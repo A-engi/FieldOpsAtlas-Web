@@ -47,18 +47,18 @@ const bootRfAtlasShell = () => {
   `;
 
   const icons = {
-    menu: icon("hamburger-light.svg", "shell-icon menu-icon"),
+    menu: icon("hamburger.svg", "shell-icon menu-icon"),
     transmitter: icon("atlas-transmitter-gold.svg", "shell-icon atlas-transmitter"),
-    dtt: icon("dtt-light.svg", "shell-icon quick-icon"),
-    dab: icon("dab-light.svg", "shell-icon quick-icon"),
-    fm: icon("fm-light.svg", "shell-icon quick-icon"),
-    more: icon("more-light.svg", "shell-icon quick-icon"),
-    map: icon("map-light.svg", "shell-icon nav-icon"),
-    sites: icon("sites-light.svg", "shell-icon nav-icon"),
-    rf: icon("rf-light.svg", "shell-icon nav-icon"),
-    network: icon("network-light.svg", "shell-icon nav-icon"),
-    docs: icon("docs-light.svg", "shell-icon nav-icon"),
-    tools: icon("tools-light.svg", "shell-icon nav-icon")
+    dtt: icon("dtt.svg", "shell-icon quick-icon"),
+    dab: icon("dab.svg", "shell-icon quick-icon"),
+    fm: icon("fm.svg", "shell-icon quick-icon"),
+    more: icon("more.svg", "shell-icon quick-icon"),
+    map: icon("map.svg", "shell-icon nav-icon"),
+    sites: icon("sites.svg", "shell-icon nav-icon"),
+    rf: icon("rf.svg", "shell-icon nav-icon"),
+    network: icon("network.svg", "shell-icon nav-icon"),
+    docs: icon("docs.svg", "shell-icon nav-icon"),
+    tools: icon("tools.svg", "shell-icon nav-icon")
   };
 
   const quickLink = (key, label, active) => `
