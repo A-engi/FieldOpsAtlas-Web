@@ -155,6 +155,44 @@ svg {
   gap: 7px;
 }
 
+
+.shell-icon {
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.quick-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.nav-item.is-active .nav-icon {
+  filter:
+    drop-shadow(0 0 5px rgba(237, 191, 99, 0.62))
+    drop-shadow(0 2px 7px rgba(237, 191, 99, 0.26));
+}
+
+.atlas-transmitter {
+  width: 22px;
+  height: 22px;
+  filter:
+    drop-shadow(0 0 5px rgba(237, 191, 99, 0.52))
+    drop-shadow(0 3px 8px rgba(237, 191, 99, 0.20));
+}
+
 .menu-button,
 .atlas-command,
 .quick-chip {
@@ -176,6 +214,7 @@ svg {
   border-radius: 8px;
 }
 
+.menu-button .shell-icon,
 .menu-button svg {
   width: 20px;
   height: 20px;
@@ -295,6 +334,7 @@ svg {
   overflow: hidden;
 }
 
+.quick-chip .shell-icon,
 .quick-chip svg {
   width: 18px;
   height: 18px;
@@ -498,6 +538,7 @@ svg {
   border-radius: 0 12px 12px 0;
 }
 
+.nav-item .shell-icon,
 .nav-item svg {
   width: 16px;
   height: 16px;
@@ -775,7 +816,8 @@ svg {
     height: 32px;
   }
 
-  .menu-button svg {
+  .menu-button .shell-icon,
+.menu-button svg {
     width: 19px;
     height: 19px;
   }
@@ -816,7 +858,8 @@ svg {
     border-radius: 7px;
   }
 
-  .quick-chip svg {
+  .quick-chip .shell-icon,
+.quick-chip svg {
     width: 17px;
     height: 17px;
     flex-basis: 17px;
@@ -844,7 +887,8 @@ svg {
     font-size: 7.5px;
   }
 
-  .nav-item svg {
+  .nav-item .shell-icon,
+.nav-item svg {
     width: 15px;
     height: 15px;
   }
