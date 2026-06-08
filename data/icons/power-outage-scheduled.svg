@@ -1,0 +1,24 @@
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 0 512 512" role="img" aria-label="Scheduled power outage warning green version">
+  <defs>
+    <linearGradient id="triGrad" x1="256" y1="60" x2="256" y2="384" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e31b0c"/>
+      <stop offset="1" stop-color="#ffd21a"/>
+    </linearGradient>
+    <linearGradient id="boltGrad" x1="256" y1="142" x2="256" y2="296" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff36a"/>
+      <stop offset="1" stop-color="#ff9f0a"/>
+    </linearGradient>
+  </defs>
+  <path d="M256 28 C274 28 292 38 302 56 L486 374 C496 392 483 414 462 414 L50 414 C29 414 16 392 26 374 L210 56 C220 38 238 28 256 28 Z" fill="#20a233" stroke="#f39a12" stroke-width="4"/>
+  <path d="M256 60 C268 60 279 67 286 79 L448 360 C454 371 446 384 433 384 L79 384 C66 384 58 371 64 360 L226 79 C233 67 244 60 256 60 Z" fill="url(#triGrad)"/>
+  <path d="M62 352 C117 357 156 344 207 350" fill="none" stroke="#20a233" stroke-width="16" stroke-linecap="round"/>
+  <path d="M305 350 C356 344 395 357 450 352" fill="none" stroke="#20a233" stroke-width="16" stroke-linecap="round"/>
+  <path d="M202 334 L231 342 L217 362 L186 353 Z" fill="#20a233"/>
+  <path d="M310 334 L281 342 L295 362 L326 353 Z" fill="#20a233"/>
+  <path d="M256 338 L246 359 L260 356 L250 381" fill="none" stroke="#ffd21a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="256" cy="210" r="95" fill="none" stroke="#b71c16" stroke-width="20"/>
+  <path d="M271 142 L234 223 L258 223 L244 296 L290 204 L265 204 Z" fill="url(#boltGrad)"/>
+  <path d="M217 293 C217 284 215 274 206 261 C194 244 182 223 182 198 C182 157 214 125 256 125 C298 125 330 157 330 198 C330 223 318 244 306 261 C297 274 295 284 295 293" fill="none" stroke="#20a233" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M216 302 H296 M223 320 H289 M236 338 H276" fill="none" stroke="#20a233" stroke-width="11" stroke-linecap="round"/>
+  <path d="M191 142 L326 279" fill="none" stroke="#b71c16" stroke-width="20" stroke-linecap="round"/>
+</svg>

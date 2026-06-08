@@ -1,0 +1,14 @@
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="128" height="128" viewBox="0 0 12 20" role="img" aria-label="Gold path pane chevron glow">
+  <defs>
+    <filter id="goldChevronGlow" x="-120%" y="-60%" width="340%" height="220%">
+      <feGaussianBlur stdDeviation="1.15" result="blur"/>
+      <feFlood flood-color="#edbf63" flood-opacity="0.42" result="gold"/>
+      <feComposite in="gold" in2="blur" operator="in" result="goldBlur"/>
+      <feMerge>
+        <feMergeNode in="goldBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M8.5 3 3.5 10l5 7" fill="none" stroke="#ffdda0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldChevronGlow)"/>
+</svg>

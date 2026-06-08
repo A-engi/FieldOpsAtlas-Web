@@ -1,0 +1,17 @@
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="128" height="128" viewBox="0 0 48 18" role="img" aria-label="Path details wave">
+  <defs>
+    <filter id="pathWaveGlow" x="-50%" y="-160%" width="200%" height="420%">
+      <feGaussianBlur stdDeviation="1.9" result="blur"/>
+      <feFlood flood-color="#ffe187" flood-opacity="0.34" result="gold"/>
+      <feComposite in="gold" in2="blur" operator="in" result="goldBlur"/>
+      <feFlood flood-color="#ffffff" flood-opacity="0.42" result="white"/>
+      <feComposite in="white" in2="blur" operator="in" result="whiteBlur"/>
+      <feMerge>
+        <feMergeNode in="goldBlur"/>
+        <feMergeNode in="whiteBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M2 9h10l4-7 5 14 6-14 5 14 4-7h10" fill="none" stroke="#ffffff" stroke-width="2.05" stroke-linecap="round" stroke-linejoin="round" filter="url(#pathWaveGlow)"/>
+</svg>
