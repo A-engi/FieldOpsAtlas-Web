@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="../../../theme.css?v=1.1.154">
   <link rel="stylesheet" href="../../../components.css?v=1.1.159">
   <link rel="stylesheet" href="./map-page.css?v=1.1.1">
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.165">
+  <link rel="stylesheet" href="./shell.css?v=1.1.1">
   <link rel="stylesheet" href="./map-ui.css?v=1.1.1">
 </head>
 
@@ -815,69 +815,6 @@
         return map;
       };
     }
-  </script>
-
-  <!-- =====================================================================
-       Map feature path bridge
-       Temporary bridge while map-app.js is copied into Features/Map.
-       It keeps root data and GitHub API paths working before the JS controller
-       gets cleaned into the feature structure.
-       ===================================================================== -->
-  <script>
-    window.FieldOpsAtlasPaths = {
-      root: "../../../",
-      data: "../../../data/",
-      repoOwner: "A-engi",
-      repoName: "FieldOpsAtlas-iOS"
-    };
-
-    (function () {
-      var originalFetch = window.fetch ? window.fetch.bind(window) : null;
-
-      if (!originalFetch) {
-        return;
-      }
-
-      function rewriteUrl(url) {
-        if (typeof url !== "string") {
-          return url;
-        }
-
-        var nextUrl = url;
-
-        if (nextUrl.indexOf("./data/") === 0) {
-          nextUrl = "../../../" + nextUrl.slice(2);
-        }
-
-        nextUrl = nextUrl
-          .replace(
-            "api.github.com/repos/BeezelBun/The-Field-Engineers-Atlas",
-            "api.github.com/repos/A-engi/FieldOpsAtlas-iOS"
-          )
-          .replace(
-            "raw.githubusercontent.com/BeezelBun/The-Field-Engineers-Atlas",
-            "raw.githubusercontent.com/A-engi/FieldOpsAtlas-iOS"
-          );
-
-        return nextUrl;
-      }
-
-      window.fetch = function (resource, options) {
-        if (typeof resource === "string") {
-          return originalFetch(rewriteUrl(resource), options);
-        }
-
-        if (resource && typeof resource.url === "string") {
-          var rewrittenUrl = rewriteUrl(resource.url);
-
-          if (rewrittenUrl !== resource.url) {
-            return originalFetch(new Request(rewrittenUrl, resource), options);
-          }
-        }
-
-        return originalFetch(resource, options);
-      };
-    }());
   </script>
 
   <!-- =====================================================================
