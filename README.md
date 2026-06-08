@@ -1,108 +1,171 @@
 # FieldOps Atlas
 
-FieldOps Atlas is a static browser prototype for field engineering walk/site workflows.
+FieldOps Atlas is a static GitHub Pages prototype for field engineering map, RF, network, docs, and tools workflows.
 
-The current app is a lightweight GitHub Pages build. It uses Leaflet for the map, local JSON files for region/site loading, and browser local storage for prototype settings and notes.
+The current repository is being reorganised into a shallow Swift/iOS-style structure while keeping the browser prototype runnable.
 
 ## Live app
 
-- GitHub Pages: https://.github.io/
-- Repository: https://github.com/
+Root `index.html` is only a launcher. It opens:
 
-## Current focus
+```text
+FieldOpsAtlas/Features/Map/index.html
+```
 
-The map page supports:
-
-- region-based walk loading
-- marker popups and collapsed/expanded walk details
-- walk search
-- region filtering
-- local-only field notes
-- weather mode panels
-- basic power/DNO helper links
-- local GitHub token storage for prototype write workflows
-
-## Repository layout
+## Current structure
 
 ```text
 .
-├── index.html                  # Main map page shell
-├── map-app.js                  # Main map/data/application controller
-├── map-ui.js                   # Late map UI bridge and weather/notes helpers
-├── theme.css                   # Shared design tokens and global reset
-├── components.css              # Shared UI components, panels, forms, and cards
-├── shell.css                   # Top bar, side menu, side rail, and app chrome
-├── map-page.css                # Main map page layout and panel positioning
-├── map-ui.css                  # Late map-only UI overrides and weather/notes styling
-├── met-office-overlay-checker.html
+├── index.html
+├── settings.html
+├── theme.css
+├── components.css
+├── sw.js
 ├── data/
-│   └── regions/                # Public prototype region/site JSON files
-└── icons/                      # Static SVG icons
+│   ├── icons/
+│   ├── regions.json
+│   └── regions/
+├── FieldOpsAtlas/
+│   ├── App/
+│   ├── Core/
+│   ├── Features/
+│   │   ├── Map/
+│   │   ├── RF/
+│   │   ├── Network/
+│   │   ├── Docs/
+│   │   ├── Tools/
+│   │   └── Weather/
+│   ├── Resources/
+│   └── Assets.xcassets/
+└── archive/
 ```
 
-## File ownership rules
+## Ownership
 
-Keep each file focused:
+### Universal/shared
 
-- `index.html` owns document structure and stable element IDs.
-- `map-app.js` owns app state, map/data loading, marker selection, panel state, and write workflows.
-- `map-ui.js` owns late UI helpers only. It should not become the main map/data owner.
-- `theme.css` owns variables, reset, and global page background.
-- `components.css` owns reusable UI pieces.
-- `shell.css` owns app chrome.
-- `map-page.css` owns map page layout.
-- `map-ui.css` owns late map-specific visual overrides.
+```text
+index.html
+settings.html
+theme.css
+components.css
+sw.js
+data/
+data/icons/
+archive/
+```
+
+### Map
+
+```text
+FieldOpsAtlas/Features/Map/
+```
+
+Map owns the geographic/walk map page, map controller, map UI bridge, map shell, and map-specific CSS.
+
+### RF
+
+```text
+FieldOpsAtlas/Features/RF/
+```
+
+RF owns the RF page, RF shell, RF services pages, RF demo map, RF page CSS, and related RF navigation.
+
+### Network
+
+```text
+FieldOpsAtlas/Features/Network/
+```
+
+Network owns its own feature page. It may temporarily reuse the RF shell assets until it grows its own shell.
+
+### Docs
+
+```text
+FieldOpsAtlas/Features/Docs/
+```
+
+Docs owns the documentation/equipment-style feature page. It may temporarily reuse the RF shell assets.
+
+### Tools
+
+```text
+FieldOpsAtlas/Features/Tools/
+```
+
+Tools owns app tools and utilities. It may temporarily reuse the RF shell assets.
+
+### Weather
+
+```text
+FieldOpsAtlas/Features/Weather/
+```
+
+Weather is reserved for weather-specific work. Do not expand it with private operational data.
 
 ## Data safety
 
 This is a public prototype repository.
 
-Public prototype data can include transmitter/walk names, approximate public locations, and public service/frequency-style information.
+Allowed public/demo data:
 
-Do not commit internal operational details, including:
+```text
+site or walk names
+approximate public locations
+regions
+service labels
+display colours
+demo notes
+```
 
-- access instructions that are not public
-- contacts, phone numbers, or engineer details
-- SharePoint links
-- IP addresses, switch ports, config notes, or credentials
-- spares locations
-- private job, fault, or maintenance details
+Do not commit private operational data:
 
-Use dummy data for anything operationally sensitive.
+```text
+access instructions
+contacts or engineer details
+SharePoint links
+IP addresses
+switch ports
+credentials
+spares locations
+private job, fault, or maintenance details
+sensitive site instructions
+```
 
-## Development notes
+Use dummy/local-only data for anything operationally sensitive.
 
-This is currently plain HTML, CSS, and JavaScript. There is no build step.
+## Current direction
 
-Recommended change order for cleanup work:
+The web prototype should stay simple and editable first. Later, the same broad structure can be converted into a Swift/iOS app.
 
-1. HTML structure
-2. CSS tokens/components/layout
-3. map UI bridge
-4. main map app JavaScript last
+Preferred future app shape:
 
-After changing a CSS or JS file, update the relevant query-string cache-bust in `index.html`.
+```text
+Map tab
+RF tab
+Network tab
+Docs tab
+Tools tab
+Settings
+```
 
-Keep the visible app version tied to meaningful app behaviour changes, not every CSS-only cleanup.
-
-## Fresh RF/map baseline
-
-This upload pack excludes archive files and uses `v1.1.1` as a fresh-start baseline for the RF/page migration bundle.
-
-The active map page should load `map-app.js` as the main controller and `map-page.css` as the main map page layout stylesheet. Do not restore or load root `app.js` or root `app.css`.
-
+Keep visible editors simple. Avoid exposing technical/private fields unless they are clearly demo-only or local-only.
 
 ## Manual test checklist
 
-After edits, check:
+After structural edits, check:
 
-- page loads on GitHub Pages
-- map appears
-- region selector loads
-- marker click opens a small popup and collapsed details pane
-- Details/Expand opens the full details pane
-- details pane can minimise and close
-- search works
-- weather mode opens and closes
-- field notes panel opens and closes
-- no obvious mobile layout regression
+```text
+/ opens Map
+Map loads regions and markers
+Map details pane opens and closes
+Map RF button opens RF
+RF loads shell and network map
+RF buttons open DTT / DAB / FM / More
+RF bottom nav opens Map / Network / Docs / Tools
+Network opens
+Docs opens
+Tools opens
+settings.html still opens if linked
+icons load from data/icons/
+```
