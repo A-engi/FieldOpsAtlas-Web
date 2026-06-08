@@ -7,19 +7,19 @@
 const bootRfAtlasShell = () => {
   const pageLinks = {
     map: "../Map/index.html",
-    sites: "./sites.html",
-    rf: "./index.html",
+    sites: "../RF/sites.html",
+    rf: "../RF/index.html",
     network: "../Network/index.html",
-    docs: "./equipment.html",
+    docs: "../RF/equipment.html",
     tools: "../Tools/index.html",
-    dtt: "./dtt.html",
-    dab: "./dab.html",
-    fm: "./fm.html",
-    more: "./services.html",
-    services: "./services.html",
-    equipment: "./equipment.html",
-    paths: "./paths.html",
-    settings: "./settings.html"
+    dtt: "../RF/dtt.html",
+    dab: "../RF/dab.html",
+    fm: "../RF/fm.html",
+    more: "../RF/services.html",
+    services: "../RF/services.html",
+    equipment: "../RF/equipment.html",
+    paths: "../RF/paths.html",
+    settings: "../RF/settings.html"
   };
 
   const searchItems = [
@@ -279,13 +279,13 @@ const bootRfAtlasShell = () => {
     const saved = Boolean(localStorage.getItem(tokenKey));
     const onlineText = navigator.onLine ? "Online" : "Offline";
     if (keyState) keyState.textContent = saved ? `Saved locally - ${onlineText}` : `Not saved - ${onlineText}`;
-    if (keyInput) keyInput.value = saved ? "Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢" : "";
+    if (keyInput) keyInput.value = saved ? "â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢" : "";
   };
 
   if (saveKey && keyInput) {
     saveKey.addEventListener("click", () => {
       const value = keyInput.value.trim();
-      if (value && !value.includes("Ã¢ÂÂ¢")) localStorage.setItem(tokenKey, value);
+      if (value && !value.includes("â¢")) localStorage.setItem(tokenKey, value);
       refreshKeyState();
     });
   }
