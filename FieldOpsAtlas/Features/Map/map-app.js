@@ -9,13 +9,13 @@
   const VERSION = "1.1.1";
 
   const DATA_FILES = {
-    regions: "./data/regions.json",
-    regionWalks: (regionId) => `./data/regions/${encodeURIComponent(regionId)}-sites.json`,
+    regions: "../../../data/regions.json",
+    regionWalks: (regionId) => `../../../data/regions/${encodeURIComponent(regionId)}-sites.json`,
   };
 
   const GITHUB_CONFIG = {
-    owner: "BeezelBun",
-    repo: "The-Field-Engineers-Atlas",
+    owner: "A-engi",
+    repo: "FieldOpsAtlas-iOS",
     branch: "main",
     regionsPath: "data/regions.json",
   };
