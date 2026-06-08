@@ -1,0 +1,2733 @@
+/* =========================================================
+   RF ATLAS PAGE CONTENT v0.1.53
+   Shared prototype content components.
+========================================================= */
+
+.page-content {
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
+  padding: 12px;
+  color: #0a2038;
+}
+
+.page-head {
+  margin-bottom: 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.page-kicker {
+  color: #8b661f;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.page-lede {
+  margin: 0;
+  color: rgba(7,28,50,0.70);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.card {
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid rgba(136,96,28,0.20);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.58), rgba(255,248,226,0.36));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.70),
+    0 8px 18px rgba(79,56,16,0.08);
+}
+
+.card.is-dark {
+  color: #fff;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.10), transparent 38%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  border-color: rgba(237,191,99,0.36);
+}
+
+.card-title {
+  margin: 0 0 8px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: 0.01em;
+}
+
+.muted {
+  color: rgba(7,28,50,0.58);
+}
+
+.is-dark .muted {
+  color: rgba(255,255,255,0.68);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.metric {
+  padding: 10px 8px;
+  text-align: center;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(136,96,28,0.14);
+}
+
+.metric strong {
+  display: block;
+  color: #08233d;
+  font-size: 19px;
+  line-height: 1;
+}
+
+.is-dark .metric strong {
+  color: #fff;
+}
+
+.metric span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(7,28,50,0.58);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.is-dark .metric span {
+  color: rgba(255,255,255,0.68);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.action-card {
+  min-height: 82px;
+  padding: 12px 10px;
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  text-align: center;
+  color: #071c32;
+  border: 1px solid rgba(136,96,28,0.18);
+  border-radius: 15px;
+  background: rgba(255,255,255,0.50);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.70);
+}
+
+.action-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.action-card strong {
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+}
+
+.list-row {
+  min-height: 54px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  color: #071c32;
+  border: 1px solid rgba(136,96,28,0.16);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.50);
+}
+
+.row-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--page-accent, #0f5fab);
+  border-radius: 11px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(136,96,28,0.14);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.row-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.row-sub {
+  margin-top: 3px;
+  color: rgba(7,28,50,0.58);
+  font-size: 10px;
+}
+
+.row-value {
+  color: #071c32;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #17692e;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status.warn {
+  color: #b36b00;
+}
+
+.signal-hero {
+  min-height: 230px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(255,218,120,0.22), transparent 38%),
+    linear-gradient(180deg, #0b243e, #06182b);
+}
+
+.frequency {
+  color: var(--gold-soft);
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pill {
+  padding: 4px 7px;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.pill.green { background: #15733a; }
+.pill.blue { background: #0f5fab; }
+.pill.purple { background: #733091; }
+
+.phone[data-page="rf"] { --page-accent: var(--gold); }
+.phone[data-page="map"] { --page-accent: #17b9d6; }
+.phone[data-page="sites"] { --page-accent: #4fae3f; }
+.phone[data-page="network"] { --page-accent: #20bdf2; }
+.phone[data-page="tools"] { --page-accent: #e5a94b; }
+.phone[data-page="dtt"] { --page-accent: #35a851; }
+.phone[data-page="dab"] { --page-accent: #2385df; }
+.phone[data-page="fm"] { --page-accent: #9b4fc0; }
+
+
+
+
+/* 06. RF dashboard layout
+   These blocks make the RF inlay match the map/path/services reference layout. */
+.dashboard-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.rf-shell-card {
+  padding: 10px;
+  border: 1px solid rgba(136,96,28,0.20);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.52), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,248,226,0.34));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.70),
+    0 8px 18px rgba(79,56,16,0.08);
+}
+
+.rf-panel-head {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rf-panel-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 15px;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.rf-panel-tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.rf-tab {
+  padding: 5px 9px;
+  color: #071c32;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(136,96,28,0.18);
+  border-radius: 9px;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.rf-tab.is-active {
+  background: rgba(255,221,160,0.78);
+  border-color: rgba(136,96,28,0.30);
+}
+
+.rf-map {
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(136,96,28,0.15);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 52% 38%, rgba(255,255,255,0.78), transparent 44%),
+    linear-gradient(180deg, rgba(255,251,240,0.72), rgba(255,240,205,0.40));
+}
+
+.rf-map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(28deg, transparent 0 42%, rgba(7,28,50,0.12) 42.2%, transparent 42.8%),
+    linear-gradient(126deg, transparent 0 52%, rgba(7,28,50,0.10) 52.2%, transparent 52.8%),
+    radial-gradient(circle at 25% 35%, rgba(33,90,120,0.08), transparent 18%),
+    radial-gradient(circle at 80% 48%, rgba(33,90,120,0.06), transparent 20%);
+}
+
+.rf-map svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rf-legend {
+  margin-top: 8px;
+  padding: 7px;
+  display: flex;
+  justify-content: space-around;
+  gap: 4px;
+  color: rgba(7,28,50,0.72);
+  background: rgba(255,255,255,0.48);
+  border: 1px solid rgba(136,96,28,0.12);
+  border-radius: 12px;
+  font-size: 9px;
+  font-weight: 760;
+}
+
+.rf-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 1px rgba(7,28,50,0.14);
+}
+
+.recent-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.recent-mini {
+  min-height: 68px;
+  padding: 7px 6px;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) 8px;
+  gap: 5px;
+  align-items: center;
+  color: #071c32;
+  background: rgba(255,255,255,0.46);
+  border: 1px solid rgba(136,96,28,0.14);
+  border-radius: 12px;
+}
+
+.recent-mini-icon {
+  color: var(--page-accent, var(--gold));
+  font-size: 18px;
+  line-height: 1;
+}
+
+.recent-mini-name {
+  display: block;
+  font-size: 9px;
+  font-weight: 950;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.recent-mini-status {
+  display: block;
+  margin-top: 4px;
+  color: #17692e;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.recent-mini-arrow {
+  color: rgba(7,28,50,0.42);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.path-detail {
+  padding: 12px;
+  color: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(237,191,99,0.38);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.11), transparent 38%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 9px 20px rgba(0,0,0,0.16);
+}
+
+.path-head {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.path-head-title {
+  margin: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.path-line {
+  display: grid;
+  grid-template-columns: 1fr minmax(90px, 120px) 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.path-site {
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.path-site small {
+  display: block;
+  margin-bottom: 3px;
+  color: rgba(255,255,255,0.58);
+  font-size: 8px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.path-frequency {
+  color: var(--gold-soft);
+  text-align: center;
+  font-size: 23px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.path-sub {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  text-align: center;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.path-wave {
+  height: 30px;
+  margin: 12px 0;
+  border-radius: 99px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,221,160,0.70), transparent 13%),
+    linear-gradient(90deg, #63d75a, var(--gold-soft), #ff553c);
+  box-shadow: 0 0 18px rgba(255,199,75,0.22);
+}
+
+.path-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.path-stat {
+  padding: 8px 5px;
+  text-align: center;
+  background: rgba(255,255,255,0.045);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.path-stat:last-child {
+  border-right: 0;
+}
+
+.path-stat strong {
+  display: block;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.path-stat span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,0.58);
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bottom-panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.compact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 6px 4px;
+  text-align: left;
+  border-bottom: 1px solid rgba(136,96,28,0.13);
+}
+
+.compact-table th {
+  color: rgba(7,28,50,0.58);
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+
+.equipment-item {
+  padding: 11px 6px;
+  text-align: center;
+  background: rgba(255,255,255,0.48);
+  border: 1px solid rgba(136,96,28,0.14);
+  border-radius: 12px;
+}
+
+.equipment-item strong {
+  display: block;
+  color: #071c32;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.equipment-item span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(7,28,50,0.58);
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+@media (min-width: 410px) {
+  .bottom-panels {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* 07. RF compact fit pass
+   This pass halves the RF dashboard height so the full layout fits the phone better. */
+.content-canvas .page-content {
+  padding: 8px;
+}
+
+.dashboard-grid {
+  gap: 7px;
+}
+
+.rf-shell-card {
+  padding: 8px;
+  border-radius: 15px;
+}
+
+.rf-panel-head {
+  margin-bottom: 6px;
+}
+
+.rf-panel-title {
+  font-size: 13px;
+}
+
+.rf-tab {
+  padding: 4px 7px;
+  font-size: 8px;
+}
+
+.rf-map {
+  min-height: 205px;
+  border-radius: 13px;
+}
+
+.rf-legend {
+  margin-top: 6px;
+  padding: 5px;
+  font-size: 8px;
+  border-radius: 10px;
+}
+
+.recent-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.recent-mini {
+  min-height: 46px;
+  padding: 5px;
+  grid-template-columns: minmax(0, 1fr) 7px;
+  gap: 3px;
+}
+
+.recent-mini-icon {
+  display: none;
+}
+
+.recent-mini-name {
+  font-size: 8px;
+}
+
+.recent-mini-status {
+  margin-top: 2px;
+  font-size: 7px;
+}
+
+.path-detail {
+  padding: 9px;
+  border-radius: 14px;
+}
+
+.path-head {
+  margin-bottom: 6px;
+}
+
+.path-head-title {
+  font-size: 12px;
+}
+
+.path-line {
+  grid-template-columns: 1fr minmax(82px, 104px) 1fr;
+  gap: 6px;
+}
+
+.path-site {
+  font-size: 9px;
+}
+
+.path-site small {
+  font-size: 7px;
+}
+
+.path-frequency {
+  font-size: 19px;
+}
+
+.path-sub {
+  font-size: 7px;
+}
+
+.path-wave {
+  height: 20px;
+  margin: 7px 0;
+}
+
+.path-stat {
+  padding: 6px 3px;
+}
+
+.path-stat strong {
+  font-size: 10px;
+}
+
+.path-stat span {
+  margin-top: 3px;
+  font-size: 6.5px;
+}
+
+.bottom-panels {
+  gap: 7px;
+}
+
+.compact-table {
+  font-size: 8.5px;
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 4px 3px;
+}
+
+.equipment-grid {
+  gap: 5px;
+}
+
+.equipment-item {
+  padding: 7px 4px;
+}
+
+.equipment-item strong {
+  font-size: 16px;
+}
+
+.equipment-item span {
+  margin-top: 3px;
+  font-size: 7px;
+}
+
+
+
+
+/* 08. RF measured dashboard rebuild
+   Content panel proportions are based on the target image:
+   network block about 60%, path details about 18%, lower blocks about 18%, with small gaps. */
+.phone[data-page="rf"] .content-canvas {
+  overflow: hidden;
+  padding: 0;
+}
+
+.phone[data-page="rf"] .content-canvas .page-content {
+  height: 100%;
+  min-height: 0;
+  padding: 7px;
+}
+
+.rf-home {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 60fr 18fr 18fr;
+  gap: 7px;
+}
+
+/* Network and recently opened live in one eggshell block. */
+.rf-network-block {
+  min-height: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: 24px minmax(0, 1fr) 72px;
+  gap: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(136,96,28,0.20);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.48), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,0.48), rgba(255,248,226,0.34));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.70),
+    0 7px 15px rgba(79,56,16,0.08);
+}
+
+.rf-network-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.rf-network-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rf-network-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.rf-network-tab {
+  height: 22px;
+  padding: 0 7px;
+  display: grid;
+  place-items: center;
+  color: #071c32;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(136,96,28,0.18);
+  border-radius: 8px;
+  font-size: 7.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.rf-network-tab.is-active {
+  background: rgba(255,221,160,0.78);
+  border-color: rgba(136,96,28,0.32);
+}
+
+/* The darker middle inset contains the map, but the map itself keeps the eggshell tone. */
+.rf-map-inset {
+  min-height: 0;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(136,96,28,0.12);
+  border-radius: 13px;
+  background: rgba(227,216,190,0.24);
+}
+
+.rf-map-paper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(136,96,28,0.12);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255,255,255,0.72), transparent 44%),
+    linear-gradient(180deg, rgba(255,251,240,0.76), rgba(255,240,205,0.44));
+}
+
+.rf-map-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(27deg, transparent 0 42%, rgba(7,28,50,0.10) 42.2%, transparent 42.7%),
+    linear-gradient(132deg, transparent 0 54%, rgba(7,28,50,0.09) 54.2%, transparent 54.8%),
+    radial-gradient(circle at 23% 34%, rgba(33,90,120,0.08), transparent 18%),
+    radial-gradient(circle at 78% 48%, rgba(33,90,120,0.06), transparent 22%);
+}
+
+.rf-map-paper svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.rf-map-label {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 8.6px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.rf-map-label-small {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 7.4px;
+  font-weight: 850;
+}
+
+/* Recently opened is the lower half of the network block, not a separate page section. */
+.rf-recent-band {
+  min-height: 0;
+  padding: 6px;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr);
+  gap: 5px;
+  border: 1px solid rgba(136,96,28,0.14);
+  border-radius: 12px;
+  background: rgba(255,251,240,0.56);
+}
+
+.rf-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rf-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rf-view-all {
+  padding: 3px 7px;
+  color: #071c32;
+  background: rgba(255,255,255,0.64);
+  border: 1px solid rgba(136,96,28,0.16);
+  border-radius: 999px;
+  font-size: 7.5px;
+  font-weight: 900;
+}
+
+.rf-recent-cards {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rf-recent-card {
+  min-width: 0;
+  padding: 5px 4px;
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr);
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+  color: #071c32;
+  background: rgba(255,255,255,0.48);
+  border: 1px solid rgba(136,96,28,0.13);
+  border-radius: 9px;
+}
+
+.rf-recent-card svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rf-recent-name {
+  display: block;
+  font-size: 7.2px;
+  font-weight: 950;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.rf-recent-status {
+  display: block;
+  margin-top: 2px;
+  color: #17692e;
+  font-size: 6.6px;
+  font-weight: 850;
+}
+
+/* Path details is a dark blue card with a gold outline immediately under the network block. */
+.rf-path-card {
+  min-height: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: 16px minmax(0, 1fr) 18px 34px;
+  gap: 5px;
+  color: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(237,191,99,0.48);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.10), transparent 36%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 7px 15px rgba(0,0,0,0.16);
+}
+
+.rf-path-title {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.rf-path-main {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 106px 1fr;
+  gap: 5px;
+  align-items: center;
+}
+
+.rf-path-site {
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.rf-path-site small {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rf-path-freq {
+  color: var(--gold-soft);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.rf-path-sub {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  text-align: center;
+  font-size: 6.5px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rf-wave {
+  height: 18px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,221,160,0.72), transparent 13%),
+    linear-gradient(90deg, #5bd858, var(--gold-soft), #ff563c);
+  box-shadow: 0 0 16px rgba(255,199,75,0.22);
+}
+
+.rf-path-stats {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.rf-path-stat {
+  padding: 5px 2px;
+  text-align: center;
+  background: rgba(255,255,255,0.045);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.rf-path-stat:last-child {
+  border-right: 0;
+}
+
+.rf-path-stat strong {
+  display: block;
+  color: #fff;
+  font-size: 8.8px;
+  line-height: 1;
+}
+
+.rf-path-stat span {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 5.8px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Bottom two cards share the remaining space. */
+.rf-bottom-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.rf-small-card {
+  min-height: 0;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(136,96,28,0.20);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 6px 12px rgba(79,56,16,0.07);
+}
+
+.rf-small-title {
+  margin: 0 0 5px;
+  color: #071c32;
+  font-size: 9.8px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.rf-service-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #071c32;
+  font-size: 6.7px;
+}
+
+.rf-service-table th,
+.rf-service-table td {
+  padding: 3px 2px;
+  text-align: left;
+  border-bottom: 1px solid rgba(136,96,28,0.13);
+}
+
+.rf-service-table th {
+  color: rgba(7,28,50,0.55);
+  font-size: 5.8px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rf-equipment-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.rf-equipment-item {
+  padding: 8px 3px;
+  text-align: center;
+  border: 1px solid rgba(136,96,28,0.13);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.48);
+}
+
+.rf-equipment-item strong {
+  display: block;
+  color: #071c32;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.rf-equipment-item span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(7,28,50,0.58);
+  font-size: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+
+/* 09. RF v0.1.53 full rebuild
+   This rebuild follows the corrected outline: one network shell containing the map
+   and recently opened band, then a dark path card, then two compact lower cards. */
+.phone[data-page="rf"] .content-canvas {
+  margin-top: calc(var(--top-shell-height) + 4px);
+  height: calc(100dvh - var(--top-shell-height) - var(--bottom-nav-height) - var(--bottom-lift) - var(--content-gap) - 4px);
+  overflow: hidden;
+}
+
+.rfv45-home {
+  height: 100%;
+  min-height: 0;
+  padding: 7px;
+  display: grid;
+  grid-template-rows: 59fr 20fr 17fr;
+  gap: 7px;
+}
+
+.rfv45-network-shell {
+  min-height: 0;
+  padding: 7px;
+  display: grid;
+  grid-template-rows: 24px minmax(0, 1fr);
+  gap: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(130, 91, 22, 0.24);
+  border-radius: 17px;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(255,255,255,0.55), transparent 48%),
+    linear-gradient(180deg, rgba(255,252,244,0.58), rgba(255,244,219,0.38));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.72),
+    inset 0 0 0 1px rgba(255,232,175,0.28),
+    0 7px 16px rgba(78,55,16,0.08);
+}
+
+.rfv45-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.rfv45-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rfv45-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.rfv45-tab {
+  height: 22px;
+  padding: 0 7px;
+  display: grid;
+  place-items: center;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.16);
+  border-radius: 8px;
+  font-size: 7.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.rfv45-tab.is-active {
+  background: rgba(255,222,163,0.85);
+  border-color: rgba(130,91,22,0.30);
+}
+
+.rfv45-map-stage {
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.15);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(221,211,188,0.32), rgba(231,222,199,0.22));
+}
+
+.rfv45-map-paper {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  bottom: 36px;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.13);
+  border-radius: 13px;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.78), transparent 44%),
+    linear-gradient(180deg, rgba(255,252,244,0.88), rgba(255,241,208,0.54));
+}
+
+.rfv45-map-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.20;
+  background-image:
+    linear-gradient(24deg, transparent 0 42%, rgba(7,28,50,0.10) 42.25%, transparent 42.8%),
+    linear-gradient(136deg, transparent 0 54%, rgba(7,28,50,0.08) 54.25%, transparent 54.8%),
+    radial-gradient(circle at 22% 35%, rgba(33,90,120,0.08), transparent 18%),
+    radial-gradient(circle at 78% 48%, rgba(33,90,120,0.06), transparent 22%);
+}
+
+.rfv45-map-paper svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.rfv45-map-label {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 8.3px;
+  font-weight: 900;
+}
+
+.rfv45-map-label-small {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 6.8px;
+  font-weight: 820;
+}
+
+.rfv45-recent {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  z-index: 3;
+  height: 64px;
+  padding: 6px;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr);
+  gap: 5px;
+  border: 1px solid rgba(130,91,22,0.15);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.55), transparent 48%),
+    linear-gradient(180deg, rgba(255,252,244,0.86), rgba(255,246,225,0.70));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.68),
+    0 -5px 12px rgba(80,55,15,0.06);
+}
+
+.rfv45-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rfv45-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.rfv45-viewall {
+  padding: 3px 7px;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.14);
+  border-radius: 999px;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.rfv45-recent-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rfv45-recent-card {
+  min-width: 0;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 3px;
+  align-items: center;
+  overflow: hidden;
+  color: #071c32;
+  background: rgba(255,255,255,0.44);
+  border: 1px solid rgba(130,91,22,0.12);
+  border-radius: 9px;
+}
+
+.rfv45-recent-card svg {
+  width: 14px;
+  height: 14px;
+}
+
+.rfv45-recent-name {
+  display: block;
+  font-size: 6.8px;
+  font-weight: 950;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.rfv45-status {
+  display: block;
+  margin-top: 2px;
+  color: #17692e;
+  font-size: 6.2px;
+  font-weight: 850;
+}
+
+.rfv45-path {
+  min-height: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: 15px minmax(0, 1fr) 16px 31px;
+  gap: 5px;
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(237,191,99,0.56);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.10), transparent 36%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 7px 15px rgba(0,0,0,0.16);
+}
+
+.rfv45-path-title {
+  margin: 0;
+  color: #fff;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.rfv45-path-main {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 102px 1fr;
+  gap: 5px;
+  align-items: center;
+}
+
+.rfv45-path-site {
+  color: #fff;
+  font-size: 7.8px;
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.rfv45-path-site small {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv45-freq {
+  color: var(--gold-soft);
+  text-align: center;
+  font-size: 17.5px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.rfv45-sub {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  text-align: center;
+  font-size: 6.2px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv45-wave {
+  height: 16px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,221,160,0.72), transparent 13%),
+    linear-gradient(90deg, #5bd858, var(--gold-soft), #ff563c);
+  box-shadow: 0 0 16px rgba(255,199,75,0.22);
+}
+
+.rfv45-path-stats {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.rfv45-path-stat {
+  padding: 5px 2px;
+  text-align: center;
+  background: rgba(255,255,255,0.045);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.rfv45-path-stat:last-child {
+  border-right: 0;
+}
+
+.rfv45-path-stat strong {
+  display: block;
+  color: #fff;
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.rfv45-path-stat span {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 5.5px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rfv45-bottom {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.rfv45-small {
+  min-height: 0;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.20);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 6px 12px rgba(79,56,16,0.07);
+}
+
+.rfv45-small-title {
+  margin: 0 0 5px;
+  color: #071c32;
+  font-size: 9.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.rfv45-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #071c32;
+  font-size: 6.5px;
+}
+
+.rfv45-table th,
+.rfv45-table td {
+  padding: 3px 2px;
+  text-align: left;
+  border-bottom: 1px solid rgba(130,91,22,0.13);
+}
+
+.rfv45-table th {
+  color: rgba(7,28,50,0.55);
+  font-size: 5.6px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rfv45-equipment {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.rfv45-equipment-item {
+  padding: 7px 3px;
+  text-align: center;
+  border: 1px solid rgba(130,91,22,0.13);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.48);
+}
+
+.rfv45-equipment-item strong {
+  display: block;
+  color: #071c32;
+  font-size: 14.5px;
+  line-height: 1;
+}
+
+.rfv45-equipment-item span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(7,28,50,0.58);
+  font-size: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+
+/* 10. RF v0.1.53 corrected contents rebuild
+   The Network title/buttons now sit directly on the contents page.
+   The map plate now encloses the map, legend, and recently-opened area as one continuous block. */
+.phone[data-page="rf"] .content-canvas {
+  overflow: hidden;
+}
+
+.rfv46-home {
+  height: 100%;
+  min-height: 0;
+  padding: 7px;
+  display: grid;
+  grid-template-rows: 59fr 20fr 17fr;
+  gap: 7px;
+}
+
+/* One network section, but no outer card/box around it. */
+.rfv46-network {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 24px minmax(0, 1fr);
+  gap: 6px;
+}
+
+/* Header belongs directly to the eggshell content page. */
+.rfv46-network-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 3px;
+}
+
+.rfv46-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rfv46-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.rfv46-tab {
+  height: 22px;
+  padding: 0 8px;
+  display: grid;
+  place-items: center;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.16);
+  border-radius: 8px;
+  font-size: 7.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.rfv46-tab.is-active {
+  background: rgba(255,222,163,0.85);
+  border-color: rgba(130,91,22,0.30);
+}
+
+/* This is the single encompassing box: map + legend + recently opened. */
+.rfv46-plate {
+  min-height: 0;
+  padding: 6px;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 72px;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.15);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(221,211,188,0.30), rgba(231,222,199,0.22));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.52),
+    0 6px 13px rgba(78,55,16,0.06);
+}
+
+/* The map paper is eggshell and aligned with the encompassing box. */
+.rfv46-map-paper {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.12);
+  border-radius: 12px 12px 0 0;
+  border-bottom: 0;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.78), transparent 44%),
+    linear-gradient(180deg, rgba(255,252,244,0.88), rgba(255,241,208,0.54));
+}
+
+.rfv46-map-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.20;
+  background-image:
+    linear-gradient(24deg, transparent 0 42%, rgba(7,28,50,0.10) 42.25%, transparent 42.8%),
+    linear-gradient(136deg, transparent 0 54%, rgba(7,28,50,0.08) 54.25%, transparent 54.8%),
+    radial-gradient(circle at 22% 35%, rgba(33,90,120,0.08), transparent 18%),
+    radial-gradient(circle at 78% 48%, rgba(33,90,120,0.06), transparent 22%);
+}
+
+.rfv46-map-paper svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.rfv46-map-label {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 8.3px;
+  font-weight: 900;
+}
+
+.rfv46-map-label-small {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 6.8px;
+  font-weight: 820;
+}
+
+.rfv46-legend {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 4px;
+  z-index: 4;
+  height: 18px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4px;
+  color: rgba(7,28,50,0.72);
+  background: rgba(255,252,244,0.76);
+  border: 1px solid rgba(130,91,22,0.10);
+  border-radius: 8px;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.rfv46-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 1px rgba(7,28,50,0.14);
+}
+
+/* Recently opened is inside the same plate, with no gap and no extra outer box. */
+.rfv46-recent {
+  min-height: 0;
+  padding: 6px;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr);
+  gap: 5px;
+  border: 1px solid rgba(130,91,22,0.12);
+  border-radius: 0 0 12px 12px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.50), transparent 48%),
+    linear-gradient(180deg, rgba(255,252,244,0.80), rgba(255,246,225,0.68));
+}
+
+.rfv46-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rfv46-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.rfv46-viewall {
+  padding: 3px 7px;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.14);
+  border-radius: 999px;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.rfv46-recent-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rfv46-recent-card {
+  min-width: 0;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 3px;
+  align-items: center;
+  overflow: hidden;
+  color: #071c32;
+  background: rgba(255,255,255,0.44);
+  border: 1px solid rgba(130,91,22,0.12);
+  border-radius: 9px;
+}
+
+.rfv46-recent-card svg {
+  width: 14px;
+  height: 14px;
+}
+
+.rfv46-recent-name {
+  display: block;
+  font-size: 6.8px;
+  font-weight: 950;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.rfv46-status {
+  display: block;
+  margin-top: 2px;
+  color: #17692e;
+  font-size: 6.2px;
+  font-weight: 850;
+}
+
+/* Path details is immediately under the network block with only the page grid gap. */
+.rfv46-path {
+  min-height: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: 15px minmax(0, 1fr) 16px 31px;
+  gap: 5px;
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(237,191,99,0.56);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.10), transparent 36%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 7px 15px rgba(0,0,0,0.16);
+}
+
+.rfv46-path-title {
+  margin: 0;
+  color: #fff;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.rfv46-path-main {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 102px 1fr;
+  gap: 5px;
+  align-items: center;
+}
+
+.rfv46-path-site {
+  color: #fff;
+  font-size: 7.8px;
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.rfv46-path-site small {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv46-freq {
+  color: var(--gold-soft);
+  text-align: center;
+  font-size: 17.5px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.rfv46-sub {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  text-align: center;
+  font-size: 6.2px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv46-wave {
+  height: 16px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,221,160,0.72), transparent 13%),
+    linear-gradient(90deg, #5bd858, var(--gold-soft), #ff563c);
+  box-shadow: 0 0 16px rgba(255,199,75,0.22);
+}
+
+.rfv46-path-stats {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.rfv46-path-stat {
+  padding: 5px 2px;
+  text-align: center;
+  background: rgba(255,255,255,0.045);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.rfv46-path-stat:last-child {
+  border-right: 0;
+}
+
+.rfv46-path-stat strong {
+  display: block;
+  color: #fff;
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.rfv46-path-stat span {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 5.5px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rfv46-bottom {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.rfv46-small {
+  min-height: 0;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.20);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 6px 12px rgba(79,56,16,0.07);
+}
+
+.rfv46-small-title {
+  margin: 0 0 5px;
+  color: #071c32;
+  font-size: 9.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.rfv46-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #071c32;
+  font-size: 6.5px;
+}
+
+.rfv46-table th,
+.rfv46-table td {
+  padding: 3px 2px;
+  text-align: left;
+  border-bottom: 1px solid rgba(130,91,22,0.13);
+}
+
+.rfv46-table th {
+  color: rgba(7,28,50,0.55);
+  font-size: 5.6px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rfv46-equipment {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.rfv46-equipment-item {
+  padding: 7px 3px;
+  text-align: center;
+  border: 1px solid rgba(130,91,22,0.13);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.48);
+}
+
+.rfv46-equipment-item strong {
+  display: block;
+  color: #071c32;
+  font-size: 14.5px;
+  line-height: 1;
+}
+
+.rfv46-equipment-item span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(7,28,50,0.58);
+  font-size: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+
+/* 11. RF v0.1.53 annotation fix
+   Removes the extra outer box around the network/map/recent section.
+   Removes the gap between recently opened and path details. */
+.phone[data-page="rf"] .content-canvas {
+  overflow: hidden;
+  padding: 0;
+}
+
+.rfv47-home {
+  height: 100%;
+  min-height: 0;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Network title and tabs sit directly on the eggshell content page. */
+.rfv47-network {
+  flex: 0 0 59%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 24px minmax(0, 1fr);
+  gap: 6px;
+}
+
+.rfv47-network-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 3px;
+}
+
+.rfv47-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rfv47-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.rfv47-tab {
+  height: 22px;
+  padding: 0 8px;
+  display: grid;
+  place-items: center;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.16);
+  border-radius: 8px;
+  font-size: 7.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.rfv47-tab.is-active {
+  background: rgba(255,222,163,0.85);
+  border-color: rgba(130,91,22,0.30);
+}
+
+/* This is not a visible outer card. It is only a layout wrapper. */
+.rfv47-map-recent {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 72px;
+  gap: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The actual visible box starts here: the map paper. */
+.rfv47-map-paper {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.14);
+  border-bottom: 0;
+  border-radius: 13px 13px 0 0;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.78), transparent 44%),
+    linear-gradient(180deg, rgba(255,252,244,0.88), rgba(255,241,208,0.54));
+}
+
+.rfv47-map-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.20;
+  background-image:
+    linear-gradient(24deg, transparent 0 42%, rgba(7,28,50,0.10) 42.25%, transparent 42.8%),
+    linear-gradient(136deg, transparent 0 54%, rgba(7,28,50,0.08) 54.25%, transparent 54.8%),
+    radial-gradient(circle at 22% 35%, rgba(33,90,120,0.08), transparent 18%),
+    radial-gradient(circle at 78% 48%, rgba(33,90,120,0.06), transparent 22%);
+}
+
+.rfv47-map-paper svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.rfv47-map-label {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 8.3px;
+  font-weight: 900;
+}
+
+.rfv47-map-label-small {
+  fill: #071c32;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 6.8px;
+  font-weight: 820;
+}
+
+.rfv47-legend {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 4px;
+  z-index: 4;
+  height: 18px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4px;
+  color: rgba(7,28,50,0.72);
+  background: rgba(255,252,244,0.76);
+  border: 1px solid rgba(130,91,22,0.10);
+  border-radius: 8px;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.rfv47-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 1px rgba(7,28,50,0.14);
+}
+
+/* Recently opened is the lower half of the same visible box. No gap. */
+.rfv47-recent {
+  min-height: 0;
+  padding: 6px;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr);
+  gap: 5px;
+  border: 1px solid rgba(130,91,22,0.14);
+  border-top: 0;
+  border-radius: 0 0 13px 13px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.50), transparent 48%),
+    linear-gradient(180deg, rgba(255,252,244,0.80), rgba(255,246,225,0.68));
+}
+
+.rfv47-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rfv47-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.rfv47-viewall {
+  padding: 3px 7px;
+  color: #071c32;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(130,91,22,0.14);
+  border-radius: 999px;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.rfv47-recent-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rfv47-recent-card {
+  min-width: 0;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 3px;
+  align-items: center;
+  overflow: hidden;
+  color: #071c32;
+  background: rgba(255,255,255,0.44);
+  border: 1px solid rgba(130,91,22,0.12);
+  border-radius: 9px;
+}
+
+.rfv47-recent-card svg {
+  width: 14px;
+  height: 14px;
+}
+
+.rfv47-recent-name {
+  display: block;
+  font-size: 6.8px;
+  font-weight: 950;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.rfv47-status {
+  display: block;
+  margin-top: 2px;
+  color: #17692e;
+  font-size: 6.2px;
+  font-weight: 850;
+}
+
+/* Path touches the network/recent block directly. No vertical gap. */
+.rfv47-path {
+  flex: 0 0 20%;
+  min-height: 0;
+  margin-top: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: 15px minmax(0, 1fr) 16px 31px;
+  gap: 5px;
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(237,191,99,0.56);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,133,0.10), transparent 36%),
+    linear-gradient(180deg, #0b243e, #06182b);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 7px 15px rgba(0,0,0,0.16);
+}
+
+.rfv47-path-title {
+  margin: 0;
+  color: #fff;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.rfv47-path-main {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 102px 1fr;
+  gap: 5px;
+  align-items: center;
+}
+
+.rfv47-path-site {
+  color: #fff;
+  font-size: 7.8px;
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.rfv47-path-site small {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv47-freq {
+  color: var(--gold-soft);
+  text-align: center;
+  font-size: 17.5px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.rfv47-sub {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  text-align: center;
+  font-size: 6.2px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rfv47-wave {
+  height: 16px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,221,160,0.72), transparent 13%),
+    linear-gradient(90deg, #5bd858, var(--gold-soft), #ff563c);
+  box-shadow: 0 0 16px rgba(255,199,75,0.22);
+}
+
+.rfv47-path-stats {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.rfv47-path-stat {
+  padding: 5px 2px;
+  text-align: center;
+  background: rgba(255,255,255,0.045);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.rfv47-path-stat:last-child {
+  border-right: 0;
+}
+
+.rfv47-path-stat strong {
+  display: block;
+  color: #fff;
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.rfv47-path-stat span {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255,255,255,0.58);
+  font-size: 5.5px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rfv47-bottom {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 7px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.rfv47-small {
+  min-height: 0;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(130,91,22,0.20);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 6px 12px rgba(79,56,16,0.07);
+}
+
+.rfv47-small-title {
+  margin: 0 0 5px;
+  color: #071c32;
+  font-size: 9.5px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.rfv47-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #071c32;
+  font-size: 6.5px;
+}
+
+.rfv47-table th,
+.rfv47-table td {
+  padding: 3px 2px;
+  text-align: left;
+  border-bottom: 1px solid rgba(130,91,22,0.13);
+}
+
+.rfv47-table th {
+  color: rgba(7,28,50,0.55);
+  font-size: 5.6px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rfv47-equipment {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.rfv47-equipment-item {
+  padding: 7px 3px;
+  text-align: center;
+  border: 1px solid rgba(130,91,22,0.13);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.48);
+}
+
+.rfv47-equipment-item strong {
+  display: block;
+  color: #071c32;
+  font-size: 14.5px;
+  line-height: 1;
+}
+
+.rfv47-equipment-item span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(7,28,50,0.58);
+  font-size: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+
+/* 12. RF v0.1.53 colour/graph polish
+   Matches the content page to the recently-opened eggshell, removes the extra button outline,
+   softens recent typography, and adds contouring + cleaner transmitter icons. */
+.phone[data-page="rf"] .content-canvas {
+  background: #fff7e6 !important;
+}
+
+.phone[data-page="rf"] .content-canvas::before {
+  opacity: 0.06 !important;
+}
+
+.rfv47-recent {
+  background: #fff7e6 !important;
+  box-shadow: none !important;
+}
+
+.rfv47-viewall {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding-inline: 2px !important;
+  color: #09203a !important;
+  font-weight: 500 !important;
+}
+
+.rfv47-recent-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 520 !important;
+  letter-spacing: 0.055em;
+}
+
+.rfv47-clock {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  color: #09203a;
+  stroke-width: 1.7;
+}
+
+.rfv47-recent-name {
+  font-weight: 520 !important;
+  letter-spacing: 0.015em;
+}
+
+.rfv47-status {
+  font-weight: 380 !important;
+}
+
+.rfv47-recent-card {
+  background: #fff9eb !important;
+}
+
+.rfv47-map-paper {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.72), transparent 44%),
+    linear-gradient(180deg, #fff8e8, #f8ecd2) !important;
+}
+
+.rfv47-map-paper::before {
+  opacity: 0.32 !important;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20360%20210%27%3E%0A%3Cg%20fill%3D%27none%27%20stroke%3D%27%25237c7768%27%20stroke-width%3D%270.65%27%20opacity%3D%270.34%27%3E%0A%3Cpath%20d%3D%27M-20%2045%20C25%2018%2055%2028%2088%2020%20S142%2018%20174%2042%20S231%2064%20270%2036%20S338%2018%20386%2044%27/%3E%0A%3Cpath%20d%3D%27M-12%2082%20C26%2062%2050%2070%2082%2058%20S137%2054%20168%2078%20S220%20106%20258%2078%20S328%2056%20376%2082%27/%3E%0A%3Cpath%20d%3D%27M-30%20126%20C18%20104%2057%20112%2092%2096%20S150%2096%20184%20120%20S238%20150%20282%20122%20S334%20100%20392%20128%27/%3E%0A%3Cpath%20d%3D%27M-18%20166%20C30%20144%2065%20154%20100%20136%20S154%20140%20192%20164%20S244%20190%20286%20164%20S342%20142%20390%20164%27/%3E%0A%3Cpath%20d%3D%27M20%20-8%20C42%2026%2038%2052%2058%2076%20S92%20108%2076%20138%20S70%20184%20102%20222%27/%3E%0A%3Cpath%20d%3D%27M146%20-14%20C164%2022%20156%2052%20178%2076%20S214%20112%20198%20144%20S192%20182%20228%20224%27/%3E%0A%3Cpath%20d%3D%27M274%20-16%20C290%2018%20286%2050%20308%2076%20S344%20110%20328%20142%20S322%20180%20360%20222%27/%3E%0A%3C/g%3E%0A%3Cg%20fill%3D%27none%27%20stroke%3D%27%2523b7aa8f%27%20stroke-width%3D%270.45%27%20opacity%3D%270.28%27%3E%0A%3Cpath%20d%3D%27M0%2030%20C44%2044%2072%2040%20112%2030%20S188%2018%20230%2028%20S300%2054%20360%2034%27/%3E%0A%3Cpath%20d%3D%27M0%20108%20C48%20124%2082%20114%20122%20104%20S198%2090%20242%20108%20S304%20138%20360%20112%27/%3E%0A%3Cpath%20d%3D%27M0%20190%20C42%20202%2084%20192%20126%20184%20S204%20172%20248%20190%20S312%20216%20360%20198%27/%3E%0A%3C/g%3E%0A%3C/svg%3E") !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
+
+.rfv47-map-label,
+.rfv47-map-label-small {
+  paint-order: stroke;
+  stroke: rgba(255,248,232,0.86);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+.rfv47-legend {
+  background: #fff7e6 !important;
+  border-color: rgba(130,91,22,0.12) !important;
+}
+
+
+/* 13. RF v0.1.53 path placeholder
+   The built-in Path Details box has been removed from the RF page markup.
+   This neutral slot keeps the layout ready for the custom path-details code. */
+.rfv49-path-placeholder {
+  flex: 0 0 20%;
+  min-height: 0;
+  margin-top: 0;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: rgba(7,28,50,0.48);
+  border: 1px dashed rgba(130,91,22,0.28);
+  border-radius: 14px;
+  background: rgba(255,247,230,0.58);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+}
+
+.rfv49-path-placeholder span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+
+/* 14. RF v0.1.53 custom path-details slot
+   The neutral placeholder has been replaced with the supplied SVG path-details card. */
+.rfv50-path-slot {
+  flex: 0 0 20%;
+  min-height: 0;
+  margin-top: 0;
+  display: grid;
+  place-items: stretch;
+  overflow: hidden;
+}
+
+.rfv50-path-slot .rf-path {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  --bg: #011532;
+  --green: #01431c;
+  --green-edge: #5e6e51;
+  --red: #5f1217;
+  --red-edge: #8e575d;
+}
+
+.rfv50-path-slot .rf-path svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  font-family: Arial, sans-serif;
+}
+
+.rfv50-path-slot .rf-path .title,
+.rfv50-path-slot .rf-path .site,
+.rfv50-path-slot .rf-path .freq {
+  font-family: Georgia, "Times New Roman", serif;
+  fill: #fff;
+  font-weight: 700;
+  filter: drop-shadow(0 3px 1px rgba(0, 0, 0, .72));
+}
+
+.rfv50-path-slot .rf-path .label,
+.rfv50-path-slot .rf-path .metric-label {
+  fill: #b9bfcc;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.rfv50-path-slot .rf-path .metric-label {
+  fill: #b7bfcc;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.rfv50-path-slot .rf-path .metric-value {
+  fill: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.rfv50-path-slot .rf-path .divider {
+  stroke: #b9c6d7;
+  stroke-opacity: .18;
+  stroke-width: 2;
+}
+
+.rfv50-path-slot .rf-path .signal {
+  fill: none;
+  stroke: url(#rf-signal);
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(255, 225, 70, .95));
+}
+
+.rfv50-path-slot .rf-path .node-green {
+  filter: drop-shadow(0 0 8px rgba(140, 255, 67, .85));
+}
+
+.rfv50-path-slot .rf-path .node-red {
+  filter: drop-shadow(0 0 8px rgba(255, 68, 50, .85));
+}
+
+
+/* 15. RF v0.1.53 seam fix
+   Removes the cream gap between Recently opened and Path Details,
+   and gives the custom Path Details card a visible gold outer border. */
+.rfv47-home {
+  gap: 0 !important;
+}
+
+.rfv47-map-recent {
+  border-radius: 13px 13px 0 0 !important;
+}
+
+.rfv47-recent {
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+}
+
+.rfv50-path-slot {
+  flex: 0 0 20% !important;
+  margin-top: -1px !important;
+  padding: 0 !important;
+  border: 2px solid rgba(237,191,99,0.74) !important;
+  border-radius: 14px !important;
+  background: #011532 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 7px 15px rgba(0,0,0,0.16) !important;
+}
+
+.rfv50-path-slot .rf-path {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #011532 !important;
+}
+
+.rfv50-path-slot .rf-path svg {
+  transform: scale(1.012);
+  transform-origin: center;
+}
+
+
+/* 16. RF v0.1.53 recently-opened rounding
+   Rounds only the Recently opened box. No layout height, order, or spacing changes. */
+.rfv47-recent {
+  position: relative !important;
+  z-index: 2 !important;
+  border: 1px solid rgba(130,91,22,0.14) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: #fff7e6 !important;
+}
+
+.rfv50-path-slot {
+  margin-top: -1px !important;
+}
+
+
+/* 17. RF v0.1.53 background colour match
+   Makes the main contents page and Recently opened panel use the same light background
+   tone as the Services box background, without moving or resizing any boxes. */
+.phone[data-page="rf"] .content-canvas {
+  background: #fcf8ee !important;
+}
+
+.rfv47-recent {
+  background: #fcf8ee !important;
+}
