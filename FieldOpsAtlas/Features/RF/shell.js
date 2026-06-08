@@ -10,14 +10,14 @@ const bootRfAtlasShell = () => {
     sites: "../RF/sites.html",
     rf: "../RF/index.html",
     network: "../Network/index.html",
-    docs: "../RF/equipment.html",
+    docs: "../Docs/index.html",
     tools: "../Tools/index.html",
     dtt: "../RF/dtt.html",
     dab: "../RF/dab.html",
     fm: "../RF/fm.html",
     more: "../RF/services.html",
     services: "../RF/services.html",
-    equipment: "../RF/equipment.html",
+    equipment: "../Docs/index.html",
     paths: "../RF/paths.html",
     settings: "../RF/settings.html"
   };
