@@ -546,6 +546,17 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 1px solid rgba(68, 215, 255, 0.22);
+  border-radius: 28px;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(68, 215, 255, 0.13), transparent 34%),
+    linear-gradient(180deg, rgba(10, 20, 34, 0.96), rgba(5, 12, 24, 0.98));
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.40),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  -webkit-backdrop-filter: blur(22px) saturate(120%);
+  backdrop-filter: blur(22px) saturate(120%);
   transition:
     transform 0.22s ease,
     opacity 0.18s ease;
@@ -592,22 +603,208 @@ button {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  padding: 0 16px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .panel-content,
 .admin-panel-body {
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .panel-content {
   gap: 12px;
+  padding: 14px 16px 16px;
 }
 
 .admin-panel-body {
   gap: 14px;
+  padding: 14px 16px 16px;
 }
+
+.panel-kicker {
+  margin-bottom: 3px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.panel-header h1,
+.admin-panel-header h2 {
+  margin: 0;
+  color: var(--text-main);
+  line-height: 1.02;
+}
+
+.panel-header h1 {
+  font-size: clamp(23px, 6.2vw, 34px);
+  letter-spacing: -0.065em;
+}
+
+.admin-panel-header h2 {
+  font-size: 20px;
+  letter-spacing: -0.045em;
+}
+
+.site-title-line {
+  min-width: 0;
+}
+
+.site-title-region {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.panel-close-button,
+.admin-close-button {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.10);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.panel-close-button:active,
+.admin-close-button:active {
+  transform: scale(0.98);
+}
+
+.panel-section {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.section-title {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.detail-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.detail-list > div {
+  display: grid;
+  grid-template-columns: minmax(82px, 0.82fr) minmax(0, 1.35fr);
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-list > div:last-child {
+  border-bottom: 0;
+}
+
+.detail-list dt {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-list dd {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.copy-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.copy-value-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.copy-button {
+  min-height: 28px;
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border: 1px solid rgba(68, 215, 255, 0.28);
+  border-radius: 999px;
+  color: var(--text-main);
+  background: rgba(68, 215, 255, 0.11);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.body-note,
+.mini-note,
+.empty-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+@media (max-width: 720px) {
+  .info-panel:not(.is-hidden) {
+    left: calc(var(--rail-width, 58px) + 12px);
+    right: 10px;
+    bottom: calc(10px + var(--safe-bottom));
+    width: auto;
+    max-height: min(560px, calc(100dvh - var(--top-bar-height) - var(--safe-top) - 24px));
+    border-radius: 26px;
+  }
+
+  .panel-header,
+  .admin-panel-header {
+    padding: 0 14px 11px;
+  }
+
+  .panel-content,
+  .admin-panel-body {
+    padding: 12px 14px 14px;
+  }
+
+  .panel-section {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .detail-list > div {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .copy-value-row {
+    align-items: flex-start;
+  }
+}
+
 
 /* -------------------------------------------------------------------------- */
 /* Form and layout helpers                                                    */
