@@ -1,0 +1,98 @@
+/* ==========================================================================
+   FieldOps Atlas theme.css v1.1.1
+   Owner: shared design tokens, app-wide reset, and global page background.
+
+   Keep this file small:
+   - variables and base document rules only
+   - no component styling
+   - no map/page-specific positioning
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --bg-main: #070b12;
+  --bg-panel: rgba(12, 18, 29, 0.9);
+  --bg-panel-solid: #0c121d;
+  --bg-bar: rgba(8, 13, 22, 0.96);
+  --bg-menu: rgba(8, 13, 22, 0.98);
+
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.18);
+
+  --text-main: #f5f7fb;
+  --text-muted: #9ca8ba;
+  --text-soft: #c8d0df;
+
+  --accent: #44d7ff;
+  --accent-soft: rgba(68, 215, 255, 0.14);
+  --accent-border: rgba(68, 215, 255, 0.42);
+
+  --danger: #ff4b6e;
+
+  --shadow-heavy: 0 18px 60px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 14px 36px rgba(0, 0, 0, 0.32);
+
+  --radius-xl: 24px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --top-bar-height: 72px;
+  --rail-width: 68px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* --------------------------------------------------------------------------
+   Base reset
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-main);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   App background
+   -------------------------------------------------------------------------- */
+body {
+  background:
+    radial-gradient(circle at top left, rgba(68, 215, 255, 0.14), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(255, 75, 110, 0.10), transparent 30%),
+    var(--bg-main);
+}
+
+/* --------------------------------------------------------------------------
+   Small screens
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  :root {
+    --top-bar-height: 68px;
+    --rail-width: 68px;
+  }
+}

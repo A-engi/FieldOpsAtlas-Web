@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Met Office Rain Map Overlay Checker</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIINfQv8qZ5qEy3QAEp+O6h1Lm0mNXtYlHI="
+        crossorigin="">
+  <style>
+    :root {
+      --land: #B3D0AE;
+      --ink: #172338;
+      --panel: rgba(248, 250, 245, 0.94);
+      --line: rgba(23, 35, 56, 0.2);
+      --muted: rgba(23, 35, 56, 0.68);
+      --blue: #203858;
+      --gold: #D8B05C;
+      --danger: #8B1E1E;
+      --ok: #1E693D;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--land);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .app-header {
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 58px;
+      padding: calc(8px + env(safe-area-inset-top)) 12px 8px;
+      background: linear-gradient(135deg, #15243A, #274568);
+      color: white;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .app-title {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .app-title strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.1;
+      letter-spacing: 0.01em;
+    }
+
+    .app-title span {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    button,
+    .file-button {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      color: inherit;
+      font: inherit;
+      font-weight: 750;
+      line-height: 1;
+      padding: 10px 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:hover,
+    .file-button:hover { filter: brightness(1.04); }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .layout {
+      position: relative;
+      min-height: 0;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      background: var(--land);
+    }
+
+    .leaflet-container {
+      background: var(--land);
+      font: inherit;
+    }
+
+    .leaflet-control-attribution {
+      font-size: 10px;
+    }
+
+    .control-shell {
+      position: absolute;
+      z-index: 1000;
+      top: 12px;
+      left: 12px;
+      width: min(390px, calc(100vw - 24px));
+      max-height: calc(100dvh - 92px - env(safe-area-inset-top));
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .control-shell.collapsed {
+      width: auto;
+      max-width: calc(100vw - 24px);
+      grid-template-rows: auto;
+    }
+
+    .control-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.48);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .control-head-title {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .control-head-title strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .control-head-title span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .control-toggle {
+      border-color: var(--line);
+      background: var(--blue);
+      color: white;
+      flex: 0 0 auto;
+      padding: 10px 11px;
+    }
+
+    .control-body {
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+    }
+
+    .control-shell.collapsed .control-body {
+      display: none;
+    }
+
+    .section {
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section h2 {
+      margin: 0 0 9px;
+      font-size: 13px;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    label.input-label {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 9px;
+      font-size: 12px;
+      font-weight: 750;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px;
+      padding: 9px 10px;
+      outline: none;
+    }
+
+    select {
+      min-height: 42px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .button-grid button,
+    .section button,
+    .file-button {
+      border-color: var(--line);
+      background: var(--blue);
+      color: white;
+      text-align: center;
+      min-height: 40px;
+    }
+
+    .section button.secondary,
+    .file-button.secondary {
+      background: transparent;
+      color: var(--blue);
+    }
+
+    .section button.warning {
+      background: var(--danger);
+      color: white;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .mode-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .band-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .band-row {
+      display: grid;
+      grid-template-columns: 24px 24px 1fr auto;
+      align-items: center;
+      gap: 9px;
+      min-height: 32px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .band-row input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--blue);
+    }
+
+    .swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+    }
+
+    .count {
+      min-width: 52px;
+      text-align: right;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+
+    .tiny {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .status {
+      position: absolute;
+      z-index: 1000;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      max-width: min(480px, calc(100vw - 24px));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(248, 250, 245, 0.96);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+      color: var(--ink);
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.4;
+      backdrop-filter: blur(12px);
+    }
+
+    .status strong {
+      color: var(--blue);
+    }
+
+    .status.error strong {
+      color: var(--danger);
+    }
+
+    .status.ok strong {
+      color: var(--ok);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .canvas-preview {
+      display: none;
+    }
+
+    .legend-strip {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 3px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin-top: 10px;
+    }
+
+    .legend-strip div {
+      height: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .app-header {
+        min-height: 52px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .app-title strong {
+        font-size: 14px;
+      }
+
+      .app-title span {
+        display: none;
+      }
+
+      .top-actions button {
+        min-height: 36px;
+        padding: 9px 10px;
+        border-radius: 11px;
+      }
+
+      .control-shell {
+        top: 8px;
+        left: 8px;
+        width: min(350px, calc(100vw - 16px));
+        max-height: calc(100dvh - 76px - env(safe-area-inset-top));
+      }
+
+      .control-body {
+        padding: 10px;
+      }
+
+      .section {
+        padding: 10px;
+      }
+
+      .status {
+        left: 8px;
+        right: 8px;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-title">
+      <strong>Met Office rain overlay checker</strong>
+      <span>Fixed PNG map images Â· rainfall-rate colour filters Â· land colour #B3D0AE</span>
+    </div>
+    <div class="top-actions">
+      <button type="button" id="fitOverlayButton">Fit</button>
+      <button type="button" id="clearButton">Clear</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div id="map" aria-label="Map"></div>
+
+    <aside class="control-shell" id="controlShell">
+      <div class="control-head">
+        <div class="control-head-title">
+          <strong>Overlay controls</strong>
+          <span id="controlHint">Collapse this so the map is visible.</span>
+        </div>
+        <button type="button" class="control-toggle" id="collapseButton" aria-expanded="true">Collapse</button>
+      </div>
+
+      <div class="control-body">
+        <section class="section">
+          <h2>Met Office source</h2>
+
+          <label class="input-label">
+            API key
+            <input id="apiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="Paste API key here">
+          </label>
+
+          <label class="input-label">
+            Order name / id
+            <input id="orderInput" type="text" autocomplete="off" spellcheck="false" value="maps-uk1">
+          </label>
+
+          <label class="mode-row">
+            <input id="includeLandInput" type="checkbox" checked>
+            Include Met Office land layer
+          </label>
+
+          <div class="button-grid">
+            <button type="button" id="saveKeyButton" class="secondary">Save key locally</button>
+            <button type="button" id="loadManifestButton">Load manifest</button>
+          </div>
+
+          <p class="tiny">The key is not written into this file. It is only stored in this browser if you press âSave key locallyâ.</p>
+        </section>
+
+        <section class="section">
+          <h2>Image file</h2>
+
+          <label class="input-label">
+            File from manifest
+            <select id="fileSelect" disabled>
+              <option value="">Load manifest first</option>
+            </select>
+          </label>
+
+          <div class="button-grid">
+            <button type="button" id="loadSelectedButton" disabled>Load selected</button>
+            <label class="file-button secondary" for="pngUpload">Upload PNG</label>
+          </div>
+
+          <input id="pngUpload" type="file" accept="image/png,image/*">
+
+          <p class="tiny">PNG upload is the fallback if the DataHub endpoint refuses browser-side loading or CORS.</p>
+        </section>
+
+        <section class="section">
+          <h2>Rain bands</h2>
+
+          <div class="band-list" id="bandList"></div>
+
+          <div class="button-grid" style="margin-top:10px;">
+            <button type="button" id="showAllButton">Show all</button>
+            <button type="button" id="hideAllButton" class="secondary">Hide all</button>
+          </div>
+
+          <div class="legend-strip" aria-hidden="true" id="legendStrip"></div>
+          <p class="tiny">Counts show approximate matching pixels after tolerance. If a band says 0, that exact colour is missing from the loaded PNG.</p>
+        </section>
+
+        <section class="section">
+          <h2>Matching controls</h2>
+
+          <label class="input-label">
+            Colour tolerance
+            <input id="toleranceInput" type="number" min="0" max="80" step="1" value="18">
+          </label>
+
+          <label class="mode-row">
+            <input id="hideUnmatchedInput" type="checkbox">
+            Hide pixels that do not match these Met Office colours
+          </label>
+
+          <label class="input-label">
+            UK overlay bounds
+            <select id="boundsSelect">
+              <option value="uk" selected>UK wide default</option>
+              <option value="uk-tight">UK tighter</option>
+              <option value="manual">Manual bounds below</option>
+            </select>
+          </label>
+
+          <div class="button-grid">
+            <label class="input-label">
+              North
+              <input id="northInput" type="number" step="0.1" value="61.5">
+            </label>
+            <label class="input-label">
+              South
+              <input id="southInput" type="number" step="0.1" value="48.3">
+            </label>
+            <label class="input-label">
+              West
+              <input id="westInput" type="number" step="0.1" value="-13.8">
+            </label>
+            <label class="input-label">
+              East
+              <input id="eastInput" type="number" step="0.1" value="5.8">
+            </label>
+          </div>
+
+          <button type="button" id="applyBoundsButton" class="secondary" style="width:100%; margin-top:8px;">Apply bounds</button>
+        </section>
+      </div>
+    </aside>
+
+    <div class="status" id="statusBox">
+      <strong>Ready.</strong> Load a Met Office manifest or upload a PNG.
+    </div>
+
+    <canvas class="canvas-preview" id="sourceCanvas"></canvas>
+    <canvas class="canvas-preview" id="outputCanvas"></canvas>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const APP_VERSION = "met-office-overlay-v1.1.1";
+      const BASE_URL = "https://data.hub.api.metoffice.gov.uk/map-images/1.0.0";
+      const LAND = "#B3D0AE";
+
+      const BANDS = [
+        { id: "lt_0_5", colour: "#0100FB", label: "<0.5 mm/h" },
+        { id: "0_5_1", colour: "#3A63F7", label: "0.5â1 mm/h" },
+        { id: "1_2", colour: "#0FBCFF", label: "1â2 mm/h" },
+        { id: "2_4", colour: "#0FA200", label: "2â4 mm/h" },
+        { id: "4_8", colour: "#FCCA15", label: "4â8 mm/h" },
+        { id: "8_16", colour: "#FD9619", label: "8â16 mm/h" },
+        { id: "16_32", colour: "#FC0600", label: "16â32 mm/h" },
+        { id: "32_plus", colour: "#B30500", label: "32+ mm/h" }
+      ];
+
+      const BOUNDS_PRESETS = {
+        "uk": { north: 61.5, south: 48.3, west: -13.8, east: 5.8 },
+        "uk-tight": { north: 60.9, south: 49.6, west: -10.9, east: 2.4 }
+      };
+
+      const state = {
+        map: null,
+        baseLayer: null,
+        overlay: null,
+        sourceImage: null,
+        sourceImageName: "",
+        sourcePixelsReady: false,
+        objectUrls: [],
+        latestManifest: null
+      };
+
+      const els = {
+        map: document.getElementById("map"),
+        statusBox: document.getElementById("statusBox"),
+        controlShell: document.getElementById("controlShell"),
+        controlHint: document.getElementById("controlHint"),
+        collapseButton: document.getElementById("collapseButton"),
+        fitOverlayButton: document.getElementById("fitOverlayButton"),
+        clearButton: document.getElementById("clearButton"),
+        apiKeyInput: document.getElementById("apiKeyInput"),
+        orderInput: document.getElementById("orderInput"),
+        includeLandInput: document.getElementById("includeLandInput"),
+        saveKeyButton: document.getElementById("saveKeyButton"),
+        loadManifestButton: document.getElementById("loadManifestButton"),
+        fileSelect: document.getElementById("fileSelect"),
+        loadSelectedButton: document.getElementById("loadSelectedButton"),
+        pngUpload: document.getElementById("pngUpload"),
+        bandList: document.getElementById("bandList"),
+        legendStrip: document.getElementById("legendStrip"),
+        showAllButton: document.getElementById("showAllButton"),
+        hideAllButton: document.getElementById("hideAllButton"),
+        toleranceInput: document.getElementById("toleranceInput"),
+        hideUnmatchedInput: document.getElementById("hideUnmatchedInput"),
+        boundsSelect: document.getElementById("boundsSelect"),
+        northInput: document.getElementById("northInput"),
+        southInput: document.getElementById("southInput"),
+        westInput: document.getElementById("westInput"),
+        eastInput: document.getElementById("eastInput"),
+        applyBoundsButton: document.getElementById("applyBoundsButton"),
+        sourceCanvas: document.getElementById("sourceCanvas"),
+        outputCanvas: document.getElementById("outputCanvas")
+      };
+
+      function init() {
+        buildBandControls();
+        buildLegendStrip();
+        initMap();
+        restoreSavedValues();
+        bindEvents();
+        setStatus("Ready.", "Load a Met Office manifest or upload a PNG.", "");
+      }
+
+      function buildBandControls() {
+        els.bandList.innerHTML = "";
+
+        BANDS.forEach((band) => {
+          const row = document.createElement("label");
+          row.className = "band-row";
+          row.htmlFor = `band-${band.id}`;
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.id = `band-${band.id}`;
+          input.dataset.bandId = band.id;
+          input.checked = true;
+
+          const swatch = document.createElement("span");
+          swatch.className = "swatch";
+          swatch.style.background = band.colour;
+
+          const label = document.createElement("span");
+          label.textContent = band.label;
+
+          const count = document.createElement("span");
+          count.className = "count";
+          count.id = `count-${band.id}`;
+          count.textContent = "â";
+
+          row.append(input, swatch, label, count);
+          els.bandList.append(row);
+        });
+      }
+
+      function buildLegendStrip() {
+        els.legendStrip.innerHTML = "";
+        BANDS.forEach((band) => {
+          const item = document.createElement("div");
+          item.style.background = band.colour;
+          els.legendStrip.append(item);
+        });
+      }
+
+      function initMap() {
+        state.map = L.map("map", {
+          zoomControl: true,
+          attributionControl: true,
+          preferCanvas: true
+        }).setView([54.8, -3.2], 5);
+
+        state.map.attributionControl.addAttribution("Powered by Met Office data when loaded");
+        state.map.getContainer().style.background = LAND;
+        state.map.fitBounds(toLeafletBounds(readBounds()));
+      }
+
+      function restoreSavedValues() {
+        const savedKey = localStorage.getItem("metOfficeMapImagesApiKey");
+        const savedOrder = localStorage.getItem("metOfficeMapImagesOrder");
+        const savedTolerance = localStorage.getItem("metOfficeOverlayTolerance");
+
+        if (savedKey) els.apiKeyInput.value = savedKey;
+        if (savedOrder) els.orderInput.value = savedOrder;
+        if (savedTolerance) els.toleranceInput.value = savedTolerance;
+      }
+
+      function bindEvents() {
+        els.collapseButton.addEventListener("click", toggleControls);
+        els.fitOverlayButton.addEventListener("click", fitOverlay);
+        els.clearButton.addEventListener("click", clearOverlay);
+
+        els.saveKeyButton.addEventListener("click", saveKeyLocal);
+        els.loadManifestButton.addEventListener("click", loadManifest);
+        els.loadSelectedButton.addEventListener("click", loadSelectedFile);
+        els.pngUpload.addEventListener("change", handleUpload);
+
+        els.showAllButton.addEventListener("click", () => setAllBands(true));
+        els.hideAllButton.addEventListener("click", () => setAllBands(false));
+        els.bandList.addEventListener("change", applyCurrentFilter);
+        els.toleranceInput.addEventListener("change", () => {
+          localStorage.setItem("metOfficeOverlayTolerance", String(getTolerance()));
+          applyCurrentFilter();
+        });
+        els.hideUnmatchedInput.addEventListener("change", applyCurrentFilter);
+
+        els.boundsSelect.addEventListener("change", handleBoundsPreset);
+        els.applyBoundsButton.addEventListener("click", () => {
+          updateOverlayOnMap();
+          fitOverlay();
+        });
+      }
+
+      function toggleControls() {
+        const collapsed = els.controlShell.classList.toggle("collapsed");
+        els.collapseButton.textContent = collapsed ? "Open" : "Collapse";
+        els.collapseButton.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        els.controlHint.textContent = collapsed ? "Controls hidden. Tap Open to edit filters." : "Collapse this so the map is visible.";
+      }
+
+      function saveKeyLocal() {
+        const key = els.apiKeyInput.value.trim();
+        const order = normaliseOrderName(els.orderInput.value);
+
+        if (!key) {
+          setStatus("No key saved.", "Paste the Met Office API key first.", "error");
+          return;
+        }
+
+        localStorage.setItem("metOfficeMapImagesApiKey", key);
+        localStorage.setItem("metOfficeMapImagesOrder", order);
+        els.orderInput.value = order;
+        setStatus("Saved locally.", "The key and order name are saved in this browser only.", "ok");
+      }
+
+      async function loadManifest() {
+        const apiKey = els.apiKeyInput.value.trim();
+        const order = normaliseOrderName(els.orderInput.value);
+
+        if (!apiKey) {
+          setStatus("Missing API key.", "Paste the key first, or use PNG upload instead.", "error");
+          return;
+        }
+
+        if (!order) {
+          setStatus("Missing order.", "Enter the Met Office order id, for example maps-uk1.", "error");
+          return;
+        }
+
+        els.orderInput.value = order;
+        localStorage.setItem("metOfficeMapImagesOrder", order);
+        setBusy(true);
+        setStatus("Loading manifestâ¦", `Calling /orders/${order}/latest`, "");
+
+        try {
+          const url = `${BASE_URL}/orders/${encodeURIComponent(order)}/latest?detail=MINIMAL`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Accept": "application/json",
+              "apikey": apiKey
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+
+          const manifest = await response.json();
+          state.latestManifest = manifest;
+          fillFileSelect(manifest);
+
+          setStatus(
+            "Manifest loaded.",
+            `${els.fileSelect.options.length} image file option(s) found. Select one and press âLoad selectedâ.`,
+            "ok"
+          );
+        } catch (error) {
+          setStatus(
+            "Manifest failed.",
+            `${error.message}. If this is CORS/browser blocking, use the PNG upload fallback.`,
+            "error"
+          );
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function fillFileSelect(manifest) {
+        const files = extractFiles(manifest);
+        els.fileSelect.innerHTML = "";
+
+        if (files.length === 0) {
+          const option = document.createElement("option");
+          option.value = "";
+          option.textContent = "No files found in manifest";
+          els.fileSelect.append(option);
+          els.fileSelect.disabled = true;
+          els.loadSelectedButton.disabled = true;
+          return;
+        }
+
+        const sorted = files.slice().sort((a, b) => scoreFile(b).score - scoreFile(a).score);
+
+        sorted.forEach((file, index) => {
+          const option = document.createElement("option");
+          option.value = file.fileId;
+          const score = scoreFile(file);
+          const label = file.fileId || `file-${index + 1}`;
+          option.textContent = score.reason ? `${label} Â· ${score.reason}` : label;
+          els.fileSelect.append(option);
+        });
+
+        els.fileSelect.disabled = false;
+        els.loadSelectedButton.disabled = false;
+      }
+
+      function extractFiles(manifest) {
+        if (!manifest || typeof manifest !== "object") return [];
+
+        if (manifest.orderDetails && Array.isArray(manifest.orderDetails.files)) {
+          return manifest.orderDetails.files.filter((file) => file && file.fileId);
+        }
+
+        if (Array.isArray(manifest.files)) {
+          return manifest.files.filter((file) => file && file.fileId);
+        }
+
+        const found = [];
+        const seen = new Set();
+
+        walkObject(manifest, (value) => {
+          if (value && typeof value === "object" && typeof value.fileId === "string" && !seen.has(value.fileId)) {
+            seen.add(value.fileId);
+            found.push(value);
+          }
+        });
+
+        return found;
+      }
+
+      function walkObject(value, visitor) {
+        visitor(value);
+
+        if (Array.isArray(value)) {
+          value.forEach((item) => walkObject(item, visitor));
+          return;
+        }
+
+        if (value && typeof value === "object") {
+          Object.values(value).forEach((item) => walkObject(item, visitor));
+        }
+      }
+
+      function scoreFile(file) {
+        const id = String(file.fileId || "").toLowerCase();
+        let score = 0;
+        const reasons = [];
+
+        if (id.includes("precip")) { score += 30; reasons.push("precip"); }
+        if (id.includes("rain")) { score += 25; reasons.push("rain"); }
+        if (id.includes("prate")) { score += 25; reasons.push("rate"); }
+        if (id.includes("pp")) { score += 10; reasons.push("pp"); }
+        if (id.includes("_+")) { score += 5; }
+        if (id.includes(".png")) { score += 2; }
+
+        return {
+          score,
+          reason: reasons.slice(0, 2).join("/")
+        };
+      }
+
+      async function loadSelectedFile() {
+        const apiKey = els.apiKeyInput.value.trim();
+        const order = normaliseOrderName(els.orderInput.value);
+        const fileId = els.fileSelect.value;
+
+        if (!apiKey || !order || !fileId) {
+          setStatus("Missing details.", "Need API key, order id, and selected file.", "error");
+          return;
+        }
+
+        setBusy(true);
+        setStatus("Loading PNGâ¦", fileId, "");
+
+        try {
+          const params = els.includeLandInput.checked ? "?includeLand=true" : "";
+          const url = `${BASE_URL}/orders/${encodeURIComponent(order)}/latest/${encodeURIComponent(fileId)}/data${params}`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Accept": "image/png",
+              "apikey": apiKey
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+
+          const blob = await response.blob();
+          await loadBlobAsSourceImage(blob, fileId);
+        } catch (error) {
+          setStatus(
+            "PNG load failed.",
+            `${error.message}. Use PNG upload fallback if the browser is blocked.`,
+            "error"
+          );
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function handleUpload(event) {
+        const file = event.target.files && event.target.files[0];
+
+        if (!file) return;
+
+        setBusy(true);
+        setStatus("Loading uploaded PNGâ¦", file.name, "");
+
+        try {
+          await loadBlobAsSourceImage(file, file.name);
+        } catch (error) {
+          setStatus("Upload failed.", error.message, "error");
+        } finally {
+          setBusy(false);
+          event.target.value = "";
+        }
+      }
+
+      async function loadBlobAsSourceImage(blob, name) {
+        const imageUrl = URL.createObjectURL(blob);
+        state.objectUrls.push(imageUrl);
+
+        const img = await loadImage(imageUrl);
+        state.sourceImage = img;
+        state.sourceImageName = name || "loaded image";
+        state.sourcePixelsReady = true;
+
+        drawSourceCanvas();
+        applyCurrentFilter();
+        fitOverlay();
+
+        setStatus(
+          "Overlay loaded.",
+          `${state.sourceImageName} Â· ${img.naturalWidth || img.width}Ã${img.naturalHeight || img.height}px`,
+          "ok"
+        );
+      }
+
+      function loadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error("Image could not be decoded."));
+          img.src = url;
+        });
+      }
+
+      function drawSourceCanvas() {
+        if (!state.sourceImage) return;
+
+        const width = state.sourceImage.naturalWidth || state.sourceImage.width;
+        const height = state.sourceImage.naturalHeight || state.sourceImage.height;
+
+        els.sourceCanvas.width = width;
+        els.sourceCanvas.height = height;
+
+        const ctx = els.sourceCanvas.getContext("2d", { willReadFrequently: true });
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(state.sourceImage, 0, 0, width, height);
+      }
+
+      function applyCurrentFilter() {
+        if (!state.sourcePixelsReady) {
+          resetCounts();
+          return;
+        }
+
+        const width = els.sourceCanvas.width;
+        const height = els.sourceCanvas.height;
+        if (!width || !height) return;
+
+        const sourceCtx = els.sourceCanvas.getContext("2d", { willReadFrequently: true });
+        const outputCtx = els.outputCanvas.getContext("2d", { willReadFrequently: true });
+
+        els.outputCanvas.width = width;
+        els.outputCanvas.height = height;
+
+        const src = sourceCtx.getImageData(0, 0, width, height);
+        const out = outputCtx.createImageData(width, height);
+
+        const selected = getSelectedBandIds();
+        const tolerance = getTolerance();
+        const hideUnmatched = els.hideUnmatchedInput.checked;
+        const counts = Object.fromEntries(BANDS.map((band) => [band.id, 0]));
+        const rgbBands = BANDS.map((band) => ({ ...band, rgb: hexToRgb(band.colour) }));
+
+        for (let i = 0; i < src.data.length; i += 4) {
+          const r = src.data[i];
+          const g = src.data[i + 1];
+          const b = src.data[i + 2];
+          const a = src.data[i + 3];
+
+          if (a === 0) {
+            out.data[i] = r;
+            out.data[i + 1] = g;
+            out.data[i + 2] = b;
+            out.data[i + 3] = 0;
+            continue;
+          }
+
+          const match = nearestBand(r, g, b, rgbBands, tolerance);
+
+          if (match) {
+            counts[match.id] += 1;
+
+            if (selected.has(match.id)) {
+              out.data[i] = match.rgb.r;
+              out.data[i + 1] = match.rgb.g;
+              out.data[i + 2] = match.rgb.b;
+              out.data[i + 3] = a;
+            } else {
+              out.data[i] = r;
+              out.data[i + 1] = g;
+              out.data[i + 2] = b;
+              out.data[i + 3] = 0;
+            }
+          } else if (hideUnmatched) {
+            out.data[i] = r;
+            out.data[i + 1] = g;
+            out.data[i + 2] = b;
+            out.data[i + 3] = 0;
+          } else {
+            out.data[i] = r;
+            out.data[i + 1] = g;
+            out.data[i + 2] = b;
+            out.data[i + 3] = a;
+          }
+        }
+
+        outputCtx.putImageData(out, 0, 0);
+        updateCounts(counts);
+        updateOverlayOnMap();
+      }
+
+      function nearestBand(r, g, b, bands, tolerance) {
+        let best = null;
+        let bestDistance = Number.POSITIVE_INFINITY;
+
+        bands.forEach((band) => {
+          const dr = r - band.rgb.r;
+          const dg = g - band.rgb.g;
+          const db = b - band.rgb.b;
+          const distance = Math.sqrt((dr * dr) + (dg * dg) + (db * db));
+
+          if (distance < bestDistance) {
+            best = band;
+            bestDistance = distance;
+          }
+        });
+
+        return bestDistance <= tolerance ? best : null;
+      }
+
+      function updateOverlayOnMap() {
+        if (!state.map || !els.outputCanvas.width || !els.outputCanvas.height) return;
+
+        if (state.overlay) {
+          state.map.removeLayer(state.overlay);
+          state.overlay = null;
+        }
+
+        const bounds = toLeafletBounds(readBounds());
+        const imageUrl = els.outputCanvas.toDataURL("image/png");
+
+        state.overlay = L.imageOverlay(imageUrl, bounds, {
+          opacity: 0.98,
+          interactive: false,
+          className: "met-office-rain-overlay"
+        }).addTo(state.map);
+      }
+
+      function getSelectedBandIds() {
+        const selected = new Set();
+
+        els.bandList.querySelectorAll("input[type='checkbox']").forEach((input) => {
+          if (input.checked) selected.add(input.dataset.bandId);
+        });
+
+        return selected;
+      }
+
+      function setAllBands(checked) {
+        els.bandList.querySelectorAll("input[type='checkbox']").forEach((input) => {
+          input.checked = checked;
+        });
+        applyCurrentFilter();
+      }
+
+      function updateCounts(counts) {
+        BANDS.forEach((band) => {
+          const count = counts[band.id] || 0;
+          const el = document.getElementById(`count-${band.id}`);
+          if (el) el.textContent = compactCount(count);
+        });
+      }
+
+      function resetCounts() {
+        BANDS.forEach((band) => {
+          const el = document.getElementById(`count-${band.id}`);
+          if (el) el.textContent = "â";
+        });
+      }
+
+      function compactCount(value) {
+        if (value >= 1000000) return `${(value / 1000000).toFixed(1)}m`;
+        if (value >= 1000) return `${Math.round(value / 1000)}k`;
+        return String(value);
+      }
+
+      function getTolerance() {
+        const value = Number(els.toleranceInput.value);
+        if (!Number.isFinite(value)) return 18;
+        return Math.max(0, Math.min(80, Math.round(value)));
+      }
+
+      function handleBoundsPreset() {
+        const value = els.boundsSelect.value;
+        const preset = BOUNDS_PRESETS[value];
+
+        if (!preset) return;
+
+        els.northInput.value = preset.north;
+        els.southInput.value = preset.south;
+        els.westInput.value = preset.west;
+        els.eastInput.value = preset.east;
+
+        updateOverlayOnMap();
+        fitOverlay();
+      }
+
+      function readBounds() {
+        const selectedPreset = BOUNDS_PRESETS[els.boundsSelect.value];
+
+        if (selectedPreset) return selectedPreset;
+
+        const north = Number(els.northInput.value);
+        const south = Number(els.southInput.value);
+        const west = Number(els.westInput.value);
+        const east = Number(els.eastInput.value);
+
+        return {
+          north: Number.isFinite(north) ? north : 61.5,
+          south: Number.isFinite(south) ? south : 48.3,
+          west: Number.isFinite(west) ? west : -13.8,
+          east: Number.isFinite(east) ? east : 5.8
+        };
+      }
+
+      function toLeafletBounds(bounds) {
+        return L.latLngBounds(
+          [bounds.south, bounds.west],
+          [bounds.north, bounds.east]
+        );
+      }
+
+      function fitOverlay() {
+        if (!state.map) return;
+        state.map.fitBounds(toLeafletBounds(readBounds()), {
+          padding: [14, 14],
+          animate: true
+        });
+      }
+
+      function clearOverlay() {
+        if (state.overlay && state.map) {
+          state.map.removeLayer(state.overlay);
+        }
+
+        state.overlay = null;
+        state.sourceImage = null;
+        state.sourceImageName = "";
+        state.sourcePixelsReady = false;
+
+        els.sourceCanvas.width = 0;
+        els.sourceCanvas.height = 0;
+        els.outputCanvas.width = 0;
+        els.outputCanvas.height = 0;
+
+        state.objectUrls.forEach((url) => URL.revokeObjectURL(url));
+        state.objectUrls = [];
+
+        resetCounts();
+        setStatus("Cleared.", "Overlay removed.", "");
+      }
+
+      function setBusy(isBusy) {
+        els.loadManifestButton.disabled = isBusy;
+        els.loadSelectedButton.disabled = isBusy || !els.fileSelect.value;
+        els.saveKeyButton.disabled = isBusy;
+      }
+
+      function setStatus(title, message, type) {
+        els.statusBox.className = `status ${type || ""}`.trim();
+        els.statusBox.innerHTML = `<strong>${escapeHtml(title)}</strong> ${escapeHtml(message || "")}`;
+      }
+
+      function normaliseOrderName(value) {
+        return String(value || "")
+          .trim()
+          .replace(/\s+/g, "-")
+          .toLowerCase();
+      }
+
+      function hexToRgb(hex) {
+        const clean = String(hex).replace("#", "");
+        const value = Number.parseInt(clean, 16);
+
+        return {
+          r: (value >> 16) & 255,
+          g: (value >> 8) & 255,
+          b: value & 255
+        };
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char]));
+      }
+
+      window.addEventListener("beforeunload", () => {
+        state.objectUrls.forEach((url) => URL.revokeObjectURL(url));
+      });
+
+      window.MetOfficeOverlayChecker = {
+        version: APP_VERSION,
+        bands: BANDS.map((band) => ({ ...band })),
+        applyCurrentFilter,
+        fitOverlay
+      };
+
+      init();
+    })();
+  </script>
+</body>
+</html>
