@@ -3,7 +3,8 @@
 <radialGradient id="bg" cx="50%" cy="48%" r="70%"><stop offset="0%" stop-color="#12385d"/><stop offset="48%" stop-color="#06172d"/><stop offset="100%" stop-color="#01050b"/></radialGradient>
 <radialGradient id="ring" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8fdff"/><stop offset="100%" stop-color="#39dcff"/></radialGradient>
 <radialGradient id="earth" cx="50%" cy="12%" r="94%"><stop offset="0%" stop-color="#348fff"/><stop offset="30%" stop-color="#1459b2"/><stop offset="62%" stop-color="#082f68"/><stop offset="100%" stop-color="#041225"/></radialGradient>
-<radialGradient id="flare" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="24%" stop-color="#fff0b5"/><stop offset="50%" stop-color="#ffb13f"/><stop offset="100%" stop-color="#ff8618" stop-opacity="0"/></radialGradient>
+<radialGradient id="flare" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff"/><stop offset="24%" stop-color="#f4fcff"/><stop offset="50%" stop-color="#9be6ff"/><stop offset="78%" stop-color="#3fbfff" stop-opacity=".55"/><stop offset="100%" stop-color="#39dcff" stop-opacity="0"/></radialGradient>
+<linearGradient id="towerGold" x1="400" y1="248" x2="400" y2="788" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffe7a8"/><stop offset="42%" stop-color="#ffd789"/><stop offset="100%" stop-color="#b87422"/></linearGradient>
 <filter id="glow" x="-55%" y="-55%" width="210%" height="210%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <clipPath id="earthClip"><ellipse cx="400" cy="842" rx="470" ry="330"/></clipPath>
 </defs>
@@ -18,10 +19,8 @@
 <circle cx="518" cy="522" r="2.4"/><circle cx="536" cy="532" r="3.2"/><circle cx="554" cy="543" r="3.8"/>
 <path d="M468 618 Q512 635 556 653 T614 685" fill="none" stroke="#ffe6a8" stroke-width="2.2" stroke-dasharray="1 7" stroke-linecap="round"/>
 </g>
-<circle cx="400" cy="248" r="72" fill="url(#flare)" filter="url(#glow)"/>
-<circle cx="400" cy="248" r="17" fill="#9a5d18"/><circle cx="400" cy="248" r="10.5" fill="#ffd17d"/>
-<g stroke="#ffd789" fill="none" stroke-linecap="round" filter="url(#glow)"><path d="M400 232 388 214 394 204 378 189 382 177" stroke-width="2.8"/><path d="M400 232 414 212 409 200 427 186 420 173 432 162" stroke-width="2.8"/></g>
-<g fill="#ffd789">
+
+<g fill="url(#towerGold)" stroke="#8a5716" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round">
 <path d="M242 788h316l-16-64h-47v-28h-29v-18H334v18h-29v28h-47z"/>
 <path d="M346 724h28l34-455h-10zM454 724h-28l-34-455h10z"/><rect x="396" y="269" width="8" height="455"/>
 <polygon points="390,269 410,269 407,255 393,255"/><circle cx="400" cy="248" r="21"/>
@@ -31,4 +30,8 @@
 <path d="M372 400 428 346h-10L362 400zM430 400 374 346h10L440 400z"/>
 <rect x="314" y="696" width="36" height="23"/><rect x="450" y="696" width="36" height="23"/>
 </g>
+
+<circle cx="400" cy="248" r="78" fill="url(#flare)" filter="url(#glow)" opacity=".88"/>
+<circle cx="400" cy="248" r="17" fill="#9a5d18"/><circle cx="400" cy="248" r="10.5" fill="#ffd17d"/>
+<g stroke="#ffd789" fill="none" stroke-linecap="round" filter="url(#glow)"><path d="M400 232 388 214 394 204 378 189 382 177" stroke-width="2.8"/><path d="M400 232 414 212 409 200 427 186 420 173 432 162" stroke-width="2.8"/></g>
 </svg>
