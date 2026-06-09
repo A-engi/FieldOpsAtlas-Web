@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas RF FM</title>
+  <title>FieldOps Atlas RF FM v1.1.1</title>
   <link rel="stylesheet" href="./shell.css?v=1.1.1" />
   <link rel="stylesheet" href="./page.css?v=1.1.1" />
 </head>
-
 <body>
   <main class="phone" data-page="fm" data-nav="rf" data-service="fm" data-version="1.1.1">
     <section class="content-canvas" aria-label="FieldOps Atlas RF FM content">
@@ -18,26 +17,79 @@
           <p class="page-lede">FM services, frequencies, stereo flags, and site distribution.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">FM overview</h2>
+        <section class="card" aria-labelledby="fmOverviewTitle">
+          <h2 class="card-title" id="fmOverviewTitle">FM overview</h2>
+
           <div class="metric-grid">
-            <div class="metric"><strong>18</strong><span>Services</span></div>
-            <div class="metric"><strong>91.5</strong><span>MHz</span></div>
-            <div class="metric"><strong>0</strong><span>Offline</span></div>
+            <div class="metric">
+              <strong>18</strong>
+              <span>Services</span>
+            </div>
+
+            <div class="metric">
+              <strong>91.5</strong>
+              <span>MHz sample</span>
+            </div>
+
+            <div class="metric">
+              <strong>0</strong>
+              <span>Offline</span>
+            </div>
           </div>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">Services</h2>
+        <section class="card" aria-labelledby="fmServicesTitle">
+          <h2 class="card-title" id="fmServicesTitle">Services</h2>
+
           <div class="list">
-            <a class="list-row" href="./index.html"><span class="row-icon">FM</span><span><b class="row-title">Radio 1</b><div class="row-sub">88.10 MHz Â· stereo</div></span><span class="status">Online</span></a>
-            <a class="list-row" href="./index.html"><span class="row-icon">FM</span><span><b class="row-title">Radio 2</b><div class="row-sub">91.50 MHz Â· stereo</div></span><span class="status">Online</span></a>
+            <a class="list-row" href="./services.html">
+              <span class="row-icon">FM</span>
+              <span>
+                <b class="row-title">FM Radio 1</b>
+                <span class="row-sub">88.10 MHz - stereo</span>
+              </span>
+              <span class="status">Online</span>
+            </a>
+
+            <a class="list-row" href="./services.html">
+              <span class="row-icon">FM</span>
+              <span>
+                <b class="row-title">FM Radio 2</b>
+                <span class="row-sub">91.50 MHz - stereo</span>
+              </span>
+              <span class="status">Online</span>
+            </a>
+
+            <a class="list-row" href="./sites.html">
+              <span class="row-icon">TX</span>
+              <span>
+                <b class="row-title">Regional service</b>
+                <span class="row-sub">Public demo coverage group</span>
+              </span>
+              <span class="status">Online</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="fmChecksTitle">
+          <h2 class="card-title" id="fmChecksTitle">Checks</h2>
+
+          <div class="action-grid">
+            <a class="action-card" href="./paths.html">
+              <span class="action-icon" aria-hidden="true">RF</span>
+              <strong>Path view</strong>
+            </a>
+
+            <a class="action-card" href="./equipment.html">
+              <span class="action-icon" aria-hidden="true">ANT</span>
+              <strong>Antenna view</strong>
+            </a>
           </div>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="./shell.js?v=1.1.1"></script>
+  <script src="./shell.js?v=1.1.1" defer></script>
 </body>
 </html>
