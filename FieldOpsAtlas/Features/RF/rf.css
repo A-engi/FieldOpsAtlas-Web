@@ -157,7 +157,7 @@
 }
 
 /* =========================================================
-   04. Collapsible path pane
+   04. Path pane: datum layout
    ========================================================= */
 
 .rf-path-toggle {
@@ -169,11 +169,31 @@
 }
 
 .rf-path-pane {
+  --path-pane-pad-x: 8px;
+  --path-pane-pad-y: 7px;
+  --path-row-gap: 5px;
+  --path-title-height: 22px;
+
   --path-node-size: 22px;
   --path-node-icon-size: 9px;
-  --path-signal-width: 34px;
-  --path-signal-overlap: 7px;
-  --path-signal-x-offset: -6px;
+  --path-node-row-height: 44px;
+  --path-node-edge-offset: 11px;
+  --path-node-gap: 5px;
+
+  --path-signal-width: 18px;
+  --path-signal-left: 2px;
+  --path-signal-top: calc(
+    var(--path-title-height) +
+    var(--path-row-gap) +
+    var(--path-node-edge-offset) +
+    var(--path-node-size) +
+    var(--path-node-gap)
+  );
+  --path-signal-bottom: calc(
+    var(--path-node-edge-offset) +
+    var(--path-node-size) +
+    var(--path-node-gap)
+  );
 
   position: absolute;
   top: 0;
@@ -227,16 +247,33 @@
 }
 
 .rf-path-pane-body {
+  position: relative;
   height: 100%;
   min-height: 0;
-  padding: 7px 7px 7px 8px;
+  padding:
+    var(--path-pane-pad-y)
+    7px
+    var(--path-pane-pad-y)
+    var(--path-pane-pad-x);
   display: grid;
-  grid-template-rows: 22px 44px minmax(168px, 1fr) 44px;
-  gap: 5px;
+  grid-template-columns: var(--path-node-size) minmax(0, 1fr);
+  grid-template-rows:
+    var(--path-title-height)
+    var(--path-node-row-height)
+    minmax(0, 1fr)
+    var(--path-node-row-height);
+  column-gap: 7px;
+  row-gap: var(--path-row-gap);
   overflow: hidden;
 }
 
+/* =========================================================
+   05. Path pane: title and transmitter rows
+   ========================================================= */
+
 .rf-path-pane-title {
+  grid-column: 1 / -1;
+  grid-row: 1;
   min-width: 0;
   padding-bottom: 4px;
   display: grid;
@@ -266,19 +303,23 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  text-overflow: clip;
 }
 
-/* =========================================================
-   05. Path pane site rows
-   ========================================================= */
-
 .rf-path-site {
+  grid-column: 1 / -1;
   min-width: 0;
   display: grid;
   grid-template-columns: var(--path-node-size) minmax(0, 1fr);
   align-items: center;
-  gap: 6px;
+  column-gap: 7px;
+}
+
+.rf-path-site.is-from {
+  grid-row: 2;
+}
+
+.rf-path-site.is-to {
+  grid-row: 4;
 }
 
 .rf-path-mast {
@@ -340,36 +381,34 @@
 }
 
 /* =========================================================
-   06. Path signal and metrics
+   06. Path pane: signal rail and detail data
    ========================================================= */
 
 .rf-path-mid {
-  position: relative;
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  align-items: center;
-  gap: 7px;
-  overflow: visible;
+  display: contents;
 }
 
 .rf-path-signal-vertical {
+  position: absolute;
+  left: var(--path-signal-left);
+  top: var(--path-signal-top);
+  bottom: var(--path-signal-bottom);
+  z-index: 1;
   width: var(--path-signal-width);
-  height: calc(100% + (var(--path-signal-overlap) * 2));
+  height: auto;
   max-height: none;
-  margin-block: calc(var(--path-signal-overlap) * -1);
-  margin-left: var(--path-signal-x-offset);
-  justify-self: start;
-  align-self: center;
-  object-fit: contain;
+  object-fit: fill;
   object-position: center;
   filter:
     drop-shadow(0 0 3px rgba(255, 225, 70, 0.42))
     drop-shadow(0 0 6px rgba(255, 145, 55, 0.12));
+  pointer-events: none;
 }
 
 .rf-path-frequency {
+  grid-column: 2;
+  grid-row: 3;
+  z-index: 2;
   min-width: 0;
   display: grid;
   align-content: center;
