@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FieldOps Atlas Offline Shell Menu v14 Repo Icons</title>
+  <style>
+    /* ==========================================================================
+       Tokens
+       ========================================================================== */
+
+    :root {
+      --phone-width: 390px;
+      --phone-height: 760px;
+
+      --shell-side: 18px;
+      --shell-surface: #081d34;
+
+      --text: rgba(255, 255, 255, 0.92);
+      --text-soft: rgba(226, 241, 255, 0.78);
+      --text-muted: rgba(226, 241, 255, 0.66);
+
+      --gold: #ffe3ad;
+      --gold-strong: #ffd176;
+      --gold-border: rgba(255, 207, 119, 0.78);
+      --gold-line: rgba(255, 207, 119, 0.40);
+      --gold-glow: rgba(255, 205, 95, 0.20);
+
+      --blue-border: rgba(111, 198, 255, 0.88);
+      --blue-glow: rgba(78, 178, 255, 0.42);
+
+      --button-top: #15395e;
+      --button-bottom: #102c4c;
+      --button-border: rgba(76, 113, 151, 0.74);
+
+      --outer-radius: 12px;
+      --inner-radius: 10px;
+      --panel-radius: 24px;
+
+      --top-height: 56px;
+      --top-pad-y: 7px;
+      --top-control-height: 42px;
+      --top-icon-button-width: 44px;
+      --top-icon-size: 25px;
+
+      --gap: 5px;
+
+      --search-height: var(--top-control-height);
+      --search-icon-size: 25px;
+      --search-edge: 12px;
+      --search-gap: 8px;
+      --search-brand-gap: 9px;
+      --search-cluster-gap: 12px;
+
+      --nav-height: 38px;
+      --nav-design-width: 68px;
+      --nav-pad-x: calc(var(--nav-design-width) * 0.17);
+      --nav-pad-y: calc(var(--nav-height) * 0.17);
+      --nav-usable-y: calc(var(--nav-height) - (var(--nav-pad-y) * 2));
+      --nav-text-height: calc(var(--nav-usable-y) / 3.1);
+      --nav-icon-size: calc(var(--nav-text-height) * 2);
+      --nav-text-width: calc(var(--nav-design-width) - (var(--nav-pad-x) * 2));
+      --nav-gap: calc(var(--nav-text-height) * 0.1);
+      --bottom-lift: 8px;
+
+      --drawer-left: 10px;
+      --drawer-top: 64px;
+      --drawer-bottom: 54px;
+      --drawer-width: min(282px, calc(100% - 78px));
+      --drawer-padding: 13px;
+      --drawer-row-height: 46px;
+      --drawer-row-gap: 7px;
+      --drawer-icon-size: 23px;
+      --drawer-close-size: 38px;
+      --drawer-brand-size: 44px;
+    }
+
+    /* ==========================================================================
+       Base
+       ========================================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      padding: 16px;
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(49, 115, 168, 0.16), transparent 42%),
+        linear-gradient(180deg, #07182d 0%, #050f1c 100%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* ==========================================================================
+       Phone mockup
+       ========================================================================== */
+
+    .phone {
+      position: relative;
+      width: min(100%, var(--phone-width));
+      height: min(var(--phone-height), calc(100vh - 32px));
+      min-height: 680px;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 38% 30%, rgba(96, 235, 255, 0.16), transparent 34%),
+        radial-gradient(circle at 72% 58%, rgba(255, 207, 119, 0.14), transparent 32%),
+        linear-gradient(180deg, rgba(14, 45, 78, 0.96), rgba(10, 35, 63, 0.84) 48%, rgba(8, 28, 52, 0.96));
+      box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .map-background {
+      position: absolute;
+      inset: 0;
+      opacity: 0.82;
+      background:
+        linear-gradient(28deg, transparent 0 42%, rgba(96, 235, 255, 0.14) 42.25%, transparent 42.8%),
+        linear-gradient(126deg, transparent 0 54%, rgba(255, 207, 119, 0.12) 54.25%, transparent 54.8%),
+        radial-gradient(circle at 28% 35%, rgba(255, 255, 255, 0.11), transparent 20%),
+        radial-gradient(circle at 80% 48%, rgba(96, 235, 255, 0.10), transparent 22%);
+    }
+
+    .map-background::after {
+      content: "offline shell";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: rgba(255, 255, 255, 0.24);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transform: translate(-50%, -50%);
+    }
+
+    .map-dim {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      background:
+        linear-gradient(90deg, rgba(2, 8, 16, 0.00), rgba(2, 8, 16, 0.44)),
+        rgba(2, 8, 16, 0.08);
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       Shared controls
+       ========================================================================== */
+
+    .button-surface {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid var(--button-border);
+      border-radius: var(--inner-radius);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.12), transparent 36%),
+        linear-gradient(180deg, var(--button-top), var(--button-bottom));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 8px 20px rgba(0, 0, 0, 0.16);
+      backdrop-filter: blur(10px);
+    }
+
+    .repo-icon {
+      display: block;
+      flex: 0 0 auto;
+      background-color: currentColor;
+      -webkit-mask: var(--icon-src) center / contain no-repeat;
+      mask: var(--icon-src) center / contain no-repeat;
+    }
+
+    .icon--menu {
+      --icon-src: url("data/icons/hamburger.svg");
+    }
+
+    .icon--search {
+      --icon-src: url("data/icons/search.svg");
+    }
+
+    .icon--filter {
+      --icon-src: url("data/icons/filter.svg");
+    }
+
+    .icon--close {
+      --icon-src: url("data/icons/close.svg");
+    }
+
+    .icon--atlas {
+      --icon-src: url("data/icons/atlas-transmitter-gold.svg");
+    }
+
+    .icon--map {
+      --icon-src: url("data/icons/map.svg");
+    }
+
+    .icon--rf {
+      --icon-src: url("data/icons/rf.svg");
+    }
+
+    .icon--network {
+      --icon-src: url("data/icons/network.svg");
+    }
+
+    .icon--docs {
+      --icon-src: url("data/icons/docs.svg");
+    }
+
+    .icon--tools {
+      --icon-src: url("data/icons/tools.svg");
+    }
+
+    .icon--profile {
+      --icon-src: url("data/icons/sites.svg");
+    }
+
+    .icon--settings {
+      --icon-src: url("data/icons/settings.svg");
+    }
+
+    .icon--info {
+      --icon-src: url("data/icons/info.svg");
+    }
+
+    .icon-button {
+      width: var(--top-icon-button-width);
+      height: var(--top-control-height);
+      padding: 0;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+
+    .icon-button .repo-icon {
+      width: var(--top-icon-size);
+      height: var(--top-icon-size);
+    }
+
+    /* ==========================================================================
+       Top shell
+       ========================================================================== */
+
+    .top-shell {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: var(--top-height);
+      padding: var(--top-pad-y) var(--shell-side);
+      display: grid;
+      grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
+      gap: var(--gap);
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .top-shell > * {
+      pointer-events: auto;
+    }
+
+    .top-shell .icon-button:first-child {
+      border-radius: var(--outer-radius) var(--inner-radius) var(--inner-radius) var(--outer-radius);
+    }
+
+    .top-shell .icon-button:last-child {
+      border-radius: var(--inner-radius) var(--outer-radius) var(--outer-radius) var(--inner-radius);
+    }
+
+    /* ==========================================================================
+       Search
+       ========================================================================== */
+
+    .search-button {
+      min-width: 0;
+      height: var(--search-height);
+      padding: 0 var(--search-edge);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: var(--search-cluster-gap);
+      text-align: left;
+    }
+
+    .search-lead,
+    .search-brand,
+    .atlas-logo {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .search-lead {
+      gap: var(--search-gap);
+      overflow: hidden;
+    }
+
+    .search-icon {
+      flex: 0 0 var(--search-icon-size);
+      width: var(--search-icon-size);
+      height: var(--search-icon-size);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .search-query {
+      min-width: 0;
+      overflow: hidden;
+      color: rgba(215, 235, 247, 0.78);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .search-brand {
+      gap: var(--search-brand-gap);
+    }
+
+    .search-divider {
+      width: 1px;
+      height: 18px;
+      flex: 0 0 auto;
+      background: var(--gold-line);
+    }
+
+    .atlas-logo {
+      height: 28px;
+      gap: 7px;
+      color: #fffdf7;
+    }
+
+    .atlas-logo .repo-icon {
+      width: 21px;
+      height: 21px;
+      color: var(--gold);
+      filter: drop-shadow(0 0 3px rgba(237, 191, 99, 0.24));
+    }
+
+    .atlas-word {
+      color: #fffdf7;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.022em;
+      text-transform: uppercase;
+      transform: translateY(1px);
+    }
+
+    /* ==========================================================================
+       Drawer panel
+       ========================================================================== */
+
+    .drawer {
+      position: absolute;
+      z-index: 8;
+      top: var(--drawer-top);
+      bottom: var(--drawer-bottom);
+      left: var(--drawer-left);
+      width: var(--drawer-width);
+      padding: var(--drawer-padding);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--gold-border);
+      border-radius: var(--panel-radius);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 17% 6%, rgba(57, 148, 255, 0.30), transparent 26%),
+        radial-gradient(circle at 92% 100%, rgba(255, 207, 119, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(12, 35, 62, 0.95), rgba(6, 20, 38, 0.96));
+      box-shadow:
+        0 0 0 1px rgba(255, 228, 166, 0.16),
+        0 0 22px rgba(255, 205, 95, 0.28),
+        0 22px 42px rgba(0, 0, 0, 0.40),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .drawer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.085), transparent 24%),
+        linear-gradient(90deg, rgba(111, 198, 255, 0.12), transparent 58%);
+      pointer-events: none;
+    }
+
+    .drawer > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       Drawer header
+       ========================================================================== */
+
+    .drawer-header {
+      min-height: var(--drawer-brand-size);
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: var(--drawer-brand-size) minmax(0, 1fr) var(--drawer-close-size);
+      gap: 9px;
+      align-items: center;
+    }
+
+    .brand-mark {
+      width: var(--drawer-brand-size);
+      height: var(--drawer-brand-size);
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      border-radius: 15px;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(67, 176, 255, 0.36), transparent 40%),
+        linear-gradient(180deg, rgba(13, 43, 75, 0.94), rgba(7, 24, 45, 0.78));
+      filter: drop-shadow(0 0 8px rgba(61, 151, 255, 0.18));
+    }
+
+    .brand-mark .repo-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .brand-title__fieldops {
+      color: #78d3ff;
+      font-size: 18px;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+      text-shadow: 0 0 8px rgba(78, 178, 255, 0.20);
+    }
+
+    .brand-title .atlas-word {
+      font-size: 14px;
+      transform: translateY(0);
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      overflow: hidden;
+      color: var(--text-soft);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .drawer-close {
+      width: var(--drawer-close-size);
+      height: var(--drawer-close-size);
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+    }
+
+    .drawer-close svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
+    /* ==========================================================================
+       Drawer pages
+       ========================================================================== */
+
+    .section-label {
+      margin: 0;
+      color: rgba(226, 241, 255, 0.82);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .pages-toggle {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .section-toggle {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .section-toggle__button {
+      min-width: 58px;
+      height: 26px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid rgba(76, 113, 151, 0.74);
+      border-radius: 9px;
+      color: rgba(226, 241, 255, 0.78);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.10), transparent 36%),
+        linear-gradient(180deg, rgba(21, 57, 94, 0.92), rgba(16, 44, 76, 0.92));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-toggle__text {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .section-toggle__chevron {
+      color: var(--gold-strong);
+      font-size: 15px;
+      line-height: 1;
+      transform: rotate(90deg);
+      transition: transform 160ms ease;
+    }
+
+    .drawer-pages {
+      display: grid;
+      gap: var(--drawer-row-gap);
+    }
+
+    .drawer-page-option {
+      display: none;
+    }
+
+    .pages-toggle:checked ~ .drawer-pages .drawer-page-option {
+      display: grid;
+    }
+
+    .pages-toggle:checked ~ .section-toggle .section-toggle__chevron {
+      transform: rotate(-90deg);
+    }
+
+    .pages-toggle:checked ~ .section-toggle .section-toggle__text::before {
+      content: "Hide";
+    }
+
+    .pages-toggle:not(:checked) ~ .section-toggle .section-toggle__text::before {
+      content: "All";
+    }
+
+    .current-page-card {
+      position: relative;
+      width: 100%;
+      min-height: 44px;
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: 23px minmax(0, 1fr) 14px;
+      gap: 10px;
+      align-items: center;
+      overflow: hidden;
+      text-align: left;
+      border-color: rgba(123, 207, 255, 0.78);
+      border-radius: var(--outer-radius);
+      background:
+        radial-gradient(circle at 20% 50%, rgba(98, 199, 255, 0.24), transparent 48%),
+        linear-gradient(180deg, rgba(26, 72, 116, 0.98), rgba(16, 47, 82, 0.98));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 0 0 1px rgba(123, 207, 255, 0.16),
+        0 0 10px rgba(78, 178, 255, 0.24);
+    }
+
+    .current-page-card::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 0;
+      width: 3px;
+      border-radius: 0 999px 999px 0;
+      background: rgba(123, 207, 255, 0.88);
+      box-shadow: 0 0 9px rgba(78, 178, 255, 0.44);
+      pointer-events: none;
+    }
+
+    .current-page-card .repo-icon {
+      width: 23px;
+      height: 23px;
+      display: block;
+      color: var(--gold);
+      filter: drop-shadow(0 0 2px rgba(255, 207, 119, 0.14));
+    }
+
+    .current-page-card__title {
+      min-width: 0;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.97);
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1;
+      letter-spacing: -0.015em;
+      white-space: nowrap;
+    }
+
+    .current-page-card__chevron {
+      color: var(--gold-strong);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .drawer-row {
+      width: 100%;
+      height: var(--drawer-row-height);
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: var(--drawer-icon-size) minmax(0, 1fr) 14px;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      text-decoration: none;
+    }
+
+    .drawer-row .repo-icon {
+      width: var(--drawer-icon-size);
+      height: var(--drawer-icon-size);
+      display: block;
+      color: var(--gold);
+      filter: drop-shadow(0 0 4px rgba(237, 191, 99, 0.12));
+    }
+
+    .drawer-row__label {
+      min-width: 0;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.96);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      white-space: nowrap;
+    }
+
+    .drawer-row__chevron {
+      color: var(--gold-strong);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .drawer-row.is-active {
+      color: var(--gold);
+      border-color: var(--blue-border);
+      background:
+        radial-gradient(circle at 30% 50%, rgba(82, 186, 255, 0.26), transparent 50%),
+        linear-gradient(180deg, rgba(33, 83, 135, 0.98), rgba(12, 42, 75, 0.98));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 0 0 1px rgba(111, 198, 255, 0.24),
+        0 0 16px var(--blue-glow);
+    }
+
+    /* ==========================================================================
+       Account menu
+       ========================================================================== */
+
+    .drawer-spacer {
+      flex: 1 1 auto;
+      min-height: 10px;
+    }
+
+    .account-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .account-button {
+      height: 42px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+    }
+
+    .account-button .repo-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    /* ==========================================================================
+       Drawer footer
+       ========================================================================== */
+
+    .online-row {
+      min-height: 38px;
+      margin-top: 10px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .checkbox {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      border: 2px solid rgba(182, 215, 249, 0.88);
+      border-radius: 5px;
+      background: rgba(8, 21, 39, 0.62);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .version-row {
+      min-height: 34px;
+      margin-top: 7px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .version-row .repo-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      color: var(--gold);
+    }
+
+    .phone-home-indicator {
+      position: absolute;
+      z-index: 9;
+      right: 30%;
+      bottom: 8px;
+      left: 30%;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    }
+
+    /* ==========================================================================
+       Bottom shell
+       ========================================================================== */
+
+    .bottom-shell {
+      position: absolute;
+      z-index: 5;
+      right: 0;
+      bottom: var(--bottom-lift);
+      left: 0;
+      padding: 0 var(--shell-side);
+      pointer-events: none;
+    }
+
+    .bottom-shell::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: calc(var(--bottom-lift) * -1);
+      left: 0;
+      z-index: -1;
+      height: calc(var(--nav-height) + var(--bottom-lift));
+      background:
+        linear-gradient(180deg, rgba(8, 29, 52, 0), rgba(8, 29, 52, 0.78) 46%, var(--shell-surface) 100%);
+      pointer-events: none;
+    }
+
+    .bottom-nav {
+      height: var(--nav-height);
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        var(--gap)
+        minmax(0, 1fr)
+        var(--gap)
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+      pointer-events: auto;
+    }
+
+    /* ==========================================================================
+       Bottom navigation buttons
+       ========================================================================== */
+
+    .nav-button {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+      height: var(--nav-height);
+      padding: 0;
+      display: grid;
+      grid-template-rows:
+        var(--nav-pad-y)
+        var(--nav-icon-size)
+        var(--nav-gap)
+        var(--nav-text-height)
+        var(--nav-pad-y);
+      justify-items: center;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--button-border);
+      border-right: 0;
+      border-radius: 0;
+      line-height: 1;
+    }
+
+    .nav-button:nth-child(1) {
+      grid-column: 1;
+      border-right: 1px solid var(--button-border);
+      border-radius: var(--outer-radius);
+    }
+
+    .nav-button:nth-child(2) {
+      grid-column: 3;
+    }
+
+    .nav-button:nth-child(3) {
+      grid-column: 5;
+      border-left: 1px solid var(--button-border);
+      border-radius: var(--outer-radius) 0 0 var(--outer-radius);
+    }
+
+    .nav-button:nth-child(4) {
+      grid-column: 6;
+    }
+
+    .nav-button:nth-child(5) {
+      grid-column: 7;
+      border-right: 1px solid var(--button-border);
+      border-radius: 0 var(--outer-radius) var(--outer-radius) 0;
+    }
+
+    .nav-button.is-active {
+      border-radius: var(--inner-radius);
+    }
+
+    .nav-button .repo-icon {
+      grid-row: 2;
+      width: var(--nav-icon-size);
+      height: var(--nav-icon-size);
+      display: block;
+    }
+
+    .nav-button span {
+      grid-row: 4;
+      width: var(--nav-text-width);
+      height: var(--nav-text-height);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: var(--nav-text-height);
+      font-weight: 700;
+      line-height: var(--nav-text-height);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .nav-button.is-active {
+      z-index: 3;
+      color: var(--gold);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--inner-radius);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(120, 211, 255, 0.34), transparent 48%),
+        radial-gradient(circle at 50% 104%, rgba(255, 190, 47, 0.18), transparent 38%),
+        linear-gradient(180deg, #2a6fac 0%, #184c7f 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 0 0 1px rgba(255, 220, 140, 0.12),
+        0 0 10px var(--gold-glow);
+      transform: translateY(-1px);
+    }
+
+    .nav-button.is-active::after {
+      content: "";
+      position: absolute;
+      right: 16%;
+      bottom: 0;
+      left: 16%;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.96), transparent);
+      box-shadow: 0 0 8px rgba(255, 199, 75, 0.55);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="map-background" aria-hidden="true"></div>
+
+    <header class="top-shell" aria-label="Map controls">
+      <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="true">
+        <span class="repo-icon icon--menu" aria-hidden="true"></span>
+      </button>
+
+      <button class="button-surface search-button" type="button" aria-label="Search">
+        <span class="search-lead">
+          <span class="repo-icon search-icon icon--search" aria-hidden="true"></span>
+          <span class="search-query">Find...</span>
+        </span>
+
+        <span class="search-brand" aria-hidden="true">
+          <span class="search-divider"></span>
+          <span class="atlas-logo">
+            <span class="repo-icon icon--atlas" aria-hidden="true"></span>
+            <span class="atlas-word">ATLAS</span>
+          </span>
+        </span>
+      </button>
+
+      <button class="button-surface icon-button" type="button" aria-label="Open filter">
+        <span class="repo-icon icon--filter" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="map-dim" aria-hidden="true"></div>
+
+    <aside class="drawer" aria-label="Main navigation menu">
+      <header class="drawer-header">
+        <div class="brand-mark" aria-hidden="true">
+          <span class="repo-icon icon--atlas" aria-hidden="true"></span>
+        </div>
+
+        <div class="brand-copy">
+          <h1 class="brand-title"><span class="brand-title__fieldops">FieldOps</span><span class="atlas-word">ATLAS</span></h1>
+          <p class="brand-subtitle">UK Network Toolkit</p>
+        </div>
+
+        <button class="button-surface drawer-close" type="button" aria-label="Close menu">
+          <span class="repo-icon icon--close" aria-hidden="true"></span>
+        </button>
+      </header>
+
+      <input class="pages-toggle" type="checkbox" id="pages-toggle">
+
+      <div class="section-toggle">
+        <p class="section-label">Pages</p>
+        <label class="section-toggle__button" for="pages-toggle" aria-label="Show or hide page list">
+          <span class="section-toggle__text"></span>
+          <span class="section-toggle__chevron" aria-hidden="true">âº</span>
+        </label>
+      </div>
+
+      <nav class="drawer-pages" aria-label="Pages">
+        <button class="button-surface drawer-row drawer-page-option" type="button">
+          <span class="repo-icon icon--map" aria-hidden="true"></span>
+          <span class="drawer-row__label">Map</span>
+          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+        </button>
+
+        <button class="button-surface current-page-card" type="button" aria-current="page">
+          <span class="repo-icon icon--rf" aria-hidden="true"></span>
+          <span class="current-page-card__title">RF</span>
+          <span class="current-page-card__chevron" aria-hidden="true">âº</span>
+        </button>
+
+        <button class="button-surface drawer-row drawer-page-option" type="button">
+          <span class="repo-icon icon--network" aria-hidden="true"></span>
+          <span class="drawer-row__label">Network</span>
+          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+        </button>
+
+        <button class="button-surface drawer-row drawer-page-option" type="button">
+          <span class="repo-icon icon--docs" aria-hidden="true"></span>
+          <span class="drawer-row__label">Docs</span>
+          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+        </button>
+
+        <button class="button-surface drawer-row drawer-page-option" type="button">
+          <span class="repo-icon icon--tools" aria-hidden="true"></span>
+          <span class="drawer-row__label">Tools</span>
+          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+        </button>
+      </nav>
+
+      <div class="drawer-spacer" aria-hidden="true"></div>
+
+      <p class="section-label">User</p>
+
+      <div class="account-menu" aria-label="User menu">
+        <button class="button-surface account-button" type="button" aria-label="Open profile">
+          <span class="repo-icon icon--profile" aria-hidden="true"></span>
+        </button>
+
+        <button class="button-surface account-button" type="button" aria-label="Open settings">
+          <span class="repo-icon icon--settings" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <button class="button-surface online-row" type="button" aria-pressed="false">
+        <span class="checkbox" aria-hidden="true"></span>
+        <span>Work online</span>
+      </button>
+
+      <div class="button-surface version-row">
+        <span class="repo-icon icon--info" aria-hidden="true"></span>
+        <span>FieldOps Atlas v1.1.1</span>
+      </div>
+    </aside>
+
+    <footer class="bottom-shell">
+      <nav class="bottom-nav" aria-label="Primary navigation">
+        <button class="button-surface nav-button" type="button">
+          <span class="repo-icon icon--map" aria-hidden="true"></span>
+          <span>Map</span>
+        </button>
+
+        <button class="button-surface nav-button is-active" type="button" aria-current="page">
+          <span class="repo-icon icon--rf" aria-hidden="true"></span>
+          <span>RF</span>
+        </button>
+
+        <button class="button-surface nav-button" type="button">
+          <span class="repo-icon icon--network" aria-hidden="true"></span>
+          <span>Net</span>
+        </button>
+
+        <button class="button-surface nav-button" type="button">
+          <span class="repo-icon icon--docs" aria-hidden="true"></span>
+          <span>Docs</span>
+        </button>
+
+        <button class="button-surface nav-button" type="button">
+          <span class="repo-icon icon--tools" aria-hidden="true"></span>
+          <span>Tool</span>
+        </button>
+      </nav>
+    </footer>
+
+    <div class="phone-home-indicator" aria-hidden="true"></div>
+  </main>
+</body>
+</html>
