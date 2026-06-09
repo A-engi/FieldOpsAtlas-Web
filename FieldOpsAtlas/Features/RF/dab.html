@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas RF DAB</title>
+  <title>FieldOps Atlas RF DAB v1.1.1</title>
   <link rel="stylesheet" href="./shell.css?v=1.1.1" />
   <link rel="stylesheet" href="./page.css?v=1.1.1" />
 </head>
-
 <body>
   <main class="phone" data-page="dab" data-nav="rf" data-service="dab" data-version="1.1.1">
     <section class="content-canvas" aria-label="FieldOps Atlas RF DAB content">
@@ -18,26 +17,79 @@
           <p class="page-lede">DAB ensembles, audio service groups, and transmitter status.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">DAB overview</h2>
+        <section class="card" aria-labelledby="dabOverviewTitle">
+          <h2 class="card-title" id="dabOverviewTitle">DAB overview</h2>
+
           <div class="metric-grid">
-            <div class="metric"><strong>12</strong><span>Ensembles</span></div>
-            <div class="metric"><strong>36</strong><span>Services</span></div>
-            <div class="metric"><strong>1</strong><span>Alert</span></div>
+            <div class="metric">
+              <strong>12</strong>
+              <span>Ensembles</span>
+            </div>
+
+            <div class="metric">
+              <strong>36</strong>
+              <span>Services</span>
+            </div>
+
+            <div class="metric">
+              <strong>1</strong>
+              <span>Alert</span>
+            </div>
           </div>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">Ensembles</h2>
+        <section class="card" aria-labelledby="dabEnsemblesTitle">
+          <h2 class="card-title" id="dabEnsemblesTitle">Ensembles</h2>
+
           <div class="list">
-            <a class="list-row" href="./index.html"><span class="row-icon">â¦</span><span><b class="row-title">National DAB</b><div class="row-sub">Main national audio layer</div></span><span class="status">Online</span></a>
-            <a class="list-row" href="./index.html"><span class="row-icon">â¦</span><span><b class="row-title">Local DAB</b><div class="row-sub">Regional ensemble group</div></span><span class="status warn">Watch</span></a>
+            <a class="list-row" href="./services.html">
+              <span class="row-icon">DAB</span>
+              <span>
+                <b class="row-title">National DAB</b>
+                <span class="row-sub">Main national audio layer</span>
+              </span>
+              <span class="status">Online</span>
+            </a>
+
+            <a class="list-row" href="./services.html">
+              <span class="row-icon">DAB</span>
+              <span>
+                <b class="row-title">Local DAB</b>
+                <span class="row-sub">Regional ensemble group</span>
+              </span>
+              <span class="status warn">Watch</span>
+            </a>
+
+            <a class="list-row" href="./paths.html">
+              <span class="row-icon">RF</span>
+              <span>
+                <b class="row-title">Contribution path</b>
+                <span class="row-sub">Public demo bearer - monitored</span>
+              </span>
+              <span class="status">Online</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="dabChecksTitle">
+          <h2 class="card-title" id="dabChecksTitle">Checks</h2>
+
+          <div class="action-grid">
+            <a class="action-card" href="./sites.html">
+              <span class="action-icon" aria-hidden="true">SITE</span>
+              <strong>Site list</strong>
+            </a>
+
+            <a class="action-card" href="./equipment.html">
+              <span class="action-icon" aria-hidden="true">RX</span>
+              <strong>Receiver view</strong>
+            </a>
           </div>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="./shell.js?v=1.1.1"></script>
+  <script src="./shell.js?v=1.1.1" defer></script>
 </body>
 </html>
