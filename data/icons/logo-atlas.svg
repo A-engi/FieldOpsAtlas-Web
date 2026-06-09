@@ -1,7 +1,7 @@
 <svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="FieldOps Atlas logo">
 <defs>
 <radialGradient id="bg" cx="50%" cy="48%" r="70%"><stop offset="0%" stop-color="#12385d"/><stop offset="48%" stop-color="#06172d"/><stop offset="100%" stop-color="#01050b"/></radialGradient>
-<radialGradient id="ring" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8fdff"/><stop offset="100%" stop-color="#39dcff"/></radialGradient>
+<radialGradient id="ring" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#d8ffff"/><stop offset="100%" stop-color="#47cfff"/></radialGradient>
 <radialGradient id="earth" cx="50%" cy="12%" r="94%"><stop offset="0%" stop-color="#348fff"/><stop offset="30%" stop-color="#1459b2"/><stop offset="62%" stop-color="#082f68"/><stop offset="100%" stop-color="#041225"/></radialGradient>
 <radialGradient id="flare" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff"/><stop offset="20%" stop-color="#fff8d8"/><stop offset="42%" stop-color="#ffd17d"/><stop offset="70%" stop-color="#61d8ff" stop-opacity=".46"/><stop offset="100%" stop-color="#39dcff" stop-opacity="0"/></radialGradient>
 <linearGradient id="towerGold" x1="400" y1="248" x2="400" y2="788" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff2bd"/><stop offset="36%" stop-color="#ffd789"/><stop offset="68%" stop-color="#d99a3b"/><stop offset="100%" stop-color="#8e5518"/></linearGradient>
@@ -15,7 +15,7 @@
 <circle cx="400" cy="248" r="141" stroke-width="14"/>
 <circle cx="400" cy="248" r="232" stroke-width="13" opacity=".88"/>
 </g>
-<g fill="none" stroke="url(#ring)" stroke-linecap="round" filter="url(#glow)"><circle cx="400" cy="248" r="141" stroke-width="5.5"/><circle cx="400" cy="248" r="232" stroke-width="5" opacity=".94"/></g>
+<g fill="none" stroke="url(#ring)" stroke-linecap="round" filter="url(#glow)"><circle cx="400" cy="248" r="141" stroke-width="7"/><circle cx="400" cy="248" r="232" stroke-width="6.5" opacity="1"/></g>
 <g opacity=".86">
 <ellipse cx="400" cy="842" rx="482" ry="340" fill="#02070c" transform="translate(0 -18)"/>
 <ellipse cx="400" cy="842" rx="486" ry="344" fill="none" stroke="#02070c" stroke-width="28" transform="translate(0 -18)"/>
@@ -23,8 +23,8 @@
 </g>
 <g filter="url(#softBlackShadow)">
 <ellipse cx="400" cy="842" rx="470" ry="330" fill="url(#earth)"/>
-<ellipse cx="400" cy="812" rx="438" ry="250" fill="#43dfff" opacity=".10"/>
-<ellipse cx="400" cy="842" rx="472" ry="332" fill="none" stroke="#58e4ff" stroke-width="5.5" opacity=".95" filter="url(#glow)"/>
+<ellipse cx="400" cy="812" rx="442" ry="252" fill="#43dfff" opacity=".22"/>
+<ellipse cx="400" cy="842" rx="472" ry="332" fill="none" stroke="#58e4ff" stroke-width="8" opacity="1" filter="url(#glow)"/>
 </g>
 <g clip-path="url(#earthClip)" fill="#ffdfaa" filter="url(#glow)">
 <circle cx="233" cy="572" r="4.2"/><circle cx="277" cy="562" r="4.5"/><circle cx="360" cy="548" r="3"/><circle cx="376" cy="559" r="4.7"/><circle cx="392" cy="568" r="4.1"/><circle cx="408" cy="567" r="4.9"/><circle cx="424" cy="559" r="3.8"/><circle cx="456" cy="551" r="3.4"/>
