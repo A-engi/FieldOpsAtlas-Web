@@ -341,18 +341,18 @@
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  align-items: stretch;
-  gap: 6px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
 }
 
 .rf-path-signal-vertical {
-  width: 28px;
-  height: calc(100% - 14px);
-  max-height: none;
-  margin-block: 7px;
-  justify-self: center;
-  align-self: stretch;
+  width: 34px;
+  height: calc(100% - 10px);
+  max-height: 240px;
+  margin-block: 5px;
+  justify-self: start;
+  align-self: center;
   object-fit: contain;
   object-position: center;
   transform: translateY(1px);
