@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FieldOps Atlas Offline Shell Menu v16 Interactive Drawer</title>
+  <title>FieldOps Atlas Offline Shell Menu v17 Stable Toggle</title>
   <style>
     /* ==========================================================================
        Tokens
@@ -199,6 +199,10 @@
 
     .icon--atlas {
       --icon-src: url("data/icons/atlas-transmitter-gold.svg");
+    }
+
+    .icon--logo {
+      --icon-src: url("data/icons/logo-atlas.svg");
     }
 
     .icon--map {
@@ -421,10 +425,10 @@
     .phone[data-drawer-open="true"] .map-dim {
       opacity: 1;
       visibility: visible;
-      pointer-events: auto;
     }
 
     .phone[data-drawer-open="true"] .drawer {
+      pointer-events: auto;
       transform: translateX(0) scale(1);
     }
 
@@ -546,6 +550,7 @@
       display: grid;
       place-items: center;
       border-radius: 13px;
+      color: rgba(255, 255, 255, 0.94);
     }
 
     .drawer-close svg {
@@ -569,13 +574,14 @@
 
     .section-card {
       padding: 10px;
-      border: 1px solid rgba(76, 113, 151, 0.74);
+      border: 1px solid rgba(101, 146, 190, 0.78);
       border-radius: 16px;
       background:
-        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.08), transparent 36%),
-        linear-gradient(180deg, rgba(10, 32, 58, 0.70), rgba(5, 18, 34, 0.54));
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.10), transparent 36%),
+        linear-gradient(180deg, rgba(14, 42, 73, 0.82), rgba(6, 22, 42, 0.68));
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 0 0 1px rgba(255, 228, 166, 0.05),
         0 8px 20px rgba(0, 0, 0, 0.12);
     }
 
@@ -630,11 +636,11 @@
       gap: var(--drawer-row-gap);
     }
 
-    .drawer-page-option {
-      display: none;
+    .drawer-page-option[hidden] {
+      display: none !important;
     }
 
-    .phone[data-pages-expanded="true"] .drawer-page-option {
+    .drawer-page-option {
       display: grid;
     }
 
@@ -1033,7 +1039,7 @@
     <aside class="drawer" aria-label="Main navigation menu">
       <header class="drawer-header">
         <div class="brand-mark" aria-hidden="true">
-          <span class="repo-icon icon--atlas" aria-hidden="true"></span>
+          <span class="repo-icon icon--logo" aria-hidden="true"></span>
         </div>
 
         <div class="brand-copy">
@@ -1056,7 +1062,7 @@
         </div>
 
         <nav class="drawer-pages" aria-label="Pages">
-        <button class="button-surface drawer-row drawer-page-option" type="button">
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
           <span class="repo-icon icon--map" aria-hidden="true"></span>
           <span class="drawer-row__label">Map</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
@@ -1068,19 +1074,19 @@
           <span class="current-page-card__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button">
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
           <span class="repo-icon icon--network" aria-hidden="true"></span>
           <span class="drawer-row__label">Network</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button">
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
           <span class="repo-icon icon--docs" aria-hidden="true"></span>
           <span class="drawer-row__label">Docs</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button">
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
           <span class="repo-icon icon--tools" aria-hidden="true"></span>
           <span class="drawer-row__label">Tools</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
@@ -1145,33 +1151,58 @@
     <div class="phone-home-indicator" aria-hidden="true"></div>
   </main>
   <script>
-    const shell = document.querySelector(".phone");
-    const openButton = document.querySelector("[data-menu-open]");
-    const closeButton = document.querySelector("[data-menu-close]");
-    const pagesToggle = document.querySelector("[data-pages-toggle]");
-    const pagesToggleText = pagesToggle?.querySelector(".section-toggle__text");
+    (function () {
+      const shell = document.querySelector(".phone");
+      const menuButton = document.querySelector("[data-menu-open]");
+      const closeButton = document.querySelector("[data-menu-close]");
+      const pagesButton = document.querySelector("[data-pages-toggle]");
+      const pagesButtonText = pagesButton ? pagesButton.querySelector(".section-toggle__text") : null;
+      const pageOptions = Array.prototype.slice.call(document.querySelectorAll(".drawer-page-option"));
 
-    function setDrawerOpen(isOpen) {
-      shell.dataset.drawerOpen = String(isOpen);
-      openButton?.setAttribute("aria-expanded", String(isOpen));
-    }
-
-    function setPagesExpanded(isExpanded) {
-      shell.dataset.pagesExpanded = String(isExpanded);
-      pagesToggle?.setAttribute("aria-expanded", String(isExpanded));
-      if (pagesToggleText) {
-        pagesToggleText.textContent = isExpanded ? "Hide" : "All";
+      function setDrawerOpen(isOpen) {
+        shell.setAttribute("data-drawer-open", isOpen ? "true" : "false");
+        if (menuButton) {
+          menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        }
       }
-    }
 
-    openButton?.addEventListener("click", () => setDrawerOpen(true));
-    closeButton?.addEventListener("click", () => setDrawerOpen(false));
-    pagesToggle?.addEventListener("click", () => {
-      setPagesExpanded(shell.dataset.pagesExpanded !== "true");
-    });
+      function setPagesExpanded(isExpanded) {
+        shell.setAttribute("data-pages-expanded", isExpanded ? "true" : "false");
 
-    setDrawerOpen(false);
-    setPagesExpanded(false);
+        if (pagesButton) {
+          pagesButton.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+        }
+
+        if (pagesButtonText) {
+          pagesButtonText.textContent = isExpanded ? "Hide" : "All";
+        }
+
+        pageOptions.forEach(function (row) {
+          row.hidden = !isExpanded;
+        });
+      }
+
+      if (menuButton) {
+        menuButton.addEventListener("click", function () {
+          setDrawerOpen(shell.getAttribute("data-drawer-open") !== "true");
+        });
+      }
+
+      if (closeButton) {
+        closeButton.addEventListener("click", function () {
+          setDrawerOpen(false);
+        });
+      }
+
+      if (pagesButton) {
+        pagesButton.addEventListener("click", function () {
+          setPagesExpanded(shell.getAttribute("data-pages-expanded") !== "true");
+        });
+      }
+
+      setDrawerOpen(false);
+      setPagesExpanded(false);
+    })();
   </script>
 </body>
 </html>
