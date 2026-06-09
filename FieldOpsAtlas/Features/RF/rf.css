@@ -209,13 +209,14 @@
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.24);
 }
 
-.rf-path-handle svg {
+.rf-path-handle-icon {
   width: 8px;
   height: 14px;
+  object-fit: contain;
   transition: transform 180ms ease;
 }
 
-.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle svg {
+.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle-icon {
   transform: rotate(180deg);
 }
 
@@ -242,15 +243,7 @@
 .rf-path-title-wave {
   width: 18px;
   height: 8px;
-  overflow: visible;
-}
-
-.rf-path-title-wave path {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.05;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  object-fit: contain;
   filter:
     drop-shadow(0 0 3px rgba(255, 255, 255, 0.34))
     drop-shadow(0 0 7px rgba(255, 225, 135, 0.20));
@@ -291,21 +284,10 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
-.rf-path-mast svg {
+.rf-path-mast img {
   width: 15px;
   height: 15px;
-}
-
-.rf-path-mast path {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.rf-path-mast circle {
-  fill: currentColor;
+  object-fit: contain;
 }
 
 .rf-path-site.is-from .rf-path-mast {
@@ -369,37 +351,10 @@
   max-height: 240px;
   justify-self: start;
   align-self: center;
-  overflow: visible;
-}
-
-.rf-path-signal-line {
-  fill: none;
-  stroke: url(#rfPaneSignalVertical);
-  stroke-width: 2.55;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  object-fit: contain;
   filter:
-    drop-shadow(0 0 5px rgba(255, 225, 70, 0.88))
-    drop-shadow(0 0 10px rgba(255, 145, 55, 0.26));
-}
-
-.rf-path-signal-node {
-  fill: #fff;
-  stroke-width: 3;
-}
-
-.rf-path-signal-node.is-green {
-  stroke: #8dff49;
-  filter:
-    drop-shadow(0 0 6px rgba(140, 255, 67, 0.90))
-    drop-shadow(0 0 11px rgba(140, 255, 67, 0.26));
-}
-
-.rf-path-signal-node.is-red {
-  stroke: #ff4931;
-  filter:
-    drop-shadow(0 0 6px rgba(255, 68, 50, 0.90))
-    drop-shadow(0 0 11px rgba(255, 68, 50, 0.28));
+    drop-shadow(0 0 5px rgba(255, 225, 70, 0.70))
+    drop-shadow(0 0 10px rgba(255, 145, 55, 0.20));
 }
 
 .rf-path-frequency {
@@ -749,11 +704,35 @@
 }
 
 .rf-clock {
+  position: relative;
   width: 12px;
   height: 12px;
   flex: 0 0 12px;
   color: #09203a;
-  stroke-width: 1.7;
+  border: 1.7px solid currentColor;
+  border-radius: 50%;
+}
+
+.rf-clock::before,
+.rf-clock::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.4px;
+  border-radius: 999px;
+  background: currentColor;
+  transform-origin: 50% 100%;
+}
+
+.rf-clock::before {
+  height: 4px;
+  transform: translate(-50%, -100%);
+}
+
+.rf-clock::after {
+  height: 3px;
+  transform: translate(-50%, -100%) rotate(120deg);
 }
 
 .rf-viewall {
@@ -787,9 +766,10 @@
   background: #fff9eb;
 }
 
-.rf-recent-card svg {
+.rf-recent-card img {
   width: 14px;
   height: 14px;
+  object-fit: contain;
 }
 
 .rf-recent-name {
@@ -928,7 +908,7 @@
     gap: 2px;
   }
 
-  .rf-recent-card svg {
+  .rf-recent-card img {
     width: 13px;
     height: 13px;
   }
