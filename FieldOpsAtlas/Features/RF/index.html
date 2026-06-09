@@ -7,15 +7,15 @@
   <link rel="stylesheet" href="./shell.css?v=1.1.1" />
   <link rel="stylesheet" href="./rf.css?v=1.1.1" />
 </head>
-
 <body>
   <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.1">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
-        <section class="rf-network">
+        <section class="rf-network" aria-labelledby="rfNetworkTitle">
           <div class="rf-network-head">
-            <h1 class="rf-title">Network map</h1>
-            <div class="rf-tabs">
+            <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
+
+            <div class="rf-tabs" aria-label="Network layer filter">
               <span class="rf-tab is-active">RF</span>
               <span class="rf-tab">IP</span>
               <span class="rf-tab">MW</span>
@@ -25,55 +25,76 @@
 
           <div class="rf-map-recent">
             <div class="rf-map-paper">
-              <input class="rf-path-toggle" id="rfPathPaneToggle" type="checkbox" checked aria-hidden="true" />
-              <div class="rf-map-stage" id="rfMapStage" data-demo-map aria-label="Network map"></div>
+              <input
+                class="rf-path-toggle"
+                id="rfPathPaneToggle"
+                type="checkbox"
+                checked
+                aria-label="Toggle path details"
+              />
 
-              <aside class="rf-path-pane" aria-label="Path details">
+              <div
+                class="rf-map-stage"
+                id="rfMapStage"
+                data-demo-map
+                role="img"
+                aria-label="Demo RF network map"
+              ></div>
+
+              <aside class="rf-path-pane" aria-label="Selected RF path details">
                 <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
                   <svg viewBox="0 0 12 20" aria-hidden="true">
-                    <path d="M8.5 3L3.5 10l5 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path
+                      d="M8.5 3L3.5 10l5 7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 </label>
 
                 <div class="rf-path-pane-body">
                   <header class="rf-path-pane-title">
                     <svg class="rf-path-title-wave" viewBox="0 0 48 18" aria-hidden="true">
-                      <path d="M2 9h10l4-7 5 14 6-14 5 14 4-7h10"/>
+                      <path d="M2 9h10l4-7 5 14 6-14 5 14 4-7h10" />
                     </svg>
-                    <span>Path Details</span>
+                    <span>Path details</span>
                   </header>
 
-                  <section class="rf-path-site is-from" aria-label="From site">
+                  <section class="rf-path-site is-from" aria-label="Source site">
                     <span class="rf-path-mast" aria-hidden="true">
                       <svg viewBox="0 0 44 44">
-                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19"/>
-                        <circle cx="22" cy="16" r="2.4"/>
-                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0"/>
+                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19" />
+                        <circle cx="22" cy="16" r="2.4" />
+                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0" />
                       </svg>
                     </span>
+
                     <span class="rf-path-site-copy">
                       <small>From</small>
-                      <b>London</b>
-                      <b>Core Site</b>
+                      <b>North Ridge</b>
+                      <b>TX Site</b>
                     </span>
                   </section>
 
-                  <section class="rf-path-mid" aria-label="Selected frequency">
-                    <svg class="rf-path-signal-vertical" viewBox="0 0 42 280" aria-label="Selected RF path">
+                  <section class="rf-path-mid" aria-label="Selected RF path">
+                    <svg class="rf-path-signal-vertical" viewBox="0 0 42 280" aria-hidden="true">
                       <defs>
                         <linearGradient id="rfPaneSignalVertical" x1="0" y1="8" x2="0" y2="272" gradientUnits="userSpaceOnUse">
-                          <stop offset="0" stop-color="#8cff43"/>
-                          <stop offset=".28" stop-color="#f5ff69"/>
-                          <stop offset=".43" stop-color="#f5ff69"/>
-                          <stop offset=".52" stop-color="#ffd94f"/>
-                          <stop offset=".66" stop-color="#ffb24c"/>
-                          <stop offset=".82" stop-color="#ff8d40"/>
-                          <stop offset="1" stop-color="#ff4432"/>
+                          <stop offset="0" stop-color="#8cff43" />
+                          <stop offset=".28" stop-color="#f5ff69" />
+                          <stop offset=".43" stop-color="#f5ff69" />
+                          <stop offset=".52" stop-color="#ffd94f" />
+                          <stop offset=".66" stop-color="#ffb24c" />
+                          <stop offset=".82" stop-color="#ff8d40" />
+                          <stop offset="1" stop-color="#ff4432" />
                         </linearGradient>
                       </defs>
-                      <path class="rf-path-signal-line" d="M21 8V108L16 115L26 122L15 131L27 140L14 150L27 160L16 170L25 180L19 190L22 200V272"/>
-                      <circle class="rf-path-signal-node is-green" cx="21" cy="8" r="5.9"/>
-                      <circle class="rf-path-signal-node is-red" cx="21" cy="272" r="5.9"/>
+                      <path class="rf-path-signal-line" d="M21 8V108L16 115L26 122L15 131L27 140L14 150L27 160L16 170L25 180L19 190L22 200V272" />
+                      <circle class="rf-path-signal-node is-green" cx="21" cy="8" r="5.9" />
+                      <circle class="rf-path-signal-node is-red" cx="21" cy="272" r="5.9" />
                     </svg>
 
                     <div class="rf-path-frequency">
@@ -81,24 +102,43 @@
                       <span>Horizontal</span>
 
                       <dl class="rf-path-data">
-                        <div><dt>Service</dt><dd>DTT 1</dd></div>
-                        <div><dt>Band</dt><dd>28 MHz</dd></div>
-                        <div><dt>Mod</dt><dd>64QAM</dd></div>
-                        <div><dt>Power</dt><dd>18 dBm</dd></div>
-                        <div><dt>Avail</dt><dd>99.98%</dd></div>
-                        <div><dt>Status</dt><dd><i></i>Online</dd></div>
+                        <div>
+                          <dt>Service</dt>
+                          <dd>DTT 1</dd>
+                        </div>
+                        <div>
+                          <dt>Band</dt>
+                          <dd>28 MHz</dd>
+                        </div>
+                        <div>
+                          <dt>Mode</dt>
+                          <dd>64QAM</dd>
+                        </div>
+                        <div>
+                          <dt>Power</dt>
+                          <dd>18 dBm</dd>
+                        </div>
+                        <div>
+                          <dt>Avail</dt>
+                          <dd>99.98%</dd>
+                        </div>
+                        <div>
+                          <dt>Status</dt>
+                          <dd><i aria-hidden="true"></i>Online</dd>
+                        </div>
                       </dl>
                     </div>
                   </section>
 
-                  <section class="rf-path-site is-to" aria-label="To site">
+                  <section class="rf-path-site is-to" aria-label="Destination site">
                     <span class="rf-path-mast" aria-hidden="true">
                       <svg viewBox="0 0 44 44">
-                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19"/>
-                        <circle cx="22" cy="16" r="2.4"/>
-                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0"/>
+                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19" />
+                        <circle cx="22" cy="16" r="2.4" />
+                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0" />
                       </svg>
                     </span>
+
                     <span class="rf-path-site-copy">
                       <small>To</small>
                       <b>Hilltop</b>
@@ -109,55 +149,120 @@
               </aside>
             </div>
 
-            <div class="rf-recent">
+            <section class="rf-recent" aria-labelledby="rfRecentTitle">
               <div class="rf-recent-head">
-                <h2 class="rf-recent-title">
+                <h2 class="rf-recent-title" id="rfRecentTitle">
                   <svg class="rf-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <circle cx="12" cy="12" r="8.5"/>
-                    <path d="M12 7.5V12l3 2"/>
+                    <circle cx="12" cy="12" r="8.5" />
+                    <path d="M12 7.5V12l3 2" />
                   </svg>
                   <span>Recently opened</span>
                 </h2>
-                <a class="rf-viewall" href="../../../sites.html">View all</a>
+
+                <a class="rf-viewall" href="./sites.html">View all</a>
               </div>
+
               <div class="rf-recent-grid">
-                <a class="rf-recent-card" href="../../../sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#df3521" stroke-width="2" aria-hidden="true"><path d="M12 8v12M8 20l4-12 4 12M8 15h8"/><circle cx="12" cy="6" r="2"/><path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5"/></svg>
-                  <span><span class="rf-recent-name">Hilltop<br>Relay</span><span class="rf-status">Online</span></span>
+                <a class="rf-recent-card" href="./sites.html">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#df3521" stroke-width="2" aria-hidden="true">
+                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
+                    <circle cx="12" cy="6" r="2" />
+                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
+                  </svg>
+                  <span>
+                    <span class="rf-recent-name">Hilltop<br />Relay</span>
+                    <span class="rf-status">Online</span>
+                  </span>
                 </a>
-                <a class="rf-recent-card" href="../../../sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true"><path d="M12 8v12M8 20l4-12 4 12M8 15h8"/><circle cx="12" cy="6" r="2"/><path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5"/></svg>
-                  <span><span class="rf-recent-name">Ridgeway<br>Relay</span><span class="rf-status">Online</span></span>
+
+                <a class="rf-recent-card" href="./sites.html">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true">
+                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
+                    <circle cx="12" cy="6" r="2" />
+                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
+                  </svg>
+                  <span>
+                    <span class="rf-recent-name">Ridgeway<br />Relay</span>
+                    <span class="rf-status">Online</span>
+                  </span>
                 </a>
-                <a class="rf-recent-card" href="../../../sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#0d8a3c" stroke-width="2" aria-hidden="true"><path d="M12 8v12M8 20l4-12 4 12M8 15h8"/><circle cx="12" cy="6" r="2"/><path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5"/></svg>
-                  <span><span class="rf-recent-name">London<br>Core</span><span class="rf-status">Online</span></span>
+
+                <a class="rf-recent-card" href="./sites.html">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0d8a3c" stroke-width="2" aria-hidden="true">
+                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
+                    <circle cx="12" cy="6" r="2" />
+                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
+                  </svg>
+                  <span>
+                    <span class="rf-recent-name">London<br />Core</span>
+                    <span class="rf-status">Online</span>
+                  </span>
                 </a>
-                <a class="rf-recent-card" href="../../../sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true"><path d="M12 8v12M8 20l4-12 4 12M8 15h8"/><circle cx="12" cy="6" r="2"/><path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5"/></svg>
-                  <span><span class="rf-recent-name">Pinewood<br>Remote</span><span class="rf-status">Online</span></span>
+
+                <a class="rf-recent-card" href="./sites.html">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true">
+                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
+                    <circle cx="12" cy="6" r="2" />
+                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
+                  </svg>
+                  <span>
+                    <span class="rf-recent-name">Pinewood<br />Remote</span>
+                    <span class="rf-status">Online</span>
+                  </span>
                 </a>
               </div>
-            </div>
+            </section>
           </div>
         </section>
+
         <div class="rf-bottom">
-          <section class="rf-small">
-            <h2 class="rf-small-title">Services</h2>
+          <section class="rf-small" aria-labelledby="rfServicesTitle">
+            <h2 class="rf-small-title" id="rfServicesTitle">Services</h2>
+
             <table class="rf-table">
-              <tr><th>Service</th><th>Type</th><th>Status</th></tr>
-              <tr><td>DTT MUX 1</td><td>DTT</td><td><span class="status">Online</span></td></tr>
-              <tr><td>DTT MUX 2</td><td>DTT</td><td><span class="status">Online</span></td></tr>
-              <tr><td>Radio 1</td><td>FM</td><td><span class="status">Online</span></td></tr>
+              <thead>
+                <tr>
+                  <th scope="col">Service</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="./dtt.html">DTT MUX 1</a></td>
+                  <td>DTT</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+                <tr>
+                  <td><a href="./dab.html">DAB National</a></td>
+                  <td>DAB</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+                <tr>
+                  <td><a href="./fm.html">FM Service</a></td>
+                  <td>FM</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+              </tbody>
             </table>
           </section>
 
-          <section class="rf-small">
-            <h2 class="rf-small-title">Equipment</h2>
+          <section class="rf-small" aria-labelledby="rfEquipmentTitle">
+            <h2 class="rf-small-title" id="rfEquipmentTitle">Equipment</h2>
+
             <div class="rf-equipment">
-              <div class="rf-equipment-item"><strong>2</strong><span>TX</span></div>
-              <div class="rf-equipment-item"><strong>3</strong><span>ANT</span></div>
-              <div class="rf-equipment-item"><strong>2</strong><span>Links</span></div>
+              <a class="rf-equipment-item" href="./equipment.html">
+                <strong>2</strong>
+                <span>TX</span>
+              </a>
+              <a class="rf-equipment-item" href="./equipment.html">
+                <strong>3</strong>
+                <span>ANT</span>
+              </a>
+              <a class="rf-equipment-item" href="./paths.html">
+                <strong>2</strong>
+                <span>Links</span>
+              </a>
             </div>
           </section>
         </div>
