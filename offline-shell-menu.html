@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FieldOps Atlas Offline Shell Menu v18 Logo Image</title>
+  <title>FieldOps Atlas Offline Shell Menu v19 Sleek Current</title>
   <style>
     /* ==========================================================================
        Tokens
@@ -575,16 +575,11 @@
     }
 
     .section-card {
-      padding: 10px;
-      border: 1px solid rgba(101, 146, 190, 0.78);
-      border-radius: 16px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.10), transparent 36%),
-        linear-gradient(180deg, rgba(14, 42, 73, 0.82), rgba(6, 22, 42, 0.68));
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.10),
-        0 0 0 1px rgba(255, 228, 166, 0.05),
-        0 8px 20px rgba(0, 0, 0, 0.12);
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .section-toggle {
@@ -653,44 +648,61 @@
     .current-page-card {
       position: relative;
       width: 100%;
-      min-height: 44px;
+      min-height: 48px;
       padding: 0 12px;
       display: grid;
-      grid-template-columns: 23px minmax(0, 1fr) 14px;
+      grid-template-columns: 24px minmax(0, 1fr) 14px;
       gap: 10px;
       align-items: center;
       overflow: hidden;
       text-align: left;
-      border-color: rgba(123, 207, 255, 0.78);
+      border-color: rgba(123, 207, 255, 0.64);
       border-radius: var(--outer-radius);
       background:
-        radial-gradient(circle at 20% 50%, rgba(98, 199, 255, 0.24), transparent 48%),
-        linear-gradient(180deg, rgba(26, 72, 116, 0.98), rgba(16, 47, 82, 0.98));
+        radial-gradient(circle at 18% 50%, rgba(98, 199, 255, 0.18), transparent 46%),
+        linear-gradient(180deg, rgba(23, 63, 104, 0.96), rgba(14, 42, 73, 0.96));
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        0 0 0 1px rgba(123, 207, 255, 0.16),
-        0 0 10px rgba(78, 178, 255, 0.24);
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 0 1px rgba(123, 207, 255, 0.09),
+        0 0 7px rgba(78, 178, 255, 0.14);
     }
 
     .current-page-card::before {
       content: "";
       position: absolute;
-      top: 8px;
-      bottom: 8px;
+      top: 9px;
+      bottom: 9px;
       left: 0;
-      width: 3px;
+      width: 2px;
       border-radius: 0 999px 999px 0;
-      background: rgba(123, 207, 255, 0.88);
-      box-shadow: 0 0 9px rgba(78, 178, 255, 0.44);
+      background: rgba(123, 207, 255, 0.72);
+      box-shadow: 0 0 7px rgba(78, 178, 255, 0.30);
       pointer-events: none;
     }
 
     .current-page-card .repo-icon {
-      width: 23px;
-      height: 23px;
+      width: 24px;
+      height: 24px;
       display: block;
       color: var(--gold);
       filter: drop-shadow(0 0 2px rgba(255, 207, 119, 0.14));
+    }
+
+    .current-page-card__copy {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .current-page-card__eyebrow {
+      overflow: hidden;
+      color: rgba(226, 241, 255, 0.66);
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .current-page-card__title {
@@ -1072,7 +1084,10 @@
 
         <button class="button-surface current-page-card" type="button" aria-current="page">
           <span class="repo-icon icon--rf" aria-hidden="true"></span>
-          <span class="current-page-card__title">RF</span>
+          <span class="current-page-card__copy">
+            <span class="current-page-card__eyebrow">Current page</span>
+            <span class="current-page-card__title">RF</span>
+          </span>
           <span class="current-page-card__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
