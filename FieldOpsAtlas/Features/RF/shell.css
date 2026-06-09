@@ -19,12 +19,12 @@
 :root {
   --page-width: 430px;
 
-  --navy-top: #09213b;
-  --navy-mid: #071a30;
-  --navy-low: #051321;
-  --shell-blue: #06182b;
-  --panel-blue: #0d2540;
-  --panel-blue-low: #07182a;
+  --navy-top: #0b2744;
+  --navy-mid: #09223c;
+  --navy-low: #07182d;
+  --shell-blue: #081d34;
+  --panel-blue: #102b49;
+  --panel-blue-low: #0c233d;
 
   --cream-top: #fffaf0;
   --cream-bottom: #f7ecd4;
@@ -49,7 +49,7 @@
 
   --control-bg:
     linear-gradient(180deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.018)),
-    rgba(10, 32, 56, 0.94);
+    rgba(16, 43, 73, 0.96);
 
   --button-bg:
     radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.07), transparent 34%),
@@ -80,8 +80,8 @@ body {
   overflow-x: hidden;
   color: #102033;
   background:
-    radial-gradient(circle at 50% 0%, rgba(38, 104, 156, 0.20), transparent 42%),
-    linear-gradient(180deg, #031020 0%, #06172a 46%, #04111f 100%);
+    radial-gradient(circle at 50% 0%, rgba(49, 115, 168, 0.18), transparent 42%),
+    linear-gradient(180deg, #071b31 0%, #081d34 48%, #07182d 100%);
   font-family:
     ui-sans-serif,
     system-ui,
@@ -141,8 +141,8 @@ svg {
   overflow-x: hidden;
   isolation: isolate;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 222, 158, 0.08), transparent 34%),
-    linear-gradient(180deg, var(--shell-blue) 0%, var(--navy-low) 100%);
+    radial-gradient(circle at 50% 0%, rgba(255, 222, 158, 0.07), transparent 34%),
+    linear-gradient(180deg, #0a2038 0%, var(--shell-blue) 58%, #07182d 100%);
   box-shadow: 0 22px 60px rgba(2, 9, 20, 0.32);
 }
 
@@ -172,7 +172,7 @@ svg {
   color: #fff;
   background:
     radial-gradient(circle at 52% -12%, rgba(255, 222, 158, 0.13), transparent 38%),
-    linear-gradient(180deg, var(--navy-top) 0%, var(--navy-mid) 62%, var(--navy-low) 100%);
+    linear-gradient(180deg, #0c2a49 0%, var(--navy-mid) 62%, var(--shell-blue) 100%);
   transition: height 160ms ease;
 }
 
