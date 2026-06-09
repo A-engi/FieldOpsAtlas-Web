@@ -11,7 +11,16 @@
 <clipPath id="earthClip"><ellipse cx="400" cy="842" rx="470" ry="330"/></clipPath>
 </defs>
 <rect width="800" height="800" fill="none"/>
+<g fill="none" stroke="#02070c" stroke-linecap="round" opacity=".72" transform="translate(0 12)">
+<circle cx="400" cy="248" r="141" stroke-width="14"/>
+<circle cx="400" cy="248" r="232" stroke-width="13" opacity=".88"/>
+</g>
 <g fill="none" stroke="url(#ring)" stroke-linecap="round" filter="url(#glow)"><circle cx="400" cy="248" r="141" stroke-width="5.5"/><circle cx="400" cy="248" r="232" stroke-width="5" opacity=".94"/></g>
+<g opacity=".72" transform="translate(0 16)">
+<ellipse cx="400" cy="842" rx="478" ry="338" fill="#02070c"/>
+<ellipse cx="400" cy="812" rx="444" ry="256" fill="#02070c" opacity=".70"/>
+<ellipse cx="400" cy="842" rx="480" ry="340" fill="none" stroke="#02070c" stroke-width="16" opacity=".82"/>
+</g>
 <g filter="url(#softBlackShadow)">
 <ellipse cx="400" cy="842" rx="470" ry="330" fill="url(#earth)"/>
 <ellipse cx="400" cy="812" rx="438" ry="250" fill="#43dfff" opacity=".10"/>
