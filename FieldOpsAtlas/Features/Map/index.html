@@ -2,26 +2,27 @@
 <html lang="en">
 <head>
   <!-- =====================================================================
-       FieldOps Atlas — document metadata
-       ===================================================================== -->
+  FieldOps Atlas — document metadata
+  ===================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>FieldOps Atlas v1.1.1</title>
 
   <!-- =====================================================================
-       Vendor styles
-       ===================================================================== -->
+  Vendor styles
+  ===================================================================== -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- =====================================================================
-       Atlas styles
-       Keep CSS ownership split by file:
-       - theme.css: shared tokens
-       - components.css: shared controls/cards/forms
-       - map-page.css: map page layout
-       - shell.css: app chrome/menu/rail
-       - map-ui.css: late map-only UI overrides
-       ===================================================================== -->
+  Atlas styles
+
+  Keep CSS ownership split by file:
+  - theme.css: shared tokens
+  - components.css: shared controls/cards/forms
+  - map-page.css: map page layout
+  - shell.css: app chrome/menu/rail
+  - map-ui.css: late map-only UI overrides
+  ===================================================================== -->
   <link rel="stylesheet" href="./theme.css?v=1.1.1">
   <link rel="stylesheet" href="./components.css?v=1.1.1">
   <link rel="stylesheet" href="./map-page.css?v=1.1.1">
@@ -33,8 +34,8 @@
 <body>
   <div class="app-shell">
     <!-- ===================================================================
-         Top app bar
-         =================================================================== -->
+    Top app bar
+    =================================================================== -->
     <header class="top-bar">
       <div class="top-left">
         <button
@@ -88,8 +89,8 @@
     <div id="topBarFade" class="top-bar-fade" aria-hidden="true"></div>
 
     <!-- ===================================================================
-         Top map filter
-         =================================================================== -->
+    Top map filter
+    =================================================================== -->
     <div id="topFilterMenu" class="top-filter-menu map-filter-menu" hidden>
       <div class="top-filter-header">
         <div class="top-filter-title">Map filter</div>
@@ -133,8 +134,8 @@
     </button>
 
     <!-- ===================================================================
-         Slide-out menu
-         =================================================================== -->
+    Slide-out menu
+    =================================================================== -->
     <div id="menuOverlay" class="menu-overlay"></div>
 
     <aside id="sideMenu" class="side-menu" aria-label="App menu" aria-hidden="true">
@@ -177,6 +178,11 @@
             <span>Docs</span>
           </a>
 
+          <a id="menuProfileButton" class="menu-list-item" href="../Profile/index.html">
+            <span class="menu-item-icon" aria-hidden="true">Me</span>
+            <span>Profile</span>
+          </a>
+
           <button id="menuSettingsButton" class="menu-list-item" type="button">
             <span class="menu-item-icon" aria-hidden="true">Set</span>
             <span>Settings</span>
@@ -195,8 +201,8 @@
     </aside>
 
     <!-- ===================================================================
-         Side rail and map tools
-         =================================================================== -->
+    Side rail and map tools
+    =================================================================== -->
     <nav class="side-rail" aria-label="Main navigation">
       <button
         id="railMapButton"
@@ -256,15 +262,15 @@
     </div>
 
     <!-- ===================================================================
-         Map canvas
-         =================================================================== -->
+    Map canvas
+    =================================================================== -->
     <main class="map-area">
       <div id="map"></div>
     </main>
 
     <!-- ===================================================================
-         Selected walk panel
-         =================================================================== -->
+    Selected walk panel
+    =================================================================== -->
     <aside id="infoPanel" class="info-panel is-hidden" aria-hidden="true">
       <div id="infoPanelDragTarget" class="panel-drag-target">
         <div class="panel-handle"></div>
@@ -273,7 +279,6 @@
       <div class="panel-header">
         <div>
           <div class="panel-kicker">Walk details</div>
-
           <div class="site-title-line">
             <h1 id="selectedSiteName">No walk selected</h1>
             <span id="selectedSiteHeaderRegion" class="site-title-region">-</span>
@@ -366,17 +371,19 @@
 
         <section class="panel-section field-notes-summary-section">
           <div class="section-title">Field Notes</div>
+
           <p class="body-note">
             Noticeboard for company notes, walk notes, engineer observations, next-visit reminders, hazards, and temporary access notes.
           </p>
+
           <button id="openFieldNotesButton" class="tool-button secondary" type="button">Open Field Notes</button>
         </section>
       </div>
     </aside>
 
     <!-- ===================================================================
-         Settings panel
-         =================================================================== -->
+    Settings panel
+    =================================================================== -->
     <aside id="settingsPanel" class="admin-panel is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
@@ -412,8 +419,8 @@
     </aside>
 
     <!-- ===================================================================
-         Walk editor panel
-         =================================================================== -->
+    Walk editor panel
+    =================================================================== -->
     <aside id="addPanel" class="admin-panel large is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
@@ -450,8 +457,8 @@
     </aside>
 
     <!-- ===================================================================
-         Region manager panel
-         =================================================================== -->
+    Region manager panel
+    =================================================================== -->
     <aside id="regionPanel" class="admin-panel large is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
@@ -466,6 +473,7 @@
         <p class="mini-note">Regions group walks and set their pin colour.</p>
 
         <label class="input-label" for="regionNameInput">Region name</label>
+
         <div class="form-row">
           <input id="regionNameInput" type="text" placeholder="Region name">
           <input id="regionColorInput" type="color" value="#38bdf8" title="Pin colour">
@@ -527,8 +535,8 @@
     </aside>
 
     <!-- ===================================================================
-         Region filter panel and legend
-         =================================================================== -->
+    Region filter panel and legend
+    =================================================================== -->
     <aside id="filterPanel" class="admin-panel is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
@@ -541,6 +549,7 @@
 
       <div class="admin-panel-body">
         <p class="mini-note">Clear regions hides pins until another region is selected.</p>
+
         <div id="regionFilterList" class="region-grid"></div>
 
         <div class="button-row">
@@ -557,8 +566,8 @@
     </aside>
 
     <!-- ===================================================================
-         Weather mode panel
-         =================================================================== -->
+    Weather mode panel
+    =================================================================== -->
     <aside id="weatherModePanel" class="weather-mode-panel is-hidden" aria-hidden="true">
       <div class="weather-mode-panel-header">
         <div>
@@ -697,8 +706,8 @@
     </aside>
 
     <!-- ===================================================================
-         Field notes panel
-         =================================================================== -->
+    Field notes panel
+    =================================================================== -->
     <aside id="fieldNotesPanel" class="field-notes-panel is-hidden" aria-hidden="true">
       <div class="field-notes-header">
         <div>
@@ -787,21 +796,23 @@
         </div>
       </div>
     </aside>
+
     <!-- ===================================================================
-         Status
-         =================================================================== -->
+    Status
+    =================================================================== -->
     <div id="statusToast" class="status-toast" aria-live="polite"></div>
   </div>
 
   <!-- =====================================================================
-       Vendor scripts
-       ===================================================================== -->
+  Vendor scripts
+  ===================================================================== -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- =====================================================================
-       Leaflet bridge
-       Keep this inline until map-app.js is cleaned last.
-       ===================================================================== -->
+  Leaflet bridge
+
+  Keep this inline until map-app.js is cleaned last.
+  ===================================================================== -->
   <script>
     window.FieldOpsAtlasBridge = window.FieldOpsAtlasBridge || {};
 
@@ -818,10 +829,11 @@
   </script>
 
   <!-- =====================================================================
-       Atlas scripts
-       map-app.js owns the main map controller. map-ui.js query matches the
-       current inspected clean bridge version.
-       ===================================================================== -->
+  Atlas scripts
+
+  map-app.js owns the main map controller. map-ui.js query matches the
+  current inspected clean bridge version.
+  ===================================================================== -->
   <script src="./map-app.js?v=1.1.1"></script>
   <script src="./map-ui.js?v=1.1.1"></script>
 </body>
