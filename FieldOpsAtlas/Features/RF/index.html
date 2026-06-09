@@ -43,33 +43,37 @@
 
               <aside class="rf-path-pane" aria-label="Selected RF path details">
                 <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
-                  <svg viewBox="0 0 12 20" aria-hidden="true">
-                    <path
-                      d="M8.5 3L3.5 10l5 7"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <img
+                    class="rf-path-handle-icon"
+                    src="../../../data/icons/path-pane-chevron-gold.svg"
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </label>
 
                 <div class="rf-path-pane-body">
                   <header class="rf-path-pane-title">
-                    <svg class="rf-path-title-wave" viewBox="0 0 48 18" aria-hidden="true">
-                      <path d="M2 9h10l4-7 5 14 6-14 5 14 4-7h10" />
-                    </svg>
+                    <img
+                      class="rf-path-title-wave"
+                      src="../../../data/icons/path-details-wave.svg"
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <span>Path details</span>
                   </header>
 
                   <section class="rf-path-site is-from" aria-label="Source site">
                     <span class="rf-path-mast" aria-hidden="true">
-                      <svg viewBox="0 0 44 44">
-                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19" />
-                        <circle cx="22" cy="16" r="2.4" />
-                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0" />
-                      </svg>
+                      <img
+                        src="../../../data/icons/atlas-transmitter-gold.svg"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </span>
 
                     <span class="rf-path-site-copy">
@@ -80,22 +84,14 @@
                   </section>
 
                   <section class="rf-path-mid" aria-label="Selected RF path">
-                    <svg class="rf-path-signal-vertical" viewBox="0 0 42 280" aria-hidden="true">
-                      <defs>
-                        <linearGradient id="rfPaneSignalVertical" x1="0" y1="8" x2="0" y2="272" gradientUnits="userSpaceOnUse">
-                          <stop offset="0" stop-color="#8cff43" />
-                          <stop offset=".28" stop-color="#f5ff69" />
-                          <stop offset=".43" stop-color="#f5ff69" />
-                          <stop offset=".52" stop-color="#ffd94f" />
-                          <stop offset=".66" stop-color="#ffb24c" />
-                          <stop offset=".82" stop-color="#ff8d40" />
-                          <stop offset="1" stop-color="#ff4432" />
-                        </linearGradient>
-                      </defs>
-                      <path class="rf-path-signal-line" d="M21 8V108L16 115L26 122L15 131L27 140L14 150L27 160L16 170L25 180L19 190L22 200V272" />
-                      <circle class="rf-path-signal-node is-green" cx="21" cy="8" r="5.9" />
-                      <circle class="rf-path-signal-node is-red" cx="21" cy="272" r="5.9" />
-                    </svg>
+                    <img
+                      class="rf-path-signal-vertical"
+                      src="../../../data/icons/path-signal-glow.svg"
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                    />
 
                     <div class="rf-path-frequency">
                       <strong>6.725 GHz</strong>
@@ -132,11 +128,12 @@
 
                   <section class="rf-path-site is-to" aria-label="Destination site">
                     <span class="rf-path-mast" aria-hidden="true">
-                      <svg viewBox="0 0 44 44">
-                        <path d="M22 16v19M14 35h16M16 35l6-19 6 19" />
-                        <circle cx="22" cy="16" r="2.4" />
-                        <path d="M17 12c3-3 7-3 10 0M13 8c5.4-5.2 12.6-5.2 18 0M9 4c7.4-7 18.6-7 26 0" />
-                      </svg>
+                      <img
+                        src="../../../data/icons/atlas-transmitter-gold.svg"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </span>
 
                     <span class="rf-path-site-copy">
@@ -152,10 +149,7 @@
             <section class="rf-recent" aria-labelledby="rfRecentTitle">
               <div class="rf-recent-head">
                 <h2 class="rf-recent-title" id="rfRecentTitle">
-                  <svg class="rf-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <circle cx="12" cy="12" r="8.5" />
-                    <path d="M12 7.5V12l3 2" />
-                  </svg>
+                  <span class="rf-clock" aria-hidden="true"></span>
                   <span>Recently opened</span>
                 </h2>
 
@@ -164,11 +158,7 @@
 
               <div class="rf-recent-grid">
                 <a class="rf-recent-card" href="./sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#df3521" stroke-width="2" aria-hidden="true">
-                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
-                    <circle cx="12" cy="6" r="2" />
-                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
-                  </svg>
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   <span>
                     <span class="rf-recent-name">Hilltop<br />Relay</span>
                     <span class="rf-status">Online</span>
@@ -176,11 +166,7 @@
                 </a>
 
                 <a class="rf-recent-card" href="./sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true">
-                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
-                    <circle cx="12" cy="6" r="2" />
-                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
-                  </svg>
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   <span>
                     <span class="rf-recent-name">Ridgeway<br />Relay</span>
                     <span class="rf-status">Online</span>
@@ -188,11 +174,7 @@
                 </a>
 
                 <a class="rf-recent-card" href="./sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#0d8a3c" stroke-width="2" aria-hidden="true">
-                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
-                    <circle cx="12" cy="6" r="2" />
-                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
-                  </svg>
+                  <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   <span>
                     <span class="rf-recent-name">London<br />Core</span>
                     <span class="rf-status">Online</span>
@@ -200,11 +182,7 @@
                 </a>
 
                 <a class="rf-recent-card" href="./sites.html">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#1264b2" stroke-width="2" aria-hidden="true">
-                    <path d="M12 8v12M8 20l4-12 4 12M8 15h8" />
-                    <circle cx="12" cy="6" r="2" />
-                    <path d="M7 6a6 6 0 0 1 0-5M17 1a6 6 0 0 1 0 5" />
-                  </svg>
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   <span>
                     <span class="rf-recent-name">Pinewood<br />Remote</span>
                     <span class="rf-status">Online</span>
