@@ -103,7 +103,7 @@
 }
 
 .rf-map-paper {
-  --path-pane-width: clamp(116px, 29.5%, 128px);
+  --path-pane-width: clamp(142px, 35%, 158px);
   --path-handle-width: 14px;
 
   position: relative;
@@ -169,11 +169,11 @@
 }
 
 .rf-path-pane {
-  --path-node-size: 20px;
+  --path-node-size: 22px;
   --path-node-icon-size: 9px;
   --path-signal-width: 34px;
-  --path-signal-overlap: 11px;
-  --path-signal-x-offset: -7px;
+  --path-signal-overlap: 7px;
+  --path-signal-x-offset: -6px;
 
   position: absolute;
   top: 0;
@@ -229,30 +229,30 @@
 .rf-path-pane-body {
   height: 100%;
   min-height: 0;
-  padding: 6px 6px 6px 7px;
+  padding: 7px 7px 7px 8px;
   display: grid;
-  grid-template-rows: 17px 34px minmax(200px, 1fr) 34px;
+  grid-template-rows: 22px 44px minmax(168px, 1fr) 44px;
   gap: 5px;
   overflow: hidden;
 }
 
 .rf-path-pane-title {
   min-width: 0;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr);
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.13);
 }
 
 .rf-path-title-wave {
-  width: 18px;
-  height: 8px;
+  width: 22px;
+  height: 10px;
   object-fit: contain;
   filter:
-    drop-shadow(0 0 3px rgba(255, 255, 255, 0.34))
-    drop-shadow(0 0 7px rgba(255, 225, 135, 0.20));
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.28))
+    drop-shadow(0 0 5px rgba(255, 225, 135, 0.14));
 }
 
 .rf-path-pane-title span {
@@ -260,9 +260,9 @@
   overflow: hidden;
   color: var(--gold-soft);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 6.45px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
@@ -278,7 +278,7 @@
   display: grid;
   grid-template-columns: var(--path-node-size) minmax(0, 1fr);
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .rf-path-mast {
@@ -317,11 +317,11 @@
 
 .rf-path-site-copy small {
   display: block;
-  margin: 0 0 1px;
-  color: rgba(219, 228, 242, 0.76);
-  font-size: 4.55px;
+  margin: 0 0 2px;
+  color: rgba(219, 228, 242, 0.78);
+  font-size: 5.4px;
   font-weight: 800;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
 }
 
@@ -331,12 +331,12 @@
   overflow: hidden;
   color: #fff;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 6.35px;
+  font-size: 7.4px;
   font-weight: 700;
-  line-height: 0.94;
+  line-height: 1.02;
   text-transform: uppercase;
   white-space: nowrap;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
 }
 
 /* =========================================================
@@ -350,7 +350,7 @@
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   overflow: visible;
 }
 
@@ -380,19 +380,19 @@
   overflow: hidden;
   color: var(--gold-soft);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 7.35px;
+  font-size: 9px;
   line-height: 1;
   white-space: nowrap;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
 }
 
 .rf-path-frequency span {
   display: block;
-  margin: 2px 0 5px;
+  margin: 3px 0 6px;
   color: rgba(219, 228, 242, 0.76);
-  font-size: 4.1px;
+  font-size: 5px;
   font-weight: 850;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.075em;
   text-transform: uppercase;
 }
 
@@ -405,11 +405,11 @@
 }
 
 .rf-path-data div {
-  min-height: 9px;
+  min-height: 12px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -417,9 +417,9 @@
   min-width: 0;
   overflow: hidden;
   color: rgba(218, 226, 240, 0.76);
-  font-size: 3.95px;
+  font-size: 5px;
   font-weight: 850;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
 }
 
@@ -427,8 +427,9 @@
   margin: 0;
   overflow: hidden;
   color: #fff;
-  font-size: 4.35px;
+  font-size: 5.4px;
   font-weight: 850;
+  text-align: right;
   white-space: nowrap;
 }
 
@@ -439,7 +440,7 @@
   margin-right: 2px;
   border-radius: 999px;
   background: #8cff43;
-  box-shadow: 0 0 6px rgba(140, 255, 67, 0.86);
+  box-shadow: 0 0 5px rgba(140, 255, 67, 0.70);
 }
 
 /* =========================================================
@@ -907,7 +908,7 @@
   }
 
   .rf-map-paper {
-    --path-pane-width: clamp(106px, 28.5%, 118px);
+    --path-pane-width: clamp(134px, 34.5%, 146px);
     --path-handle-width: 13px;
   }
 
