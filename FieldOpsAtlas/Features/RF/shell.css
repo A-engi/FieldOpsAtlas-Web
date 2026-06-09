@@ -659,6 +659,16 @@ svg {
     drop-shadow(0 2px 5px rgba(237, 191, 99, 0.16));
 }
 
+.nav-item[href*="../Map/"] {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.nav-item[href*="../Map/"] .nav-icon {
+  filter:
+    drop-shadow(0 0 4px rgba(237, 191, 99, 0.32))
+    drop-shadow(0 2px 5px rgba(237, 191, 99, 0.12));
+}
+
 /* =========================================================
    07. Backdrop, search, and menu panels
    ========================================================= */
