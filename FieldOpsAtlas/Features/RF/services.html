@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas RF Services</title>
+  <title>FieldOps Atlas RF Services v1.1.1</title>
   <link rel="stylesheet" href="./shell.css?v=1.1.1" />
   <link rel="stylesheet" href="./page.css?v=1.1.1" />
 </head>
-
 <body>
-  <main class="phone" data-page="more" data-nav="rf" data-service="more" data-version="1.1.1">
+  <main class="phone" data-page="services" data-nav="rf" data-version="1.1.1">
     <section class="content-canvas" aria-label="FieldOps Atlas RF Services content">
       <article class="page-content">
         <header class="page-head">
@@ -18,21 +17,74 @@
           <p class="page-lede">Jump into service layers, assets, and analysis pages.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">Service pages</h2>
-          <div class="action-grid">
-            <a class="action-card" href="./dtt.html"><span class="action-icon">📡</span><strong>DTT</strong></a>
-            <a class="action-card" href="./dab.html"><span class="action-icon">▦</span><strong>DAB</strong></a>
-            <a class="action-card" href="./fm.html"><span class="action-icon">◎</span><strong>FM</strong></a>
-            <a class="action-card" href="./paths.html"><span class="action-icon">〰️</span><strong>Paths</strong></a>
-            <a class="action-card" href="./equipment.html"><span class="action-icon">▣</span><strong>Equipment</strong></a>
-            <a class="action-card" href="./settings.html"><span class="action-icon">⚙️</span><strong>Settings</strong></a>
+        <section class="card" aria-labelledby="servicePagesTitle">
+          <h2 class="card-title" id="servicePagesTitle">Service pages</h2>
+
+          <div class="list">
+            <a class="list-row" href="./dtt.html">
+              <span class="row-icon">DTT</span>
+              <span>
+                <b class="row-title">DTT</b>
+                <span class="row-sub">Digital terrestrial multiplexes</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
+
+            <a class="list-row" href="./dab.html">
+              <span class="row-icon">DAB</span>
+              <span>
+                <b class="row-title">DAB</b>
+                <span class="row-sub">Digital audio ensembles</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
+
+            <a class="list-row" href="./fm.html">
+              <span class="row-icon">FM</span>
+              <span>
+                <b class="row-title">FM</b>
+                <span class="row-sub">Analogue radio services</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
+
+            <a class="list-row" href="./paths.html">
+              <span class="row-icon">RF</span>
+              <span>
+                <b class="row-title">Paths</b>
+                <span class="row-sub">RF routes and link checks</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
+
+            <a class="list-row" href="./equipment.html">
+              <span class="row-icon">EQ</span>
+              <span>
+                <b class="row-title">Equipment</b>
+                <span class="row-sub">Prototype RF inventory</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
+
+            <a class="list-row" href="./settings.html">
+              <span class="row-icon">SET</span>
+              <span>
+                <b class="row-title">Settings</b>
+                <span class="row-sub">Display and offline preferences</span>
+              </span>
+              <span class="status">Open</span>
+            </a>
           </div>
+        </section>
+
+        <section class="card" aria-labelledby="servicesNextTitle">
+          <h2 class="card-title" id="servicesNextTitle">Conversion note</h2>
+          <p class="muted">This page is now a clean navigation list, ready to map into SwiftUI rows or cards.</p>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="./shell.js?v=1.1.1"></script>
+  <script src="./shell.js?v=1.1.1" defer></script>
 </body>
 </html>
