@@ -5,6 +5,7 @@
 <radialGradient id="earth" cx="50%" cy="12%" r="94%"><stop offset="0%" stop-color="#348fff"/><stop offset="30%" stop-color="#1459b2"/><stop offset="62%" stop-color="#082f68"/><stop offset="100%" stop-color="#041225"/></radialGradient>
 <radialGradient id="flare" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff"/><stop offset="20%" stop-color="#fff8d8"/><stop offset="42%" stop-color="#ffd17d"/><stop offset="70%" stop-color="#61d8ff" stop-opacity=".46"/><stop offset="100%" stop-color="#39dcff" stop-opacity="0"/></radialGradient>
 <linearGradient id="towerGold" x1="400" y1="248" x2="400" y2="788" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff2bd"/><stop offset="36%" stop-color="#ffd789"/><stop offset="68%" stop-color="#d99a3b"/><stop offset="100%" stop-color="#8e5518"/></linearGradient>
+<radialGradient id="earthShadowFade" cx="50%" cy="100%" r="64%"><stop offset="0%" stop-color="#02070c" stop-opacity=".88"/><stop offset="48%" stop-color="#02070c" stop-opacity=".56"/><stop offset="82%" stop-color="#02070c" stop-opacity=".18"/><stop offset="100%" stop-color="#02070c" stop-opacity="0"/></radialGradient>
 <filter id="glow" x="-55%" y="-55%" width="210%" height="210%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="blackShadow" x="-45%" y="-45%" width="190%" height="205%"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity=".55"/><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".48"/></filter>
 <filter id="softBlackShadow" x="-35%" y="-35%" width="170%" height="170%"><feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#000000" flood-opacity=".32"/></filter>
@@ -16,10 +17,10 @@
 <circle cx="400" cy="248" r="232" stroke-width="13" opacity=".88"/>
 </g>
 <g fill="none" stroke="url(#ring)" stroke-linecap="round" filter="url(#glow)"><circle cx="400" cy="248" r="141" stroke-width="7"/><circle cx="400" cy="248" r="232" stroke-width="6.5" opacity="1"/></g>
-<g opacity=".86">
-<ellipse cx="400" cy="842" rx="482" ry="340" fill="#02070c" transform="translate(0 -18)"/>
-<ellipse cx="400" cy="842" rx="486" ry="344" fill="none" stroke="#02070c" stroke-width="28" transform="translate(0 -18)"/>
-<ellipse cx="400" cy="812" rx="450" ry="260" fill="#02070c" opacity=".72" transform="translate(0 -14)"/>
+<g>
+<ellipse cx="400" cy="842" rx="482" ry="340" fill="url(#earthShadowFade)" transform="translate(0 -18)"/>
+<ellipse cx="400" cy="842" rx="486" ry="344" fill="none" stroke="url(#earthShadowFade)" stroke-width="28" transform="translate(0 -18)"/>
+<ellipse cx="400" cy="812" rx="450" ry="260" fill="url(#earthShadowFade)" opacity=".58" transform="translate(0 -14)"/>
 </g>
 <g filter="url(#softBlackShadow)">
 <ellipse cx="400" cy="842" rx="470" ry="330" fill="url(#earth)"/>
