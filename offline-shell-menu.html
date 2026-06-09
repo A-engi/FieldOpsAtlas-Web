@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FieldOps Atlas Offline Shell Menu v20 Full Screen</title>
+  <title>FieldOps Atlas Offline Shell Menu v21 Clickable Pages</title>
   <style>
     /* ==========================================================================
        Tokens
@@ -1015,7 +1015,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-drawer-open="false" data-pages-expanded="false">
+  <main class="phone" data-drawer-open="false" data-pages-expanded="false" data-current-page="rf">
     <div class="map-background" aria-hidden="true"></div>
 
     <header class="top-shell" aria-label="Map controls">
@@ -1071,34 +1071,40 @@
         </div>
 
         <nav class="drawer-pages" aria-label="Pages">
-        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="map" data-label="Map" data-icon="icon--map">
           <span class="repo-icon icon--map" aria-hidden="true"></span>
           <span class="drawer-row__label">Map</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface current-page-card" type="button" aria-current="page">
-          <span class="repo-icon icon--rf" aria-hidden="true"></span>
+        <button class="button-surface current-page-card" type="button" aria-current="page" data-current-page-card>
+          <span class="repo-icon icon--rf" aria-hidden="true" data-current-page-icon></span>
           <span class="current-page-card__copy">
             <span class="current-page-card__eyebrow">Current page</span>
-            <span class="current-page-card__title">RF</span>
+            <span class="current-page-card__title" data-current-page-title>RF</span>
           </span>
           <span class="current-page-card__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="rf" data-label="RF" data-icon="icon--rf">
+          <span class="repo-icon icon--rf" aria-hidden="true"></span>
+          <span class="drawer-row__label">RF</span>
+          <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
+        </button>
+
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="network" data-label="Network" data-icon="icon--network">
           <span class="repo-icon icon--network" aria-hidden="true"></span>
           <span class="drawer-row__label">Network</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="docs" data-label="Docs" data-icon="icon--docs">
           <span class="repo-icon icon--docs" aria-hidden="true"></span>
           <span class="drawer-row__label">Docs</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
-        <button class="button-surface drawer-row drawer-page-option" type="button" hidden>
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="tools" data-label="Tools" data-icon="icon--tools">
           <span class="repo-icon icon--tools" aria-hidden="true"></span>
           <span class="drawer-row__label">Tools</span>
           <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
@@ -1133,27 +1139,27 @@
 
     <footer class="bottom-shell">
       <nav class="bottom-nav" aria-label="Primary navigation">
-        <button class="button-surface nav-button" type="button">
+        <button class="button-surface nav-button" type="button" data-page-button data-nav-button data-page="map" data-label="Map" data-icon="icon--map">
           <span class="repo-icon icon--map" aria-hidden="true"></span>
           <span>Map</span>
         </button>
 
-        <button class="button-surface nav-button is-active" type="button" aria-current="page">
+        <button class="button-surface nav-button is-active" type="button" aria-current="page" data-page-button data-nav-button data-page="rf" data-label="RF" data-icon="icon--rf">
           <span class="repo-icon icon--rf" aria-hidden="true"></span>
           <span>RF</span>
         </button>
 
-        <button class="button-surface nav-button" type="button">
+        <button class="button-surface nav-button" type="button" data-page-button data-nav-button data-page="network" data-label="Network" data-icon="icon--network">
           <span class="repo-icon icon--network" aria-hidden="true"></span>
           <span>Net</span>
         </button>
 
-        <button class="button-surface nav-button" type="button">
+        <button class="button-surface nav-button" type="button" data-page-button data-nav-button data-page="docs" data-label="Docs" data-icon="icon--docs">
           <span class="repo-icon icon--docs" aria-hidden="true"></span>
           <span>Docs</span>
         </button>
 
-        <button class="button-surface nav-button" type="button">
+        <button class="button-surface nav-button" type="button" data-page-button data-nav-button data-page="tools" data-label="Tools" data-icon="icon--tools">
           <span class="repo-icon icon--tools" aria-hidden="true"></span>
           <span>Tool</span>
         </button>
@@ -1170,6 +1176,20 @@
       const pagesButton = document.querySelector("[data-pages-toggle]");
       const pagesButtonText = pagesButton ? pagesButton.querySelector(".section-toggle__text") : null;
       const pageOptions = Array.prototype.slice.call(document.querySelectorAll(".drawer-page-option"));
+      const pageButtons = Array.prototype.slice.call(document.querySelectorAll("[data-page-button]"));
+      const navButtons = Array.prototype.slice.call(document.querySelectorAll("[data-nav-button]"));
+      const currentPageIcon = document.querySelector("[data-current-page-icon]");
+      const currentPageTitle = document.querySelector("[data-current-page-title]");
+
+      const pages = {
+        map: { label: "Map", icon: "icon--map" },
+        rf: { label: "RF", icon: "icon--rf" },
+        network: { label: "Network", icon: "icon--network" },
+        docs: { label: "Docs", icon: "icon--docs" },
+        tools: { label: "Tools", icon: "icon--tools" }
+      };
+
+      let activePage = "rf";
 
       function setDrawerOpen(isOpen) {
         shell.setAttribute("data-drawer-open", isOpen ? "true" : "false");
@@ -1189,9 +1209,55 @@
           pagesButtonText.textContent = isExpanded ? "Hide" : "All";
         }
 
-        pageOptions.forEach(function (row) {
-          row.hidden = !isExpanded;
+        updatePageOptionVisibility();
+      }
+
+      function updateCurrentPagePill() {
+        const page = pages[activePage] || pages.rf;
+
+        if (currentPageTitle) {
+          currentPageTitle.textContent = page.label;
+        }
+
+        if (currentPageIcon) {
+          currentPageIcon.className = "repo-icon " + page.icon;
+          currentPageIcon.setAttribute("aria-hidden", "true");
+        }
+      }
+
+      function updateBottomNav() {
+        navButtons.forEach(function (button) {
+          const isActive = button.getAttribute("data-page") === activePage;
+          button.classList.toggle("is-active", isActive);
+
+          if (isActive) {
+            button.setAttribute("aria-current", "page");
+          } else {
+            button.removeAttribute("aria-current");
+          }
         });
+      }
+
+      function updatePageOptionVisibility() {
+        const expanded = shell.getAttribute("data-pages-expanded") === "true";
+
+        pageOptions.forEach(function (row) {
+          const isCurrent = row.getAttribute("data-page") === activePage;
+          row.hidden = !expanded || isCurrent;
+          row.classList.toggle("is-active", isCurrent);
+        });
+      }
+
+      function setActivePage(pageName) {
+        if (!pages[pageName]) {
+          return;
+        }
+
+        activePage = pageName;
+        shell.setAttribute("data-current-page", pageName);
+        updateCurrentPagePill();
+        updateBottomNav();
+        updatePageOptionVisibility();
       }
 
       if (menuButton) {
@@ -1212,8 +1278,16 @@
         });
       }
 
+      pageButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          const pageName = button.getAttribute("data-page");
+          setActivePage(pageName);
+        });
+      });
+
       setDrawerOpen(false);
       setPagesExpanded(false);
+      setActivePage("rf");
     })();
   </script>
 </body>
