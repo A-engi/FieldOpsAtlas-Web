@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FieldOps Atlas Offline Shell Menu v14 Repo Icons</title>
+  <title>FieldOps Atlas Offline Shell Menu v16 Interactive Drawer</title>
   <style>
     /* ==========================================================================
        Tokens
@@ -197,10 +197,6 @@
       --icon-src: url("data/icons/filter.svg");
     }
 
-    .icon--close {
-      --icon-src: url("data/icons/close.svg");
-    }
-
     .icon--atlas {
       --icon-src: url("data/icons/atlas-transmitter-gold.svg");
     }
@@ -250,6 +246,45 @@
       width: var(--top-icon-size);
       height: var(--top-icon-size);
     }
+
+    .css-close {
+      position: relative;
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
+    .css-close::before,
+    .css-close::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 23px;
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+      transform-origin: center;
+    }
+
+    .css-close::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .css-close::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .chevron-mark {
+      width: 10px;
+      height: 10px;
+      display: block;
+      border-top: 3px solid currentColor;
+      border-right: 3px solid currentColor;
+      transform: rotate(45deg);
+    }
+
+
 
     /* ==========================================================================
        Top shell
@@ -366,6 +401,32 @@
     /* ==========================================================================
        Drawer panel
        ========================================================================== */
+
+    .drawer,
+    .map-dim {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 180ms ease,
+        visibility 180ms ease,
+        transform 180ms ease;
+    }
+
+    .drawer {
+      transform: translateX(-14px) scale(0.985);
+    }
+
+    .phone[data-drawer-open="true"] .drawer,
+    .phone[data-drawer-open="true"] .map-dim {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .phone[data-drawer-open="true"] .drawer {
+      transform: translateX(0) scale(1);
+    }
 
     .drawer {
       position: absolute;
@@ -506,12 +567,16 @@
       text-transform: uppercase;
     }
 
-    .pages-toggle {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
-      opacity: 0;
-      pointer-events: none;
+    .section-card {
+      padding: 10px;
+      border: 1px solid rgba(76, 113, 151, 0.74);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.08), transparent 36%),
+        linear-gradient(180deg, rgba(10, 32, 58, 0.70), rgba(5, 18, 34, 0.54));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 8px 20px rgba(0, 0, 0, 0.12);
     }
 
     .section-toggle {
@@ -550,10 +615,14 @@
 
     .section-toggle__chevron {
       color: var(--gold-strong);
-      font-size: 15px;
-      line-height: 1;
       transform: rotate(90deg);
       transition: transform 160ms ease;
+    }
+
+    .section-toggle__chevron .chevron-mark {
+      width: 8px;
+      height: 8px;
+      border-width: 2px;
     }
 
     .drawer-pages {
@@ -565,20 +634,12 @@
       display: none;
     }
 
-    .pages-toggle:checked ~ .drawer-pages .drawer-page-option {
+    .phone[data-pages-expanded="true"] .drawer-page-option {
       display: grid;
     }
 
-    .pages-toggle:checked ~ .section-toggle .section-toggle__chevron {
+    .phone[data-pages-expanded="true"] .section-toggle__chevron {
       transform: rotate(-90deg);
-    }
-
-    .pages-toggle:checked ~ .section-toggle .section-toggle__text::before {
-      content: "Hide";
-    }
-
-    .pages-toggle:not(:checked) ~ .section-toggle .section-toggle__text::before {
-      content: "All";
     }
 
     .current-page-card {
@@ -637,10 +698,15 @@
 
     .current-page-card__chevron {
       color: var(--gold-strong);
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 1;
+      display: grid;
+      place-items: center;
       transform: translateY(-1px);
+    }
+
+    .current-page-card__chevron .chevron-mark {
+      width: 8px;
+      height: 8px;
+      border-width: 3px;
     }
 
     .drawer-row {
@@ -675,10 +741,15 @@
 
     .drawer-row__chevron {
       color: var(--gold-strong);
-      font-size: 22px;
-      font-weight: 500;
-      line-height: 1;
+      display: grid;
+      place-items: center;
       transform: translateY(-1px);
+    }
+
+    .drawer-row__chevron .chevron-mark {
+      width: 9px;
+      height: 9px;
+      border-width: 3px;
     }
 
     .drawer-row.is-active {
@@ -929,11 +1000,11 @@
   </style>
 </head>
 <body>
-  <main class="phone">
+  <main class="phone" data-drawer-open="false" data-pages-expanded="false">
     <div class="map-background" aria-hidden="true"></div>
 
     <header class="top-shell" aria-label="Map controls">
-      <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="true">
+      <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open>
         <span class="repo-icon icon--menu" aria-hidden="true"></span>
       </button>
 
@@ -970,59 +1041,59 @@
           <p class="brand-subtitle">UK Network Toolkit</p>
         </div>
 
-        <button class="button-surface drawer-close" type="button" aria-label="Close menu">
-          <span class="repo-icon icon--close" aria-hidden="true"></span>
+        <button class="button-surface drawer-close" type="button" aria-label="Close menu" data-menu-close>
+          <span class="css-close" aria-hidden="true"></span>
         </button>
       </header>
 
-      <input class="pages-toggle" type="checkbox" id="pages-toggle">
+      <section class="section-card" aria-label="Page selector">
+        <div class="section-toggle">
+          <p class="section-label">Pages</p>
+          <button class="section-toggle__button" type="button" aria-expanded="false" data-pages-toggle>
+            <span class="section-toggle__text">All</span>
+            <span class="section-toggle__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
+          </button>
+        </div>
 
-      <div class="section-toggle">
-        <p class="section-label">Pages</p>
-        <label class="section-toggle__button" for="pages-toggle" aria-label="Show or hide page list">
-          <span class="section-toggle__text"></span>
-          <span class="section-toggle__chevron" aria-hidden="true">âº</span>
-        </label>
-      </div>
-
-      <nav class="drawer-pages" aria-label="Pages">
+        <nav class="drawer-pages" aria-label="Pages">
         <button class="button-surface drawer-row drawer-page-option" type="button">
           <span class="repo-icon icon--map" aria-hidden="true"></span>
           <span class="drawer-row__label">Map</span>
-          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+          <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
         <button class="button-surface current-page-card" type="button" aria-current="page">
           <span class="repo-icon icon--rf" aria-hidden="true"></span>
           <span class="current-page-card__title">RF</span>
-          <span class="current-page-card__chevron" aria-hidden="true">âº</span>
+          <span class="current-page-card__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
         <button class="button-surface drawer-row drawer-page-option" type="button">
           <span class="repo-icon icon--network" aria-hidden="true"></span>
           <span class="drawer-row__label">Network</span>
-          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+          <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
         <button class="button-surface drawer-row drawer-page-option" type="button">
           <span class="repo-icon icon--docs" aria-hidden="true"></span>
           <span class="drawer-row__label">Docs</span>
-          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+          <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
 
         <button class="button-surface drawer-row drawer-page-option" type="button">
           <span class="repo-icon icon--tools" aria-hidden="true"></span>
           <span class="drawer-row__label">Tools</span>
-          <span class="drawer-row__chevron" aria-hidden="true">âº</span>
+          <span class="drawer-row__chevron" aria-hidden="true"><span class="chevron-mark"></span></span>
         </button>
-      </nav>
+        </nav>
+      </section>
 
       <div class="drawer-spacer" aria-hidden="true"></div>
 
       <p class="section-label">User</p>
 
       <div class="account-menu" aria-label="User menu">
-        <button class="button-surface account-button" type="button" aria-label="Open profile">
+        <button class="button-surface account-button" type="button" aria-label="Open profile placeholder">
           <span class="repo-icon icon--profile" aria-hidden="true"></span>
         </button>
 
@@ -1073,5 +1144,34 @@
 
     <div class="phone-home-indicator" aria-hidden="true"></div>
   </main>
+  <script>
+    const shell = document.querySelector(".phone");
+    const openButton = document.querySelector("[data-menu-open]");
+    const closeButton = document.querySelector("[data-menu-close]");
+    const pagesToggle = document.querySelector("[data-pages-toggle]");
+    const pagesToggleText = pagesToggle?.querySelector(".section-toggle__text");
+
+    function setDrawerOpen(isOpen) {
+      shell.dataset.drawerOpen = String(isOpen);
+      openButton?.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    function setPagesExpanded(isExpanded) {
+      shell.dataset.pagesExpanded = String(isExpanded);
+      pagesToggle?.setAttribute("aria-expanded", String(isExpanded));
+      if (pagesToggleText) {
+        pagesToggleText.textContent = isExpanded ? "Hide" : "All";
+      }
+    }
+
+    openButton?.addEventListener("click", () => setDrawerOpen(true));
+    closeButton?.addEventListener("click", () => setDrawerOpen(false));
+    pagesToggle?.addEventListener("click", () => {
+      setPagesExpanded(shell.dataset.pagesExpanded !== "true");
+    });
+
+    setDrawerOpen(false);
+    setPagesExpanded(false);
+  </script>
 </body>
 </html>
