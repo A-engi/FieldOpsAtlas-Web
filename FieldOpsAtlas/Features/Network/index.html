@@ -1,48 +1,314 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FieldOps Atlas Network</title>
-  <link rel="stylesheet" href="../RF/shell.css?v=1.1.1" />
-  <link rel="stylesheet" href="../RF/page.css?v=1.1.1" />
-</head>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.1-shell-v2.0">
+  <style>
 
+    :root {
+      --feature-content-side: 7px;
+      --feature-content-radius: 20px;
+    }
+
+    .content-canvas {
+      position: absolute;
+      z-index: 1;
+      top: calc(var(--safe-top) + var(--top-height) + var(--feature-content-side));
+      right: var(--feature-content-side);
+      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--feature-content-side));
+      left: var(--feature-content-side);
+      min-height: 0;
+      overflow: hidden;
+      border: 2px solid var(--gold-border);
+      border-radius: var(--feature-content-radius);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 0 0 1px rgba(255, 231, 168, 0.20),
+        0 14px 30px rgba(2, 9, 20, 0.26);
+    }
+
+    .feature-page {
+      height: 100%;
+      min-height: 0;
+      padding: 10px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .feature-hero {
+      padding: 12px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.26),
+        0 6px 18px rgba(37, 24, 8, 0.10);
+    }
+
+    .feature-kicker {
+      margin: 0 0 5px;
+      color: rgba(68, 80, 92, 0.68);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .feature-title {
+      margin: 0;
+      color: #172b3e;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .feature-copy {
+      margin: 7px 0 0;
+      color: rgba(22, 43, 62, 0.72);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .feature-section {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.54),
+        0 6px 18px rgba(37, 24, 8, 0.08);
+    }
+
+    .feature-section h2 {
+      margin: 0 0 10px;
+      color: #172b3e;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric-card,
+    .action-card {
+      min-height: 66px;
+      padding: 10px;
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      color: #172b3e;
+      border: 1px solid rgba(192, 150, 68, 0.26);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.64), transparent 42%),
+        linear-gradient(180deg, rgba(255, 252, 244, 0.88), rgba(247, 236, 212, 0.78));
+      text-decoration: none;
+      box-shadow: 0 5px 12px rgba(37, 24, 8, 0.06);
+    }
+
+    .metric-card strong,
+    .action-card strong {
+      display: block;
+      overflow: hidden;
+      color: #172b3e;
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .metric-card span,
+    .action-card span {
+      color: rgba(22, 43, 62, 0.64);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .list-row {
+      min-height: 46px;
+      padding: 9px 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      color: #172b3e;
+      border: 1px solid rgba(192, 150, 68, 0.22);
+      border-radius: 14px;
+      background: rgba(255, 252, 244, 0.72);
+      text-decoration: none;
+    }
+
+    .list-row strong {
+      display: block;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .list-row small {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: rgba(22, 43, 62, 0.62);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .status-pill {
+      padding: 5px 8px;
+      color: #0d4d2a;
+      border-radius: 999px;
+      background: rgba(21, 115, 58, 0.12);
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 360px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .phone[data-page="network"] .content-canvas {
+      background:
+        radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.78), transparent 39%),
+        linear-gradient(180deg, #f3fbff 0%, #dcefff 100%);
+    }
+  </style>
+</head>
 <body>
-  <main class="phone" data-page="network" data-nav="network" data-version="1.1.1">
-    <section class="content-canvas" aria-label="FieldOps Atlas Network content">
-      <article class="page-content">
-        <header class="page-head">
-          <div class="page-kicker">Topology</div>
-          <h1 class="page-title">Network</h1>
-          <p class="page-lede">View link topology, online paths, degraded branches, and route health.</p>
+  <main class="phone" data-page="network" data-version="1.1.1">
+    <section class="content-canvas" aria-label="Network content">
+      <article class="feature-page">
+        <header class="feature-hero">
+          <p class="feature-kicker">Topology</p>
+          <h1 class="feature-title">Network</h1>
+          <p class="feature-copy">View link topology, online paths, degraded branches, and route health.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">Network topology</h2>
-          <div class="topology">
-            <svg viewBox="0 0 300 220" fill="none">
-              <path d="M55 110 135 55 235 92 188 170 88 165 55 110Z" stroke="#48c7ff" stroke-width="2" opacity=".72"/>
-              <path d="M135 55 150 118 188 170M55 110 150 118 235 92" stroke="#9be8ff" stroke-width="1.4" opacity=".45"/>
-              <g fill="#0f5fab" stroke="#ffdda0" stroke-width="2">
-                <circle cx="55" cy="110" r="12"/><circle cx="135" cy="55" r="12"/><circle cx="235" cy="92" r="12"/><circle cx="188" cy="170" r="12"/><circle cx="88" cy="165" r="12"/><circle cx="150" cy="118" r="12"/>
-              </g>
-            </svg>
+        <section class="feature-section" aria-label="Network summary">
+          <h2>Summary</h2>
+          <div class="feature-grid">
+          <article class="metric-card">
+            <strong>18</strong>
+            <span>Total</span>
+          </article>
+          <article class="metric-card">
+            <strong>16</strong>
+            <span>Good</span>
+          </article>
+          <article class="metric-card">
+            <strong>2</strong>
+            <span>Degraded</span>
+          </article>
           </div>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">Link health</h2>
-          <div class="metric-grid">
-            <div class="metric"><strong>18</strong><span>Total</span></div>
-            <div class="metric"><strong>16</strong><span>Good</span></div>
-            <div class="metric"><strong>2</strong><span>Degraded</span></div>
+        <section class="feature-section" aria-labelledby="networkTopologyTitle">
+          <h2 id="networkTopologyTitle">Network topology</h2>
+          <div class="feature-list">
+            <a class="list-row" href="../RF/paths.html">
+              <span>
+                <strong>Core link topology</strong>
+                <small>RF, IP, and microwave route overview</small>
+              </span>
+              <span class="status-pill">Online</span>
+            </a>
+            <a class="list-row" href="../RF/sites.html">
+              <span>
+                <strong>Degraded branches</strong>
+                <small>Two paths need attention</small>
+              </span>
+              <span class="status-pill">Review</span>
+            </a>
+          </div>
+        </section>
+        <section class="feature-section" aria-labelledby="networkHealthTitle">
+          <h2 id="networkHealthTitle">Link health</h2>
+          <div class="feature-list">
+            <article class="list-row">
+              <span>
+                <strong>North route</strong>
+                <small>All services nominal</small>
+              </span>
+              <span class="status-pill">Good</span>
+            </article>
+            <article class="list-row">
+              <span>
+                <strong>South relay chain</strong>
+                <small>Reduced margin on one hop</small>
+              </span>
+              <span class="status-pill">Watch</span>
+            </article>
           </div>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="../RF/shell.js?v=1.1.1"></script>
+  <script>
+    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+    window.FieldOpsSearchQueue.push({
+      page: "network",
+      label: "Network",
+      placeholder: "Search network...",
+      emptyText: "No network matches found.",
+      items: [
+        {
+          id: "network-topology",
+          title: "Network topology",
+          subtitle: "Topology and route overview",
+          href: "./index.html#networkTopologyTitle",
+          keywords: ["network", "topology", "routes", "links"]
+        },
+        {
+          id: "network-health",
+          title: "Link health",
+          subtitle: "Good and degraded link status",
+          href: "./index.html#networkHealthTitle",
+          keywords: ["health", "degraded", "good", "status"]
+        },
+        {
+          id: "network-paths",
+          title: "RF paths",
+          subtitle: "Open RF path analysis",
+          href: "../RF/paths.html",
+          keywords: ["paths", "rf", "link", "microwave"]
+        }
+      ]
+    });
+  </script>
+  <script src="../../../shell.js?v=1.1.1-shell-v2.0" defer></script>
 </body>
 </html>
