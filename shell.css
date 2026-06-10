@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.1-shell-v1.9
+   Version: 1.1.1-shell-v2.0
 
    Purpose:
    - Shared top shell, burger drawer, page selector, and bottom nav.
@@ -965,6 +965,197 @@
       width: 8px;
       height: 8px;
       border-width: 3px;
+    }
+
+
+
+    /* ==========================================================================
+       Page search panel
+       ========================================================================== */
+
+    .search-panel {
+      position: absolute;
+      z-index: 13;
+      top: calc(var(--safe-top) + 56px + 7px);
+      right: var(--shell-side);
+      left: var(--shell-side);
+      max-height: min(430px, calc(100dvh - var(--safe-top) - var(--safe-bottom) - 118px));
+      padding: 10px;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      gap: 9px;
+      color: var(--text);
+      border: 1px solid var(--gold-border);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 18% 4%, rgba(95, 181, 255, 0.24), transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(255, 207, 119, 0.13), transparent 34%),
+        linear-gradient(180deg, rgba(13, 42, 72, 0.985), rgba(6, 20, 38, 0.985));
+      box-shadow:
+        0 0 0 1px rgba(255, 228, 166, 0.12),
+        0 14px 30px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(16px) saturate(122%);
+      -webkit-backdrop-filter: blur(16px) saturate(122%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-6px) scale(0.985);
+      transform-origin: top center;
+      transition:
+        opacity 150ms ease,
+        visibility 150ms ease,
+        transform 150ms ease;
+    }
+
+    .phone[data-page="rf"] .search-panel {
+      right: var(--rf-content-side, var(--shell-side));
+      left: var(--rf-content-side, var(--shell-side));
+    }
+
+    .phone[data-search-open="true"] .search-panel {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .search-panel__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 30px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-panel__copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .search-panel__title {
+      margin: 0;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.96);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .search-panel__hint {
+      margin: 0;
+      overflow: hidden;
+      color: rgba(226, 241, 255, 0.66);
+      font-size: 10px;
+      font-weight: 650;
+      line-height: 1.1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .search-panel__close {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .search-field {
+      min-height: 42px;
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 9px;
+      align-items: center;
+      border: 1px solid rgba(101, 146, 190, 0.62);
+      border-radius: var(--outer-radius);
+      background:
+        radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.06), transparent 38%),
+        linear-gradient(180deg, rgba(12, 35, 62, 0.92), rgba(6, 20, 38, 0.86));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    }
+
+    .search-field .repo-icon {
+      width: 22px;
+      height: 22px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .search-field__input {
+      min-width: 0;
+      width: 100%;
+      height: 40px;
+      color: rgba(255, 255, 255, 0.96);
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .search-field__input::placeholder {
+      color: rgba(226, 241, 255, 0.52);
+    }
+
+    .search-results {
+      min-height: 0;
+      display: grid;
+      gap: 7px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .search-result {
+      min-height: 48px;
+      padding: 0 12px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      text-align: left;
+      text-decoration: none;
+      border-radius: var(--outer-radius);
+    }
+
+    .search-result__title {
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.96);
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .search-result__subtitle {
+      overflow: hidden;
+      color: rgba(226, 241, 255, 0.68);
+      font-size: 10px;
+      font-weight: 650;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .search-empty {
+      margin: 0;
+      padding: 8px 4px 2px;
+      color: rgba(226, 241, 255, 0.62);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .search-empty[hidden] {
+      display: none;
     }
 
 
