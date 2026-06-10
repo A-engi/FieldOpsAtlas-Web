@@ -1,22 +1,23 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v1
+   Version: 1.1.1-map-shell-guard-v2
 
    Purpose:
    - Keep map chrome touches from leaking into map document-level handlers.
-   - Keep the map canvas behind the top rail by treating chrome as chrome only.
-   - Bridge the shared shell Region filter action to the map-owned filter panel.
+   - Keep old map chrome and the newer shared shell chrome safely separated.
+   - Bridge shared shell Region filter actions to the map-owned region panel.
 
    Load order:
-   - Load after map-app.js so map button handlers run first, then this guard stops
-     the same click before broad document-level closers see it.
+   - Load after map-app.js so map-owned button handlers run first.
+   - This file then stops the same chrome click before broad document handlers
+     treat it as a map/background click.
    ============================================================================ */
 
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v1";
+  const VERSION = "1.1.1-map-shell-guard-v2";
 
   const CHROME_EVENT_ROOTS = [
     ".top-bar",
@@ -27,7 +28,13 @@
     ".side-menu",
     ".menu-overlay",
     ".side-rail",
-    ".rail-tools-menu"
+    ".rail-tools-menu",
+
+    ".top-shell",
+    ".drawer",
+    ".filter-panel",
+    ".search-panel",
+    ".bottom-shell"
   ];
 
   function byId(id) {
@@ -50,43 +57,63 @@
     });
   }
 
+  function setExpanded(element, isExpanded) {
+    if (element) {
+      element.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+    }
+  }
+
+  function closeHiddenMenu(menu) {
+    if (!menu) {
+      return;
+    }
+
+    menu.hidden = true;
+    menu.classList.remove("is-open");
+  }
+
   function openPanel(panel) {
     if (!panel) {
-      return;
+      return false;
     }
 
     panel.hidden = false;
     panel.classList.remove("is-hidden");
     panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+
+    return true;
   }
 
   function closeOldChromeMenus() {
-    const topFilterMenu = byId("topFilterMenu");
-    const topRegionTree = byId("topRegionTree");
-    const railToolsMenu = byId("railToolsMenu");
-    const fitMapButton = byId("fitMapBtn");
-    const topSelectRegionButton = byId("topSelectRegionButton");
-    const railToolsButton = byId("railToolsButton");
+    closeHiddenMenu(byId("topFilterMenu"));
+    closeHiddenMenu(byId("topRegionTree"));
+    closeHiddenMenu(byId("railToolsMenu"));
 
-    [topFilterMenu, topRegionTree, railToolsMenu].forEach(function (menu) {
-      if (!menu) {
-        return;
-      }
-
-      menu.hidden = true;
-      menu.classList.remove("is-open");
-    });
-
-    [fitMapButton, topSelectRegionButton, railToolsButton].forEach(function (button) {
-      if (button) {
-        button.setAttribute("aria-expanded", "false");
-      }
-    });
+    setExpanded(byId("fitMapBtn"), false);
+    setExpanded(byId("topSelectRegionButton"), false);
+    setExpanded(byId("railToolsButton"), false);
   }
 
   function openRegionFilterPanel() {
     closeOldChromeMenus();
-    openPanel(byId("filterPanel"));
+
+    if (openPanel(byId("filterPanel"))) {
+      return;
+    }
+
+    /*
+      Fallback for transitional markup: if the full region filter panel is not
+      present, open the old top region tree instead of silently doing nothing.
+    */
+    const topRegionTree = byId("topRegionTree");
+    const topSelectRegionButton = byId("topSelectRegionButton");
+
+    if (topRegionTree) {
+      topRegionTree.hidden = false;
+      topRegionTree.classList.add("is-open");
+      setExpanded(topSelectRegionButton, true);
+    }
   }
 
   function bindSharedShellBridge() {
