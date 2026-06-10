@@ -1,0 +1,171 @@
+/* ==========================================================================
+   FieldOps Atlas RF quick services
+   Feature file: FieldOpsAtlas/Features/RF/rf-quick.css
+   Version: 1.1.1-rf-quick-v1
+
+   Purpose:
+   - Restore the RF-only DTT / DAB / FM / More quick row.
+   - Keep this out of the shared root shell because it is RF-specific.
+   ========================================================================== */
+
+/* ==========================================================================
+   RF top shell layout
+   ========================================================================== */
+
+.phone[data-page="rf"] {
+  --rf-content-side: 7px;
+  --rf-quick-height: 35px;
+  --rf-quick-row-gap: 6px;
+  --top-height: 94px;
+}
+
+.phone[data-page="rf"].rf-quick-collapsed {
+  --top-height: 56px;
+}
+
+.phone[data-page="rf"] .top-shell {
+  height: calc(var(--top-height) + var(--safe-top));
+  padding:
+    calc(var(--top-pad-y) + var(--safe-top))
+    var(--rf-content-side)
+    var(--top-pad-y);
+  grid-template-rows: var(--top-control-height) var(--rf-quick-height);
+  row-gap: var(--rf-quick-row-gap);
+  align-content: start;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   RF quick row
+   ========================================================================== */
+
+.rf-quick-access {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
+  height: var(--rf-quick-height);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.phone.rf-quick-collapsed .rf-quick-access {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+}
+
+.rf-quick-chip {
+  min-width: 0;
+  height: var(--rf-quick-height);
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  overflow: hidden;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.15);
+  font-size: clamp(11.5px, 3.25vw, 13.5px);
+  font-weight: 760;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.rf-quick-chip img {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  object-fit: contain;
+}
+
+.rf-quick-chip span {
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.rf-quick-chip.is-dtt {
+  --chip-main: #15733a;
+  --chip-dark: #0d4d2a;
+  --chip-border: rgba(22, 83, 46, 0.70);
+}
+
+.rf-quick-chip.is-dab {
+  --chip-main: #0f5fab;
+  --chip-dark: #0a3975;
+  --chip-border: rgba(14, 64, 120, 0.78);
+}
+
+.rf-quick-chip.is-fm {
+  --chip-main: #733091;
+  --chip-dark: #491962;
+  --chip-border: rgba(83, 33, 105, 0.78);
+}
+
+.rf-quick-chip:not(.is-more) {
+  border: 1px solid var(--chip-border);
+  background:
+    radial-gradient(circle at 25% 18%, rgba(255, 255, 255, 0.13), transparent 42%),
+    linear-gradient(135deg, var(--chip-main), var(--chip-dark));
+}
+
+.rf-quick-chip.is-more {
+  border: 1px solid var(--button-border);
+  background:
+    radial-gradient(circle at 25% 18%, rgba(255, 255, 255, 0.09), transparent 42%),
+    linear-gradient(135deg, #183350, #0b1d33);
+  font-weight: 720;
+}
+
+.rf-quick-chip.is-current {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -2px 0 rgba(255, 221, 160, 0.52),
+    0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   RF quick collapse handle
+   ========================================================================== */
+
+.rf-quick-toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 84px;
+  height: 10px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  transform: translateX(-50%);
+}
+
+.rf-quick-toggle::before {
+  content: "";
+  width: 54px;
+  height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(192, 197, 202, 0.92), rgba(111, 118, 127, 0.88));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.phone.rf-quick-collapsed .rf-quick-toggle::before {
+  width: 42px;
+  opacity: 0.86;
+}
