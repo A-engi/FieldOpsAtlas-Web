@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.1-shell-v1.1
+   Version: 1.1.1-shell-v1.2.2
 
    Purpose:
    - Shared top shell, burger drawer, page selector, and bottom nav.
@@ -866,6 +866,15 @@
       background:
         linear-gradient(180deg, rgba(8, 29, 52, 0), rgba(8, 29, 52, 0.78) 46%, var(--shell-surface) 100%);
       pointer-events: none;
+    }
+
+
+    .phone[data-page="rf"] {
+      --rf-content-side: 7px;
+    }
+
+    .phone[data-page="rf"] .bottom-shell {
+      padding-inline: var(--rf-content-side);
     }
 
     .bottom-nav {
