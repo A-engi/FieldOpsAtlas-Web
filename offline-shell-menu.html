@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FieldOps Atlas Offline Shell Menu v24 RF Nav Behaviour</title>
+  <title>FieldOps Atlas Offline Shell Menu v25 Nav Radius Fix</title>
   <style>
     /* ==========================================================================
        Tokens
@@ -940,19 +940,20 @@
     }
 
     .nav-button:first-child,
-    .nav-button.is-is-group-start {
+    .nav-button.is-group-start {
       border-left: 1px solid var(--button-border);
       border-radius: var(--outer-radius) 0 0 var(--outer-radius);
     }
 
     .nav-button:last-child,
-    .nav-button.is-is-group-end {
+    .nav-button.is-group-end {
       border-right: 1px solid var(--button-border);
       border-radius: 0 var(--outer-radius) var(--outer-radius) 0;
     }
 
-    .nav-button:first-child:last-child,
-    .nav-button.is-is-group-start.is-is-group-end {
+    .nav-button:first-child.is-group-end,
+    .nav-button:last-child.is-group-start,
+    .nav-button.is-group-start.is-group-end {
       border-right: 1px solid var(--button-border);
       border-radius: var(--outer-radius);
     }
