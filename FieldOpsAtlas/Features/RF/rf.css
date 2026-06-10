@@ -1,6 +1,6 @@
 /*
   FieldOps Atlas RF page styles
-  Version: 1.1.1-rf-integrated-v3
+  Version: 1.1.1-rf-integrated-v4
 
   Purpose:
   - Own only the RF landing page content inside the shared shell.
@@ -197,10 +197,10 @@
 }
 
 .rf-quick-chip.is-more span::before {
-  content: "â¢â¢â¢";
+  content: "...";
   font-size: 19px;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
 }
 
 .rf-quick-chip.is-pin {
@@ -1187,4 +1187,16 @@
   .rf-bottom {
     gap: 6px;
   }
+}
+
+
+.rf-quick-chip.is-more::before {
+  content: "...";
+  font-size: 19px;
+  line-height: 1;
+  letter-spacing: 0.10em;
+}
+
+.rf-quick-chip.is-more span {
+  display: none;
 }
