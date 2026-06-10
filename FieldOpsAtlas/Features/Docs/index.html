@@ -1,44 +1,321 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas Docs</title>
-  <link rel="stylesheet" href="../RF/shell.css?v=1.1.1" />
-  <link rel="stylesheet" href="../RF/page.css?v=1.1.1" />
-</head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Equipment</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.1-shell-v2.0">
+  <style>
 
+    :root {
+      --feature-content-side: 7px;
+      --feature-content-radius: 20px;
+    }
+
+    .content-canvas {
+      position: absolute;
+      z-index: 1;
+      top: calc(var(--safe-top) + var(--top-height) + var(--feature-content-side));
+      right: var(--feature-content-side);
+      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--feature-content-side));
+      left: var(--feature-content-side);
+      min-height: 0;
+      overflow: hidden;
+      border: 2px solid var(--gold-border);
+      border-radius: var(--feature-content-radius);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 0 0 1px rgba(255, 231, 168, 0.20),
+        0 14px 30px rgba(2, 9, 20, 0.26);
+    }
+
+    .feature-page {
+      height: 100%;
+      min-height: 0;
+      padding: 10px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .feature-hero {
+      padding: 12px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.26),
+        0 6px 18px rgba(37, 24, 8, 0.10);
+    }
+
+    .feature-kicker {
+      margin: 0 0 5px;
+      color: rgba(68, 80, 92, 0.68);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .feature-title {
+      margin: 0;
+      color: #172b3e;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .feature-copy {
+      margin: 7px 0 0;
+      color: rgba(22, 43, 62, 0.72);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .feature-section {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.54),
+        0 6px 18px rgba(37, 24, 8, 0.08);
+    }
+
+    .feature-section h2 {
+      margin: 0 0 10px;
+      color: #172b3e;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric-card,
+    .action-card {
+      min-height: 66px;
+      padding: 10px;
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      color: #172b3e;
+      border: 1px solid rgba(192, 150, 68, 0.26);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.64), transparent 42%),
+        linear-gradient(180deg, rgba(255, 252, 244, 0.88), rgba(247, 236, 212, 0.78));
+      text-decoration: none;
+      box-shadow: 0 5px 12px rgba(37, 24, 8, 0.06);
+    }
+
+    .metric-card strong,
+    .action-card strong {
+      display: block;
+      overflow: hidden;
+      color: #172b3e;
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .metric-card span,
+    .action-card span {
+      color: rgba(22, 43, 62, 0.64);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .list-row {
+      min-height: 46px;
+      padding: 9px 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      color: #172b3e;
+      border: 1px solid rgba(192, 150, 68, 0.22);
+      border-radius: 14px;
+      background: rgba(255, 252, 244, 0.72);
+      text-decoration: none;
+    }
+
+    .list-row strong {
+      display: block;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .list-row small {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: rgba(22, 43, 62, 0.62);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .status-pill {
+      padding: 5px 8px;
+      color: #0d4d2a;
+      border-radius: 999px;
+      background: rgba(21, 115, 58, 0.12);
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 360px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .phone[data-page="docs"] .content-canvas {
+      background:
+        radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.78), transparent 39%),
+        linear-gradient(180deg, #fffdf6 0%, #f6edda 100%);
+    }
+  </style>
+</head>
 <body>
-  <main class="phone" data-page="docs" data-nav="docs" data-version="1.1.1">
-    <section class="content-canvas" aria-label="FieldOps Atlas Docs content">
-      <article class="page-content">
-        <header class="page-head">
-          <div class="page-kicker">Inventory</div>
-          <h1 class="page-title">Equipment</h1>
-          <p class="page-lede">Prototype inventory view for transmitters, antennas, links, and receivers.</p>
+  <main class="phone" data-page="docs" data-version="1.1.1">
+    <section class="content-canvas" aria-label="Equipment content">
+      <article class="feature-page">
+        <header class="feature-hero">
+          <p class="feature-kicker">Inventory</p>
+          <h1 class="feature-title">Equipment</h1>
+          <p class="feature-copy">Prototype inventory view for transmitters, antennas, links, and receivers.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">Inventory summary</h2>
-          <div class="metric-grid">
-            <div class="metric"><strong>42</strong><span>Transmitters</span></div>
-            <div class="metric"><strong>31</strong><span>Antennas</span></div>
-            <div class="metric"><strong>7</strong><span>Offline</span></div>
+        <section class="feature-section" aria-label="Equipment summary">
+          <h2>Summary</h2>
+          <div class="feature-grid">
+          <article class="metric-card">
+            <strong>42</strong>
+            <span>Transmitters</span>
+          </article>
+          <article class="metric-card">
+            <strong>31</strong>
+            <span>Antennas</span>
+          </article>
+          <article class="metric-card">
+            <strong>7</strong>
+            <span>Offline</span>
+          </article>
           </div>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">Equipment groups</h2>
-          <div class="list">
-            <a class="list-row" href="#"><span class="row-icon">TX</span><span><b class="row-title">Transmitters</b><div class="row-sub">Power, exciter, and service group</div></span><span class="row-value">42</span></a>
-            <a class="list-row" href="#"><span class="row-icon">ANT</span><span><b class="row-title">Antenna systems</b><div class="row-sub">Panels, combiners, feeders</div></span><span class="row-value">31</span></a>
-            <a class="list-row" href="#"><span class="row-icon">RX</span><span><b class="row-title">Receivers</b><div class="row-sub">Off-air, IP, satellite, microwave</div></span><span class="row-value">18</span></a>
+        <section class="feature-section" aria-labelledby="docsGroupsTitle">
+          <h2 id="docsGroupsTitle">Equipment groups</h2>
+          <div class="feature-list">
+            <a class="list-row" href="../RF/equipment.html#transmitters">
+              <span>
+                <strong>TX Transmitters</strong>
+                <small>Power, exciter, and service groups</small>
+              </span>
+              <span class="status-pill">42</span>
+            </a>
+            <a class="list-row" href="../RF/equipment.html#antennas">
+              <span>
+                <strong>ANT Antenna systems</strong>
+                <small>Panels, combiners, feeders</small>
+              </span>
+              <span class="status-pill">31</span>
+            </a>
+            <a class="list-row" href="../RF/equipment.html#receivers">
+              <span>
+                <strong>RX Receivers</strong>
+                <small>Off-air, IP, satellite, microwave</small>
+              </span>
+              <span class="status-pill">18</span>
+            </a>
+          </div>
+        </section>
+        <section class="feature-section" aria-labelledby="docsInventoryTitle">
+          <h2 id="docsInventoryTitle">Inventory notes</h2>
+          <div class="feature-list">
+            <article class="list-row">
+              <span>
+                <strong>Prototype inventory</strong>
+                <small>Dummy equipment records only</small>
+              </span>
+              <span class="status-pill">Draft</span>
+            </article>
           </div>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="../RF/shell.js?v=1.1.1"></script>
+  <script>
+    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+    window.FieldOpsSearchQueue.push({
+      page: "docs",
+      label: "Equipment",
+      placeholder: "Search equipment...",
+      emptyText: "No equipment matches found.",
+      items: [
+        {
+          id: "docs-inventory",
+          title: "Inventory summary",
+          subtitle: "Transmitters, antennas, and offline count",
+          href: "./index.html#docsInventoryTitle",
+          keywords: ["inventory", "summary", "offline", "equipment"]
+        },
+        {
+          id: "docs-tx",
+          title: "TX Transmitters",
+          subtitle: "Power, exciter, and service groups",
+          href: "../RF/equipment.html#transmitters",
+          keywords: ["tx", "transmitters", "power", "exciter"]
+        },
+        {
+          id: "docs-ant",
+          title: "Antenna systems",
+          subtitle: "Panels, combiners, feeders",
+          href: "../RF/equipment.html#antennas",
+          keywords: ["antenna", "ant", "panels", "feeders"]
+        },
+        {
+          id: "docs-rx",
+          title: "Receivers",
+          subtitle: "Off-air, IP, satellite, microwave",
+          href: "../RF/equipment.html#receivers",
+          keywords: ["receivers", "rx", "satellite", "microwave"]
+        }
+      ]
+    });
+  </script>
+  <script src="../../../shell.js?v=1.1.1-shell-v2.0" defer></script>
 </body>
 </html>
