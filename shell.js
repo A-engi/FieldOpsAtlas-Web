@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.1-shell-v2.1-map-mount
+   Version: 1.1.1-shell-v2.2-map-drawer-actions
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
@@ -18,7 +18,7 @@
      Configuration
      ======================================================================== */
 
-  const VERSION = "1.1.1-shell-v2.1-map-mount";
+  const VERSION = "1.1.1-shell-v2.2-map-drawer-actions";
   const SHELL_ROOT_SELECTOR = ".phone, .app-shell";
   const DEFAULT_PAGE = "rf";
   const MAX_SEARCH_RESULTS = 12;
@@ -328,16 +328,16 @@
       <p class="section-label">User</p>
 
       <div class="account-menu" aria-label="User menu">
-        <button class="button-surface account-button" type="button" aria-label="Open profile placeholder">
+        <button class="button-surface account-button" type="button" aria-label="Open profile placeholder" data-shell-profile>
           ${iconMarkup("icon--profile")}
         </button>
 
-        <button class="button-surface account-button" type="button" aria-label="Open settings">
+        <button class="button-surface account-button" type="button" aria-label="Open settings" data-shell-settings>
           ${iconMarkup("icon--settings")}
         </button>
       </div>
 
-      <button class="button-surface online-row" type="button" aria-pressed="false">
+      <button class="button-surface online-row" type="button" aria-pressed="false" data-shell-online>
         <span class="checkbox" aria-hidden="true"></span>
         <span>Work online</span>
       </button>
@@ -407,6 +407,9 @@
       pagesButton: this.shell.querySelector("[data-pages-toggle]"),
       currentPageCard: this.shell.querySelector("[data-current-page-card]"),
       currentPageTitle: this.shell.querySelector("[data-current-page-title]"),
+      profileButton: this.shell.querySelector("[data-shell-profile]"),
+      settingsButton: this.shell.querySelector("[data-shell-settings]"),
+      onlineButton: this.shell.querySelector("[data-shell-online]"),
       pageOptions: Array.from(this.shell.querySelectorAll(".drawer-page-option")),
       pageButtons: Array.from(this.shell.querySelectorAll("[data-page-button]")),
       navButtons: Array.from(this.shell.querySelectorAll("[data-nav-button]"))
@@ -499,6 +502,28 @@
       button.addEventListener("click", function (event) {
         controller.handlePageButtonClick(event, button);
       });
+    });
+
+    if (refs.profileButton) {
+      refs.profileButton.addEventListener("click", function () {
+        controller.handleProfileClick();
+      });
+    }
+
+    if (refs.settingsButton) {
+      refs.settingsButton.addEventListener("click", function () {
+        controller.handleSettingsClick();
+      });
+    }
+
+    if (refs.onlineButton) {
+      refs.onlineButton.addEventListener("click", function () {
+        controller.handleWorkOnlineClick();
+      });
+    }
+
+    window.addEventListener("fieldops:shell-work-online-state", function (event) {
+      controller.handleWorkOnlineState(event);
     });
 
     window.addEventListener("pageshow", function () {
@@ -814,6 +839,42 @@
     });
 
     this.setSearchOpen(false);
+  };
+
+  ShellController.prototype.setWorkOnlinePressed = function (isOnline) {
+    if (this.refs.onlineButton) {
+      this.refs.onlineButton.setAttribute("aria-pressed", isOnline ? "true" : "false");
+    }
+  };
+
+  ShellController.prototype.handleProfileClick = function () {
+    this.dispatchShellEvent("fieldops:shell-profile", { source: "drawer" });
+    this.setDrawerOpen(false);
+  };
+
+  ShellController.prototype.handleSettingsClick = function () {
+    this.dispatchShellEvent("fieldops:shell-settings", { source: "drawer" });
+    this.setDrawerOpen(false);
+  };
+
+  ShellController.prototype.handleWorkOnlineClick = function () {
+    const nextOnlineState = !(this.refs.onlineButton && this.refs.onlineButton.getAttribute("aria-pressed") === "true");
+
+    this.setWorkOnlinePressed(nextOnlineState);
+    this.dispatchShellEvent("fieldops:shell-work-online-toggle", {
+      source: "drawer",
+      online: nextOnlineState
+    });
+  };
+
+  ShellController.prototype.handleWorkOnlineState = function (event) {
+    const detail = event.detail || {};
+
+    if (detail.page && detail.page !== this.activePage) {
+      return;
+    }
+
+    this.setWorkOnlinePressed(Boolean(detail.online));
   };
 
   ShellController.prototype.handlePageButtonClick = function (event, button) {
