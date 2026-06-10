@@ -1,6 +1,6 @@
 /*
   FieldOps Atlas RF page styles
-  Version: 1.1.1-rf-integrated-v4
+  Version: 1.1.1-rf-integrated-v5
 
   Purpose:
   - Own only the RF landing page content inside the shared shell.
@@ -107,7 +107,7 @@
   left: var(--rf-content-side);
   height: var(--rf-quick-height);
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) 0.72fr 0.72fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) var(--rf-quick-height) var(--rf-quick-height);
   gap: var(--gap);
   opacity: 1;
   transform: translateY(0);
@@ -192,16 +192,6 @@
   padding-inline: 4px;
 }
 
-.rf-quick-chip.is-more span {
-  font-size: 0;
-}
-
-.rf-quick-chip.is-more span::before {
-  content: "...";
-  font-size: 19px;
-  line-height: 1;
-  letter-spacing: 0.10em;
-}
 
 .rf-quick-chip.is-pin {
   --chip-main: #183350;
@@ -209,14 +199,52 @@
   --chip-border: var(--button-border);
 }
 
-.rf-quick-chip.is-pin span {
-  font-size: 0;
+
+
+.rf-quick-chip.is-more,
+.rf-quick-chip.is-pin {
+  width: var(--rf-quick-height);
+  min-width: var(--rf-quick-height);
+  padding: 0;
+  gap: 0;
 }
 
-.rf-quick-chip.is-pin span::before {
-  content: "Pin";
-  font-size: clamp(10px, 2.8vw, 12px);
+.rf-quick-chip.is-more img,
+.rf-quick-chip.is-pin img {
+  display: none;
+}
+
+.rf-quick-chip.is-more span {
+  display: block;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 18px;
+  font-weight: 900;
   line-height: 1;
+  letter-spacing: 0.08em;
+  transform: translateY(-1px);
+}
+
+.rf-quick-chip.is-pin span {
+  display: block;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(10px, 2.7vw, 12px);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.rf-quick-chip.is-pin[aria-pressed="true"],
+.phone[data-page="rf"].rf-quick-pinned .rf-quick-chip.is-pin {
+  color: var(--gold-soft);
+  border-color: var(--gold-border);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(120, 211, 255, 0.25), transparent 48%),
+    radial-gradient(circle at 50% 104%, rgba(255, 190, 47, 0.22), transparent 40%),
+    linear-gradient(180deg, #2a6fac 0%, #184c7f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 1px rgba(255, 220, 140, 0.12),
+    0 0 10px var(--gold-glow);
 }
 
 .rf-quick-toggle {
@@ -1190,13 +1218,3 @@
 }
 
 
-.rf-quick-chip.is-more::before {
-  content: "...";
-  font-size: 19px;
-  line-height: 1;
-  letter-spacing: 0.10em;
-}
-
-.rf-quick-chip.is-more span {
-  display: none;
-}
