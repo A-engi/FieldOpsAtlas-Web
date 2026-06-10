@@ -1,10 +1,10 @@
 /* ============================================================================
  FieldOps Atlas shared shell
  Root file: shell.css
- Version: 1.1.1-shell-v2.6-map-glow-fade
+ Version: 1.1.1-shell-v2.7-root-fade-rollback
  Purpose:
  - Shared shell chrome for top controls, drawer, search, and bottom nav.
- - Map-specific top glow and bottom fade tuning live behind [data-page="map"].
+ - Shared root shell only; page-specific fades/glows live in page CSS.
  - Does not own map data, markers, details panel content, or region JSON.
  ============================================================================ */
 
@@ -143,27 +143,6 @@
   grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
   gap: var(--gap);
   align-items: center;
-  pointer-events: none;
-}
-
-.fieldops-shell-root[data-page="map"] .top-shell::before,
-.fieldops-shell-root[data-current-page="map"] .top-shell::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: calc(var(--safe-top) + 2px);
-  right: 6px;
-  left: 6px;
-  height: calc(var(--top-control-height) + 12px);
-  border-radius: 22px;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(98, 216, 255, 0.28), rgba(8, 27, 49, 0.14) 52%, transparent 76%),
-    linear-gradient(180deg, rgba(8, 29, 52, 0.36), rgba(8, 20, 38, 0.04));
-  box-shadow:
-    0 8px 26px rgba(31, 151, 201, 0.12),
-    0 0 32px rgba(96, 235, 255, 0.10);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
   pointer-events: none;
 }
 
@@ -627,26 +606,6 @@
   pointer-events: none;
 }
 
-.fieldops-shell-root .bottom-shell::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: calc((var(--bottom-lift) + var(--safe-bottom)) * -1);
-  left: 0;
-  z-index: -1;
-  height: calc(var(--nav-height) + var(--bottom-lift) + var(--safe-bottom));
-  background: linear-gradient(180deg, rgba(8, 29, 52, 0), rgba(8, 29, 52, 0.78) 46%, var(--shell-surface) 100%);
-  pointer-events: none;
-}
-
-.fieldops-shell-root[data-page="map"] .bottom-shell::before,
-.fieldops-shell-root[data-current-page="map"] .bottom-shell::before {
-  height: calc(var(--nav-height) + var(--bottom-lift) + var(--safe-bottom) + 34px);
-  background:
-    radial-gradient(ellipse at 50% 100%, rgba(65, 181, 232, 0.22), transparent 62%),
-    linear-gradient(180deg, rgba(7, 11, 18, 0), rgba(7, 19, 34, 0.36) 24%, rgba(8, 29, 52, 0.82) 66%, #0d2947 100%);
-}
-
 .fieldops-shell-root .bottom-nav {
   height: var(--nav-height);
   display: flex;
@@ -748,60 +707,6 @@
   text-align: center;
   white-space: nowrap;
 }
-
-/* Map-owned legacy tools menu exposed by the bridge only when active Map is pressed. */
-.fieldops-shell-root[data-page="map"] .rail-tools-menu,
-.fieldops-shell-root[data-current-page="map"] .rail-tools-menu {
-  position: absolute !important;
-  z-index: 5006 !important;
-  right: 12px !important;
-  bottom: calc(var(--safe-bottom) + var(--bottom-lift) + var(--nav-height) + 10px) !important;
-  left: 12px !important;
-  width: auto !important;
-  max-width: 430px !important;
-  margin-inline: auto !important;
-  padding: 12px !important;
-  border: 1px solid rgba(96, 235, 255, 0.30) !important;
-  border-radius: 22px !important;
-  color: var(--text) !important;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(96, 235, 255, 0.18), transparent 10rem),
-    rgba(5, 14, 28, 0.97) !important;
-  box-shadow: 0 18px 56px rgba(0, 0, 0, 0.46), 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(130%) !important;
-  backdrop-filter: blur(18px) saturate(130%) !important;
-}
-
-.fieldops-shell-root[data-page="map"] .rail-tools-menu.is-open,
-.fieldops-shell-root[data-current-page="map"] .rail-tools-menu.is-open,
-.fieldops-shell-root[data-map-tools-open="true"] .rail-tools-menu {
-  display: grid !important;
-  gap: 8px !important;
-}
-
-.fieldops-shell-root .map-tools-title {
-  padding: 2px 2px 4px;
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.fieldops-shell-root .rail-tool-button {
-  min-height: 46px;
-  padding: 8px 11px;
-  display: grid;
-  gap: 2px;
-  border: 1px solid rgba(96, 235, 255, 0.22);
-  border-radius: 16px;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.07);
-  text-align: left;
-}
-
-.fieldops-shell-root .rail-tool-button span { font-size: 13px; font-weight: 850; }
-.fieldops-shell-root .rail-tool-button small { color: var(--text-muted); font-size: 11px; font-weight: 650; }
 
 @media (max-width: 420px) {
   .fieldops-shell-root {
