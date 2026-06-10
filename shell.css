@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.1-shell-v1.5
+   Version: 1.1.1-shell-v1.6
 
    Purpose:
    - Shared top shell, burger drawer, page selector, and bottom nav.
@@ -699,7 +699,7 @@
       color: var(--gold-strong);
       display: grid;
       place-items: center;
-      transform: translateY(-1px);
+      transform: none;
     }
 
     .current-page-card__chevron .chevron-mark {
@@ -742,7 +742,7 @@
       color: var(--gold-strong);
       display: grid;
       place-items: center;
-      transform: translateY(-1px);
+      transform: none;
     }
 
     .drawer-row__chevron .chevron-mark {
@@ -879,6 +879,7 @@
       display: flex;
       align-items: stretch;
       justify-content: center;
+      column-gap: var(--nav-active-gap);
       overflow: visible;
       border: 0;
       background: transparent;
@@ -892,8 +893,8 @@
 
     .nav-button {
       position: relative;
-      width: 20%;
-      flex: 0 0 20%;
+      width: calc((100% - (var(--nav-active-gap) * 4)) / 5);
+      flex: 0 0 calc((100% - (var(--nav-active-gap) * 4)) / 5);
       min-width: 0;
       height: var(--nav-height);
       padding: 0;
@@ -942,8 +943,8 @@
 
     .nav-button.is-active {
       z-index: 3;
-      width: 20%;
-      flex: 0 0 20%;
+      width: calc((100% - (var(--nav-active-gap) * 4)) / 5);
+      flex: 0 0 calc((100% - (var(--nav-active-gap) * 4)) / 5);
       margin-inline: 0;
       color: var(--gold);
       border: 1px solid var(--gold-border);
@@ -1006,7 +1007,7 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.16),
         0 0 0 1px rgba(255, 220, 140, 0.12),
         0 0 10px var(--gold-glow);
-      transform: translateY(-1px);
+      transform: none;
     }
 
     .nav-button.is-active::after {
