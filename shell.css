@@ -543,14 +543,6 @@ button {
   text-transform: uppercase;
 }
 
-.section-card {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
 .section-toggle {
   margin-bottom: 8px;
   display: flex;
@@ -897,7 +889,6 @@ button {
   gap: 10px;
   overflow: hidden;
   text-align: left;
-  text-decoration: none;
   border-radius: var(--outer-radius);
 }
 
@@ -990,11 +981,6 @@ button {
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0) scale(1);
-}
-
-.search-panel__head {
-  display: grid;
-  gap: 3px;
 }
 
 .search-panel__copy {
