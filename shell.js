@@ -264,10 +264,6 @@
           <h2 class="search-panel__title" data-search-title>Search</h2>
           <p class="search-panel__hint" data-search-hint>Search this page.</p>
         </div>
-
-        <button class="button-surface search-panel__close" type="button" aria-label="Close search" data-search-close>
-          <span class="css-close" aria-hidden="true"></span>
-        </button>
       </header>
 
       <label class="search-field">
@@ -386,7 +382,6 @@
       filterButton: this.shell.querySelector("[data-filter-open-button]"),
       filterClose: this.shell.querySelector("[data-filter-close]"),
       searchButton: this.shell.querySelector("[data-search-open]"),
-      searchClose: this.shell.querySelector("[data-search-close]"),
       searchInput: this.shell.querySelector("[data-search-input]"),
       searchResults: this.shell.querySelector("[data-search-results]"),
       searchEmpty: this.shell.querySelector("[data-search-empty]"),
@@ -443,13 +438,6 @@
         controller.setSearchOpen(controller.shell.dataset.searchOpen !== "true");
       });
     }
-
-    if (refs.searchClose) {
-      refs.searchClose.addEventListener("click", function () {
-        controller.setSearchOpen(false);
-      });
-    }
-
     if (refs.searchInput) {
       refs.searchInput.addEventListener("input", function () {
         controller.renderSearchResults(refs.searchInput.value);
