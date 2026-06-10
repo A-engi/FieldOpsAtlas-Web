@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.1-shell-v2.2-map-drawer-actions
+   Version: 1.1.1-shell-v2.4-map-visible-build
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
@@ -18,7 +18,7 @@
      Configuration
      ======================================================================== */
 
-  const VERSION = "1.1.1-shell-v2.2-map-drawer-actions";
+  const VERSION = "1.1.1-shell-v2.4-map-visible-build";
   const SHELL_ROOT_SELECTOR = ".phone, .app-shell";
   const DEFAULT_PAGE = "rf";
   const MAX_SEARCH_RESULTS = 12;
@@ -344,7 +344,7 @@
 
       <div class="button-surface version-row">
         ${iconMarkup("icon--info")}
-        <span>FieldOps Atlas v2.0</span>
+        <span>FieldOps Atlas v2.4 map shell</span>
       </div>
     </aside>
 
