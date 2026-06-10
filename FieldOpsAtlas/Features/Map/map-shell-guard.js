@@ -1,11 +1,13 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v7
+   Version: 1.1.1-map-shell-guard-v8
 
    Purpose:
    - Load the shared root shell on the map page when index.html has not yet
      been fully handed over.
+   - If the shared root shell fails to mount, inject a map-only fallback shell
+     so the old archived shell is not replaced by blank space.
    - Keep old map chrome clicks from leaking into broad map document handlers.
    - Preserve delegated map actions that intentionally rely on document clicks.
    - Bridge shared shell Region filter, Search, Settings, and Work online actions
@@ -14,19 +16,26 @@
 
    Load order:
    - Best loaded after map-app.js and before map-ui.js.
-   - Works with the current old map shell and with the newer shared shell chrome.
    ============================================================================ */
 
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v7";
+  const VERSION = "1.1.1-map-shell-guard-v8";
   const WORK_ONLINE_KEY = "fieldops-atlas-work-online";
   const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
 
-  const SHARED_SHELL_CSS_PATH = "../../../shell.css";
-  const SHARED_SHELL_JS_PATH = "../../../shell.js";
-  const SHARED_SHELL_VERSION = "1.1.1-shell-v2.2-map-drawer-actions";
+  const SHARED_SHELL_CSS_PATHS = [
+    "../../../shell.css",
+    "/shell.css"
+  ];
+
+  const SHARED_SHELL_JS_PATHS = [
+    "../../../shell.js",
+    "/shell.js"
+  ];
+
+  const SHARED_SHELL_VERSION = "1.1.1-shell-v2.3-map-bottom-visible";
 
   const CHROME_ROOT_SELECTORS = [
     ".top-bar",
@@ -42,13 +51,10 @@
     ".drawer",
     ".filter-panel",
     ".search-panel",
-    ".bottom-shell"
+    ".bottom-shell",
+    "[data-map-shell-fallback]"
   ];
 
-  /*
-    These actions are intentionally handled by map-app.js through document-level
-    delegation. Do not block them or search results / region chips stop working.
-  */
   const MAP_DELEGATED_ACTION_SELECTOR = [
     "[data-action][data-walk]",
     "[data-search-walk]",
@@ -59,6 +65,44 @@
     "[data-copy-target]"
   ].join(",");
 
+  const fallbackPages = [
+    {
+      key: "map",
+      label: "Map",
+      navLabel: "Map",
+      icon: "icon--map",
+      href: "FieldOpsAtlas/Features/Map/index.html"
+    },
+    {
+      key: "rf",
+      label: "RF",
+      navLabel: "RF",
+      icon: "icon--rf",
+      href: "FieldOpsAtlas/Features/RF/index.html"
+    },
+    {
+      key: "network",
+      label: "Network",
+      navLabel: "Net",
+      icon: "icon--network",
+      href: "FieldOpsAtlas/Features/Network/index.html"
+    },
+    {
+      key: "docs",
+      label: "Docs",
+      navLabel: "Docs",
+      icon: "icon--docs",
+      href: "FieldOpsAtlas/Features/Docs/index.html"
+    },
+    {
+      key: "tools",
+      label: "Tools",
+      navLabel: "Tool",
+      icon: "icon--tools",
+      href: "FieldOpsAtlas/Features/Tools/index.html"
+    }
+  ];
+
   const boundChromeRoots = new WeakSet();
 
   function byId(id) {
@@ -67,6 +111,10 @@
 
   function isElement(value) {
     return value instanceof Element;
+  }
+
+  function shellRoot() {
+    return document.querySelector(".app-shell") || document.body;
   }
 
   function assetUrl(path) {
@@ -97,10 +145,430 @@
     }) || null;
   }
 
+  function hasMountedSharedShell() {
+    const root = shellRoot();
+
+    return Boolean(
+      document.querySelector(".top-shell") &&
+      document.querySelector(".bottom-shell") &&
+      root.dataset.shellReady === "true"
+    );
+  }
+
   function refreshSharedShellState() {
     bindChromeRoots();
     registerMapSearchProvider();
     publishWorkOnlineState();
+  }
+
+  function ensureSharedShellStyles() {
+    SHARED_SHELL_CSS_PATHS.forEach(function (path) {
+      const href = assetUrl(path);
+
+      if (existingStylesheet(href)) {
+        return;
+      }
+
+      const link = document.createElement("link");
+
+      link.rel = "stylesheet";
+      link.href = cacheBust(href, SHARED_SHELL_VERSION);
+      link.dataset.fieldopsSharedShell = VERSION;
+
+      document.head.appendChild(link);
+    });
+  }
+
+  function ensureSharedShellScript() {
+    const firstCandidate = SHARED_SHELL_JS_PATHS.map(assetUrl).find(function (src) {
+      return !existingScript(src);
+    });
+
+    if (!firstCandidate) {
+      window.requestAnimationFrame(refreshSharedShellState);
+      return;
+    }
+
+    const script = document.createElement("script");
+
+    script.src = cacheBust(firstCandidate, SHARED_SHELL_VERSION);
+    script.defer = true;
+    script.dataset.fieldopsSharedShell = VERSION;
+    script.addEventListener("load", refreshSharedShellState, { once: true });
+
+    document.body.appendChild(script);
+  }
+
+  function ensureSharedShellAssets() {
+    ensureSharedShellStyles();
+    ensureSharedShellScript();
+  }
+
+  function iconMarkup(iconClass) {
+    return '<span class="repo-icon ' + iconClass + '" aria-hidden="true"></span>';
+  }
+
+  function fallbackPageHref(page) {
+    return new URL("../../../" + page.href, window.location.href).href;
+  }
+
+  function fallbackNavMarkup() {
+    return fallbackPages.map(function (page) {
+      const active = page.key === "map" ? " is-active" : "";
+
+      return `
+        <a class="button-surface nav-button${active}" href="${fallbackPageHref(page)}" data-page="${page.key}"${active ? ' aria-current="page"' : ""}>
+          ${iconMarkup(page.icon)}
+          <span>${page.navLabel}</span>
+        </a>`;
+    }).join("");
+  }
+
+  function fallbackShellMarkup() {
+    return `
+    <header class="top-shell" aria-label="Map controls" data-map-shell-fallback>
+      <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="false" data-fallback-menu>
+        ${iconMarkup("icon--menu")}
+      </button>
+
+      <button class="button-surface search-button" type="button" aria-label="Open search" data-fallback-search>
+        <span class="search-lead">
+          ${iconMarkup("icon--search")}
+          <span class="search-query">Find walk</span>
+        </span>
+
+        <span class="search-brand" aria-hidden="true">
+          <span class="search-divider"></span>
+          <span class="atlas-logo">
+            ${iconMarkup("icon--atlas")}
+            <span class="atlas-word">ATLAS</span>
+          </span>
+        </span>
+      </button>
+
+      <button class="button-surface icon-button" type="button" aria-label="Open filter menu" data-filter-region>
+        ${iconMarkup("icon--filter")}
+      </button>
+    </header>
+
+    <footer class="bottom-shell" data-map-shell-fallback>
+      <nav class="bottom-nav" aria-label="Primary navigation">
+        ${fallbackNavMarkup()}
+      </nav>
+    </footer>`;
+  }
+
+  function injectFallbackShellStyles() {
+    if (document.getElementById("fieldops-map-fallback-shell-style")) {
+      return;
+    }
+
+    const style = document.createElement("style");
+
+    style.id = "fieldops-map-fallback-shell-style";
+    style.textContent = `
+      .fieldops-shell-root {
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --shell-side: 12px;
+        --shell-surface: #0d2947;
+        --text: rgba(255, 255, 255, 0.92);
+        --gold: #ffe3ad;
+        --gold-border: rgba(255, 207, 119, 0.78);
+        --gold-line: rgba(255, 207, 119, 0.40);
+        --gold-glow: rgba(255, 205, 95, 0.20);
+        --button-top: rgba(9, 24, 45, 0.94);
+        --button-bottom: rgba(4, 14, 28, 0.92);
+        --button-border: rgba(96, 235, 255, 0.62);
+        --outer-radius: 16px;
+        --inner-radius: 14px;
+        --top-height: 56px;
+        --top-pad-y: 8px;
+        --top-control-height: 42px;
+        --top-icon-button-width: 48px;
+        --top-icon-size: 26px;
+        --gap: 12px;
+        --search-height: var(--top-control-height);
+        --search-icon-size: 25px;
+        --search-edge: 14px;
+        --search-gap: 12px;
+        --search-brand-gap: 8px;
+        --search-cluster-gap: 12px;
+        --nav-height: 38px;
+        --nav-design-width: 68px;
+        --nav-pad-x: calc(var(--nav-design-width) * 0.17);
+        --nav-pad-y: calc(var(--nav-height) * 0.17);
+        --nav-usable-y: calc(var(--nav-height) - (var(--nav-pad-y) * 2));
+        --nav-text-height: calc(var(--nav-usable-y) / 3.1);
+        --nav-icon-size: calc(var(--nav-text-height) * 2);
+        --nav-text-width: calc(var(--nav-design-width) - (var(--nav-pad-x) * 2));
+        --nav-gap: calc(var(--nav-text-height) * 0.1);
+        --nav-active-gap: 5px;
+        --bottom-lift: 8px;
+      }
+
+      .fieldops-shell-root .button-surface {
+        appearance: none;
+        -webkit-appearance: none;
+        border: 1px solid var(--button-border);
+        border-radius: var(--inner-radius);
+        color: var(--text);
+        background:
+          radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.12), transparent 36%),
+          linear-gradient(180deg, var(--button-top), var(--button-bottom));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 8px 20px rgba(0, 0, 0, 0.16);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .fieldops-shell-root .repo-icon {
+        display: block;
+        flex: 0 0 auto;
+        background-color: currentColor;
+        -webkit-mask: var(--icon-src) center / contain no-repeat;
+        mask: var(--icon-src) center / contain no-repeat;
+      }
+
+      .fieldops-shell-root .icon--menu { --icon-src: url("../../../data/icons/hamburger.svg"); }
+      .fieldops-shell-root .icon--search { --icon-src: url("../../../data/icons/search.svg"); }
+      .fieldops-shell-root .icon--filter { --icon-src: url("../../../data/icons/filter.svg"); }
+      .fieldops-shell-root .icon--atlas { --icon-src: url("../../../data/icons/atlas-transmitter-gold.svg"); }
+      .fieldops-shell-root .icon--map { --icon-src: url("../../../data/icons/map.svg"); }
+      .fieldops-shell-root .icon--rf { --icon-src: url("../../../data/icons/rf.svg"); }
+      .fieldops-shell-root .icon--network { --icon-src: url("../../../data/icons/network.svg"); }
+      .fieldops-shell-root .icon--docs { --icon-src: url("../../../data/icons/docs.svg"); }
+      .fieldops-shell-root .icon--tools { --icon-src: url("../../../data/icons/tools.svg"); }
+
+      .fieldops-shell-root .top-shell {
+        position: absolute;
+        z-index: 5002;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: calc(var(--top-height) + var(--safe-top));
+        padding: calc(var(--top-pad-y) + var(--safe-top)) var(--shell-side) var(--top-pad-y);
+        display: grid;
+        grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
+        gap: var(--gap);
+        align-items: center;
+        pointer-events: none;
+      }
+
+      .fieldops-shell-root .top-shell > * {
+        pointer-events: auto;
+      }
+
+      .fieldops-shell-root .icon-button {
+        width: var(--top-icon-button-width);
+        height: var(--top-control-height);
+        padding: 0;
+        display: grid;
+        place-items: center;
+        line-height: 1;
+      }
+
+      .fieldops-shell-root .icon-button .repo-icon {
+        width: var(--top-icon-size);
+        height: var(--top-icon-size);
+      }
+
+      .fieldops-shell-root .search-button {
+        min-width: 0;
+        height: var(--search-height);
+        padding: 0 var(--search-edge);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: var(--search-cluster-gap);
+        text-align: left;
+      }
+
+      .fieldops-shell-root .search-lead,
+      .fieldops-shell-root .search-brand,
+      .fieldops-shell-root .atlas-logo {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        white-space: nowrap;
+      }
+
+      .fieldops-shell-root .search-lead {
+        gap: var(--search-gap);
+        overflow: hidden;
+      }
+
+      .fieldops-shell-root .search-lead .repo-icon {
+        width: var(--search-icon-size);
+        height: var(--search-icon-size);
+      }
+
+      .fieldops-shell-root .search-query {
+        min-width: 0;
+        overflow: hidden;
+        color: rgba(215, 235, 247, 0.78);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1;
+        transform: translateY(1px);
+      }
+
+      .fieldops-shell-root .search-brand {
+        gap: var(--search-brand-gap);
+      }
+
+      .fieldops-shell-root .search-divider {
+        width: 1px;
+        height: 18px;
+        flex: 0 0 auto;
+        background: var(--gold-line);
+      }
+
+      .fieldops-shell-root .atlas-logo {
+        height: 28px;
+        gap: 7px;
+        color: #fffdf7;
+      }
+
+      .fieldops-shell-root .atlas-logo .repo-icon {
+        width: 21px;
+        height: 21px;
+        color: var(--gold);
+      }
+
+      .fieldops-shell-root .atlas-word {
+        color: #fffdf7;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0.022em;
+        text-transform: uppercase;
+        transform: translateY(1px);
+      }
+
+      .fieldops-shell-root .bottom-shell {
+        position: absolute;
+        z-index: 5002;
+        right: 0;
+        bottom: calc(var(--safe-bottom) + var(--bottom-lift));
+        left: 0;
+        padding: 0 var(--shell-side);
+        pointer-events: none;
+      }
+
+      .fieldops-shell-root .bottom-nav {
+        height: var(--nav-height);
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        pointer-events: auto;
+      }
+
+      .fieldops-shell-root .nav-button {
+        position: relative;
+        width: 20%;
+        flex: 0 0 20%;
+        min-width: 0;
+        height: var(--nav-height);
+        padding: 0;
+        display: grid;
+        grid-template-rows:
+          var(--nav-pad-y)
+          var(--nav-icon-size)
+          var(--nav-gap)
+          var(--nav-text-height)
+          var(--nav-pad-y);
+        justify-items: center;
+        align-items: center;
+        overflow: hidden;
+        color: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(76, 113, 151, 0.74);
+        border-right: 0;
+        border-radius: 0;
+        text-decoration: none;
+        line-height: 1;
+      }
+
+      .fieldops-shell-root .nav-button:first-child {
+        border-left: 1px solid rgba(76, 113, 151, 0.74);
+        border-radius: var(--outer-radius) 0 0 var(--outer-radius);
+      }
+
+      .fieldops-shell-root .nav-button:last-child {
+        border-right: 1px solid rgba(76, 113, 151, 0.74);
+        border-radius: 0 var(--outer-radius) var(--outer-radius) 0;
+      }
+
+      .fieldops-shell-root .nav-button.is-active {
+        z-index: 3;
+        width: calc(20% - (var(--nav-active-gap) * 2));
+        flex: 0 0 calc(20% - (var(--nav-active-gap) * 2));
+        margin-inline: var(--nav-active-gap);
+        color: var(--gold);
+        border: 1px solid var(--gold-border);
+        border-radius: var(--inner-radius);
+        background:
+          radial-gradient(circle at 50% 0%, rgba(120, 211, 255, 0.34), transparent 48%),
+          radial-gradient(circle at 50% 104%, rgba(255, 190, 47, 0.18), transparent 38%),
+          linear-gradient(180deg, #2a6fac 0%, #184c7f 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 0 0 1px rgba(255, 220, 140, 0.12),
+          0 0 10px var(--gold-glow);
+      }
+
+      .fieldops-shell-root .nav-button .repo-icon {
+        grid-row: 2;
+        width: var(--nav-icon-size);
+        height: var(--nav-icon-size);
+      }
+
+      .fieldops-shell-root .nav-button span {
+        grid-row: 4;
+        width: var(--nav-text-width);
+        height: var(--nav-text-height);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        font-size: var(--nav-text-height);
+        font-weight: 700;
+        line-height: var(--nav-text-height);
+        text-align: center;
+        white-space: nowrap;
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+  function injectFallbackShellIfNeeded() {
+    window.setTimeout(function () {
+      const root = shellRoot();
+
+      if (hasMountedSharedShell() || document.querySelector("[data-map-shell-fallback]")) {
+        return;
+      }
+
+      root.classList.add("fieldops-shell-root");
+      root.dataset.page = "map";
+      root.dataset.currentPage = "map";
+      root.dataset.shellReady = "fallback";
+      root.dataset.shellVersion = VERSION;
+
+      injectFallbackShellStyles();
+      root.insertAdjacentHTML("afterbegin", fallbackShellMarkup());
+      bindChromeRoots();
+
+      window.dispatchEvent(new CustomEvent("fieldops:map-shell-fallback-mounted", {
+        detail: { version: VERSION }
+      }));
+    }, 450);
   }
 
   function injectLegacyShellArchiveStyles() {
@@ -125,46 +593,6 @@
     `;
 
     document.head.appendChild(style);
-  }
-
-  function ensureSharedShellStyles() {
-    const cssHref = assetUrl(SHARED_SHELL_CSS_PATH);
-
-    if (existingStylesheet(cssHref)) {
-      return;
-    }
-
-    const link = document.createElement("link");
-
-    link.rel = "stylesheet";
-    link.href = cacheBust(cssHref, SHARED_SHELL_VERSION);
-    link.dataset.fieldopsSharedShell = VERSION;
-
-    document.head.appendChild(link);
-  }
-
-  function ensureSharedShellScript() {
-    const jsSrc = assetUrl(SHARED_SHELL_JS_PATH);
-    const existing = existingScript(jsSrc);
-
-    if (existing) {
-      window.requestAnimationFrame(refreshSharedShellState);
-      return;
-    }
-
-    const script = document.createElement("script");
-
-    script.src = cacheBust(jsSrc, SHARED_SHELL_VERSION);
-    script.defer = true;
-    script.dataset.fieldopsSharedShell = VERSION;
-    script.addEventListener("load", refreshSharedShellState, { once: true });
-
-    document.body.appendChild(script);
-  }
-
-  function ensureSharedShellAssets() {
-    ensureSharedShellStyles();
-    ensureSharedShellScript();
   }
 
   function setExpanded(element, isExpanded) {
@@ -227,11 +655,6 @@
       return;
     }
 
-    /*
-      Bubble-phase only:
-      - lets the button/input/link target handler run first;
-      - stops the same click before map-app.js document-level closers see it.
-    */
     root.addEventListener("click", stopChromeClickBeforeMapDocumentHandlers);
     boundChromeRoots.add(root);
   }
@@ -282,18 +705,10 @@
   function openMapRegionFilter() {
     closeOldFloatingMenus();
 
-    /*
-      Prefer the full map-owned region panel if present. That is the real region
-      filter UI, and map-app.js owns its contents.
-    */
     if (openPanel(byId("filterPanel"))) {
       return;
     }
 
-    /*
-      Transitional fallback: older top filter/tree markup, as shown in the map
-      page currently. This does not touch map state; it only opens the UI.
-    */
     openOldTopRegionFilter();
   }
 
@@ -444,10 +859,6 @@
       toggle.checked = nextState;
     });
 
-    /*
-      map-app.js owns the real save/toast/sync logic. One change event is enough:
-      its setWorkOnline() mirrors the paired toggle internally.
-    */
     toggles[0].dispatchEvent(new Event("change", { bubbles: true }));
     publishWorkOnlineState();
   }
@@ -464,6 +875,35 @@
     if (settingsButton) {
       settingsButton.click();
     }
+  }
+
+  function bindFallbackShellActions() {
+    document.addEventListener("click", function (event) {
+      const target = event.target;
+
+      if (!isElement(target)) {
+        return;
+      }
+
+      if (target.closest("[data-fallback-search]")) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const input = byId("siteSearchInput");
+
+        if (input) {
+          input.focus();
+        }
+
+        return;
+      }
+
+      if (target.closest("[data-fallback-menu]")) {
+        event.preventDefault();
+        event.stopPropagation();
+        openMapSettings();
+      }
+    }, true);
   }
 
   function bindSharedShellBridge() {
@@ -515,6 +955,8 @@
 
     injectLegacyShellArchiveStyles();
     ensureSharedShellAssets();
+    injectFallbackShellIfNeeded();
+    bindFallbackShellActions();
     bindChromeRoots();
     observeChromeRoots();
     bindSharedShellBridge();
