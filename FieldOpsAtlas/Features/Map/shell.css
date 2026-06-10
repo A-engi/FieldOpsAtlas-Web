@@ -1,8 +1,8 @@
-/* FieldOps Atlas shell.css v1.1.1-map-shell-guard-v1
+/* FieldOps Atlas shell.css v1.1.1-map-fade-restore-v1
    Shared app chrome owner.
 
    Ownership:
-   - top bar controls and passive top map scrim
+   - top bar and top fade ribbon
    - main search field and suggestions
    - top filter dropdown and region tree
    - burger menu and menu sections
@@ -41,18 +41,18 @@
   --top-bar-control-radius: 14px;
   --top-bar-control-font-size: 14px;
 
-  --top-bar-bg-top: rgba(11, 35, 53, 0);
-  --top-bar-bg-mid: rgba(11, 35, 53, 0);
-  --top-bar-bg-bottom: rgba(11, 35, 53, 0);
-  --top-bar-shadow: none;
-  --top-bar-blur: 0px;
+  --top-bar-bg-top: rgba(11, 35, 53, 1);
+  --top-bar-bg-mid: rgba(11, 35, 53, 1);
+  --top-bar-bg-bottom: rgba(11, 35, 53, 0.70);
+  --top-bar-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  --top-bar-blur: 14px;
 
-  --top-fade-height: calc(var(--safe-top) + var(--top-bar-height) + 22px);
-  --top-ribbon-height: calc(var(--safe-top) + var(--top-bar-height));
-  --top-ribbon-bg-top: rgba(11, 35, 53, 0.78);
-  --top-ribbon-bg-bottom: rgba(11, 35, 53, 0.40);
-  --top-fade-top: rgba(43, 132, 171, 0.22);
-  --top-fade-mid: rgba(43, 132, 171, 0.10);
+  --top-fade-height: 90px;
+  --top-ribbon-height: 30px;
+  --top-ribbon-bg-top: rgba(11, 35, 53, 0.70);
+  --top-ribbon-bg-bottom: rgba(11, 35, 53, 0.46);
+  --top-fade-top: rgba(11, 35, 53, 0.42);
+  --top-fade-mid: rgba(43, 132, 171, 0.24);
   --top-fade-bottom: rgba(7, 11, 18, 0);
 
   --chrome-control-border: rgba(96, 235, 255, 0.62);
@@ -144,6 +144,8 @@
     var(--top-bar-bg-bottom) 100%
   );
   box-shadow: var(--top-bar-shadow);
+  -webkit-backdrop-filter: blur(var(--top-bar-blur));
+  backdrop-filter: blur(var(--top-bar-blur));
   pointer-events: none;
 }
 
@@ -268,8 +270,8 @@
 
 .top-bar-fade {
   position: fixed;
-  z-index: calc(var(--top-bar-z-index) - 1);
-  top: 0;
+  z-index: 300;
+  top: calc(var(--top-bar-height) + var(--safe-top) - 2px);
   left: 0;
   right: 0;
   height: var(--top-fade-height);
@@ -298,8 +300,8 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 16px 28px rgba(27, 132, 168, 0.08);
-  -webkit-backdrop-filter: blur(10px) saturate(118%);
-  backdrop-filter: blur(10px) saturate(118%);
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
 }
 
 .top-bar-fade::after {
