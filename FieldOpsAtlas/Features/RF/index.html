@@ -4,13 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FieldOps Atlas RF v1.1.1</title>
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.1-shell-v1">
-  <link rel="stylesheet" href="./rf-canvas.css?v=1.1.1-rf-canvas-v2">
-  <link rel="stylesheet" href="./rf-quick.css?v=1.1.1-rf-quick-v1">
-  <link rel="stylesheet" href="./rf.css?v=1.1.1">
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.1-shell-v1.4">
+  <link rel="stylesheet" href="./rf.css?v=1.1.1-rf-integrated-v1">
 </head>
 <body>
   <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.1">
+    <input class="rf-quick-state" type="checkbox" id="rfQuickState" aria-hidden="true">
+
+    <nav class="rf-quick-access" aria-label="RF service shortcuts">
+      <a class="rf-quick-chip is-dtt" href="./dtt.html">
+        <img src="../../../data/icons/dtt.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <span>DTT</span>
+      </a>
+
+      <a class="rf-quick-chip is-dab" href="./dab.html">
+        <img src="../../../data/icons/dab.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <span>DAB</span>
+      </a>
+
+      <a class="rf-quick-chip is-fm" href="./fm.html">
+        <img src="../../../data/icons/fm.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <span>FM</span>
+      </a>
+
+      <a class="rf-quick-chip is-more" href="./services.html">
+        <img src="../../../data/icons/more.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <span>More</span>
+      </a>
+    </nav>
+
+    <label class="rf-quick-toggle" for="rfQuickState" aria-label="Collapse RF service shortcuts"></label>
+
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
         <section class="rf-network" aria-labelledby="rfNetworkTitle">
@@ -244,8 +268,7 @@
     </section>
   </main>
 
-  <script src="../../../shell.js?v=1.1.1-shell-v1" defer></script>
-  <script src="./rf-quick.js?v=1.1.1-rf-quick-v1" defer></script>
+  <script src="../../../shell.js?v=1.1.1-shell-v1.4" defer></script>
   <script src="./rf-demo-map.js?v=1.1.1" defer></script>
 </body>
 </html>
