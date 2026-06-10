@@ -379,6 +379,7 @@
       backdropButton: this.shell.querySelector("[data-menu-backdrop]"),
       filterButton: this.shell.querySelector("[data-filter-open-button]"),
       filterClose: this.shell.querySelector("[data-filter-close]"),
+      filterRegionButton: this.shell.querySelector("[data-filter-region]"),
       searchButton: this.shell.querySelector("[data-search-open]"),
       searchInput: this.shell.querySelector("[data-search-input]"),
       searchResults: this.shell.querySelector("[data-search-results]"),
@@ -428,6 +429,12 @@
     if (refs.filterClose) {
       refs.filterClose.addEventListener("click", function () {
         controller.setFilterOpen(false);
+      });
+    }
+
+    if (refs.filterRegionButton) {
+      refs.filterRegionButton.addEventListener("click", function () {
+        controller.handleRegionFilterClick();
       });
     }
 
@@ -736,6 +743,21 @@
     }
 
     this.setSearchOpen(false);
+  };
+
+  ShellController.prototype.dispatchShellEvent = function (name, detail) {
+    window.dispatchEvent(new CustomEvent(name, {
+      detail: {
+        page: this.activePage,
+        version: VERSION,
+        ...(detail || {})
+      }
+    }));
+  };
+
+  ShellController.prototype.handleRegionFilterClick = function () {
+    this.dispatchShellEvent("fieldops:shell-filter-region", { source: "filter-panel" });
+    this.setFilterOpen(false);
   };
 
   ShellController.prototype.handlePageButtonClick = function (event, button) {
