@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.1-shell-v2.0
+   Version: 1.1.1-shell-v2.1-map-mount
 
    Purpose:
    - Shared top shell, burger drawer, page selector, filter panel, search panel,
@@ -107,8 +107,47 @@ button {
 }
 
 /* ==========================================================================
+   Map shell mount compatibility
+   ========================================================================== */
+
+.fieldops-shell-root[data-page="map"] {
+  --shell-side: 12px;
+  --gap: 12px;
+
+  --top-pad-y: 8px;
+  --top-control-height: 42px;
+  --top-icon-button-width: 48px;
+  --top-icon-size: 26px;
+
+  --search-edge: 14px;
+  --search-gap: 12px;
+  --search-brand-gap: 8px;
+  --search-cluster-gap: 12px;
+
+  --button-border: rgba(96, 235, 255, 0.62);
+  --button-top: rgba(9, 24, 45, 0.94);
+  --button-bottom: rgba(4, 14, 28, 0.92);
+
+  --outer-radius: 16px;
+  --inner-radius: 14px;
+}
+
+.fieldops-shell-root[data-page="map"] .top-shell {
+  z-index: 5002;
+}
+
+.fieldops-shell-root[data-page="map"] .bottom-shell {
+  display: none;
+}
+
+
+/* ==========================================================================
    App viewport
    ========================================================================== */
+
+.fieldops-shell-root {
+  position: relative;
+}
 
 .phone {
   position: relative;
@@ -149,7 +188,7 @@ button {
     visibility 180ms ease;
 }
 
-.phone[data-drawer-open="true"] .map-dim {
+.fieldops-shell-root[data-drawer-open="true"] .map-dim {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -449,7 +488,7 @@ button {
   z-index: 1;
 }
 
-.phone[data-drawer-open="true"] .drawer {
+.fieldops-shell-root[data-drawer-open="true"] .drawer {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -602,7 +641,7 @@ button {
   display: none !important;
 }
 
-.phone[data-pages-expanded="true"] .section-toggle__chevron {
+.fieldops-shell-root[data-pages-expanded="true"] .section-toggle__chevron {
   transform: rotate(-90deg);
 }
 
@@ -843,11 +882,11 @@ button {
     transform 150ms ease;
 }
 
-.phone[data-page="rf"] .filter-panel {
+.fieldops-shell-root[data-page="rf"] .filter-panel {
   right: var(--rf-content-side, var(--shell-side));
 }
 
-.phone[data-filter-open="true"] .filter-panel {
+.fieldops-shell-root[data-filter-open="true"] .filter-panel {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -971,12 +1010,12 @@ button {
     transform 150ms ease;
 }
 
-.phone[data-page="rf"] .search-panel {
+.fieldops-shell-root[data-page="rf"] .search-panel {
   right: var(--rf-content-side, var(--shell-side));
   left: var(--rf-content-side, var(--shell-side));
 }
 
-.phone[data-search-open="true"] .search-panel {
+.fieldops-shell-root[data-search-open="true"] .search-panel {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -1061,6 +1100,7 @@ button {
 }
 
 .search-result {
+  width: 100%;
   min-height: 48px;
   padding: 0 12px;
   display: grid;
@@ -1131,11 +1171,11 @@ button {
   pointer-events: none;
 }
 
-.phone[data-page="rf"] {
+.fieldops-shell-root[data-page="rf"] {
   --rf-content-side: 7px;
 }
 
-.phone[data-page="rf"] .bottom-shell {
+.fieldops-shell-root[data-page="rf"] .bottom-shell {
   padding-inline: var(--rf-content-side);
 }
 
