@@ -1,17 +1,17 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.1-shell-v1.3
+   Version: 1.1.1-shell-v1
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
-   - Keep page state, burger drawer, collapsible Pages, filter panel, and bottom nav in one place.
+   - Keep page state, burger drawer, collapsible Pages, and RF-style bottom nav in one place.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-shell-v1.3";
+  const VERSION = "1.1.1-shell-v1";
 
   const pages = {
     map: {
@@ -67,10 +67,6 @@
     return new URL(path, rootPath).href;
   }
 
-  function samePath(url) {
-    return new URL(url, window.location.href).pathname === window.location.pathname;
-  }
-
   function iconSpan(iconClass, extraClass) {
     const classes = ["repo-icon", iconClass];
 
@@ -85,30 +81,25 @@
     return '<span class="chevron-mark"></span>';
   }
 
-  function pageHref(pageKey) {
-    const page = pages[pageKey] || pages.rf;
-    return asset(page.href);
-  }
-
   function pageOptionMarkup(pageKey) {
     const page = pages[pageKey];
 
     return `
-        <a class="button-surface drawer-row drawer-page-option" href="${pageHref(pageKey)}" hidden data-page-button data-page="${pageKey}">
+        <button class="button-surface drawer-row drawer-page-option" type="button" hidden data-page-button data-page="${pageKey}">
           ${iconSpan(page.icon)}
           <span class="drawer-row__label">${page.label}</span>
           <span class="drawer-row__chevron" aria-hidden="true">${chevron()}</span>
-        </a>`;
+        </button>`;
   }
 
   function navButtonMarkup(pageKey) {
     const page = pages[pageKey];
 
     return `
-        <a class="button-surface nav-button" href="${pageHref(pageKey)}" data-page-button data-nav-button data-page="${pageKey}">
+        <button class="button-surface nav-button" type="button" data-page-button data-nav-button data-page="${pageKey}">
           ${iconSpan(page.icon)}
           <span>${page.navLabel}</span>
-        </a>`;
+        </button>`;
   }
 
   function shellMarkup(activePage) {
@@ -135,29 +126,12 @@
         </span>
       </button>
 
-      <button class="button-surface icon-button" type="button" aria-label="Open filter menu" aria-expanded="false" data-filter-open-button>
+      <button class="button-surface icon-button" type="button" aria-label="Open filter">
         ${iconSpan("icon--filter")}
       </button>
     </header>
 
     <div class="map-dim" aria-hidden="true"></div>
-
-    <aside class="filter-panel" aria-label="Filter menu">
-      <header class="filter-panel__head">
-        <h2 class="filter-panel__title">Filter</h2>
-        <button class="button-surface filter-panel__close" type="button" aria-label="Close filter menu" data-filter-close>
-          <span class="css-close" aria-hidden="true"></span>
-        </button>
-      </header>
-
-      <button class="button-surface filter-option" type="button" data-filter-region>
-        <span class="filter-option__copy">
-          <span class="filter-option__label">Region</span>
-          <span class="filter-option__meta">All regions</span>
-        </span>
-        <span class="filter-option__chevron" aria-hidden="true">${chevron()}</span>
-      </button>
-    </aside>
 
     <aside class="drawer" aria-label="Main navigation menu">
       <header class="drawer-header">
@@ -185,14 +159,14 @@
         </div>
 
         <nav class="drawer-pages" aria-label="Pages">
-          <a class="button-surface current-page-card" href="${pageHref(active)}" aria-current="page" data-current-page-card>
+          <button class="button-surface current-page-card" type="button" aria-current="page" data-current-page-card>
             ${iconSpan(pages[active].icon)}
             <span class="current-page-card__copy">
               <span class="current-page-card__eyebrow">Current page</span>
               <span class="current-page-card__title" data-current-page-title>${pages[active].label}</span>
             </span>
             <span class="current-page-card__chevron" aria-hidden="true">${chevron()}</span>
-          </a>
+          </button>
           ${pageOrder.map(pageOptionMarkup).join("")}
         </nav>
       </section>
@@ -245,22 +219,18 @@
     shell.dataset.shellReady = "true";
     shell.dataset.drawerOpen = "false";
     shell.dataset.pagesExpanded = "false";
-    shell.dataset.filterOpen = "false";
     shell.dataset.currentPage = activePage;
 
     shell.insertAdjacentHTML("afterbegin", shellMarkup(activePage));
 
     const menuButton = shell.querySelector("[data-menu-open]");
     const closeButton = shell.querySelector("[data-menu-close]");
-    const filterButton = shell.querySelector("[data-filter-open-button]");
-    const filterClose = shell.querySelector("[data-filter-close]");
     const pagesButton = shell.querySelector("[data-pages-toggle]");
     const pagesButtonText = pagesButton ? pagesButton.querySelector(".section-toggle__text") : null;
     const pageOptions = Array.prototype.slice.call(shell.querySelectorAll(".drawer-page-option"));
     const pageButtons = Array.prototype.slice.call(shell.querySelectorAll("[data-page-button]"));
     const navButtons = Array.prototype.slice.call(shell.querySelectorAll("[data-nav-button]"));
-    const currentPageCard = shell.querySelector("[data-current-page-card]");
-    const currentPageIcon = currentPageCard ? currentPageCard.querySelector(".repo-icon") : null;
+    const currentPageIcon = shell.querySelector("[data-current-page-card] .repo-icon");
     const currentPageTitle = shell.querySelector("[data-current-page-title]");
 
     function setDrawerOpen(isOpen) {
@@ -268,22 +238,6 @@
 
       if (menuButton) {
         menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      }
-
-      if (isOpen) {
-        setFilterOpen(false);
-      }
-    }
-
-    function setFilterOpen(isOpen) {
-      shell.setAttribute("data-filter-open", isOpen ? "true" : "false");
-
-      if (filterButton) {
-        filterButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      }
-
-      if (isOpen) {
-        setDrawerOpen(false);
       }
     }
 
@@ -311,10 +265,6 @@
       if (currentPageIcon) {
         currentPageIcon.className = "repo-icon " + page.icon;
         currentPageIcon.setAttribute("aria-hidden", "true");
-      }
-
-      if (currentPageCard) {
-        currentPageCard.setAttribute("href", pageHref(activePage));
       }
     }
 
@@ -372,18 +322,6 @@
       });
     }
 
-    if (filterButton) {
-      filterButton.addEventListener("click", function () {
-        setFilterOpen(shell.getAttribute("data-filter-open") !== "true");
-      });
-    }
-
-    if (filterClose) {
-      filterClose.addEventListener("click", function () {
-        setFilterOpen(false);
-      });
-    }
-
     if (pagesButton) {
       pagesButton.addEventListener("click", function () {
         setPagesExpanded(shell.getAttribute("data-pages-expanded") !== "true");
@@ -391,21 +329,12 @@
     }
 
     pageButtons.forEach(function (button) {
-      button.addEventListener("click", function (event) {
-        const pageName = button.getAttribute("data-page");
-
-        setActivePage(pageName);
-
-        if (samePath(button.href)) {
-          event.preventDefault();
-          setDrawerOpen(false);
-          setFilterOpen(false);
-        }
+      button.addEventListener("click", function () {
+        setActivePage(button.getAttribute("data-page"));
       });
     });
 
     setDrawerOpen(false);
-    setFilterOpen(false);
     setPagesExpanded(false);
     setActivePage(activePage);
   }
