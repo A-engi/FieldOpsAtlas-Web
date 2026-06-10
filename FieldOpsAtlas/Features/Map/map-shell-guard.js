@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v8
+   Version: 1.1.1-map-shell-guard-v9
 
    Purpose:
    - Load the shared root shell on the map page when index.html has not yet
@@ -21,7 +21,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v8";
+  const VERSION = "1.1.1-map-shell-guard-v9";
   const WORK_ONLINE_KEY = "fieldops-atlas-work-online";
   const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
 
@@ -35,7 +35,7 @@
     "/shell.js"
   ];
 
-  const SHARED_SHELL_VERSION = "1.1.1-shell-v2.3-map-bottom-visible";
+  const SHARED_SHELL_VERSION = "1.1.1-shell-v2.4-map-visible-build";
 
   const CHROME_ROOT_SELECTORS = [
     ".top-bar",
@@ -226,7 +226,7 @@
 
   function fallbackShellMarkup() {
     return `
-    <header class="top-shell" aria-label="Map controls" data-map-shell-fallback>
+    <header class="top-shell" aria-label="Map controls" data-map-shell-fallback data-build="v2.4-guard-v9">
       <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="false" data-fallback-menu>
         ${iconMarkup("icon--menu")}
       </button>
@@ -251,7 +251,8 @@
       </button>
     </header>
 
-    <footer class="bottom-shell" data-map-shell-fallback>
+    <footer class="bottom-shell" data-map-shell-fallback data-build="v2.4-guard-v9">
+      <div class="map-shell-build">v2.4 map shell Â· guard v9</div>
       <nav class="bottom-nav" aria-label="Primary navigation">
         ${fallbackNavMarkup()}
       </nav>
@@ -455,6 +456,23 @@
         bottom: calc(var(--safe-bottom) + var(--bottom-lift));
         left: 0;
         padding: 0 var(--shell-side);
+        pointer-events: none;
+      }
+
+      .fieldops-shell-root .map-shell-build {
+        position: absolute;
+        right: var(--shell-side);
+        bottom: calc(var(--nav-height) + 6px);
+        padding: 3px 7px;
+        border: 1px solid rgba(255, 207, 119, 0.44);
+        border-radius: 999px;
+        color: rgba(255, 227, 173, 0.92);
+        background: rgba(4, 14, 28, 0.72);
+        box-shadow: 0 0 8px rgba(255, 205, 95, 0.16);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         pointer-events: none;
       }
 
