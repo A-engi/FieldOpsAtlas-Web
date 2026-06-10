@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v3
+   Version: 1.1.1-map-shell-guard-v4
 
    Purpose:
    - Keep old map chrome clicks from leaking into broad map document handlers.
@@ -17,7 +17,8 @@
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v3";
+  const VERSION = "1.1.1-map-shell-guard-v4";
+  const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
 
   const CHROME_ROOT_SELECTORS = [
     ".top-bar",
@@ -190,6 +191,99 @@
     openOldTopRegionFilter();
   }
 
+  function mapBridge() {
+    return window.FieldOpsAtlasBridge || null;
+  }
+
+  function visibleWalks() {
+    const bridge = mapBridge();
+
+    if (!bridge || typeof bridge.getVisibleWalks !== "function") {
+      return [];
+    }
+
+    return bridge.getVisibleWalks();
+  }
+
+  function walkSubtitle(walk) {
+    return [
+      walk.regionName || walk.region || walk.regionId || "",
+      walk.gridRef || walk.grid || "",
+      walk.siteType || walk.type || "Walk"
+    ].filter(Boolean).join(" Â· ");
+  }
+
+  function registerMapSearchProvider() {
+    const walks = visibleWalks();
+
+    const provider = {
+      page: "map",
+      id: MAP_SEARCH_PROVIDER_ID,
+      label: "Map",
+      placeholder: "Find walk",
+      emptyText: walks.length ? "No matching walks." : "Pick a region to load walks.",
+      items: walks.map(function (walk) {
+        return {
+          id: String(walk.id || walk.slug || walk.name || ""),
+          title: String(walk.name || walk.title || "Unnamed walk"),
+          subtitle: walkSubtitle(walk),
+          keywords: [
+            walk.id,
+            walk.slug,
+            walk.regionId,
+            walk.region,
+            walk.gridRef,
+            walk.grid,
+            walk.what3words,
+            walk.w3w,
+            walk.notes
+          ].filter(Boolean)
+        };
+      }).filter(function (item) {
+        return item.id && item.title;
+      })
+    };
+
+    if (window.FieldOpsSearch && typeof window.FieldOpsSearch.registerPage === "function") {
+      window.FieldOpsSearch.registerPage(provider);
+      return;
+    }
+
+    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+    if (Array.isArray(window.FieldOpsSearchQueue)) {
+      window.FieldOpsSearchQueue.push(provider);
+    }
+  }
+
+  function scheduleMapSearchProviderRefresh() {
+    window.requestAnimationFrame(function () {
+      registerMapSearchProvider();
+    });
+  }
+
+  function handleShellSearchSelect(event) {
+    const detail = event.detail || {};
+    const item = detail.item || {};
+    const bridge = mapBridge();
+
+    if (detail.page !== "map" || !item.id || !bridge || typeof bridge.selectWalk !== "function") {
+      return;
+    }
+
+    bridge.selectWalk(item.id, true);
+  }
+
+  function bindMapSearchBridge() {
+    window.addEventListener("fieldops:shell-search-select", handleShellSearchSelect);
+    window.addEventListener("fieldops-atlas-walks-changed", scheduleMapSearchProviderRefresh);
+    window.addEventListener("fieldops-atlas-regions-changed", scheduleMapSearchProviderRefresh);
+    window.addEventListener("fieldops:map-shell-guard-refresh-search", scheduleMapSearchProviderRefresh);
+
+    scheduleMapSearchProviderRefresh();
+    window.setTimeout(registerMapSearchProvider, 250);
+    window.setTimeout(registerMapSearchProvider, 900);
+  }
+
   function bindSharedShellBridge() {
     window.addEventListener("fieldops:shell-filter-region", openMapRegionFilter);
     window.addEventListener("fieldops:open-region-filter", openMapRegionFilter);
@@ -219,6 +313,7 @@
     bindChromeRoots();
     observeChromeRoots();
     bindSharedShellBridge();
+    bindMapSearchBridge();
 
     window.dispatchEvent(new CustomEvent("fieldops:map-shell-guard-ready", {
       detail: { version: VERSION }
