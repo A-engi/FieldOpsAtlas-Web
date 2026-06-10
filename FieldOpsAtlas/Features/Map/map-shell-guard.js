@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v4
+   Version: 1.1.1-map-shell-guard-v5
 
    Purpose:
    - Keep old map chrome clicks from leaking into broad map document handlers.
@@ -17,7 +17,8 @@
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v4";
+  const VERSION = "1.1.1-map-shell-guard-v5";
+  const WORK_ONLINE_KEY = "fieldops-atlas-work-online";
   const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
 
   const CHROME_ROOT_SELECTORS = [
@@ -284,9 +285,104 @@
     window.setTimeout(registerMapSearchProvider, 900);
   }
 
+  function dispatchShellState(name, detail) {
+    window.dispatchEvent(new CustomEvent(name, {
+      detail: {
+        page: "map",
+        version: VERSION,
+        ...(detail || {})
+      }
+    }));
+  }
+
+  function uniqueElements(elements) {
+    return elements.filter(function (element, index, all) {
+      return element && all.indexOf(element) === index;
+    });
+  }
+
+  function mapWorkOnlineToggles() {
+    return uniqueElements([
+      byId("workOnlineToggle"),
+      byId("writeToggle")
+    ]);
+  }
+
+  function currentWorkOnlineState() {
+    const toggle = mapWorkOnlineToggles()[0];
+
+    if (toggle) {
+      return Boolean(toggle.checked);
+    }
+
+    return localStorage.getItem(WORK_ONLINE_KEY) === "true";
+  }
+
+  function publishWorkOnlineState() {
+    dispatchShellState("fieldops:shell-work-online-state", {
+      online: currentWorkOnlineState()
+    });
+  }
+
+  function setMapWorkOnline(isOnline) {
+    const nextState = Boolean(isOnline);
+    const toggles = mapWorkOnlineToggles();
+
+    if (!toggles.length) {
+      localStorage.setItem(WORK_ONLINE_KEY, String(nextState));
+      publishWorkOnlineState();
+      return;
+    }
+
+    toggles.forEach(function (toggle) {
+      toggle.checked = nextState;
+    });
+
+    /*
+      map-app.js owns the real save/toast/sync logic. One change event is enough:
+      its setWorkOnline() mirrors the paired toggle internally.
+    */
+    toggles[0].dispatchEvent(new Event("change", { bubbles: true }));
+    publishWorkOnlineState();
+  }
+
+  function openMapSettings() {
+    closeOldFloatingMenus();
+
+    if (openPanel(byId("settingsPanel"))) {
+      return;
+    }
+
+    const settingsButton = byId("menuSettingsButton");
+
+    if (settingsButton) {
+      settingsButton.click();
+    }
+  }
+
   function bindSharedShellBridge() {
     window.addEventListener("fieldops:shell-filter-region", openMapRegionFilter);
     window.addEventListener("fieldops:open-region-filter", openMapRegionFilter);
+
+    window.addEventListener("fieldops:shell-settings", function (event) {
+      if (!event.detail || event.detail.page === "map") {
+        openMapSettings();
+      }
+    });
+
+    window.addEventListener("fieldops:shell-work-online-toggle", function (event) {
+      const detail = event.detail || {};
+
+      if (detail.page === "map") {
+        setMapWorkOnline(Boolean(detail.online));
+      }
+    });
+
+    window.addEventListener("storage", function (event) {
+      if (event.key === WORK_ONLINE_KEY) {
+        publishWorkOnlineState();
+      }
+    });
 
     document.addEventListener("click", function (event) {
       const target = event.target;
@@ -314,6 +410,7 @@
     observeChromeRoots();
     bindSharedShellBridge();
     bindMapSearchBridge();
+    publishWorkOnlineState();
 
     window.dispatchEvent(new CustomEvent("fieldops:map-shell-guard-ready", {
       detail: { version: VERSION }
