@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FieldOps Atlas RF v1.1.1</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.1-shell-v1.7">
-  <link rel="stylesheet" href="./rf.css?v=1.1.1-rf-integrated-v4">
+  <link rel="stylesheet" href="./rf.css?v=1.1.1-rf-integrated-v5">
 </head>
 <body>
   <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.1">
@@ -28,15 +28,15 @@
       </a>
 
       <a class="rf-quick-chip is-more" href="./services.html" aria-label="More RF services">
-        <span>More</span>
+        <span aria-hidden="true">...</span>
       </a>
 
-      <button class="rf-quick-chip is-pin" type="button" aria-label="Pin RF shortcuts">
-        <span>Pin</span>
+      <button class="rf-quick-chip is-pin" type="button" aria-label="Pin RF shortcuts open" aria-pressed="false" data-rf-quick-pin>
+        <span aria-hidden="true">Pin</span>
       </button>
     </nav>
 
-    <label class="rf-quick-toggle" for="rfQuickState" aria-label="Expand RF service shortcuts"></label>
+    <label class="rf-quick-toggle" for="rfQuickState" aria-label="Expand RF service shortcuts" data-rf-quick-toggle></label>
 
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
@@ -272,6 +272,76 @@
   </main>
 
   <script src="../../../shell.js?v=1.1.1-shell-v1.4" defer></script>
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE_KEY = "fieldops.rf.quickShortcutsPinned";
+
+      function setStoredPinned(value) {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, value ? "true" : "false");
+        } catch {
+          /* Local storage can be blocked in private/offline contexts. */
+        }
+      }
+
+      function getStoredPinned() {
+        try {
+          return window.localStorage.getItem(STORAGE_KEY) === "true";
+        } catch {
+          return false;
+        }
+      }
+
+      function bootRfQuickPreferences() {
+        const app = document.querySelector(".phone[data-page='rf']");
+        const state = document.querySelector("#rfQuickState");
+        const pin = document.querySelector("[data-rf-quick-pin]");
+        const toggle = document.querySelector("[data-rf-quick-toggle]");
+
+        if (!app || !state || !pin) {
+          return;
+        }
+
+        function applyPinned(isPinned, persist) {
+          app.classList.toggle("rf-quick-pinned", isPinned);
+          state.checked = !isPinned;
+          pin.setAttribute("aria-pressed", String(isPinned));
+          pin.setAttribute("aria-label", isPinned ? "Unpin RF shortcuts" : "Pin RF shortcuts open");
+
+          if (toggle) {
+            toggle.setAttribute("aria-label", state.checked ? "Expand RF service shortcuts" : "Collapse RF service shortcuts");
+          }
+
+          if (persist) {
+            setStoredPinned(isPinned);
+          }
+        }
+
+        applyPinned(getStoredPinned(), false);
+
+        pin.addEventListener("click", function () {
+          applyPinned(pin.getAttribute("aria-pressed") !== "true", true);
+        });
+
+        state.addEventListener("change", function () {
+          if (state.checked) {
+            applyPinned(false, true);
+          } else if (toggle) {
+            toggle.setAttribute("aria-label", "Collapse RF service shortcuts");
+          }
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", bootRfQuickPreferences, { once: true });
+      } else {
+        bootRfQuickPreferences();
+      }
+    })();
+  </script>
+
   <script src="./rf-demo-map.js?v=1.1.1" defer></script>
 </body>
 </html>
