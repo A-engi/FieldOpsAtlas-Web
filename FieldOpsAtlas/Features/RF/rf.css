@@ -1,6 +1,6 @@
 /*
   FieldOps Atlas RF page styles
-  Version: 1.1.1-rf-integrated-v5
+  Version: 1.1.1-rf-integrated-v6
 
   Purpose:
   - Own only the RF landing page content inside the shared shell.
@@ -87,6 +87,36 @@
 }
 
 
+
+/* =========================================================
+   RF quick row clear dismiss layer
+   ========================================================= */
+
+.rf-quick-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: block;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+/*
+  When the quick row is open and not pinned, the clear backdrop covers
+  the whole app shell. It sits below the RF quick row but above the page,
+  top bar, and bottom bar, so tapping anywhere else collapses the quick row.
+*/
+.phone[data-page="rf"]:has(.rf-quick-state:not(:checked)):not(.rf-quick-pinned) .rf-quick-backdrop {
+  pointer-events: auto;
+}
+
+/* Pinned means page controls stay usable and outside taps do not collapse it. */
+.phone[data-page="rf"].rf-quick-pinned .rf-quick-backdrop {
+  pointer-events: none;
+}
+
 /* =========================================================
    RF service quick row
    ========================================================= */
@@ -101,7 +131,7 @@
 
 .rf-quick-access {
   position: absolute;
-  z-index: 6;
+  z-index: 7;
   top: calc(var(--safe-top) + var(--rf-shell-height) + var(--rf-quick-gap));
   right: var(--rf-content-side);
   left: var(--rf-content-side);
@@ -114,6 +144,13 @@
   transition:
     opacity 140ms ease,
     transform 140ms ease;
+}
+
+
+.phone[data-page="rf"].rf-quick-pinned .rf-quick-access {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .phone[data-page="rf"]:has(.rf-quick-state:checked) .rf-quick-access {
@@ -249,7 +286,7 @@
 
 .rf-quick-toggle {
   position: absolute;
-  z-index: 7;
+  z-index: 8;
   top: calc(var(--safe-top) + var(--rf-content-top) - 4px);
   left: 50%;
   width: 84px;
