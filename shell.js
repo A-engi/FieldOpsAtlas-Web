@@ -240,7 +240,7 @@
       </button>
     </aside>
 
-    <aside class="search-panel" aria-label="Page search" data-search-panel>
+    <aside class="search-panel" aria-label="Page search">
       <header class="search-panel__head">
         <div class="search-panel__copy">
           <h2 class="search-panel__title" data-search-title>Search</h2>
@@ -283,14 +283,14 @@
         </div>
 
         <nav class="drawer-pages" aria-label="Pages">
-          <a class="button-surface current-page-card" href="${pageHref(active)}" aria-current="page" data-current-page-card>
+          <button class="button-surface current-page-card" type="button" aria-current="page" aria-expanded="false" data-current-page-card>
             ${iconSpan(page.icon)}
             <span class="current-page-card__copy">
               <span class="current-page-card__eyebrow">Current page</span>
               <span class="current-page-card__title" data-current-page-title>${page.label}</span>
             </span>
             <span class="current-page-card__chevron" aria-hidden="true">${chevron()}</span>
-          </a>
+          </button>
           ${pageOrder.map(pageOptionMarkup).join("")}
         </nav>
       </section>
@@ -343,6 +343,7 @@
     shell.dataset.filterOpen = "false";
     shell.dataset.searchOpen = "false";
     shell.dataset.currentPage = activePage;
+    shell.dataset.page = activePage;
 
     shell.insertAdjacentHTML("afterbegin", shellMarkup(activePage));
 
@@ -495,6 +496,10 @@
         pagesButtonText.textContent = isExpanded ? "Hide" : "All";
       }
 
+      if (currentPageCard) {
+        currentPageCard.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+      }
+
       updatePageOptionVisibility();
     }
 
@@ -510,9 +515,6 @@
         currentPageIcon.setAttribute("aria-hidden", "true");
       }
 
-      if (currentPageCard) {
-        currentPageCard.setAttribute("href", pageHref(activePage));
-      }
     }
 
     function updateBottomNav() {
@@ -550,6 +552,7 @@
 
       activePage = pageName;
       shell.dataset.currentPage = pageName;
+      shell.dataset.page = pageName;
 
       updateCurrentPagePill();
       updateBottomNav();
@@ -619,6 +622,12 @@
 
     if (pagesButton) {
       pagesButton.addEventListener("click", function () {
+        setPagesExpanded(shell.dataset.pagesExpanded !== "true");
+      });
+    }
+
+    if (currentPageCard) {
+      currentPageCard.addEventListener("click", function () {
         setPagesExpanded(shell.dataset.pagesExpanded !== "true");
       });
     }
