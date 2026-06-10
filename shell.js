@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.1-shell-v1.8
+   Version: 1.1.1-shell-v1.9
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
@@ -11,7 +11,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "1.1.1-shell-v1.8";
+  const VERSION = "1.1.1-shell-v1.9";
 
   const pages = {
     map: {
@@ -389,13 +389,18 @@
       button.addEventListener("click", function (event) {
         const pageName = button.getAttribute("data-page");
 
-        setActivePage(pageName);
-
         if (samePath(button.href)) {
           event.preventDefault();
+          setActivePage(pageName);
           setDrawerOpen(false);
           setFilterOpen(false);
+          return;
         }
+
+        /*
+          Let real navigation happen without changing this page's active rail first.
+          Safari can restore that mutated DOM from bfcache when pressing Back.
+        */
       });
     });
 
@@ -403,6 +408,17 @@
     setFilterOpen(false);
     setPagesExpanded(false);
     setActivePage(activePage);
+
+    window.addEventListener("pageshow", function () {
+      const resetPage = shell.dataset.page || shell.dataset.currentPage || activePage;
+
+      if (pages[resetPage]) {
+        setActivePage(resetPage);
+      }
+
+      setDrawerOpen(false);
+      setFilterOpen(false);
+    });
   }
 
   if (document.readyState === "loading") {
