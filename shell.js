@@ -1,7 +1,7 @@
 /* ============================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.1-shell-v2.4-map-visible-build
+   Version: 1.1.1-shell-v2.5-map-mount-fixes
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
@@ -18,7 +18,7 @@
      Configuration
      ======================================================================== */
 
-  const VERSION = "1.1.1-shell-v2.4-map-visible-build";
+  const VERSION = "1.1.1-shell-v2.5-map-mount-fixes";
   const SHELL_ROOT_SELECTOR = ".phone, .app-shell";
   const DEFAULT_PAGE = "rf";
   const MAX_SEARCH_RESULTS = 12;
@@ -344,7 +344,7 @@
 
       <div class="button-surface version-row">
         ${iconMarkup("icon--info")}
-        <span>FieldOps Atlas v2.4 map shell</span>
+        <span>FieldOps Atlas v2.5 map shell</span>
       </div>
     </aside>
 
@@ -361,7 +361,7 @@
 
   function ShellController(shell) {
     this.shell = shell;
-    this.activePage = normalisePageKey(shell.dataset.currentPage || shell.dataset.page);
+    this.activePage = normalisePageKey(shell.dataset.currentPage || shell.dataset.page || inferPageFromLocation());
     this.refs = Object.create(null);
   }
 
@@ -737,11 +737,23 @@
     }, this).slice(0, MAX_SEARCH_RESULTS);
 
     refs.searchResults.innerHTML = matches.map(function (item) {
-      return `
-          <a class="button-surface search-result" href="${escapeHtml(this.resultHref(item))}">
-            <span class="search-result__title">${escapeHtml(item.title)}</span>
-            <span class="search-result__subtitle">${escapeHtml(item.subtitle)}</span>
+      const itemId = escapeHtml(item.id);
+      const title = escapeHtml(item.title);
+      const subtitle = escapeHtml(item.subtitle);
+
+      if (item.href) {
+        return `
+          <a class="button-surface search-result" href="${escapeHtml(this.resultHref(item))}" data-search-result data-search-result-id="${itemId}">
+            <span class="search-result__title">${title}</span>
+            <span class="search-result__subtitle">${subtitle}</span>
           </a>`;
+      }
+
+      return `
+          <button class="button-surface search-result" type="button" data-search-result data-search-result-id="${itemId}">
+            <span class="search-result__title">${title}</span>
+            <span class="search-result__subtitle">${subtitle}</span>
+          </button>`;
     }, this).join("");
 
     refs.searchEmpty.textContent = provider.emptyText;
