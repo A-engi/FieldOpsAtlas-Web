@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.1-shell-v2.3-map-bottom-visible
+   Version: 1.1.1-shell-v2.6-map-fade-buttons
 
    Purpose:
    - Shared top shell, burger drawer, page selector, filter panel, search panel,
@@ -134,10 +134,59 @@ button {
 
 .fieldops-shell-root[data-page="map"] .top-shell {
   z-index: 5002;
+  isolation: isolate;
+}
+
+.fieldops-shell-root[data-page="map"] .top-shell::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: calc(var(--shell-side) * -1);
+  left: calc(var(--shell-side) * -1);
+  height: calc(var(--safe-top) + var(--top-height));
+  background: linear-gradient(
+    180deg,
+    rgba(11, 35, 53, 1) 0%,
+    rgba(11, 35, 53, 1) 54%,
+    rgba(11, 35, 53, 0.70) 100%
+  );
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  pointer-events: none;
+}
+
+.fieldops-shell-root[data-page="map"] .map-dim {
+  z-index: 5003;
+}
+
+.fieldops-shell-root[data-page="map"] .drawer {
+  z-index: 5006;
+}
+
+.fieldops-shell-root[data-page="map"] .filter-panel,
+.fieldops-shell-root[data-page="map"] .search-panel {
+  z-index: 5007;
 }
 
 .fieldops-shell-root[data-page="map"] .bottom-shell {
   z-index: 5002;
+}
+
+.fieldops-shell-root[data-page="map"] .bottom-shell::before {
+  right: calc(var(--shell-side) * -1);
+  bottom: calc((var(--bottom-lift) + var(--safe-bottom)) * -1);
+  left: calc(var(--shell-side) * -1);
+  height: calc(var(--nav-height) + var(--bottom-lift) + var(--safe-bottom) + 34px);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 29, 52, 0) 0%,
+      rgba(8, 29, 52, 0.54) 17%,
+      rgba(8, 29, 52, 0.86) 48%,
+      var(--shell-surface) 100%
+    );
 }
 
 
