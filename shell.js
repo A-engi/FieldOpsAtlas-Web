@@ -5,13 +5,16 @@
 
    Purpose:
    - Inject shared shell chrome into a .phone root.
-   - Keep page state, burger drawer, collapsible Pages, filter panel, and bottom nav in one place.
+   - Keep page state, burger drawer, collapsible Pages, filter panel,
+     page search, and bottom nav in one place.
    ========================================================================== */
 
 (function () {
   "use strict";
 
   const VERSION = "1.1.1-shell-v2.0";
+  const DEFAULT_PAGE = "rf";
+  const MAX_SEARCH_RESULTS = 12;
 
   const pages = {
     map: {
@@ -47,12 +50,14 @@
   };
 
   const pageOrder = ["map", "rf", "network", "docs", "tools"];
-
   const searchProviders = Object.create(null);
+
+  function normalisePageKey(pageKey) {
+    return pages[pageKey] ? pageKey : DEFAULT_PAGE;
+  }
 
   function normaliseSearchItem(item) {
     return {
-      id: String(item.id || item.title || ""),
       title: String(item.title || ""),
       subtitle: String(item.subtitle || ""),
       href: item.href ? String(item.href) : "",
@@ -69,11 +74,21 @@
 
     return {
       page,
-      label: String(provider.label || pages[page]?.label || page.toUpperCase()),
-      placeholder: String(provider.placeholder || `Search ${pages[page]?.label || page}...`),
+      label: String(provider.label || (pages[page] && pages[page].label) || page.toUpperCase()),
+      placeholder: String(provider.placeholder || `Search ${(pages[page] && pages[page].label) || page}...`),
       emptyText: String(provider.emptyText || "No matches found."),
-      items: Array.isArray(provider.items) ? provider.items.map(normaliseSearchItem).filter((item) => item.title) : []
+      items: Array.isArray(provider.items)
+        ? provider.items.map(normaliseSearchItem).filter(function (item) {
+          return item.title;
+        })
+        : []
     };
+  }
+
+  function refreshSearchUi(page) {
+    if (typeof window.FieldOpsSearchRefresh === "function") {
+      window.FieldOpsSearchRefresh(page);
+    }
   }
 
   function registerSearchProvider(provider) {
@@ -84,19 +99,17 @@
     }
 
     searchProviders[normalised.page] = normalised;
-
-    if (typeof window.FieldOpsSearchRefresh === "function") {
-      window.FieldOpsSearchRefresh(normalised.page);
-    }
+    refreshSearchUi(normalised.page);
   }
 
   window.FieldOpsSearch = {
-    registerPage: registerSearchProvider,
     register: registerSearchProvider,
+    registerPage: registerSearchProvider,
     providers: searchProviders
   };
 
   (window.FieldOpsSearchQueue || []).forEach(registerSearchProvider);
+
   window.FieldOpsSearchQueue = {
     push(provider) {
       registerSearchProvider(provider);
@@ -116,9 +129,8 @@
     });
   }
 
-
   function getScriptRoot() {
-    const scripts = Array.prototype.slice.call(document.querySelectorAll("script[src]"));
+    const scripts = Array.from(document.querySelectorAll("script[src]"));
     const shellScript = scripts.reverse().find(function (script) {
       return /(^|\/)shell\.js(\?|$)/.test(script.getAttribute("src") || "");
     });
@@ -155,8 +167,7 @@
   }
 
   function pageHref(pageKey) {
-    const page = pages[pageKey] || pages.rf;
-    return asset(page.href);
+    return asset(pages[normalisePageKey(pageKey)].href);
   }
 
   function pageOptionMarkup(pageKey) {
@@ -181,10 +192,11 @@
   }
 
   function shellMarkup(activePage) {
-    const active = pages[activePage] ? activePage : "rf";
+    const active = normalisePageKey(activePage);
+    const page = pages[active];
 
     return `
-    <header class="top-shell" aria-label="Map controls">
+    <header class="top-shell" aria-label="App controls">
       <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open>
         ${iconSpan("icon--menu")}
       </button>
@@ -227,7 +239,6 @@
         <span class="filter-option__chevron" aria-hidden="true">${chevron()}</span>
       </button>
     </aside>
-
 
     <aside class="search-panel" aria-label="Page search" data-search-panel>
       <header class="search-panel__head">
@@ -273,10 +284,10 @@
 
         <nav class="drawer-pages" aria-label="Pages">
           <a class="button-surface current-page-card" href="${pageHref(active)}" aria-current="page" data-current-page-card>
-            ${iconSpan(pages[active].icon)}
+            ${iconSpan(page.icon)}
             <span class="current-page-card__copy">
               <span class="current-page-card__eyebrow">Current page</span>
-              <span class="current-page-card__title" data-current-page-title>${pages[active].label}</span>
+              <span class="current-page-card__title" data-current-page-title>${page.label}</span>
             </span>
             <span class="current-page-card__chevron" aria-hidden="true">${chevron()}</span>
           </a>
@@ -305,7 +316,7 @@
 
       <div class="button-surface version-row">
         ${iconSpan("icon--info")}
-        <span>FieldOps Atlas v1.1.1</span>
+        <span>FieldOps Atlas v2.0</span>
       </div>
     </aside>
 
@@ -323,13 +334,10 @@
       return;
     }
 
-    let activePage = shell.dataset.currentPage || shell.dataset.page || "rf";
-
-    if (!pages[activePage]) {
-      activePage = "rf";
-    }
+    let activePage = normalisePageKey(shell.dataset.currentPage || shell.dataset.page);
 
     shell.dataset.shellReady = "true";
+    shell.dataset.shellVersion = VERSION;
     shell.dataset.drawerOpen = "false";
     shell.dataset.pagesExpanded = "false";
     shell.dataset.filterOpen = "false";
@@ -352,15 +360,15 @@
     const searchQueryLabel = shell.querySelector(".search-query");
     const pagesButton = shell.querySelector("[data-pages-toggle]");
     const pagesButtonText = pagesButton ? pagesButton.querySelector(".section-toggle__text") : null;
-    const pageOptions = Array.prototype.slice.call(shell.querySelectorAll(".drawer-page-option"));
-    const pageButtons = Array.prototype.slice.call(shell.querySelectorAll("[data-page-button]"));
-    const navButtons = Array.prototype.slice.call(shell.querySelectorAll("[data-nav-button]"));
+    const pageOptions = Array.from(shell.querySelectorAll(".drawer-page-option"));
+    const pageButtons = Array.from(shell.querySelectorAll("[data-page-button]"));
+    const navButtons = Array.from(shell.querySelectorAll("[data-nav-button]"));
     const currentPageCard = shell.querySelector("[data-current-page-card]");
     const currentPageIcon = currentPageCard ? currentPageCard.querySelector(".repo-icon") : null;
     const currentPageTitle = shell.querySelector("[data-current-page-title]");
 
     function setDrawerOpen(isOpen) {
-      shell.setAttribute("data-drawer-open", isOpen ? "true" : "false");
+      shell.dataset.drawerOpen = isOpen ? "true" : "false";
 
       if (menuButton) {
         menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -373,7 +381,7 @@
     }
 
     function setFilterOpen(isOpen) {
-      shell.setAttribute("data-filter-open", isOpen ? "true" : "false");
+      shell.dataset.filterOpen = isOpen ? "true" : "false";
 
       if (filterButton) {
         filterButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -385,35 +393,8 @@
       }
     }
 
-
     function currentSearchProvider() {
       return searchProviders[activePage] || null;
-    }
-
-    function updateSearchUi() {
-      const provider = currentSearchProvider();
-      const page = pages[activePage] || pages.rf;
-      const placeholder = provider ? provider.placeholder : `Search ${page.label}...`;
-      const title = provider ? `Search ${provider.label}` : `Search ${page.label}`;
-      const hint = provider ? "Page-specific results only." : "Search is not available on this page yet.";
-
-      if (searchInput) {
-        searchInput.placeholder = placeholder;
-      }
-
-      if (searchQueryLabel) {
-        searchQueryLabel.textContent = placeholder;
-      }
-
-      if (searchTitle) {
-        searchTitle.textContent = title;
-      }
-
-      if (searchHint) {
-        searchHint.textContent = hint;
-      }
-
-      renderSearchResults(searchInput ? searchInput.value : "");
     }
 
     function resultHref(item) {
@@ -442,7 +423,7 @@
       const matches = provider.items.filter(function (item) {
         const haystack = [item.title, item.subtitle].concat(item.keywords).join(" ").toLowerCase();
         return !needle || haystack.includes(needle);
-      }).slice(0, 12);
+      }).slice(0, MAX_SEARCH_RESULTS);
 
       searchResults.innerHTML = matches.map(function (item) {
         return `
@@ -456,8 +437,34 @@
       searchEmpty.hidden = matches.length > 0;
     }
 
+    function updateSearchUi() {
+      const provider = currentSearchProvider();
+      const page = pages[activePage] || pages[DEFAULT_PAGE];
+      const placeholder = provider ? provider.placeholder : `Search ${page.label}...`;
+      const title = provider ? `Search ${provider.label}` : `Search ${page.label}`;
+      const hint = provider ? "Page-specific results only." : "Search is not available on this page yet.";
+
+      if (searchInput) {
+        searchInput.placeholder = placeholder;
+      }
+
+      if (searchQueryLabel) {
+        searchQueryLabel.textContent = placeholder;
+      }
+
+      if (searchTitle) {
+        searchTitle.textContent = title;
+      }
+
+      if (searchHint) {
+        searchHint.textContent = hint;
+      }
+
+      renderSearchResults(searchInput ? searchInput.value : "");
+    }
+
     function setSearchOpen(isOpen) {
-      shell.setAttribute("data-search-open", isOpen ? "true" : "false");
+      shell.dataset.searchOpen = isOpen ? "true" : "false";
 
       if (searchButton) {
         searchButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -467,6 +474,7 @@
         setDrawerOpen(false);
         setFilterOpen(false);
         updateSearchUi();
+
         requestAnimationFrame(function () {
           if (searchInput) {
             searchInput.focus();
@@ -476,9 +484,8 @@
       }
     }
 
-
     function setPagesExpanded(isExpanded) {
-      shell.setAttribute("data-pages-expanded", isExpanded ? "true" : "false");
+      shell.dataset.pagesExpanded = isExpanded ? "true" : "false";
 
       if (pagesButton) {
         pagesButton.setAttribute("aria-expanded", isExpanded ? "true" : "false");
@@ -492,7 +499,7 @@
     }
 
     function updateCurrentPagePill() {
-      const page = pages[activePage] || pages.rf;
+      const page = pages[activePage] || pages[DEFAULT_PAGE];
 
       if (currentPageTitle) {
         currentPageTitle.textContent = page.label;
@@ -510,11 +517,11 @@
 
     function updateBottomNav() {
       const activeIndex = Math.max(0, navButtons.findIndex(function (button) {
-        return button.getAttribute("data-page") === activePage;
+        return button.dataset.page === activePage;
       }));
 
       navButtons.forEach(function (button, index) {
-        const isActive = button.getAttribute("data-page") === activePage;
+        const isActive = button.dataset.page === activePage;
 
         button.classList.toggle("is-active", isActive);
         button.classList.toggle("is-group-end", index === activeIndex - 1);
@@ -529,12 +536,10 @@
     }
 
     function updatePageOptionVisibility() {
-      const expanded = shell.getAttribute("data-pages-expanded") === "true";
+      const expanded = shell.dataset.pagesExpanded === "true";
 
       pageOptions.forEach(function (row) {
-        const isCurrent = row.getAttribute("data-page") === activePage;
-        row.hidden = !expanded || isCurrent;
-        row.classList.toggle("is-active", isCurrent);
+        row.hidden = !expanded || row.dataset.page === activePage;
       });
     }
 
@@ -544,7 +549,8 @@
       }
 
       activePage = pageName;
-      shell.setAttribute("data-current-page", pageName);
+      shell.dataset.currentPage = pageName;
+
       updateCurrentPagePill();
       updateBottomNav();
       updatePageOptionVisibility();
@@ -553,7 +559,7 @@
 
     if (menuButton) {
       menuButton.addEventListener("click", function () {
-        setDrawerOpen(shell.getAttribute("data-drawer-open") !== "true");
+        setDrawerOpen(shell.dataset.drawerOpen !== "true");
       });
     }
 
@@ -562,9 +568,10 @@
         setDrawerOpen(false);
       });
     }
+
     if (filterButton) {
       filterButton.addEventListener("click", function () {
-        setFilterOpen(shell.getAttribute("data-filter-open") !== "true");
+        setFilterOpen(shell.dataset.filterOpen !== "true");
       });
     }
 
@@ -574,10 +581,9 @@
       });
     }
 
-
     if (searchButton) {
       searchButton.addEventListener("click", function () {
-        setSearchOpen(shell.getAttribute("data-search-open") !== "true");
+        setSearchOpen(shell.dataset.searchOpen !== "true");
       });
     }
 
@@ -600,7 +606,7 @@
     }
 
     document.addEventListener("pointerdown", function (event) {
-      if (shell.getAttribute("data-search-open") !== "true") {
+      if (shell.dataset.searchOpen !== "true") {
         return;
       }
 
@@ -613,20 +619,19 @@
 
     if (pagesButton) {
       pagesButton.addEventListener("click", function () {
-        setPagesExpanded(shell.getAttribute("data-pages-expanded") !== "true");
+        setPagesExpanded(shell.dataset.pagesExpanded !== "true");
       });
     }
 
     pageButtons.forEach(function (button) {
       button.addEventListener("click", function (event) {
-        const pageName = button.getAttribute("data-page");
+        const pageName = button.dataset.page;
 
         if (samePath(button.href)) {
           event.preventDefault();
           setActivePage(pageName);
           setDrawerOpen(false);
           setFilterOpen(false);
-          return;
         }
 
         /*
@@ -649,12 +654,9 @@
     setActivePage(activePage);
 
     window.addEventListener("pageshow", function () {
-      const resetPage = shell.dataset.page || shell.dataset.currentPage || activePage;
+      const resetPage = normalisePageKey(shell.dataset.page || shell.dataset.currentPage || activePage);
 
-      if (pages[resetPage]) {
-        setActivePage(resetPage);
-      }
-
+      setActivePage(resetPage);
       setDrawerOpen(false);
       setFilterOpen(false);
       setSearchOpen(false);
