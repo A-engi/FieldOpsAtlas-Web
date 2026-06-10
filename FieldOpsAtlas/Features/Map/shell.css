@@ -1,4 +1,4 @@
-/* FieldOps Atlas shell.css v1.1.1-map-fade-restore-v1
+/* FieldOps Atlas shell.css v1.1.1-map-shell-v2.1-shared-top
    Shared app chrome owner.
 
    Ownership:
@@ -109,6 +109,22 @@
   --rail-button-bg-active: linear-gradient(180deg, rgba(76, 205, 230, 0.78), rgba(16, 86, 115, 0.82));
   --rail-button-border: rgba(255, 255, 255, 0.16);
   --rail-button-border-active: rgba(120, 239, 255, 0.92);
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* Shared shell top-bar handoff                                               */
+/* -------------------------------------------------------------------------- */
+
+/*
+  When the root shared shell is mounted on the map app shell, keep the original
+  map fade/ribbon visuals but remove the old top control row. This prevents two
+  burger/search/filter bars from occupying the same space.
+*/
+.app-shell.fieldops-shell-root[data-shell-ready="true"] .top-bar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* -------------------------------------------------------------------------- */
