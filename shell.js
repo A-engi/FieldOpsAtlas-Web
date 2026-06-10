@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ============================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
    Version: 1.1.1-shell-v2.0
@@ -7,10 +7,16 @@
    - Inject shared shell chrome into a .phone root.
    - Keep page state, burger drawer, collapsible Pages, filter panel,
      page search, and bottom nav in one place.
-   ========================================================================== */
+   - Keep logic grouped so the shell can later map cleanly to Swift views,
+     state, and controller actions.
+   ============================================================================ */
 
 (function () {
   "use strict";
+
+  /* ========================================================================
+     Configuration
+     ======================================================================== */
 
   const VERSION = "1.1.1-shell-v2.0";
   const DEFAULT_PAGE = "rf";
@@ -52,9 +58,9 @@
   const pageOrder = ["map", "rf", "network", "docs", "tools"];
   const searchProviders = Object.create(null);
 
-  function normalisePageKey(pageKey) {
-    return pages[pageKey] ? pageKey : DEFAULT_PAGE;
-  }
+  /* ========================================================================
+     Search provider registry
+     ======================================================================== */
 
   function normaliseSearchItem(item) {
     return {
@@ -85,7 +91,7 @@
     };
   }
 
-  function refreshSearchUi(page) {
+  function notifySearchProviderChanged(page) {
     if (typeof window.FieldOpsSearchRefresh === "function") {
       window.FieldOpsSearchRefresh(page);
     }
@@ -99,7 +105,7 @@
     }
 
     searchProviders[normalised.page] = normalised;
-    refreshSearchUi(normalised.page);
+    notifySearchProviderChanged(normalised.page);
   }
 
   window.FieldOpsSearch = {
@@ -116,6 +122,14 @@
       return Object.keys(searchProviders).length;
     }
   };
+
+  /* ========================================================================
+     Utilities
+     ======================================================================== */
+
+  function normalisePageKey(pageKey) {
+    return pages[pageKey] ? pageKey : DEFAULT_PAGE;
+  }
 
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, function (character) {
@@ -148,11 +162,15 @@
     return new URL(path, rootPath).href;
   }
 
-  function samePath(url) {
+  function isSamePagePath(url) {
     return new URL(url, window.location.href).pathname === window.location.pathname;
   }
 
-  function iconSpan(iconClass, extraClass) {
+  /* ========================================================================
+     Markup helpers
+     ======================================================================== */
+
+  function iconMarkup(iconClass, extraClass) {
     const classes = ["repo-icon", iconClass];
 
     if (extraClass) {
@@ -162,7 +180,7 @@
     return `<span class="${classes.join(" ")}" aria-hidden="true"></span>`;
   }
 
-  function chevron() {
+  function chevronMarkup() {
     return '<span class="chevron-mark"></span>';
   }
 
@@ -175,9 +193,9 @@
 
     return `
         <a class="button-surface drawer-row drawer-page-option" href="${pageHref(pageKey)}" hidden data-page-button data-page="${pageKey}">
-          ${iconSpan(page.icon)}
+          ${iconMarkup(page.icon)}
           <span class="drawer-row__label">${page.label}</span>
-          <span class="drawer-row__chevron" aria-hidden="true">${chevron()}</span>
+          <span class="drawer-row__chevron" aria-hidden="true">${chevronMarkup()}</span>
         </a>`;
   }
 
@@ -186,7 +204,7 @@
 
     return `
         <a class="button-surface nav-button" href="${pageHref(pageKey)}" data-page-button data-nav-button data-page="${pageKey}">
-          ${iconSpan(page.icon)}
+          ${iconMarkup(page.icon)}
           <span>${page.navLabel}</span>
         </a>`;
   }
@@ -198,26 +216,26 @@
     return `
     <header class="top-shell" aria-label="App controls">
       <button class="button-surface icon-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open>
-        ${iconSpan("icon--menu")}
+        ${iconMarkup("icon--menu")}
       </button>
 
       <button class="button-surface search-button" type="button" aria-label="Open search" aria-expanded="false" data-search-open>
         <span class="search-lead">
-          ${iconSpan("icon--search", "search-icon")}
+          ${iconMarkup("icon--search", "search-icon")}
           <span class="search-query">Find...</span>
         </span>
 
         <span class="search-brand" aria-hidden="true">
           <span class="search-divider"></span>
           <span class="atlas-logo">
-            ${iconSpan("icon--atlas")}
+            ${iconMarkup("icon--atlas")}
             <span class="atlas-word">ATLAS</span>
           </span>
         </span>
       </button>
 
       <button class="button-surface icon-button" type="button" aria-label="Open filter menu" aria-expanded="false" data-filter-open-button>
-        ${iconSpan("icon--filter")}
+        ${iconMarkup("icon--filter")}
       </button>
     </header>
 
@@ -236,7 +254,7 @@
           <span class="filter-option__label">Region</span>
           <span class="filter-option__meta">All regions</span>
         </span>
-        <span class="filter-option__chevron" aria-hidden="true">${chevron()}</span>
+        <span class="filter-option__chevron" aria-hidden="true">${chevronMarkup()}</span>
       </button>
     </aside>
 
@@ -278,18 +296,18 @@
           <p class="section-label">Pages</p>
           <button class="section-toggle__button" type="button" aria-expanded="false" data-pages-toggle>
             <span class="section-toggle__text">All</span>
-            <span class="section-toggle__chevron" aria-hidden="true">${chevron()}</span>
+            <span class="section-toggle__chevron" aria-hidden="true">${chevronMarkup()}</span>
           </button>
         </div>
 
         <nav class="drawer-pages" aria-label="Pages">
           <button class="button-surface current-page-card" type="button" aria-current="page" aria-expanded="false" data-current-page-card>
-            ${iconSpan(page.icon)}
+            ${iconMarkup(page.icon)}
             <span class="current-page-card__copy">
               <span class="current-page-card__eyebrow">Current page</span>
               <span class="current-page-card__title" data-current-page-title>${page.label}</span>
             </span>
-            <span class="current-page-card__chevron" aria-hidden="true">${chevron()}</span>
+            <span class="current-page-card__chevron" aria-hidden="true">${chevronMarkup()}</span>
           </button>
           ${pageOrder.map(pageOptionMarkup).join("")}
         </nav>
@@ -301,11 +319,11 @@
 
       <div class="account-menu" aria-label="User menu">
         <button class="button-surface account-button" type="button" aria-label="Open profile placeholder">
-          ${iconSpan("icon--profile")}
+          ${iconMarkup("icon--profile")}
         </button>
 
         <button class="button-surface account-button" type="button" aria-label="Open settings">
-          ${iconSpan("icon--settings")}
+          ${iconMarkup("icon--settings")}
         </button>
       </div>
 
@@ -315,7 +333,7 @@
       </button>
 
       <div class="button-surface version-row">
-        ${iconSpan("icon--info")}
+        ${iconMarkup("icon--info")}
         <span>FieldOps Atlas v2.0</span>
       </div>
     </aside>
@@ -327,6 +345,440 @@
     </footer>`;
   }
 
+  /* ========================================================================
+     Shell controller
+     ======================================================================== */
+
+  function ShellController(shell) {
+    this.shell = shell;
+    this.activePage = normalisePageKey(shell.dataset.currentPage || shell.dataset.page);
+    this.refs = Object.create(null);
+  }
+
+  ShellController.prototype.boot = function () {
+    if (!this.shell || this.shell.dataset.shellReady === "true") {
+      return;
+    }
+
+    this.initialiseDataset();
+    this.shell.insertAdjacentHTML("afterbegin", shellMarkup(this.activePage));
+    this.cacheRefs();
+    this.bindEvents();
+    this.exposeSearchRefresh();
+    this.resetUiState();
+  };
+
+  ShellController.prototype.initialiseDataset = function () {
+    this.shell.dataset.shellReady = "true";
+    this.shell.dataset.shellVersion = VERSION;
+    this.shell.dataset.drawerOpen = "false";
+    this.shell.dataset.pagesExpanded = "false";
+    this.shell.dataset.filterOpen = "false";
+    this.shell.dataset.searchOpen = "false";
+    this.shell.dataset.currentPage = this.activePage;
+    this.shell.dataset.page = this.activePage;
+  };
+
+  ShellController.prototype.cacheRefs = function () {
+    this.refs = {
+      menuButton: this.shell.querySelector("[data-menu-open]"),
+      backdropButton: this.shell.querySelector("[data-menu-backdrop]"),
+      filterButton: this.shell.querySelector("[data-filter-open-button]"),
+      filterClose: this.shell.querySelector("[data-filter-close]"),
+      searchButton: this.shell.querySelector("[data-search-open]"),
+      searchClose: this.shell.querySelector("[data-search-close]"),
+      searchInput: this.shell.querySelector("[data-search-input]"),
+      searchResults: this.shell.querySelector("[data-search-results]"),
+      searchEmpty: this.shell.querySelector("[data-search-empty]"),
+      searchTitle: this.shell.querySelector("[data-search-title]"),
+      searchHint: this.shell.querySelector("[data-search-hint]"),
+      searchQueryLabel: this.shell.querySelector(".search-query"),
+      pagesButton: this.shell.querySelector("[data-pages-toggle]"),
+      currentPageCard: this.shell.querySelector("[data-current-page-card]"),
+      currentPageTitle: this.shell.querySelector("[data-current-page-title]"),
+      pageOptions: Array.from(this.shell.querySelectorAll(".drawer-page-option")),
+      pageButtons: Array.from(this.shell.querySelectorAll("[data-page-button]")),
+      navButtons: Array.from(this.shell.querySelectorAll("[data-nav-button]"))
+    };
+
+    this.refs.pagesButtonText = this.refs.pagesButton
+      ? this.refs.pagesButton.querySelector(".section-toggle__text")
+      : null;
+
+    this.refs.currentPageIcon = this.refs.currentPageCard
+      ? this.refs.currentPageCard.querySelector(".repo-icon")
+      : null;
+  };
+
+  ShellController.prototype.bindEvents = function () {
+    const controller = this;
+    const refs = this.refs;
+
+    if (refs.menuButton) {
+      refs.menuButton.addEventListener("click", function () {
+        controller.setDrawerOpen(controller.shell.dataset.drawerOpen !== "true");
+      });
+    }
+
+    if (refs.backdropButton) {
+      refs.backdropButton.addEventListener("click", function () {
+        controller.setDrawerOpen(false);
+      });
+    }
+
+    if (refs.filterButton) {
+      refs.filterButton.addEventListener("click", function () {
+        controller.setFilterOpen(controller.shell.dataset.filterOpen !== "true");
+      });
+    }
+
+    if (refs.filterClose) {
+      refs.filterClose.addEventListener("click", function () {
+        controller.setFilterOpen(false);
+      });
+    }
+
+    if (refs.searchButton) {
+      refs.searchButton.addEventListener("click", function () {
+        controller.setSearchOpen(controller.shell.dataset.searchOpen !== "true");
+      });
+    }
+
+    if (refs.searchClose) {
+      refs.searchClose.addEventListener("click", function () {
+        controller.setSearchOpen(false);
+      });
+    }
+
+    if (refs.searchInput) {
+      refs.searchInput.addEventListener("input", function () {
+        controller.renderSearchResults(refs.searchInput.value);
+      });
+
+      refs.searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          controller.setSearchOpen(false);
+        }
+      });
+    }
+
+    document.addEventListener("pointerdown", function (event) {
+      controller.handleDocumentPointerDown(event);
+    }, true);
+
+    if (refs.pagesButton) {
+      refs.pagesButton.addEventListener("click", function () {
+        controller.togglePagesExpanded();
+      });
+    }
+
+    if (refs.currentPageCard) {
+      refs.currentPageCard.addEventListener("click", function () {
+        controller.togglePagesExpanded();
+      });
+    }
+
+    refs.pageButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        controller.handlePageButtonClick(event, button);
+      });
+    });
+
+    window.addEventListener("pageshow", function () {
+      controller.handlePageShow();
+    });
+  };
+
+  ShellController.prototype.exposeSearchRefresh = function () {
+    const controller = this;
+
+    window.FieldOpsSearchRefresh = function (page) {
+      if (page === controller.activePage) {
+        controller.updateSearchUi();
+      }
+    };
+  };
+
+  ShellController.prototype.resetUiState = function () {
+    this.setDrawerOpen(false);
+    this.setFilterOpen(false);
+    this.setSearchOpen(false);
+    this.setPagesExpanded(false);
+    this.setActivePage(this.activePage);
+  };
+
+  /* ========================================================================
+     Shell controller: state setters
+     ======================================================================== */
+
+  ShellController.prototype.setDrawerOpen = function (isOpen) {
+    this.shell.dataset.drawerOpen = isOpen ? "true" : "false";
+
+    if (this.refs.menuButton) {
+      this.refs.menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+
+    if (isOpen) {
+      this.setFilterOpen(false);
+      this.setSearchOpen(false);
+    }
+  };
+
+  ShellController.prototype.setFilterOpen = function (isOpen) {
+    this.shell.dataset.filterOpen = isOpen ? "true" : "false";
+
+    if (this.refs.filterButton) {
+      this.refs.filterButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+
+    if (isOpen) {
+      this.setDrawerOpen(false);
+      this.setSearchOpen(false);
+    }
+  };
+
+  ShellController.prototype.setSearchOpen = function (isOpen) {
+    const refs = this.refs;
+
+    this.shell.dataset.searchOpen = isOpen ? "true" : "false";
+
+    if (refs.searchButton) {
+      refs.searchButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+
+    if (!isOpen) {
+      return;
+    }
+
+    this.setDrawerOpen(false);
+    this.setFilterOpen(false);
+    this.updateSearchUi();
+
+    requestAnimationFrame(function () {
+      if (refs.searchInput) {
+        refs.searchInput.focus();
+        refs.searchInput.select();
+      }
+    });
+  };
+
+  ShellController.prototype.setPagesExpanded = function (isExpanded) {
+    const expanded = isExpanded ? "true" : "false";
+
+    this.shell.dataset.pagesExpanded = expanded;
+
+    if (this.refs.pagesButton) {
+      this.refs.pagesButton.setAttribute("aria-expanded", expanded);
+    }
+
+    if (this.refs.currentPageCard) {
+      this.refs.currentPageCard.setAttribute("aria-expanded", expanded);
+    }
+
+    if (this.refs.pagesButtonText) {
+      this.refs.pagesButtonText.textContent = isExpanded ? "Hide" : "All";
+    }
+
+    this.updatePageOptionVisibility();
+  };
+
+  ShellController.prototype.togglePagesExpanded = function () {
+    this.setPagesExpanded(this.shell.dataset.pagesExpanded !== "true");
+  };
+
+  ShellController.prototype.setActivePage = function (pageName) {
+    if (!pages[pageName]) {
+      return;
+    }
+
+    this.activePage = pageName;
+    this.shell.dataset.currentPage = pageName;
+    this.shell.dataset.page = pageName;
+
+    this.updateCurrentPagePill();
+    this.updateBottomNav();
+    this.updatePageOptionVisibility();
+    this.updateSearchUi();
+  };
+
+  /* ========================================================================
+     Shell controller: rendering
+     ======================================================================== */
+
+  ShellController.prototype.updateCurrentPagePill = function () {
+    const page = pages[this.activePage] || pages[DEFAULT_PAGE];
+
+    if (this.refs.currentPageTitle) {
+      this.refs.currentPageTitle.textContent = page.label;
+    }
+
+    if (this.refs.currentPageIcon) {
+      this.refs.currentPageIcon.className = "repo-icon " + page.icon;
+      this.refs.currentPageIcon.setAttribute("aria-hidden", "true");
+    }
+  };
+
+  ShellController.prototype.updateBottomNav = function () {
+    const activePage = this.activePage;
+    const activeIndex = Math.max(0, this.refs.navButtons.findIndex(function (button) {
+      return button.dataset.page === activePage;
+    }));
+
+    this.refs.navButtons.forEach(function (button, index) {
+      const isActive = button.dataset.page === activePage;
+
+      button.classList.toggle("is-active", isActive);
+      button.classList.toggle("is-group-end", index === activeIndex - 1);
+      button.classList.toggle("is-group-start", index === activeIndex + 1);
+
+      if (isActive) {
+        button.setAttribute("aria-current", "page");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  ShellController.prototype.updatePageOptionVisibility = function () {
+    const activePage = this.activePage;
+    const expanded = this.shell.dataset.pagesExpanded === "true";
+
+    this.refs.pageOptions.forEach(function (row) {
+      row.hidden = !expanded || row.dataset.page === activePage;
+    });
+  };
+
+  /* ========================================================================
+     Shell controller: search
+     ======================================================================== */
+
+  ShellController.prototype.currentSearchProvider = function () {
+    return searchProviders[this.activePage] || null;
+  };
+
+  ShellController.prototype.resultHref = function (item) {
+    if (!item.href) {
+      return "#";
+    }
+
+    return new URL(item.href, window.location.href).href;
+  };
+
+  ShellController.prototype.itemMatchesQuery = function (item, query) {
+    const needle = String(query || "").trim().toLowerCase();
+
+    if (!needle) {
+      return true;
+    }
+
+    const haystack = [item.title, item.subtitle].concat(item.keywords).join(" ").toLowerCase();
+    return haystack.includes(needle);
+  };
+
+  ShellController.prototype.renderSearchResults = function (query) {
+    const refs = this.refs;
+    const provider = this.currentSearchProvider();
+
+    if (!refs.searchResults || !refs.searchEmpty) {
+      return;
+    }
+
+    if (!provider) {
+      refs.searchResults.innerHTML = "";
+      refs.searchEmpty.textContent = "Search is not available on this page yet.";
+      refs.searchEmpty.hidden = false;
+      return;
+    }
+
+    const matches = provider.items.filter(function (item) {
+      return this.itemMatchesQuery(item, query);
+    }, this).slice(0, MAX_SEARCH_RESULTS);
+
+    refs.searchResults.innerHTML = matches.map(function (item) {
+      return `
+          <a class="button-surface search-result" href="${escapeHtml(this.resultHref(item))}">
+            <span class="search-result__title">${escapeHtml(item.title)}</span>
+            <span class="search-result__subtitle">${escapeHtml(item.subtitle)}</span>
+          </a>`;
+    }, this).join("");
+
+    refs.searchEmpty.textContent = provider.emptyText;
+    refs.searchEmpty.hidden = matches.length > 0;
+  };
+
+  ShellController.prototype.updateSearchUi = function () {
+    const refs = this.refs;
+    const provider = this.currentSearchProvider();
+    const page = pages[this.activePage] || pages[DEFAULT_PAGE];
+    const placeholder = provider ? provider.placeholder : `Search ${page.label}...`;
+    const title = provider ? `Search ${provider.label}` : `Search ${page.label}`;
+    const hint = provider ? "Page-specific results only." : "Search is not available on this page yet.";
+
+    if (refs.searchInput) {
+      refs.searchInput.placeholder = placeholder;
+    }
+
+    if (refs.searchQueryLabel) {
+      refs.searchQueryLabel.textContent = placeholder;
+    }
+
+    if (refs.searchTitle) {
+      refs.searchTitle.textContent = title;
+    }
+
+    if (refs.searchHint) {
+      refs.searchHint.textContent = hint;
+    }
+
+    this.renderSearchResults(refs.searchInput ? refs.searchInput.value : "");
+  };
+
+  /* ========================================================================
+     Shell controller: events
+     ======================================================================== */
+
+  ShellController.prototype.handleDocumentPointerDown = function (event) {
+    if (this.shell.dataset.searchOpen !== "true") {
+      return;
+    }
+
+    if (event.target.closest(".search-panel, .search-button")) {
+      return;
+    }
+
+    this.setSearchOpen(false);
+  };
+
+  ShellController.prototype.handlePageButtonClick = function (event, button) {
+    const pageName = button.dataset.page;
+
+    if (!isSamePagePath(button.href)) {
+      /*
+        Let real navigation happen without changing this page's active rail first.
+        Safari can restore that mutated DOM from bfcache when pressing Back.
+      */
+      return;
+    }
+
+    event.preventDefault();
+    this.setActivePage(pageName);
+    this.setDrawerOpen(false);
+    this.setFilterOpen(false);
+  };
+
+  ShellController.prototype.handlePageShow = function () {
+    const resetPage = normalisePageKey(this.shell.dataset.page || this.shell.dataset.currentPage || this.activePage);
+
+    this.setActivePage(resetPage);
+    this.setDrawerOpen(false);
+    this.setFilterOpen(false);
+    this.setSearchOpen(false);
+  };
+
+  /* ========================================================================
+     Boot
+     ======================================================================== */
+
   function bootFieldOpsShell() {
     const shell = document.querySelector(".phone");
 
@@ -334,342 +786,7 @@
       return;
     }
 
-    let activePage = normalisePageKey(shell.dataset.currentPage || shell.dataset.page);
-
-    shell.dataset.shellReady = "true";
-    shell.dataset.shellVersion = VERSION;
-    shell.dataset.drawerOpen = "false";
-    shell.dataset.pagesExpanded = "false";
-    shell.dataset.filterOpen = "false";
-    shell.dataset.searchOpen = "false";
-    shell.dataset.currentPage = activePage;
-    shell.dataset.page = activePage;
-
-    shell.insertAdjacentHTML("afterbegin", shellMarkup(activePage));
-
-    const menuButton = shell.querySelector("[data-menu-open]");
-    const backdropButton = shell.querySelector("[data-menu-backdrop]");
-    const filterButton = shell.querySelector("[data-filter-open-button]");
-    const filterClose = shell.querySelector("[data-filter-close]");
-    const searchButton = shell.querySelector("[data-search-open]");
-    const searchClose = shell.querySelector("[data-search-close]");
-    const searchInput = shell.querySelector("[data-search-input]");
-    const searchResults = shell.querySelector("[data-search-results]");
-    const searchEmpty = shell.querySelector("[data-search-empty]");
-    const searchTitle = shell.querySelector("[data-search-title]");
-    const searchHint = shell.querySelector("[data-search-hint]");
-    const searchQueryLabel = shell.querySelector(".search-query");
-    const pagesButton = shell.querySelector("[data-pages-toggle]");
-    const pagesButtonText = pagesButton ? pagesButton.querySelector(".section-toggle__text") : null;
-    const pageOptions = Array.from(shell.querySelectorAll(".drawer-page-option"));
-    const pageButtons = Array.from(shell.querySelectorAll("[data-page-button]"));
-    const navButtons = Array.from(shell.querySelectorAll("[data-nav-button]"));
-    const currentPageCard = shell.querySelector("[data-current-page-card]");
-    const currentPageIcon = currentPageCard ? currentPageCard.querySelector(".repo-icon") : null;
-    const currentPageTitle = shell.querySelector("[data-current-page-title]");
-
-    function setDrawerOpen(isOpen) {
-      shell.dataset.drawerOpen = isOpen ? "true" : "false";
-
-      if (menuButton) {
-        menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      }
-
-      if (isOpen) {
-        setFilterOpen(false);
-        setSearchOpen(false);
-      }
-    }
-
-    function setFilterOpen(isOpen) {
-      shell.dataset.filterOpen = isOpen ? "true" : "false";
-
-      if (filterButton) {
-        filterButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      }
-
-      if (isOpen) {
-        setDrawerOpen(false);
-        setSearchOpen(false);
-      }
-    }
-
-    function currentSearchProvider() {
-      return searchProviders[activePage] || null;
-    }
-
-    function resultHref(item) {
-      if (!item.href) {
-        return "#";
-      }
-
-      return new URL(item.href, window.location.href).href;
-    }
-
-    function renderSearchResults(query) {
-      if (!searchResults || !searchEmpty) {
-        return;
-      }
-
-      const provider = currentSearchProvider();
-
-      if (!provider) {
-        searchResults.innerHTML = "";
-        searchEmpty.textContent = "Search is not available on this page yet.";
-        searchEmpty.hidden = false;
-        return;
-      }
-
-      const needle = String(query || "").trim().toLowerCase();
-      const matches = provider.items.filter(function (item) {
-        const haystack = [item.title, item.subtitle].concat(item.keywords).join(" ").toLowerCase();
-        return !needle || haystack.includes(needle);
-      }).slice(0, MAX_SEARCH_RESULTS);
-
-      searchResults.innerHTML = matches.map(function (item) {
-        return `
-          <a class="button-surface search-result" href="${escapeHtml(resultHref(item))}">
-            <span class="search-result__title">${escapeHtml(item.title)}</span>
-            <span class="search-result__subtitle">${escapeHtml(item.subtitle)}</span>
-          </a>`;
-      }).join("");
-
-      searchEmpty.textContent = provider.emptyText;
-      searchEmpty.hidden = matches.length > 0;
-    }
-
-    function updateSearchUi() {
-      const provider = currentSearchProvider();
-      const page = pages[activePage] || pages[DEFAULT_PAGE];
-      const placeholder = provider ? provider.placeholder : `Search ${page.label}...`;
-      const title = provider ? `Search ${provider.label}` : `Search ${page.label}`;
-      const hint = provider ? "Page-specific results only." : "Search is not available on this page yet.";
-
-      if (searchInput) {
-        searchInput.placeholder = placeholder;
-      }
-
-      if (searchQueryLabel) {
-        searchQueryLabel.textContent = placeholder;
-      }
-
-      if (searchTitle) {
-        searchTitle.textContent = title;
-      }
-
-      if (searchHint) {
-        searchHint.textContent = hint;
-      }
-
-      renderSearchResults(searchInput ? searchInput.value : "");
-    }
-
-    function setSearchOpen(isOpen) {
-      shell.dataset.searchOpen = isOpen ? "true" : "false";
-
-      if (searchButton) {
-        searchButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      }
-
-      if (isOpen) {
-        setDrawerOpen(false);
-        setFilterOpen(false);
-        updateSearchUi();
-
-        requestAnimationFrame(function () {
-          if (searchInput) {
-            searchInput.focus();
-            searchInput.select();
-          }
-        });
-      }
-    }
-
-    function setPagesExpanded(isExpanded) {
-      shell.dataset.pagesExpanded = isExpanded ? "true" : "false";
-
-      if (pagesButton) {
-        pagesButton.setAttribute("aria-expanded", isExpanded ? "true" : "false");
-      }
-
-      if (pagesButtonText) {
-        pagesButtonText.textContent = isExpanded ? "Hide" : "All";
-      }
-
-      if (currentPageCard) {
-        currentPageCard.setAttribute("aria-expanded", isExpanded ? "true" : "false");
-      }
-
-      updatePageOptionVisibility();
-    }
-
-    function updateCurrentPagePill() {
-      const page = pages[activePage] || pages[DEFAULT_PAGE];
-
-      if (currentPageTitle) {
-        currentPageTitle.textContent = page.label;
-      }
-
-      if (currentPageIcon) {
-        currentPageIcon.className = "repo-icon " + page.icon;
-        currentPageIcon.setAttribute("aria-hidden", "true");
-      }
-
-    }
-
-    function updateBottomNav() {
-      const activeIndex = Math.max(0, navButtons.findIndex(function (button) {
-        return button.dataset.page === activePage;
-      }));
-
-      navButtons.forEach(function (button, index) {
-        const isActive = button.dataset.page === activePage;
-
-        button.classList.toggle("is-active", isActive);
-        button.classList.toggle("is-group-end", index === activeIndex - 1);
-        button.classList.toggle("is-group-start", index === activeIndex + 1);
-
-        if (isActive) {
-          button.setAttribute("aria-current", "page");
-        } else {
-          button.removeAttribute("aria-current");
-        }
-      });
-    }
-
-    function updatePageOptionVisibility() {
-      const expanded = shell.dataset.pagesExpanded === "true";
-
-      pageOptions.forEach(function (row) {
-        row.hidden = !expanded || row.dataset.page === activePage;
-      });
-    }
-
-    function setActivePage(pageName) {
-      if (!pages[pageName]) {
-        return;
-      }
-
-      activePage = pageName;
-      shell.dataset.currentPage = pageName;
-      shell.dataset.page = pageName;
-
-      updateCurrentPagePill();
-      updateBottomNav();
-      updatePageOptionVisibility();
-      updateSearchUi();
-    }
-
-    if (menuButton) {
-      menuButton.addEventListener("click", function () {
-        setDrawerOpen(shell.dataset.drawerOpen !== "true");
-      });
-    }
-
-    if (backdropButton) {
-      backdropButton.addEventListener("click", function () {
-        setDrawerOpen(false);
-      });
-    }
-
-    if (filterButton) {
-      filterButton.addEventListener("click", function () {
-        setFilterOpen(shell.dataset.filterOpen !== "true");
-      });
-    }
-
-    if (filterClose) {
-      filterClose.addEventListener("click", function () {
-        setFilterOpen(false);
-      });
-    }
-
-    if (searchButton) {
-      searchButton.addEventListener("click", function () {
-        setSearchOpen(shell.dataset.searchOpen !== "true");
-      });
-    }
-
-    if (searchClose) {
-      searchClose.addEventListener("click", function () {
-        setSearchOpen(false);
-      });
-    }
-
-    if (searchInput) {
-      searchInput.addEventListener("input", function () {
-        renderSearchResults(searchInput.value);
-      });
-
-      searchInput.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-          setSearchOpen(false);
-        }
-      });
-    }
-
-    document.addEventListener("pointerdown", function (event) {
-      if (shell.dataset.searchOpen !== "true") {
-        return;
-      }
-
-      if (event.target.closest(".search-panel, .search-button")) {
-        return;
-      }
-
-      setSearchOpen(false);
-    }, true);
-
-    if (pagesButton) {
-      pagesButton.addEventListener("click", function () {
-        setPagesExpanded(shell.dataset.pagesExpanded !== "true");
-      });
-    }
-
-    if (currentPageCard) {
-      currentPageCard.addEventListener("click", function () {
-        setPagesExpanded(shell.dataset.pagesExpanded !== "true");
-      });
-    }
-
-    pageButtons.forEach(function (button) {
-      button.addEventListener("click", function (event) {
-        const pageName = button.dataset.page;
-
-        if (samePath(button.href)) {
-          event.preventDefault();
-          setActivePage(pageName);
-          setDrawerOpen(false);
-          setFilterOpen(false);
-        }
-
-        /*
-          Let real navigation happen without changing this page's active rail first.
-          Safari can restore that mutated DOM from bfcache when pressing Back.
-        */
-      });
-    });
-
-    window.FieldOpsSearchRefresh = function (page) {
-      if (page === activePage) {
-        updateSearchUi();
-      }
-    };
-
-    setDrawerOpen(false);
-    setFilterOpen(false);
-    setSearchOpen(false);
-    setPagesExpanded(false);
-    setActivePage(activePage);
-
-    window.addEventListener("pageshow", function () {
-      const resetPage = normalisePageKey(shell.dataset.page || shell.dataset.currentPage || activePage);
-
-      setActivePage(resetPage);
-      setDrawerOpen(false);
-      setFilterOpen(false);
-      setSearchOpen(false);
-    });
+    new ShellController(shell).boot();
   }
 
   if (document.readyState === "loading") {
