@@ -1,30 +1,32 @@
 /* ==========================================================================
-   FieldOps Atlas map-ui.js v1.1.3-shell-diagnostics
+   FieldOps Atlas map-ui.js
    Root file: FieldOpsAtlas/Features/Map/map-ui.js
+   Version: 1.1.4-clean-shell-loader-v11
 
    Purpose:
    - Keep map-app.js as the owner of map creation, region loading, markers,
      search data, selected-walk state, and GitHub write workflows.
    - Load the shared root shell from the map page because index.html still only
      calls map-app.js and map-ui.js.
-   - Show a persistent diagnostic badge because map-app.js can overwrite the
-     shared status toast during async map/region boot.
-   - Load the map shell guard after the root shell request.
+   - Load the bridge-only map shell guard after the root shell request.
    - Keep essential late UI bridge behaviours alive while the map shell is being
      handed over.
+   - Do not inject fallback shell UI.
+   - Do not show persistent diagnostics UI.
 
    Swift conversion note:
-   - This is deliberately controller-like and small.
-   - The old large late-helper file can move to archive once the shell handoff is
-     confirmed and the remaining panels are split into separate feature files.
+   - This file is deliberately controller-like and small.
+   - Shell owns shell chrome.
+   - Map owns map state.
+   - Guard only bridges events.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  var UI_VERSION = "1.1.3-shell-diagnostics";
-  var SHARED_SHELL_VERSION = "1.1.1-shell-v2.5-map-mount-fixes";
-  var MAP_SHELL_GUARD_VERSION = "1.1.1-map-shell-guard-v10";
+  var UI_VERSION = "1.1.4-clean-shell-loader-v11";
+  var SHARED_SHELL_VERSION = "1.1.1-shell-v2.6-map-button-events";
+  var MAP_SHELL_GUARD_VERSION = "1.1.1-map-shell-guard-v11";
 
   var loadedAssets = Object.create(null);
 
@@ -50,7 +52,10 @@
   }
 
   function on(target, eventName, callback, options) {
-    if (!target) return;
+    if (!target) {
+      return;
+    }
+
     target.addEventListener(eventName, callback, options || false);
   }
 
@@ -107,11 +112,13 @@
       link.rel = "stylesheet";
       link.href = cacheBust(href, version);
       link.dataset.fieldopsMapUiLoader = UI_VERSION;
+
       link.addEventListener("load", function () {
         resolve("loaded");
       }, { once: true });
+
       link.addEventListener("error", function () {
-        resolve("error: " + path);
+        resolve("error");
       }, { once: true });
 
       document.head.appendChild(link);
@@ -133,21 +140,36 @@
       script.src = cacheBust(src, version);
       script.defer = true;
       script.dataset.fieldopsMapUiLoader = UI_VERSION;
+
       script.addEventListener("load", function () {
         resolve("loaded");
       }, { once: true });
+
       script.addEventListener("error", function () {
-        resolve("error: " + path);
+        resolve("error");
       }, { once: true });
 
       document.body.appendChild(script);
     });
   }
 
+  function removeDiagnosticBadge() {
+    var badge = byId("fieldopsMapShellDiagnostics");
+
+    if (badge && badge.parentNode) {
+      badge.parentNode.removeChild(badge);
+    }
+
+    delete document.documentElement.dataset.mapUiDiagnostic;
+    delete document.documentElement.dataset.mapUiDiagnostics;
+  }
+
   function showToast(message) {
     var toast = byId("statusToast");
 
-    if (!toast) return;
+    if (!toast) {
+      return;
+    }
 
     toast.textContent = message;
     toast.classList.add("show", "is-visible");
@@ -156,56 +178,6 @@
     showToast._timer = window.setTimeout(function () {
       toast.classList.remove("show", "is-visible");
     }, 1800);
-  }
-
-  function diagnosticsBadge() {
-    var existing = byId("fieldopsMapShellDiagnostics");
-
-    if (existing) {
-      return existing;
-    }
-
-    var badge = document.createElement("div");
-
-    badge.id = "fieldopsMapShellDiagnostics";
-    badge.setAttribute("role", "status");
-    badge.style.position = "fixed";
-    badge.style.left = "12px";
-    badge.style.right = "12px";
-    badge.style.bottom = "calc(env(safe-area-inset-bottom, 0px) + 58px)";
-    badge.style.zIndex = "9000";
-    badge.style.padding = "9px 12px";
-    badge.style.border = "1px solid rgba(255, 207, 119, 0.48)";
-    badge.style.borderRadius = "16px";
-    badge.style.color = "rgba(255, 227, 173, 0.94)";
-    badge.style.background = "rgba(4, 14, 28, 0.82)";
-    badge.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.30), 0 0 10px rgba(255, 205, 95, 0.16)";
-    badge.style.font = "800 11px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif";
-    badge.style.letterSpacing = "0.03em";
-    badge.style.textAlign = "center";
-    badge.style.pointerEvents = "none";
-    badge.style.backdropFilter = "blur(10px)";
-    badge.style.webkitBackdropFilter = "blur(10px)";
-
-    document.body.appendChild(badge);
-    return badge;
-  }
-
-  function updateDiagnosticsBadge(message) {
-    var badge = diagnosticsBadge();
-
-    badge.textContent = "FieldOps " + message;
-    document.documentElement.dataset.mapUiDiagnostic = message;
-  }
-
-  function reportShellLoadStep(step, result) {
-    var message = "map-ui v1.1.3 Â· " + step + ": " + result;
-
-    updateDiagnosticsBadge(message);
-
-    if (window.console && typeof window.console.info === "function") {
-      window.console.info("FieldOps Atlas", message);
-    }
   }
 
   function getBridge() {
@@ -234,7 +206,9 @@
   }
 
   function setPanelVisible(panel, visible) {
-    if (!panel) return;
+    if (!panel) {
+      return;
+    }
 
     panel.hidden = false;
     panel.classList.toggle("is-hidden", !visible);
@@ -253,7 +227,10 @@
       "weatherModePanel",
       "fieldNotesPanel"
     ].forEach(function (id) {
-      if (id === exceptId) return;
+      if (id === exceptId) {
+        return;
+      }
+
       setPanelVisible(byId(id), false);
     });
   }
@@ -273,15 +250,15 @@
   }
 
   function openWeatherMode() {
+    var selected = getSelectedWalk();
+    var weatherButton = byId("weatherModeButton");
+
     closeOtherPanels("weatherModePanel");
     setPanelVisible(byId("weatherModePanel"), true);
 
-    var weatherButton = byId("weatherModeButton");
     if (weatherButton) {
       weatherButton.setAttribute("aria-pressed", "true");
     }
-
-    var selected = getSelectedWalk();
 
     if (selected) {
       setSelectedWeatherPending();
@@ -291,9 +268,10 @@
   }
 
   function closeWeatherMode() {
+    var weatherButton = byId("weatherModeButton");
+
     setPanelVisible(byId("weatherModePanel"), false);
 
-    var weatherButton = byId("weatherModeButton");
     if (weatherButton) {
       weatherButton.setAttribute("aria-pressed", "false");
     }
@@ -307,7 +285,7 @@
       : "No visible walks are loaded yet.";
 
     if (list) {
-      list.innerHTML = '<p class="visible-weather-empty">' + message + "</p>";
+      list.innerHTML = "<li>" + message + "</li>";
     }
 
     setText("weatherOverlayStatus", message);
@@ -326,7 +304,9 @@
     var panel = byId("infoPanel");
     var button = byId("expandInfoButton");
 
-    if (!panel) return;
+    if (!panel) {
+      return;
+    }
 
     panel.style.transform = "";
     panel.classList.remove("is-hidden", "is-dragging", "dragging", "is-collapsed");
@@ -351,12 +331,46 @@
     var panel = byId("infoPanel");
     var handle = byId("infoPanelDragTarget");
 
-    if (!panel || !handle || !window.PointerEvent) return;
+    if (!panel || !handle || !window.PointerEvent || handle.dataset.fieldopsMapUiDrag === UI_VERSION) {
+      return;
+    }
+
+    handle.dataset.fieldopsMapUiDrag = UI_VERSION;
 
     var drag = null;
 
+    function finishDrag(event) {
+      if (!drag || event.pointerId !== drag.pointerId) {
+        return;
+      }
+
+      var deltaY = drag.lastY - drag.startY;
+      var moved = drag.moved || Math.abs(deltaY) > 10;
+
+      try {
+        handle.releasePointerCapture(drag.pointerId);
+      } catch (error) {
+        /* Pointer capture can already be released by the browser. */
+      }
+
+      drag = null;
+      panel.classList.remove("is-dragging", "dragging");
+
+      if (!moved) {
+        return;
+      }
+
+      if (deltaY <= -28) {
+        setInfoPanelExpanded(true);
+      } else if (deltaY >= 28) {
+        setInfoPanelExpanded(false);
+      }
+    }
+
     on(handle, "pointerdown", function (event) {
-      if (!isPanelVisible(panel)) return;
+      if (!isPanelVisible(panel)) {
+        return;
+      }
 
       drag = {
         pointerId: event.pointerId,
@@ -370,7 +384,9 @@
     });
 
     on(handle, "pointermove", function (event) {
-      if (!drag || event.pointerId !== drag.pointerId) return;
+      if (!drag || event.pointerId !== drag.pointerId) {
+        return;
+      }
 
       drag.lastY = event.clientY;
 
@@ -381,30 +397,90 @@
 
     on(handle, "pointerup", finishDrag);
     on(handle, "pointercancel", finishDrag);
+  }
 
-    function finishDrag(event) {
-      if (!drag || event.pointerId !== drag.pointerId) return;
+  function setMapToolsOpen(open) {
+    var menu = byId("railToolsMenu");
+    var trigger = byId("railMapButton") || qs(".map-tools-trigger");
 
-      var deltaY = drag.lastY - drag.startY;
-      var moved = drag.moved || Math.abs(deltaY) > 10;
-
-      try {
-        handle.releasePointerCapture(drag.pointerId);
-      } catch (error) {
-        // Pointer capture can already be released by the browser.
-      }
-
-      drag = null;
-      panel.classList.remove("is-dragging", "dragging");
-
-      if (!moved) return;
-
-      if (deltaY <= -28) {
-        setInfoPanelExpanded(true);
-      } else if (deltaY >= 28) {
-        setInfoPanelExpanded(false);
-      }
+    if (!menu || !trigger) {
+      return;
     }
+
+    menu.hidden = !open;
+    menu.classList.toggle("is-open", !!open);
+    trigger.classList.toggle("is-active", !!open);
+    trigger.setAttribute("aria-expanded", open ? "true" : "false");
+
+    if (document.querySelector(".fieldops-shell-root")) {
+      document.querySelector(".fieldops-shell-root").dataset.mapToolsOpen = open ? "true" : "false";
+    }
+  }
+
+  function toggleMapTools() {
+    var menu = byId("railToolsMenu");
+
+    setMapToolsOpen(Boolean(menu && (menu.hidden || !menu.classList.contains("is-open"))));
+  }
+
+  function wireMapTools() {
+    var button = byId("railMapButton") || qs(".map-tools-trigger");
+    var menu = byId("railToolsMenu");
+
+    if (!button || !menu || button.dataset.fieldopsMapToolsBridge === UI_VERSION) {
+      return;
+    }
+
+    button.dataset.fieldopsMapToolsBridge = UI_VERSION;
+
+    on(button, "click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (typeof event.stopImmediatePropagation === "function") {
+        event.stopImmediatePropagation();
+      }
+
+      toggleMapTools();
+    }, true);
+
+    on(document, "click", function (event) {
+      var target = event.target;
+
+      if (!target || typeof target.closest !== "function") {
+        return;
+      }
+
+      if (
+        target.closest("#railToolsMenu") ||
+        target.closest("#railMapButton") ||
+        target.closest(".map-tools-trigger")
+      ) {
+        return;
+      }
+
+      setMapToolsOpen(false);
+    }, true);
+  }
+
+  function wireShellEvents() {
+    if (window.__fieldopsMapUiShellEventsVersion === UI_VERSION) {
+      return;
+    }
+
+    window.__fieldopsMapUiShellEventsVersion = UI_VERSION;
+
+    window.addEventListener("fieldops:shell-map-tools-toggle", function () {
+      toggleMapTools();
+    });
+
+    window.addEventListener("fieldops:shell-search-open", function () {
+      setMapToolsOpen(false);
+    });
+
+    window.addEventListener("fieldops:shell-filter-region", function () {
+      setMapToolsOpen(false);
+    });
   }
 
   function wireButtons() {
@@ -445,7 +521,7 @@
       "clearAllFieldNotesButton"
     ].forEach(function (id) {
       on(byId(id), "click", function () {
-        showToast("Map UI v1.1.3 shell diagnostics active");
+        showToast("Map UI active");
       });
     });
   }
@@ -459,33 +535,18 @@
     bridge.closeWeatherMode = closeWeatherMode;
     bridge.openFieldNotes = openFieldNotesPanel;
     bridge.closeFieldNotes = closeFieldNotesPanel;
+    bridge.toggleMapTools = toggleMapTools;
   }
 
   function loadShellAssets() {
-    updateDiagnosticsBadge("map-ui v1.1.3 Â· loading shell css");
-
     return loadStylesheet("../../../shell.css", SHARED_SHELL_VERSION)
-      .then(function (result) {
-        reportShellLoadStep("root css", result);
+      .then(function () {
         return loadScript("../../../shell.js", SHARED_SHELL_VERSION);
       })
-      .then(function (result) {
-        reportShellLoadStep("root js", result);
+      .then(function () {
         return loadScript("./map-shell-guard.js", MAP_SHELL_GUARD_VERSION);
       })
-      .then(function (result) {
-        reportShellLoadStep("guard js", result);
-
-        window.setTimeout(function () {
-          var shellReady = document.querySelector(".app-shell") &&
-            document.querySelector(".app-shell").dataset.shellReady;
-          var guardReady = document.documentElement.dataset.mapShellGuard || "not-ready";
-
-          updateDiagnosticsBadge(
-            "map-ui v1.1.3 Â· shell=" + (shellReady || "not-ready") + " Â· guard=" + guardReady
-          );
-        }, 1200);
-
+      .then(function () {
         window.dispatchEvent(new CustomEvent("fieldops:map-ui-shell-loader-ready", {
           detail: {
             version: UI_VERSION,
@@ -499,11 +560,14 @@
   function markBody() {
     document.documentElement.dataset.mapUiVersion = UI_VERSION;
     document.documentElement.dataset.mapUiShellLoader = "true";
-    document.documentElement.dataset.mapUiDiagnostics = "true";
+    document.documentElement.dataset.mapUiShellVersion = SHARED_SHELL_VERSION;
+    document.documentElement.dataset.mapUiGuardVersion = MAP_SHELL_GUARD_VERSION;
+    document.documentElement.dataset.mapUiDiagnostics = "false";
   }
 
   function boot() {
     markBody();
+    removeDiagnosticBadge();
     updateBridge();
 
     safe("shared shell loader", function () {
@@ -511,11 +575,10 @@
     });
 
     safe("button wiring", wireButtons);
+    safe("map tools wiring", wireMapTools);
+    safe("shell event bridge", wireShellEvents);
     safe("details panel drag", wireDetailsPanelDrag);
-
-    showToast("FieldOps Atlas map-ui v1.1.3 loaded");
-    updateDiagnosticsBadge("map-ui v1.1.3 loaded");
   }
 
   onReady(boot);
-})();
+}());
