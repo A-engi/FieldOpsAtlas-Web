@@ -1,21 +1,17 @@
 /* ==========================================================================
    FieldOps Atlas map shell shim
    Root file: FieldOpsAtlas/Features/Map/shell.css
-   Version: 1.1.1-map-shell-v2.4-full-top-fade-bridge
+   Version: 1.1.1-map-shell-v2.3-legacy-archived
 
    Purpose:
    - Archive/remove the old map-owned shell chrome.
-   - Keep the original map full top fade visual while the shared shell owns
-     burger, search, filter, drawer, and nav.
-   - Add map-only high-specificity overrides for the shared shell backdrop.
-   - Do not inject or recreate shell UI.
-   - Do not touch map data, regions, markers, Leaflet state, or walk selection.
+   - Keep only the original map top fade/ribbon visual.
+   - Let the shared root shell own burger, search, filter, drawer, and nav.
 
    Notes:
    - The old full map shell CSS has moved to:
      FieldOpsAtlas/Features/Map/archive/shell.legacy-v2.1-shared-top.css
-   - Map page layout stays in map-page.css.
-   - Shared chrome structure stays in root shell.css and shell.js.
+   - Map data, panels, regions, markers, and Leaflet styling stay outside this file.
    ========================================================================== */
 
 /* -------------------------------------------------------------------------- */
@@ -26,41 +22,14 @@
   --safe-top: env(safe-area-inset-top, 0px);
 
   --top-bar-height: 56px;
-  --top-bar-z-index: 5000;
-
-  --top-bar-padding-top: 8px;
-  --top-bar-padding-right: 12px;
-  --top-bar-padding-bottom: 8px;
-  --top-bar-padding-left: 12px;
-  --top-bar-gap: 12px;
-  --top-bar-menu-column-width: 48px;
-  --top-bar-filter-column-width: 48px;
-  --top-bar-control-height: 42px;
-  --top-bar-control-width: 44px;
-  --top-bar-control-radius: 14px;
-
-  --top-bar-bg-top: rgba(11, 35, 53, 1);
-  --top-bar-bg-mid: rgba(11, 35, 53, 1);
-  --top-bar-bg-bottom: rgba(11, 35, 53, 0.70);
-  --top-bar-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
-  --top-bar-blur: 14px;
-
   --top-fade-height: 90px;
   --top-ribbon-height: 30px;
+
   --top-ribbon-bg-top: rgba(11, 35, 53, 0.70);
   --top-ribbon-bg-bottom: rgba(11, 35, 53, 0.46);
   --top-fade-top: rgba(11, 35, 53, 0.42);
   --top-fade-mid: rgba(43, 132, 171, 0.24);
   --top-fade-bottom: rgba(7, 11, 18, 0);
-
-  --chrome-control-border: rgba(96, 235, 255, 0.62);
-  --chrome-control-bg: rgba(5, 17, 30, 0.90);
-  --chrome-control-bg-top: rgba(9, 24, 45, 0.94);
-  --chrome-control-bg-bottom: rgba(4, 14, 28, 0.92);
-  --chrome-control-glow:
-    0 0 0 1px rgba(96, 235, 255, 0.12),
-    0 0 18px rgba(96, 235, 255, 0.22),
-    0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -96,83 +65,6 @@
   white-space: nowrap;
   border: 0;
   clip: rect(0, 0, 0, 0);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Shared shell full top backdrop bridge                                      */
-/* -------------------------------------------------------------------------- */
-
-/*
-  The original top fade was two pieces:
-  1. a solid blurred .top-bar backdrop behind the controls;
-  2. the .top-bar-fade ribbon below the controls.
-
-  The shared shell replaces .top-bar with .top-shell, so this high-specificity
-  map-only selector restores the missing backdrop/glow without creating or
-  injecting fake chrome.
-*/
-html .fieldops-shell-root[data-page="map"] .top-shell {
-  z-index: 5002;
-  isolation: isolate;
-  overflow: visible;
-}
-
-html .fieldops-shell-root[data-page="map"] .top-shell::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: calc(var(--top-bar-height) + var(--safe-top));
-  background: linear-gradient(
-    180deg,
-    var(--top-bar-bg-top) 0%,
-    var(--top-bar-bg-mid) 54%,
-    var(--top-bar-bg-bottom) 100%
-  );
-  box-shadow: var(--top-bar-shadow);
-  -webkit-backdrop-filter: blur(var(--top-bar-blur));
-  backdrop-filter: blur(var(--top-bar-blur));
-  pointer-events: none;
-}
-
-html .fieldops-shell-root[data-page="map"] .top-shell::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  bottom: -3px;
-  left: 0;
-  height: 22px;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(96, 235, 255, 0.18), transparent 68%),
-    linear-gradient(180deg, rgba(11, 35, 53, 0.38), rgba(11, 35, 53, 0));
-  pointer-events: none;
-}
-
-html .fieldops-shell-root[data-page="map"] .button-surface {
-  border-color: var(--chrome-control-border);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.12), transparent 36%),
-    linear-gradient(180deg, var(--chrome-control-bg-top), var(--chrome-control-bg-bottom));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    var(--chrome-control-glow);
-}
-
-html .fieldops-shell-root[data-page="map"] .bottom-shell::before {
-  right: 0;
-  bottom: calc((var(--bottom-lift) + var(--safe-bottom)) * -1);
-  left: 0;
-  height: calc(var(--nav-height) + var(--bottom-lift) + var(--safe-bottom) + 42px);
-  background: linear-gradient(
-    180deg,
-    rgba(8, 29, 52, 0) 0%,
-    rgba(8, 29, 52, 0.72) 18%,
-    rgba(8, 29, 52, 0.94) 44%,
-    rgba(13, 41, 71, 1) 100%
-  );
 }
 
 /* -------------------------------------------------------------------------- */
