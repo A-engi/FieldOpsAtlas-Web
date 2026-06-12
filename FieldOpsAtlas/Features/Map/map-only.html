@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en" data-page="map-only">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#061426">
+  <title>FieldOps Atlas · Map only</title>
+
+  <!-- Map library only. No page chrome, drawer, RF nav, or shared app frame. -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+  <style>
+    /* ==========================================================================
+       FieldOps Atlas map-only.html
+       Root file: FieldOpsAtlas/Features/Map/map-only.html
+       Version: 1.1.0-actual-map-only
+
+       Purpose:
+       - Isolated actual map runner.
+       - Loads Leaflet and map-app.js only.
+       - Keeps map-owned panels/links needed by map-app.js:
+         region filter, marker/walk details, map settings, add/edit walk,
+         add/manage region, legend, fit/reload controls.
+       - Does not load shared app frame assets, RF/nav tabs, drawer,
+         search chrome, or app top/bottom bars.
+       ========================================================================== */
+
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --page-width: 430px;
+
+      --text: rgba(255, 255, 255, 0.94);
+      --text-soft: rgba(226, 241, 255, 0.78);
+      --text-muted: rgba(226, 241, 255, 0.62);
+
+      --gold: #edbf63;
+      --gold-soft: #ffdda0;
+      --gold-line: rgba(237, 191, 99, 0.36);
+
+      --blue-line: rgba(94, 208, 255, 0.32);
+      --panel-bg:
+        radial-gradient(circle at 18% 0%, rgba(94, 208, 255, 0.13), transparent 34%),
+        linear-gradient(180deg, rgba(9, 29, 52, 0.97), rgba(5, 18, 32, 0.98));
+      --control-bg:
+        radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(16, 43, 73, 0.97), rgba(12, 35, 61, 0.97));
+
+      --shadow-panel:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 18px 38px rgba(0, 0, 0, 0.38);
+
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 9px;
+
+      --map-side: 7px;
+      --map-top: calc(var(--safe-top) + 8px);
+      --map-bottom: calc(var(--safe-bottom) + 8px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(35, 97, 145, 0.34), transparent 44%),
+        linear-gradient(180deg, #07172a, #020812);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .map-only-shell {
+      position: fixed;
+      inset: 0;
+      width: min(100vw, var(--page-width));
+      margin-inline: auto;
+      overflow: hidden;
+      background: #061426;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #061426;
+    }
+
+    .leaflet-container {
+      width: 100%;
+      height: 100%;
+      background: #061426;
+      font: inherit;
+    }
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      color: var(--text);
+      background: rgba(7, 22, 40, 0.98);
+      border: 1px solid rgba(255, 221, 160, 0.28);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .leaflet-popup-content {
+      margin: 12px;
+      min-width: 190px;
+    }
+
+    .leaflet-control-zoom a {
+      color: var(--gold-soft) !important;
+      background: rgba(9, 29, 52, 0.96) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .map-only-controls {
+      position: absolute;
+      z-index: 20;
+      top: var(--map-top);
+      right: var(--map-side);
+      left: var(--map-side);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+      pointer-events: none;
+    }
+
+    .map-only-controls > * {
+      pointer-events: auto;
+    }
+
+    .map-only-button,
+    .panel-button,
+    .popup-button,
+    .region-filter-button,
+    .region-edit-button,
+    .search-suggestion,
+    .legend-button {
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 38px;
+      border: 1px solid rgba(42, 67, 93, 0.72);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      background: var(--control-bg);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 8px 18px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .map-only-button {
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.02em;
+    }
+
+    .map-only-button.is-gold {
+      color: var(--gold-soft);
+      border-color: rgba(237, 191, 99, 0.64);
+    }
+
+    .map-only-status {
+      position: absolute;
+      z-index: 40;
+      right: var(--map-side);
+      bottom: calc(var(--safe-bottom) + 12px);
+      left: var(--map-side);
+      min-height: 34px;
+      padding: 9px 12px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 221, 160, 0.30);
+      border-radius: 14px;
+      color: var(--text-soft);
+      background: rgba(6, 18, 34, 0.82);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+      pointer-events: none;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .map-only-status.show,
+    .map-only-status.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .top-filter-menu,
+    .search-suggestions {
+      position: absolute;
+      z-index: 30;
+      top: calc(var(--map-top) + 46px);
+      right: var(--map-side);
+      left: var(--map-side);
+      padding: 10px;
+      border: 1px solid var(--gold-line);
+      border-radius: var(--radius-lg);
+      background: var(--panel-bg);
+      box-shadow: var(--shadow-panel);
+    }
+
+    .top-filter-menu.is-open,
+    .search-suggestions.is-open {
+      display: grid;
+      gap: 8px;
+    }
+
+    .top-filter-menu:not(.is-open),
+    .search-suggestions:not(.is-open) {
+      display: none;
+    }
+
+    .search-shell {
+      position: absolute;
+      z-index: 22;
+      top: calc(var(--map-top) + 46px);
+      right: var(--map-side);
+      left: var(--map-side);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      pointer-events: none;
+    }
+
+    .search-shell input {
+      min-height: 42px;
+      padding: 0 12px;
+      color: var(--text);
+      border: 1px solid rgba(94, 208, 255, 0.22);
+      border-radius: 12px;
+      background: rgba(4, 15, 29, 0.80);
+      outline: 0;
+      pointer-events: auto;
+    }
+
+    .search-suggestions {
+      top: calc(var(--map-top) + 94px);
+    }
+
+    .search-suggestion {
+      width: 100%;
+      padding: 9px 10px;
+      display: grid;
+      gap: 3px;
+      text-align: left;
+    }
+
+    .search-suggestion__title {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 850;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .search-suggestion__meta {
+      overflow: hidden;
+      color: var(--text-muted);
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .region-tree-list,
+    .region-filter-list,
+    .region-list,
+    .assign-walks-list,
+    .region-legend {
+      display: grid;
+      gap: 8px;
+    }
+
+    .region-tree-list {
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    .region-filter-button,
+    .region-edit-button,
+    .legend-button {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .region-swatch,
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 999px;
+      background: var(--region-colour, var(--gold));
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
+    }
+
+    .region-legend {
+      position: absolute;
+      z-index: 18;
+      right: var(--map-side);
+      bottom: calc(var(--safe-bottom) + 56px);
+      left: var(--map-side);
+      max-height: 118px;
+      padding: 10px;
+      overflow: auto;
+      border: 1px solid rgba(94, 208, 255, 0.22);
+      border-radius: var(--radius-lg);
+      background: rgba(4, 15, 29, 0.72);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
+    }
+
+    .map-panel {
+      position: absolute;
+      z-index: 50;
+      right: var(--map-side);
+      left: var(--map-side);
+      max-height: min(78vh, 680px);
+      overflow: auto;
+      color: var(--text);
+      border: 1px solid var(--gold-line);
+      border-radius: var(--radius-lg);
+      background: var(--panel-bg);
+      box-shadow: var(--shadow-panel);
+    }
+
+    .map-panel.is-hidden {
+      display: none;
+    }
+
+    .map-panel.is-open {
+      display: block;
+    }
+
+    .map-panel--top {
+      top: calc(var(--safe-top) + 96px);
+    }
+
+    .info-panel {
+      bottom: calc(var(--safe-bottom) + 178px);
+      max-height: min(50vh, 420px);
+    }
+
+    .panel-head,
+    .panel-section,
+    .panel-actions,
+    .form-grid {
+      padding: 12px;
+    }
+
+    .panel-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-title,
+    .panel-head h2,
+    .panel-head h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .panel-subtitle,
+    .panel-copy,
+    .muted {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .panel-close {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--gold-soft);
+    }
+
+    .panel-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel-section + .panel-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-section h3,
+    .panel-section h4 {
+      margin: 0;
+      color: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .detail-card {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .detail-label {
+      margin: 0 0 5px;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      margin: 0;
+      overflow-wrap: anywhere;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .info-panel-body {
+      display: grid;
+      gap: 10px;
+    }
+
+    .services-list,
+    .alerts-list,
+    .notes-list {
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .services-list li,
+    .alerts-list li,
+    .notes-list li {
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-soft);
+      font-size: 12px;
+    }
+
+    .panel-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-actions--three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel-button,
+    .popup-button {
+      min-height: 38px;
+      padding: 0 10px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .panel-button.is-danger {
+      color: #ffb3c2;
+      border-color: rgba(255, 75, 110, 0.45);
+    }
+
+    .panel-button.is-gold,
+    .popup-button.is-gold {
+      color: var(--gold-soft);
+      border-color: rgba(237, 191, 99, 0.64);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .form-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .form-field label,
+    .form-label {
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      min-height: 40px;
+      padding: 9px 10px;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      outline: 0;
+    }
+
+    .form-field textarea {
+      min-height: 84px;
+      resize: vertical;
+    }
+
+    .assign-walks-section {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .assign-walks-section:not(.is-open) {
+      display: none;
+    }
+
+    .global-operation-overlay {
+      position: absolute;
+      z-index: 80;
+      inset: calc(var(--safe-top) + 76px) var(--map-side) calc(var(--safe-bottom) + 76px);
+      padding: 14px;
+      overflow: auto;
+      border: 1px solid var(--gold-line);
+      border-radius: var(--radius-lg);
+      background: var(--panel-bg);
+      box-shadow: var(--shadow-panel);
+    }
+
+    .global-operation-overlay h2 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .startup-region-list {
+      margin: 12px 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .startup-region-button {
+      min-height: 44px;
+      border: 1px solid rgba(237, 191, 99, 0.42);
+      border-radius: 12px;
+      color: var(--text);
+      background: var(--control-bg);
+      font-weight: 850;
+    }
+
+    .operation-locked #map {
+      filter: saturate(0.72) brightness(0.72);
+    }
+
+    .map-fatal {
+      position: absolute;
+      z-index: 100;
+      inset: 14px;
+      padding: 14px;
+      display: grid;
+      place-items: center;
+      color: #ffd6df;
+      text-align: center;
+      border: 1px solid rgba(255, 75, 110, 0.48);
+      border-radius: var(--radius-lg);
+      background: rgba(24, 5, 15, 0.92);
+      box-shadow: var(--shadow-panel);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="map-only-shell" aria-label="Actual map only">
+    <div id="map" aria-label="FieldOps Atlas map"></div>
+
+    <div class="map-only-controls" aria-label="Map controls only">
+      <button id="fitMapBtn" class="map-only-button is-gold" type="button" aria-expanded="false">
+        Map
+      </button>
+      <button id="fitVisibleWalksButton" class="map-only-button" type="button">
+        Fit
+      </button>
+      <button class="map-only-button" type="button" data-open-panel="filterPanel">
+        Regions
+      </button>
+      <button class="map-only-button" type="button" data-open-panel="settingsPanel">
+        Settings
+      </button>
+    </div>
+
+    <section id="topFilterMenu" class="top-filter-menu" hidden aria-label="Map quick actions">
+      <button id="topSelectRegionButton" class="panel-button is-gold" type="button" aria-expanded="false">
+        Select region
+      </button>
+      <button class="panel-button" type="button" data-open-panel="regionPanel">
+        Manage regions
+      </button>
+      <button class="panel-button" type="button" data-open-panel="addPanel">
+        Add walk
+      </button>
+      <button id="reloadDataButton" class="panel-button" type="button">
+        Reload data
+      </button>
+
+      <div id="topRegionTree" class="region-tree" hidden>
+        <div id="topRegionTreeList" class="region-tree-list"></div>
+      </div>
+
+      <p id="topActiveRegionText" class="muted">No region selected.</p>
+    </section>
+
+    <div class="search-shell" aria-label="Walk search">
+      <input
+        id="walkSearch"
+        type="search"
+        autocomplete="off"
+        placeholder="Find walk on map"
+        aria-label="Find walk on map"
+      >
+    </div>
+    <div id="searchSuggestions" class="search-suggestions" role="listbox"></div>
+
+    <aside id="regionLegend" class="region-legend" aria-label="Region legend"></aside>
+
+    <aside id="infoPanel" class="map-panel info-panel is-hidden" aria-hidden="true">
+      <header id="infoPanelDragTarget" class="panel-head panel-drag-target">
+        <div>
+          <p class="panel-subtitle">Walk details</p>
+          <h2 id="selectedWalkName">No walk selected</h2>
+          <p id="selectedWalkSubtitle" class="panel-subtitle">-</p>
+        </div>
+        <button id="closeInfoButton" class="panel-close map-only-button" type="button" aria-label="Close walk details">
+          ×
+        </button>
+      </header>
+
+      <div id="infoPanelBody" class="info-panel-body">
+        <section class="panel-section">
+          <h3>Walk details</h3>
+          <div class="detail-grid">
+            <div class="detail-card">
+              <p class="detail-label">Grid ref</p>
+              <p id="selectedWalkGrid" class="detail-value">-</p>
+              <button id="copyGridButton" class="panel-button" type="button">Copy</button>
+            </div>
+            <div class="detail-card">
+              <p class="detail-label">What3Words</p>
+              <p id="selectedWalkW3W" class="detail-value">-</p>
+              <button id="copyW3WButton" class="panel-button" type="button">Copy</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h3>Services</h3>
+          <ul id="selectedWalkServices" class="services-list">
+            <li>No services loaded.</li>
+          </ul>
+        </section>
+
+        <section class="panel-section">
+          <h3>Access notes</h3>
+          <p id="selectedWalkNotes" class="panel-copy">-</p>
+        </section>
+
+        <section class="panel-section">
+          <h3>Map weather notes</h3>
+          <div class="detail-grid">
+            <div class="detail-card">
+              <p class="detail-label">Forecast</p>
+              <p id="selectedWalkPressureMemo" class="detail-value">Select a walk.</p>
+            </div>
+            <div class="detail-card">
+              <p class="detail-label">Wind</p>
+              <p id="selectedWalkWindMemo" class="detail-value">Select a walk.</p>
+            </div>
+            <div class="detail-card">
+              <p class="detail-label">Lightning</p>
+              <p id="selectedWalkLightningMemo" class="detail-value">Select a walk.</p>
+            </div>
+            <div class="detail-card">
+              <p class="detail-label">Power</p>
+              <p id="selectedWalkPowerCompany" class="detail-value">Select a walk.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="panel-actions">
+        <button id="expandInfoButton" class="panel-button" type="button" aria-expanded="false">
+          Expand
+        </button>
+        <button id="editSelectedButton" class="panel-button is-gold" type="button">
+          Edit
+        </button>
+      </div>
+    </aside>
+
+    <aside id="settingsPanel" class="map-panel map-panel--top is-hidden" aria-hidden="true">
+      <header class="panel-head">
+        <div>
+          <p class="panel-subtitle">Settings</p>
+          <h2>Map GitHub settings</h2>
+        </div>
+        <button id="closeSettingsButton" class="panel-close map-only-button" type="button" aria-label="Close settings">
+          ×
+        </button>
+      </header>
+
+      <div class="form-grid">
+        <label class="form-field">
+          <span>GitHub token</span>
+          <input id="githubTokenInput" type="password" autocomplete="off" placeholder="Token stored only in this browser">
+        </label>
+
+        <label class="form-field">
+          <span>Write online</span>
+          <input id="workOnlineToggle" type="checkbox">
+        </label>
+
+        <p class="panel-copy">
+          Work online currently writes region settings only; walk files stay region-loaded.
+        </p>
+      </div>
+
+      <div class="panel-actions panel-actions--three">
+        <button id="saveGithubTokenButton" class="panel-button is-gold" type="button">
+          Save
+        </button>
+        <button id="clearLocalButton" class="panel-button is-danger" type="button">
+          Clear local edits
+        </button>
+        <button class="panel-button" type="button" data-close-panel="settingsPanel">
+          Close
+        </button>
+      </div>
+    </aside>
+
+    <aside id="addPanel" class="map-panel map-panel--top is-hidden" aria-hidden="true">
+      <header class="panel-head">
+        <div>
+          <p class="panel-subtitle">Walks</p>
+          <h2 id="walkPanelTitle">Add walk</h2>
+        </div>
+        <button id="closeAddPanelButton" class="panel-close map-only-button" type="button" aria-label="Close walk panel">
+          ×
+        </button>
+      </header>
+
+      <div class="form-grid">
+        <label class="form-field">
+          <span>Walk name</span>
+          <input id="walkNameInput" type="text" autocomplete="off">
+        </label>
+
+        <label class="form-field">
+          <span>Coordinates</span>
+          <input id="walkCoordsInput" type="text" inputmode="decimal" placeholder="lat, lng">
+        </label>
+
+        <label class="form-field">
+          <span>Region</span>
+          <select id="walkRegionSelect"></select>
+        </label>
+
+        <label class="form-field">
+          <span>Access notes</span>
+          <textarea id="walkNotesInput"></textarea>
+        </label>
+
+        <button id="addRegionFromWalkButton" class="panel-button" type="button">
+          Add region
+        </button>
+      </div>
+
+      <div class="panel-actions panel-actions--three">
+        <button id="saveWalkButton" class="panel-button is-gold" type="button">
+          Save walk
+        </button>
+        <button id="deleteEditingWalkButton" class="panel-button is-danger" type="button">
+          Delete walk
+        </button>
+        <button id="cancelEditButton" class="panel-button" type="button">
+          Cancel
+        </button>
+      </div>
+    </aside>
+
+    <aside id="regionPanel" class="map-panel map-panel--top is-hidden" aria-hidden="true">
+      <header class="panel-head">
+        <div>
+          <p class="panel-subtitle">Regions</p>
+          <h2>Add / manage region</h2>
+        </div>
+        <button id="closeRegionPanelButton" class="panel-close map-only-button" type="button" aria-label="Close region panel">
+          ×
+        </button>
+      </header>
+
+      <div class="form-grid">
+        <label class="form-field">
+          <span>Region name</span>
+          <input id="regionNameInput" type="text" autocomplete="off">
+        </label>
+
+        <label class="form-field">
+          <span>Pin colour</span>
+          <input id="regionColorInput" type="color" value="#64748b">
+        </label>
+
+        <label class="form-field">
+          <span>Region notes</span>
+          <textarea id="regionNotesInput"></textarea>
+        </label>
+
+        <button id="toggleAssignWalksSectionButton" class="panel-button" type="button">
+          Add walks to region
+        </button>
+
+        <section id="assignWalksSection" class="assign-walks-section">
+          <p class="panel-copy">Tick walks and move them into the selected region.</p>
+          <div id="assignWalksList" class="assign-walks-list"></div>
+          <button id="saveWalkAssignmentsButton" class="panel-button is-gold" type="button">
+            Assign selected
+          </button>
+        </section>
+      </div>
+
+      <section class="panel-section">
+        <h3>Current regions</h3>
+        <p class="panel-copy">Edit or delete existing region buckets.</p>
+        <div id="regionList" class="region-list"></div>
+      </section>
+
+      <div class="panel-actions panel-actions--three">
+        <button id="saveRegionButton" class="panel-button is-gold" type="button">
+          Save region
+        </button>
+        <button id="deleteRegionButton" class="panel-button is-danger" type="button">
+          Delete region
+        </button>
+        <button id="cancelRegionEditButton" class="panel-button" type="button">
+          New
+        </button>
+      </div>
+    </aside>
+
+    <aside id="filterPanel" class="map-panel map-panel--top is-hidden" aria-hidden="true">
+      <header class="panel-head">
+        <div>
+          <p class="panel-subtitle">Filter</p>
+          <h2>Select region</h2>
+        </div>
+        <button id="closeFilterPanelButton" class="panel-close map-only-button" type="button" aria-label="Close filter panel">
+          ×
+        </button>
+      </header>
+
+      <section class="panel-section">
+        <p class="panel-copy">Clear regions hides pins until another region is selected.</p>
+        <div id="regionFilterList" class="region-filter-list"></div>
+      </section>
+
+      <div class="panel-actions panel-actions--three">
+        <button id="applyRegionFilterButton" class="panel-button is-gold" type="button">
+          Apply
+        </button>
+        <button id="showDemoPinsButton" class="panel-button" type="button">
+          Show demo pins
+        </button>
+        <button id="clearRegionFilterButton" class="panel-button is-danger" type="button">
+          Clear regions
+        </button>
+      </div>
+    </aside>
+
+    <div id="statusToast" class="map-only-status" role="status" aria-live="polite"></div>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+  <script src="./map-app.js?v=1.1.1-map-only"></script>
+</body>
+</html>
