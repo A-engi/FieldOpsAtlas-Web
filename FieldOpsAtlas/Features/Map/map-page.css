@@ -1,69 +1,32 @@
-Top-bar fade removal blocks
-===========================
-
-These are the full top-bar-related blocks to remove from the current repo files.
-I did not include the bottom bar block here.
+Top and bottom bar fade code to remove
+=====================================
 
 File: FieldOpsAtlas/Features/Map/index.html
 Remove this whole line:
+
 <div id="topBarFade" class="top-bar-fade" aria-hidden="true"></div>
 
 
 File: FieldOpsAtlas/Features/Map/map-page.css
-Replace the file header with this clean header:
+Remove the top-bar variables from :root:
 
-/* FieldOps Atlas map-page.css v1.1.1-map-page-clean
- Map page layout owner.
-
- Ownership:
- - page reset and map canvas
- - Leaflet layer positioning
- - weather button and weather/field-notes panels
- - selected walk/detail panel positioning and theme
- - map page form/layout helpers, legend, toast, and local overlays
-
- Clean rules:
- - map-page.css owns map layout and map panels
- - shell.css owns map shell compatibility only
- - no shared root shell chrome ownership
- - no region/data JSON edits
- */
+--top-bar-bg-top: rgba(11, 35, 53, 1);
+--top-bar-bg-mid: rgba(11, 35, 53, 1);
+--top-bar-bg-bottom: rgba(11, 35, 53, 0.70);
+--top-bar-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+--top-bar-blur: 14px;
+--map-top-fade-height: 90px;
+--map-top-ribbon-height: 30px;
+--map-top-ribbon-bg-top: rgba(11, 35, 53, 0.70);
+--map-top-ribbon-bg-bottom: rgba(11, 35, 53, 0.46);
+--map-top-fade-top: rgba(11, 35, 53, 0.42);
+--map-top-fade-mid: rgba(43, 132, 171, 0.24);
+--map-top-fade-bottom: rgba(7, 11, 18, 0);
 
 
-Remove these top-bar visual variables from :root:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full top shell visual block:
 
-  --top-bar-bg-top: rgba(11, 35, 53, 1);
-  --top-bar-bg-mid: rgba(11, 35, 53, 1);
-  --top-bar-bg-bottom: rgba(11, 35, 53, 0.70);
-  --top-bar-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
-  --top-bar-blur: 14px;
-
-  --map-top-fade-height: 90px;
-  --map-top-ribbon-height: 30px;
-  --map-top-ribbon-bg-top: rgba(11, 35, 53, 0.70);
-  --map-top-ribbon-bg-bottom: rgba(11, 35, 53, 0.46);
-  --map-top-fade-top: rgba(11, 35, 53, 0.42);
-  --map-top-fade-mid: rgba(43, 132, 171, 0.24);
-  --map-top-fade-bottom: rgba(7, 11, 18, 0);
-
-
-Remove this whole top-shell backdrop block:
-
-/* -------------------------------------------------------------------------- */
-/* Shared shell map-only visual tuning                                         */
-/* -------------------------------------------------------------------------- */
-
-/*
-  Map is full-bleed under the shared shell. RF-style content spacing does not
-  apply, because the map needs to remain behind the chrome.
-
-  The top backdrop belongs visually to the shared top shell, but the style is
-  map-only, so the override lives in this map page stylesheet.
-
-  Important: keep the solid top backdrop on .top-shell itself. The previous
-  pseudo-element approach used z-index:-1 and could disappear behind shell/map
-  stacking layers. The lower ribbon remains the existing .top-bar-fade element.
-*/
 html .fieldops-shell-root[data-page="map"] .top-shell,
 html .fieldops-shell-root[data-current-page="map"] .top-shell {
   isolation: isolate !important;
@@ -81,13 +44,9 @@ html .fieldops-shell-root[data-current-page="map"] .top-shell {
 }
 
 
-Remove this whole top-shell pseudo block:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full pseudo-element block:
 
-/*
-  Disable the shared root shell's map glow patch and this file's old
-  pseudo-fade path. The app already has the separate .top-bar-fade ribbon in
-  the map DOM; duplicating it here makes the stack fragile.
-*/
 html .fieldops-shell-root[data-page="map"] .top-shell::before,
 html .fieldops-shell-root[data-current-page="map"] .top-shell::before,
 html .fieldops-shell-root[data-page="map"] .top-shell::after,
@@ -97,7 +56,8 @@ html .fieldops-shell-root[data-current-page="map"] .top-shell::after {
 }
 
 
-Remove this whole top-shell child stacking block:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full top-shell child block:
 
 html .fieldops-shell-root[data-page="map"] .top-shell > *,
 html .fieldops-shell-root[data-current-page="map"] .top-shell > * {
@@ -106,9 +66,9 @@ html .fieldops-shell-root[data-current-page="map"] .top-shell > * {
 }
 
 
-Remove this whole top-shell button styling block:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full top button visual block:
 
-/* Keep the buttons/search matching the approved preview without adding a second shell. */
 html .fieldops-shell-root[data-page="map"] :is(.top-shell .icon-button, .top-shell .search-button),
 html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button, .top-shell .search-button) {
   height: var(--top-control-height);
@@ -140,21 +100,18 @@ html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button:a
 }
 
 
-Remove this whole top-bar ribbon block:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full top-bar ribbon block:
 
-/*
-  The old map DOM still contains .top-bar-fade. Treat it as the lower ribbon
-  only. Keep it above the map and below the top shell controls.
-*/
 .top-bar-fade {
   z-index: 5001;
   top: calc(56px + var(--safe-top) - 2px);
 }
 
 
-Keep this block. This is the bottom bar fade location:
+File: FieldOpsAtlas/Features/Map/map-page.css
+Remove this full bottom bar backing block:
 
-/* Bottom fade stays map-specific. It backs the nav without changing map state. */
 html .fieldops-shell-root[data-page="map"] .bottom-shell,
 html .fieldops-shell-root[data-current-page="map"] .bottom-shell {
   isolation: isolate;
@@ -179,3 +136,4 @@ html .fieldops-shell-root[data-current-page="map"] .bottom-shell::before {
     );
   pointer-events: none;
 }
+p
