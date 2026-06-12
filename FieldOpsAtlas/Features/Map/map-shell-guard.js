@@ -1,37 +1,39 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.2-retire-map-legacy-shell
+   Version: 1.1.3-force-retire-map-legacy-shell
 
    Purpose:
    - Bridge shared shell events into the map-owned UI/state.
-   - Retire duplicate legacy Map chrome once the shared root shell is loaded.
+   - Force-retire duplicate legacy Map chrome after the shared root shell loads.
    - Register visible map walks with FieldOpsSearch.
    - Protect shell chrome clicks from broad map document handlers.
    - Do not change map data, region JSON, markers, Leaflet state, or walk files.
 
    Notes:
-   - The old Map fade is deliberately not retired here.
-   - Legacy nodes are hidden, not deleted, so older map code can still query ids.
+   - Legacy chrome is hidden by broad selector and inline style.
+   - Legacy nodes are hidden, not removed, so older map code can still query ids.
    ============================================================================ */
 
 (function fieldOpsMapShellGuard() {
   "use strict";
 
-  const VERSION = "1.1.2-retire-map-legacy-shell";
-  const WORK_ONLINE_KEY = "fieldops-atlas-work-online";
-  const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
+  var VERSION = "1.1.3-force-retire-map-legacy-shell";
+  var WORK_ONLINE_KEY = "fieldops-atlas-work-online";
+  var MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
 
-  const LEGACY_CHROME_SELECTORS = [
-    ".app-shell > .top-bar",
-    ".app-shell > #topFilterMenu",
-    ".app-shell > #menuOverlay",
-    ".app-shell > #sideMenu",
-    ".app-shell > .side-rail",
-    ".app-shell > #railToolsMenu"
+  var LEGACY_CHROME_SELECTORS = [
+    ".top-bar",
+    "#topBarFade",
+    "#topFilterMenu",
+    "#topRegionTree",
+    "#menuOverlay",
+    "#sideMenu",
+    ".side-rail",
+    "#railToolsMenu"
   ];
 
-  const CHROME_ROOT_SELECTORS = [
+  var CHROME_ROOT_SELECTORS = [
     ".top-shell",
     ".drawer",
     ".filter-panel",
@@ -40,7 +42,7 @@
     ".map-tools-panel"
   ];
 
-  const MAP_DELEGATED_ACTION_SELECTOR = [
+  var MAP_DELEGATED_ACTION_SELECTOR = [
     "[data-action][data-walk]",
     "[data-search-walk]",
     "[data-region-filter]",
@@ -51,10 +53,14 @@
     "[data-map-tool-action]"
   ].join(",");
 
-  const boundChromeRoots = new WeakSet();
+  var boundChromeRoots = new WeakSet();
 
   function byId(id) {
     return document.getElementById(id);
+  }
+
+  function qsa(selector, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
   }
 
   function isElement(value) {
@@ -63,11 +69,10 @@
 
   function dispatchMapShellState(name, detail) {
     window.dispatchEvent(new CustomEvent(name, {
-      detail: {
+      detail: Object.assign({
         page: "map",
-        version: VERSION,
-        ...(detail || {})
-      }
+        version: VERSION
+      }, detail || {})
     }));
   }
 
@@ -77,48 +82,67 @@
     }
   }
 
+  function forceHide(element) {
+    if (!element) {
+      return;
+    }
+
+    element.dataset.fieldopsLegacyShellRetired = VERSION;
+    element.setAttribute("aria-hidden", "true");
+    element.hidden = true;
+    element.classList.remove("is-open", "open", "active", "is-active");
+    element.style.setProperty("display", "none", "important");
+    element.style.setProperty("visibility", "hidden", "important");
+    element.style.setProperty("pointer-events", "none", "important");
+  }
+
   function injectLegacyRetireStyles() {
     if (byId("fieldopsMapLegacyShellRetireStyle")) {
       return;
     }
 
-    const style = document.createElement("style");
+    var style = document.createElement("style");
     style.id = "fieldopsMapLegacyShellRetireStyle";
-    style.textContent = `
-      html[data-map-legacy-shell="retired"] .app-shell > .top-bar,
-      html[data-map-legacy-shell="retired"] .app-shell > #topFilterMenu,
-      html[data-map-legacy-shell="retired"] .app-shell > #menuOverlay,
-      html[data-map-legacy-shell="retired"] .app-shell > #sideMenu,
-      html[data-map-legacy-shell="retired"] .app-shell > .side-rail,
-      html[data-map-legacy-shell="retired"] .app-shell > #railToolsMenu {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-      }
-    `;
+    style.textContent = [
+      'html[data-map-legacy-shell="retired"] .top-bar',
+      'html[data-map-legacy-shell="retired"] #topBarFade',
+      'html[data-map-legacy-shell="retired"] #topFilterMenu',
+      'html[data-map-legacy-shell="retired"] #topRegionTree',
+      'html[data-map-legacy-shell="retired"] #menuOverlay',
+      'html[data-map-legacy-shell="retired"] #sideMenu',
+      'html[data-map-legacy-shell="retired"] .side-rail',
+      'html[data-map-legacy-shell="retired"] #railToolsMenu',
+      '.top-bar[data-fieldops-legacy-shell-retired]',
+      '#topBarFade[data-fieldops-legacy-shell-retired]',
+      '#topFilterMenu[data-fieldops-legacy-shell-retired]',
+      '#topRegionTree[data-fieldops-legacy-shell-retired]',
+      '#menuOverlay[data-fieldops-legacy-shell-retired]',
+      '#sideMenu[data-fieldops-legacy-shell-retired]',
+      '.side-rail[data-fieldops-legacy-shell-retired]',
+      '#railToolsMenu[data-fieldops-legacy-shell-retired]',
+      '{',
+      '  display: none !important;',
+      '  visibility: hidden !important;',
+      '  pointer-events: none !important;',
+      '}'
+    ].join("\n");
+
     document.head.appendChild(style);
   }
 
   function retireLegacyChrome() {
     injectLegacyRetireStyles();
-
     document.documentElement.dataset.mapLegacyShell = "retired";
 
-    LEGACY_CHROME_SELECTORS.forEach(function hideLegacySelector(selector) {
-      document.querySelectorAll(selector).forEach(function hideLegacyElement(element) {
-        element.dataset.fieldopsLegacyShellRetired = VERSION;
-        element.setAttribute("aria-hidden", "true");
-        if (element.id === "topFilterMenu" || element.id === "railToolsMenu") {
-          element.hidden = true;
-          element.classList.remove("is-open");
-        }
-      });
+    LEGACY_CHROME_SELECTORS.forEach(function hideSelector(selector) {
+      qsa(selector).forEach(forceHide);
     });
 
     setExpanded(byId("menuBtn"), false);
     setExpanded(byId("fitMapBtn"), false);
     setExpanded(byId("topSelectRegionButton"), false);
     setExpanded(byId("railMapButton"), false);
+    setExpanded(byId("railToolsButton"), false);
   }
 
   function openPanel(panel) {
@@ -161,27 +185,32 @@
   function openMapRegionFilter() {
     closeMapToolsPanel();
     closeMapFeaturePanels("filterPanel");
+
     if (openPanel(byId("filterPanel"))) {
       return;
     }
+
     dispatchMapShellState("fieldops:map-region-filter-missing");
   }
 
   function openMapSettings() {
     closeMapToolsPanel();
     closeMapFeaturePanels("settingsPanel");
+
     if (openPanel(byId("settingsPanel"))) {
       return;
     }
 
-    const settingsButton = byId("menuSettingsButton");
+    var settingsButton = byId("menuSettingsButton");
+
     if (settingsButton) {
       settingsButton.click();
     }
   }
 
   function clickIfPresent(id) {
-    const element = byId(id);
+    var element = byId(id);
+
     if (!element) {
       return false;
     }
@@ -195,10 +224,12 @@
   }
 
   function visibleWalks() {
-    const bridge = mapBridge();
+    var bridge = mapBridge();
+
     if (!bridge || typeof bridge.getVisibleWalks !== "function") {
       return [];
     }
+
     return bridge.getVisibleWalks() || [];
   }
 
@@ -211,9 +242,9 @@
   }
 
   function registerMapSearchProvider() {
-    const walks = visibleWalks();
+    var walks = visibleWalks();
 
-    const provider = {
+    var provider = {
       page: "map",
       id: MAP_SEARCH_PROVIDER_ID,
       label: "Map",
@@ -247,6 +278,7 @@
     }
 
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+
     if (Array.isArray(window.FieldOpsSearchQueue)) {
       window.FieldOpsSearchQueue.push(provider);
     }
@@ -257,9 +289,9 @@
   }
 
   function handleShellSearchSelect(event) {
-    const detail = event.detail || {};
-    const item = detail.item || {};
-    const bridge = mapBridge();
+    var detail = event.detail || {};
+    var item = detail.item || {};
+    var bridge = mapBridge();
 
     if (detail.page !== "map" || !item.id || !bridge || typeof bridge.selectWalk !== "function") {
       return;
@@ -273,7 +305,8 @@
   }
 
   function currentWorkOnlineState() {
-    const toggle = mapWorkOnlineToggles()[0];
+    var toggle = mapWorkOnlineToggles()[0];
+
     if (toggle) {
       return Boolean(toggle.checked);
     }
@@ -288,8 +321,8 @@
   }
 
   function setMapWorkOnline(isOnline) {
-    const nextState = Boolean(isOnline);
-    const toggles = mapWorkOnlineToggles();
+    var nextState = Boolean(isOnline);
+    var toggles = mapWorkOnlineToggles();
 
     if (!toggles.length) {
       localStorage.setItem(WORK_ONLINE_KEY, String(nextState));
@@ -310,7 +343,7 @@
       return;
     }
 
-    const style = document.createElement("style");
+    var style = document.createElement("style");
     style.id = "fieldopsMapToolsPanelStyle";
     style.textContent = `
       .map-tools-panel {
@@ -367,11 +400,13 @@
         font-weight: 800;
       }
     `;
+
     document.head.appendChild(style);
   }
 
   function mapToolsPanel() {
-    let panel = byId("mapToolsPanel");
+    var panel = byId("mapToolsPanel");
+
     if (panel) {
       return panel;
     }
@@ -383,27 +418,28 @@
     panel.className = "map-tools-panel";
     panel.hidden = true;
     panel.setAttribute("aria-label", "Map tools");
-    panel.innerHTML = `
-      <div class="map-tools-panel__title">Map tools</div>
-      <button class="map-tools-panel__button" type="button" data-map-tool-action="regions">Regions</button>
-      <button class="map-tools-panel__button" type="button" data-map-tool-action="fit">Fit map</button>
-      <button class="map-tools-panel__button" type="button" data-map-tool-action="weather">Weather</button>
-      <button class="map-tools-panel__button" type="button" data-map-tool-action="settings">Settings</button>
-    `;
+    panel.innerHTML = [
+      '<div class="map-tools-panel__title">Map tools</div>',
+      '<button class="map-tools-panel__button" type="button" data-map-tool-action="regions">Regions</button>',
+      '<button class="map-tools-panel__button" type="button" data-map-tool-action="fit">Fit map</button>',
+      '<button class="map-tools-panel__button" type="button" data-map-tool-action="weather">Weather</button>',
+      '<button class="map-tools-panel__button" type="button" data-map-tool-action="settings">Settings</button>'
+    ].join("");
 
     (document.querySelector(".app-shell") || document.body).appendChild(panel);
     return panel;
   }
 
   function closeMapToolsPanel() {
-    const panel = byId("mapToolsPanel");
+    var panel = byId("mapToolsPanel");
+
     if (panel) {
       panel.hidden = true;
     }
   }
 
   function toggleMapToolsPanel() {
-    const panel = mapToolsPanel();
+    var panel = mapToolsPanel();
     panel.hidden = !panel.hidden;
   }
 
@@ -435,10 +471,12 @@
   }
 
   function shouldLetMapDocumentHandle(event) {
-    const target = event.target;
+    var target = event.target;
+
     if (!isElement(target)) {
       return false;
     }
+
     return Boolean(target.closest(MAP_DELEGATED_ACTION_SELECTOR));
   }
 
@@ -461,7 +499,7 @@
 
   function bindChromeRoots() {
     CHROME_ROOT_SELECTORS.forEach(function bindSelector(selector) {
-      document.querySelectorAll(selector).forEach(bindChromeRoot);
+      qsa(selector).forEach(bindChromeRoot);
     });
   }
 
@@ -470,12 +508,13 @@
       return;
     }
 
-    const observer = new MutationObserver(function observeShellMutation() {
+    var observer = new MutationObserver(function observeShellMutation() {
       retireLegacyChrome();
       bindChromeRoots();
     });
 
     observer.observe(document.documentElement, {
+      attributes: true,
       childList: true,
       subtree: true
     });
@@ -497,7 +536,8 @@
     });
 
     window.addEventListener("fieldops:shell-work-online-toggle", function handleShellWorkOnline(event) {
-      const detail = event.detail || {};
+      var detail = event.detail || {};
+
       if (detail.page === "map") {
         setMapWorkOnline(Boolean(detail.online));
       }
@@ -508,12 +548,14 @@
     window.addEventListener("fieldops:map-shell-guard-refresh-search", scheduleMapSearchProviderRefresh);
 
     document.addEventListener("click", function handleGuardClick(event) {
-      const target = event.target;
+      var target = event.target;
+
       if (!isElement(target)) {
         return;
       }
 
-      const toolButton = target.closest("[data-map-tool-action]");
+      var toolButton = target.closest("[data-map-tool-action]");
+
       if (toolButton) {
         event.preventDefault();
         event.stopPropagation();
@@ -522,8 +564,8 @@
     }, true);
 
     document.addEventListener("pointerdown", function handleOutsidePointer(event) {
-      const target = event.target;
-      const panel = byId("mapToolsPanel");
+      var target = event.target;
+      var panel = byId("mapToolsPanel");
 
       if (!isElement(target) || !panel || panel.hidden) {
         return;
@@ -547,6 +589,10 @@
     registerMapSearchProvider();
     publishWorkOnlineState();
 
+    window.setTimeout(retireLegacyChrome, 0);
+    window.setTimeout(retireLegacyChrome, 100);
+    window.setTimeout(retireLegacyChrome, 500);
+    window.setTimeout(retireLegacyChrome, 1200);
     window.setTimeout(registerMapSearchProvider, 250);
     window.setTimeout(registerMapSearchProvider, 900);
 
@@ -560,4 +606,4 @@
   } else {
     boot();
   }
-})();
+}());
