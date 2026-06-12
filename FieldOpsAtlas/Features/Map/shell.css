@@ -1,55 +1,55 @@
 /* ==========================================================================
    FieldOps Atlas Map shell.css
-   Version: 1.1.1-map-shell-v2.10-app-shell-fade-cleanup
-   Owner: Map-only top fade/backdrop and Map-page shell layering.
+   Root file: FieldOpsAtlas/Features/Map/shell.css
+   Version: 1.1.1-map-shell-v2.9-full-top-backdrop
+
+   Owner: Map-only shell/fade compatibility.
 
    Scope:
-   - Root/shared shell owns menu, search, filter, drawer, and bottom nav.
-   - This file retires the old in-page Map chrome and keeps only the Map fade.
-   - This file adds Map-page layer compatibility for the current shell mount
-     shape: .app-shell/.phone with data-page/data-current-page.
-   - No groove/tray layer.
-   - No RF, data, region, Map HTML, root shell, or root-shell script changes.
+   - Root/shared shell owns the menu, search, filter buttons, drawer, and bottom nav.
+   - Map owns the map canvas, old DOM bridge targets, panels, and map tools.
+   - This file hides retired in-page Map chrome and restores the full original
+     Map top visual behind the shared shell buttons.
+   - No fallback shell injection.
+   - No RF, data, region JSON, marker, Leaflet, or root-shell changes.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Map fade and shell layer tokens
+   Map fade/backdrop tokens
    -------------------------------------------------------------------------- */
 
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   --top-bar-height: 56px;
   --map-shell-height: var(--shared-shell-top, var(--top-height, var(--top-bar-height)));
   --map-top-stack-height: calc(var(--safe-top) + var(--map-shell-height));
 
-  --map-fade-height: 104px;
-  --map-fade-ribbon-height: 28px;
+  --map-top-bar-bg-top: rgba(11, 35, 53, 1);
+  --map-top-bar-bg-mid: rgba(11, 35, 53, 1);
+  --map-top-bar-bg-bottom: rgba(11, 35, 53, 0.70);
+  --map-top-bar-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  --map-top-bar-blur: 14px;
 
-  --map-fade-layer: 5001;
-  --map-shell-layer: 5002;
-  --map-dim-layer: 5003;
-  --map-drawer-layer: 5006;
-  --map-panel-layer: 5007;
-
-  --map-fade-navy-top: #061426;
-  --map-fade-navy-mid: #08223d;
-  --map-fade-navy-low: rgba(10, 42, 73, 0.72);
-  --map-fade-soft-top: rgba(11, 35, 53, 0.58);
-  --map-fade-soft-mid: rgba(43, 132, 171, 0.25);
-  --map-fade-clear: rgba(7, 11, 18, 0);
+  --map-top-fade-height: 90px;
+  --map-top-ribbon-height: 30px;
+  --map-top-ribbon-bg-top: rgba(11, 35, 53, 0.70);
+  --map-top-ribbon-bg-bottom: rgba(11, 35, 53, 0.46);
+  --map-top-fade-top: rgba(11, 35, 53, 0.42);
+  --map-top-fade-mid: rgba(43, 132, 171, 0.24);
+  --map-top-fade-bottom: rgba(7, 11, 18, 0);
 }
 
 /* --------------------------------------------------------------------------
    Retire old Map-owned chrome.
-   The shared/root shell is the active shell chrome.
+   The shared/root shell is the active top/bottom chrome.
    -------------------------------------------------------------------------- */
 
 .top-bar,
 .side-menu,
 .menu-overlay,
 .side-rail,
-.rail-tools-menu,
 .top-filter-menu,
 .top-region-tree,
 .site-search-results {
@@ -57,34 +57,30 @@
 }
 
 .sr-only {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-  clip: rect(0, 0, 0, 0) !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
 }
 
 /* --------------------------------------------------------------------------
-   Shared shell compatibility.
-   Current shell.js mounts on .phone or .app-shell, then writes
-   data-page/data-current-page.
+   Shared/root shell compatibility.
 
-   Keep .fieldops-shell-root selectors for older/future wrapper compatibility,
-   but do not require that class for the Map page to render correctly.
+   Important:
+   The previous Map-local file cleared .top-shell background after map-page.css
+   had restored it. That made the map show directly behind the new buttons.
 
-   This file does not restyle individual shell buttons.
+   Keep the restored top-bar backdrop on .top-shell itself so it cannot vanish
+   behind a negative pseudo-element stacking context.
    -------------------------------------------------------------------------- */
 
-.fieldops-shell-root[data-page="map"],
-.fieldops-shell-root[data-current-page="map"],
-.app-shell[data-page="map"],
-.app-shell[data-current-page="map"],
-.phone[data-page="map"],
-.phone[data-current-page="map"] {
+html .fieldops-shell-root[data-page="map"],
+html .fieldops-shell-root[data-current-page="map"] {
   --chrome-control-border: var(--button-border, rgba(76, 113, 151, 0.74)) !important;
   --chrome-control-bg: var(--button-bottom, #102c4c) !important;
   --chrome-control-bg-top: var(--button-top, #15395e) !important;
@@ -94,149 +90,186 @@
     0 8px 20px rgba(0, 0, 0, 0.18) !important;
 }
 
-/*
-   The Map CSS is only loaded by the Map page, so these fallbacks are
-   intentionally local to Map. They keep the shared top shell clear even before
-   data-page is applied, or if the root is .app-shell rather than .phone.
-*/
-.fieldops-shell-root .top-shell,
-.app-shell .top-shell,
-.phone .top-shell {
-  z-index: var(--map-shell-layer) !important;
+html .fieldops-shell-root[data-page="map"] .top-shell,
+html .fieldops-shell-root[data-current-page="map"] .top-shell {
+  z-index: 5002 !important;
   isolation: isolate !important;
   overflow: visible !important;
   border-bottom: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
+  background:
+    linear-gradient(
+      180deg,
+      var(--map-top-bar-bg-top) 0%,
+      var(--map-top-bar-bg-mid) 54%,
+      var(--map-top-bar-bg-bottom) 100%
+    ) !important;
+  box-shadow: var(--map-top-bar-shadow) !important;
+  -webkit-backdrop-filter: blur(var(--map-top-bar-blur)) !important;
+  backdrop-filter: blur(var(--map-top-bar-blur)) !important;
 }
 
-.fieldops-shell-root .top-shell::before,
-.fieldops-shell-root .top-shell::after,
-.app-shell .top-shell::before,
-.app-shell .top-shell::after,
-.phone .top-shell::before,
-.phone .top-shell::after {
+/* Keep pseudo fades off here to avoid a second hidden/negative shell layer.
+   The solid top backdrop is on .top-shell; the lower ribbon remains .top-bar-fade. */
+html .fieldops-shell-root[data-page="map"] .top-shell::before,
+html .fieldops-shell-root[data-current-page="map"] .top-shell::before,
+html .fieldops-shell-root[data-page="map"] .top-shell::after,
+html .fieldops-shell-root[data-current-page="map"] .top-shell::after {
   content: none !important;
   display: none !important;
 }
 
-.fieldops-shell-root .top-shell > *,
-.app-shell .top-shell > *,
-.phone .top-shell > * {
+html .fieldops-shell-root[data-page="map"] .top-shell > *,
+html .fieldops-shell-root[data-current-page="map"] .top-shell > * {
   position: relative;
   z-index: 2;
 }
 
-/*
-   Layer compatibility only. Visual styling still belongs to the shared shell.
-   These values mirror the intended Map stack so the injected shell sits above
-   Leaflet and map panels while the fade stays behind the controls.
-*/
-.fieldops-shell-root[data-page="map"] .map-dim,
-.fieldops-shell-root[data-current-page="map"] .map-dim,
-.app-shell[data-page="map"] .map-dim,
-.app-shell[data-current-page="map"] .map-dim,
-.phone[data-page="map"] .map-dim,
-.phone[data-current-page="map"] .map-dim {
-  z-index: var(--map-dim-layer) !important;
+/* Keep the buttons/search matching the shell preview without creating any UI. */
+html .fieldops-shell-root[data-page="map"] :is(.top-shell .icon-button, .top-shell .search-button),
+html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button, .top-shell .search-button) {
+  height: var(--top-control-height);
+  min-height: var(--top-control-height);
+  border: 1px solid var(--chrome-control-border);
+  color: var(--text-main);
+  background-color: var(--chrome-control-bg);
+  background-image: linear-gradient(180deg, var(--chrome-control-bg-top), var(--chrome-control-bg-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    var(--chrome-control-glow);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
-.fieldops-shell-root[data-page="map"] .bottom-shell,
-.fieldops-shell-root[data-current-page="map"] .bottom-shell,
-.app-shell[data-page="map"] .bottom-shell,
-.app-shell[data-current-page="map"] .bottom-shell,
-.phone[data-page="map"] .bottom-shell,
-.phone[data-current-page="map"] .bottom-shell {
-  z-index: var(--map-shell-layer) !important;
+html .fieldops-shell-root[data-page="map"] .top-shell .icon-button,
+html .fieldops-shell-root[data-current-page="map"] .top-shell .icon-button,
+html .fieldops-shell-root[data-page="map"] .top-shell .search-button,
+html .fieldops-shell-root[data-current-page="map"] .top-shell .search-button {
+  border-radius: 14px;
 }
 
-.fieldops-shell-root[data-page="map"] .drawer,
-.fieldops-shell-root[data-current-page="map"] .drawer,
-.app-shell[data-page="map"] .drawer,
-.app-shell[data-current-page="map"] .drawer,
-.phone[data-page="map"] .drawer,
-.phone[data-current-page="map"] .drawer {
-  z-index: var(--map-drawer-layer) !important;
-}
-
-.fieldops-shell-root[data-page="map"] .filter-panel,
-.fieldops-shell-root[data-current-page="map"] .filter-panel,
-.fieldops-shell-root[data-page="map"] .search-panel,
-.fieldops-shell-root[data-current-page="map"] .search-panel,
-.app-shell[data-page="map"] .filter-panel,
-.app-shell[data-current-page="map"] .filter-panel,
-.app-shell[data-page="map"] .search-panel,
-.app-shell[data-current-page="map"] .search-panel,
-.phone[data-page="map"] .filter-panel,
-.phone[data-current-page="map"] .filter-panel,
-.phone[data-page="map"] .search-panel,
-.phone[data-current-page="map"] .search-panel {
-  z-index: var(--map-panel-layer) !important;
+html .fieldops-shell-root[data-page="map"] :is(.top-shell .icon-button:active, .top-shell .search-button:active),
+html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button:active, .top-shell .search-button:active) {
+  transform: scale(0.98);
 }
 
 /* --------------------------------------------------------------------------
-   Map-attached fade.
-   Starts at the top of the viewport/map and sits below shared-shell controls.
+   Original lower ribbon/fade below controls.
+
+   This is the second half of the original Map top visual. It starts below the
+   shared top shell and fades into the map; it does not replace the solid
+   backdrop/glow behind the buttons.
    -------------------------------------------------------------------------- */
 
 .top-bar-fade {
   position: fixed !important;
-  z-index: var(--map-fade-layer) !important;
-  top: 0 !important;
+  z-index: 5001 !important;
+  top: calc(var(--map-top-stack-height) - 2px) !important;
   right: 0 !important;
   left: 0 !important;
-  height: calc(var(--map-top-stack-height) + var(--map-fade-height)) !important;
+  height: var(--map-top-fade-height) !important;
   overflow: hidden !important;
   pointer-events: none !important;
-
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(96, 176, 231, 0.18), transparent 42%),
     linear-gradient(
       180deg,
-      var(--map-fade-navy-top) 0%,
-      var(--map-fade-navy-mid) calc(var(--safe-top) + 18px),
-      var(--map-fade-navy-low) var(--map-top-stack-height),
-      var(--map-fade-soft-top) calc(var(--map-top-stack-height) + 18px),
-      var(--map-fade-soft-mid) calc(var(--map-top-stack-height) + 64px),
-      var(--map-fade-clear) 100%
+      var(--map-top-ribbon-bg-top) 0%,
+      var(--map-top-ribbon-bg-bottom) var(--map-top-ribbon-height),
+      var(--map-top-fade-top) calc(var(--map-top-ribbon-height) + 8px),
+      var(--map-top-fade-mid) 58%,
+      var(--map-top-fade-bottom) 100%
     ) !important;
-
   box-shadow:
-    inset 0 -1px 0 rgba(255, 255, 255, 0.035),
-    0 10px 24px rgba(0, 0, 0, 0.16) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(98, 176, 231, 0.14),
+    0 10px 22px rgba(0, 0, 0, 0.10) !important;
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
 }
 
-/* No groove/tray layer. */
-.top-bar-fade::before {
+.top-bar-fade::before,
+.top-bar-fade::after {
   content: none !important;
   display: none !important;
 }
 
-.top-bar-fade::after {
-  content: "" !important;
+/* --------------------------------------------------------------------------
+   Map tools menu bridge.
+
+   The old side-rail is retired visually, but the old #railToolsMenu remains a
+   map-owned bridge target for the active Map bottom-nav action.
+   -------------------------------------------------------------------------- */
+
+.rail-tools-menu {
+  display: none !important;
+}
+
+.fieldops-shell-root[data-page="map"] .rail-tools-menu,
+.fieldops-shell-root[data-current-page="map"] .rail-tools-menu {
   position: absolute !important;
-  top: calc(var(--map-top-stack-height) - 1px) !important;
-  right: 0 !important;
-  left: 0 !important;
-  height: var(--map-fade-height) !important;
-  pointer-events: none !important;
-
+  z-index: 5006 !important;
+  right: 12px !important;
+  bottom: calc(var(--safe-bottom) + var(--bottom-lift, 8px) + var(--nav-height, 38px) + 10px) !important;
+  left: 12px !important;
+  width: auto !important;
+  max-width: 430px !important;
+  margin-inline: auto !important;
+  padding: 12px !important;
+  border: 1px solid rgba(96, 235, 255, 0.30) !important;
+  border-radius: 22px !important;
+  color: var(--text, rgba(255, 255, 255, 0.92)) !important;
   background:
-    linear-gradient(
-      180deg,
-      rgba(6, 21, 39, 0.52) 0%,
-      rgba(12, 50, 82, 0.38) var(--map-fade-ribbon-height),
-      rgba(43, 132, 171, 0.20) 54%,
-      rgba(7, 11, 18, 0) 100%
-    ) !important;
-
+    radial-gradient(circle at 50% 0%, rgba(96, 235, 255, 0.18), transparent 10rem),
+    rgba(5, 14, 28, 0.97) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(98, 176, 231, 0.18),
-    0 10px 22px rgba(0, 0, 0, 0.10) !important;
+    0 18px 56px rgba(0, 0, 0, 0.46),
+    0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(130%) !important;
+  backdrop-filter: blur(18px) saturate(130%) !important;
+}
 
-  -webkit-backdrop-filter: blur(1.5px);
-  backdrop-filter: blur(1.5px);
+.fieldops-shell-root[data-page="map"] .rail-tools-menu.is-open,
+.fieldops-shell-root[data-current-page="map"] .rail-tools-menu.is-open,
+.fieldops-shell-root[data-map-tools-open="true"] .rail-tools-menu {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.fieldops-shell-root .map-tools-title {
+  padding: 2px 2px 4px;
+  color: var(--gold, #ffe3ad);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.fieldops-shell-root .rail-tool-button {
+  min-height: 46px;
+  padding: 8px 11px;
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(96, 235, 255, 0.22);
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.07);
+  text-align: left;
+}
+
+.fieldops-shell-root .rail-tool-button span {
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.fieldops-shell-root .rail-tool-button small {
+  color: var(--text-muted, rgba(255, 255, 255, 0.64));
+  font-size: 11px;
+  font-weight: 650;
+}
+
+@media (max-width: 720px) {
+  :root {
+    --top-bar-height: 56px;
+    --map-top-fade-height: 88px;
+    --map-top-ribbon-height: 28px;
+  }
 }
