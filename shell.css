@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.17-rf-width-bottom-nav
+   Version: 1.1.18-root-editor
    Purpose:
    - One shared root shell for every page.
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -884,4 +884,110 @@ select {
 .nav-button {
   width: var(--nav-button-width);
   min-width: var(--nav-button-width);
+}
+
+
+/* ==========================================================================
+   11. Root editor panel
+   ========================================================================== */
+
+.editor-row-button {
+  min-height: 48px;
+}
+
+.editor-mode-note,
+.drawer-version {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.editor-panel {
+  position: fixed;
+  z-index: 72;
+  top: var(--panel-top);
+  right: max(calc((100vw - var(--page-width)) / 2 + var(--panel-right)), var(--panel-right));
+  left: max(calc((100vw - var(--page-width)) / 2 + var(--panel-left)), var(--panel-left));
+  max-height: var(--panel-max-height);
+  overflow: auto;
+  padding: 14px;
+  color: var(--text);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--panel-radius);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 180ms ease, visibility 180ms ease, transform 180ms ease;
+}
+
+.fieldops-shell-root[data-editor-open="true"] .editor-panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.editor-panel__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.editor-field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.editor-field input {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 10px;
+  color: var(--text);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--inner-radius);
+  background: rgba(255, 255, 255, 0.07);
+  outline: none;
+}
+
+.editor-field input:focus {
+  border-color: var(--gold-border);
+  box-shadow: 0 0 0 3px rgba(237, 191, 99, 0.12);
+}
+
+.editor-field-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1fr 0.65fr;
+  gap: 8px;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.panel-close-button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--text);
+}
+
+@media (max-width: 380px) {
+  .editor-field-grid {
+    grid-template-columns: 1fr;
+  }
 }
