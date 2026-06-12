@@ -1,10 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas OSM panes
    File: FieldOpsAtlas/Features/maps/OSMpanes.js
-   Version: 1.0.0
+   Version: 1.0.1
    Purpose:
    - Own Leaflet popup markup.
    - Own selected-walk details pane markup.
+   - Own collapsed/details/toast pane states.
    - Own details copy buttons.
    ========================================================================== */
 
@@ -141,16 +142,16 @@
     ].join("");
   }
 
-  function regionPaneHtml(region, walkCount) {
+  function regionToastHtml(region, walkCount) {
     return [
       '<div class="osmpanes-title-row">',
       '<div>',
       '<h2 class="osmpanes-title">',
       escapeHtml(region.name),
       '</h2>',
-      '<p class="osmpanes-line">',
+      '<p class="osmpanes-subtitle">',
       Number(walkCount || 0),
-      ' walks loaded - tap a marker',
+      ' walks loaded',
       '</p>',
       '</div>',
       '<button class="osmpanes-button" type="button" data-region-open>Region</button>',
@@ -158,7 +159,20 @@
     ].join("");
   }
 
-  function detailsPaneHtml(walk, region, options) {
+  function collapsedWalkHtml(walk) {
+    return [
+      '<div class="osmpanes-title-row">',
+      '<h2 class="osmpanes-title">',
+      escapeHtml(walk.name),
+      '</h2>',
+      '<button class="osmpanes-button" type="button" data-open-details="',
+      escapeHtml(walk.id),
+      '">Details</button>',
+      '</div>'
+    ].join("");
+  }
+
+  function detailsPaneHtml(walk, options) {
     var coordinates = formatCoordinates(walk);
     var what3words = valueOrFallback(walk.what3words, "No w3w recorded.");
     var accessLines = [
@@ -175,12 +189,9 @@
     return [
       '<article>',
       '<div class="osmpanes-title-row">',
-      '<div>',
       '<h2 class="osmpanes-title">',
       escapeHtml(walk.name),
       '</h2>',
-      '</div>',
-      '<button class="osmpanes-button" type="button" data-region-open>Region</button>',
       '<button class="osmpanes-button" type="button" data-edit-walk="',
       escapeHtml(walk.id),
       '">Edit</button>',
@@ -207,35 +218,55 @@
     ].join("");
   }
 
-  function render(panel, html) {
+  function render(panel, mode, html) {
     if (!panel) {
       return;
     }
 
     panel.hidden = false;
+    panel.dataset.paneMode = mode;
     panel.innerHTML = html;
   }
 
-  function renderEmpty(panel) {
-    render(panel, emptyPaneHtml());
+  function hide(panel) {
+    if (!panel) {
+      return;
+    }
+
+    panel.hidden = true;
+    panel.removeAttribute("data-pane-mode");
+    panel.innerHTML = "";
   }
 
-  function renderRegion(panel, region, walkCount) {
+  function renderEmpty(panel) {
+    render(panel, "empty", emptyPaneHtml());
+  }
+
+  function renderRegionToast(panel, region, walkCount) {
     if (!region) {
       renderEmpty(panel);
       return;
     }
 
-    render(panel, regionPaneHtml(region, walkCount));
+    render(panel, "toast", regionToastHtml(region, walkCount));
   }
 
-  function renderDetails(panel, walk, region, options) {
+  function renderCollapsed(panel, walk) {
     if (!walk) {
-      renderRegion(panel, region, options && options.walkCount);
+      renderEmpty(panel);
       return;
     }
 
-    render(panel, detailsPaneHtml(walk, region, options || {}));
+    render(panel, "collapsed", collapsedWalkHtml(walk));
+  }
+
+  function renderDetails(panel, walk, options) {
+    if (!walk) {
+      renderEmpty(panel);
+      return;
+    }
+
+    render(panel, "details", detailsPaneHtml(walk, options || {}));
   }
 
   function setWeatherText(message) {
@@ -296,9 +327,11 @@
   window.FieldOpsOSMpanes = {
     popupHtml: popupHtml,
     renderEmpty: renderEmpty,
-    renderRegion: renderRegion,
+    renderRegionToast: renderRegionToast,
+    renderCollapsed: renderCollapsed,
     renderDetails: renderDetails,
     setWeatherText: setWeatherText,
-    formatCoordinates: formatCoordinates
+    formatCoordinates: formatCoordinates,
+    hide: hide
   };
 }());
