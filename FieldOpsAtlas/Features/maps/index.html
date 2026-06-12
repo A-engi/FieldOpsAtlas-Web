@@ -5,52 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Maps</title>
   <link rel="stylesheet" href="../../../shell.css">
-  <link rel="stylesheet" href="./background.css?v=bottom-ready-20260612">
+  <link rel="stylesheet" href="./background.css?v=osm-visible-20260612b">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="./maps.css?v=region-walks-20260612">
+  <link rel="stylesheet" href="./OSMmaps.css?v=osm-visible-20260612b">
 </head>
 <body>
   <div class="fieldops-shell-root" data-page="map"></div>
+
+  <main class="osmmaps-page" data-osmmaps-page>
+    <div id="OSMmaps" class="osmmaps-canvas" data-osmmaps-canvas aria-label="UK walk marker map"></div>
+
+    <section class="osmmaps-panel" aria-label="UK OSM maps">
+      <header class="osmmaps-header">
+        <div>
+          <p class="osmmaps-kicker">UK region walks</p>
+          <h1>OSM maps</h1>
+        </div>
+
+        <button class="osmmaps-pill-button" type="button" data-theme-toggle>
+          <span data-theme-label>Dark</span>
+        </button>
+      </header>
+
+      <section class="osmmaps-region-card" aria-label="Regions">
+        <div class="osmmaps-region-head">
+          <span data-region-summary>Loading regionsâ¦</span>
+          <button class="osmmaps-text-button" type="button" data-fit-visible>Fit</button>
+        </div>
+        <div class="osmmaps-region-list" data-region-list></div>
+      </section>
+
+      <section class="osmmaps-details" data-selected-panel aria-live="polite">
+        <p class="osmmaps-empty">Pick a region, then tap a walk marker.</p>
+      </section>
+    </section>
+  </main>
 
   <div class="background-item" aria-hidden="true">
     <div class="atlas-top-fade"></div>
     <div class="atlas-top-fade atlas-bottom-fade"></div>
   </div>
 
-  <main class="maps-page" data-maps-page>
-    <section class="maps-panel" aria-label="UK maps">
-      <header class="maps-header">
-        <div>
-          <p class="maps-kicker">UK region walks</p>
-          <h1>Maps</h1>
-        </div>
-
-        <button class="maps-pill-button" type="button" data-theme-toggle>
-          <span data-theme-label>Dark</span>
-        </button>
-      </header>
-
-      <section class="maps-region-strip" aria-label="Regions">
-        <div class="maps-region-head">
-          <span data-region-summary>Loading regionsâ¦</span>
-          <button class="maps-text-button" type="button" data-fit-visible>Fit</button>
-        </div>
-        <div class="maps-region-list" data-region-list></div>
-      </section>
-
-      <section class="maps-canvas-wrap">
-        <div id="mapsCanvas" class="maps-canvas" aria-label="UK walk marker map"></div>
-        <div class="maps-loading" data-loading hidden>Loading walksâ¦</div>
-      </section>
-
-      <section class="maps-details" data-selected-panel aria-live="polite">
-        <p class="maps-empty">Pick a region, then tap a walk marker.</p>
-      </section>
-    </section>
-  </main>
-
   <script src="../../../shell.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="./maps.js?v=region-walks-20260612"></script>
+  <script src="./OSMmaps.js?v=osm-visible-20260612b"></script>
 </body>
 </html>
