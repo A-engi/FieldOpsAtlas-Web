@@ -1,7 +1,7 @@
-/* FieldOps Atlas | FieldOpsAtlas/Features/Map/shell.css | Version: 1.1.1-map-shell-clean-rewrite */
-/* Purpose: Minimal map-page shell compatibility. Root shell owns app chrome. Map owns canvas, Leaflet, regions, markers, panels, and tools. */
+/* FieldOps Atlas | FieldOpsAtlas/Features/Map/shell.css | Version: 1.1.2-map-loader */
+/* Purpose: Map shell compatibility only. Root shell owns app chrome. Map app owns map, regions, markers, weather panels, and map state. */
 
-/* 1. Settings */
+/* 1. Layers */
 :root {
   --map-layer-shell: 5002;
   --map-layer-dim: 5003;
@@ -10,12 +10,11 @@
   --map-layer-tools: 5008;
 }
 
-/* 2. Map chrome */
+/* 2. Map shell cleanup */
 :where(.top-bar, .side-menu, .menu-overlay, .side-rail, .top-filter-menu, .top-region-tree, .site-search-results, .rail-tools-menu) { display: none; }
 
 /* 3. Placement */
 :where(.top-shell, .bottom-shell) { z-index: var(--map-layer-shell); }
-.top-shell { background: rgb(11, 35, 53); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .bottom-shell { isolation: isolate; }
 .map-dim { z-index: var(--map-layer-dim); }
 .drawer { z-index: var(--map-layer-drawer); }
