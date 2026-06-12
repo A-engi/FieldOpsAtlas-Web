@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas map-ui.js
    Root file: FieldOpsAtlas/Features/Map/map-ui.js
-   Version: 1.1.4-clean-shell-loader-v11
+   Version: 1.1.5-lazy-weather-v1
 
    Purpose:
    - Keep map-app.js as the owner of map creation, region loading, markers,
@@ -12,23 +12,27 @@
    - Keep essential late UI bridge behaviours alive while the map shell is being
      handed over.
    - Do not inject fallback shell UI.
-   - Do not show persistent diagnostics UI.
+   - Do not preload Weather Mode panel markup.
+   - Initialise Weather Mode only when the Weather button is pressed.
 
    Swift conversion note:
    - This file is deliberately controller-like and small.
    - Shell owns shell chrome.
    - Map owns map state.
+   - Weather panel is lazy-created by weather-mode-panel.js.
    - Guard only bridges events.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  var UI_VERSION = "1.1.4-clean-shell-loader-v11";
+  var UI_VERSION = "1.1.5-lazy-weather-v1";
   var SHARED_SHELL_VERSION = "1.1.1-shell-v2.6-map-button-events";
   var MAP_SHELL_GUARD_VERSION = "1.1.1-map-shell-guard-v11";
+  var WEATHER_PANEL_VERSION = "1.1.1-lazy-weather-v1";
 
   var loadedAssets = Object.create(null);
+  var weatherPanelReadyPromise = null;
 
   function byId(id) {
     return document.getElementById(id);
@@ -75,14 +79,15 @@
 
   function cacheBust(url, version) {
     var nextUrl = new URL(url, window.location.href);
-
     nextUrl.searchParams.set("v", version);
     return nextUrl.href;
   }
 
   function sameAsset(left, right) {
-    return new URL(left, window.location.href).href.split("?")[0] ===
-      new URL(right, window.location.href).href.split("?")[0];
+    return (
+      new URL(left, window.location.href).href.split("?")[0] ===
+      new URL(right, window.location.href).href.split("?")[0]
+    );
   }
 
   function existingStylesheet(href) {
@@ -210,7 +215,6 @@
       return;
     }
 
-    panel.hidden = false;
     panel.classList.toggle("is-hidden", !visible);
     panel.classList.toggle("is-open", !!visible);
     panel.setAttribute("aria-hidden", visible ? "false" : "true");
@@ -249,22 +253,105 @@
     setText("selectedSiteLightningMemo", "Open Weather Mode for manual strike links.");
   }
 
+  function wireWeatherModePanel(panel) {
+    if (!panel || panel.dataset.fieldopsWeatherPanelWired === UI_VERSION) {
+      return;
+    }
+
+    panel.dataset.fieldopsWeatherPanelWired = UI_VERSION;
+
+    on(byId("closeWeatherModePanelButton") || byId("closeWeatherModeButton"), "click", closeWeatherMode);
+    on(byId("weatherSitesRefreshButton") || byId("refreshVisibleWeatherButton"), "click", refreshWeatherMode);
+
+    [
+      "weatherOverlayAllButton",
+      "weatherOverlayWatchButton",
+      "weatherOverlayHighButton",
+      "weatherOverlayClearButton",
+      "weatherOverlayFitButton",
+      "saveMetOfficeWarningsButton",
+      "checkMetOfficeWarningsButton",
+      "clearMetOfficeWarningsButton",
+      "saveDnoPowerButton",
+      "openDnoPowerButton",
+      "clearDnoPowerButton"
+    ].forEach(function (id) {
+      on(byId(id), "click", function () {
+        showToast("Map UI active");
+      });
+    });
+  }
+
+  function ensureWeatherModePanel() {
+    var existingPanel = byId("weatherModePanel");
+
+    if (existingPanel) {
+      wireWeatherModePanel(existingPanel);
+      return Promise.resolve(existingPanel);
+    }
+
+    if (weatherPanelReadyPromise) {
+      return weatherPanelReadyPromise;
+    }
+
+    weatherPanelReadyPromise = loadScript("./weather-mode-panel.js", WEATHER_PANEL_VERSION)
+      .then(function () {
+        var weatherMode = window.FieldOpsAtlasWeatherMode;
+
+        if (!weatherMode || typeof weatherMode.ensurePanel !== "function") {
+          throw new Error("weather-mode-panel.js loaded but did not expose FieldOpsAtlasWeatherMode.ensurePanel");
+        }
+
+        return weatherMode.ensurePanel();
+      })
+      .then(function (panel) {
+        wireWeatherModePanel(panel);
+        return panel;
+      })
+      .catch(function (error) {
+        weatherPanelReadyPromise = null;
+
+        if (window.console && typeof window.console.warn === "function") {
+          window.console.warn("FieldOps Atlas Weather Mode failed to initialise", error);
+        }
+
+        showToast("Weather Mode failed to load");
+        return null;
+      });
+
+    return weatherPanelReadyPromise;
+  }
+
   function openWeatherMode() {
-    var selected = getSelectedWalk();
     var weatherButton = byId("weatherModeButton");
 
-    closeOtherPanels("weatherModePanel");
-    setPanelVisible(byId("weatherModePanel"), true);
-
     if (weatherButton) {
-      weatherButton.setAttribute("aria-pressed", "true");
+      weatherButton.setAttribute("aria-busy", "true");
     }
 
-    if (selected) {
-      setSelectedWeatherPending();
-    }
+    ensureWeatherModePanel().then(function (panel) {
+      if (!panel) {
+        if (weatherButton) {
+          weatherButton.setAttribute("aria-busy", "false");
+        }
 
-    setText("weatherOverlayStatus", "Weather map overlay paused. Forecast text stays in Weather Mode for now.");
+        return;
+      }
+
+      closeOtherPanels("weatherModePanel");
+      setPanelVisible(panel, true);
+
+      if (weatherButton) {
+        weatherButton.setAttribute("aria-pressed", "true");
+        weatherButton.setAttribute("aria-busy", "false");
+      }
+
+      if (getSelectedWalk()) {
+        setSelectedWeatherPending();
+      }
+
+      refreshWeatherMode();
+    });
   }
 
   function closeWeatherMode() {
@@ -274,6 +361,7 @@
 
     if (weatherButton) {
       weatherButton.setAttribute("aria-pressed", "false");
+      weatherButton.setAttribute("aria-busy", "false");
     }
   }
 
@@ -285,7 +373,11 @@
       : "No visible walks are loaded yet.";
 
     if (list) {
-      list.innerHTML = "<li>" + message + "</li>";
+      list.innerHTML = "";
+      var item = document.createElement("p");
+      item.className = "visible-weather-empty";
+      item.textContent = message;
+      list.appendChild(item);
     }
 
     setText("weatherOverlayStatus", message);
@@ -419,7 +511,6 @@
 
   function toggleMapTools() {
     var menu = byId("railToolsMenu");
-
     setMapToolsOpen(Boolean(menu && (menu.hidden || !menu.classList.contains("is-open"))));
   }
 
@@ -485,15 +576,15 @@
 
   function wireButtons() {
     on(byId("weatherModeButton"), "click", function () {
-      if (isPanelVisible(byId("weatherModePanel"))) {
+      var panel = byId("weatherModePanel");
+
+      if (isPanelVisible(panel)) {
         closeWeatherMode();
       } else {
         openWeatherMode();
       }
     });
 
-    on(byId("closeWeatherModeButton"), "click", closeWeatherMode);
-    on(byId("refreshVisibleWeatherButton"), "click", refreshWeatherMode);
     on(byId("openFieldNotesButton"), "click", openFieldNotesPanel);
     on(byId("closeFieldNotesButton"), "click", closeFieldNotesPanel);
 
@@ -505,17 +596,6 @@
     });
 
     [
-      "weatherOverlayAllButton",
-      "weatherOverlayWatchButton",
-      "weatherOverlayHighButton",
-      "weatherOverlayClearButton",
-      "weatherOverlayFitButton",
-      "metOfficeWarningsSaveButton",
-      "metOfficeWarningsCheckButton",
-      "metOfficeWarningsClearButton",
-      "dnoPowerSaveButton",
-      "dnoPowerOpenButton",
-      "dnoPowerClearButton",
       "saveFieldNoteButton",
       "clearFieldNoteButton",
       "clearAllFieldNotesButton"
