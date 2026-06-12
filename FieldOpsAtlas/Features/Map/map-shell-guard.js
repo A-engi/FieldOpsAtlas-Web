@@ -1,23 +1,35 @@
 /* ============================================================================
    FieldOps Atlas map shell guard
    Root file: FieldOpsAtlas/Features/Map/map-shell-guard.js
-   Version: 1.1.1-map-shell-guard-v11-bridge-only
+   Version: 1.1.2-retire-map-legacy-shell
 
    Purpose:
    - Bridge shared shell events into the map-owned UI/state.
-   - Protect shell chrome clicks from broad map document handlers.
+   - Retire duplicate legacy Map chrome once the shared root shell is loaded.
    - Register visible map walks with FieldOpsSearch.
-   - Do not load root shell files.
-   - Do not inject fallback top/bottom shell UI.
-   - Do not change map data, region JSON, markers, Leaflet state, or fade visuals.
+   - Protect shell chrome clicks from broad map document handlers.
+   - Do not change map data, region JSON, markers, Leaflet state, or walk files.
+
+   Notes:
+   - The old Map fade is deliberately not retired here.
+   - Legacy nodes are hidden, not deleted, so older map code can still query ids.
    ============================================================================ */
 
-(function () {
+(function fieldOpsMapShellGuard() {
   "use strict";
 
-  const VERSION = "1.1.1-map-shell-guard-v11-bridge-only";
+  const VERSION = "1.1.2-retire-map-legacy-shell";
   const WORK_ONLINE_KEY = "fieldops-atlas-work-online";
   const MAP_SEARCH_PROVIDER_ID = "map-visible-walks";
+
+  const LEGACY_CHROME_SELECTORS = [
+    ".app-shell > .top-bar",
+    ".app-shell > #topFilterMenu",
+    ".app-shell > #menuOverlay",
+    ".app-shell > #sideMenu",
+    ".app-shell > .side-rail",
+    ".app-shell > #railToolsMenu"
+  ];
 
   const CHROME_ROOT_SELECTORS = [
     ".top-shell",
@@ -25,14 +37,6 @@
     ".filter-panel",
     ".search-panel",
     ".bottom-shell",
-    ".top-bar",
-    ".top-filter-menu",
-    ".top-region-tree",
-    ".search-shell",
-    ".side-menu",
-    ".menu-overlay",
-    ".side-rail",
-    ".rail-tools-menu",
     ".map-tools-panel"
   ];
 
@@ -73,23 +77,48 @@
     }
   }
 
-  function openHiddenMenu(menu) {
-    if (!menu) {
-      return false;
-    }
-
-    menu.hidden = false;
-    menu.classList.add("is-open");
-    return true;
-  }
-
-  function closeHiddenMenu(menu) {
-    if (!menu) {
+  function injectLegacyRetireStyles() {
+    if (byId("fieldopsMapLegacyShellRetireStyle")) {
       return;
     }
 
-    menu.hidden = true;
-    menu.classList.remove("is-open");
+    const style = document.createElement("style");
+    style.id = "fieldopsMapLegacyShellRetireStyle";
+    style.textContent = `
+      html[data-map-legacy-shell="retired"] .app-shell > .top-bar,
+      html[data-map-legacy-shell="retired"] .app-shell > #topFilterMenu,
+      html[data-map-legacy-shell="retired"] .app-shell > #menuOverlay,
+      html[data-map-legacy-shell="retired"] .app-shell > #sideMenu,
+      html[data-map-legacy-shell="retired"] .app-shell > .side-rail,
+      html[data-map-legacy-shell="retired"] .app-shell > #railToolsMenu {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function retireLegacyChrome() {
+    injectLegacyRetireStyles();
+
+    document.documentElement.dataset.mapLegacyShell = "retired";
+
+    LEGACY_CHROME_SELECTORS.forEach(function hideLegacySelector(selector) {
+      document.querySelectorAll(selector).forEach(function hideLegacyElement(element) {
+        element.dataset.fieldopsLegacyShellRetired = VERSION;
+        element.setAttribute("aria-hidden", "true");
+        if (element.id === "topFilterMenu" || element.id === "railToolsMenu") {
+          element.hidden = true;
+          element.classList.remove("is-open");
+        }
+      });
+    });
+
+    setExpanded(byId("menuBtn"), false);
+    setExpanded(byId("fitMapBtn"), false);
+    setExpanded(byId("topSelectRegionButton"), false);
+    setExpanded(byId("railMapButton"), false);
   }
 
   function openPanel(panel) {
@@ -114,50 +143,38 @@
     panel.setAttribute("aria-hidden", "true");
   }
 
-  function closeOldFloatingMenus() {
-    closeHiddenMenu(byId("topFilterMenu"));
-    closeHiddenMenu(byId("topRegionTree"));
-    closeHiddenMenu(byId("railToolsMenu"));
-
-    setExpanded(byId("fitMapBtn"), false);
-    setExpanded(byId("topSelectRegionButton"), false);
-    setExpanded(byId("railToolsButton"), false);
-    setExpanded(byId("railMapButton"), false);
-  }
-
-  function openOldTopRegionFilter() {
-    const topFilterMenu = byId("topFilterMenu");
-    const topRegionTree = byId("topRegionTree");
-
-    const openedFilter = openHiddenMenu(topFilterMenu);
-    const openedTree = openHiddenMenu(topRegionTree);
-
-    setExpanded(byId("fitMapBtn"), openedFilter);
-    setExpanded(byId("topSelectRegionButton"), openedTree);
-
-    return openedFilter || openedTree;
+  function closeMapFeaturePanels(exceptId) {
+    [
+      "filterPanel",
+      "settingsPanel",
+      "addPanel",
+      "regionPanel",
+      "weatherModePanel",
+      "fieldNotesPanel"
+    ].forEach(function closeFeaturePanel(id) {
+      if (id !== exceptId) {
+        closePanel(byId(id));
+      }
+    });
   }
 
   function openMapRegionFilter() {
     closeMapToolsPanel();
-
+    closeMapFeaturePanels("filterPanel");
     if (openPanel(byId("filterPanel"))) {
       return;
     }
-
-    openOldTopRegionFilter();
+    dispatchMapShellState("fieldops:map-region-filter-missing");
   }
 
   function openMapSettings() {
-    closeOldFloatingMenus();
     closeMapToolsPanel();
-
+    closeMapFeaturePanels("settingsPanel");
     if (openPanel(byId("settingsPanel"))) {
       return;
     }
 
     const settingsButton = byId("menuSettingsButton");
-
     if (settingsButton) {
       settingsButton.click();
     }
@@ -165,7 +182,6 @@
 
   function clickIfPresent(id) {
     const element = byId(id);
-
     if (!element) {
       return false;
     }
@@ -180,11 +196,9 @@
 
   function visibleWalks() {
     const bridge = mapBridge();
-
     if (!bridge || typeof bridge.getVisibleWalks !== "function") {
       return [];
     }
-
     return bridge.getVisibleWalks() || [];
   }
 
@@ -205,7 +219,7 @@
       label: "Map",
       placeholder: "Find walk",
       emptyText: walks.length ? "No matching walks." : "Pick a region to load walks.",
-      items: walks.map(function (walk) {
+      items: walks.map(function mapWalkToSearchItem(walk) {
         return {
           id: String(walk.id || walk.slug || walk.name || ""),
           title: String(walk.name || walk.title || "Unnamed walk"),
@@ -222,7 +236,7 @@
             walk.notes
           ].filter(Boolean)
         };
-      }).filter(function (item) {
+      }).filter(function hasSearchIdentity(item) {
         return item.id && item.title;
       })
     };
@@ -233,7 +247,6 @@
     }
 
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
-
     if (Array.isArray(window.FieldOpsSearchQueue)) {
       window.FieldOpsSearchQueue.push(provider);
     }
@@ -261,7 +274,6 @@
 
   function currentWorkOnlineState() {
     const toggle = mapWorkOnlineToggles()[0];
-
     if (toggle) {
       return Boolean(toggle.checked);
     }
@@ -285,7 +297,7 @@
       return;
     }
 
-    toggles.forEach(function (toggle) {
+    toggles.forEach(function updateToggle(toggle) {
       toggle.checked = nextState;
     });
 
@@ -299,15 +311,14 @@
     }
 
     const style = document.createElement("style");
-
     style.id = "fieldopsMapToolsPanelStyle";
     style.textContent = `
       .map-tools-panel {
         position: absolute;
         z-index: 5008;
-        right: 12px;
+        right: var(--shell-side, 7px);
         bottom: calc(env(safe-area-inset-bottom, 0px) + 58px);
-        left: 12px;
+        left: var(--shell-side, 7px);
         padding: 10px;
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -356,13 +367,11 @@
         font-weight: 800;
       }
     `;
-
     document.head.appendChild(style);
   }
 
   function mapToolsPanel() {
     let panel = byId("mapToolsPanel");
-
     if (panel) {
       return panel;
     }
@@ -375,7 +384,7 @@
     panel.hidden = true;
     panel.setAttribute("aria-label", "Map tools");
     panel.innerHTML = `
-      <p class="map-tools-panel__title">Map tools</p>
+      <div class="map-tools-panel__title">Map tools</div>
       <button class="map-tools-panel__button" type="button" data-map-tool-action="regions">Regions</button>
       <button class="map-tools-panel__button" type="button" data-map-tool-action="fit">Fit map</button>
       <button class="map-tools-panel__button" type="button" data-map-tool-action="weather">Weather</button>
@@ -388,15 +397,12 @@
 
   function closeMapToolsPanel() {
     const panel = byId("mapToolsPanel");
-
     if (panel) {
       panel.hidden = true;
     }
   }
 
   function toggleMapToolsPanel() {
-    closeOldFloatingMenus();
-
     const panel = mapToolsPanel();
     panel.hidden = !panel.hidden;
   }
@@ -410,7 +416,7 @@
     }
 
     if (action === "fit") {
-      if (!clickIfPresent("fitMapBtn")) {
+      if (!clickIfPresent("fitVisibleSitesButton")) {
         dispatchMapShellState("fieldops:map-tools-fit", { source: "map-tools-panel" });
       }
       return;
@@ -430,11 +436,9 @@
 
   function shouldLetMapDocumentHandle(event) {
     const target = event.target;
-
     if (!isElement(target)) {
       return false;
     }
-
     return Boolean(target.closest(MAP_DELEGATED_ACTION_SELECTOR));
   }
 
@@ -456,7 +460,7 @@
   }
 
   function bindChromeRoots() {
-    CHROME_ROOT_SELECTORS.forEach(function (selector) {
+    CHROME_ROOT_SELECTORS.forEach(function bindSelector(selector) {
       document.querySelectorAll(selector).forEach(bindChromeRoot);
     });
   }
@@ -466,7 +470,10 @@
       return;
     }
 
-    const observer = new MutationObserver(bindChromeRoots);
+    const observer = new MutationObserver(function observeShellMutation() {
+      retireLegacyChrome();
+      bindChromeRoots();
+    });
 
     observer.observe(document.documentElement, {
       childList: true,
@@ -480,15 +487,17 @@
     window.addEventListener("fieldops:shell-map-tools-toggle", toggleMapToolsPanel);
     window.addEventListener("fieldops:shell-search-select", handleShellSearchSelect);
 
-    window.addEventListener("fieldops:shell-settings", function (event) {
+    window.addEventListener("fieldops:shell-search-open", closeMapToolsPanel);
+    window.addEventListener("fieldops:shell-filter-open", closeMapToolsPanel);
+
+    window.addEventListener("fieldops:shell-settings", function handleShellSettings(event) {
       if (!event.detail || event.detail.page === "map") {
         openMapSettings();
       }
     });
 
-    window.addEventListener("fieldops:shell-work-online-toggle", function (event) {
+    window.addEventListener("fieldops:shell-work-online-toggle", function handleShellWorkOnline(event) {
       const detail = event.detail || {};
-
       if (detail.page === "map") {
         setMapWorkOnline(Boolean(detail.online));
       }
@@ -498,33 +507,25 @@
     window.addEventListener("fieldops-atlas-regions-changed", scheduleMapSearchProviderRefresh);
     window.addEventListener("fieldops:map-shell-guard-refresh-search", scheduleMapSearchProviderRefresh);
 
-    document.addEventListener("click", function (event) {
+    document.addEventListener("click", function handleGuardClick(event) {
       const target = event.target;
-
       if (!isElement(target)) {
         return;
       }
 
       const toolButton = target.closest("[data-map-tool-action]");
-
       if (toolButton) {
         event.preventDefault();
         event.stopPropagation();
         handleMapToolAction(toolButton.dataset.mapToolAction);
-        return;
-      }
-
-      if (target.closest("[data-filter-region]")) {
-        event.preventDefault();
-        event.stopPropagation();
-        openMapRegionFilter();
       }
     }, true);
 
-    document.addEventListener("pointerdown", function (event) {
+    document.addEventListener("pointerdown", function handleOutsidePointer(event) {
       const target = event.target;
+      const panel = byId("mapToolsPanel");
 
-      if (!isElement(target) || !byId("mapToolsPanel") || byId("mapToolsPanel").hidden) {
+      if (!isElement(target) || !panel || panel.hidden) {
         return;
       }
 
@@ -538,8 +539,8 @@
 
   function boot() {
     document.documentElement.dataset.mapShellGuard = VERSION;
-    document.documentElement.dataset.mapLegacyShell = "archived";
 
+    retireLegacyChrome();
     bindChromeRoots();
     observeChromeRoots();
     bindShellEvents();
