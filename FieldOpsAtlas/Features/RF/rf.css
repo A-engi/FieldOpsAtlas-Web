@@ -1,7 +1,25 @@
+
+/* ==========================================================================
+   0. RF page background
+   ========================================================================== */
+
+/*
+   RF does not use the map fade layer. Keep the RF page on a plain solid
+   background using the same blue as the map fade.
+*/
+html,
+body {
+  background: #183f64;
+}
+
+.phone[data-page="rf"] {
+  background: #183f64;
+}
+
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.12-restore-demo-svg
+   Version: 1.1.13-solid-rf-background
 
    Purpose:
    RF landing page content only.
