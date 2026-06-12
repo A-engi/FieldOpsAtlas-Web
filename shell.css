@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.11-one-gold-root-shell
+   Version: 1.1.13-root-shell-owns-bars
 
    Purpose:
    One shared root shell for every page.
@@ -812,3 +812,78 @@ select {
     --page-width: 430px;
   }
 }
+
+
+/* ==========================================================================
+   8. Root shell ownership guard
+   ========================================================================== */
+
+.fieldops-shell-root[data-page] .top-shell,
+.fieldops-shell-root[data-current-page] .top-shell,
+.phone[data-page] .top-shell,
+.app-shell[data-page] .top-shell {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  left: 50%;
+  width: min(100vw, var(--page-width));
+  height: calc(var(--top-height) + var(--safe-top));
+  padding: calc(var(--top-pad-y) + var(--safe-top)) var(--shell-side) var(--top-pad-y);
+  display: grid;
+  grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
+  gap: var(--shell-gap);
+  align-items: center;
+  color: var(--text);
+  pointer-events: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  transform: translateX(-50%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.fieldops-shell-root[data-page] .bottom-shell,
+.fieldops-shell-root[data-current-page] .bottom-shell,
+.phone[data-page] .bottom-shell,
+.app-shell[data-page] .bottom-shell {
+  position: fixed;
+  z-index: 40;
+  right: auto;
+  bottom: calc(var(--safe-bottom) + var(--bottom-lift));
+  left: 50%;
+  width: min(100vw, var(--page-width));
+  height: var(--nav-height);
+  padding-inline: 10px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  pointer-events: none;
+  background: transparent;
+  box-shadow: none;
+  transform: translateX(-50%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.fieldops-shell-root[data-page] .top-shell::before,
+.fieldops-shell-root[data-page] .top-shell::after,
+.fieldops-shell-root[data-page] .bottom-shell::before,
+.fieldops-shell-root[data-page] .bottom-shell::after,
+.fieldops-shell-root[data-current-page] .top-shell::before,
+.fieldops-shell-root[data-current-page] .top-shell::after,
+.fieldops-shell-root[data-current-page] .bottom-shell::before,
+.fieldops-shell-root[data-current-page] .bottom-shell::after,
+.phone[data-page] .top-shell::before,
+.phone[data-page] .top-shell::after,
+.phone[data-page] .bottom-shell::before,
+.phone[data-page] .bottom-shell::after,
+.app-shell[data-page] .top-shell::before,
+.app-shell[data-page] .top-shell::after,
+.app-shell[data-page] .bottom-shell::before,
+.app-shell[data-page] .bottom-shell::after {
+  content: none;
+  display: none;
+}
+
