@@ -1,6 +1,6 @@
-/* FieldOps Atlas map-page.css v1.1.13-root-shell-spacing
+/* FieldOps Atlas map-page.css v1.1.14-map-restored
    Map page layout, canvas, Leaflet, weather panels, walk panels, forms, legend, toast, and local overlays.
-   Root shell owns top and bottom app chrome.
+   Root shell owns app chrome. Map index loads root shell directly, matching RF.
    This file does not touch data, region JSON, markers, or map state.
  */
 
@@ -19,8 +19,8 @@
   --shadow-heavy: 0 18px 60px rgba(0, 0, 0, 0.45);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --map-top-clearance: var(--top-height, 54px);
-  --map-bottom-clearance: calc(var(--nav-height, 38px) + var(--bottom-lift, 8px));
+  --shared-shell-top: 66px;
+  --shared-shell-bottom: 64px;
 
 }
 
@@ -44,11 +44,8 @@ textarea { font: inherit; }
 button { cursor: pointer; }
 
 .app-shell {
-  position: relative;
-  width: min(100vw, var(--page-width, 430px));
-  min-height: 100vh;
-  min-height: 100dvh;
-  margin-inline: auto;
+  position: fixed;
+  inset: 0;
   overflow: hidden;
   background: transparent;
 }
@@ -124,7 +121,7 @@ button { cursor: pointer; }
 .leaflet-control-container,
 .leaflet-top,
 .leaflet-bottom { z-index: 1000; }
-.leaflet-bottom.leaflet-right { bottom: calc(var(--map-bottom-clearance) + var(--safe-bottom)); }
+.leaflet-bottom.leaflet-right { bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom)); }
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
@@ -217,7 +214,7 @@ button { cursor: pointer; }
   position: fixed;
   z-index: 620;
   width: min(430px, calc(100vw - 24px));
-  max-height: min(680px, calc(100dvh - var(--map-top-clearance) - var(--map-bottom-clearance) - var(--safe-top) - var(--safe-bottom) - 28px));
+  max-height: min(680px, calc(100dvh - var(--shared-shell-top) - var(--shared-shell-bottom) - var(--safe-top) - var(--safe-bottom) - 28px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -239,7 +236,7 @@ button { cursor: pointer; }
   z-index: 610;
   left: 50%;
   right: auto;
-  bottom: calc(var(--map-bottom-clearance) + var(--safe-bottom) + 12px);
+  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 12px);
   transform: translateX(-50%);
 }
 
@@ -247,7 +244,7 @@ button { cursor: pointer; }
 .weather-mode-panel,
 .field-notes-panel {
   left: 50%;
-  top: calc(var(--map-top-clearance) + var(--safe-top) + 8px);
+  top: calc(var(--shared-shell-top) + var(--safe-top) + 8px);
   transform: translateX(-50%);
 }
 
@@ -451,7 +448,7 @@ input[type="color"] { width: 48px; flex: 0 0 48px; padding: 3px; }
   position: fixed;
   z-index: 410;
   left: 12px;
-  bottom: calc(var(--map-bottom-clearance) + var(--safe-bottom) + 12px);
+  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 12px);
   width: 190px;
   padding: 12px;
   border: 1px solid var(--border-soft);
@@ -471,7 +468,7 @@ input[type="color"] { width: 48px; flex: 0 0 48px; padding: 3px; }
   position: fixed;
   z-index: 7000;
   right: 14px;
-  bottom: calc(var(--map-bottom-clearance) + var(--safe-bottom) + 14px);
+  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 14px);
   min-height: 42px;
   display: none;
   align-items: center;
@@ -491,7 +488,7 @@ input[type="color"] { width: 48px; flex: 0 0 48px; padding: 3px; }
 .region-start-panel {
   position: fixed;
   z-index: 650;
-  top: calc(var(--map-top-clearance) + var(--safe-top) + 12px);
+  top: calc(var(--shared-shell-top) + var(--safe-top) + 12px);
   left: 50%;
   width: min(460px, calc(100vw - 24px));
   transform: translateX(-50%);
@@ -509,13 +506,15 @@ input[type="color"] { width: 48px; flex: 0 0 48px; padding: 3px; }
 [hidden] { display: none !important; }
 
 @media (max-width: 720px) {
+  :root { --shared-shell-top: 64px; --shared-shell-bottom: 62px; }
+
   .info-panel {
     left: 12px;
     right: 12px;
     width: auto;
-    bottom: calc(var(--map-bottom-clearance) + var(--safe-bottom) + 10px);
+    bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 10px);
     transform: none;
-    max-height: min(560px, calc(100dvh - var(--map-top-clearance) - var(--map-bottom-clearance) - var(--safe-top) - var(--safe-bottom) - 22px));
+    max-height: min(560px, calc(100dvh - var(--shared-shell-top) - var(--shared-shell-bottom) - var(--safe-top) - var(--safe-bottom) - 22px));
     border-radius: 26px;
   }
 
