@@ -1,23 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.15-rf-width-root-shell
-
+   Version: 1.1.16-rf-width-root-shell-bars
    Purpose:
-   One shared root shell for every page.
-
-   Rules:
+   - One shared root shell for every page.
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
-   - Root shell does not paint page backgrounds.
-   - Root shell does not add page-wide top or bottom backing layers.
-   - Individual controls keep the RF gold/navy button look.
    - Page files own page content backgrounds and feature visuals.
-
-   Width decision:
-   - Use an actual side inset token, not a percentage.
-   - Root shell controls align to the RF content panel by sharing a 7px inset.
+   - Top and bottom shell bars use the RF content frame parameters.
    ========================================================================== */
-
 
 /* ==========================================================================
    1. Tokens
@@ -27,7 +17,6 @@
   /* Safe areas and page frame */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-
   --page-width: 430px;
   --shell-side: 7px;
   --shell-gap: 7px;
@@ -116,15 +105,20 @@
   --panel-radius: 18px;
 }
 
-
 /* ==========================================================================
    2. Base shell layout
    ========================================================================== */
 
 html,
 body {
-  margin: 0;
   min-height: 100%;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 button,
@@ -154,7 +148,6 @@ select {
   --shell-gap: 7px;
 }
 
-
 /* ==========================================================================
    3. Icons
    ========================================================================== */
@@ -179,7 +172,6 @@ select {
 .icon--profile { --icon-src: url("data/icons/profile.svg"); }
 .icon--settings { --icon-src: url("data/icons/settings.svg"); }
 .icon--info { --icon-src: url("data/icons/info.svg"); }
-
 
 /* ==========================================================================
    4. Shared control primitives
@@ -256,7 +248,6 @@ select {
   border-right: 3px solid currentColor;
   transform: rotate(45deg);
 }
-
 
 /* ==========================================================================
    5. Top shell and search bar
@@ -391,7 +382,6 @@ select {
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
 }
 
-
 /* ==========================================================================
    6. Drawer
    ========================================================================== */
@@ -409,9 +399,7 @@ select {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition:
-    opacity 180ms ease,
-    visibility 180ms ease;
+  transition: opacity 180ms ease, visibility 180ms ease;
 }
 
 .fieldops-shell-root[data-drawer-open="true"] .map-dim {
@@ -441,10 +429,7 @@ select {
   visibility: hidden;
   pointer-events: none;
   transform: translateX(calc((100% + var(--shell-side)) * -1));
-  transition:
-    opacity 180ms ease,
-    visibility 180ms ease,
-    transform 180ms ease;
+  transition: opacity 180ms ease, visibility 180ms ease, transform 180ms ease;
 }
 
 .drawer::before,
@@ -645,7 +630,6 @@ select {
   gap: 8px;
 }
 
-
 /* ==========================================================================
    7. Search and filter panels
    ========================================================================== */
@@ -668,10 +652,7 @@ select {
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-8px);
-  transition:
-    opacity 180ms ease,
-    visibility 180ms ease,
-    transform 180ms ease;
+  transition: opacity 180ms ease, visibility 180ms ease, transform 180ms ease;
 }
 
 .fieldops-shell-root[data-search-open="true"] .search-panel,
@@ -698,7 +679,6 @@ select {
 .search-input {
   width: 100%;
   min-height: 42px;
-  box-sizing: border-box;
   color: var(--text);
   border: 1px solid var(--gold-line);
   border-radius: var(--inner-radius);
@@ -728,7 +708,6 @@ select {
   color: var(--text-muted);
   font-size: 13px;
 }
-
 
 /* ==========================================================================
    8. Bottom shell and nav
@@ -851,4 +830,32 @@ select {
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.96), transparent);
   box-shadow: 0 0 8px rgba(255, 199, 75, 0.55);
+}
+
+
+/* ==========================================================================
+   9. RF content width alignment override
+   ========================================================================== */
+
+/*
+   Keep the top and bottom root-shell bars inside the same 430px app frame
+   while including the 7px side padding in the measured width.
+
+   Previous behaviour used content-box width plus padding, so the shell rails
+   rendered 14px wider than the RF/content frame and pushed controls outwards.
+*/
+.top-shell,
+.fieldops-shell-root[data-page] .top-shell,
+.fieldops-shell-root[data-current-page] .top-shell,
+.phone[data-page] .top-shell,
+.app-shell[data-page] .top-shell,
+.bottom-shell,
+.fieldops-shell-root[data-page] .bottom-shell,
+.fieldops-shell-root[data-current-page] .bottom-shell,
+.phone[data-page] .bottom-shell,
+.app-shell[data-page] .bottom-shell {
+  box-sizing: border-box;
+  width: min(100vw, var(--page-width));
+  padding-right: var(--shell-side);
+  padding-left: var(--shell-side);
 }
