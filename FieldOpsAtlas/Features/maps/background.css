@@ -1,0 +1,76 @@
+:root {
+  --background-blue: #183f64;
+  --background-fade-height: clamp(180px, 20vw, 562px);
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.fieldops-shell-root {
+  position: relative;
+  z-index: 1;
+}
+
+.background-item {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 0;
+  min-height: calc(var(--background-fade-height) * 2);
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.background-item::before,
+.background-item::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: var(--background-fade-height);
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(125, 194, 255, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(3, 17, 34, 0.34), transparent 92%),
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(255, 255, 255, 0.96),
+      rgba(235, 247, 255, 0.68) 48%,
+      rgba(24, 63, 100, 0.00) 78%
+    ),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.86), transparent 90%),
+    linear-gradient(
+      180deg,
+      var(--background-blue) 0%,
+      rgba(24, 63, 100, 0.98) 22%,
+      rgba(24, 63, 100, 0.82) 46%,
+      rgba(24, 63, 100, 0.42) 72%,
+      rgba(24, 63, 100, 0.00) 100%
+    );
+}
+
+.background-item::before {
+  top: 0;
+}
+
+.background-item::after {
+  top: var(--background-fade-height);
+  transform: rotate(180deg);
+}
+
+@media (max-width: 760px) {
+  :root {
+    --background-fade-height: 172px;
+  }
+}
