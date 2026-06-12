@@ -1,96 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- FieldOps Atlas Map v1.1.6-lazy-weather-js -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>FieldOps Atlas v1.1.6</title>
-
+  <title>FieldOps Atlas Map v1.1.14</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.11-one-gold-root-shell">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-  <link rel="stylesheet" href="./theme.css?v=1.1.1">
-  <link rel="stylesheet" href="./components.css?v=1.1.1">
-  <link rel="stylesheet" href="./map-page.css?v=1.1.1">
-  <link rel="stylesheet" href="./shell.css?v=1.1.1">
-  <link rel="stylesheet" href="./map-ui.css?v=1.1.6-lazy-weather-js">
-  <link rel="stylesheet" href="./rf.css?v=1.1.1">
+  <link rel="stylesheet" href="./map-page.css?v=1.1.14-map-restored">
+  <link rel="stylesheet" href="./map-ui.css?v=1.1.14-map-restored">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="top-bar">
-      <div class="top-left">
-        <button id="menuBtn" class="menu-button" type="button" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
-          <img class="top-icon-img" src="../../../data/icons/hamburger.svg" alt="" aria-hidden="true">
-        </button>
-      </div>
-
-      <div class="top-actions">
-        <div class="site-search search-shell" role="search">
-          <label class="sr-only" for="siteSearchInput">Find walk</label>
-          <input
-            id="siteSearchInput"
-            class="site-search-input"
-            type="text"
-            name="fieldops_walk_search"
-            inputmode="search"
-            placeholder="Find walk"
-            autocomplete="off"
-            autocapitalize="none"
-            autocorrect="off"
-            enterkeyhint="search"
-            spellcheck="false"
-            aria-autocomplete="list"
-            data-lpignore="true"
-            data-1p-ignore="true"
-            data-form-type="search"
-          >
-          <div id="siteSearchResults" class="site-search-results" aria-label="Walk search results"></div>
-        </div>
-
-        <button
-          id="fitMapBtn"
-          class="top-button filter-button"
-          type="button"
-          aria-label="Open map filter"
-          aria-controls="topFilterMenu"
-          aria-expanded="false"
-        >
-          <img class="top-icon-img" src="../../../data/icons/filter.svg" alt="" aria-hidden="true">
-        </button>
-      </div>
-    </header>
-
-    <div id="topBarFade" class="top-bar-fade" aria-hidden="true"></div>
-
-    <div id="topFilterMenu" class="top-filter-menu map-filter-menu" hidden>
-      <div class="top-filter-header">
-        <div class="top-filter-title">Map filter</div>
-      </div>
-
-      <div class="top-filter-actions map-filter-actions">
-        <button id="fitVisibleSitesButton" class="top-filter-action" type="button">
-          <span>Fit visible walks</span>
-          <small>Map view</small>
-        </button>
-
-        <button
-          id="topSelectRegionButton"
-          class="top-filter-action primary tree-trigger"
-          type="button"
-          aria-expanded="false"
-          aria-controls="topRegionTree"
-        >
-          <span>Select region</span>
-          <small id="topActiveRegionText">Pick region</small>
-          <span class="tree-trigger-icon" aria-hidden="true">&#9662;</span>
-        </button>
-      </div>
-
-      <div id="topRegionTree" class="top-region-tree" hidden>
-        <div class="top-region-tree-title">Regions</div>
-        <div id="topRegionTreeList" class="top-region-tree-list" aria-label="Region selector"></div>
-      </div>
-    </div>
+  <div class="app-shell" data-page="map" data-current-page="map">
+    <main class="map-area" aria-label="FieldOps Atlas map">
+      <div id="map" role="application" aria-label="Map"></div>
+    </main>
 
     <button
       id="weatherModeButton"
@@ -98,125 +21,11 @@
       type="button"
       aria-label="Weather mode"
       aria-pressed="false"
-      aria-controls="weatherModePanel"
     >
       <span class="weather-super-icon" aria-hidden="true">
-        <img src="../../../data/icons/weather.svg?v=1.1.1" alt="">
+        <img src="../../../data/icons/weather.svg?v=1.1.2" alt="">
       </span>
     </button>
-
-    <div id="menuOverlay" class="menu-overlay"></div>
-
-    <aside id="sideMenu" class="side-menu" aria-label="App menu" aria-hidden="true">
-      <div class="menu-header">
-        <div class="menu-brand">
-          <div class="menu-logo menu-logo-inline" role="img" aria-label="FieldOps Atlas logo">
-            <img class="menu-logo-image" src="../../../data/icons/logo-atlas.svg" alt="" aria-hidden="true">
-          </div>
-          <div class="menu-brand-text">
-            <div class="menu-title">FieldOps Atlas</div>
-            <div class="menu-subtitle">UK Network Toolkit</div>
-          </div>
-        </div>
-        <button id="closeMenuBtn" class="menu-close-button" type="button" aria-label="Close menu">&times;</button>
-      </div>
-
-      <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <div class="menu-list">
-          <button id="menuMapButton" class="menu-list-item active" type="button">
-            <span class="menu-item-icon" aria-hidden="true"><img src="../../../data/icons/map.svg" alt=""></span>
-            <span>Map</span>
-          </button>
-          <a id="menuRfButton" class="menu-list-item" href="../RF/index.html">
-            <span class="menu-item-icon" aria-hidden="true"><img src="../../../data/icons/rf.svg" alt=""></span>
-            <span>RF</span>
-          </a>
-          <a id="menuNetworkButton" class="menu-list-item" href="../Network/index.html">
-            <span class="menu-item-icon" aria-hidden="true"><img src="../../../data/icons/network.svg" alt=""></span>
-            <span>Network</span>
-          </a>
-          <a id="menuDocsButton" class="menu-list-item" href="../Docs/index.html">
-            <span class="menu-item-icon" aria-hidden="true"><img src="../../../data/icons/docs.svg" alt=""></span>
-            <span>Docs</span>
-          </a>
-          <a id="menuProfileButton" class="menu-list-item" href="../Profile/index.html">
-            <span class="menu-item-icon" aria-hidden="true">Me</span>
-            <span>Profile</span>
-          </a>
-          <button id="menuSettingsButton" class="menu-list-item" type="button">
-            <span class="menu-item-icon" aria-hidden="true">Set</span>
-            <span>Settings</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="menu-section menu-section-bottom">
-        <label class="check-line">
-          <input id="writeToggle" type="checkbox">
-          <span>Work online</span>
-        </label>
-        <div class="menu-version">FieldOps Atlas v1.1.6</div>
-      </div>
-    </aside>
-
-    <nav class="side-rail" aria-label="Main navigation">
-      <button
-        id="railMapButton"
-        class="rail-button active map-tools-trigger"
-        type="button"
-        aria-label="Open map tools"
-        aria-controls="railToolsMenu"
-        aria-expanded="false"
-      >
-        <span class="rail-icon" aria-hidden="true"><img src="../../../data/icons/map-black.svg" alt=""></span>
-        <span class="rail-label">Map</span>
-      </button>
-
-      <a id="railRfButton" class="rail-button" href="../RF/index.html" aria-label="RF">
-        <span class="rail-icon" aria-hidden="true"><img src="../../../data/icons/rf.svg" alt=""></span>
-        <span class="rail-label">RF</span>
-      </a>
-
-      <a id="railNetworkButton" class="rail-button" href="../Network/index.html" aria-label="Network">
-        <span class="rail-icon" aria-hidden="true"><img src="../../../data/icons/network.svg" alt=""></span>
-        <span class="rail-label">Network</span>
-      </a>
-
-      <a id="railDocsButton" class="rail-button" href="../Docs/index.html" aria-label="Docs">
-        <span class="rail-icon" aria-hidden="true"><img src="../../../data/icons/docs.svg" alt=""></span>
-        <span class="rail-label">Docs</span>
-      </a>
-
-      <a id="railToolPageButton" class="rail-button" href="../Tools/index.html" aria-label="Tools">
-        <span class="rail-icon" aria-hidden="true"><img src="../../../data/icons/tools.svg" alt=""></span>
-        <span class="rail-label">Tools</span>
-      </a>
-    </nav>
-
-    <div id="railToolsMenu" class="rail-tools-menu map-tools-menu" hidden>
-      <div class="map-tools-title">Map tools</div>
-      <button id="railAddSiteButton" class="rail-tool-button" type="button">
-        <span>Add walk</span>
-        <small>Drop a new map point</small>
-      </button>
-      <button id="railSelectRegionButton" class="rail-tool-button" type="button">
-        <span>Filter regions</span>
-        <small>Choose visible walk files</small>
-      </button>
-      <button id="railAddRegionButton" class="rail-tool-button" type="button">
-        <span>Regions</span>
-        <small>Add or edit groups</small>
-      </button>
-      <button id="railReloadButton" class="rail-tool-button" type="button">
-        <span>Reload map data</span>
-        <small>Refresh GitHub/local data</small>
-      </button>
-    </div>
-
-    <main class="map-area">
-      <div id="map"></div>
-    </main>
 
     <aside id="infoPanel" class="info-panel is-hidden" aria-hidden="true">
       <div id="infoPanelDragTarget" class="panel-drag-target">
@@ -237,24 +46,27 @@
       <div id="infoPanelBody" class="panel-content">
         <section class="panel-section">
           <div class="section-title">Walk details</div>
+
           <dl class="detail-list">
             <div>
               <dt>Grid ref</dt>
               <dd class="copy-value-row">
                 <span id="selectedSiteGrid">-</span>
-                <button class="copy-button" type="button" data-copy-target="selectedSiteGrid" aria-label="Copy grid reference">Copy</button>
+                <button id="copyGridButton" class="copy-button" type="button" data-copy-target="selectedSiteGrid" aria-label="Copy grid reference">Copy</button>
               </dd>
             </div>
+
             <div>
               <dt>What3Words</dt>
               <dd class="copy-value-row">
                 <span id="selectedSiteW3W">-</span>
-                <button class="copy-button" type="button" data-copy-target="selectedSiteW3W" aria-label="Copy What3Words">Copy</button>
+                <button id="copyW3WButton" class="copy-button" type="button" data-copy-target="selectedSiteW3W" aria-label="Copy What3Words">Copy</button>
               </dd>
             </div>
           </dl>
+
           <div class="button-row">
-            <button id="expandInfoButton" class="tool-button secondary" type="button">Expand</button>
+            <button id="expandInfoButton" class="tool-button secondary" type="button" aria-expanded="false">Expand</button>
             <button id="editSelectedButton" class="tool-button" type="button">Edit</button>
           </div>
         </section>
@@ -273,32 +85,39 @@
 
         <section class="panel-section site-weather-section">
           <div class="section-title">Weather</div>
+
           <dl class="site-memo-grid site-weather-grid">
             <div class="site-memo-row">
               <dt>Forecast</dt>
               <dd id="selectedSitePressureMemo">Select a walk.</dd>
             </div>
+
             <div class="site-memo-row">
               <dt>Wind</dt>
               <dd id="selectedSiteWindMemo">Select a walk.</dd>
             </div>
+
             <div class="site-memo-row">
               <dt>Lightning</dt>
               <dd id="selectedSiteLightningMemo">Select a walk.</dd>
             </div>
+
+            <div class="site-memo-row">
+              <dt>Power</dt>
+              <dd id="selectedSitePowerCompany">Select a walk.</dd>
+            </div>
           </dl>
-          <p class="mini-note weather-mode-note">
-            Selected-walk forecast stays here. Weather mode loads only when the Weather button is pressed.
-          </p>
         </section>
 
         <section class="panel-section site-alerts-section">
           <div class="section-title">Alerts</div>
+
           <dl class="site-memo-grid site-alert-grid">
             <div class="site-memo-row">
               <dt>Power outages</dt>
-              <dd id="selectedSitePowerCompany">Use Power panel to save a postcode/DNO check.</dd>
+              <dd>Use Power panel to save a postcode/DNO check.</dd>
             </div>
+
             <div class="site-memo-row">
               <dt>Walk alerts</dt>
               <dd>None loaded.</dd>
@@ -306,11 +125,9 @@
           </dl>
         </section>
 
-        <section class="panel-section field-notes-summary-section">
+        <section class="panel-section field-notes-summary">
           <div class="section-title">Field Notes</div>
-          <p class="body-note">
-            Noticeboard for company notes, walk notes, engineer observations, next-visit reminders, hazards, and temporary access notes.
-          </p>
+          <p class="mini-note">Noticeboard for company notes, walk notes, engineer observations, next-visit reminders, hazards, and temporary access notes.</p>
           <button id="openFieldNotesButton" class="tool-button secondary" type="button">Open Field Notes</button>
         </section>
       </div>
@@ -322,69 +139,75 @@
           <div class="panel-kicker">Settings</div>
           <h2>GitHub settings</h2>
         </div>
-        <button id="closeSettingsButton" class="admin-close-button" data-close-panel="settingsPanel" type="button" aria-label="Close settings">&times;</button>
+        <button id="closeSettingsButton" class="admin-close-button" type="button" aria-label="Close settings">&times;</button>
       </div>
+
       <div class="admin-panel-body">
-        <label class="check-line">
-          <input id="workOnlineToggle" type="checkbox">
+        <label class="toggle-row" for="workOnlineToggle">
           <span>Write region settings to GitHub</span>
+          <input id="workOnlineToggle" type="checkbox">
         </label>
+
         <label class="input-label" for="githubTokenInput">GitHub token</label>
-        <div class="form-row">
-          <input id="githubTokenInput" type="password" placeholder="GitHub token, Contents read/write">
-          <button id="saveGithubTokenButton" class="tool-button" type="button">Save</button>
-        </div>
+        <input id="githubTokenInput" type="password" autocomplete="off" placeholder="Paste token">
+
         <div class="button-row">
+          <button id="saveGithubTokenButton" class="tool-button" type="button">Save</button>
           <button id="reloadDataButton" class="tool-button secondary" type="button">Reload data</button>
           <button id="clearLocalButton" class="tool-button danger" type="button">Clear local edits</button>
         </div>
-        <p class="mini-note">
-          Token is saved only in this browser. Work online currently writes region settings only; walk files stay region-loaded.
-        </p>
+
+        <label class="toggle-row" for="writeToggle">
+          <span>Work online</span>
+          <input id="writeToggle" type="checkbox">
+        </label>
+
+        <p class="mini-note">Token is saved only in this browser. Work online currently writes region settings only; walk files stay region-loaded.</p>
       </div>
     </aside>
 
-    <aside id="addPanel" class="admin-panel large is-hidden" aria-hidden="true">
+    <aside id="addPanel" class="admin-panel is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
           <div class="panel-kicker">Walks</div>
-          <h2 id="sitePanelTitle">Add walk</h2>
+          <h2 id="walkPanelTitle">Add walk</h2>
         </div>
-        <button id="closeAddPanelButton" class="admin-close-button" data-close-panel="addPanel" type="button" aria-label="Close add walk">&times;</button>
+        <button id="closeAddPanelButton" class="admin-close-button" type="button" aria-label="Close walk panel">&times;</button>
       </div>
+
       <div class="admin-panel-body">
-        <label class="input-label" for="siteNameInput">Walk name</label>
-        <input id="siteNameInput" class="required-field" type="text" placeholder="Walk name">
+        <label class="input-label" for="walkNameInput">Walk name</label>
+        <input id="walkNameInput" type="text" placeholder="Walk name">
 
-        <label class="input-label" for="coordsInput">Coordinates</label>
-        <input id="coordsInput" class="required-field" type="text" placeholder="52.012653, -4.996841">
+        <label class="input-label" for="walkCoordsInput">Coordinates</label>
+        <input id="walkCoordsInput" type="text" placeholder="54.0000, -3.0000">
 
-        <label class="input-label" for="siteRegionSelect">Region</label>
-        <select id="siteRegionSelect" required></select>
-
-        <div class="button-row">
-          <button id="addRegionFromSiteButton" class="tool-button secondary" type="button">Add region</button>
+        <div class="form-row">
+          <label class="input-label" for="walkRegionSelect">Region</label>
+          <select id="walkRegionSelect"></select>
+          <button id="addRegionFromWalkButton" class="tool-button secondary" type="button">Add region</button>
         </div>
 
-        <label class="input-label" for="accessNotesInput">Access notes</label>
-        <textarea id="accessNotesInput" placeholder="Access requirements / notes, optional"></textarea>
+        <label class="input-label" for="walkNotesInput">Access notes</label>
+        <textarea id="walkNotesInput" placeholder="Access notes"></textarea>
 
         <div class="button-row">
-          <button id="addSiteButton" class="tool-button" type="button">Save walk</button>
-          <button id="deleteEditingSiteButton" class="tool-button danger" type="button" hidden>Delete walk</button>
+          <button id="saveWalkButton" class="tool-button" type="button">Save walk</button>
+          <button id="deleteEditingWalkButton" class="tool-button danger" type="button" hidden>Delete walk</button>
           <button id="cancelEditButton" class="tool-button secondary" type="button">Cancel</button>
         </div>
       </div>
     </aside>
 
-    <aside id="regionPanel" class="admin-panel large is-hidden" aria-hidden="true">
+    <aside id="regionPanel" class="admin-panel is-hidden" aria-hidden="true">
       <div class="admin-panel-header">
         <div>
           <div class="panel-kicker">Regions</div>
           <h2>Add / manage region</h2>
         </div>
-        <button id="closeRegionPanelButton" class="admin-close-button" data-close-panel="regionPanel" type="button" aria-label="Close region panel">&times;</button>
+        <button id="closeRegionPanelButton" class="admin-close-button" type="button" aria-label="Close region panel">&times;</button>
       </div>
+
       <div class="admin-panel-body">
         <p class="mini-note">Regions group walks and set their pin colour.</p>
 
@@ -398,50 +221,36 @@
         <textarea id="regionNotesInput" placeholder="Optional region notes"></textarea>
 
         <div class="button-row">
-          <button id="addRegionButton" class="tool-button" type="button">Save region</button>
+          <button id="saveRegionButton" class="tool-button" type="button">Save region</button>
           <button id="deleteRegionButton" class="tool-button danger" type="button" hidden>Delete region</button>
           <button id="cancelRegionEditButton" class="tool-button secondary" type="button">New</button>
         </div>
 
         <section class="collapsible-section">
-          <button
-            id="toggleAssignSitesSectionButton"
-            class="collapsible-section-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="assignSitesSectionBody"
-          >
+          <button id="toggleAssignWalksSectionButton" class="collapsible-section-toggle" type="button" aria-expanded="false" aria-controls="assignWalksSectionBody">
             <span>
               Add walks to region
               <small>Tick walks and move them into the selected region.</small>
             </span>
             <span class="collapsible-section-icon" data-collapse-icon aria-hidden="true">+</span>
           </button>
-          <div id="assignSitesSectionBody" class="collapsible-section-body" hidden>
-            <div id="siteChecklist" class="site-grid"></div>
+
+          <div id="assignWalksSectionBody" class="collapsible-section-body" hidden>
+            <div id="assignWalksList" class="site-grid"></div>
             <div class="button-row">
-              <button id="assignSitesButton" class="tool-button secondary" type="button">Assign selected</button>
+              <button id="saveWalkAssignmentsButton" class="tool-button secondary" type="button">Assign selected</button>
             </div>
           </div>
         </section>
 
         <section class="collapsible-section">
-          <button
-            id="toggleCurrentRegionsSectionButton"
-            class="collapsible-section-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="currentRegionsSectionBody"
-          >
+          <div class="collapsible-section-toggle is-static">
             <span>
               Current regions
               <small>Edit or delete existing region buckets.</small>
             </span>
-            <span class="collapsible-section-icon" data-collapse-icon aria-hidden="true">+</span>
-          </button>
-          <div id="currentRegionsSectionBody" class="collapsible-section-body">
-            <div id="regionList" class="region-grid"></div>
           </div>
+          <div id="regionList" class="region-grid"></div>
         </section>
       </div>
     </aside>
@@ -452,22 +261,142 @@
           <div class="panel-kicker">Filter</div>
           <h2>Select region</h2>
         </div>
-        <button id="closeFilterPanelButton" class="admin-close-button" data-close-panel="filterPanel" type="button" aria-label="Close filter panel">&times;</button>
+        <button id="closeFilterPanelButton" class="admin-close-button" type="button" aria-label="Close region filter">&times;</button>
       </div>
+
       <div class="admin-panel-body">
         <p class="mini-note">Clear regions hides pins until another region is selected.</p>
-        <div id="regionFilterList" class="region-grid"></div>
+        <div id="regionFilterList" class="region-filter-list"></div>
+
         <div class="button-row">
           <button id="applyRegionFilterButton" class="tool-button" type="button">Apply</button>
           <button id="showDemoPinsButton" class="tool-button secondary" type="button">Show demo pins</button>
-          <button id="clearRegionFilterButton" class="tool-button secondary" type="button">Clear regions</button>
+          <button id="clearRegionFilterButton" class="tool-button danger" type="button">Clear regions</button>
         </div>
+
+        <div class="section-title">Regions</div>
+        <div id="regionLegend" class="region-legend"></div>
       </div>
     </aside>
 
-    <aside class="legend-panel">
-      <div class="legend-title">Regions</div>
-      <div id="regionLegend" class="legend-list"></div>
+    <aside id="weatherModePanel" class="weather-mode-panel is-hidden" aria-hidden="true">
+      <div class="weather-mode-panel-header">
+        <div>
+          <div class="panel-kicker">Weather mode</div>
+          <h2>Visible walk weather</h2>
+        </div>
+        <button id="closeWeatherModeButton" class="admin-close-button" type="button" aria-label="Close Weather Mode">&times;</button>
+      </div>
+
+      <div class="weather-mode-panel-body">
+        <p class="mini-note">Weather mode is split into separate source blocks. Forecast checks visible walks separately, while warnings, lightning, and power cuts stay separate.</p>
+
+        <section class="weather-source-block">
+          <div class="panel-kicker">Forecast</div>
+          <h3>Visible walk forecast</h3>
+          <p>Loads selected region walk files as separate forecast points and keeps risky conditions visible.</p>
+
+          <div class="button-row">
+            <button id="refreshVisibleWeatherButton" class="tool-button" type="button">Refresh forecasts</button>
+            <button id="weatherOverlayAllButton" class="tool-button secondary" type="button">All</button>
+            <button id="weatherOverlayWatchButton" class="tool-button secondary" type="button">Watch+</button>
+            <button id="weatherOverlayHighButton" class="tool-button secondary" type="button">High only</button>
+            <button id="weatherOverlayClearButton" class="tool-button secondary" type="button">Clear overlay</button>
+            <button id="weatherOverlayFitButton" class="tool-button secondary" type="button">Fit overlay</button>
+          </div>
+
+          <div id="weatherOverlayStatus" class="weather-overlay-status">Map overlay waiting for visible walk forecasts.</div>
+          <ul id="visibleWeatherSiteList" class="visible-weather-site-list">
+            <li>Open Weather Mode to load visible walk forecasts.</li>
+          </ul>
+        </section>
+
+        <section class="weather-source-block">
+          <div class="panel-kicker">Warnings</div>
+          <h3>Met Office warnings</h3>
+          <p>Manual official warning check is ready. If NSWWS access is added later, paste the supplied Atom feed URL and API key here.</p>
+
+          <div class="source-link-row">
+            <a class="source-link-button" href="https://weather.metoffice.gov.uk/warnings-and-advice/uk-warnings" target="_blank" rel="noopener">Open warnings</a>
+            <a class="source-link-button secondary" href="https://metoffice.github.io" target="_blank" rel="noopener">API docs</a>
+          </div>
+
+          <label class="alert-feed-label" for="metOfficeWarningsFeedInput">
+            <span>NSWWS Atom feed URL</span>
+            <input id="metOfficeWarningsFeedInput" type="url" placeholder="Feed URL">
+          </label>
+
+          <label class="alert-feed-label" for="metOfficeWarningsApiKeyInput">
+            <span>API key</span>
+            <input id="metOfficeWarningsApiKeyInput" type="password" autocomplete="off" placeholder="Optional API key">
+          </label>
+
+          <div class="alert-feed-actions">
+            <button id="metOfficeWarningsSaveButton" class="source-link-button" type="button">Save source</button>
+            <button id="metOfficeWarningsCheckButton" class="source-link-button secondary" type="button">Check feed</button>
+            <button id="metOfficeWarningsClearButton" class="source-link-button secondary" type="button">Clear</button>
+          </div>
+
+          <div id="metOfficeWarningsResult" class="alert-feed-result">
+            <p class="alert-feed-message">Manual warning link is ready. NSWWS feed check is optional.</p>
+          </div>
+        </section>
+
+        <section class="weather-source-block">
+          <div class="panel-kicker">Lightning</div>
+          <h3>Lightning check</h3>
+          <p>Manual strike-risk links only. Lightning does not own Weather Mode controls, overlay filters, refresh, or map markers.</p>
+
+          <div class="source-link-row">
+            <a class="source-link-button" href="https://weather.metoffice.gov.uk/maps-and-charts/uk-weather-map" target="_blank" rel="noopener">Met Office 24h</a>
+            <a class="source-link-button secondary" href="https://www.lightningmaps.org/" target="_blank" rel="noopener">LightningMaps</a>
+            <a class="source-link-button secondary" href="https://map.blitzortung.org/" target="_blank" rel="noopener">Blitzortung</a>
+          </div>
+
+          <p class="mini-note">Forecast thunderstorm flags stay separate from live strike checks.</p>
+        </section>
+
+        <section class="weather-source-block">
+          <div class="panel-kicker">Power</div>
+          <h3>DNO / power outage</h3>
+          <p>Save a postcode or likely DNO locally, then open the official checker.</p>
+
+          <div class="source-link-row">
+            <a class="source-link-button" href="https://www.powercut105.com/en/" target="_blank" rel="noopener">PowerCut105</a>
+            <a class="source-link-button secondary" href="https://www.energynetworks.org/customers/find-my-network-operator" target="_blank" rel="noopener">Find DNO</a>
+          </div>
+
+          <div class="alert-feed-setup dno-power-setup" aria-label="DNO power outage setup">
+            <label class="alert-feed-label" for="dnoPowerPostcodeInput">
+              <span>Postcode / outward code</span>
+              <input id="dnoPowerPostcodeInput" type="text" inputmode="text" autocomplete="postal-code" placeholder="e.g. SA62 or CF10 1AA">
+            </label>
+
+            <label class="alert-feed-label" for="dnoPowerProviderSelect">
+              <span>Known DNO / checker</span>
+              <select id="dnoPowerProviderSelect">
+                <option value="auto">Find my DNO first</option>
+                <option value="nationalGrid">National Grid ED</option>
+                <option value="ukpn">UK Power Networks</option>
+                <option value="ssen">SSEN</option>
+                <option value="spen">SP Energy Networks</option>
+                <option value="enwl">Electricity North West</option>
+                <option value="northernPowergrid">Northern Powergrid</option>
+              </select>
+            </label>
+
+            <div class="alert-feed-actions">
+              <button id="dnoPowerSaveButton" class="source-link-button" type="button">Save power source</button>
+              <button id="dnoPowerOpenButton" class="source-link-button secondary" type="button">Open check</button>
+              <button id="dnoPowerClearButton" class="source-link-button secondary" type="button">Clear</button>
+            </div>
+
+            <div id="dnoPowerResult" class="alert-feed-result">
+              <p class="alert-feed-message">PowerCut105 / ENA finder is ready. Save a DNO when known.</p>
+            </div>
+          </div>
+        </section>
+      </div>
     </aside>
 
     <aside id="fieldNotesPanel" class="field-notes-panel is-hidden" aria-hidden="true">
@@ -480,99 +409,74 @@
       </div>
 
       <div class="field-notes-body">
-        <p class="mini-note">
-          Local prototype notes only. Saved in this browser and deliberately kept separate from Weather and Alerts.
-        </p>
+        <p class="mini-note">Local prototype notes only. Saved in this browser and deliberately kept separate from Weather and Alerts.</p>
 
-        <form id="fieldNoteForm" class="field-note-form">
-          <label class="alert-feed-label" for="fieldNoteWalkInput">
+        <form id="fieldNoteForm" class="field-note-editor" autocomplete="off">
+          <div class="field-note-current-site">
             <span>Selected walk</span>
-            <input id="fieldNoteWalkInput" type="text" readonly value="No walk selected">
-          </label>
+            <strong id="fieldNoteSiteLabel">No walk selected</strong>
+          </div>
 
-          <label class="alert-feed-label" for="fieldNoteTypeInput">
-            <span>Type</span>
-            <select id="fieldNoteTypeInput">
-              <option value="company">Company</option>
-              <option value="walk">Walk</option>
-              <option value="engineer">Engineer</option>
-              <option value="nextVisit">Next visit</option>
-              <option value="hazard">Hazard</option>
-            </select>
-          </label>
+          <div class="field-note-form-grid">
+            <label class="field-note-label" for="fieldNoteScopeSelect">
+              <span>Type</span>
+              <select id="fieldNoteScopeSelect">
+                <option value="Company">Company</option>
+                <option value="Walk">Walk</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Next visit">Next visit</option>
+                <option value="Hazard">Hazard</option>
+              </select>
+            </label>
 
-          <label class="alert-feed-label" for="fieldNoteTitleInput">
-            <span>Title</span>
-            <input id="fieldNoteTitleInput" type="text" maxlength="80" placeholder="Short note title">
-          </label>
+            <label class="field-note-label" for="fieldNoteTitleInput">
+              <span>Title</span>
+              <input id="fieldNoteTitleInput" type="text" placeholder="Short title">
+            </label>
+          </div>
 
-          <label class="alert-feed-label" for="fieldNoteBodyInput">
+          <label class="field-note-label" for="fieldNoteBodyInput">
             <span>Note</span>
-            <textarea id="fieldNoteBodyInput" rows="4" maxlength="600" placeholder="Write the note here. This stays local for now."></textarea>
+            <textarea id="fieldNoteBodyInput" placeholder="Write note"></textarea>
           </label>
 
-          <div class="button-row field-note-actions">
-            <button id="saveFieldNoteButton" class="tool-button" type="submit">Save note</button>
-            <button id="clearFieldNoteFormButton" class="tool-button secondary" type="button">Clear</button>
+          <div class="button-row">
+            <button id="saveFieldNoteButton" class="tool-button" type="button">Save note</button>
+            <button id="clearFieldNoteButton" class="tool-button secondary" type="button">Clear</button>
           </div>
         </form>
 
-        <div class="field-note-saved-header">
-          <div>
-            <div class="section-title">Saved notes</div>
-            <p class="mini-note">Newest first. These are local-only until GitHub sync is designed.</p>
-          </div>
-          <button id="clearFieldNotesButton" class="tool-button danger small" type="button">Clear all</button>
-        </div>
+        <section class="field-note-list-section">
+          <div class="section-title">Saved notes</div>
+          <p class="mini-note">Newest first. These are local-only until GitHub sync is designed.</p>
+          <button id="clearAllFieldNotesButton" class="tool-button danger" type="button">Clear all</button>
+          <div id="fieldNoteList" class="field-note-list"></div>
+        </section>
 
-        <div id="fieldNotesSavedList" class="field-note-saved-list" aria-live="polite"></div>
+        <section class="field-note-guide">
+          <div class="panel-kicker">Company</div>
+          <h3>Company-wide notes</h3>
+          <p>Shared notices, reminders, process changes, and operational updates.</p>
 
-        <div class="field-notes-grid field-notes-examples" aria-label="Field note examples">
-          <section class="field-note-card">
-            <div class="field-note-tag">Company</div>
-            <h3>Company-wide notes</h3>
-            <p>Shared notices, reminders, process changes, and operational updates.</p>
-          </section>
-          <section class="field-note-card">
-            <div class="field-note-tag">Walk</div>
-            <h3>Walk-specific notes</h3>
-            <p>Bird nest found, gate issue, temporary access note, local hazard, or walk condition.</p>
-          </section>
-          <section class="field-note-card">
-            <div class="field-note-tag">Engineer</div>
-            <h3>Engineer observations</h3>
-            <p>Human-entered notes from visits, not automated weather or outage data.</p>
-          </section>
-          <section class="field-note-card">
-            <div class="field-note-tag">Next visit</div>
-            <h3>Bring / check next time</h3>
-            <p>Bring filters, check locks, re-check access, inspect cable route, or follow up a fault note.</p>
-          </section>
-        </div>
+          <div class="panel-kicker">Walk</div>
+          <h3>Walk-specific notes</h3>
+          <p>Bird nest found, gate issue, temporary access note, local hazard, or walk condition.</p>
+
+          <div class="panel-kicker">Engineer</div>
+          <h3>Engineer observations</h3>
+          <p>Human-entered notes from visits, not automated weather or outage data.</p>
+
+          <div class="panel-kicker">Next visit</div>
+          <h3>Bring / check next time</h3>
+          <p>Bring filters, check locks, re-check access, inspect cable route, or follow up a fault note.</p>
+        </section>
       </div>
     </aside>
 
-    <div id="statusToast" class="status-toast" aria-live="polite"></div>
+    <div id="statusToast" class="status-toast" role="status" aria-live="polite"></div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <script>
-    window.FieldOpsAtlasBridge = window.FieldOpsAtlasBridge || {};
-
-    if (window.L && window.L.map && !window.L.__fieldOpsAtlasCapturedMap) {
-      window.L.__fieldOpsAtlasCapturedMap = true;
-      window.FieldOpsAtlasBridge.originalMapFactory = window.L.map;
-
-      window.L.map = function () {
-        var map = window.FieldOpsAtlasBridge.originalMapFactory.apply(this, arguments);
-        window.FieldOpsAtlasBridge.map = map;
-        return map;
-      };
-    }
-  </script>
-
-  <script src="./map-app.js?v=1.1.1"></script>
-  <script src="./map-ui.js?v=1.1.6-lazy-weather-js"></script>
+  <script src="../../../shell.js?v=1.1.11-one-root-shell" defer></script>
+  <script src="./map-loader.js?v=1.1.14-map-runtime-only" defer></script>
 </body>
 </html>
