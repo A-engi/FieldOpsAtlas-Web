@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.13-root-shell-owns-bars
+   Version: 1.1.14-clean-root-shell
 
    Purpose:
    One shared root shell for every page.
@@ -20,6 +20,7 @@
    ========================================================================== */
 
 :root {
+  /* Safe areas and page frame */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
@@ -27,10 +28,12 @@
   --shell-side: 9px;
   --shell-gap: 7px;
 
+  /* Text */
   --text: rgba(255, 255, 255, 0.94);
   --text-soft: rgba(226, 241, 255, 0.78);
   --text-muted: rgba(226, 241, 255, 0.62);
 
+  /* Brand colour */
   --gold: #edbf63;
   --gold-soft: #ffdda0;
   --gold-strong: #ffd176;
@@ -38,6 +41,7 @@
   --gold-line: rgba(237, 191, 99, 0.35);
   --gold-glow: rgba(237, 191, 99, 0.42);
 
+  /* Shared control surfaces */
   --button-border: rgba(42, 67, 93, 0.72);
   --button-top: #102b49;
   --button-bottom: #0c233d;
@@ -51,12 +55,22 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 8px 18px rgba(0, 0, 0, 0.15);
 
+  /* Shared floating panels */
+  --panel-bg:
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(9, 29, 52, 0.98), rgba(5, 18, 32, 0.98));
+  --panel-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 34px rgba(0, 0, 0, 0.34);
+
+  /* Top shell */
   --top-height: 54px;
   --top-pad-y: 6px;
   --top-control-height: 38px;
   --top-icon-button-width: 34px;
   --top-icon-size: 20px;
 
+  /* Search */
   --search-height: var(--top-control-height);
   --search-icon-size: 18px;
   --search-edge: 10px;
@@ -64,6 +78,7 @@
   --search-brand-gap: 5px;
   --search-cluster-gap: 8px;
 
+  /* Bottom nav */
   --nav-height: 38px;
   --nav-button-width: 76px;
   --nav-pad-x: 8px;
@@ -74,6 +89,7 @@
   --nav-active-gap: 8px;
   --bottom-lift: 8px;
 
+  /* Drawer */
   --drawer-top: calc(var(--safe-top) + var(--top-height) + 8px);
   --drawer-bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + 12px);
   --drawer-left: var(--shell-side);
@@ -84,11 +100,13 @@
   --drawer-icon-size: 22px;
   --drawer-brand-size: 48px;
 
+  /* Search/filter panels */
   --panel-top: calc(var(--safe-top) + var(--top-height) + 8px);
   --panel-left: var(--shell-side);
   --panel-right: var(--shell-side);
   --panel-max-height: calc(100vh - var(--panel-top) - var(--safe-bottom) - var(--nav-height) - 26px);
 
+  /* Radius */
   --outer-radius: 12px;
   --inner-radius: 10px;
   --panel-radius: 18px;
@@ -132,7 +150,7 @@ select {
 
 
 /* ==========================================================================
-   3. Icons and control surfaces
+   3. Icons
    ========================================================================== */
 
 .repo-icon {
@@ -155,6 +173,11 @@ select {
 .icon--profile { --icon-src: url("data/icons/profile.svg"); }
 .icon--settings { --icon-src: url("data/icons/settings.svg"); }
 .icon--info { --icon-src: url("data/icons/info.svg"); }
+
+
+/* ==========================================================================
+   4. Shared control primitives
+   ========================================================================== */
 
 .button-surface,
 .icon-button,
@@ -230,10 +253,14 @@ select {
 
 
 /* ==========================================================================
-   4. Top shell
+   5. Top shell and search bar
    ========================================================================== */
 
-.top-shell {
+.top-shell,
+.fieldops-shell-root[data-page] .top-shell,
+.fieldops-shell-root[data-current-page] .top-shell,
+.phone[data-page] .top-shell,
+.app-shell[data-page] .top-shell {
   position: fixed;
   z-index: 40;
   top: 0;
@@ -245,18 +272,26 @@ select {
   grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
   gap: var(--shell-gap);
   align-items: center;
+  overflow: visible;
   color: var(--text);
   pointer-events: none;
   background: transparent;
   box-shadow: none;
-  overflow: visible;
   transform: translateX(-50%);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 
 .top-shell::before,
-.top-shell::after {
+.top-shell::after,
+.fieldops-shell-root[data-page] .top-shell::before,
+.fieldops-shell-root[data-page] .top-shell::after,
+.fieldops-shell-root[data-current-page] .top-shell::before,
+.fieldops-shell-root[data-current-page] .top-shell::after,
+.phone[data-page] .top-shell::before,
+.phone[data-page] .top-shell::after,
+.app-shell[data-page] .top-shell::before,
+.app-shell[data-page] .top-shell::after {
   content: none;
   display: none;
 }
@@ -352,7 +387,7 @@ select {
 
 
 /* ==========================================================================
-   5. Drawer and panels
+   6. Drawer
    ========================================================================== */
 
 .map-dim {
@@ -394,12 +429,8 @@ select {
   color: var(--text);
   border: 1px solid var(--gold-line);
   border-radius: var(--panel-radius);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
-    linear-gradient(180deg, rgba(9, 29, 52, 0.98), rgba(5, 18, 32, 0.98));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 16px 34px rgba(0, 0, 0, 0.34);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -506,6 +537,10 @@ select {
   border-width: 2px;
 }
 
+.fieldops-shell-root[data-pages-expanded="true"] .section-toggle__chevron {
+  transform: rotate(-90deg);
+}
+
 .drawer-pages {
   display: grid;
   gap: var(--drawer-row-gap);
@@ -517,10 +552,6 @@ select {
 
 .drawer-page-option[hidden] {
   display: none;
-}
-
-.fieldops-shell-root[data-pages-expanded="true"] .section-toggle__chevron {
-  transform: rotate(-90deg);
 }
 
 .current-page-card,
@@ -608,6 +639,11 @@ select {
   gap: 8px;
 }
 
+
+/* ==========================================================================
+   7. Search and filter panels
+   ========================================================================== */
+
 .search-panel,
 .filter-panel {
   position: fixed;
@@ -620,12 +656,8 @@ select {
   color: var(--text);
   border: 1px solid var(--gold-line);
   border-radius: var(--panel-radius);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
-    linear-gradient(180deg, rgba(9, 29, 52, 0.98), rgba(5, 18, 32, 0.98));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 16px 34px rgba(0, 0, 0, 0.34);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -693,10 +725,14 @@ select {
 
 
 /* ==========================================================================
-   6. Bottom shell
+   8. Bottom shell and nav
    ========================================================================== */
 
-.bottom-shell {
+.bottom-shell,
+.fieldops-shell-root[data-page] .bottom-shell,
+.fieldops-shell-root[data-current-page] .bottom-shell,
+.phone[data-page] .bottom-shell,
+.app-shell[data-page] .bottom-shell {
   position: fixed;
   z-index: 40;
   right: auto;
@@ -718,7 +754,15 @@ select {
 }
 
 .bottom-shell::before,
-.bottom-shell::after {
+.bottom-shell::after,
+.fieldops-shell-root[data-page] .bottom-shell::before,
+.fieldops-shell-root[data-page] .bottom-shell::after,
+.fieldops-shell-root[data-current-page] .bottom-shell::before,
+.fieldops-shell-root[data-current-page] .bottom-shell::after,
+.phone[data-page] .bottom-shell::before,
+.phone[data-page] .bottom-shell::after,
+.app-shell[data-page] .bottom-shell::before,
+.app-shell[data-page] .bottom-shell::after {
   content: none;
   display: none;
 }
@@ -729,6 +773,7 @@ select {
 
 .nav-button {
   position: relative;
+  z-index: 1;
   width: var(--nav-button-width);
   min-width: var(--nav-button-width);
   height: var(--nav-height);
@@ -801,89 +846,3 @@ select {
   background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.96), transparent);
   box-shadow: 0 0 8px rgba(255, 199, 75, 0.55);
 }
-
-
-/* ==========================================================================
-   7. Responsive tuning
-   ========================================================================== */
-
-@media (max-width: 720px) {
-  :root {
-    --page-width: 430px;
-  }
-}
-
-
-/* ==========================================================================
-   8. Root shell ownership guard
-   ========================================================================== */
-
-.fieldops-shell-root[data-page] .top-shell,
-.fieldops-shell-root[data-current-page] .top-shell,
-.phone[data-page] .top-shell,
-.app-shell[data-page] .top-shell {
-  position: fixed;
-  z-index: 40;
-  top: 0;
-  left: 50%;
-  width: min(100vw, var(--page-width));
-  height: calc(var(--top-height) + var(--safe-top));
-  padding: calc(var(--top-pad-y) + var(--safe-top)) var(--shell-side) var(--top-pad-y);
-  display: grid;
-  grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
-  gap: var(--shell-gap);
-  align-items: center;
-  color: var(--text);
-  pointer-events: none;
-  background: transparent;
-  box-shadow: none;
-  overflow: visible;
-  transform: translateX(-50%);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-.fieldops-shell-root[data-page] .bottom-shell,
-.fieldops-shell-root[data-current-page] .bottom-shell,
-.phone[data-page] .bottom-shell,
-.app-shell[data-page] .bottom-shell {
-  position: fixed;
-  z-index: 40;
-  right: auto;
-  bottom: calc(var(--safe-bottom) + var(--bottom-lift));
-  left: 50%;
-  width: min(100vw, var(--page-width));
-  height: var(--nav-height);
-  padding-inline: 10px;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 0;
-  pointer-events: none;
-  background: transparent;
-  box-shadow: none;
-  transform: translateX(-50%);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-.fieldops-shell-root[data-page] .top-shell::before,
-.fieldops-shell-root[data-page] .top-shell::after,
-.fieldops-shell-root[data-page] .bottom-shell::before,
-.fieldops-shell-root[data-page] .bottom-shell::after,
-.fieldops-shell-root[data-current-page] .top-shell::before,
-.fieldops-shell-root[data-current-page] .top-shell::after,
-.fieldops-shell-root[data-current-page] .bottom-shell::before,
-.fieldops-shell-root[data-current-page] .bottom-shell::after,
-.phone[data-page] .top-shell::before,
-.phone[data-page] .top-shell::after,
-.phone[data-page] .bottom-shell::before,
-.phone[data-page] .bottom-shell::after,
-.app-shell[data-page] .top-shell::before,
-.app-shell[data-page] .top-shell::after,
-.app-shell[data-page] .bottom-shell::before,
-.app-shell[data-page] .bottom-shell::after {
-  content: none;
-  display: none;
-}
-
