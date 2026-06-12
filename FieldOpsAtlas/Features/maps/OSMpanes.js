@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas OSM panes
    File: FieldOpsAtlas/Features/maps/OSMpanes.js
-   Version: 1.0.1
+   Version: 1.0.2
    Purpose:
    - Own Leaflet popup markup.
-   - Own selected-walk details pane markup.
-   - Own collapsed/details/toast pane states.
+   - Own collapsed and expanded selected-walk details pane markup.
+   - Own temporary region-loaded toast markup.
    - Own details copy buttons.
+   - Own coming soon panel for buttons without a real action yet.
    ========================================================================== */
 
 (function fieldOpsOSMpanes() {
@@ -62,6 +63,18 @@
     }
 
     return [];
+  }
+
+  function hasWalkthrough(walkthrough) {
+    if (!walkthrough || typeof walkthrough !== "object") {
+      return false;
+    }
+
+    return Boolean(
+      String(walkthrough.type || "").trim() ||
+      String(walkthrough.url || "").trim() ||
+      String(walkthrough.notes || "").trim()
+    );
   }
 
   function formatCoordinates(walk) {
@@ -161,18 +174,55 @@
 
   function collapsedWalkHtml(walk) {
     return [
-      '<div class="osmpanes-title-row">',
+      '<div class="osmpanes-title-row osmpanes-title-row--three">',
       '<h2 class="osmpanes-title">',
       escapeHtml(walk.name),
       '</h2>',
-      '<button class="osmpanes-button" type="button" data-open-details="',
+      '<button class="osmpanes-button" type="button" data-expand-details="',
       escapeHtml(walk.id),
-      '">Details</button>',
+      '">Expand</button>',
+      '<button class="osmpanes-button osmpanes-button--quiet" type="button" data-close-pane>Close</button>',
       '</div>'
     ].join("");
   }
 
-  function detailsPaneHtml(walk, options) {
+  function regionSectionHtml(region) {
+    if (!region) {
+      return sectionHtml("Region", '<p class="osmpanes-line">No region recorded.</p>');
+    }
+
+    return sectionHtml("Region", [
+      '<p class="osmpanes-line">',
+      escapeHtml(region.name),
+      '</p>',
+      region.notes ? '<p class="osmpanes-line">' + escapeHtml(region.notes) + '</p>' : "",
+      region.id ? '<p class="osmpanes-line">ID: ' + escapeHtml(region.id) + '</p>' : ""
+    ].join(""));
+  }
+
+  function optionalExtraSections(walk) {
+    var sections = [];
+
+    if (asList(walk.inputs).length) {
+      sections.push(sectionHtml("Inputs", listHtml(walk.inputs, "No inputs recorded.")));
+    }
+
+    if (asList(walk.equipment).length) {
+      sections.push(sectionHtml("Equipment", listHtml(walk.equipment, "No equipment recorded.")));
+    }
+
+    if (hasWalkthrough(walk.walkthrough)) {
+      sections.push(sectionHtml("Walkthrough", [
+        walk.walkthrough.type ? '<p class="osmpanes-line">Type: ' + escapeHtml(walk.walkthrough.type) + '</p>' : "",
+        walk.walkthrough.url ? '<p class="osmpanes-line">URL: ' + escapeHtml(walk.walkthrough.url) + '</p>' : "",
+        walk.walkthrough.notes ? '<p class="osmpanes-line">' + escapeHtml(walk.walkthrough.notes) + '</p>' : ""
+      ].join("")));
+    }
+
+    return sections.join("");
+  }
+
+  function detailsPaneHtml(walk, region, options) {
     var coordinates = formatCoordinates(walk);
     var what3words = valueOrFallback(walk.what3words, "No w3w recorded.");
     var accessLines = [
@@ -188,19 +238,22 @@
 
     return [
       '<article>',
-      '<div class="osmpanes-title-row">',
+      '<div class="osmpanes-title-row osmpanes-title-row--three">',
       '<h2 class="osmpanes-title">',
       escapeHtml(walk.name),
       '</h2>',
-      '<button class="osmpanes-button" type="button" data-edit-walk="',
+      '<button class="osmpanes-button" type="button" data-collapse-details="',
       escapeHtml(walk.id),
-      '">Edit</button>',
+      '">Collapse</button>',
+      '<button class="osmpanes-button osmpanes-button--quiet" type="button" data-close-pane>Close</button>',
       '</div>',
       '<div class="osmpanes-grid">',
+      regionSectionHtml(region),
       copyRowHtml("Coordinates", coordinates),
       copyRowHtml("w3w", what3words),
       sectionHtml("Access info", accessLines.length ? listHtml(accessLines, "No access info recorded.") : '<p class="osmpanes-line">No access info recorded.</p>'),
       sectionHtml("Services", listHtml(walk.services, "No services recorded.")),
+      optionalExtraSections(walk),
       sectionHtml("Weather", [
         '<div class="osmpanes-actions">',
         '<button class="osmpanes-button" type="button" data-load-weather="',
@@ -260,19 +313,67 @@
     render(panel, "collapsed", collapsedWalkHtml(walk));
   }
 
-  function renderDetails(panel, walk, options) {
+  function renderDetails(panel, walk, region, options) {
     if (!walk) {
       renderEmpty(panel);
       return;
     }
 
-    render(panel, "details", detailsPaneHtml(walk, options || {}));
+    render(panel, "details", detailsPaneHtml(walk, region, options || {}));
   }
 
   function setWeatherText(message) {
     var output = document.querySelector("[data-weather-output]");
     if (output) {
       output.textContent = message;
+    }
+  }
+
+  function ensureComingSoonPanel() {
+    var panel = document.querySelector("[data-coming-soon-panel]");
+
+    if (panel) {
+      return panel;
+    }
+
+    panel = document.createElement("section");
+    panel.className = "osmpanes-coming-soon";
+    panel.setAttribute("data-coming-soon-panel", "");
+    panel.hidden = true;
+    panel.innerHTML = [
+      '<button class="osmpanes-coming-soon__backdrop" type="button" data-coming-soon-close aria-label="Close coming soon"></button>',
+      '<article class="osmpanes-coming-soon__card" role="dialog" aria-modal="true" aria-label="Coming soon">',
+      '<h2 class="osmpanes-coming-soon__title" data-coming-soon-title>Coming soon</h2>',
+      '<p class="osmpanes-coming-soon__text" data-coming-soon-text>This action is not wired yet.</p>',
+      '<button class="osmpanes-button" type="button" data-coming-soon-close>Close</button>',
+      '</article>'
+    ].join("");
+
+    document.body.appendChild(panel);
+    return panel;
+  }
+
+  function showComingSoon(label) {
+    var panel = ensureComingSoonPanel();
+    var title = panel.querySelector("[data-coming-soon-title]");
+    var text = panel.querySelector("[data-coming-soon-text]");
+    var cleanLabel = valueOrFallback(label, "This action");
+
+    if (title) {
+      title.textContent = cleanLabel;
+    }
+
+    if (text) {
+      text.textContent = cleanLabel + " is coming soon.";
+    }
+
+    panel.hidden = false;
+  }
+
+  function hideComingSoon() {
+    var panel = document.querySelector("[data-coming-soon-panel]");
+    if (panel) {
+      panel.hidden = true;
     }
   }
 
@@ -307,21 +408,24 @@
     }
   }
 
-  document.addEventListener("click", function onCopyClick(event) {
+  document.addEventListener("click", function onDocumentClick(event) {
     var copyButton = event.target.closest("[data-copy-value]");
+    var comingSoonClose = event.target.closest("[data-coming-soon-close]");
 
-    if (!copyButton) {
-      return;
+    if (copyButton) {
+      copyText(copyButton.getAttribute("data-copy-value")).then(function copied() {
+        copyButton.setAttribute("aria-label", copied ? "Copied" : "Copy failed");
+        copyButton.dataset.copied = copied ? "true" : "false";
+
+        window.setTimeout(function resetCopyLabel() {
+          copyButton.removeAttribute("data-copied");
+        }, 900);
+      });
     }
 
-    copyText(copyButton.getAttribute("data-copy-value")).then(function copied() {
-      copyButton.setAttribute("aria-label", copied ? "Copied" : "Copy failed");
-      copyButton.dataset.copied = copied ? "true" : "false";
-
-      window.setTimeout(function resetCopyLabel() {
-        copyButton.removeAttribute("data-copied");
-      }, 900);
-    });
+    if (comingSoonClose) {
+      hideComingSoon();
+    }
   });
 
   window.FieldOpsOSMpanes = {
@@ -332,6 +436,8 @@
     renderDetails: renderDetails,
     setWeatherText: setWeatherText,
     formatCoordinates: formatCoordinates,
+    showComingSoon: showComingSoon,
+    hideComingSoon: hideComingSoon,
     hide: hide
   };
 }());
