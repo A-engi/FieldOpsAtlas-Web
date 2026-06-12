@@ -1,17 +1,17 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.7-single-shell-cleanup
+   Version: 1.1.9-gold-content-width-shell
 
    Purpose:
-   Shared shell layout only.
+   One shared root shell for every page.
 
    Rules:
+   - Root shell owns top buttons, search, drawer, filter, and bottom nav.
    - Root shell does not paint page backgrounds.
-   - Root shell does not add top or bottom backing layers.
-   - Individual shell controls keep their own button surfaces.
-   - Page and feature files may apply their own colours later.
-   - Icon paths resolve from this root CSS file to data/icons/.
+   - Root shell does not add page-wide top or bottom backing layers.
+   - Individual controls keep the RF gold/navy button look.
+   - Page files own page content backgrounds and feature visuals.
    ========================================================================== */
 
 
@@ -25,52 +25,53 @@
 
   --page-width: 430px;
   --shell-side: 9px;
-  --text: rgba(255, 255, 255, 0.92);
+  --shell-gap: 7px;
+
+  --text: rgba(255, 255, 255, 0.94);
   --text-soft: rgba(226, 241, 255, 0.78);
-  --text-muted: rgba(226, 241, 255, 0.66);
+  --text-muted: rgba(226, 241, 255, 0.62);
 
-  --gold: #ffe3ad;
+  --gold: #edbf63;
+  --gold-soft: #ffdda0;
   --gold-strong: #ffd176;
-  --gold-border: rgba(255, 207, 119, 0.78);
-  --gold-line: rgba(255, 207, 119, 0.40);
+  --gold-border: rgba(237, 191, 99, 0.78);
+  --gold-line: rgba(237, 191, 99, 0.35);
+  --gold-glow: rgba(237, 191, 99, 0.42);
 
-  --control-border: rgba(76, 113, 151, 0.72);
-  --control-bg:
+  --button-border: rgba(42, 67, 93, 0.72);
+  --button-top: #102b49;
+  --button-bottom: #0c233d;
+  --button-bg:
     linear-gradient(180deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.018)),
     rgba(16, 43, 73, 0.96);
-  --control-bg-strong:
+  --button-bg-strong:
     radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.07), transparent 34%),
-    linear-gradient(180deg, #102b49, #0c233d);
-  --control-shadow:
+    linear-gradient(180deg, var(--button-top), var(--button-bottom));
+  --button-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 8px 18px rgba(0, 0, 0, 0.15);
 
-  --outer-radius: 12px;
-  --inner-radius: 10px;
-  --panel-radius: 24px;
-
   --top-height: 54px;
-  --top-pad-y: 8px;
+  --top-pad-y: 6px;
   --top-control-height: 38px;
-  --top-icon-button-width: 42px;
-  --top-icon-size: 22px;
+  --top-icon-button-width: 34px;
+  --top-icon-size: 20px;
 
-  --gap: 7px;
   --search-height: var(--top-control-height);
-  --search-icon-size: 20px;
-  --search-edge: 11px;
+  --search-icon-size: 18px;
+  --search-edge: 10px;
   --search-gap: 8px;
-  --search-brand-gap: 7px;
+  --search-brand-gap: 5px;
   --search-cluster-gap: 8px;
 
   --nav-height: 38px;
   --nav-button-width: 76px;
-  --nav-design-width: 76px;
-  --nav-pad-x: calc(var(--nav-design-width) * 0.17);
-  --nav-pad-y: calc(var(--nav-height) * 0.17);
-  --nav-icon-size: 18px;
+  --nav-pad-x: 8px;
+  --nav-pad-y: 6px;
+  --nav-icon-size: 16px;
   --nav-label-size: 9px;
-  --nav-gap: 3px;
+  --nav-gap: 2px;
+  --nav-active-gap: 8px;
   --bottom-lift: 8px;
 
   --drawer-top: calc(var(--safe-top) + var(--top-height) + 8px);
@@ -87,6 +88,10 @@
   --panel-left: var(--shell-side);
   --panel-right: var(--shell-side);
   --panel-max-height: calc(100vh - var(--panel-top) - var(--safe-bottom) - var(--nav-height) - 26px);
+
+  --outer-radius: 12px;
+  --inner-radius: 10px;
+  --panel-radius: 18px;
 }
 
 
@@ -98,7 +103,6 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  background: transparent;
 }
 
 button,
@@ -112,32 +116,23 @@ select {
 .app-shell {
   position: relative;
   width: min(100vw, var(--page-width));
-  margin-inline: auto;
   min-height: 100vh;
   min-height: 100dvh;
+  margin-inline: auto;
   overflow: hidden;
   color: var(--text);
   background: transparent;
 }
 
-.fieldops-shell-root[data-page="map"] {
+.fieldops-shell-root[data-page="map"],
+.fieldops-shell-root[data-current-page="map"] {
   --shell-side: 9px;
-  --gap: 7px;
-  --top-pad-y: 8px;
-  --top-control-height: 38px;
-  --top-icon-button-width: 42px;
-  --top-icon-size: 22px;
-  --search-edge: 11px;
-  --search-gap: 8px;
-  --search-brand-gap: 7px;
-  --search-cluster-gap: 8px;
-  --outer-radius: 12px;
-  --inner-radius: 10px;
+  --shell-gap: 7px;
 }
 
 
 /* ==========================================================================
-   3. Icon and control structure
+   3. Icons and control surfaces
    ========================================================================== */
 
 .repo-icon {
@@ -173,20 +168,22 @@ select {
 .online-row {
   appearance: none;
   -webkit-appearance: none;
-  border: 1px solid var(--control-border);
   color: inherit;
-  background: var(--control-bg);
-  box-shadow: var(--control-shadow);
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  box-shadow: var(--button-shadow);
 }
 
 .icon-button {
   width: var(--top-icon-button-width);
+  min-width: var(--top-icon-button-width);
   height: var(--top-control-height);
   padding: 0;
   display: grid;
   place-items: center;
-  line-height: 1;
+  color: var(--gold-soft);
   border-radius: 8px;
+  line-height: 1;
 }
 
 .icon-button .repo-icon {
@@ -238,21 +235,22 @@ select {
 
 .top-shell {
   position: fixed;
-  width: min(100vw, var(--page-width));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
+  z-index: 40;
   top: 0;
-  right: auto;
+  left: 50%;
+  width: min(100vw, var(--page-width));
   height: calc(var(--top-height) + var(--safe-top));
   padding: calc(var(--top-pad-y) + var(--safe-top)) var(--shell-side) var(--top-pad-y);
   display: grid;
   grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
-  gap: var(--gap);
+  gap: var(--shell-gap);
   align-items: center;
+  color: var(--text);
   pointer-events: none;
   background: transparent;
   box-shadow: none;
+  overflow: visible;
+  transform: translateX(-50%);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -267,32 +265,25 @@ select {
   pointer-events: auto;
 }
 
-.top-shell .icon-button:first-child {
-  border-radius: var(--outer-radius) var(--inner-radius) var(--inner-radius) var(--outer-radius);
-}
-
-.top-shell .icon-button:last-child {
-  border-radius: var(--inner-radius) var(--outer-radius) var(--outer-radius) var(--inner-radius);
-}
-
 .search-button {
   min-width: 0;
   height: var(--search-height);
-  border-radius: 10px;
-  padding: 0 var(--search-edge);
+  padding: 0 var(--search-edge) 0 11px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   column-gap: var(--search-cluster-gap);
+  color: var(--text);
   text-align: left;
+  border-radius: 10px;
 }
 
 .search-lead,
 .search-brand,
 .atlas-logo {
+  min-width: 0;
   display: flex;
   align-items: center;
-  min-width: 0;
   white-space: nowrap;
 }
 
@@ -302,19 +293,23 @@ select {
 }
 
 .search-icon {
-  flex: 0 0 var(--search-icon-size);
   width: var(--search-icon-size);
   height: var(--search-icon-size);
+  flex: 0 0 var(--search-icon-size);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .search-query {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-soft);
-  font-size: 16px;
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.70);
+  font-size: clamp(10.8px, 3vw, 12.3px);
+  font-weight: 500;
   line-height: 1;
-  transform: translateY(1px);
+  letter-spacing: 0.005em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: none;
 }
 
 .search-brand {
@@ -325,18 +320,34 @@ select {
   width: 1px;
   height: 18px;
   flex: 0 0 auto;
-  background: currentColor;
-  opacity: 0.28;
+  border-radius: 99px;
+  background: var(--gold-line);
+  box-shadow: 0 0 8px rgba(237, 191, 99, 0.10);
 }
 
 .atlas-logo {
   height: 28px;
-  gap: 7px;
+  gap: 5px;
 }
 
 .atlas-logo .repo-icon {
-  width: 21px;
-  height: 21px;
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+  filter:
+    drop-shadow(0 0 5px rgba(237, 191, 99, 0.52))
+    drop-shadow(0 3px 8px rgba(237, 191, 99, 0.20));
+}
+
+.atlas-mini-word {
+  color: #fffdf7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(13px, 3.7vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
 }
 
 
@@ -347,14 +358,13 @@ select {
 .map-dim {
   appearance: none;
   -webkit-appearance: none;
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 4;
+  z-index: 60;
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  background: rgba(2, 8, 16, 0.46);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -371,19 +381,25 @@ select {
 }
 
 .drawer {
-  position: absolute;
-  z-index: 8;
+  position: fixed;
+  z-index: 70;
   top: var(--drawer-top);
   bottom: var(--drawer-bottom);
-  left: var(--drawer-left);
+  left: max(calc((100vw - var(--page-width)) / 2 + var(--drawer-left)), var(--drawer-left));
   width: var(--drawer-width);
   padding: var(--drawer-padding);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   color: var(--text);
-  background: transparent;
-  box-shadow: none;
+  border: 1px solid var(--gold-line);
+  border-radius: var(--panel-radius);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(9, 29, 52, 0.98), rgba(5, 18, 32, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 34px rgba(0, 0, 0, 0.34);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -426,14 +442,11 @@ select {
   place-items: center;
   color: var(--gold);
   background: transparent;
-  filter: none;
 }
 
-.brand-logo {
+.drawer-brand-mark .repo-icon {
   width: 34px;
   height: 34px;
-  display: block;
-  object-fit: contain;
 }
 
 .drawer-title {
@@ -483,8 +496,8 @@ select {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border-radius: 9px;
   color: var(--text-soft);
+  border-radius: 9px;
 }
 
 .section-toggle__chevron .chevron-mark {
@@ -522,6 +535,7 @@ select {
   align-items: center;
   text-align: left;
   text-decoration: none;
+  border-radius: 12px;
 }
 
 .current-page-card {
@@ -535,6 +549,7 @@ select {
 .drawer-row .repo-icon {
   width: var(--drawer-icon-size);
   height: var(--drawer-icon-size);
+  color: var(--gold-soft);
 }
 
 .current-page-card__copy,
@@ -595,16 +610,22 @@ select {
 
 .search-panel,
 .filter-panel {
-  position: absolute;
-  z-index: 7;
+  position: fixed;
+  z-index: 70;
   top: var(--panel-top);
-  right: var(--panel-right);
-  left: var(--panel-left);
+  right: max(calc((100vw - var(--page-width)) / 2 + var(--panel-right)), var(--panel-right));
+  left: max(calc((100vw - var(--page-width)) / 2 + var(--panel-left)), var(--panel-left));
   max-height: var(--panel-max-height);
   overflow: auto;
   color: var(--text);
-  background: transparent;
-  box-shadow: none;
+  border: 1px solid var(--gold-line);
+  border-radius: var(--panel-radius);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(9, 29, 52, 0.98), rgba(5, 18, 32, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 34px rgba(0, 0, 0, 0.34);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -641,9 +662,9 @@ select {
   min-height: 42px;
   box-sizing: border-box;
   color: var(--text);
-  background: transparent;
-  border: 1px solid currentColor;
+  border: 1px solid var(--gold-line);
   border-radius: var(--inner-radius);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .search-results,
@@ -658,10 +679,10 @@ select {
   min-height: 42px;
   display: grid;
   align-items: center;
-  text-align: left;
   color: inherit;
+  text-align: left;
   text-decoration: none;
-  background: transparent;
+  border-radius: 12px;
 }
 
 .search-empty {
@@ -677,14 +698,13 @@ select {
 
 .bottom-shell {
   position: fixed;
-  width: min(100vw, var(--page-width));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
+  z-index: 40;
   right: auto;
   bottom: calc(var(--safe-bottom) + var(--bottom-lift));
-  padding-inline: 10px;
+  left: 50%;
+  width: min(100vw, var(--page-width));
   height: var(--nav-height);
+  padding-inline: 10px;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -692,6 +712,7 @@ select {
   pointer-events: none;
   background: transparent;
   box-shadow: none;
+  transform: translateX(-50%);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -716,10 +737,24 @@ select {
   place-items: center;
   align-content: center;
   gap: var(--nav-gap);
-  color: var(--text-soft);
+  color: rgba(255, 255, 255, 0.84);
   text-align: center;
-  background: var(--control-bg-strong);
   text-decoration: none;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    0 -3px 10px rgba(4, 10, 18, 0.14);
+}
+
+.nav-button:first-child,
+.nav-button.is-group-start {
+  border-radius: 12px 0 0 12px;
+}
+
+.nav-button:last-child,
+.nav-button.is-group-end {
+  border-radius: 0 12px 12px 0;
 }
 
 .nav-button .repo-icon {
@@ -737,23 +772,34 @@ select {
   white-space: nowrap;
 }
 
-.nav-button:first-child,
-.nav-button.is-group-start {
-  border-radius: 12px 0 0 12px;
-}
-
-.nav-button:last-child,
-.nav-button.is-group-end {
-  border-radius: 0 12px 12px 0;
-}
-
 .nav-button.is-active {
-  z-index: 2;
-  margin-inline: 8px;
-  color: var(--gold);
-  border-color: var(--gold-border);
+  z-index: 3;
+  margin-inline: var(--nav-active-gap);
+  color: var(--gold-soft);
+  border-color: rgba(237, 191, 99, 0.68);
   border-radius: 10px;
-  background: var(--control-bg-strong);
+  background:
+    radial-gradient(circle at 50% 104%, rgba(255, 190, 47, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.012)),
+    linear-gradient(180deg, var(--button-top), var(--button-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 0 0 1px rgba(255, 220, 140, 0.08),
+    0 0 9px rgba(255, 199, 75, 0.12);
+  transform: translateY(-1px);
+}
+
+.nav-button.is-active::after {
+  content: "";
+  position: absolute;
+  right: 16%;
+  bottom: 0;
+  left: 16%;
+  height: 2px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.96), transparent);
+  box-shadow: 0 0 8px rgba(255, 199, 75, 0.55);
 }
 
 
@@ -763,7 +809,6 @@ select {
 
 @media (max-width: 720px) {
   :root {
-    --shell-side: 12px;
-    --drawer-width: min(318px, calc(100vw - 24px));
+    --page-width: 430px;
   }
 }
