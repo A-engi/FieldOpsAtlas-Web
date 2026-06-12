@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.0.4-collapsed-pane
+   Version: 1.0.5-pane-expand-collapse
    Purpose:
    - UK-only free OSM map rendered through Leaflet.
    - Load region buckets from data/regions.json.
@@ -12,7 +12,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.0.4-collapsed-pane";
+  var VERSION = "1.0.5-pane-expand-collapse";
   var REGION_TOAST_MS = 3000;
   var DATA_FILES = {
     regions: "../../../data/regions.json",
@@ -135,6 +135,22 @@
     };
   }
 
+  function normaliseWalkthrough(rawWalkthrough) {
+    if (!rawWalkthrough || typeof rawWalkthrough !== "object") {
+      return {
+        type: "",
+        url: "",
+        notes: ""
+      };
+    }
+
+    return {
+      type: String(rawWalkthrough.type || ""),
+      url: String(rawWalkthrough.url || rawWalkthrough.href || ""),
+      notes: String(rawWalkthrough.notes || rawWalkthrough.description || "")
+    };
+  }
+
   function normaliseWalk(rawWalk, fallbackRegionId) {
     if (!rawWalk) {
       return null;
@@ -168,7 +184,10 @@
       accessNotes: String(rawWalk.accessInfo || rawWalk.accessNotes || rawWalk.access || ""),
       address: String(rawWalk.address || ""),
       services: asStringList(rawWalk.services),
-      alerts: asStringList(rawWalk.alerts || rawWalk.warnings)
+      alerts: asStringList(rawWalk.alerts || rawWalk.warnings),
+      inputs: asStringList(rawWalk.inputs),
+      equipment: asStringList(rawWalk.equipment),
+      walkthrough: normaliseWalkthrough(rawWalk.walkthrough)
     };
   }
 
@@ -420,9 +439,20 @@
     }
 
     clearPaneTimer();
-    paneRenderer.renderDetails(selectedPanel(), walk, {
+    paneRenderer.renderDetails(selectedPanel(), walk, selectedRegion(), {
       walkCount: state.walks.length
     });
+  }
+
+  function closeDetailsPane() {
+    var paneRenderer = panes();
+
+    clearPaneTimer();
+    state.selectedWalkId = "";
+
+    if (paneRenderer) {
+      paneRenderer.hide(selectedPanel());
+    }
   }
 
   function selectWalk(walkId, openPopup, expandDetails) {
@@ -648,6 +678,12 @@
     });
   }
 
+  function showComingSoon(label) {
+    if (panes()) {
+      panes().showComingSoon(label);
+    }
+  }
+
   function wireEvents() {
     document.addEventListener("click", function onClick(event) {
       var regionButton = event.target.closest("[data-region-id]");
@@ -655,6 +691,9 @@
       var regionOpen = event.target.closest("[data-region-open]");
       var weatherButton = event.target.closest("[data-load-weather]");
       var detailsButton = event.target.closest("[data-open-details]");
+      var expandButton = event.target.closest("[data-expand-details]");
+      var collapseButton = event.target.closest("[data-collapse-details]");
+      var closePaneButton = event.target.closest("[data-close-pane]");
       var editButton = event.target.closest("[data-edit-walk]");
 
       if (regionButton) {
@@ -677,14 +716,23 @@
         return;
       }
 
+      if (expandButton) {
+        selectWalk(expandButton.getAttribute("data-expand-details"), false, true);
+        return;
+      }
+
+      if (collapseButton) {
+        selectWalk(collapseButton.getAttribute("data-collapse-details"), false, false);
+        return;
+      }
+
+      if (closePaneButton) {
+        closeDetailsPane();
+        return;
+      }
+
       if (editButton) {
-        window.dispatchEvent(new CustomEvent("fieldops:walk-edit", {
-          detail: {
-            walk: selectedWalk(),
-            walkId: editButton.getAttribute("data-edit-walk"),
-            region: selectedRegion()
-          }
-        }));
+        showComingSoon("Edit walk");
         return;
       }
 
@@ -752,6 +800,7 @@
       selectRegion: selectRegion,
       openRegionOverlay: openRegionOverlay,
       closeRegionOverlay: closeRegionOverlay,
+      closeDetailsPane: closeDetailsPane,
       fitVisible: fitVisible,
       getRegions: function getRegions() {
         return state.regions.slice();
