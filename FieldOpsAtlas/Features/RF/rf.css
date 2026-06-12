@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.11-no-rf-topbar
+   Version: 1.1.12-restore-demo-svg
 
    Purpose:
    RF landing page content only.
@@ -471,8 +471,225 @@
 }
 
 
+
+
 /* ==========================================================================
-   4. Recent, services, and equipment
+   4. RF demo map SVG
+   ========================================================================== */
+
+.rf-map-stage svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.demo-map-bg {
+  fill: transparent;
+}
+
+.demo-route {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-link-soft {
+  opacity: 0.22;
+  stroke-width: 7;
+}
+
+.demo-link-soft.is-main {
+  stroke: #126832;
+}
+
+.demo-link-soft.is-backup {
+  stroke: #1b5c92;
+}
+
+.demo-route.is-main {
+  stroke: #106228;
+  stroke-width: 3.2;
+}
+
+.demo-route.is-backup {
+  stroke: #1f5f98;
+  stroke-width: 2.8;
+}
+
+.demo-route.is-alert {
+  stroke: #c5291e;
+  stroke-width: 3.5;
+}
+
+.demo-route.is-selected-path {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 94, 51, 0.38))
+    drop-shadow(0 0 10px rgba(255, 214, 122, 0.20));
+}
+
+.demo-route-dot {
+  stroke: #fff7de;
+  stroke-width: 1;
+}
+
+.demo-route-dot.green {
+  fill: #106228;
+}
+
+.demo-route-dot.blue {
+  fill: #1f5f98;
+}
+
+.demo-route-dot.red {
+  fill: #d33428;
+}
+
+.demo-node {
+  color: #fff7de;
+}
+
+.demo-node .halo {
+  opacity: 0.42;
+}
+
+.demo-node .halo.core,
+.demo-node .halo.main,
+.demo-node .halo.remote {
+  fill: #e8d9a0;
+}
+
+.demo-node .halo.relay {
+  fill: #ff5d32;
+}
+
+.demo-node circle.core,
+.demo-node circle.main {
+  fill: #13733a;
+  stroke: #fff7de;
+}
+
+.demo-node circle.remote {
+  fill: #1f5f98;
+  stroke: #fff7de;
+}
+
+.demo-node circle.relay {
+  fill: #b82a21;
+  stroke: #fff7de;
+}
+
+.demo-node circle.inner-ring {
+  fill: none;
+  stroke: rgba(255, 247, 222, 0.82);
+  stroke-width: 1.1;
+}
+
+.demo-node.is-selected circle.relay,
+.demo-node.is-selected circle.core,
+.demo-node.is-selected circle.main,
+.demo-node.is-selected circle.remote {
+  filter:
+    drop-shadow(0 0 5px rgba(255, 218, 123, 0.48))
+    drop-shadow(0 0 12px rgba(255, 94, 51, 0.30));
+}
+
+.demo-node .mast {
+  color: #fff7de;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-node .mast circle {
+  fill: currentColor;
+}
+
+.demo-original-halo {
+  fill: none;
+  pointer-events: none;
+}
+
+.relay-halo-ring {
+  stroke: rgba(201, 42, 31, 0.24);
+  stroke-width: 1;
+}
+
+.relay-halo-ring.is-outer {
+  stroke: rgba(201, 42, 31, 0.18);
+}
+
+.relay-halo-line {
+  stroke: rgba(201, 42, 31, 0.18);
+  stroke-width: 0.7;
+}
+
+.relay-halo-line.strong {
+  stroke: rgba(201, 42, 31, 0.26);
+  stroke-width: 0.9;
+}
+
+.demo-label {
+  fill: #071c32;
+  paint-order: stroke;
+  stroke: rgba(255, 248, 231, 0.88);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.demo-label .name {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.demo-label .type {
+  fill: rgba(7, 28, 50, 0.58);
+  font-size: 5.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.demo-label.hide-type .type {
+  display: none;
+}
+
+.demo-compass {
+  fill: none;
+  stroke: rgba(130, 91, 22, 0.16);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-compass text {
+  fill: rgba(130, 91, 22, 0.34);
+  stroke: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.demo-legend {
+  fill: rgba(255, 255, 255, 0.56);
+  stroke: rgba(130, 91, 22, 0.14);
+  stroke-width: 1;
+}
+
+.demo-legend-text {
+  fill: #071c32;
+  stroke: none;
+  font-size: 6px;
+  font-weight: 800;
+}
+
+
+/* ==========================================================================
+   5. Recent, services, and equipment
    ========================================================================== */
 
 .rf-recent {
@@ -673,7 +890,7 @@
 
 
 /* ==========================================================================
-   5. Small screens
+   6. Small screens
    ========================================================================== */
 
 @media (max-width: 380px) {
