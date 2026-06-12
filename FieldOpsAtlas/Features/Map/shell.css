@@ -1,109 +1,31 @@
-/* ==========================================================================
-   FieldOps Atlas
-   File: FieldOpsAtlas/Features/Map/shell.css
-   Version: 1.1.1-map-shell-clean-rewrite
+/* FieldOps Atlas | FieldOpsAtlas/Features/Map/shell.css | Version: 1.1.1-map-shell-clean-rewrite */
+/* Purpose: Minimal map-page shell compatibility. Root shell owns app chrome. Map owns canvas, Leaflet, regions, markers, panels, and tools. */
 
-   Purpose:
-   Minimal map-page shell compatibility.
-
-   Ownership:
-   - Root shell owns app chrome.
-   - Map owns map canvas, Leaflet, regions, markers, selected walk, panels, and tools.
-   - This file does not create shell controls.
-   - This file does not inject fallback controls.
-   - This file does not touch data, region JSON, markers, or map state.
-   ========================================================================== */
-
-
-/* ==========================================================================
-   1. Settings
-   ========================================================================== */
-
+/* 1. Settings */
 :root {
   --map-safe-bottom: env(safe-area-inset-bottom, 0px);
   --map-bottom-shell-height: var(--nav-height, 38px);
   --map-bottom-lift: var(--bottom-lift, 8px);
-
   --map-layer-shell: 5002;
   --map-layer-dim: 5003;
   --map-layer-drawer: 5006;
   --map-layer-panel: 5007;
   --map-layer-tools: 5008;
-
   --map-bottom-clear: rgba(7, 11, 18, 0);
   --map-bottom-soft: rgba(7, 19, 34, 0.68);
   --map-bottom-solid: rgba(8, 29, 52, 0.94);
   --map-bottom-base: #0d2947;
 }
 
+/* 2. Map chrome */
+:where(.top-bar, .side-menu, .menu-overlay, .side-rail, .top-filter-menu, .top-region-tree, .site-search-results, .rail-tools-menu) { display: none; }
 
-/* ==========================================================================
-   2. Map shell cleanup
-   ========================================================================== */
-
-.top-bar,
-.side-menu,
-.menu-overlay,
-.side-rail,
-.top-filter-menu,
-.top-region-tree,
-.site-search-results,
-.rail-tools-menu {
-  display: none;
-}
-
-
-/* ==========================================================================
-   3. Placement
-   ========================================================================== */
-
-.top-shell {
-  z-index: var(--map-layer-shell);
-  background: rgb(11, 35, 53);
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-.bottom-shell {
-  z-index: var(--map-layer-shell);
-  isolation: isolate;
-}
-
-.map-dim {
-  z-index: var(--map-layer-dim);
-}
-
-.drawer {
-  z-index: var(--map-layer-drawer);
-}
-
-:is(.filter-panel, .search-panel) {
-  z-index: var(--map-layer-panel);
-}
-
-.bottom-shell::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: calc((var(--map-bottom-lift) + var(--map-safe-bottom)) * -1);
-  left: 0;
-  z-index: -1;
-  height: calc(var(--map-bottom-shell-height) + var(--map-bottom-lift) + var(--map-safe-bottom) + 44px);
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      var(--map-bottom-clear) 0%,
-      var(--map-bottom-soft) 17%,
-      var(--map-bottom-solid) 52%,
-      var(--map-bottom-base) 100%
-    );
-}
-
-.map-tools-panel {
-  z-index: var(--map-layer-tools);
-  right: 12px;
-  bottom: calc(var(--map-safe-bottom) + var(--map-bottom-lift) + var(--map-bottom-shell-height) + 12px);
-  left: 12px;
-}
+/* 3. Placement */
+:where(.top-shell, .bottom-shell) { z-index: var(--map-layer-shell); }
+.top-shell { background: rgb(11, 35, 53); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.bottom-shell { isolation: isolate; }
+.map-dim { z-index: var(--map-layer-dim); }
+.drawer { z-index: var(--map-layer-drawer); }
+:is(.filter-panel, .search-panel) { z-index: var(--map-layer-panel); }
+.bottom-shell::before { content: ""; position: absolute; right: 0; bottom: calc((var(--map-bottom-lift) + var(--map-safe-bottom)) * -1); left: 0; z-index: -1; height: calc(var(--map-bottom-shell-height) + var(--map-bottom-lift) + var(--map-safe-bottom) + 44px); pointer-events: none; background: linear-gradient(180deg, var(--map-bottom-clear) 0%, var(--map-bottom-soft) 17%, var(--map-bottom-solid) 52%, var(--map-bottom-base) 100%); }
+.map-tools-panel { z-index: var(--map-layer-tools); right: 12px; bottom: calc(var(--map-safe-bottom) + var(--map-bottom-lift) + var(--map-bottom-shell-height) + 12px); left: 12px; }
