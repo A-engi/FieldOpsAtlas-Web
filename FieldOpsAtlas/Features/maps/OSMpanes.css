@@ -1,11 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas OSM panes
    File: FieldOpsAtlas/Features/maps/OSMpanes.css
-   Version: 1.0.1
+   Version: 1.0.2
    Purpose:
    - Leaflet marker popup styling.
    - Bottom details pane styling.
    - Temporary region-loaded toast styling.
+   - Coming soon modal for buttons that are not wired yet.
    ========================================================================== */
 
 .leaflet-popup-content-wrapper,
@@ -82,18 +83,15 @@
   padding: 12px 14px;
 }
 
-.osmpanes-empty {
-  margin: 0;
-  color: rgba(205, 234, 255, 0.74);
-  font-size: 13px;
-  line-height: 1.35;
-}
-
 .osmpanes-title-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
+}
+
+.osmpanes-title-row--three {
+  grid-template-columns: minmax(0, 1fr) auto auto;
 }
 
 .osmpanes-title {
@@ -107,11 +105,17 @@
   white-space: nowrap;
 }
 
-.osmpanes-subtitle {
+.osmpanes-subtitle,
+.osmpanes-empty {
   margin: 5px 0 0;
   color: rgba(205, 234, 255, 0.74);
   font-size: 12px;
   line-height: 1.35;
+}
+
+.osmpanes-empty {
+  margin: 0;
+  font-size: 13px;
 }
 
 .osmpanes-button {
@@ -122,6 +126,10 @@
   background:
     radial-gradient(circle at 50% 0%, rgba(121, 198, 255, 0.14), transparent 46%),
     linear-gradient(180deg, rgba(22, 68, 116, 0.62), rgba(6, 24, 48, 0.68));
+}
+
+.osmpanes-button--quiet {
+  color: rgba(205, 234, 255, 0.88);
 }
 
 .osmpanes-grid {
@@ -153,6 +161,10 @@
   color: rgba(205, 234, 255, 0.76);
   font-size: 13px;
   line-height: 1.4;
+}
+
+.osmpanes-line + .osmpanes-line {
+  margin-top: 6px;
 }
 
 .osmpanes-copy-row {
@@ -233,7 +245,58 @@
   gap: 8px;
 }
 
-.osmmaps-page[data-theme="light"] .osmpanes-details {
+.osmpanes-coming-soon {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.osmpanes-coming-soon[hidden] {
+  display: none;
+}
+
+.osmpanes-coming-soon__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(2, 9, 20, 0.44);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+}
+
+.osmpanes-coming-soon__card {
+  position: relative;
+  z-index: 1;
+  width: min(340px, 100%);
+  padding: 16px;
+  border: 1px solid rgba(184, 226, 255, 0.20);
+  border-radius: 24px;
+  color: rgba(246, 252, 255, 0.98);
+  background:
+    linear-gradient(180deg, rgba(8, 31, 58, 0.92), rgba(5, 18, 36, 0.84)),
+    rgba(7, 22, 42, 0.80);
+  box-shadow: 0 24px 54px rgba(0, 12, 28, 0.42);
+}
+
+.osmpanes-coming-soon__title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.osmpanes-coming-soon__text {
+  margin: 0 0 14px;
+  color: rgba(205, 234, 255, 0.74);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.osmmaps-page[data-theme="light"] .osmpanes-details,
+.osmmaps-page[data-theme="light"] .osmpanes-coming-soon__card {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(235, 246, 255, 0.76)),
     rgba(255, 255, 255, 0.76);
@@ -241,7 +304,8 @@
 
 .osmmaps-page[data-theme="light"] .osmpanes-title,
 .osmmaps-page[data-theme="light"] .osmpanes-section-title,
-.osmmaps-page[data-theme="light"] .osmpanes-value {
+.osmmaps-page[data-theme="light"] .osmpanes-value,
+.osmmaps-page[data-theme="light"] .osmpanes-coming-soon__title {
   color: #0a2038;
 }
 
@@ -249,7 +313,8 @@
 .osmmaps-page[data-theme="light"] .osmpanes-line,
 .osmmaps-page[data-theme="light"] .osmpanes-list,
 .osmmaps-page[data-theme="light"] .osmpanes-weather-output,
-.osmmaps-page[data-theme="light"] .osmpanes-empty {
+.osmmaps-page[data-theme="light"] .osmpanes-empty,
+.osmmaps-page[data-theme="light"] .osmpanes-coming-soon__text {
   color: rgba(22, 52, 82, 0.68);
 }
 
@@ -262,5 +327,13 @@
     right: 9px;
     left: 9px;
     max-height: 58dvh;
+  }
+
+  .osmpanes-title-row--three {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .osmpanes-title-row--three .osmpanes-button:last-child {
+    grid-column: 2;
   }
 }
