@@ -1,28 +1,37 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.0.5-pane-expand-collapse
+   Version: 1.0.6-root-editor
    Purpose:
    - UK-only free OSM map rendered through Leaflet.
    - Load region buckets from data/regions.json.
    - Load only the selected region's walk/site pins.
-   - Delegate marker popups and selected-walk details to OSMpanes.js.
+   - Delegate marker popups, details and edit forms to OSMpanes.js.
+   - Use FieldOpsEditor from root shell for online GitHub writes.
    ========================================================================== */
 
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.0.5-pane-expand-collapse";
+  var VERSION = "1.0.6-root-editor";
   var REGION_TOAST_MS = 3000;
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
       return "../../../data/regions/" + encodeURIComponent(regionId) + "-sites.json";
+    },
+    regionPath: function regionPath(regionId) {
+      return "data/regions/" + encodeURIComponent(regionId) + "-sites.json";
+    },
+    recyclePath: function recyclePath(regionId) {
+      return "data/recycle-bin/" + encodeURIComponent(regionId) + "-sites-recycle.json";
     }
   };
   var STORAGE_KEYS = {
     region: "fieldops-osmmaps-selected-region-v1",
-    theme: "fieldops-osmmaps-theme-v1"
+    theme: "fieldops-osmmaps-theme-v1",
+    localPrefix: "fieldops-osmmaps-local-region-",
+    recyclePrefix: "fieldops-osmmaps-local-recycle-"
   };
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -44,6 +53,10 @@
 
   function panes() {
     return window.FieldOpsOSMpanes || null;
+  }
+
+  function editor() {
+    return window.FieldOpsEditor || null;
   }
 
   function qs(selector, root) {
@@ -191,6 +204,29 @@
     };
   }
 
+  function serialiseWalk(walk) {
+    return {
+      id: walk.id,
+      name: walk.name,
+      description: walk.description || "",
+      siteType: walk.siteType || "Walk",
+      status: walk.status || "demo",
+      regionId: walk.regionId || state.selectedRegionId,
+      lat: Number(walk.lat),
+      lng: Number(walk.lng),
+      what3words: walk.what3words || "",
+      accessNotes: walk.accessNotes || "",
+      address: walk.address || "",
+      gridRef: walk.gridRef || "",
+      services: asStringList(walk.services),
+      inputs: asStringList(walk.inputs),
+      equipment: asStringList(walk.equipment),
+      walkthrough: normaliseWalkthrough(walk.walkthrough),
+      alerts: asStringList(walk.alerts),
+      notes: walk.notes || ""
+    };
+  }
+
   function safeLocalGet(key) {
     try {
       return window.localStorage.getItem(key) || "";
@@ -205,6 +241,23 @@
     } catch (error) {
       // Storage can be unavailable in previews/webviews.
     }
+  }
+
+  function safeLocalJson(key, fallback) {
+    try {
+      var raw = window.localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function localRegionKey(regionId) {
+    return STORAGE_KEYS.localPrefix + regionId;
+  }
+
+  function localRecycleKey(regionId) {
+    return STORAGE_KEYS.recyclePrefix + regionId;
   }
 
   function selectedRegion() {
@@ -444,6 +497,17 @@
     });
   }
 
+  function renderEditPane(walk, message) {
+    var paneRenderer = panes();
+
+    if (!paneRenderer) {
+      return;
+    }
+
+    clearPaneTimer();
+    paneRenderer.renderEdit(selectedPanel(), walk, selectedRegion(), message || editStatusText());
+  }
+
   function closeDetailsPane() {
     var paneRenderer = panes();
 
@@ -484,6 +548,18 @@
     }
   }
 
+  function applyLocalOverride(regionId, walks) {
+    var local = safeLocalJson(localRegionKey(regionId), null);
+
+    if (!Array.isArray(local)) {
+      return walks;
+    }
+
+    return local.map(function normaliseLocal(rawWalk) {
+      return normaliseWalk(rawWalk, regionId);
+    }).filter(Boolean).filter(isInsideUkBounds);
+  }
+
   function loadRegionWalks(regionId) {
     if (state.regionCache.has(regionId)) {
       return Promise.resolve(state.regionCache.get(regionId));
@@ -503,6 +579,7 @@
         .filter(Boolean)
         .filter(isInsideUkBounds);
 
+      walks = applyLocalOverride(regionId, walks);
       state.regionCache.set(regionId, walks);
       return walks;
     });
@@ -678,10 +755,170 @@
     });
   }
 
-  function showComingSoon(label) {
-    if (panes()) {
-      panes().showComingSoon(label);
+  function editStatusText() {
+    if (editor() && editor().isOnline && editor().isOnline()) {
+      return "Editing online. Save writes the region file to GitHub.";
     }
+
+    return "Editing locally. Save stores a local override on this device.";
+  }
+
+  function parseLines(value) {
+    return String(value || "").split(/\n|,/).map(function clean(line) {
+      return line.trim();
+    }).filter(Boolean);
+  }
+
+  function formValue(form, name) {
+    var field = form.elements[name];
+    return field ? String(field.value || "").trim() : "";
+  }
+
+  function walkFromForm(form) {
+    var existing = selectedWalk() || {};
+    var lat = Number(formValue(form, "lat"));
+    var lng = Number(formValue(form, "lng"));
+
+    return serialiseWalk(Object.assign({}, existing, {
+      name: formValue(form, "name") || existing.name,
+      siteType: formValue(form, "siteType") || "Walk",
+      status: formValue(form, "status") || "demo",
+      lat: Number.isFinite(lat) ? lat : existing.lat,
+      lng: Number.isFinite(lng) ? lng : existing.lng,
+      what3words: formValue(form, "what3words"),
+      gridRef: formValue(form, "gridRef"),
+      address: formValue(form, "address"),
+      accessNotes: formValue(form, "accessNotes"),
+      services: parseLines(formValue(form, "services")),
+      alerts: parseLines(formValue(form, "alerts")),
+      inputs: parseLines(formValue(form, "inputs")),
+      equipment: parseLines(formValue(form, "equipment")),
+      walkthrough: {
+        type: formValue(form, "walkthroughType"),
+        url: formValue(form, "walkthroughUrl"),
+        notes: formValue(form, "walkthroughNotes")
+      },
+      description: formValue(form, "description"),
+      notes: formValue(form, "notes")
+    }));
+  }
+
+  function storeLocalRegion(regionId, walks) {
+    safeLocalSet(localRegionKey(regionId), JSON.stringify(walks.map(serialiseWalk)));
+  }
+
+  function persistRegion(regionId, walks, message) {
+    var cleanWalks = walks.map(serialiseWalk);
+
+    if (editor() && editor().isOnline && editor().isOnline()) {
+      return editor().saveJsonFile(DATA_FILES.regionPath(regionId), cleanWalks, message);
+    }
+
+    storeLocalRegion(regionId, cleanWalks);
+    return Promise.resolve({
+      local: true
+    });
+  }
+
+  function saveCurrentEdit(form) {
+    var updated = walkFromForm(form);
+    var regionId = state.selectedRegionId;
+    var existingIndex = state.walks.findIndex(function findWalkIndex(walk) {
+      return walk.id === updated.id;
+    });
+
+    if (existingIndex === -1) {
+      state.walks.push(updated);
+    } else {
+      state.walks.splice(existingIndex, 1, updated);
+    }
+
+    if (panes()) {
+      panes().setEditStatus("Saving...");
+    }
+
+    return persistRegion(regionId, state.walks, "Update walk " + updated.name)
+      .then(function saved() {
+        state.regionCache.set(regionId, state.walks.slice());
+        renderMarkers();
+        renderRegions();
+        registerSearch();
+        state.selectedWalkId = updated.id;
+        renderFullDetailsPane(updated);
+      })
+      .catch(function handleError(error) {
+        if (panes()) {
+          panes().setEditStatus(error.message || "Save failed.");
+        }
+      });
+  }
+
+  function recycleLocal(regionId, deletedWalk) {
+    var recycled = safeLocalJson(localRecycleKey(regionId), []);
+    recycled.push(Object.assign({}, serialiseWalk(deletedWalk), {
+      deletedAt: new Date().toISOString(),
+      sourcePath: DATA_FILES.regionPath(regionId)
+    }));
+    safeLocalSet(localRecycleKey(regionId), JSON.stringify(recycled));
+  }
+
+  function recycleOnline(regionId, deletedWalk) {
+    var binPath = DATA_FILES.recyclePath(regionId);
+    var item = Object.assign({}, serialiseWalk(deletedWalk), {
+      deletedAt: new Date().toISOString(),
+      sourcePath: DATA_FILES.regionPath(regionId)
+    });
+
+    return editor().readJsonFile(binPath, [])
+      .then(function appendRecycle(recycled) {
+        var next = Array.isArray(recycled) ? recycled.slice() : [];
+        next.push(item);
+        return editor().saveJsonFile(binPath, next, "Recycle walk " + deletedWalk.name);
+      });
+  }
+
+  function deleteCurrentWalk(walkId) {
+    var regionId = state.selectedRegionId;
+    var deletedWalk = state.walks.find(function findWalk(walk) {
+      return walk.id === walkId;
+    });
+
+    if (!deletedWalk) {
+      return;
+    }
+
+    var nextWalks = state.walks.filter(function keepWalk(walk) {
+      return walk.id !== walkId;
+    });
+
+    if (panes()) {
+      panes().setEditStatus("Deleting...");
+    }
+
+    var recycle = editor() && editor().isOnline && editor().isOnline()
+      ? recycleOnline(regionId, deletedWalk)
+      : Promise.resolve().then(function localRecycle() {
+        recycleLocal(regionId, deletedWalk);
+      });
+
+    recycle
+      .then(function saveAfterRecycle() {
+        state.walks = nextWalks;
+        return persistRegion(regionId, state.walks, "Delete walk " + deletedWalk.name);
+      })
+      .then(function finishDelete() {
+        state.regionCache.set(regionId, state.walks.slice());
+        state.selectedWalkId = "";
+        renderMarkers();
+        renderRegions();
+        registerSearch();
+        renderRegionToast();
+      })
+      .catch(function handleError(error) {
+        if (panes()) {
+          panes().setEditStatus(error.message || "Delete failed.");
+        }
+      });
   }
 
   function wireEvents() {
@@ -695,6 +932,8 @@
       var collapseButton = event.target.closest("[data-collapse-details]");
       var closePaneButton = event.target.closest("[data-close-pane]");
       var editButton = event.target.closest("[data-edit-walk]");
+      var editCancel = event.target.closest("[data-edit-cancel]");
+      var editDelete = event.target.closest("[data-edit-delete]");
 
       if (regionButton) {
         selectRegion(regionButton.getAttribute("data-region-id"));
@@ -732,7 +971,23 @@
       }
 
       if (editButton) {
-        showComingSoon("Edit walk");
+        var walk = state.walks.find(function findWalk(walkItem) {
+          return walkItem.id === editButton.getAttribute("data-edit-walk");
+        });
+        if (walk) {
+          state.selectedWalkId = walk.id;
+          renderEditPane(walk);
+        }
+        return;
+      }
+
+      if (editCancel) {
+        selectWalk(editCancel.getAttribute("data-edit-cancel"), false, true);
+        return;
+      }
+
+      if (editDelete) {
+        deleteCurrentWalk(editDelete.getAttribute("data-edit-delete"));
         return;
       }
 
@@ -741,12 +996,36 @@
       }
     });
 
+    document.addEventListener("submit", function onSubmit(event) {
+      var form = event.target.closest("[data-edit-form]");
+      if (!form) {
+        return;
+      }
+
+      event.preventDefault();
+      saveCurrentEdit(form);
+    });
+
     window.addEventListener("fieldops:shell-filter-region", function onShellFilterRegion() {
       openRegionOverlay();
     });
 
     window.addEventListener("fieldops:shell-map-tools-toggle", function onMapToolsToggle() {
       openRegionOverlay();
+    });
+
+    window.addEventListener("fieldops:editor-mode-change", function onEditorModeChange() {
+      var walk = selectedWalk();
+      var panel = selectedPanel();
+      if (!walk || !panel || panel.hidden) {
+        return;
+      }
+
+      if (panel.dataset.paneMode === "edit") {
+        renderEditPane(walk);
+      } else if (panel.dataset.paneMode === "details") {
+        renderFullDetailsPane(walk);
+      }
     });
   }
 
@@ -810,6 +1089,14 @@
       },
       getSelectedWalk: selectedWalk
     };
+
+    if (window.FieldOpsEditor && window.FieldOpsEditor.registerPage) {
+      window.FieldOpsEditor.registerPage({
+        page: "map",
+        label: "Maps",
+        fileScope: "data/regions"
+      });
+    }
   }
 
   function init() {
