@@ -1,0 +1,175 @@
+/* ==========================================================================
+   FieldOps Atlas weather-mode-panel.js
+   Root file: FieldOpsAtlas/Features/Map/weather-mode-panel.js
+   Version: 1.1.1-lazy-weather-v1
+
+   Purpose:
+   - Own the Weather Mode panel markup.
+   - Keep the bulky Weather Mode DOM out of index.html.
+   - Create Weather Mode only when map-ui.js asks for it after the Weather
+     button is pressed.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var PANEL_VERSION = "1.1.1-lazy-weather-v1";
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function getPanelMountPoint() {
+    return byId("fieldNotesPanel") ||
+      byId("statusToast") ||
+      document.querySelector(".app-shell") ||
+      document.body;
+  }
+
+  function createWeatherModePanel() {
+    var existingPanel = byId("weatherModePanel");
+
+    if (existingPanel) {
+      return existingPanel;
+    }
+
+    var panel = document.createElement("aside");
+
+    panel.id = "weatherModePanel";
+    panel.className = "weather-mode-panel is-open";
+    panel.setAttribute("aria-hidden", "false");
+    panel.dataset.fieldopsWeatherModeVersion = PANEL_VERSION;
+
+    panel.innerHTML = [
+      '<div class="weather-mode-panel-header">',
+      '  <div>',
+      '    <div class="panel-kicker">Weather mode</div>',
+      '    <h2>Visible walk weather</h2>',
+      '  </div>',
+      '  <button id="closeWeatherModePanelButton" class="admin-close-button" type="button" aria-label="Close weather mode">&times;</button>',
+      '</div>',
+      '<div class="weather-mode-panel-body">',
+      '  <p class="mini-note">',
+      '    Weather mode is split into separate source blocks. Forecast checks visible walks separately, while warnings, lightning, and power cuts stay separate.',
+      '  </p>',
+      '  <div class="weather-source-grid">',
+      '    <section class="weather-source-card weather-source-card-primary">',
+      '      <div class="field-note-tag">Forecast</div>',
+      '      <h3>Visible walk forecast</h3>',
+      '      <p>Loads selected region walk files as separate forecast points and keeps risky conditions visible.</p>',
+      '      <button id="weatherSitesRefreshButton" class="source-link-button secondary" type="button">Refresh forecasts</button>',
+      '      <div class="weather-overlay-controls" aria-label="Weather map overlay controls">',
+      '        <div class="weather-overlay-control-row">',
+      '          <button id="weatherOverlayAllButton" class="weather-overlay-toggle" type="button" data-weather-overlay-filter="all" aria-pressed="true">All</button>',
+      '          <button id="weatherOverlayWatchButton" class="weather-overlay-toggle" type="button" data-weather-overlay-filter="watch" aria-pressed="false">Watch+</button>',
+      '          <button id="weatherOverlayHighButton" class="weather-overlay-toggle" type="button" data-weather-overlay-filter="high" aria-pressed="false">High only</button>',
+      '          <button id="weatherOverlayClearButton" class="weather-overlay-toggle" type="button" data-weather-overlay-filter="off" aria-pressed="false">Clear overlay</button>',
+      '          <button id="weatherOverlayFitButton" class="weather-overlay-action" type="button">Fit overlay</button>',
+      '        </div>',
+      '        <p id="weatherOverlayStatus" class="weather-overlay-status">Map overlay waiting for visible walk forecasts.</p>',
+      '      </div>',
+      '      <div id="visibleWeatherSiteList" class="visible-weather-site-list">',
+      '        <p class="visible-weather-empty">Open Weather Mode to load visible walk forecasts.</p>',
+      '      </div>',
+      '    </section>',
+      '    <section id="weatherWarningSourceCard" class="weather-source-card weather-alert-card">',
+      '      <div class="field-note-tag">Warnings</div>',
+      '      <h3>Met Office warnings</h3>',
+      '      <p>Manual official warning check is ready. If NSWWS access is added later, paste the supplied Atom feed URL and API key here.</p>',
+      '      <div class="source-link-row">',
+      '        <a class="source-link-button" href="https://weather.metoffice.gov.uk/warnings-and-advice/uk-warnings" target="_blank" rel="noopener">Open warnings</a>',
+      '        <a class="source-link-button secondary" href="https://metoffice.github.io/nswws-public-api/" target="_blank" rel="noopener">API docs</a>',
+      '      </div>',
+      '      <div class="alert-feed-setup" aria-label="Met Office warning feed setup">',
+      '        <label class="alert-feed-label" for="metOfficeWarningsFeedInput">',
+      '          <span>NSWWS Atom feed URL</span>',
+      '          <input id="metOfficeWarningsFeedInput" type="url" inputmode="url" placeholder="Paste supplied Atom Feed URL">',
+      '        </label>',
+      '        <label class="alert-feed-label" for="metOfficeWarningsKeyInput">',
+      '          <span>API key</span>',
+      '          <input id="metOfficeWarningsKeyInput" type="password" autocomplete="off" placeholder="Saved locally only">',
+      '        </label>',
+      '        <div class="alert-feed-actions">',
+      '          <button id="saveMetOfficeWarningsButton" class="source-link-button" type="button">Save source</button>',
+      '          <button id="checkMetOfficeWarningsButton" class="source-link-button secondary" type="button">Check feed</button>',
+      '          <button id="clearMetOfficeWarningsButton" class="source-link-button secondary" type="button">Clear</button>',
+      '        </div>',
+      '        <div id="metOfficeWarningsResult" class="alert-feed-result">',
+      '          <p class="alert-feed-message">Manual warning link is ready. NSWWS feed check is optional.</p>',
+      '        </div>',
+      '      </div>',
+      '    </section>',
+      '    <section id="lightningSourceCard" class="weather-source-card weather-alert-card lightning-passive-card">',
+      '      <div class="field-note-tag">Lightning</div>',
+      '      <h3>Lightning check</h3>',
+      '      <p>Manual strike-risk links only. Lightning does not own Weather Mode controls, overlay filters, refresh, or map markers.</p>',
+      '      <div class="source-link-row">',
+      '        <a class="source-link-button" href="https://weather.metoffice.gov.uk/maps-and-charts/lightning-map" target="_blank" rel="noopener">Met Office 24h</a>',
+      '        <a class="source-link-button secondary" href="https://www.lightningmaps.org/" target="_blank" rel="noopener">LightningMaps</a>',
+      '        <a class="source-link-button secondary" href="https://map.blitzortung.org/" target="_blank" rel="noopener">Blitzortung</a>',
+      '      </div>',
+      '      <p class="lightning-passive-note">Forecast thunderstorm flags stay separate from live strike checks.</p>',
+      '    </section>',
+      '    <section id="powerOutageSourceCard" class="weather-source-card weather-alert-card power-alert-card">',
+      '      <div class="field-note-tag">Power</div>',
+      '      <h3>DNO / power outage</h3>',
+      '      <p>Save a postcode or likely DNO locally, then open the official checker.</p>',
+      '      <div class="source-link-row">',
+      '        <a class="source-link-button" href="https://www.powercut105.com/en/" target="_blank" rel="noopener">PowerCut105</a>',
+      '        <a class="source-link-button secondary" href="https://www.energynetworks.org/customers/find-my-network-operator" target="_blank" rel="noopener">Find DNO</a>',
+      '      </div>',
+      '      <div class="alert-feed-setup dno-power-setup" aria-label="DNO power outage setup">',
+      '        <label class="alert-feed-label" for="dnoPowerPostcodeInput">',
+      '          <span>Postcode / outward code</span>',
+      '          <input id="dnoPowerPostcodeInput" type="text" inputmode="text" autocomplete="postal-code" placeholder="e.g. SA62 or CF10 1AA">',
+      '        </label>',
+      '        <label class="alert-feed-label" for="dnoPowerProviderSelect">',
+      '          <span>Known DNO / checker</span>',
+      '          <select id="dnoPowerProviderSelect">',
+      '            <option value="auto">Find my DNO first</option>',
+      '            <option value="nationalGrid">National Grid ED</option>',
+      '            <option value="ukpn">UK Power Networks</option>',
+      '            <option value="ssen">SSEN</option>',
+      '            <option value="spen">SP Energy Networks</option>',
+      '            <option value="enwl">Electricity North West</option>',
+      '            <option value="northernPowergrid">Northern Powergrid</option>',
+      '          </select>',
+      '        </label>',
+      '        <div class="alert-feed-actions">',
+      '          <button id="saveDnoPowerButton" class="source-link-button" type="button">Save power source</button>',
+      '          <button id="openDnoPowerButton" class="source-link-button secondary" type="button">Open check</button>',
+      '          <button id="clearDnoPowerButton" class="source-link-button secondary" type="button">Clear</button>',
+      '        </div>',
+      '        <div id="dnoPowerResult" class="alert-feed-result">',
+      '          <p class="alert-feed-message">PowerCut105 / ENA finder is ready. Save a DNO when known.</p>',
+      '        </div>',
+      '      </div>',
+      '    </section>',
+      '  </div>',
+      '</div>'
+    ].join("");
+
+    var mountPoint = getPanelMountPoint();
+
+    if (mountPoint && mountPoint.parentNode && mountPoint.id === "fieldNotesPanel") {
+      mountPoint.parentNode.insertBefore(panel, mountPoint);
+    } else if (mountPoint && mountPoint.parentNode && mountPoint.id === "statusToast") {
+      mountPoint.parentNode.insertBefore(panel, mountPoint);
+    } else {
+      mountPoint.appendChild(panel);
+    }
+
+    window.dispatchEvent(new CustomEvent("fieldops:weather-panel-ready", {
+      detail: {
+        version: PANEL_VERSION
+      }
+    }));
+
+    return panel;
+  }
+
+  window.FieldOpsAtlasWeatherMode = {
+    version: PANEL_VERSION,
+    ensurePanel: createWeatherModePanel
+  };
+}());
