@@ -1,7 +1,18 @@
+/* ==========================================================================
+   FieldOps Atlas OSM maps
+   File: FieldOpsAtlas/Features/maps/OSMmaps.js
+   Version: 1.0.3-panes
+   Purpose:
+   - UK-only free OSM map rendered through Leaflet.
+   - Load region buckets from data/regions.json.
+   - Load only the selected region's walk/site pins.
+   - Delegate marker popups and selected-walk details to OSMpanes.js.
+   ========================================================================== */
+
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.0.2-filter-region-overlay";
+  var VERSION = "1.0.3-panes";
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
@@ -29,6 +40,10 @@
     theme: "dark"
   };
 
+  function panes() {
+    return window.FieldOpsOSMpanes || null;
+  }
+
   function qs(selector, root) {
     return (root || document).querySelector(selector);
   }
@@ -39,7 +54,7 @@
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
-        "\"": "&quot;",
+        '"': "&quot;",
         "'": "&#39;"
       }[character];
     });
@@ -49,9 +64,11 @@
     if (Array.isArray(payload)) {
       return payload;
     }
+
     if (payload && Array.isArray(payload[key])) {
       return payload[key];
     }
+
     return [];
   }
 
@@ -70,6 +87,30 @@
       walk.lat <= UK_BOUNDS[1][0] &&
       walk.lng >= UK_BOUNDS[0][1] &&
       walk.lng <= UK_BOUNDS[1][1];
+  }
+
+  function asStringList(value) {
+    if (Array.isArray(value)) {
+      return value.map(function mapItem(item) {
+        if (typeof item === "string") {
+          return item.trim();
+        }
+
+        if (item && typeof item === "object") {
+          return String(item.name || item.label || item.title || item.service || item.id || "").trim();
+        }
+
+        return "";
+      }).filter(Boolean);
+    }
+
+    if (typeof value === "string" && value.trim()) {
+      return value.split(/[,;\n]/).map(function splitLine(line) {
+        return line.trim();
+      }).filter(Boolean);
+    }
+
+    return [];
   }
 
   function normaliseRegion(rawRegion) {
@@ -113,14 +154,19 @@
     return {
       id: id,
       name: name,
-      description: String(rawWalk.description || rawWalk.notes || ""),
+      description: String(rawWalk.description || ""),
+      notes: String(rawWalk.notes || rawWalk.note || ""),
       siteType: String(rawWalk.siteType || rawWalk.type || "Walk"),
       status: String(rawWalk.status || "demo"),
       regionId: String(rawWalk.regionId || rawWalk.region || fallbackRegionId || ""),
       lat: lat,
       lng: lng,
       gridRef: String(rawWalk.gridRef || rawWalk.grid || ""),
-      what3words: String(rawWalk.what3words || rawWalk.w3w || "")
+      what3words: String(rawWalk.what3words || rawWalk.w3w || ""),
+      accessNotes: String(rawWalk.accessInfo || rawWalk.accessNotes || rawWalk.access || ""),
+      address: String(rawWalk.address || ""),
+      services: asStringList(rawWalk.services),
+      alerts: asStringList(rawWalk.alerts || rawWalk.warnings)
     };
   }
 
@@ -163,6 +209,7 @@
         if (response.status === 404) {
           return fallback;
         }
+
         throw new Error("Could not load " + url + " (" + response.status + ")");
       }
 
@@ -229,26 +276,26 @@
     }
 
     if (!state.regions.length) {
-      list.innerHTML = "<p class=\"osmmaps-empty\">No regions found.</p>";
+      list.innerHTML = '<p class="osmpanes-empty">No regions found.</p>';
       return;
     }
 
     list.innerHTML = state.regions.map(function regionButton(region) {
       var isSelected = region.id === state.selectedRegionId;
       return [
-        "<button class=\"osmmaps-region-button\" type=\"button\" data-region-id=\"",
+        '<button class="osmmaps-region-button" type="button" data-region-id="',
         escapeHtml(region.id),
-        "\" aria-pressed=\"",
+        '" aria-pressed="',
         String(isSelected),
-        "\" style=\"--region-color:",
+        '" style="--region-color:',
         escapeHtml(region.color),
-        "\">",
-        "<span class=\"osmmaps-region-dot\" aria-hidden=\"true\"></span>",
-        "<span class=\"osmmaps-region-name\">",
+        '">',
+        '<span class="osmmaps-region-dot" aria-hidden="true"></span>',
+        '<span class="osmmaps-region-name">',
         escapeHtml(region.name),
-        "</span>",
-        isSelected ? "<span class=\"osmmaps-region-count\">" + state.walks.length + "</span>" : "",
-        "</button>"
+        '</span>',
+        isSelected ? '<span class="osmmaps-region-count">' + state.walks.length + '</span>' : "",
+        '</button>'
       ].join("");
     }).join("");
   }
@@ -257,38 +304,18 @@
     var panel = qs("[data-selected-panel]");
     if (panel) {
       panel.hidden = false;
-      panel.innerHTML = "<p class=\"osmmaps-empty\">" + escapeHtml(message) + "</p>";
+      panel.innerHTML = '<p class="osmpanes-empty">' + escapeHtml(message) + '</p>';
     }
   }
 
   function makeMarkerIcon(region) {
     return L.divIcon({
       className: "osmmaps-pin-shell",
-      html: "<span class=\"osmmaps-pin\" style=\"--pin-color:" + escapeHtml(region.color) + "\"></span>",
+      html: '<span class="osmmaps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
       iconSize: [18, 18],
       iconAnchor: [9, 9],
       popupAnchor: [0, -10]
     });
-  }
-
-  function markerPopup(walk, region) {
-    return [
-      "<article class=\"osmmaps-popup\">",
-      "<h2 class=\"osmmaps-popup-title\">",
-      escapeHtml(walk.name),
-      "</h2>",
-      "<p class=\"osmmaps-popup-meta\">",
-      escapeHtml(region.name),
-      " - ",
-      escapeHtml(walk.siteType),
-      "</p>",
-      "<p class=\"osmmaps-popup-line\">",
-      walk.lat.toFixed(5),
-      ", ",
-      walk.lng.toFixed(5),
-      "</p>",
-      "</article>"
-    ].join("");
   }
 
   function renderMarkers() {
@@ -312,7 +339,7 @@
         keyboard: true
       });
 
-      marker.bindPopup(markerPopup(walk, region));
+      marker.bindPopup(panes() ? panes().popupHtml(walk) : escapeHtml(walk.name));
       marker.on("click", function onMarkerClick() {
         selectWalk(walk.id, true);
       });
@@ -337,77 +364,28 @@
     });
   }
 
-  function renderSelectedPanel(walk) {
+  function renderPane(walk) {
     var panel = qs("[data-selected-panel]");
     var region = selectedRegion();
+    var paneRenderer = panes();
 
-    if (!panel) {
+    if (!panel || !paneRenderer) {
       return;
     }
 
-    panel.hidden = false;
-
     if (!region) {
-      panel.innerHTML = [
-        "<div class=\"osmmaps-selected-header\">",
-        "<p class=\"osmmaps-empty\">Pick a region to load walks.</p>",
-        "<button class=\"osmmaps-small-button\" type=\"button\" data-region-open>Region</button>",
-        "</div>"
-      ].join("");
+      paneRenderer.renderEmpty(panel);
       return;
     }
 
     if (!walk) {
-      panel.innerHTML = [
-        "<div class=\"osmmaps-selected-header\">",
-        "<div>",
-        "<h2 class=\"osmmaps-selected-title\">",
-        escapeHtml(region.name),
-        "</h2>",
-        "<p class=\"osmmaps-selected-meta\">",
-        state.walks.length,
-        " walks loaded - tap a marker",
-        "</p>",
-        "</div>",
-        "<button class=\"osmmaps-small-button\" type=\"button\" data-region-open>Region</button>",
-        "</div>"
-      ].join("");
+      paneRenderer.renderRegion(panel, region, state.walks.length);
       return;
     }
 
-    panel.innerHTML = [
-      "<article>",
-      "<div class=\"osmmaps-selected-header\">",
-      "<div>",
-      "<h2 class=\"osmmaps-selected-title\">",
-      escapeHtml(walk.name),
-      "</h2>",
-      "<p class=\"osmmaps-selected-meta\">",
-      escapeHtml(region.name),
-      " - ",
-      escapeHtml(walk.siteType),
-      " - ",
-      escapeHtml(walk.status),
-      "</p>",
-      "</div>",
-      "<button class=\"osmmaps-small-button\" type=\"button\" data-region-open>Region</button>",
-      "</div>",
-      "<p class=\"osmmaps-selected-line\">",
-      walk.lat.toFixed(5),
-      ", ",
-      walk.lng.toFixed(5),
-      "</p>",
-      walk.gridRef ? "<p class=\"osmmaps-selected-line\">Grid: " + escapeHtml(walk.gridRef) + "</p>" : "",
-      walk.what3words ? "<p class=\"osmmaps-selected-line\">w3w: " + escapeHtml(walk.what3words) + "</p>" : "",
-      walk.description ? "<p class=\"osmmaps-selected-line\">" + escapeHtml(walk.description) + "</p>" : "",
-      "<div class=\"osmmaps-actions\">",
-      "<button class=\"osmmaps-weather-button\" type=\"button\" data-load-weather=\"",
-      escapeHtml(walk.id),
-      "\">Weather</button>",
-      "<p class=\"osmmaps-weather-output\" data-weather-output>Weather not loaded.</p>",
-      "</div>",
-      "</article>"
-    ].join("");
+    paneRenderer.renderDetails(panel, walk, region, {
+      walkCount: state.walks.length
+    });
   }
 
   function selectWalk(walkId, openPopup) {
@@ -420,7 +398,7 @@
     }
 
     state.selectedWalkId = walk.id;
-    renderSelectedPanel(walk);
+    renderPane(walk);
 
     var marker = state.markerRefs.get(walk.id);
     if (marker && state.map) {
@@ -467,7 +445,7 @@
     safeLocalSet(STORAGE_KEYS.region, regionId);
     clearMarkers();
     renderRegions();
-    renderSelectedPanel(null);
+    renderPane(null);
     closeRegionOverlay();
 
     return loadRegionWalks(regionId)
@@ -475,8 +453,9 @@
         state.walks = walks;
         renderMarkers();
         renderRegions();
-        renderSelectedPanel(null);
+        renderPane(null);
         fitVisible();
+        registerSearch();
       })
       .catch(function handleError(error) {
         showMapError(error.message || "Region could not load.");
@@ -496,7 +475,7 @@
         return selectRegion(storedRegion);
       }
 
-      renderSelectedPanel(null);
+      renderPane(null);
       openRegionOverlay();
       return Promise.resolve();
     });
@@ -541,9 +520,8 @@
   }
 
   function setWeatherText(message) {
-    var output = qs("[data-weather-output]");
-    if (output) {
-      output.textContent = message;
+    if (panes()) {
+      panes().setWeatherText(message);
     }
   }
 
@@ -604,12 +582,35 @@
       });
   }
 
+  function registerSearch() {
+    if (!window.FieldOpsSearch || !window.FieldOpsSearch.registerPage) {
+      return;
+    }
+
+    window.FieldOpsSearch.registerPage({
+      page: "map",
+      label: "Maps",
+      placeholder: "Search Map...",
+      emptyText: "No loaded walks match that search.",
+      items: state.walks.map(function searchItem(walk) {
+        return {
+          id: walk.id,
+          title: walk.name,
+          subtitle: selectedRegion() ? selectedRegion().name : "",
+          keywords: [walk.siteType, walk.status, walk.gridRef, walk.what3words].filter(Boolean)
+        };
+      })
+    });
+  }
+
   function wireEvents() {
     document.addEventListener("click", function onClick(event) {
       var regionButton = event.target.closest("[data-region-id]");
       var overlayClose = event.target.closest("[data-region-overlay-close]");
       var regionOpen = event.target.closest("[data-region-open]");
       var weatherButton = event.target.closest("[data-load-weather]");
+      var detailsButton = event.target.closest("[data-open-details]");
+      var editButton = event.target.closest("[data-edit-walk]");
 
       if (regionButton) {
         selectRegion(regionButton.getAttribute("data-region-id"));
@@ -623,6 +624,22 @@
 
       if (regionOpen) {
         openRegionOverlay();
+        return;
+      }
+
+      if (detailsButton) {
+        selectWalk(detailsButton.getAttribute("data-open-details"), false);
+        return;
+      }
+
+      if (editButton) {
+        window.dispatchEvent(new CustomEvent("fieldops:walk-edit", {
+          detail: {
+            walk: selectedWalk(),
+            walkId: editButton.getAttribute("data-edit-walk"),
+            region: selectedRegion()
+          }
+        }));
         return;
       }
 
