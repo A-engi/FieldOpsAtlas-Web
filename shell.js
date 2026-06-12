@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.11-one-root-shell
+   Version: 1.1.13-one-root-shell
 
    Purpose:
    Inject one shared shell into the current page root.
@@ -17,7 +17,7 @@
 (function fieldOpsSharedShell() {
   "use strict";
 
-  var VERSION = "1.1.11-one-root-shell";
+  var VERSION = "1.1.13-one-root-shell";
   var ROOT_SELECTOR = ".phone, .app-shell, .fieldops-shell-root";
   var CHROME_SELECTOR = [
     ":scope > .top-shell",
