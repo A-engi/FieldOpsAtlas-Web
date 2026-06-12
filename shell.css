@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.4-root-controls-clear-shell
+   Version: 1.1.5-rf-topbar-clear-root
 
    Purpose:
    Shared shell layout only.
@@ -13,7 +13,6 @@
    - Page and feature files may apply their own colours later.
    - Icon paths resolve from this root CSS file to data/icons/.
    ========================================================================== */
-
 
 /* ==========================================================================
    1. Tokens
@@ -50,17 +49,18 @@
   --panel-radius: 24px;
 
   --top-height: 54px;
-  --top-pad-y: 8px;
+  --top-pad-y: 6px;
   --top-control-height: 38px;
-  --top-icon-button-width: 42px;
-  --top-icon-size: 22px;
+  --command-height: 38px;
+  --top-icon-button-width: 34px;
+  --top-icon-size: 20px;
 
   --gap: 7px;
   --search-height: var(--top-control-height);
-  --search-icon-size: 20px;
-  --search-edge: 11px;
+  --search-icon-size: 18px;
+  --search-edge: 10px;
   --search-gap: 8px;
-  --search-brand-gap: 7px;
+  --search-brand-gap: 5px;
   --search-cluster-gap: 8px;
 
   --nav-height: 38px;
@@ -88,7 +88,6 @@
   --panel-right: var(--shell-side);
   --panel-max-height: calc(100vh - var(--panel-top) - var(--safe-bottom) - var(--nav-height) - 26px);
 }
-
 
 /* ==========================================================================
    2. Base shell layout
@@ -123,18 +122,18 @@ select {
 .fieldops-shell-root[data-page="map"] {
   --shell-side: 9px;
   --gap: 7px;
-  --top-pad-y: 8px;
+  --top-pad-y: 6px;
   --top-control-height: 38px;
-  --top-icon-button-width: 42px;
-  --top-icon-size: 22px;
-  --search-edge: 11px;
+  --command-height: 38px;
+  --top-icon-button-width: 34px;
+  --top-icon-size: 20px;
+  --search-edge: 10px;
   --search-gap: 8px;
-  --search-brand-gap: 7px;
+  --search-brand-gap: 5px;
   --search-cluster-gap: 8px;
   --outer-radius: 12px;
   --inner-radius: 10px;
 }
-
 
 /* ==========================================================================
    3. Icon and control structure
@@ -231,28 +230,28 @@ select {
   transform: rotate(45deg);
 }
 
-
 /* ==========================================================================
    4. Top shell
    ========================================================================== */
 
 .top-shell {
   position: fixed;
-  width: min(100vw, var(--page-width));
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 5;
   top: 0;
-  right: auto;
+  left: 50%;
+  width: min(100vw, var(--page-width));
   height: calc(var(--top-height) + var(--safe-top));
   padding: calc(var(--top-pad-y) + var(--safe-top)) var(--shell-side) var(--top-pad-y);
   display: grid;
   grid-template-columns: var(--top-icon-button-width) minmax(0, 1fr) var(--top-icon-button-width);
   gap: var(--gap);
   align-items: center;
+  color: var(--text);
   pointer-events: none;
   background: transparent;
   box-shadow: none;
+  overflow: visible;
+  transform: translateX(-50%);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -267,32 +266,74 @@ select {
   pointer-events: auto;
 }
 
-.top-shell .icon-button:first-child {
-  border-radius: var(--outer-radius) var(--inner-radius) var(--inner-radius) var(--outer-radius);
+.command-row {
+  height: var(--command-height);
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
 }
 
-.top-shell .icon-button:last-child {
-  border-radius: var(--inner-radius) var(--outer-radius) var(--outer-radius) var(--inner-radius);
+.shell-icon {
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
+.menu-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-button,
+.atlas-command,
+.icon-button,
+.search-button {
+  height: var(--command-height);
+  color: var(--text);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  box-shadow: var(--control-shadow);
+}
+
+.menu-button,
+.icon-button {
+  width: 34px;
+  min-width: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold-strong);
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.menu-button .shell-icon,
+.menu-button svg,
+.icon-button .repo-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.atlas-command,
 .search-button {
   min-width: 0;
-  height: var(--search-height);
-  border-radius: 10px;
-  padding: 0 var(--search-edge);
+  padding: 0 10px 0 11px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 20px minmax(0, 1fr) 1px auto;
   align-items: center;
-  column-gap: var(--search-cluster-gap);
+  gap: 8px;
   text-align: left;
+  border-radius: 10px;
 }
 
 .search-lead,
 .search-brand,
 .atlas-logo {
+  min-width: 0;
   display: flex;
   align-items: center;
-  min-width: 0;
   white-space: nowrap;
 }
 
@@ -301,44 +342,105 @@ select {
   overflow: hidden;
 }
 
-.search-icon {
-  flex: 0 0 var(--search-icon-size);
-  width: var(--search-icon-size);
-  height: var(--search-icon-size);
+.search-icon,
+.search-symbol {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex: 0 0 18px;
 }
 
-.search-query {
+.search-symbol::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border: 2.2px solid rgba(255, 255, 255, 0.94);
+  border-radius: 50%;
+}
+
+.search-symbol::after {
+  content: "";
+  position: absolute;
+  top: 12.5px;
+  left: 12.5px;
+  width: 7px;
+  height: 2.2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.search-query,
+.command-search-text {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-soft);
-  font-size: 16px;
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.70);
+  font-size: clamp(10.8px, 3vw, 12.3px);
+  font-weight: 500;
   line-height: 1;
-  transform: translateY(1px);
+  letter-spacing: 0.005em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: none;
 }
 
-.search-brand {
-  gap: var(--search-brand-gap);
-}
-
-.search-divider {
+.search-divider,
+.command-divider {
   width: 1px;
   height: 18px;
   flex: 0 0 auto;
-  background: currentColor;
-  opacity: 0.28;
+  border-radius: 99px;
+  background: rgba(237, 191, 99, 0.30);
+  box-shadow: 0 0 8px rgba(237, 191, 99, 0.10);
+}
+
+.search-brand,
+.atlas-identity {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
 }
 
 .atlas-logo {
   height: 28px;
-  gap: 7px;
+  gap: 5px;
 }
 
-.atlas-logo .repo-icon {
-  width: 21px;
-  height: 21px;
+.atlas-logo .repo-icon,
+.atlas-transmitter {
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+  filter:
+    drop-shadow(0 0 5px rgba(237, 191, 99, 0.52))
+    drop-shadow(0 3px 8px rgba(237, 191, 99, 0.20));
 }
 
+.atlas-mini-word {
+  color: #fffdf7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(13px, 3.7vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.top-shell .icon-button:first-child {
+  border-radius: 8px;
+}
+
+.top-shell .icon-button:last-child {
+  border-radius: 8px;
+}
 
 /* ==========================================================================
    5. Drawer and panels
@@ -670,7 +772,6 @@ select {
   font-size: 13px;
 }
 
-
 /* ==========================================================================
    6. Bottom shell
    ========================================================================== */
@@ -755,7 +856,6 @@ select {
   border-radius: 10px;
   background: var(--control-bg-strong);
 }
-
 
 /* ==========================================================================
    7. Responsive tuning
