@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.0.6-root-editor
+   Version: 1.0.7-edit-click-fix
    Purpose:
    - UK-only free OSM map rendered through Leaflet.
    - Load region buckets from data/regions.json.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.0.6-root-editor";
+  var VERSION = "1.0.7-edit-click-fix";
   var REGION_TOAST_MS = 3000;
   var DATA_FILES = {
     regions: "../../../data/regions.json",
@@ -921,6 +921,11 @@
       });
   }
 
+  function consumeClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   function wireEvents() {
     document.addEventListener("click", function onClick(event) {
       var regionButton = event.target.closest("[data-region-id]");
@@ -936,41 +941,49 @@
       var editDelete = event.target.closest("[data-edit-delete]");
 
       if (regionButton) {
+        consumeClick(event);
         selectRegion(regionButton.getAttribute("data-region-id"));
         return;
       }
 
       if (overlayClose) {
+        consumeClick(event);
         closeRegionOverlay();
         return;
       }
 
       if (regionOpen) {
+        consumeClick(event);
         openRegionOverlay();
         return;
       }
 
       if (detailsButton) {
+        consumeClick(event);
         selectWalk(detailsButton.getAttribute("data-open-details"), false, true);
         return;
       }
 
       if (expandButton) {
+        consumeClick(event);
         selectWalk(expandButton.getAttribute("data-expand-details"), false, true);
         return;
       }
 
       if (collapseButton) {
+        consumeClick(event);
         selectWalk(collapseButton.getAttribute("data-collapse-details"), false, false);
         return;
       }
 
       if (closePaneButton) {
+        consumeClick(event);
         closeDetailsPane();
         return;
       }
 
       if (editButton) {
+        consumeClick(event);
         var walk = state.walks.find(function findWalk(walkItem) {
           return walkItem.id === editButton.getAttribute("data-edit-walk");
         });
@@ -982,19 +995,22 @@
       }
 
       if (editCancel) {
+        consumeClick(event);
         selectWalk(editCancel.getAttribute("data-edit-cancel"), false, true);
         return;
       }
 
       if (editDelete) {
+        consumeClick(event);
         deleteCurrentWalk(editDelete.getAttribute("data-edit-delete"));
         return;
       }
 
       if (weatherButton) {
+        consumeClick(event);
         loadWeather(weatherButton.getAttribute("data-load-weather"));
       }
-    });
+    }, true);
 
     document.addEventListener("submit", function onSubmit(event) {
       var form = event.target.closest("[data-edit-form]");
@@ -1003,6 +1019,7 @@
       }
 
       event.preventDefault();
+      event.stopPropagation();
       saveCurrentEdit(form);
     });
 
