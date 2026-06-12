@@ -1,5 +1,5 @@
-/* FieldOps Atlas | FieldOpsAtlas/Features/Map/shell.css | Version: 1.1.2-map-loader */
-/* Purpose: Map shell compatibility only. Root shell owns app chrome. Map app owns map, regions, markers, weather panels, and map state. */
+/* FieldOps Atlas | FieldOpsAtlas/Features/Map/shell.css | Version: 1.1.3-no-bar-backing */
+/* Purpose: Map shell compatibility only. Root shell creates app chrome; this file prevents Map-only bar backings. */
 
 /* 1. Layers */
 :root {
@@ -15,8 +15,22 @@
 
 /* 3. Placement */
 :where(.top-shell, .bottom-shell) { z-index: var(--map-layer-shell); }
-.bottom-shell { isolation: isolate; }
 .map-dim { z-index: var(--map-layer-dim); }
 .drawer { z-index: var(--map-layer-drawer); }
 :is(.filter-panel, .search-panel) { z-index: var(--map-layer-panel); }
 .map-tools-panel { z-index: var(--map-layer-tools); right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + var(--bottom-lift, 8px) + var(--nav-height, 38px) + 12px); left: 12px; }
+
+/* 4. Bar backing cancellation */
+.fieldops-shell-root[data-page="map"] .top-shell::before,
+.fieldops-shell-root[data-current-page="map"] .top-shell::before,
+.fieldops-shell-root[data-page="map"] .top-shell::after,
+.fieldops-shell-root[data-current-page="map"] .top-shell::after,
+.fieldops-shell-root[data-page="map"] .bottom-shell::before,
+.fieldops-shell-root[data-current-page="map"] .bottom-shell::before {
+  content: none;
+  display: none;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
