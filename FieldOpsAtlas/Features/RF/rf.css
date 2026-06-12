@@ -1,53 +1,42 @@
-/*
-  FieldOps Atlas RF page styles
-  Version: 1.1.1-rf-integrated-v7
+/* ==========================================================================
+   FieldOps Atlas RF page
+   File: FieldOpsAtlas/Features/RF/rf.css
+   Version: 1.1.10-no-rf-topbar
 
-  Purpose:
-  - Own only the RF landing page content inside the shared shell.
-  - Style the RF network card, dynamic map, collapsible path pane,
-    recently opened sites, services table, and equipment summary.
+   Purpose:
+   RF landing page content only.
 
-  Conversion note:
-  - The generated map class names intentionally match rf-demo-map.js.
-  - Keep dashboard/page-only styles here; shared header/footer styles live in shell.css.
-*/
+   Ownership:
+   - Root shell owns top buttons, search, drawer, filter, and bottom nav.
+   - RF owns the RF canvas, network demo, path pane, recent cards, services, and equipment.
+   - This file does not style shared shell chrome.
+   ========================================================================== */
 
-/* =========================================================
-   01. RF canvas and layout
-   ========================================================= */
+
+/* ==========================================================================
+   1. RF canvas
+   ========================================================================== */
 
 .phone[data-page="rf"] {
   --rf-content-side: 7px;
-  --rf-quick-height: 35px;
-  --rf-quick-gap: 6px;
-  --rf-shell-height: 56px;
-  --rf-content-top: calc(var(--rf-shell-height) + var(--rf-quick-gap) + var(--rf-quick-height));
-  --content-gap: var(--rf-content-side);
-  --content-radius: 20px;
-}
-
-
-.phone[data-page="rf"] .top-shell {
-  padding-right: var(--rf-content-side);
-  padding-left: var(--rf-content-side);
-}
-
-.phone[data-page="rf"]:has(.rf-quick-state:checked) {
-  --rf-content-top: var(--rf-shell-height);
+  --rf-content-gap: var(--rf-content-side);
+  --rf-content-radius: 20px;
+  --rf-content-top: calc(var(--top-height, 54px) + 8px);
+  --rf-bottom-space: calc(var(--safe-bottom, 0px) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + var(--rf-content-gap));
 }
 
 .phone[data-page="rf"] .content-canvas {
   position: absolute;
   z-index: 1;
-  top: calc(var(--safe-top) + var(--rf-content-top) + var(--content-gap));
-  right: var(--content-gap);
-  bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--content-gap));
-  left: var(--content-gap);
+  top: calc(var(--safe-top, 0px) + var(--rf-content-top));
+  right: var(--rf-content-gap);
+  bottom: var(--rf-bottom-space);
+  left: var(--rf-content-gap);
   min-height: 0;
   padding: 0;
   overflow: hidden;
-  border: 2px solid var(--gold-border);
-  border-radius: var(--content-radius);
+  border: 2px solid var(--gold-border, rgba(237, 191, 99, 0.78));
+  border-radius: var(--rf-content-radius);
   background:
     radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.84), transparent 39%),
     linear-gradient(180deg, #fffdf6 0%, #fbf2df 100%);
@@ -87,210 +76,9 @@
 }
 
 
-
-/* =========================================================
-   RF service quick row
-   ========================================================= */
-
-.rf-quick-state {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.rf-quick-access {
-  position: absolute;
-  z-index: 7;
-  top: calc(var(--safe-top) + var(--rf-shell-height) + var(--rf-quick-gap));
-  right: var(--rf-content-side);
-  left: var(--rf-content-side);
-  height: var(--rf-quick-height);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) var(--rf-quick-height) var(--rf-quick-height);
-  gap: var(--gap);
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity 140ms ease,
-    transform 140ms ease;
-}
-
-
-.phone[data-page="rf"].rf-quick-pinned .rf-quick-access {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.phone[data-page="rf"]:has(.rf-quick-state:checked) .rf-quick-access {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-8px);
-}
-
-.rf-quick-chip {
-  min-width: 0;
-  height: var(--rf-quick-height);
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  overflow: hidden;
-  color: #fff;
-  border-radius: 8px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 8px 18px rgba(0, 0, 0, 0.15);
-  font-size: clamp(11.5px, 3.25vw, 13.5px);
-  font-weight: 760;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-}
-
-.rf-quick-chip img {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-  object-fit: contain;
-}
-
-.rf-quick-chip span {
-  min-width: 0;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.rf-quick-chip.is-dtt {
-  --chip-main: #15733a;
-  --chip-dark: #0d4d2a;
-  --chip-border: rgba(22, 83, 46, 0.70);
-}
-
-.rf-quick-chip.is-dab {
-  --chip-main: #0f5fab;
-  --chip-dark: #0a3975;
-  --chip-border: rgba(14, 64, 120, 0.78);
-}
-
-.rf-quick-chip.is-fm {
-  --chip-main: #733091;
-  --chip-dark: #491962;
-  --chip-border: rgba(83, 33, 105, 0.78);
-}
-
-.rf-quick-chip.is-more {
-  --chip-main: #183350;
-  --chip-dark: #0b1d33;
-  --chip-border: var(--button-border);
-}
-
-.rf-quick-chip {
-  border: 1px solid var(--chip-border);
-  background:
-    radial-gradient(circle at 25% 18%, rgba(255, 255, 255, 0.13), transparent 42%),
-    linear-gradient(135deg, var(--chip-main), var(--chip-dark));
-}
-
-
-.rf-quick-chip.is-pin,
-.rf-quick-chip.is-more {
-  padding-inline: 4px;
-}
-
-
-.rf-quick-chip.is-pin {
-  --chip-main: #183350;
-  --chip-dark: #0b1d33;
-  --chip-border: var(--button-border);
-}
-
-
-
-.rf-quick-chip.is-more,
-.rf-quick-chip.is-pin {
-  width: var(--rf-quick-height);
-  min-width: var(--rf-quick-height);
-  padding: 0;
-  gap: 0;
-}
-
-.rf-quick-chip.is-more img,
-.rf-quick-chip.is-pin img {
-  display: none;
-}
-
-.rf-quick-chip.is-more span {
-  display: block;
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 18px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  transform: translateY(-1px);
-}
-
-.rf-quick-chip.is-pin span {
-  display: block;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: clamp(10px, 2.7vw, 12px);
-  font-weight: 850;
-  line-height: 1;
-  letter-spacing: 0.01em;
-}
-
-.rf-quick-chip.is-pin[aria-pressed="true"],
-.phone[data-page="rf"].rf-quick-pinned .rf-quick-chip.is-pin {
-  color: var(--gold-soft);
-  border-color: var(--gold-border);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(120, 211, 255, 0.25), transparent 48%),
-    radial-gradient(circle at 50% 104%, rgba(255, 190, 47, 0.22), transparent 40%),
-    linear-gradient(180deg, #2a6fac 0%, #184c7f 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 0 1px rgba(255, 220, 140, 0.12),
-    0 0 10px var(--gold-glow);
-}
-
-.rf-quick-toggle {
-  position: absolute;
-  z-index: 8;
-  top: calc(var(--safe-top) + var(--rf-content-top) - 4px);
-  left: 50%;
-  width: 84px;
-  height: 12px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  transform: translateX(-50%);
-}
-
-.rf-quick-toggle::before {
-  content: "";
-  width: 54px;
-  height: 5px;
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, rgba(192, 197, 202, 0.92), rgba(111, 118, 127, 0.88));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-.phone[data-page="rf"]:has(.rf-quick-state:checked) .rf-quick-toggle::before {
-  width: 42px;
-  opacity: 0.86;
-}
-
-/* =========================================================
-   02. Network title and filter buttons
-   ========================================================= */
+/* ==========================================================================
+   2. Network header and tabs
+   ========================================================================== */
 
 .rf-network {
   flex: 1 1 auto;
@@ -308,14 +96,20 @@
   padding: 0 3px;
 }
 
-.rf-title {
+.rf-title,
+.rf-small-title,
+.rf-recent-title {
   margin: 0;
   color: #071c32;
-  font-size: 13px;
-  line-height: 1;
+  font-family: Georgia, "Times New Roman", serif;
   font-weight: 950;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.rf-title {
+  font-size: 13px;
+  line-height: 1;
 }
 
 .rf-tabs {
@@ -342,9 +136,10 @@
   background: rgba(255, 222, 163, 0.85);
 }
 
-/* =========================================================
-   03. Network map card
-   ========================================================= */
+
+/* ==========================================================================
+   3. Map and path pane
+   ========================================================================== */
 
 .rf-map-recent {
   min-height: 0;
@@ -359,7 +154,6 @@
 .rf-map-paper {
   --path-pane-width: clamp(142px, 35%, 158px);
   --path-handle-width: 14px;
-
   position: relative;
   min-height: 0;
   overflow: hidden;
@@ -410,10 +204,6 @@
   overflow: visible;
 }
 
-/* =========================================================
-   04. Path details pane: true auto-length rail
-   ========================================================= */
-
 .rf-path-toggle {
   position: absolute;
   inline-size: 1px;
@@ -431,7 +221,6 @@
   --path-node-icon-size: 9px;
   --path-node-row-height: 44px;
   --path-signal-width: 34px;
-
   position: absolute;
   top: 0;
   right: 0;
@@ -463,7 +252,7 @@
   width: var(--path-handle-width);
   display: grid;
   place-items: center;
-  color: var(--gold-soft);
+  color: var(--gold-soft, #ffdda0);
   cursor: pointer;
   border-right: 1px solid rgba(237, 191, 99, 0.32);
   background:
@@ -472,42 +261,28 @@
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.24);
 }
 
-.rf-path-handle-icon,
-.rf-path-handle svg {
+.rf-path-handle-icon {
   width: 8px;
   height: 14px;
   object-fit: contain;
   transition: transform 180ms ease;
 }
 
-.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle-icon,
-.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle svg {
+.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle-icon {
   transform: rotate(180deg);
 }
 
 .rf-path-pane-body {
   height: 100%;
   min-height: 0;
-  padding:
-    var(--path-pane-pad-y)
-    7px
-    var(--path-pane-pad-y)
-    var(--path-pane-pad-x);
+  padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  grid-template-rows:
-    var(--path-title-height)
-    var(--path-node-row-height)
-    minmax(0, 1fr)
-    var(--path-node-row-height);
+  grid-template-rows: var(--path-title-height) var(--path-node-row-height) minmax(0, 1fr) var(--path-node-row-height);
   column-gap: 7px;
   row-gap: var(--path-row-gap);
   overflow: hidden;
 }
-
-/* =========================================================
-   05. Path details pane: title and transmitter nodes
-   ========================================================= */
 
 .rf-path-pane-title {
   grid-column: 1 / -1;
@@ -525,15 +300,12 @@
   width: 22px;
   height: 10px;
   object-fit: contain;
-  filter:
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.28))
-    drop-shadow(0 0 5px rgba(255, 225, 135, 0.14));
 }
 
 .rf-path-pane-title span {
   min-width: 0;
   overflow: hidden;
-  color: var(--gold-soft);
+  color: var(--gold-soft, #ffdda0);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 8px;
   font-weight: 700;
@@ -577,31 +349,12 @@
   object-fit: contain;
 }
 
-.rf-path-mast svg {
-  width: var(--path-node-icon-size);
-  height: var(--path-node-icon-size);
-}
-
-.rf-path-mast path {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.rf-path-mast circle {
-  fill: currentColor;
-}
-
 .rf-path-site.is-from .rf-path-mast {
-  color: #8cff43;
   border: 1px solid rgba(140, 255, 67, 0.48);
   box-shadow: 0 0 8px rgba(140, 255, 67, 0.16);
 }
 
 .rf-path-site.is-to .rf-path-mast {
-  color: #ff6a4b;
   border: 1px solid rgba(255, 90, 58, 0.48);
   box-shadow: 0 0 8px rgba(255, 90, 58, 0.16);
 }
@@ -636,358 +389,101 @@
   text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
 }
 
-/* =========================================================
-   06. Path details pane: signal rail and data
-   ========================================================= */
-
 .rf-path-mid {
-  display: contents;
+  grid-column: 1 / -1;
+  grid-row: 3;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 7px;
 }
 
 .rf-path-signal-vertical {
-  grid-column: 1;
-  grid-row: 3;
-  width: var(--path-signal-width);
-  height: 100%;
-  max-height: none;
-  align-self: stretch;
+  width: 28px;
+  height: min(100%, 210px);
   justify-self: center;
-  object-fit: fill;
-  object-position: center;
-  filter:
-    drop-shadow(0 0 3px rgba(255, 225, 70, 0.42))
-    drop-shadow(0 0 6px rgba(255, 145, 55, 0.12));
-  pointer-events: none;
+  object-fit: contain;
 }
 
 .rf-path-frequency {
-  grid-column: 2;
-  grid-row: 3;
-  z-index: 2;
   min-width: 0;
   display: grid;
   align-content: center;
+  gap: 3px;
 }
 
 .rf-path-frequency strong {
-  display: block;
-  overflow: hidden;
-  color: var(--gold-soft);
+  color: #fff;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1;
-  white-space: nowrap;
-  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
 }
 
-.rf-path-frequency span {
-  display: block;
-  margin: 3px 0 6px;
-  color: rgba(219, 228, 242, 0.76);
-  font-size: 5px;
-  font-weight: 850;
-  letter-spacing: 0.075em;
+.rf-path-frequency > span {
+  color: rgba(219, 228, 242, 0.78);
+  font-size: 5.4px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
 }
 
 .rf-path-data {
-  margin: 0;
-  padding: 0;
+  margin: 4px 0 0;
   display: grid;
   gap: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.13);
 }
 
 .rf-path-data div {
-  min-height: 12px;
+  min-width: 0;
+  padding: 3px 0;
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
-  align-items: center;
-  gap: 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .rf-path-data dt {
-  min-width: 0;
-  overflow: hidden;
-  color: rgba(218, 226, 240, 0.76);
+  color: rgba(219, 228, 242, 0.72);
   font-size: 5px;
   font-weight: 850;
-  letter-spacing: 0.035em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .rf-path-data dd {
   margin: 0;
-  overflow: hidden;
   color: #fff;
   font-size: 5.4px;
   font-weight: 850;
-  text-align: right;
   white-space: nowrap;
 }
 
 .rf-path-data i {
+  width: 5px;
+  height: 5px;
+  margin-right: 3px;
   display: inline-block;
-  width: 4px;
-  height: 4px;
-  margin-right: 2px;
-  border-radius: 999px;
+  border-radius: 50%;
   background: #8cff43;
-  box-shadow: 0 0 5px rgba(140, 255, 67, 0.70);
+  box-shadow: 0 0 6px rgba(140, 255, 67, 0.74);
+  vertical-align: middle;
 }
 
-/* =========================================================
-   07. Generated demo map: routes
-   ========================================================= */
 
-.demo-map-bg {
-  fill: transparent;
-}
-
-.demo-route {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.22));
-}
-
-.demo-route.is-main {
-  stroke: #13682b;
-  stroke-width: 2.35;
-}
-
-.demo-route.is-backup {
-  stroke: #1c5aaf;
-  stroke-width: 2.25;
-}
-
-.demo-route.is-alert {
-  stroke: #d73120;
-  stroke-width: 3.2;
-}
-
-.demo-route.is-selected-path {
-  filter:
-    drop-shadow(0 0 4px rgba(255, 225, 70, 0.72))
-    drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.22));
-}
-
-.demo-link-soft {
-  opacity: 0.14;
-  stroke-width: 5;
-}
-
-.demo-route-dot {
-  fill: #f7efd3;
-  stroke-width: 1.8;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.24));
-}
-
-.demo-route-dot.green {
-  stroke: #176e2f;
-}
-
-.demo-route-dot.blue {
-  stroke: #1e62ae;
-}
-
-.demo-route-dot.red {
-  fill: #d72d1e;
-  stroke: #fff8e6;
-  filter: drop-shadow(0 0 4px rgba(255, 90, 49, 0.65));
-}
-
-/* =========================================================
-   08. Generated demo map: nodes
-   ========================================================= */
-
-.demo-node .halo {
-  opacity: 0.32;
-  filter: drop-shadow(0 0 4px rgba(255, 226, 146, 0.24));
-}
-
-.demo-node.is-selected .selected-halo {
-  opacity: 0.34;
-  fill: #ffe3a0;
-  filter: drop-shadow(0 0 8px rgba(255, 213, 80, 0.52));
-}
-
-.demo-original-halo {
-  pointer-events: none;
-  filter:
-    drop-shadow(0 0 4px rgba(255, 213, 80, 0.54))
-    drop-shadow(0 0 10px rgba(255, 213, 80, 0.28));
-}
-
-.demo-original-halo .relay-halo-ring {
-  fill: none;
-  stroke: rgba(255, 217, 105, 0.88);
-  stroke-width: 1.15;
-  opacity: 0.42;
-}
-
-.demo-original-halo .relay-halo-ring.is-outer {
-  opacity: 0.28;
-}
-
-.demo-original-halo .relay-halo-line {
-  fill: none;
-  stroke: rgba(255, 217, 105, 0.95);
-  stroke-width: 1.15;
-  stroke-linecap: round;
-  opacity: 0.36;
-}
-
-.demo-original-halo .relay-halo-line.strong {
-  stroke-width: 1.55;
-  opacity: 0.42;
-}
-
-.demo-node.relay .demo-original-halo {
-  filter:
-    drop-shadow(0 0 4px rgba(255, 93, 50, 0.58))
-    drop-shadow(0 0 10px rgba(255, 93, 50, 0.30));
-}
-
-.demo-node.relay .demo-original-halo .relay-halo-ring {
-  stroke: rgba(215, 59, 35, 0.92);
-  opacity: 0.34;
-}
-
-.demo-node.relay .demo-original-halo .relay-halo-ring.is-outer {
-  opacity: 0.22;
-}
-
-.demo-node.relay .demo-original-halo .relay-halo-line {
-  stroke: rgba(215, 59, 35, 0.95);
-  opacity: 0.36;
-}
-
-.demo-node.relay .demo-original-halo .relay-halo-line.strong {
-  opacity: 0.44;
-}
-
-.demo-node .core,
-.demo-node .main {
-  fill: #106228;
-  stroke: #5e6e51;
-}
-
-.demo-node .remote {
-  fill: #1b4d81;
-  stroke: #5b7289;
-}
-
-.demo-node .relay {
-  fill: #9f231a;
-  stroke: #8e575d;
-  filter: drop-shadow(0 0 5px rgba(255, 93, 50, 0.36));
-}
-
-.demo-node .inner-ring {
-  fill: none;
-  stroke: rgba(255, 247, 222, 0.64);
-  stroke-width: 1.2;
-}
-
-.demo-node .mast {
-  fill: none;
-  stroke: #fff7de;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.8;
-}
-
-/* =========================================================
-   09. Generated demo map: labels, compass, and legend
-   ========================================================= */
-
-.demo-label {
-  font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", Arial, sans-serif;
-  paint-order: stroke fill;
-  stroke: rgba(239, 229, 207, 0.92);
-  stroke-linejoin: round;
-  text-transform: uppercase;
-}
-
-.demo-label .name {
-  fill: #172033;
-  stroke-width: 1.55px;
-  font-size: 8.4px;
-  font-weight: 850;
-  letter-spacing: 0.08px;
-}
-
-.demo-label .type {
-  stroke-width: 1px;
-  font-size: 5.3px;
-  font-weight: 850;
-  letter-spacing: 0.55px;
-}
-
-.demo-label.hide-type .type {
-  display: none;
-}
-
-.demo-label.core .type,
-.demo-label.main .type {
-  fill: #176e2f;
-}
-
-.demo-label.relay .type {
-  fill: #bc2f21;
-}
-
-.demo-label.remote .type {
-  fill: #1e62ae;
-}
-
-.demo-compass {
-  opacity: 0.18;
-  fill: none;
-  stroke: #9f8751;
-  stroke-width: 1.5;
-}
-
-.demo-compass text {
-  fill: #9f8751;
-  stroke: none;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 8px;
-}
-
-.demo-legend {
-  fill: rgba(252, 248, 238, 0.70);
-  stroke: rgba(200, 162, 93, 0.48);
-  stroke-width: 1;
-  filter: drop-shadow(0 1px 2px rgba(108, 85, 41, 0.12));
-}
-
-.demo-legend-text {
-  fill: #2a2a28;
-  font-family: "Arial Narrow", Arial, sans-serif;
-  font-size: 6.4px;
-  font-weight: 760;
-  letter-spacing: 0.2px;
-}
-
-/* =========================================================
-   10. Recently opened
-   ========================================================= */
+/* ==========================================================================
+   4. Recent, services, and equipment
+   ========================================================================== */
 
 .rf-recent {
-  position: relative;
-  z-index: 2;
   min-height: 0;
-  padding: 6px;
+  padding: 6px 8px;
   display: grid;
   grid-template-rows: 18px minmax(0, 1fr);
   gap: 5px;
-  overflow: hidden;
   border: 1px solid rgba(130, 91, 22, 0.14);
-  border-radius: 14px;
-  background: #fcf8ee;
+  border-radius: 0 0 13px 13px;
+  background: rgba(255, 255, 255, 0.36);
 }
 
 .rf-recent-head {
@@ -998,26 +494,20 @@
 }
 
 .rf-recent-title {
-  margin: 0;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #071c32;
   font-size: 10px;
   line-height: 1;
-  font-weight: 520;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
 }
 
 .rf-clock {
-  position: relative;
-  width: 12px;
-  height: 12px;
-  flex: 0 0 12px;
-  color: #09203a;
-  border: 1.7px solid currentColor;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border: 2px solid #071c32;
   border-radius: 50%;
+  position: relative;
 }
 
 .rf-clock::before,
@@ -1025,203 +515,173 @@
   content: "";
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 1.4px;
-  border-radius: 999px;
-  background: currentColor;
-  transform-origin: 50% 100%;
+  bottom: 50%;
+  width: 2px;
+  border-radius: 99px;
+  background: #071c32;
+  transform-origin: bottom center;
 }
 
 .rf-clock::before {
-  height: 4px;
-  transform: translate(-50%, -100%);
+  height: 5px;
+  transform: translateX(-50%) rotate(0deg);
 }
 
 .rf-clock::after {
-  height: 3px;
-  transform: translate(-50%, -100%) rotate(120deg);
+  height: 4px;
+  transform: translateX(-50%) rotate(120deg);
 }
 
 .rf-viewall {
-  padding: 3px 2px;
-  color: #09203a;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
+  color: #071c32;
   font-size: 7px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .rf-recent-grid {
-  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) 0.72fr 0.72fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 5px;
 }
 
 .rf-recent-card {
   min-width: 0;
-  padding: 4px;
+  padding: 4px 5px;
   display: grid;
-  grid-template-columns: 15px minmax(0, 1fr);
+  grid-template-columns: 17px minmax(0, 1fr);
+  gap: 4px;
   align-items: center;
-  gap: 3px;
-  overflow: hidden;
   color: #071c32;
   border: 1px solid rgba(130, 91, 22, 0.12);
   border-radius: 9px;
-  background: #fff9eb;
+  background: rgba(255, 255, 255, 0.54);
+  text-decoration: none;
 }
 
 .rf-recent-card img {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
 }
 
 .rf-recent-name {
   display: block;
-  font-size: 6.8px;
-  font-weight: 520;
-  line-height: 0.98;
-  letter-spacing: 0.015em;
+  overflow: hidden;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6.6px;
+  font-weight: 800;
+  line-height: 0.96;
   text-transform: uppercase;
+  text-decoration: underline;
 }
 
 .rf-status {
   display: block;
-  margin-top: 2px;
-  color: #17692e;
-  font-size: 6.2px;
-  font-weight: 380;
+  margin-top: 1px;
+  color: #10672f;
+  font-size: 6px;
+  line-height: 1;
+  text-decoration: underline;
 }
 
-/* =========================================================
-   11. Services and equipment
-   ========================================================= */
-
 .rf-bottom {
-  flex: 0 0 18%;
+  flex: 0 0 auto;
   min-height: 0;
-  margin-top: 7px;
+  margin-top: 8px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  gap: 8px;
 }
 
 .rf-small {
-  min-height: 0;
-  padding: 7px;
-  overflow: hidden;
-  border: 1px solid rgba(130, 91, 22, 0.20);
-  border-radius: 13px;
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    0 6px 12px rgba(79, 56, 16, 0.07);
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(130, 91, 22, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.50);
 }
 
 .rf-small-title {
-  margin: 0 0 5px;
-  color: #071c32;
-  font-size: 9.5px;
+  margin-bottom: 8px;
+  font-size: 10px;
   line-height: 1;
-  font-weight: 950;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
 }
 
 .rf-table {
   width: 100%;
   border-collapse: collapse;
   color: #071c32;
-  font-size: 6.5px;
-}
-
-.rf-table th,
-.rf-table td {
-  padding: 3px 2px;
-  text-align: left;
-  border-bottom: 1px solid rgba(130, 91, 22, 0.13);
+  font-size: 6.3px;
 }
 
 .rf-table th {
-  color: rgba(7, 28, 50, 0.55);
-  font-size: 5.6px;
-  font-weight: 950;
-  letter-spacing: 0.05em;
+  padding: 3px 4px 5px 0;
+  color: rgba(7, 28, 50, 0.58);
+  font-size: 5.4px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: left;
   text-transform: uppercase;
+  border-bottom: 1px solid rgba(130, 91, 22, 0.16);
+}
+
+.rf-table td {
+  padding: 4px 4px 4px 0;
+  border-bottom: 1px solid rgba(130, 91, 22, 0.12);
+  white-space: nowrap;
+}
+
+.rf-table a,
+.rf-equipment-item {
+  color: #091f7e;
 }
 
 .rf-equipment {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .rf-equipment-item {
-  padding: 7px 3px;
+  min-width: 0;
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.54);
   text-align: center;
-  border: 1px solid rgba(130, 91, 22, 0.13);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.48);
+  text-decoration: underline;
 }
 
 .rf-equipment-item strong {
-  display: block;
   color: #071c32;
-  font-size: 14.5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
   line-height: 1;
 }
 
 .rf-equipment-item span {
-  display: block;
-  margin-top: 3px;
-  color: rgba(7, 28, 50, 0.58);
-  font-size: 6px;
-  font-weight: 900;
+  font-size: 6.5px;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
-/* =========================================================
-   12. Small-screen trim
-   ========================================================= */
 
-@media (max-width: 390px) {
-  .rf-home {
-    padding: 6px;
-  }
+/* ==========================================================================
+   5. Small screens
+   ========================================================================== */
 
-  .rf-network {
-    grid-template-rows: 23px minmax(0, 1fr);
-    gap: 5px;
-  }
-
-  .rf-tab {
-    padding-inline: 6px;
-  }
-
-  .rf-map-paper {
-    --path-pane-width: clamp(134px, 34.5%, 146px);
-    --path-handle-width: 13px;
-  }
-
-  .rf-recent-grid {
-    gap: 4px;
-  }
-
-  .rf-recent-card {
-    grid-template-columns: 13px minmax(0, 1fr);
-    gap: 2px;
-  }
-
-  .rf-recent-card img {
-    width: 13px;
-    height: 13px;
-  }
-
+@media (max-width: 380px) {
   .rf-bottom {
-    gap: 6px;
+    grid-template-columns: 1fr;
+  }
+
+  .rf-equipment-item {
+    min-height: 42px;
   }
 }
-
