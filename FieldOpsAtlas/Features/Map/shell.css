@@ -1,17 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas Map shell.css
-   Version: 1.1.1-map-shell-v2.9-applied-fade-cleanup
-   Owner: Map-only top fade/backdrop.
+   Version: 1.1.1-map-shell-v2.10-app-shell-fade-cleanup
+   Owner: Map-only top fade/backdrop and Map-page shell layering.
 
    Scope:
    - Root/shared shell owns menu, search, filter, drawer, and bottom nav.
    - This file retires the old in-page Map chrome and keeps only the Map fade.
+   - This file adds Map-page layer compatibility for the current shell mount
+     shape: .app-shell/.phone with data-page/data-current-page.
    - No groove/tray layer.
-   - No RF, data, region, Map HTML, or root-shell changes.
+   - No RF, data, region, Map HTML, root shell, or root-shell script changes.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Map fade tokens
+   Map fade and shell layer tokens
    -------------------------------------------------------------------------- */
 
 :root {
@@ -24,7 +26,11 @@
   --map-fade-height: 104px;
   --map-fade-ribbon-height: 28px;
 
-  --map-fade-layer: 3;
+  --map-fade-layer: 5001;
+  --map-shell-layer: 5002;
+  --map-dim-layer: 5003;
+  --map-drawer-layer: 5006;
+  --map-panel-layer: 5007;
 
   --map-fade-navy-top: #061426;
   --map-fade-navy-mid: #08223d;
@@ -36,7 +42,7 @@
 
 /* --------------------------------------------------------------------------
    Retire old Map-owned chrome.
-   The shared/root shell is the active top chrome.
+   The shared/root shell is the active shell chrome.
    -------------------------------------------------------------------------- */
 
 .top-bar,
@@ -64,12 +70,17 @@
 
 /* --------------------------------------------------------------------------
    Shared shell compatibility.
-   The current shell script boots on .phone or .app-shell, then writes
-   data-page/data-current-page. Keep selectors aligned with that applied shape.
+   Current shell.js mounts on .phone or .app-shell, then writes
+   data-page/data-current-page.
 
-   This file does not restyle individual buttons.
+   Keep .fieldops-shell-root selectors for older/future wrapper compatibility,
+   but do not require that class for the Map page to render correctly.
+
+   This file does not restyle individual shell buttons.
    -------------------------------------------------------------------------- */
 
+.fieldops-shell-root[data-page="map"],
+.fieldops-shell-root[data-current-page="map"],
 .app-shell[data-page="map"],
 .app-shell[data-current-page="map"],
 .phone[data-page="map"],
@@ -84,12 +95,14 @@
 }
 
 /*
-   The Map CSS is only loaded by the Map page, so this fallback is intentionally
-   local to Map. It keeps the shared top shell clear even before data-page is
-   applied or if the root is .app-shell rather than .phone.
+   The Map CSS is only loaded by the Map page, so these fallbacks are
+   intentionally local to Map. They keep the shared top shell clear even before
+   data-page is applied, or if the root is .app-shell rather than .phone.
 */
+.fieldops-shell-root .top-shell,
 .app-shell .top-shell,
 .phone .top-shell {
+  z-index: var(--map-shell-layer) !important;
   isolation: isolate !important;
   overflow: visible !important;
   border-bottom: 0 !important;
@@ -99,6 +112,8 @@
   backdrop-filter: none !important;
 }
 
+.fieldops-shell-root .top-shell::before,
+.fieldops-shell-root .top-shell::after,
 .app-shell .top-shell::before,
 .app-shell .top-shell::after,
 .phone .top-shell::before,
@@ -107,10 +122,58 @@
   display: none !important;
 }
 
+.fieldops-shell-root .top-shell > *,
 .app-shell .top-shell > *,
 .phone .top-shell > * {
   position: relative;
   z-index: 2;
+}
+
+/*
+   Layer compatibility only. Visual styling still belongs to the shared shell.
+   These values mirror the intended Map stack so the injected shell sits above
+   Leaflet and map panels while the fade stays behind the controls.
+*/
+.fieldops-shell-root[data-page="map"] .map-dim,
+.fieldops-shell-root[data-current-page="map"] .map-dim,
+.app-shell[data-page="map"] .map-dim,
+.app-shell[data-current-page="map"] .map-dim,
+.phone[data-page="map"] .map-dim,
+.phone[data-current-page="map"] .map-dim {
+  z-index: var(--map-dim-layer) !important;
+}
+
+.fieldops-shell-root[data-page="map"] .bottom-shell,
+.fieldops-shell-root[data-current-page="map"] .bottom-shell,
+.app-shell[data-page="map"] .bottom-shell,
+.app-shell[data-current-page="map"] .bottom-shell,
+.phone[data-page="map"] .bottom-shell,
+.phone[data-current-page="map"] .bottom-shell {
+  z-index: var(--map-shell-layer) !important;
+}
+
+.fieldops-shell-root[data-page="map"] .drawer,
+.fieldops-shell-root[data-current-page="map"] .drawer,
+.app-shell[data-page="map"] .drawer,
+.app-shell[data-current-page="map"] .drawer,
+.phone[data-page="map"] .drawer,
+.phone[data-current-page="map"] .drawer {
+  z-index: var(--map-drawer-layer) !important;
+}
+
+.fieldops-shell-root[data-page="map"] .filter-panel,
+.fieldops-shell-root[data-current-page="map"] .filter-panel,
+.fieldops-shell-root[data-page="map"] .search-panel,
+.fieldops-shell-root[data-current-page="map"] .search-panel,
+.app-shell[data-page="map"] .filter-panel,
+.app-shell[data-current-page="map"] .filter-panel,
+.app-shell[data-page="map"] .search-panel,
+.app-shell[data-current-page="map"] .search-panel,
+.phone[data-page="map"] .filter-panel,
+.phone[data-current-page="map"] .filter-panel,
+.phone[data-page="map"] .search-panel,
+.phone[data-current-page="map"] .search-panel {
+  z-index: var(--map-panel-layer) !important;
 }
 
 /* --------------------------------------------------------------------------
