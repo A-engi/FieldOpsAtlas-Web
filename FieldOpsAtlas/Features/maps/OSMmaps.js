@@ -1,16 +1,16 @@
 /* ==========================================================================
-   FieldOps Atlas maps
-   File: FieldOpsAtlas/Features/maps/maps.js
+   FieldOps Atlas OSM maps
+   File: FieldOpsAtlas/Features/maps/OSMmaps.js
    Version: 1.0.0-region-walks
    Purpose:
-   - UK-only free Leaflet map prototype.
-   - Load region buckets from data/regions.json.
-   - Load walk/site pins only from the selected region JSON file to keep data low.
-   - Use one OpenStreetMap tile layer and CSS filtering for dark mode.
-   - Load optional weather for one selected walk on demand using Open-Meteo.
+   - UK-only free OSM map rendered through Leaflet.
+   - Loads region buckets from data/regions.json.
+   - Loads walk/site pins only from the selected region JSON file to keep data low.
+   - Uses one OpenStreetMap tile layer and CSS filtering for dark mode.
+   - Loads optional weather for one selected walk on demand using Open-Meteo.
    ========================================================================== */
 
-(function fieldOpsMaps() {
+(function fieldOpsOSMMaps() {
   "use strict";
 
   var VERSION = "1.0.0-region-walks";
@@ -22,8 +22,8 @@
   };
 
   var STORAGE_KEYS = {
-    region: "fieldops-maps-selected-region-v1",
-    theme: "fieldops-maps-theme-v1"
+    region: "fieldops-osmmaps-selected-region-v1",
+    theme: "fieldops-osmmaps-theme-v1"
   };
 
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
@@ -45,10 +45,6 @@
 
   function qs(selector, root) {
     return (root || document).querySelector(selector);
-  }
-
-  function qsa(selector, root) {
-    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
   }
 
   function escapeHtml(value) {
@@ -150,12 +146,6 @@
     }) || null;
   }
 
-  function selectedWalk() {
-    return state.walks.find(function findWalk(walk) {
-      return walk.id === state.selectedWalkId;
-    }) || null;
-  }
-
   async function loadJson(url, fallback) {
     var response = await fetch(url + "?v=" + Date.now(), {
       cache: "no-store",
@@ -216,13 +206,6 @@
     return walks;
   }
 
-  function setLoading(isLoading) {
-    var loading = qs("[data-loading]");
-    if (loading) {
-      loading.hidden = !isLoading;
-    }
-  }
-
   async function selectRegion(regionId) {
     if (!regionId) {
       return;
@@ -234,7 +217,6 @@
     renderRegions();
     renderSelectedPanel(null);
     renderSummary();
-    setLoading(true);
 
     try {
       state.walks = await loadRegionWalks(regionId);
@@ -243,8 +225,6 @@
       fitVisible();
     } catch (error) {
       showMapError(error.message || "Region could not load.");
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -257,8 +237,8 @@
     list.innerHTML = state.regions.map(function regionButton(region) {
       var isSelected = region.id === state.selectedRegionId;
       return [
-        '<button class="maps-region-button" type="button" data-region-id="' + escapeHtml(region.id) + '" aria-pressed="' + String(isSelected) + '" style="--region-color:' + escapeHtml(region.color) + '">',
-        '<span class="maps-region-dot" aria-hidden="true"></span>',
+        '<button class="osmmaps-region-button" type="button" data-region-id="' + escapeHtml(region.id) + '" aria-pressed="' + String(isSelected) + '" style="--region-color:' + escapeHtml(region.color) + '">',
+        '<span class="osmmaps-region-dot" aria-hidden="true"></span>',
         '<span>' + escapeHtml(region.name) + '</span>',
         '</button>'
       ].join("");
@@ -283,8 +263,8 @@
 
   function makeMarkerIcon(region) {
     return L.divIcon({
-      className: "maps-pin-shell",
-      html: '<span class="maps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
+      className: "osmmaps-pin-shell",
+      html: '<span class="osmmaps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
       iconSize: [18, 18],
       iconAnchor: [9, 9],
       popupAnchor: [0, -10]
@@ -293,10 +273,10 @@
 
   function markerPopup(walk, region) {
     return [
-      '<article class="maps-popup">',
-      '<h2 class="maps-popup-title">' + escapeHtml(walk.name) + '</h2>',
-      '<p class="maps-popup-meta">' + escapeHtml(region.name) + ' Â· ' + escapeHtml(walk.siteType) + '</p>',
-      '<p class="maps-popup-line">' + walk.lat.toFixed(5) + ', ' + walk.lng.toFixed(5) + '</p>',
+      '<article class="osmmaps-popup">',
+      '<h2 class="osmmaps-popup-title">' + escapeHtml(walk.name) + '</h2>',
+      '<p class="osmmaps-popup-meta">' + escapeHtml(region.name) + ' Â· ' + escapeHtml(walk.siteType) + '</p>',
+      '<p class="osmmaps-popup-line">' + walk.lat.toFixed(5) + ', ' + walk.lng.toFixed(5) + '</p>',
       '</article>'
     ].join("");
   }
@@ -380,21 +360,21 @@
     }
 
     if (!walk) {
-      panel.innerHTML = '<p class="maps-empty">Pick a region, then tap a walk marker.</p>';
+      panel.innerHTML = '<p class="osmmaps-empty">Pick a region, then tap a walk marker.</p>';
       return;
     }
 
     panel.innerHTML = [
       '<article>',
-      '<h2 class="maps-selected-title">' + escapeHtml(walk.name) + '</h2>',
-      '<p class="maps-selected-meta">' + escapeHtml(region ? region.name : walk.regionId) + ' Â· ' + escapeHtml(walk.siteType) + ' Â· ' + escapeHtml(walk.status) + '</p>',
-      '<p class="maps-selected-line">' + walk.lat.toFixed(5) + ', ' + walk.lng.toFixed(5) + '</p>',
-      walk.gridRef ? '<p class="maps-selected-line">Grid: ' + escapeHtml(walk.gridRef) + '</p>' : "",
-      walk.what3words ? '<p class="maps-selected-line">w3w: ' + escapeHtml(walk.what3words) + '</p>' : "",
-      walk.description ? '<p class="maps-selected-line">' + escapeHtml(walk.description) + '</p>' : "",
-      '<div class="maps-weather-row">',
-      '<p class="maps-weather-output" data-weather-output>Weather not loaded.</p>',
-      '<button class="maps-weather-button" type="button" data-load-weather="' + escapeHtml(walk.id) + '">Weather</button>',
+      '<h2 class="osmmaps-selected-title">' + escapeHtml(walk.name) + '</h2>',
+      '<p class="osmmaps-selected-meta">' + escapeHtml(region ? region.name : walk.regionId) + ' Â· ' + escapeHtml(walk.siteType) + ' Â· ' + escapeHtml(walk.status) + '</p>',
+      '<p class="osmmaps-selected-line">' + walk.lat.toFixed(5) + ', ' + walk.lng.toFixed(5) + '</p>',
+      walk.gridRef ? '<p class="osmmaps-selected-line">Grid: ' + escapeHtml(walk.gridRef) + '</p>' : "",
+      walk.what3words ? '<p class="osmmaps-selected-line">w3w: ' + escapeHtml(walk.what3words) + '</p>' : "",
+      walk.description ? '<p class="osmmaps-selected-line">' + escapeHtml(walk.description) + '</p>' : "",
+      '<div class="osmmaps-weather-row">',
+      '<p class="osmmaps-weather-output" data-weather-output>Weather not loaded.</p>',
+      '<button class="osmmaps-weather-button" type="button" data-load-weather="' + escapeHtml(walk.id) + '">Weather</button>',
       '</div>',
       '</article>'
     ].join("");
@@ -501,7 +481,7 @@
   }
 
   function setTheme(theme) {
-    var page = qs("[data-maps-page]");
+    var page = qs("[data-osmmaps-page]");
     var label = qs("[data-theme-label]");
     var nextTheme = theme === "light" ? "light" : "dark";
 
@@ -545,9 +525,9 @@
   }
 
   function showMapError(message) {
-    var canvas = qs("#mapsCanvas");
+    var canvas = qs("#OSMmaps");
     if (canvas) {
-      canvas.innerHTML = '<div class="maps-error">' + escapeHtml(message) + '</div>';
+      canvas.innerHTML = '<div class="osmmaps-error">' + escapeHtml(message) + '</div>';
     }
   }
 
@@ -577,7 +557,7 @@
   }
 
   function initMap() {
-    var canvas = qs("#mapsCanvas");
+    var canvas = qs("#OSMmaps");
 
     if (!canvas) {
       return;
@@ -627,7 +607,7 @@
 
     try {
       await loadRegions();
-      window.FieldOpsMaps = {
+      window.FieldOpsOSMmaps = {
         version: VERSION,
         selectRegion: selectRegion,
         fitVisible: fitVisible,
@@ -636,11 +616,10 @@
         },
         getWalks: function getWalks() {
           return state.walks.slice();
-        },
-        getSelectedWalk: selectedWalk
+        }
       };
     } catch (error) {
-      showMapError(error.message || "Maps failed to load.");
+      showMapError(error.message || "OSM maps failed to load.");
     }
   }
 
