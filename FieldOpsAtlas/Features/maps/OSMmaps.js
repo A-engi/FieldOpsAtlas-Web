@@ -1,20 +1,22 @@
-/* ==========================================================================
+/* ===========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.0.7-edit-click-fix
+   Version: 1.0.8-tidy
    Purpose:
    - UK-only free OSM map rendered through Leaflet.
    - Load region buckets from data/regions.json.
    - Load only the selected region's walk/site pins.
    - Delegate marker popups, details and edit forms to OSMpanes.js.
    - Use FieldOpsEditor from root shell for online GitHub writes.
-   ========================================================================== */
+   =========================================================================== */
 
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.0.7-edit-click-fix";
+  var VERSION = "1.0.8-tidy";
   var REGION_TOAST_MS = 3000;
+  var WEATHER_CACHE_MS = 10 * 60 * 1000;
+
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
@@ -27,15 +29,16 @@
       return "data/recycle-bin/" + encodeURIComponent(regionId) + "-sites-recycle.json";
     }
   };
+
   var STORAGE_KEYS = {
     region: "fieldops-osmmaps-selected-region-v1",
     theme: "fieldops-osmmaps-theme-v1",
     localPrefix: "fieldops-osmmaps-local-region-",
     recyclePrefix: "fieldops-osmmaps-local-recycle-"
   };
+
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
-  var WEATHER_CACHE_MS = 10 * 60 * 1000;
 
   var state = {
     map: null,
@@ -51,6 +54,10 @@
     paneHideTimer: 0
   };
 
+  /* -------------------------------------------------------------------------
+     App dependencies and DOM helpers
+     ------------------------------------------------------------------------- */
+
   function panes() {
     return window.FieldOpsOSMpanes || null;
   }
@@ -63,15 +70,55 @@
     return (root || document).querySelector(selector);
   }
 
+  function closestFromEvent(event, selector) {
+    var target = event && event.target;
+
+    if (!target) {
+      return null;
+    }
+
+    if (target.nodeType !== 1) {
+      target = target.parentElement;
+    }
+
+    return target && target.closest ? target.closest(selector) : null;
+  }
+
+  function selectedPanel() {
+    return qs("[data-selected-panel]");
+  }
+
+  function selectedRegion() {
+    return state.regions.find(function findRegion(region) {
+      return region.id === state.selectedRegionId;
+    }) || null;
+  }
+
+  function getWalkById(walkId) {
+    return state.walks.find(function findWalk(walk) {
+      return walk.id === walkId;
+    }) || null;
+  }
+
+  function selectedWalk() {
+    return getWalkById(state.selectedWalkId);
+  }
+
+  /* -------------------------------------------------------------------------
+     Generic utilities
+     ------------------------------------------------------------------------- */
+
   function escapeHtml(value) {
+    var replacements = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
+
     return String(value == null ? "" : value).replace(/[&<>"']/g, function replaceCharacter(character) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      }[character];
+      return replacements[character];
     });
   }
 
@@ -85,23 +132,6 @@
     }
 
     return [];
-  }
-
-  function numberFrom(value) {
-    var number = Number(value);
-    return Number.isFinite(number) ? number : null;
-  }
-
-  function cssColor(value, fallback) {
-    var candidate = String(value || "").trim();
-    return candidate || fallback;
-  }
-
-  function isInsideUkBounds(walk) {
-    return walk.lat >= UK_BOUNDS[0][0] &&
-      walk.lat <= UK_BOUNDS[1][0] &&
-      walk.lng >= UK_BOUNDS[0][1] &&
-      walk.lng <= UK_BOUNDS[1][1];
   }
 
   function asStringList(value) {
@@ -126,6 +156,87 @@
     }
 
     return [];
+  }
+
+  function parseLines(value) {
+    return String(value || "").split(/\n|,/).map(function clean(line) {
+      return line.trim();
+    }).filter(Boolean);
+  }
+
+  function numberFrom(value) {
+    var number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function cssColor(value, fallback) {
+    var candidate = String(value || "").trim();
+    return candidate || fallback;
+  }
+
+  function consumeClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /* -------------------------------------------------------------------------
+     Local storage
+     ------------------------------------------------------------------------- */
+
+  function safeLocalGet(key) {
+    try {
+      return window.localStorage.getItem(key) || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function safeLocalSet(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      // Storage can be unavailable in previews/webviews.
+    }
+  }
+
+  function safeLocalJson(key, fallback) {
+    try {
+      var raw = window.localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function localRegionKey(regionId) {
+    return STORAGE_KEYS.localPrefix + regionId;
+  }
+
+  function localRecycleKey(regionId) {
+    return STORAGE_KEYS.recyclePrefix + regionId;
+  }
+
+  /* -------------------------------------------------------------------------
+     Data loading and normalisation
+     ------------------------------------------------------------------------- */
+
+  function loadJson(url, fallback) {
+    return fetch(url + "?v=" + Date.now(), {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json"
+      }
+    }).then(function handleResponse(response) {
+      if (!response.ok) {
+        if (response.status === 404) {
+          return fallback;
+        }
+
+        throw new Error("Could not load " + url + " (" + response.status + ")");
+      }
+
+      return response.json();
+    });
   }
 
   function normaliseRegion(rawRegion) {
@@ -227,54 +338,122 @@
     };
   }
 
-  function safeLocalGet(key) {
-    try {
-      return window.localStorage.getItem(key) || "";
-    } catch (error) {
-      return "";
+  function isInsideUkBounds(walk) {
+    return walk.lat >= UK_BOUNDS[0][0] &&
+      walk.lat <= UK_BOUNDS[1][0] &&
+      walk.lng >= UK_BOUNDS[0][1] &&
+      walk.lng <= UK_BOUNDS[1][1];
+  }
+
+  function applyLocalOverride(regionId, walks) {
+    var local = safeLocalJson(localRegionKey(regionId), null);
+
+    if (!Array.isArray(local)) {
+      return walks;
+    }
+
+    return local.map(function normaliseLocal(rawWalk) {
+      return normaliseWalk(rawWalk, regionId);
+    }).filter(Boolean).filter(isInsideUkBounds);
+  }
+
+  function loadRegionWalks(regionId) {
+    if (state.regionCache.has(regionId)) {
+      return Promise.resolve(state.regionCache.get(regionId));
+    }
+
+    return loadJson(DATA_FILES.regionWalks(regionId), []).then(function handlePayload(payload) {
+      var rawWalks = asArray(payload, "walks");
+
+      if (!rawWalks.length) {
+        rawWalks = asArray(payload, "sites");
+      }
+
+      var walks = rawWalks
+        .map(function mapWalk(rawWalk) {
+          return normaliseWalk(rawWalk, regionId);
+        })
+        .filter(Boolean)
+        .filter(isInsideUkBounds);
+
+      walks = applyLocalOverride(regionId, walks);
+      state.regionCache.set(regionId, walks);
+      return walks;
+    });
+  }
+
+  function loadRegions() {
+    return loadJson(DATA_FILES.regions, []).then(function handleRegions(payload) {
+      var storedRegion = safeLocalGet(STORAGE_KEYS.region);
+
+      state.regions = asArray(payload, "regions").map(normaliseRegion).filter(Boolean);
+      renderRegions();
+
+      if (storedRegion && state.regions.some(function hasStored(region) {
+        return region.id === storedRegion;
+      })) {
+        return selectRegion(storedRegion);
+      }
+
+      if (panes()) {
+        panes().hide(selectedPanel());
+      }
+
+      openRegionOverlay();
+      return Promise.resolve();
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+     Theme and overlays
+     ------------------------------------------------------------------------- */
+
+  function initialTheme() {
+    var stored = safeLocalGet(STORAGE_KEYS.theme);
+
+    if (stored === "light" || stored === "dark") {
+      return stored;
+    }
+
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+      return "light";
+    }
+
+    return "dark";
+  }
+
+  function setTheme(theme) {
+    var page = qs("[data-osmmaps-page]");
+    var nextTheme = theme === "light" ? "light" : "dark";
+
+    state.theme = nextTheme;
+
+    if (page) {
+      page.setAttribute("data-theme", nextTheme);
+    }
+
+    safeLocalSet(STORAGE_KEYS.theme, nextTheme);
+  }
+
+  function setOverlayOpen(open) {
+    var overlay = qs("[data-region-overlay]");
+
+    if (overlay) {
+      overlay.hidden = !open;
     }
   }
 
-  function safeLocalSet(key, value) {
-    try {
-      window.localStorage.setItem(key, value);
-    } catch (error) {
-      // Storage can be unavailable in previews/webviews.
-    }
+  function openRegionOverlay() {
+    setOverlayOpen(true);
   }
 
-  function safeLocalJson(key, fallback) {
-    try {
-      var raw = window.localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
-    } catch (error) {
-      return fallback;
-    }
+  function closeRegionOverlay() {
+    setOverlayOpen(false);
   }
 
-  function localRegionKey(regionId) {
-    return STORAGE_KEYS.localPrefix + regionId;
-  }
-
-  function localRecycleKey(regionId) {
-    return STORAGE_KEYS.recyclePrefix + regionId;
-  }
-
-  function selectedRegion() {
-    return state.regions.find(function findRegion(region) {
-      return region.id === state.selectedRegionId;
-    }) || null;
-  }
-
-  function selectedWalk() {
-    return state.walks.find(function findWalk(walk) {
-      return walk.id === state.selectedWalkId;
-    }) || null;
-  }
-
-  function selectedPanel() {
-    return qs("[data-selected-panel]");
-  }
+  /* -------------------------------------------------------------------------
+     Pane rendering
+     ------------------------------------------------------------------------- */
 
   function clearPaneTimer() {
     if (state.paneHideTimer) {
@@ -294,171 +473,16 @@
     }, REGION_TOAST_MS);
   }
 
-  function loadJson(url, fallback) {
-    return fetch(url + "?v=" + Date.now(), {
-      cache: "no-store",
-      headers: {
-        Accept: "application/json"
-      }
-    }).then(function handleResponse(response) {
-      if (!response.ok) {
-        if (response.status === 404) {
-          return fallback;
-        }
-
-        throw new Error("Could not load " + url + " (" + response.status + ")");
-      }
-
-      return response.json();
-    });
-  }
-
-  function setTheme(theme) {
-    var page = qs("[data-osmmaps-page]");
-    var nextTheme = theme === "light" ? "light" : "dark";
-
-    state.theme = nextTheme;
-
-    if (page) {
-      page.setAttribute("data-theme", nextTheme);
-    }
-
-    safeLocalSet(STORAGE_KEYS.theme, nextTheme);
-  }
-
-  function initialTheme() {
-    var stored = safeLocalGet(STORAGE_KEYS.theme);
-
-    if (stored === "light" || stored === "dark") {
-      return stored;
-    }
-
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-      return "light";
-    }
-
-    return "dark";
-  }
-
-  function setOverlayOpen(open) {
-    var overlay = qs("[data-region-overlay]");
-    if (overlay) {
-      overlay.hidden = !open;
-    }
-  }
-
-  function openRegionOverlay() {
-    setOverlayOpen(true);
-  }
-
-  function closeRegionOverlay() {
-    setOverlayOpen(false);
-  }
-
-  function clearMarkers() {
-    state.walks = [];
-    state.selectedWalkId = "";
-    state.markerRefs.clear();
-
-    if (state.markerLayer) {
-      state.markerLayer.clearLayers();
-    }
-  }
-
-  function renderRegions() {
-    var list = qs("[data-region-list]");
-    if (!list) {
-      return;
-    }
-
-    if (!state.regions.length) {
-      list.innerHTML = '<p class="osmpanes-empty">No regions found.</p>';
-      return;
-    }
-
-    list.innerHTML = state.regions.map(function regionButton(region) {
-      var isSelected = region.id === state.selectedRegionId;
-      return [
-        '<button class="osmmaps-region-button" type="button" data-region-id="',
-        escapeHtml(region.id),
-        '" aria-pressed="',
-        String(isSelected),
-        '" style="--region-color:',
-        escapeHtml(region.color),
-        '">',
-        '<span class="osmmaps-region-dot" aria-hidden="true"></span>',
-        '<span class="osmmaps-region-name">',
-        escapeHtml(region.name),
-        '</span>',
-        isSelected ? '<span class="osmmaps-region-count">' + state.walks.length + '</span>' : "",
-        '</button>'
-      ].join("");
-    }).join("");
-  }
-
   function showMapError(message) {
     var panel = selectedPanel();
-    if (panel) {
-      clearPaneTimer();
-      panel.hidden = false;
-      panel.innerHTML = '<p class="osmpanes-empty">' + escapeHtml(message) + '</p>';
-    }
-  }
 
-  function makeMarkerIcon(region) {
-    return L.divIcon({
-      className: "osmmaps-pin-shell",
-      html: '<span class="osmmaps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9],
-      popupAnchor: [0, -10]
-    });
-  }
-
-  function renderMarkers() {
-    if (!state.markerLayer || !window.L) {
+    if (!panel) {
       return;
     }
 
-    state.markerLayer.clearLayers();
-    state.markerRefs.clear();
-
-    var region = selectedRegion() || {
-      id: state.selectedRegionId,
-      name: state.selectedRegionId,
-      color: "#38bdf8"
-    };
-
-    state.walks.forEach(function addWalkMarker(walk) {
-      var marker = L.marker([walk.lat, walk.lng], {
-        icon: makeMarkerIcon(region),
-        title: walk.name,
-        keyboard: true
-      });
-
-      marker.bindPopup(panes() ? panes().popupHtml(walk) : escapeHtml(walk.name));
-      marker.on("click", function onMarkerClick() {
-        selectWalk(walk.id, true, false);
-      });
-
-      marker.addTo(state.markerLayer);
-      state.markerRefs.set(walk.id, marker);
-    });
-  }
-
-  function fitVisible() {
-    if (!state.map || !state.walks.length) {
-      return;
-    }
-
-    var bounds = L.latLngBounds(state.walks.map(function toLatLng(walk) {
-      return [walk.lat, walk.lng];
-    }));
-
-    state.map.fitBounds(bounds.pad(0.22), {
-      animate: true,
-      maxZoom: 11
-    });
+    clearPaneTimer();
+    panel.hidden = false;
+    panel.innerHTML = '<p class="osmpanes-empty">' + escapeHtml(message) + '</p>';
   }
 
   function renderRegionToast() {
@@ -519,10 +543,111 @@
     }
   }
 
-  function selectWalk(walkId, openPopup, expandDetails) {
-    var walk = state.walks.find(function findWalk(walkItem) {
-      return walkItem.id === walkId;
+  /* -------------------------------------------------------------------------
+     Region and marker rendering
+     ------------------------------------------------------------------------- */
+
+  function renderRegions() {
+    var list = qs("[data-region-list]");
+
+    if (!list) {
+      return;
+    }
+
+    if (!state.regions.length) {
+      list.innerHTML = '<p class="osmpanes-empty">No regions found.</p>';
+      return;
+    }
+
+    list.innerHTML = state.regions.map(function regionButton(region) {
+      var isSelected = region.id === state.selectedRegionId;
+
+      return [
+        '<button class="osmmaps-region-button" type="button" data-region-id="',
+        escapeHtml(region.id),
+        '" aria-pressed="',
+        String(isSelected),
+        '" style="--region-color:',
+        escapeHtml(region.color),
+        '">',
+        '<span class="osmmaps-region-dot" aria-hidden="true"></span>',
+        '<span class="osmmaps-region-name">',
+        escapeHtml(region.name),
+        '</span>',
+        isSelected ? '<span class="osmmaps-region-count">' + state.walks.length + '</span>' : "",
+        '</button>'
+      ].join("");
+    }).join("");
+  }
+
+  function makeMarkerIcon(region) {
+    return L.divIcon({
+      className: "osmmaps-pin-shell",
+      html: '<span class="osmmaps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9],
+      popupAnchor: [0, -10]
     });
+  }
+
+  function clearMarkers() {
+    state.walks = [];
+    state.selectedWalkId = "";
+    state.markerRefs.clear();
+
+    if (state.markerLayer) {
+      state.markerLayer.clearLayers();
+    }
+  }
+
+  function renderMarkers() {
+    if (!state.markerLayer || !window.L) {
+      return;
+    }
+
+    state.markerLayer.clearLayers();
+    state.markerRefs.clear();
+
+    var region = selectedRegion() || {
+      id: state.selectedRegionId,
+      name: state.selectedRegionId,
+      color: "#38bdf8"
+    };
+
+    state.walks.forEach(function addWalkMarker(walk) {
+      var marker = L.marker([walk.lat, walk.lng], {
+        icon: makeMarkerIcon(region),
+        title: walk.name,
+        keyboard: true
+      });
+
+      marker.bindPopup(panes() ? panes().popupHtml(walk) : escapeHtml(walk.name));
+      marker.on("click", function onMarkerClick() {
+        selectWalk(walk.id, true, false);
+      });
+
+      marker.addTo(state.markerLayer);
+      state.markerRefs.set(walk.id, marker);
+    });
+  }
+
+  function fitVisible() {
+    if (!state.map || !state.walks.length) {
+      return;
+    }
+
+    var bounds = L.latLngBounds(state.walks.map(function toLatLng(walk) {
+      return [walk.lat, walk.lng];
+    }));
+
+    state.map.fitBounds(bounds.pad(0.22), {
+      animate: true,
+      maxZoom: 11
+    });
+  }
+
+  function selectWalk(walkId, openPopup, expandDetails) {
+    var walk = getWalkById(walkId);
 
     if (!walk) {
       return;
@@ -537,6 +662,7 @@
     }
 
     var marker = state.markerRefs.get(walk.id);
+
     if (marker && state.map) {
       state.map.setView(marker.getLatLng(), Math.max(state.map.getZoom(), 10), {
         animate: true
@@ -546,43 +672,6 @@
         marker.openPopup();
       }
     }
-  }
-
-  function applyLocalOverride(regionId, walks) {
-    var local = safeLocalJson(localRegionKey(regionId), null);
-
-    if (!Array.isArray(local)) {
-      return walks;
-    }
-
-    return local.map(function normaliseLocal(rawWalk) {
-      return normaliseWalk(rawWalk, regionId);
-    }).filter(Boolean).filter(isInsideUkBounds);
-  }
-
-  function loadRegionWalks(regionId) {
-    if (state.regionCache.has(regionId)) {
-      return Promise.resolve(state.regionCache.get(regionId));
-    }
-
-    return loadJson(DATA_FILES.regionWalks(regionId), []).then(function handlePayload(payload) {
-      var rawWalks = asArray(payload, "walks");
-
-      if (!rawWalks.length) {
-        rawWalks = asArray(payload, "sites");
-      }
-
-      var walks = rawWalks
-        .map(function mapWalk(rawWalk) {
-          return normaliseWalk(rawWalk, regionId);
-        })
-        .filter(Boolean)
-        .filter(isInsideUkBounds);
-
-      walks = applyLocalOverride(regionId, walks);
-      state.regionCache.set(regionId, walks);
-      return walks;
-    });
   }
 
   function selectRegion(regionId) {
@@ -611,26 +700,9 @@
       });
   }
 
-  function loadRegions() {
-    return loadJson(DATA_FILES.regions, []).then(function handleRegions(payload) {
-      var storedRegion = safeLocalGet(STORAGE_KEYS.region);
-
-      state.regions = asArray(payload, "regions").map(normaliseRegion).filter(Boolean);
-      renderRegions();
-
-      if (storedRegion && state.regions.some(function hasStored(region) {
-        return region.id === storedRegion;
-      })) {
-        return selectRegion(storedRegion);
-      }
-
-      if (panes()) {
-        panes().hide(selectedPanel());
-      }
-      openRegionOverlay();
-      return Promise.resolve();
-    });
-  }
+  /* -------------------------------------------------------------------------
+     Weather
+     ------------------------------------------------------------------------- */
 
   function weatherCodeText(code) {
     var labels = {
@@ -676,10 +748,23 @@
     }
   }
 
+  function weatherLabelFromPayload(payload) {
+    var current = payload && payload.current;
+
+    if (!current) {
+      throw new Error("Weather unavailable.");
+    }
+
+    return [
+      Math.round(current.temperature_2m) + "C",
+      weatherCodeText(current.weather_code),
+      "Wind " + Math.round(current.wind_speed_10m) + " km/h",
+      "Rain " + Number(current.precipitation || 0).toFixed(1) + " mm"
+    ].join(" - ");
+  }
+
   function loadWeather(walkId) {
-    var walk = state.walks.find(function findWalk(walkItem) {
-      return walkItem.id === walkId;
-    });
+    var walk = getWalkById(walkId);
 
     if (!walk) {
       return;
@@ -708,18 +793,7 @@
         return response.json();
       })
       .then(function handleWeather(payload) {
-        var current = payload && payload.current;
-
-        if (!current) {
-          throw new Error("Weather unavailable.");
-        }
-
-        var label = [
-          Math.round(current.temperature_2m) + "C",
-          weatherCodeText(current.weather_code),
-          "Wind " + Math.round(current.wind_speed_10m) + " km/h",
-          "Rain " + Number(current.precipitation || 0).toFixed(1) + " mm"
-        ].join(" - ");
+        var label = weatherLabelFromPayload(payload);
 
         state.weatherCache.set(cacheKey, {
           time: Date.now(),
@@ -732,6 +806,10 @@
         setWeatherText("Weather unavailable for this walk.");
       });
   }
+
+  /* -------------------------------------------------------------------------
+     Search registration
+     ------------------------------------------------------------------------- */
 
   function registerSearch() {
     if (!window.FieldOpsSearch || !window.FieldOpsSearch.registerPage) {
@@ -755,18 +833,16 @@
     });
   }
 
+  /* -------------------------------------------------------------------------
+     Editing and recycling
+     ------------------------------------------------------------------------- */
+
   function editStatusText() {
     if (editor() && editor().isOnline && editor().isOnline()) {
       return "Editing online. Save writes the region file to GitHub.";
     }
 
     return "Editing locally. Save stores a local override on this device.";
-  }
-
-  function parseLines(value) {
-    return String(value || "").split(/\n|,/).map(function clean(line) {
-      return line.trim();
-    }).filter(Boolean);
   }
 
   function formValue(form, name) {
@@ -820,6 +896,21 @@
     });
   }
 
+  function refreshAfterWalkChange(regionId, selectedWalkId) {
+    state.regionCache.set(regionId, state.walks.slice());
+    renderMarkers();
+    renderRegions();
+    registerSearch();
+
+    if (selectedWalkId) {
+      state.selectedWalkId = selectedWalkId;
+      renderFullDetailsPane(getWalkById(selectedWalkId));
+    } else {
+      state.selectedWalkId = "";
+      renderRegionToast();
+    }
+  }
+
   function saveCurrentEdit(form) {
     var updated = walkFromForm(form);
     var regionId = state.selectedRegionId;
@@ -838,13 +929,8 @@
     }
 
     return persistRegion(regionId, state.walks, "Update walk " + updated.name)
-      .then(function saved() {
-        state.regionCache.set(regionId, state.walks.slice());
-        renderMarkers();
-        renderRegions();
-        registerSearch();
-        state.selectedWalkId = updated.id;
-        renderFullDetailsPane(updated);
+      .then(function finishSave() {
+        refreshAfterWalkChange(regionId, updated.id);
       })
       .catch(function handleError(error) {
         if (panes()) {
@@ -855,10 +941,12 @@
 
   function recycleLocal(regionId, deletedWalk) {
     var recycled = safeLocalJson(localRecycleKey(regionId), []);
+
     recycled.push(Object.assign({}, serialiseWalk(deletedWalk), {
       deletedAt: new Date().toISOString(),
       sourcePath: DATA_FILES.regionPath(regionId)
     }));
+
     safeLocalSet(localRecycleKey(regionId), JSON.stringify(recycled));
   }
 
@@ -879,9 +967,7 @@
 
   function deleteCurrentWalk(walkId) {
     var regionId = state.selectedRegionId;
-    var deletedWalk = state.walks.find(function findWalk(walk) {
-      return walk.id === walkId;
-    });
+    var deletedWalk = getWalkById(walkId);
 
     if (!deletedWalk) {
       return;
@@ -907,12 +993,7 @@
         return persistRegion(regionId, state.walks, "Delete walk " + deletedWalk.name);
       })
       .then(function finishDelete() {
-        state.regionCache.set(regionId, state.walks.slice());
-        state.selectedWalkId = "";
-        renderMarkers();
-        renderRegions();
-        registerSearch();
-        renderRegionToast();
+        refreshAfterWalkChange(regionId, "");
       })
       .catch(function handleError(error) {
         if (panes()) {
@@ -921,24 +1002,23 @@
       });
   }
 
-  function consumeClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  /* -------------------------------------------------------------------------
+     Event wiring
+     ------------------------------------------------------------------------- */
 
-  function wireEvents() {
+  function wireClickEvents() {
     document.addEventListener("click", function onClick(event) {
-      var regionButton = event.target.closest("[data-region-id]");
-      var overlayClose = event.target.closest("[data-region-overlay-close]");
-      var regionOpen = event.target.closest("[data-region-open]");
-      var weatherButton = event.target.closest("[data-load-weather]");
-      var detailsButton = event.target.closest("[data-open-details]");
-      var expandButton = event.target.closest("[data-expand-details]");
-      var collapseButton = event.target.closest("[data-collapse-details]");
-      var closePaneButton = event.target.closest("[data-close-pane]");
-      var editButton = event.target.closest("[data-edit-walk]");
-      var editCancel = event.target.closest("[data-edit-cancel]");
-      var editDelete = event.target.closest("[data-edit-delete]");
+      var regionButton = closestFromEvent(event, "[data-region-id]");
+      var overlayClose = closestFromEvent(event, "[data-region-overlay-close]");
+      var regionOpen = closestFromEvent(event, "[data-region-open]");
+      var detailsButton = closestFromEvent(event, "[data-open-details]");
+      var expandButton = closestFromEvent(event, "[data-expand-details]");
+      var collapseButton = closestFromEvent(event, "[data-collapse-details]");
+      var closePaneButton = closestFromEvent(event, "[data-close-pane]");
+      var editButton = closestFromEvent(event, "[data-edit-walk]");
+      var editCancel = closestFromEvent(event, "[data-edit-cancel]");
+      var editDelete = closestFromEvent(event, "[data-edit-delete]");
+      var weatherButton = closestFromEvent(event, "[data-load-weather]");
 
       if (regionButton) {
         consumeClick(event);
@@ -984,9 +1064,8 @@
 
       if (editButton) {
         consumeClick(event);
-        var walk = state.walks.find(function findWalk(walkItem) {
-          return walkItem.id === editButton.getAttribute("data-edit-walk");
-        });
+        var walk = getWalkById(editButton.getAttribute("data-edit-walk"));
+
         if (walk) {
           state.selectedWalkId = walk.id;
           renderEditPane(walk);
@@ -1011,9 +1090,12 @@
         loadWeather(weatherButton.getAttribute("data-load-weather"));
       }
     }, true);
+  }
 
+  function wireSubmitEvents() {
     document.addEventListener("submit", function onSubmit(event) {
-      var form = event.target.closest("[data-edit-form]");
+      var form = closestFromEvent(event, "[data-edit-form]");
+
       if (!form) {
         return;
       }
@@ -1022,7 +1104,9 @@
       event.stopPropagation();
       saveCurrentEdit(form);
     });
+  }
 
+  function wireShellEvents() {
     window.addEventListener("fieldops:shell-filter-region", function onShellFilterRegion() {
       openRegionOverlay();
     });
@@ -1034,6 +1118,7 @@
     window.addEventListener("fieldops:editor-mode-change", function onEditorModeChange() {
       var walk = selectedWalk();
       var panel = selectedPanel();
+
       if (!walk || !panel || panel.hidden) {
         return;
       }
@@ -1045,6 +1130,16 @@
       }
     });
   }
+
+  function wireEvents() {
+    wireClickEvents();
+    wireSubmitEvents();
+    wireShellEvents();
+  }
+
+  /* -------------------------------------------------------------------------
+     Leaflet setup and public API
+     ------------------------------------------------------------------------- */
 
   function initMap() {
     var canvas = qs("#OSMmaps");
@@ -1090,6 +1185,18 @@
     state.markerLayer = L.layerGroup().addTo(state.map);
   }
 
+  function registerEditorPage() {
+    if (!window.FieldOpsEditor || !window.FieldOpsEditor.registerPage) {
+      return;
+    }
+
+    window.FieldOpsEditor.registerPage({
+      page: "map",
+      label: "Maps",
+      fileScope: "data/regions"
+    });
+  }
+
   function exposeApi() {
     window.FieldOpsOSMmaps = {
       version: VERSION,
@@ -1107,13 +1214,7 @@
       getSelectedWalk: selectedWalk
     };
 
-    if (window.FieldOpsEditor && window.FieldOpsEditor.registerPage) {
-      window.FieldOpsEditor.registerPage({
-        page: "map",
-        label: "Maps",
-        fileScope: "data/regions"
-      });
-    }
+    registerEditorPage();
   }
 
   function init() {
