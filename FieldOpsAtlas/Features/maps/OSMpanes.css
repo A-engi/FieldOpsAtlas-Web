@@ -1,3 +1,13 @@
+/* ==========================================================================
+   FieldOps Atlas OSM panes
+   File: FieldOpsAtlas/Features/maps/OSMpanes.css
+   Version: 1.0.1
+   Purpose:
+   - Leaflet marker popup styling.
+   - Bottom details pane styling.
+   - Temporary region-loaded toast styling.
+   ========================================================================== */
+
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   color: #102842;
@@ -46,24 +56,30 @@
 .osmpanes-details {
   position: fixed;
   right: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
-  bottom: calc(96px + env(safe-area-inset-bottom));
+  bottom: calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + 10px);
   left: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
   z-index: 30;
-  max-height: min(62dvh, 560px);
+  max-height: min(56dvh, 520px);
   overflow: hidden auto;
-  padding: 14px;
+  padding: 13px 14px;
   border: 1px solid rgba(184, 226, 255, 0.18);
   border-radius: 24px;
   background:
     linear-gradient(180deg, rgba(8, 31, 58, 0.82), rgba(5, 18, 36, 0.64)),
     rgba(7, 22, 42, 0.62);
-  box-shadow: 0 24px 52px rgba(0, 14, 32, 0.30);
+  box-shadow: 0 18px 38px rgba(0, 14, 32, 0.30);
   backdrop-filter: blur(18px) saturate(130%);
   -webkit-backdrop-filter: blur(18px) saturate(130%);
 }
 
 .osmpanes-details[hidden] {
   display: none;
+}
+
+.osmpanes-details[data-pane-mode="toast"],
+.osmpanes-details[data-pane-mode="collapsed"] {
+  overflow: visible;
+  padding: 12px 14px;
 }
 
 .osmpanes-empty {
@@ -75,18 +91,27 @@
 
 .osmpanes-title-row {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: start;
-  gap: 8px;
-  margin-bottom: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
 }
 
 .osmpanes-title {
   margin: 0;
+  overflow: hidden;
   color: rgba(246, 252, 255, 0.98);
   font-size: 19px;
   line-height: 1.1;
   letter-spacing: -0.035em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.osmpanes-subtitle {
+  margin: 5px 0 0;
+  color: rgba(205, 234, 255, 0.74);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .osmpanes-button {
@@ -102,6 +127,7 @@
 .osmpanes-grid {
   display: grid;
   gap: 10px;
+  margin-top: 12px;
 }
 
 .osmpanes-section {
@@ -131,7 +157,7 @@
 
 .osmpanes-copy-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
 }
@@ -155,6 +181,10 @@
   background:
     radial-gradient(circle at 50% 0%, rgba(121, 198, 255, 0.14), transparent 46%),
     linear-gradient(180deg, rgba(22, 68, 116, 0.62), rgba(6, 24, 48, 0.68));
+}
+
+.osmpanes-icon-button[data-copied="true"] {
+  border-color: rgba(104, 235, 166, 0.58);
 }
 
 .osmpanes-copy-icon {
@@ -203,7 +233,6 @@
   gap: 8px;
 }
 
-.osmpanes-page[data-theme="light"] .osmpanes-details,
 .osmmaps-page[data-theme="light"] .osmpanes-details {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(235, 246, 255, 0.76)),
@@ -216,6 +245,7 @@
   color: #0a2038;
 }
 
+.osmmaps-page[data-theme="light"] .osmpanes-subtitle,
 .osmmaps-page[data-theme="light"] .osmpanes-line,
 .osmmaps-page[data-theme="light"] .osmpanes-list,
 .osmmaps-page[data-theme="light"] .osmpanes-weather-output,
@@ -231,15 +261,6 @@
   .osmpanes-details {
     right: 9px;
     left: 9px;
-    max-height: 66dvh;
-  }
-
-  .osmpanes-title-row {
-    grid-template-columns: 1fr auto;
-  }
-
-  .osmpanes-title-row .osmpanes-button:first-of-type {
-    grid-column: 1 / -1;
-    justify-self: start;
+    max-height: 58dvh;
   }
 }
