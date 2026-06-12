@@ -13,20 +13,18 @@ body {
 body {
   position: relative;
   overflow-x: hidden;
+  background: #ffffff;
 }
 
 .fieldops-shell-root {
   position: relative;
-  z-index: 1;
+  z-index: 40;
 }
 
 .background-item {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 0;
+  inset: 0;
+  z-index: 20;
   pointer-events: none;
   overflow: hidden;
   isolation: isolate;
