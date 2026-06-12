@@ -1,4 +1,18 @@
-/* FieldOps Atlas map-page.css v1.1.1-map-top-fade-original-v2
+Top-bar fade removal blocks
+===========================
+
+These are the full top-bar-related blocks to remove from the current repo files.
+I did not include the bottom bar block here.
+
+File: FieldOpsAtlas/Features/Map/index.html
+Remove this whole line:
+<div id="topBarFade" class="top-bar-fade" aria-hidden="true"></div>
+
+
+File: FieldOpsAtlas/Features/Map/map-page.css
+Replace the file header with this clean header:
+
+/* FieldOps Atlas map-page.css v1.1.1-map-page-clean
  Map page layout owner.
 
  Ownership:
@@ -9,38 +23,14 @@
  - map page form/layout helpers, legend, toast, and local overlays
 
  Clean rules:
- - map-only shared-shell visual tuning lives here, not in root shell.css
- - original top fade/backdrop is scoped to the Map page only
+ - map-page.css owns map layout and map panels
+ - shell.css owns map shell compatibility only
  - no shared root shell chrome ownership
  - no region/data JSON edits
- - no rollback to old top shell/side rail
-
- v2 correction:
- - The old full top fade is two pieces:
-   1. the dark solid top backdrop behind the controls;
-   2. the existing .top-bar-fade ribbon below it.
- - Do not put the top backdrop on a negative-z-index pseudo-element.
- - Do not add glow-only shell patches.
- - Do not duplicate or recreate shell UI.
  */
 
-:root {
-  --bg-main: #070b12;
-  --bg-panel: rgba(8, 15, 28, 0.94);
-  --bg-panel-strong: rgba(5, 14, 28, 0.97);
-  --border-soft: rgba(255, 255, 255, 0.10);
-  --border-blue: rgba(96, 235, 255, 0.26);
-  --text-main: #f5f7fb;
-  --text-muted: #9ca8ba;
-  --text-soft: #c8d0df;
-  --accent: #44d7ff;
-  --gold: #ffe3ad;
-  --danger: #ff4b6e;
-  --shadow-heavy: 0 18px 60px rgba(0, 0, 0, 0.45);
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --shared-shell-top: 66px;
-  --shared-shell-bottom: 64px;
+
+Remove these top-bar visual variables from :root:
 
   --top-bar-bg-top: rgba(11, 35, 53, 1);
   --top-bar-bg-mid: rgba(11, 35, 53, 1);
@@ -56,41 +46,8 @@
   --map-top-fade-mid: rgba(43, 132, 171, 0.24);
   --map-top-fade-bottom: rgba(7, 11, 18, 0);
 
-  --chrome-control-border: rgba(96, 235, 255, 0.62);
-  --chrome-control-bg: rgba(5, 17, 30, 0.90);
-  --chrome-control-bg-top: rgba(9, 24, 45, 0.94);
-  --chrome-control-bg-bottom: rgba(4, 14, 28, 0.92);
-  --chrome-control-glow:
-    0 0 0 1px rgba(96, 235, 255, 0.12),
-    0 0 18px rgba(96, 235, 255, 0.22),
-    0 8px 20px rgba(0, 0, 0, 0.18);
-}
 
-* { box-sizing: border-box; }
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  color: var(--text-main);
-  background: var(--bg-main);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-button,
-input,
-select,
-textarea { font: inherit; }
-button { cursor: pointer; }
-
-.app-shell {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  background: var(--bg-main);
-}
+Remove this whole top-shell backdrop block:
 
 /* -------------------------------------------------------------------------- */
 /* Shared shell map-only visual tuning                                         */
@@ -123,6 +80,9 @@ html .fieldops-shell-root[data-current-page="map"] .top-shell {
   backdrop-filter: blur(var(--top-bar-blur)) !important;
 }
 
+
+Remove this whole top-shell pseudo block:
+
 /*
   Disable the shared root shell's map glow patch and this file's old
   pseudo-fade path. The app already has the separate .top-bar-fade ribbon in
@@ -136,11 +96,17 @@ html .fieldops-shell-root[data-current-page="map"] .top-shell::after {
   display: none !important;
 }
 
+
+Remove this whole top-shell child stacking block:
+
 html .fieldops-shell-root[data-page="map"] .top-shell > *,
 html .fieldops-shell-root[data-current-page="map"] .top-shell > * {
   position: relative;
   z-index: 2;
 }
+
+
+Remove this whole top-shell button styling block:
 
 /* Keep the buttons/search matching the approved preview without adding a second shell. */
 html .fieldops-shell-root[data-page="map"] :is(.top-shell .icon-button, .top-shell .search-button),
@@ -173,6 +139,9 @@ html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button:a
   transform: scale(0.98);
 }
 
+
+Remove this whole top-bar ribbon block:
+
 /*
   The old map DOM still contains .top-bar-fade. Treat it as the lower ribbon
   only. Keep it above the map and below the top shell controls.
@@ -181,6 +150,9 @@ html .fieldops-shell-root[data-current-page="map"] :is(.top-shell .icon-button:a
   z-index: 5001;
   top: calc(56px + var(--safe-top) - 2px);
 }
+
+
+Keep this block. This is the bottom bar fade location:
 
 /* Bottom fade stays map-specific. It backs the nav without changing map state. */
 html .fieldops-shell-root[data-page="map"] .bottom-shell,
@@ -206,502 +178,4 @@ html .fieldops-shell-root[data-current-page="map"] .bottom-shell::before {
       #0d2947 100%
     );
   pointer-events: none;
-}
-
-/* Map-owned legacy tools menu exposed by the bridge only when active Map is pressed. */
-.fieldops-shell-root[data-page="map"] .rail-tools-menu,
-.fieldops-shell-root[data-current-page="map"] .rail-tools-menu {
-  position: absolute !important;
-  z-index: 5006 !important;
-  right: 12px !important;
-  bottom: calc(var(--safe-bottom) + var(--bottom-lift) + var(--nav-height) + 10px) !important;
-  left: 12px !important;
-  width: auto !important;
-  max-width: 430px !important;
-  margin-inline: auto !important;
-  padding: 12px !important;
-  border: 1px solid rgba(96, 235, 255, 0.30) !important;
-  border-radius: 22px !important;
-  color: var(--text) !important;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(96, 235, 255, 0.18), transparent 10rem),
-    rgba(5, 14, 28, 0.97) !important;
-  box-shadow: 0 18px 56px rgba(0, 0, 0, 0.46), 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(130%) !important;
-  backdrop-filter: blur(18px) saturate(130%) !important;
-}
-
-.fieldops-shell-root[data-page="map"] .rail-tools-menu.is-open,
-.fieldops-shell-root[data-current-page="map"] .rail-tools-menu.is-open,
-.fieldops-shell-root[data-map-tools-open="true"] .rail-tools-menu {
-  display: grid !important;
-  gap: 8px !important;
-}
-
-.fieldops-shell-root .map-tools-title {
-  padding: 2px 2px 4px;
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.fieldops-shell-root .rail-tool-button {
-  min-height: 46px;
-  padding: 8px 11px;
-  display: grid;
-  gap: 2px;
-  border: 1px solid rgba(96, 235, 255, 0.22);
-  border-radius: 16px;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(255, 255, 255, 0.07);
-  text-align: left;
-}
-
-.fieldops-shell-root .rail-tool-button span { font-size: 13px; font-weight: 850; }
-.fieldops-shell-root .rail-tool-button small { color: var(--text-muted); font-size: 11px; font-weight: 650; }
-
-.map-area {
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-}
-
-#map,
-.leaflet-container {
-  width: 100%;
-  height: 100%;
-  background: #08101a;
-  font-family: inherit;
-}
-
-.leaflet-control-container,
-.leaflet-top,
-.leaflet-bottom { z-index: 1000; }
-.leaflet-bottom.leaflet-right { bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom)); }
-
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  color: var(--text-main);
-  background: rgba(8, 13, 22, 0.96);
-  border: 1px solid rgba(96, 235, 255, 0.20);
-  box-shadow: var(--shadow-heavy);
-}
-
-.walk-popover { min-width: 190px; color: var(--text-main); }
-.walk-popover h3 { margin: 0 0 5px; font-size: 15px; line-height: 1.15; }
-.walk-popover p { margin: 0 0 8px; color: var(--text-muted); font-size: 12px; line-height: 1.35; }
-.walk-popover .popup-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-.walk-popover button { border: 0; border-radius: 999px; padding: 7px 10px; color: #05111d; background: var(--accent); font-size: 12px; font-weight: 800; }
-
-.weather-super-button {
-  position: absolute;
-  z-index: 450;
-  right: 12px;
-  top: calc(var(--safe-top) + 78px);
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid rgba(96, 235, 255, 0.62);
-  border-radius: 16px;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 224, 154, 0.12), transparent 36%),
-    linear-gradient(180deg, rgba(9, 24, 45, 0.94), rgba(4, 14, 28, 0.92));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 0 18px rgba(96, 235, 255, 0.20), 0 8px 20px rgba(0, 0, 0, 0.20);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
-.weather-super-button[aria-pressed="true"],
-.weather-super-button:hover,
-.weather-super-button:focus-visible {
-  border-color: rgba(255, 227, 173, 0.72);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 24px rgba(255, 205, 95, 0.22), 0 10px 24px rgba(0, 0, 0, 0.26);
-}
-
-.weather-super-icon,
-.weather-super-icon img {
-  width: 46px;
-  height: 46px;
-  display: block;
-}
-
-.map-weather-shell { position: relative; display: grid; place-items: end; }
-.map-weather-control { width: 56px; height: 56px; display: grid; place-items: center; overflow: hidden; padding: 0; border: 1px solid rgba(96, 235, 255, 0.62); border-radius: 14px; color: var(--text-main); background: rgba(5, 17, 30, 0.92); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 18px rgba(96, 235, 255, 0.22), 0 8px 20px rgba(0, 0, 0, 0.18); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.map-weather-icon { width: 48px; height: 48px; display: block; border-radius: 11px; filter: drop-shadow(0 0 6px rgba(68, 215, 255, 0.36)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.32)); }
-.map-weather-control:hover,
-.map-weather-control:focus-visible,
-.map-weather-control.is-open,
-.map-weather-control.has-active { border-color: rgba(96, 235, 255, 0.78); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 1px rgba(96, 235, 255, 0.20), 0 0 22px rgba(96, 235, 255, 0.28), 0 8px 22px rgba(0, 0, 0, 0.24); }
-.map-weather-control:active { transform: scale(0.98); }
-
-.map-weather-menu {
-  position: absolute;
-  right: 66px;
-  bottom: 0;
-  width: 206px;
-  display: none;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid rgba(96, 235, 255, 0.26);
-  border-radius: 18px;
-  color: var(--text-main);
-  background: radial-gradient(circle at 100% 0%, rgba(68, 215, 255, 0.12), transparent 8rem), rgba(8, 13, 22, 0.975);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.44), 0 0 0 1px rgba(96, 235, 255, 0.10);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-}
-.map-weather-menu.is-open { display: grid; }
-.map-weather-menu-title { padding: 1px 2px 3px; color: var(--text-muted); font-size: 10px; font-weight: 900; letter-spacing: 0.13em; text-transform: uppercase; }
-.map-weather-master,
-.map-weather-option { min-height: 38px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border: 1px solid rgba(96, 235, 255, 0.26); border-radius: 14px; color: var(--text-main); background: rgba(68, 215, 255, 0.10); font-size: 12px; font-weight: 850; }
-.map-weather-master input { width: 21px; height: 21px; margin: 0; accent-color: var(--accent); }
-.map-weather-menu.weather-disabled .map-weather-hour-panel,
-.map-weather-menu.weather-disabled .map-weather-option { opacity: 0.48; }
-.map-weather-menu.weather-disabled .map-weather-option { pointer-events: none; }
-
-.info-panel,
-.admin-panel,
-.weather-mode-panel,
-.field-notes-panel {
-  position: fixed;
-  z-index: 620;
-  width: min(430px, calc(100vw - 24px));
-  max-height: min(680px, calc(100dvh - var(--shared-shell-top) - var(--shared-shell-bottom) - var(--safe-top) - var(--safe-bottom) - 28px));
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-top: 10px;
-  border: 1px solid rgba(96, 235, 255, 0.24);
-  border-radius: 28px;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(96, 235, 255, 0.13), transparent 12rem),
-    radial-gradient(circle at 100% 100%, rgba(255, 227, 173, 0.10), transparent 10rem),
-    var(--bg-panel-strong);
-  box-shadow: 0 24px 76px rgba(0, 0, 0, 0.50), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  -webkit-backdrop-filter: blur(22px) saturate(120%);
-  backdrop-filter: blur(22px) saturate(120%);
-  transition: transform 0.22s ease, opacity 0.18s ease;
-}
-
-.info-panel {
-  z-index: 610;
-  left: 50%;
-  right: auto;
-  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 12px);
-  transform: translateX(-50%);
-}
-
-.admin-panel,
-.weather-mode-panel,
-.field-notes-panel {
-  left: 50%;
-  top: calc(var(--shared-shell-top) + var(--safe-top) + 8px);
-  transform: translateX(-50%);
-}
-
-.admin-panel.large { width: min(560px, calc(100vw - 24px)); }
-.weather-mode-panel,
-.field-notes-panel { width: min(640px, calc(100vw - 24px)); }
-
-.info-panel.is-hidden,
-.admin-panel.is-hidden,
-.weather-mode-panel.is-hidden,
-.field-notes-panel.is-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.info-panel.is-hidden { transform: translateX(-50%) translateY(110%); }
-.admin-panel.is-hidden,
-.weather-mode-panel.is-hidden,
-.field-notes-panel.is-hidden { transform: translateX(-50%) translateY(-10px); }
-
-.info-panel.collapsed { transform: translateX(-50%) translateY(calc(100% - 86px)); }
-.info-panel.collapsed .panel-content { display: none; }
-.info-panel.dragging,
-.info-panel.is-dragging { transition: none; }
-
-.panel-drag-target { flex: 0 0 auto; padding: 0 0 8px; touch-action: pan-y; }
-.panel-handle { width: 44px; height: 5px; margin: 0 auto; border-radius: 999px; background: rgba(255, 255, 255, 0.26); box-shadow: 0 0 10px rgba(96, 235, 255, 0.18); }
-
-.panel-header,
-.admin-panel-header,
-.weather-mode-panel-header,
-.field-notes-panel-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 16px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.panel-content,
-.admin-panel-body,
-.weather-mode-panel-body,
-.field-notes-panel-body {
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 14px 16px 16px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.panel-kicker {
-  margin-bottom: 3px;
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.panel-header h1,
-.admin-panel-header h2,
-.weather-mode-panel-header h2,
-.field-notes-panel-header h2 {
-  margin: 0;
-  color: var(--text-main);
-  line-height: 1.02;
-}
-.panel-header h1 { font-size: clamp(23px, 6.2vw, 34px); letter-spacing: -0.065em; }
-.admin-panel-header h2,
-.weather-mode-panel-header h2,
-.field-notes-panel-header h2 { font-size: 20px; letter-spacing: -0.045em; }
-
-.site-title-line { min-width: 0; }
-.site-title-region { display: block; margin-top: 4px; color: var(--text-muted); font-size: 13px; font-weight: 750; }
-
-.panel-close-button,
-.admin-close-button {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.10);
-  font-size: 24px;
-  line-height: 1;
-}
-.panel-close-button:active,
-.admin-close-button:active { transform: scale(0.98); }
-
-.panel-section,
-.weather-source-card,
-.field-note-card,
-.collapsible-section {
-  display: grid;
-  gap: 10px;
-  padding: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.section-title,
-.field-note-tag {
-  margin: 0;
-  color: var(--text-main);
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.03em;
-}
-.field-note-tag { color: var(--gold); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
-
-.detail-list,
-.site-memo-grid { display: grid; gap: 0; margin: 0; }
-.detail-list > div,
-.site-memo-row { display: grid; grid-template-columns: minmax(82px, 0.82fr) minmax(0, 1.35fr); gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-.detail-list > div:last-child,
-.site-memo-row:last-child { border-bottom: 0; }
-.detail-list dt,
-.site-memo-row dt { color: var(--text-muted); font-size: 11px; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
-.detail-list dd,
-.site-memo-row dd { margin: 0; color: var(--text-main); font-size: 13px; line-height: 1.35; }
-
-.copy-value-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
-.copy-value-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.copy-button { border: 1px solid rgba(96, 235, 255, 0.20); border-radius: 999px; padding: 5px 8px; color: var(--accent); background: rgba(68, 215, 255, 0.08); font-size: 11px; font-weight: 850; }
-
-.body-note,
-.mini-note,
-.empty-note { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.38; }
-.body-note { color: var(--text-soft); }
-
-.tag-row,
-.button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.button-row { margin-top: 2px; }
-.tag-pill { display: inline-flex; align-items: center; min-height: 26px; padding: 5px 9px; border-radius: 999px; color: var(--text-main); background: rgba(68, 215, 255, 0.12); font-size: 12px; font-weight: 800; }
-
-.tool-button,
-.source-link-button,
-.weather-overlay-toggle,
-.collapsible-section-toggle {
-  min-height: 38px;
-  border: 1px solid rgba(96, 235, 255, 0.28);
-  border-radius: 14px;
-  color: #04101d;
-  background: linear-gradient(180deg, #63dcff, #29bce8);
-  font-size: 13px;
-  font-weight: 850;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
-}
-.tool-button.secondary,
-.source-link-button.secondary { color: var(--text-main); background: rgba(255, 255, 255, 0.08); }
-.tool-button.danger { color: #fff; border-color: rgba(255, 75, 110, 0.42); background: rgba(255, 75, 110, 0.18); }
-.tool-button.small { min-height: 32px; padding: 0 10px; font-size: 12px; }
-
-.input-label,
-.check-line { display: grid; gap: 6px; color: var(--text-muted); font-size: 12px; font-weight: 800; }
-.check-line { grid-template-columns: auto minmax(0, 1fr); align-items: center; }
-.check-line input { width: 20px; height: 20px; accent-color: var(--accent); }
-.form-row { display: flex; gap: 8px; align-items: center; }
-.form-row > input { min-width: 0; flex: 1 1 auto; }
-input,
-select,
-textarea { width: 100%; border: 1px solid rgba(96, 235, 255, 0.22); border-radius: 14px; color: var(--text-main); background: rgba(255, 255, 255, 0.08); outline: none; }
-input,
-select { min-height: 40px; padding: 0 11px; }
-textarea { min-height: 90px; padding: 10px 11px; resize: vertical; }
-input:focus,
-select:focus,
-textarea:focus { border-color: rgba(96, 235, 255, 0.72); box-shadow: 0 0 0 3px rgba(96, 235, 255, 0.13); }
-input[type="color"] { width: 48px; flex: 0 0 48px; padding: 3px; }
-
-.tool-grid,
-.site-grid,
-.region-grid,
-.field-notes-grid,
-.weather-source-grid { display: grid; gap: 8px; }
-.tool-grid { grid-template-columns: 1fr 1fr; }
-.weather-source-grid { grid-template-columns: 1fr; }
-
-.collapsible-section-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; color: var(--text-main); background: rgba(255, 255, 255, 0.08); text-align: left; }
-.collapsible-section-toggle span { display: grid; gap: 3px; }
-.collapsible-section-toggle small { color: var(--text-muted); font-size: 11px; font-weight: 650; }
-.collapsible-section-body { display: grid; gap: 8px; }
-
-.weather-overlay-controls,
-.weather-overlay-control-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.weather-overlay-toggle { min-height: 32px; padding: 0 10px; color: var(--text-main); background: rgba(255, 255, 255, 0.08); }
-.weather-overlay-toggle[aria-pressed="true"] { color: #04101d; background: var(--accent); }
-
-.site-memo-risk-watch { color: rgba(255, 214, 82, 0.98); }
-.site-memo-risk-high { color: rgba(255, 120, 145, 0.98); }
-
-.legend-panel {
-  position: fixed;
-  z-index: 410;
-  left: 12px;
-  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 12px);
-  width: 190px;
-  padding: 12px;
-  border: 1px solid var(--border-soft);
-  border-radius: 20px;
-  color: var(--text-main);
-  background: var(--bg-panel);
-  box-shadow: var(--shadow-heavy);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-}
-.legend-title { margin-bottom: 9px; color: var(--text-main); font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
-.legend-list { display: grid; gap: 7px; }
-.legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-soft); font-size: 12px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--region-color, var(--accent)); box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16); }
-
-.status-toast {
-  position: fixed;
-  z-index: 7000;
-  right: 14px;
-  bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 14px);
-  min-height: 42px;
-  display: none;
-  align-items: center;
-  max-width: min(360px, calc(100vw - 28px));
-  padding: 10px 12px;
-  border: 1px solid rgba(68, 215, 255, 0.22);
-  border-radius: 16px;
-  color: var(--text-main);
-  background: rgba(8, 13, 22, 0.94);
-  box-shadow: var(--shadow-heavy);
-  font-size: 13px;
-}
-.status-toast.is-visible,
-.status-toast.show { display: flex; }
-
-.startup-region-gate,
-.region-start-panel {
-  position: fixed;
-  z-index: 650;
-  top: calc(var(--shared-shell-top) + var(--safe-top) + 12px);
-  left: 50%;
-  width: min(460px, calc(100vw - 24px));
-  transform: translateX(-50%);
-  padding: 14px;
-  border: 1px solid rgba(96, 235, 255, 0.24);
-  border-radius: 24px;
-  color: var(--text-main);
-  background: var(--bg-panel-strong);
-  box-shadow: var(--shadow-heavy);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-}
-
-.hidden,
-[hidden] { display: none !important; }
-
-@media (max-width: 720px) {
-  :root { --shared-shell-top: 64px; --shared-shell-bottom: 62px; }
-
-  .info-panel {
-    left: 12px;
-    right: 12px;
-    width: auto;
-    bottom: calc(var(--shared-shell-bottom) + var(--safe-bottom) + 10px);
-    transform: none;
-    max-height: min(560px, calc(100dvh - var(--shared-shell-top) - var(--shared-shell-bottom) - var(--safe-top) - var(--safe-bottom) - 22px));
-    border-radius: 26px;
-  }
-
-  .info-panel.is-hidden { transform: translateY(110%); }
-  .info-panel.collapsed { transform: translateY(calc(100% - 86px)); }
-
-  .admin-panel,
-  .weather-mode-panel,
-  .field-notes-panel {
-    left: 10px;
-    right: 10px;
-    width: auto;
-    transform: none;
-  }
-
-  .admin-panel.is-hidden,
-  .weather-mode-panel.is-hidden,
-  .field-notes-panel.is-hidden { transform: translateY(-10px); }
-
-  .panel-header,
-  .admin-panel-header,
-  .weather-mode-panel-header,
-  .field-notes-panel-header { padding: 0 14px 11px; }
-  .panel-content,
-  .admin-panel-body,
-  .weather-mode-panel-body,
-  .field-notes-panel-body { padding: 13px 14px 15px; }
-
-  .legend-panel { display: none; }
-  .weather-super-button { top: calc(var(--safe-top) + 72px); right: 10px; width: 52px; height: 52px; }
-  .tool-grid { grid-template-columns: 1fr; }
 }
