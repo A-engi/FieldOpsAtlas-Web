@@ -1,18 +1,16 @@
 /* ==========================================================================
-   FieldOps Atlas shared shell
-   Root file: shell.js
-   Version: 1.1.13-one-root-shell
-
-   Purpose:
-   Inject one shared shell into the current page root.
-
-   Rules:
-   - One root shell only.
-   - One top shell only.
-   - One bottom shell only.
-   - Page files own page content.
-   - Feature files own feature panels and data logic.
-   ========================================================================== */
+ FieldOps Atlas shared shell
+ Root file: shell.js
+ Version: 1.1.13-one-root-shell
+ Purpose:
+ Inject one shared shell into the current page root.
+ Rules:
+ - One root shell only.
+ - One top shell only.
+ - One bottom shell only.
+ - Page files own page content.
+ - Feature files own feature panels and data logic.
+ ========================================================================== */
 
 (function fieldOpsSharedShell() {
   "use strict";
@@ -34,7 +32,7 @@
       label: "Map",
       navLabel: "Map",
       icon: "icon--map",
-      href: "FieldOpsAtlas/Features/Map/index.html"
+      href: "FieldOpsAtlas/Features/maps/index.html"
     },
     rf: {
       label: "RF",
@@ -197,7 +195,6 @@
 
     return [
       '<button class="map-dim" type="button" data-menu-backdrop data-fieldops-shell-chrome aria-label="Close menu"></button>',
-
       '<header class="top-shell" data-fieldops-shell-chrome>',
       '<button class="icon-button" type="button" data-menu-open aria-label="Open menu" aria-expanded="false">',
       icon("icon--menu"),
@@ -216,7 +213,6 @@
       icon("icon--filter"),
       '</button>',
       '</header>',
-
       '<aside class="drawer" data-fieldops-shell-chrome aria-label="FieldOps menu">',
       '<div class="drawer-header">',
       '<div class="drawer-brand-mark">', icon("icon--atlas"), '</div>',
@@ -254,7 +250,6 @@
       '<p class="drawer-subtitle">FieldOps Atlas ', VERSION, '</p>',
       '</div>',
       '</aside>',
-
       '<aside class="search-panel" data-fieldops-shell-chrome aria-label="Search panel">',
       '<h2 class="panel-heading" data-search-title>Search ', escapeHtml(page.label), '</h2>',
       '<p class="panel-subtext" data-search-hint>Page-specific results only.</p>',
@@ -262,13 +257,11 @@
       '<div class="search-results" data-search-results></div>',
       '<p class="search-empty" data-search-empty>No matches found.</p>',
       '</aside>',
-
       '<aside class="filter-panel" data-fieldops-shell-chrome aria-label="Filter panel">',
       '<h2 class="panel-heading">Filter</h2>',
       '<p class="panel-subtext">Region</p>',
       '<button class="filter-region-button" type="button" data-filter-region>All regions ', chevron(), '</button>',
       '</aside>',
-
       '<nav class="bottom-shell" data-fieldops-shell-chrome aria-label="Primary navigation">',
       pageOrder.map(function mapNav(pageKey, index) {
         return navButton(pageKey, active, activeIndex, index);
@@ -573,6 +566,7 @@
 
     if (this.refs.pagesButton) {
       this.refs.pagesButton.setAttribute("aria-expanded", open ? "true" : "false");
+
       var text = this.refs.pagesButton.querySelector(".section-toggle__text");
 
       if (text) {
@@ -602,6 +596,7 @@
 
     this.refs.navButtons.forEach(function updateNav(button) {
       var active = button.dataset.page === this.page;
+
       button.classList.toggle("is-active", active);
 
       if (active) {
