@@ -1,62 +1,46 @@
 /* ==========================================================================
    FieldOps Atlas Map shell.css
-   Version: 1.1.1-map-shell-v2.4-root-buttons-map-background
-   Owner: Map-only shell backdrop, groove and fade.
+   Version: 1.1.1-map-shell-v2.5-attached-groove-fade
+   Owner: Map-only top backdrop, groove tray, and fade.
 
-   Rules:
-   - Root/shared shell keeps the real menu/search/filter button styling.
-   - This file only supplies the Map page background behind that shell.
-   - No archived shell button rebuild.
-   - No data/region edits.
+   Intent:
+   - Keep the root/shared shell buttons exactly as the root shell styles them.
+   - Do not rebuild menu/search/filter button styling here.
+   - Attach the Map fade/backdrop to the top of the viewport instead of starting
+     underneath the buttons.
    ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   Map shell tokens
-   -------------------------------------------------------------------------- */
 
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-
-  /* Uses shared shell height when present, with safe fallbacks. */
-  --map-shell-height: var(--shared-shell-top, var(--top-bar-height, 72px));
-  --map-shell-pad-x: clamp(7px, 2.5vw, 12px);
-  --map-shell-groove-top: calc(var(--safe-top) + 6px);
-  --map-shell-groove-height: calc(var(--map-shell-height) - 12px);
-
-  /* Singapore-airline-ish navy/gold, but restrained behind the root buttons. */
-  --map-shell-navy-950: #061426;
-  --map-shell-navy-900: #08213b;
-  --map-shell-navy-820: #0b2f53;
-  --map-shell-navy-740: #123f68;
-
-  --map-shell-gold-soft: rgba(255, 227, 173, 0.28);
-  --map-shell-gold-line: rgba(255, 209, 118, 0.20);
-  --map-shell-blue-line: rgba(98, 176, 231, 0.30);
-  --map-shell-cyan-line: rgba(96, 235, 255, 0.16);
-
-  --map-top-fade-height: 98px;
-  --map-top-ribbon-height: 28px;
 
   /*
-     Compatibility bridge:
-     Current map-page.css still has old map-scoped control variables.
-     Keep those variables aligned with the root/shared shell palette so the
-     buttons stay visually owned by the root shell instead of the old cyan map
-     override.
+     Keep the same nominal top height the existing Map shell used, but let any
+     shared shell variable win if the root shell provides one.
   */
-  --chrome-control-border: var(--button-border, rgba(76, 113, 151, 0.74));
-  --chrome-control-bg: var(--button-bottom, rgba(16, 44, 76, 0.94));
-  --chrome-control-bg-top: var(--button-top, #15395e);
-  --chrome-control-bg-bottom: var(--button-bottom, #102c4c);
-  --chrome-control-glow:
-    0 0 0 1px rgba(255, 227, 173, 0.04),
-    0 8px 20px rgba(0, 0, 0, 0.18);
+  --top-bar-height: 56px;
+  --map-shell-height: var(--top-shell-height, var(--shared-shell-top, var(--top-bar-height)));
+  --map-shell-depth: calc(var(--safe-top) + var(--map-shell-height));
+
+  --top-fade-height: 96px;
+  --top-ribbon-height: 28px;
+
+  --map-shell-navy-top: #061426;
+  --map-shell-navy-mid: #08223d;
+  --map-shell-navy-low: #0d365e;
+
+  --map-fade-top: rgba(7, 24, 43, 0.68);
+  --map-fade-mid: rgba(38, 123, 166, 0.28);
+  --map-fade-bottom: rgba(7, 11, 18, 0);
+
+  --map-groove-x: clamp(7px, 2.2vw, 12px);
+  --map-groove-top: calc(var(--safe-top) + 6px);
+  --map-groove-height: calc(var(--map-shell-height) - 12px);
+  --map-groove-radius: 17px;
 }
 
 /* --------------------------------------------------------------------------
    Remove only the old Map-owned chrome duplicate.
-   The shared/root shell remains active and owns the visible buttons.
+   The root/shared shell remains responsible for visible buttons and behaviour.
    -------------------------------------------------------------------------- */
 
 .top-bar,
@@ -83,169 +67,96 @@
 }
 
 /* --------------------------------------------------------------------------
-   Shared root shell: Map-owned background only.
-   Important: no direct button/search/filter colour rules live here.
-   -------------------------------------------------------------------------- */
-
-html .fieldops-shell-root[data-page="map"] .top-shell,
-html .fieldops-shell-root[data-current-page="map"] .top-shell {
-  isolation: isolate !important;
-  overflow: visible !important;
-  border-bottom: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Solid dark upper backdrop behind the root buttons. */
-html .fieldops-shell-root[data-page="map"] .top-shell::before,
-html .fieldops-shell-root[data-current-page="map"] .top-shell::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  z-index: 0;
-  top: calc(var(--safe-top) * -1);
-  right: 0;
-  left: 0;
-  height: calc(var(--safe-top) + var(--map-shell-height) + 8px);
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(70, 143, 208, 0.20), transparent 44%),
-    linear-gradient(
-      180deg,
-      var(--map-shell-navy-950) 0%,
-      var(--map-shell-navy-900) 48%,
-      rgba(10, 38, 68, 0.92) 76%,
-      rgba(10, 38, 68, 0.62) 100%
-    );
-  box-shadow:
-    inset 0 -1px 0 rgba(255, 255, 255, 0.045),
-    0 10px 24px rgba(0, 0, 0, 0.18);
-  -webkit-backdrop-filter: blur(14px) saturate(114%);
-  backdrop-filter: blur(14px) saturate(114%);
-}
-
-/*
-   The groove is a recessed tray behind the root buttons.
-   It does not colour the controls; it gives them the missing carved-in seat.
-*/
-html .fieldops-shell-root[data-page="map"] .top-shell::after,
-html .fieldops-shell-root[data-current-page="map"] .top-shell::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  z-index: 1;
-  top: var(--map-shell-groove-top);
-  right: var(--map-shell-pad-x);
-  left: var(--map-shell-pad-x);
-  height: var(--map-shell-groove-height);
-  border: 1px solid rgba(76, 113, 151, 0.30);
-  border-radius: clamp(17px, 4.2vw, 26px);
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% -18%, rgba(255, 227, 173, 0.12), transparent 35%),
-    radial-gradient(circle at 50% 120%, rgba(96, 235, 255, 0.10), transparent 44%),
-    linear-gradient(
-      180deg,
-      rgba(2, 11, 24, 0.54) 0%,
-      rgba(5, 19, 36, 0.64) 48%,
-      rgba(8, 31, 55, 0.48) 100%
-    );
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.46),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.055),
-    inset 0 0 0 1px rgba(255, 227, 173, 0.035),
-    0 1px 0 rgba(255, 227, 173, 0.08),
-    0 15px 30px rgba(0, 0, 0, 0.22);
-}
-
-/* Keep actual shared/root controls above the Map-only backdrop/groove. */
-html .fieldops-shell-root[data-page="map"] .top-shell > *,
-html .fieldops-shell-root[data-current-page="map"] .top-shell > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* --------------------------------------------------------------------------
-   Lower fade below the shell.
-   This is the visible Map fade into the map canvas.
+   Attached Map backdrop + fade.
+   This deliberately starts at top: 0 so there is no detached strip below the
+   root shell controls.
    -------------------------------------------------------------------------- */
 
 .top-bar-fade {
   position: fixed;
-  z-index: 5001;
-  top: calc(var(--safe-top) + var(--map-shell-height) - 3px);
+  z-index: 300;
+  top: 0;
   right: 0;
   left: 0;
-  height: var(--map-top-fade-height);
+  height: calc(var(--map-shell-depth) + var(--top-fade-height));
   overflow: hidden;
   pointer-events: none;
-  background: transparent;
+
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(96, 176, 231, 0.18), transparent 42%),
+    linear-gradient(
+      180deg,
+      var(--map-shell-navy-top) 0%,
+      var(--map-shell-navy-mid) calc(var(--safe-top) + 18px),
+      rgba(8, 34, 61, 0.94) var(--map-shell-depth),
+      var(--map-fade-top) calc(var(--map-shell-depth) + 8px),
+      var(--map-fade-mid) calc(var(--map-shell-depth) + 55px),
+      var(--map-fade-bottom) 100%
+    );
+
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.035),
+    0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
-.top-bar-fade::before,
+/*
+   Recessed groove/tray behind the root controls.
+   This is the missing seat for the buttons; it does not restyle the buttons.
+*/
+.top-bar-fade::before {
+  content: "";
+  position: absolute;
+  top: var(--map-groove-top);
+  right: var(--map-groove-x);
+  left: var(--map-groove-x);
+  height: var(--map-groove-height);
+  border: 1px solid rgba(76, 113, 151, 0.32);
+  border-radius: var(--map-groove-radius);
+  pointer-events: none;
+
+  background:
+    radial-gradient(circle at 50% -16%, rgba(255, 227, 173, 0.12), transparent 38%),
+    radial-gradient(circle at 50% 115%, rgba(96, 235, 255, 0.10), transparent 44%),
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 22, 0.52) 0%,
+      rgba(5, 20, 38, 0.66) 48%,
+      rgba(8, 32, 58, 0.48) 100%
+    );
+
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.46),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.055),
+    inset 0 0 0 1px rgba(255, 227, 173, 0.035),
+    0 1px 0 rgba(255, 227, 173, 0.08),
+    0 14px 26px rgba(0, 0, 0, 0.20);
+}
+
+/*
+   Slim ribbon at the join between the attached top shell and the map fade.
+   This keeps the old Map fade feel but removes the detached floating band.
+*/
 .top-bar-fade::after {
   content: "";
   position: absolute;
+  top: calc(var(--map-shell-depth) - 1px);
   right: 0;
   left: 0;
+  height: var(--top-ribbon-height);
   pointer-events: none;
-}
 
-.top-bar-fade::before {
-  top: 0;
-  height: var(--map-top-ribbon-height);
   background:
     linear-gradient(
       180deg,
-      rgba(7, 22, 41, 0.72) 0%,
-      rgba(10, 42, 73, 0.46) 100%
+      rgba(6, 21, 39, 0.58) 0%,
+      rgba(12, 50, 82, 0.42) 100%
     );
+
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
-    inset 0 -1px 0 var(--map-shell-blue-line),
-    0 8px 18px rgba(0, 0, 0, 0.18);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-}
+    inset 0 -1px 0 rgba(98, 176, 231, 0.24),
+    0 10px 22px rgba(0, 0, 0, 0.12);
 
-.top-bar-fade::after {
-  top: var(--map-top-ribbon-height);
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at 50% -18%, rgba(255, 227, 173, 0.11), transparent 38%),
-    linear-gradient(
-      180deg,
-      rgba(8, 30, 54, 0.50) 0%,
-      rgba(29, 95, 139, 0.28) 48%,
-      rgba(7, 11, 18, 0) 100%
-    );
-}
-
-/* --------------------------------------------------------------------------
-   Bottom fade remains Map-specific and does not affect navigation buttons.
-   -------------------------------------------------------------------------- */
-
-html .fieldops-shell-root[data-page="map"] .bottom-shell,
-html .fieldops-shell-root[data-current-page="map"] .bottom-shell {
-  isolation: isolate;
-}
-
-html .fieldops-shell-root[data-page="map"] .bottom-shell::before,
-html .fieldops-shell-root[data-current-page="map"] .bottom-shell::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: calc((var(--bottom-lift, 0px) + var(--safe-bottom)) * -1);
-  left: 0;
-  z-index: -1;
-  height: calc(var(--nav-height, 64px) + var(--bottom-lift, 0px) + var(--safe-bottom) + 38px);
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(7, 11, 18, 0) 0%,
-      rgba(7, 19, 34, 0.52) 22%,
-      rgba(8, 29, 52, 0.92) 58%,
-      #0d2947 100%
-    );
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
 }
