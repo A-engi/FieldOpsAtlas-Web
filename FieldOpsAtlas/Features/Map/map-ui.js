@@ -1,38 +1,25 @@
 /* ==========================================================================
    FieldOps Atlas map-ui.js
    Root file: FieldOpsAtlas/Features/Map/map-ui.js
-   Version: 1.1.5-lazy-weather-v1
+   Version: 1.1.5-root-width-retire-legacy-map-shell
 
    Purpose:
    - Keep map-app.js as the owner of map creation, region loading, markers,
      search data, selected-walk state, and GitHub write workflows.
-   - Load the shared root shell from the map page because index.html still only
-     calls map-app.js and map-ui.js.
+   - Load the shared root shell from the map page.
    - Load the bridge-only map shell guard after the root shell request.
-   - Keep essential late UI bridge behaviours alive while the map shell is being
-     handed over.
-   - Do not inject fallback shell UI.
-   - Do not preload Weather Mode panel markup.
-   - Initialise Weather Mode only when the Weather button is pressed.
-
-   Swift conversion note:
-   - This file is deliberately controller-like and small.
-   - Shell owns shell chrome.
-   - Map owns map state.
-   - Weather panel is lazy-created by weather-mode-panel.js.
-   - Guard only bridges events.
+   - Keep essential late UI bridge behaviours alive while the map shell is handed over.
+   - Do not inject fallback top/bottom shell UI.
    ========================================================================== */
 
-(function () {
+(function fieldOpsMapUi() {
   "use strict";
 
-  var UI_VERSION = "1.1.5-lazy-weather-v1";
-  var SHARED_SHELL_VERSION = "1.1.1-shell-v2.6-map-button-events";
-  var MAP_SHELL_GUARD_VERSION = "1.1.1-map-shell-guard-v11";
-  var WEATHER_PANEL_VERSION = "1.1.1-lazy-weather-v1";
+  const UI_VERSION = "1.1.5-root-width-retire-legacy-map-shell";
+  const SHARED_SHELL_VERSION = "1.1.15-rf-width-root-shell";
+  const MAP_SHELL_GUARD_VERSION = "1.1.2-retire-map-legacy-shell";
 
-  var loadedAssets = Object.create(null);
-  var weatherPanelReadyPromise = null;
+  const loadedAssets = Object.create(null);
 
   function byId(id) {
     return document.getElementById(id);
@@ -78,32 +65,30 @@
   }
 
   function cacheBust(url, version) {
-    var nextUrl = new URL(url, window.location.href);
+    const nextUrl = new URL(url, window.location.href);
     nextUrl.searchParams.set("v", version);
     return nextUrl.href;
   }
 
   function sameAsset(left, right) {
-    return (
-      new URL(left, window.location.href).href.split("?")[0] ===
-      new URL(right, window.location.href).href.split("?")[0]
-    );
+    return new URL(left, window.location.href).href.split("?")[0] ===
+      new URL(right, window.location.href).href.split("?")[0];
   }
 
   function existingStylesheet(href) {
-    return qsa('link[rel="stylesheet"][href]').find(function (link) {
+    return qsa('link[rel="stylesheet"][href]').find(function findStylesheet(link) {
       return sameAsset(link.href, href);
     }) || null;
   }
 
   function existingScript(src) {
-    return qsa("script[src]").find(function (script) {
+    return qsa("script[src]").find(function findScript(script) {
       return sameAsset(script.src, src);
     }) || null;
   }
 
   function loadStylesheet(path, version) {
-    var href = assetUrl(path);
+    const href = assetUrl(path);
 
     if (existingStylesheet(href) || loadedAssets[href]) {
       return Promise.resolve("already-loaded");
@@ -111,27 +96,23 @@
 
     loadedAssets[href] = true;
 
-    return new Promise(function (resolve) {
-      var link = document.createElement("link");
-
+    return new Promise(function createStylesheet(resolve) {
+      const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = cacheBust(href, version);
       link.dataset.fieldopsMapUiLoader = UI_VERSION;
-
-      link.addEventListener("load", function () {
+      link.addEventListener("load", function onLoad() {
         resolve("loaded");
       }, { once: true });
-
-      link.addEventListener("error", function () {
+      link.addEventListener("error", function onError() {
         resolve("error");
       }, { once: true });
-
       document.head.appendChild(link);
     });
   }
 
   function loadScript(path, version) {
-    var src = assetUrl(path);
+    const src = assetUrl(path);
 
     if (existingScript(src) || loadedAssets[src]) {
       return Promise.resolve("already-loaded");
@@ -139,28 +120,23 @@
 
     loadedAssets[src] = true;
 
-    return new Promise(function (resolve) {
-      var script = document.createElement("script");
-
+    return new Promise(function createScript(resolve) {
+      const script = document.createElement("script");
       script.src = cacheBust(src, version);
       script.defer = true;
       script.dataset.fieldopsMapUiLoader = UI_VERSION;
-
-      script.addEventListener("load", function () {
+      script.addEventListener("load", function onLoad() {
         resolve("loaded");
       }, { once: true });
-
-      script.addEventListener("error", function () {
+      script.addEventListener("error", function onError() {
         resolve("error");
       }, { once: true });
-
       document.body.appendChild(script);
     });
   }
 
   function removeDiagnosticBadge() {
-    var badge = byId("fieldopsMapShellDiagnostics");
-
+    const badge = byId("fieldopsMapShellDiagnostics");
     if (badge && badge.parentNode) {
       badge.parentNode.removeChild(badge);
     }
@@ -170,8 +146,7 @@
   }
 
   function showToast(message) {
-    var toast = byId("statusToast");
-
+    const toast = byId("statusToast");
     if (!toast) {
       return;
     }
@@ -180,7 +155,7 @@
     toast.classList.add("show", "is-visible");
 
     window.clearTimeout(showToast._timer);
-    showToast._timer = window.setTimeout(function () {
+    showToast._timer = window.setTimeout(function hideToast() {
       toast.classList.remove("show", "is-visible");
     }, 1800);
   }
@@ -191,22 +166,18 @@
   }
 
   function getSelectedWalk() {
-    var bridge = getBridge();
-
+    const bridge = getBridge();
     if (bridge && typeof bridge.getSelectedWalk === "function") {
       return bridge.getSelectedWalk();
     }
-
     return null;
   }
 
   function getVisibleWalks() {
-    var bridge = getBridge();
-
+    const bridge = getBridge();
     if (bridge && typeof bridge.getVisibleWalks === "function") {
       return bridge.getVisibleWalks() || [];
     }
-
     return [];
   }
 
@@ -215,33 +186,28 @@
       return;
     }
 
+    panel.hidden = false;
     panel.classList.toggle("is-hidden", !visible);
-    panel.classList.toggle("is-open", !!visible);
+    panel.classList.toggle("is-open", Boolean(visible));
     panel.setAttribute("aria-hidden", visible ? "false" : "true");
   }
 
   function isPanelVisible(panel) {
-    return !!panel &&
+    return Boolean(panel) &&
       !panel.classList.contains("is-hidden") &&
       panel.getAttribute("aria-hidden") !== "true";
   }
 
   function closeOtherPanels(exceptId) {
-    [
-      "weatherModePanel",
-      "fieldNotesPanel"
-    ].forEach(function (id) {
-      if (id === exceptId) {
-        return;
+    ["weatherModePanel", "fieldNotesPanel"].forEach(function closePanel(id) {
+      if (id !== exceptId) {
+        setPanelVisible(byId(id), false);
       }
-
-      setPanelVisible(byId(id), false);
     });
   }
 
   function setText(id, value) {
-    var element = byId(id);
-
+    const element = byId(id);
     if (element) {
       element.textContent = value;
     }
@@ -253,131 +219,43 @@
     setText("selectedSiteLightningMemo", "Open Weather Mode for manual strike links.");
   }
 
-  function wireWeatherModePanel(panel) {
-    if (!panel || panel.dataset.fieldopsWeatherPanelWired === UI_VERSION) {
-      return;
-    }
-
-    panel.dataset.fieldopsWeatherPanelWired = UI_VERSION;
-
-    on(byId("closeWeatherModePanelButton") || byId("closeWeatherModeButton"), "click", closeWeatherMode);
-    on(byId("weatherSitesRefreshButton") || byId("refreshVisibleWeatherButton"), "click", refreshWeatherMode);
-
-    [
-      "weatherOverlayAllButton",
-      "weatherOverlayWatchButton",
-      "weatherOverlayHighButton",
-      "weatherOverlayClearButton",
-      "weatherOverlayFitButton",
-      "saveMetOfficeWarningsButton",
-      "checkMetOfficeWarningsButton",
-      "clearMetOfficeWarningsButton",
-      "saveDnoPowerButton",
-      "openDnoPowerButton",
-      "clearDnoPowerButton"
-    ].forEach(function (id) {
-      on(byId(id), "click", function () {
-        showToast("Map UI active");
-      });
-    });
-  }
-
-  function ensureWeatherModePanel() {
-    var existingPanel = byId("weatherModePanel");
-
-    if (existingPanel) {
-      wireWeatherModePanel(existingPanel);
-      return Promise.resolve(existingPanel);
-    }
-
-    if (weatherPanelReadyPromise) {
-      return weatherPanelReadyPromise;
-    }
-
-    weatherPanelReadyPromise = loadScript("./weather-mode-panel.js", WEATHER_PANEL_VERSION)
-      .then(function () {
-        var weatherMode = window.FieldOpsAtlasWeatherMode;
-
-        if (!weatherMode || typeof weatherMode.ensurePanel !== "function") {
-          throw new Error("weather-mode-panel.js loaded but did not expose FieldOpsAtlasWeatherMode.ensurePanel");
-        }
-
-        return weatherMode.ensurePanel();
-      })
-      .then(function (panel) {
-        wireWeatherModePanel(panel);
-        return panel;
-      })
-      .catch(function (error) {
-        weatherPanelReadyPromise = null;
-
-        if (window.console && typeof window.console.warn === "function") {
-          window.console.warn("FieldOps Atlas Weather Mode failed to initialise", error);
-        }
-
-        showToast("Weather Mode failed to load");
-        return null;
-      });
-
-    return weatherPanelReadyPromise;
-  }
-
   function openWeatherMode() {
-    var weatherButton = byId("weatherModeButton");
+    const selected = getSelectedWalk();
+    const weatherButton = byId("weatherModeButton");
+
+    closeOtherPanels("weatherModePanel");
+    setPanelVisible(byId("weatherModePanel"), true);
 
     if (weatherButton) {
-      weatherButton.setAttribute("aria-busy", "true");
+      weatherButton.setAttribute("aria-pressed", "true");
     }
 
-    ensureWeatherModePanel().then(function (panel) {
-      if (!panel) {
-        if (weatherButton) {
-          weatherButton.setAttribute("aria-busy", "false");
-        }
+    if (selected) {
+      setSelectedWeatherPending();
+    }
 
-        return;
-      }
-
-      closeOtherPanels("weatherModePanel");
-      setPanelVisible(panel, true);
-
-      if (weatherButton) {
-        weatherButton.setAttribute("aria-pressed", "true");
-        weatherButton.setAttribute("aria-busy", "false");
-      }
-
-      if (getSelectedWalk()) {
-        setSelectedWeatherPending();
-      }
-
-      refreshWeatherMode();
-    });
+    setText("weatherOverlayStatus", "Weather map overlay paused. Forecast text stays in Weather Mode for now.");
   }
 
   function closeWeatherMode() {
-    var weatherButton = byId("weatherModeButton");
+    const weatherButton = byId("weatherModeButton");
 
     setPanelVisible(byId("weatherModePanel"), false);
 
     if (weatherButton) {
       weatherButton.setAttribute("aria-pressed", "false");
-      weatherButton.setAttribute("aria-busy", "false");
     }
   }
 
   function refreshWeatherMode() {
-    var walks = getVisibleWalks();
-    var list = byId("visibleWeatherSiteList");
-    var message = walks.length
+    const walks = getVisibleWalks();
+    const list = byId("visibleWeatherSiteList");
+    const message = walks.length
       ? "Weather refresh is parked during shell handoff. Visible walks: " + walks.length + "."
       : "No visible walks are loaded yet.";
 
     if (list) {
-      list.innerHTML = "";
-      var item = document.createElement("p");
-      item.className = "visible-weather-empty";
-      item.textContent = message;
-      list.appendChild(item);
+      list.innerHTML = "<p class=\"visible-weather-empty\">" + message + "</p>";
     }
 
     setText("weatherOverlayStatus", message);
@@ -393,8 +271,8 @@
   }
 
   function setInfoPanelExpanded(expanded) {
-    var panel = byId("infoPanel");
-    var button = byId("expandInfoButton");
+    const panel = byId("infoPanel");
+    const button = byId("expandInfoButton");
 
     if (!panel) {
       return;
@@ -420,8 +298,8 @@
   }
 
   function wireDetailsPanelDrag() {
-    var panel = byId("infoPanel");
-    var handle = byId("infoPanelDragTarget");
+    const panel = byId("infoPanel");
+    const handle = byId("infoPanelDragTarget");
 
     if (!panel || !handle || !window.PointerEvent || handle.dataset.fieldopsMapUiDrag === UI_VERSION) {
       return;
@@ -429,15 +307,15 @@
 
     handle.dataset.fieldopsMapUiDrag = UI_VERSION;
 
-    var drag = null;
+    let drag = null;
 
     function finishDrag(event) {
       if (!drag || event.pointerId !== drag.pointerId) {
         return;
       }
 
-      var deltaY = drag.lastY - drag.startY;
-      var moved = drag.moved || Math.abs(deltaY) > 10;
+      const deltaY = drag.lastY - drag.startY;
+      const moved = drag.moved || Math.abs(deltaY) > 10;
 
       try {
         handle.releasePointerCapture(drag.pointerId);
@@ -459,7 +337,7 @@
       }
     }
 
-    on(handle, "pointerdown", function (event) {
+    on(handle, "pointerdown", function handlePointerDown(event) {
       if (!isPanelVisible(panel)) {
         return;
       }
@@ -475,13 +353,12 @@
       handle.setPointerCapture(event.pointerId);
     });
 
-    on(handle, "pointermove", function (event) {
+    on(handle, "pointermove", function handlePointerMove(event) {
       if (!drag || event.pointerId !== drag.pointerId) {
         return;
       }
 
       drag.lastY = event.clientY;
-
       if (Math.abs(drag.lastY - drag.startY) > 10) {
         drag.moved = true;
       }
@@ -491,67 +368,49 @@
     on(handle, "pointercancel", finishDrag);
   }
 
-  function setMapToolsOpen(open) {
-    var menu = byId("railToolsMenu");
-    var trigger = byId("railMapButton") || qs(".map-tools-trigger");
-
-    if (!menu || !trigger) {
-      return;
-    }
-
-    menu.hidden = !open;
-    menu.classList.toggle("is-open", !!open);
-    trigger.classList.toggle("is-active", !!open);
-    trigger.setAttribute("aria-expanded", open ? "true" : "false");
-
-    if (document.querySelector(".fieldops-shell-root")) {
-      document.querySelector(".fieldops-shell-root").dataset.mapToolsOpen = open ? "true" : "false";
-    }
-  }
-
-  function toggleMapTools() {
-    var menu = byId("railToolsMenu");
-    setMapToolsOpen(Boolean(menu && (menu.hidden || !menu.classList.contains("is-open"))));
-  }
-
-  function wireMapTools() {
-    var button = byId("railMapButton") || qs(".map-tools-trigger");
-    var menu = byId("railToolsMenu");
-
-    if (!button || !menu || button.dataset.fieldopsMapToolsBridge === UI_VERSION) {
-      return;
-    }
-
-    button.dataset.fieldopsMapToolsBridge = UI_VERSION;
-
-    on(button, "click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
+  function wireButtons() {
+    on(byId("weatherModeButton"), "click", function toggleWeatherMode() {
+      if (isPanelVisible(byId("weatherModePanel"))) {
+        closeWeatherMode();
+      } else {
+        openWeatherMode();
       }
+    });
 
-      toggleMapTools();
-    }, true);
+    on(byId("closeWeatherModeButton") || byId("closeWeatherModePanelButton"), "click", closeWeatherMode);
+    on(byId("refreshVisibleWeatherButton") || byId("weatherSitesRefreshButton"), "click", refreshWeatherMode);
+    on(byId("openFieldNotesButton"), "click", openFieldNotesPanel);
+    on(byId("closeFieldNotesButton"), "click", closeFieldNotesPanel);
 
-    on(document, "click", function (event) {
-      var target = event.target;
+    on(byId("expandInfoButton"), "click", function handleExpandInfo() {
+      const panel = byId("infoPanel");
+      const isExpanded = Boolean(panel && panel.classList.contains("is-expanded"));
+      setInfoPanelExpanded(!isExpanded);
+    });
 
-      if (!target || typeof target.closest !== "function") {
-        return;
-      }
-
-      if (
-        target.closest("#railToolsMenu") ||
-        target.closest("#railMapButton") ||
-        target.closest(".map-tools-trigger")
-      ) {
-        return;
-      }
-
-      setMapToolsOpen(false);
-    }, true);
+    [
+      "weatherOverlayAllButton",
+      "weatherOverlayWatchButton",
+      "weatherOverlayHighButton",
+      "weatherOverlayClearButton",
+      "weatherOverlayFitButton",
+      "metOfficeWarningsSaveButton",
+      "metOfficeWarningsCheckButton",
+      "metOfficeWarningsClearButton",
+      "dnoPowerSaveButton",
+      "dnoPowerOpenButton",
+      "dnoPowerClearButton",
+      "saveDnoPowerButton",
+      "openDnoPowerButton",
+      "clearDnoPowerButton",
+      "saveFieldNoteButton",
+      "clearFieldNoteButton",
+      "clearAllFieldNotesButton"
+    ].forEach(function bindToast(id) {
+      on(byId(id), "click", function handleUtilityClick() {
+        showToast("Map UI active");
+      });
+    });
   }
 
   function wireShellEvents() {
@@ -561,53 +420,23 @@
 
     window.__fieldopsMapUiShellEventsVersion = UI_VERSION;
 
-    window.addEventListener("fieldops:shell-map-tools-toggle", function () {
-      toggleMapTools();
-    });
-
-    window.addEventListener("fieldops:shell-search-open", function () {
-      setMapToolsOpen(false);
-    });
-
-    window.addEventListener("fieldops:shell-filter-region", function () {
-      setMapToolsOpen(false);
-    });
-  }
-
-  function wireButtons() {
-    on(byId("weatherModeButton"), "click", function () {
-      var panel = byId("weatherModePanel");
-
-      if (isPanelVisible(panel)) {
-        closeWeatherMode();
-      } else {
-        openWeatherMode();
+    window.addEventListener("fieldops:shell-search-open", function closeMapToolsOnSearch() {
+      const panel = byId("mapToolsPanel");
+      if (panel) {
+        panel.hidden = true;
       }
     });
 
-    on(byId("openFieldNotesButton"), "click", openFieldNotesPanel);
-    on(byId("closeFieldNotesButton"), "click", closeFieldNotesPanel);
-
-    on(byId("expandInfoButton"), "click", function () {
-      var panel = byId("infoPanel");
-      var isExpanded = !!panel && panel.classList.contains("is-expanded");
-
-      setInfoPanelExpanded(!isExpanded);
-    });
-
-    [
-      "saveFieldNoteButton",
-      "clearFieldNoteButton",
-      "clearAllFieldNotesButton"
-    ].forEach(function (id) {
-      on(byId(id), "click", function () {
-        showToast("Map UI active");
-      });
+    window.addEventListener("fieldops:shell-filter-region", function closeMapToolsOnFilter() {
+      const panel = byId("mapToolsPanel");
+      if (panel) {
+        panel.hidden = true;
+      }
     });
   }
 
   function updateBridge() {
-    var bridge = getBridge();
+    const bridge = getBridge();
 
     bridge.mapUiVersion = UI_VERSION;
     bridge.refreshWeatherMode = refreshWeatherMode;
@@ -615,18 +444,17 @@
     bridge.closeWeatherMode = closeWeatherMode;
     bridge.openFieldNotes = openFieldNotesPanel;
     bridge.closeFieldNotes = closeFieldNotesPanel;
-    bridge.toggleMapTools = toggleMapTools;
   }
 
   function loadShellAssets() {
     return loadStylesheet("../../../shell.css", SHARED_SHELL_VERSION)
-      .then(function () {
+      .then(function loadSharedShellScript() {
         return loadScript("../../../shell.js", SHARED_SHELL_VERSION);
       })
-      .then(function () {
+      .then(function loadMapGuard() {
         return loadScript("./map-shell-guard.js", MAP_SHELL_GUARD_VERSION);
       })
-      .then(function () {
+      .then(function notifyShellLoaderReady() {
         window.dispatchEvent(new CustomEvent("fieldops:map-ui-shell-loader-ready", {
           detail: {
             version: UI_VERSION,
@@ -650,15 +478,13 @@
     removeDiagnosticBadge();
     updateBridge();
 
-    safe("shared shell loader", function () {
+    safe("shared shell loader", function loadShell() {
       loadShellAssets();
     });
-
     safe("button wiring", wireButtons);
-    safe("map tools wiring", wireMapTools);
     safe("shell event bridge", wireShellEvents);
     safe("details panel drag", wireDetailsPanelDrag);
   }
 
   onReady(boot);
-}());
+})();
