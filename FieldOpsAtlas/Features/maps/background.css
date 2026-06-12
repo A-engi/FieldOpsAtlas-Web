@@ -3,24 +3,6 @@
   --top-fade-height: clamp(180px, 20vw, 562px);
 }
 
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-}
-
-body {
-  position: relative;
-  overflow-x: hidden;
-  background: #ffffff;
-}
-
-.fieldops-shell-root {
-  position: relative;
-  z-index: 40;
-}
-
 .background-item {
   position: fixed;
   inset: 0;
