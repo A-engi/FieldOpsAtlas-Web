@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.39-network-owns-map-key
+   Version: 1.1.42-key-under-map-node-size-clean
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -11,6 +11,8 @@
    - Match the SVG viewBox to the holder aspect ratio so the map fills vertically without flattening.
    - Apply clearer top/left map insets and explicit node radius rules.
    - Own the static RF map key so no extra key script is needed.
+   - Place the key in the reserved strip below the graph, not over graph content.
+   - Draw node circles from one radius rule only.
    - Fit graph coordinates into a taller map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
@@ -18,7 +20,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.39-network-owns-map-key";
+  const VERSION = "1.1.42-key-under-map-node-size-clean";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -36,9 +38,15 @@
   };
 
   const NODE_RADIUS = {
-    default: 18,
-    relay: 20,
-    large: 25
+    default: 11,
+    relay: 12,
+    large: 14
+  };
+
+  const NODE_HALO_RADIUS = {
+    default: 17,
+    relay: 18,
+    large: 21
   };
 
   const MAP_KEY_TEMPLATE = String.raw`
@@ -317,6 +325,18 @@
     return NODE_RADIUS.default;
   }
 
+  function markerHaloRadius(node) {
+    if (node.size === "large") {
+      return NODE_HALO_RADIUS.large;
+    }
+
+    if (node.type === "relay") {
+      return NODE_HALO_RADIUS.relay;
+    }
+
+    return NODE_HALO_RADIUS.default;
+  }
+
   function linkGeometry(from, to) {
     const dx = to.x - from.x;
     const dy = to.y - from.y;
@@ -566,13 +586,17 @@
   function attachMapKey(mount) {
     const mapPaper = mount.closest(".rf-map-paper");
 
-    if (!mapPaper || mapPaper.dataset.rfNetworkMapKeyInit === "true") {
+    if (!mapPaper) {
       return;
     }
 
     mapPaper
       .querySelectorAll(":scope > .rf-map-key")
       .forEach((key) => key.remove());
+
+    if (mapPaper.dataset.rfNetworkMapKeyInit === "true") {
+      mapPaper.dataset.rfNetworkMapKeyInit = "false";
+    }
 
     const fragment = makeFragment(MAP_KEY_TEMPLATE);
     const key = fragment.querySelector(".rf-map-key");
