@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.47-one-circle-no-route-dots
+   Version: 1.1.48-restore-original-plain-halo
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -13,7 +13,8 @@
    - Own the static RF map key so no extra key script is needed.
    - Place the key in the reserved strip below the graph, not over graph content.
    - Draw each RF map node as one SVG circle only.
-   - Do not draw selected-path route dot circles.
+   - Restore only the original plain halo circle behind each node.
+   - Do not draw transmitter/mast icons, inner rings, selected starbursts, or route dots.
    - Fit graph coordinates into a taller map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
@@ -21,7 +22,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.47-one-circle-no-route-dots";
+  const VERSION = "1.1.48-restore-original-plain-halo";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -448,6 +449,7 @@
 
     const linksSoftGroup = svg("g", { class: "demo-links-soft" });
     const linksGroup = svg("g", { class: "demo-links" });
+    const halosGroup = svg("g", { class: "demo-node-halos" });
     const nodesGroup = svg("g", { class: "demo-nodes" });
     const labelsGroup = svg("g", { class: "demo-labels" });
 
@@ -475,6 +477,15 @@
     graph.nodes.forEach((node) => {
       const radius = markerRadius(node);
       const selected = selectedNodeIds.has(node.id);
+
+      halosGroup.append(svg("circle", {
+        class: `halo ${node.type || "site"}`,
+        cx: node.x,
+        cy: node.y,
+        r: radius + (selected ? 13 : 8),
+        "vector-effect": "non-scaling-stroke"
+      }));
+
       const nodeGroup = svg("g", {
         class: `demo-node ${selected ? "is-selected" : ""}`,
         transform: `translate(${node.x} ${node.y})`
@@ -493,6 +504,7 @@
     root.append(
       linksSoftGroup,
       linksGroup,
+      halosGroup,
       nodesGroup,
       labelsGroup
     );
