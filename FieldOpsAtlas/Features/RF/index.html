@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.21</title>
-
+  <title>FieldOps Atlas RF v1.1.25</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./rf.css?v=1.1.21-rf-network-map-split">
+  <link rel="stylesheet" href="./background.css?v=1.1.22-rf-page-map-pane-compass-background">
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.21">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.25">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
         <section class="rf-network" aria-labelledby="rfNetworkTitle">
           <div class="rf-network-head">
             <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
-
             <div class="rf-tabs" aria-label="Network layer filter">
               <span class="rf-tab is-active">RF</span>
               <span class="rf-tab">IP</span>
@@ -26,15 +25,6 @@
 
           <div class="rf-map-recent">
             <div class="rf-map-paper">
-              <img
-                class="rf-map-background"
-                src="../../Resources/Logos/rf-map-background.svg"
-                alt=""
-                aria-hidden="true"
-                loading="eager"
-                decoding="async"
-              >
-
               <input
                 class="rf-path-toggle"
                 id="rfPathPaneToggle"
@@ -105,7 +95,6 @@
                     <div class="rf-path-frequency">
                       <strong>6.725 GHz</strong>
                       <span>Horizontal</span>
-
                       <dl class="rf-path-data">
                         <div>
                           <dt>Service</dt>
@@ -203,7 +192,6 @@
         <div class="rf-bottom">
           <section class="rf-small" aria-labelledby="rfServicesTitle">
             <h2 class="rf-small-title" id="rfServicesTitle">Services</h2>
-
             <table class="rf-table">
               <thead>
                 <tr>
@@ -234,7 +222,6 @@
 
           <section class="rf-small" aria-labelledby="rfEquipmentTitle">
             <h2 class="rf-small-title" id="rfEquipmentTitle">Equipment</h2>
-
             <div class="rf-equipment">
               <a class="rf-equipment-item" href="./equipment.html">
                 <strong>2</strong>
@@ -352,6 +339,6 @@
   </script>
 
   <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-network-map.js?v=1.1.21-rf-network-map-split" defer></script>
+  <script src="./rf-network-map.js?v=1.1.25-pane-reflow-listener-moved" defer></script>
 </body>
 </html>
