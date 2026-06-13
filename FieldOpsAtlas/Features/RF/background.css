@@ -1,0 +1,84 @@
+/* ==========================================================================
+   FieldOps Atlas RF background
+   File: FieldOpsAtlas/Features/RF/background.css
+   Version: 1.1.19-css-current-background-mirrored-gold-blue
+   Purpose: RF page background only.
+   ========================================================================== */
+
+html,
+body {
+  background-color: #061a3a;
+}
+
+.phone[data-page="rf"] {
+  --rf-bg-navy: #061a3a;
+
+  background-color: var(--rf-bg-navy);
+  background-image:
+    linear-gradient(74deg, transparent 0 72.8%, rgba(235, 253, 255, 0.82) 73.15%, rgba(110, 226, 255, 0.55) 74.4%, rgba(19, 153, 226, 0.32) 78.6%, transparent 85.6%),
+    linear-gradient(74deg, transparent 0 75.1%, rgba(248, 255, 255, 0.84) 75.35%, transparent 75.8%),
+    linear-gradient(72deg, transparent 0 83.4%, rgba(126, 227, 255, 0.16) 84%, transparent 89%),
+
+    linear-gradient(138deg, transparent 0 66%, rgba(255, 244, 189, 0.72) 66.8%, rgba(255, 207, 105, 0.64) 68.2%, rgba(45, 190, 250, 0.18) 70.6%, transparent 75%),
+    linear-gradient(138deg, transparent 0 68.6%, rgba(255, 244, 189, 0.66) 68.9%, transparent 69.25%),
+    radial-gradient(ellipse at 94% 9%, rgba(255, 207, 105, 0.26), transparent 22%),
+
+    linear-gradient(106deg, transparent 0 72.8%, rgba(235, 253, 255, 0.82) 73.15%, rgba(110, 226, 255, 0.55) 74.4%, rgba(19, 153, 226, 0.32) 78.6%, transparent 85.6%),
+    linear-gradient(106deg, transparent 0 75.1%, rgba(248, 255, 255, 0.84) 75.35%, transparent 75.8%),
+    linear-gradient(108deg, transparent 0 83.4%, rgba(126, 227, 255, 0.16) 84%, transparent 89%),
+
+    linear-gradient(42deg, transparent 0 66%, rgba(255, 244, 189, 0.72) 66.8%, rgba(255, 207, 105, 0.64) 68.2%, rgba(45, 190, 250, 0.18) 70.6%, transparent 75%),
+    linear-gradient(42deg, transparent 0 68.6%, rgba(255, 244, 189, 0.66) 68.9%, transparent 69.25%),
+    radial-gradient(ellipse at 94% 91%, rgba(255, 207, 105, 0.26), transparent 22%),
+
+    radial-gradient(ellipse at 91% 24%, rgba(73, 213, 255, 0.24), transparent 30%),
+    radial-gradient(ellipse at 88% 76%, rgba(23, 152, 235, 0.26), transparent 36%),
+    radial-gradient(ellipse at 14% 35%, rgba(40, 119, 190, 0.16), transparent 44%),
+    linear-gradient(180deg, #071d3f 0%, #061a3a 42%, #041733 100%);
+
+  background-position:
+    right top,
+    right top,
+    right top,
+
+    right top,
+    right top,
+    center,
+
+    right bottom,
+    right bottom,
+    right bottom,
+
+    right bottom,
+    right bottom,
+    center,
+
+    center,
+    center,
+    center,
+    center;
+
+  background-size:
+    46% 36%,
+    46% 36%,
+    46% 36%,
+
+    46% 36%,
+    46% 36%,
+    100% 100%,
+
+    46% 36%,
+    46% 36%,
+    46% 36%,
+
+    46% 36%,
+    46% 36%,
+    100% 100%,
+
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+
+  background-repeat: no-repeat;
+}
