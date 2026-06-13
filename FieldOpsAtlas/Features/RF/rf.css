@@ -1,7 +1,7 @@
 /* ========================================================================== 
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.20-background-split
+   Version: 1.1.21-smoke-buttons-background-split
    Purpose: RF landing page content only.
 
    Ownership:
@@ -21,12 +21,12 @@
   --rf-content-top: calc(var(--top-height, 54px) + 8px);
   --rf-bottom-space: calc(var(--safe-bottom, 0px) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + var(--rf-content-gap));
   --rf-button-text: #f5fbff;
-  --rf-button-blue-top: #1887ff;
-  --rf-button-blue-mid: #0d66d8;
-  --rf-button-blue-bottom: #073f94;
-  --rf-button-blue-dark-top: rgba(13, 73, 150, 0.92);
-  --rf-button-blue-dark-bottom: rgba(3, 27, 67, 0.94);
-  --rf-button-cyan-border: rgba(128, 221, 255, 0.46);
+  --rf-button-blue-top: #236fa3;
+  --rf-button-blue-mid: #15527f;
+  --rf-button-blue-bottom: #0b3560;
+  --rf-button-blue-dark-top: rgba(12, 56, 96, 0.94);
+  --rf-button-blue-dark-bottom: rgba(3, 22, 45, 0.96);
+  --rf-button-cyan-border: rgba(150, 197, 228, 0.46);
   --rf-button-gold-border: rgba(255, 207, 105, 0.78);
   --rf-button-gold-strong: #ffcf69;
 }
@@ -151,7 +151,7 @@
   border-color: var(--rf-button-gold-strong);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 42%),
-    linear-gradient(180deg, #1b91ff 0%, #116fe8 48%, #073e91 100%);
+    linear-gradient(180deg, #2b779f 0%, #174f75 52%, #0b314f 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.26),
     0 0 0 1px rgba(255, 207, 105, 0.18),
