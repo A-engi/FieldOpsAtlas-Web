@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF panes
    File: FieldOpsAtlas/Features/RF/rf-panes.js
-   Version: 1.1.32-clean-path-details-loader
+   Version: 1.1.36-no-details-mount
 
    Purpose:
    - Own RF path details pane markup.
    - Attach the path pane directly into .rf-map-paper.
    - Keep the pane out of normal layout flow.
-   - Load the pane shell before the dynamic map.
-   - Load the path details body after the dynamic map has rendered.
+   - Do not create an empty details mount or hidden placeholder.
+   - Append the actual path details body directly into the pane after the map renders.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.32-clean-path-details-loader";
+  const VERSION = "1.1.36-no-details-mount";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
   const MAP_READY_EVENT = "fieldops:rf-network-map-rendered";
@@ -43,8 +43,6 @@
       decoding="async"
     >
   </label>
-
-  <div class="rf-path-pane-body" data-rf-path-details-body hidden></div>
 </aside>
 `;
 
@@ -158,9 +156,9 @@
   }
 
   function loadPathDetailsBody(mapPaper) {
-    const bodyMount = mapPaper.querySelector("[data-rf-path-details-body]");
+    const pane = mapPaper.querySelector(".rf-path-pane");
 
-    if (!bodyMount || bodyMount.dataset.rfDetailsLoaded === "true") {
+    if (!pane || pane.dataset.rfDetailsLoaded === "true") {
       return;
     }
 
@@ -172,7 +170,8 @@
     }
 
     body.dataset.rfDetailsLoaded = "true";
-    bodyMount.replaceWith(body);
+    pane.appendChild(body);
+    pane.dataset.rfDetailsLoaded = "true";
     mapPaper.classList.add(DETAILS_READY_CLASS);
 
     mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-path-details-ready", {
