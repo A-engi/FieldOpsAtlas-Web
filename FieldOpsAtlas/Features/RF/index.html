@@ -1,205 +1,322 @@
-/* ==========================================================================
-   FieldOps Atlas RF path details
-   File: FieldOpsAtlas/Features/RF/rf-path-details.js
-   Version: 1.1.41-render-on-pane-ready-once
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas RF v1.1.41</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
+  <link rel="stylesheet" href="./rf.css?v=1.1.39-network-key-styles">
+  <link rel="stylesheet" href="./rf-pane.css?v=1.1.41-path-details-top-lock">
+  <link rel="stylesheet" href="./background.css?v=1.1.38-compass-and-key-background">
+</head>
+<body>
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.41">
+    <section class="content-canvas" aria-label="RF Atlas content">
+      <article class="rf-home">
+        <section class="rf-network" aria-labelledby="rfNetworkTitle">
+          <div class="rf-network-head">
+            <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
+            <div class="rf-tabs" aria-label="Network layer filter">
+              <span class="rf-tab is-active">RF</span>
+              <span class="rf-tab">IP</span>
+              <span class="rf-tab">MW</span>
+              <span class="rf-tab">All</span>
+            </div>
+          </div>
 
-   Purpose:
-   - Own the visible Path details content only.
-   - Render the zigzag signal SVG and 6 GHz/service detail rows.
-   - Render once when the pane shell is ready.
-   - Do not wait for the RF map render event.
-   - Do not create an empty mount or placeholder.
-   - Remove duplicate detail bodies before rendering.
-   ========================================================================== */
+          <div class="rf-map-recent">
+            <div class="rf-map-paper">
+              <div
+                class="rf-map-stage"
+                id="rfMapStage"
+                data-rf-network-map
+                role="img"
+                aria-label="RF network map"
+              ></div>
+            </div>
 
-(() => {
-  "use strict";
+            <section class="rf-recent" aria-labelledby="rfRecentTitle">
+              <div class="rf-recent-head">
+                <h2 class="rf-recent-title" id="rfRecentTitle">
+                  <span class="rf-clock" aria-hidden="true"></span>
+                  <span>Recently opened</span>
+                </h2>
+                <a class="rf-viewall" href="./sites.html">View all</a>
+              </div>
 
-  const VERSION = "1.1.41-render-on-pane-ready-once";
-  const MAP_PAPER_SELECTOR = ".rf-map-paper";
-  const PANE_SELECTOR = ".rf-path-pane";
-  const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
-  const DETAILS_READY_CLASS = "is-path-details-ready";
+              <div class="rf-recent-grid">
+                <a class="rf-recent-card" href="./sites.html">
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span>
+                    <span class="rf-recent-name">Hilltop<br>Relay</span>
+                    <span class="rf-status">Online</span>
+                  </span>
+                </a>
 
-  const PATH_DETAILS_BODY_TEMPLATE = String.raw`
-<div class="rf-path-pane-body">
-  <header class="rf-path-pane-title">
-    <img
-      class="rf-path-title-wave"
-      src="../../../data/icons/path-details-wave.svg"
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
-      decoding="async"
-    >
-    <span>Path details</span>
-  </header>
+                <a class="rf-recent-card" href="./sites.html">
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span>
+                    <span class="rf-recent-name">Ridgeway<br>Relay</span>
+                    <span class="rf-status">Online</span>
+                  </span>
+                </a>
 
-  <section class="rf-path-site is-from" aria-label="Source site">
-    <span class="rf-path-mast" aria-hidden="true">
-      <img
-        src="../../../data/icons/atlas-transmitter-gold.svg"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      >
-    </span>
-    <span class="rf-path-site-copy">
-      <small>From</small>
-      <b>North Ridge</b>
-      <b>TX Site</b>
-    </span>
-  </section>
+                <a class="rf-recent-card" href="./sites.html">
+                  <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span>
+                    <span class="rf-recent-name">London<br>Core</span>
+                    <span class="rf-status">Online</span>
+                  </span>
+                </a>
 
-  <section class="rf-path-mid" aria-label="Selected RF path">
-    <img
-      class="rf-path-signal-vertical"
-      src="../../../data/icons/path-signal-glow.svg"
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
-      decoding="async"
-    >
+                <a class="rf-recent-card" href="./sites.html">
+                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span>
+                    <span class="rf-recent-name">Pinewood<br>Remote</span>
+                    <span class="rf-status">Online</span>
+                  </span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
 
-    <div class="rf-path-frequency">
-      <strong>6.725 GHz</strong>
-      <span>Horizontal</span>
+        <div class="rf-bottom">
+          <section class="rf-small" aria-labelledby="rfServicesTitle">
+            <h2 class="rf-small-title" id="rfServicesTitle">Services</h2>
+            <table class="rf-table">
+              <thead>
+                <tr>
+                  <th scope="col">Service</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="./dtt.html">DTT MUX 1</a></td>
+                  <td>DTT</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+                <tr>
+                  <td><a href="./dab.html">DAB National</a></td>
+                  <td>DAB</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+                <tr>
+                  <td><a href="./fm.html">FM Service</a></td>
+                  <td>FM</td>
+                  <td><span class="status">Online</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
 
-      <dl class="rf-path-data">
-        <div>
-          <dt>Service</dt>
-          <dd>DTT 1</dd>
+          <section class="rf-small" aria-labelledby="rfEquipmentTitle">
+            <h2 class="rf-small-title" id="rfEquipmentTitle">Equipment</h2>
+            <div class="rf-equipment">
+              <a class="rf-equipment-item" href="./equipment.html">
+                <strong>2</strong>
+                <span>TX</span>
+              </a>
+              <a class="rf-equipment-item" href="./equipment.html">
+                <strong>3</strong>
+                <span>ANT</span>
+              </a>
+              <a class="rf-equipment-item" href="./paths.html">
+                <strong>2</strong>
+                <span>Links</span>
+              </a>
+            </div>
+          </section>
         </div>
-        <div>
-          <dt>Band</dt>
-          <dd>28 MHz</dd>
-        </div>
-        <div>
-          <dt>Mode</dt>
-          <dd>64QAM</dd>
-        </div>
-        <div>
-          <dt>Power</dt>
-          <dd>18 dBm</dd>
-        </div>
-        <div>
-          <dt>Avail</dt>
-          <dd>99.98%</dd>
-        </div>
-        <div>
-          <dt>Status</dt>
-          <dd><i aria-hidden="true"></i>Online</dd>
-        </div>
-      </dl>
-    </div>
-  </section>
+      </article>
+    </section>
+  </main>
 
-  <section class="rf-path-site is-to" aria-label="Destination site">
-    <span class="rf-path-mast" aria-hidden="true">
-      <img
-        src="../../../data/icons/atlas-transmitter-gold.svg"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      >
-    </span>
-    <span class="rf-path-site-copy">
-      <small>To</small>
-      <b>Hilltop</b>
-      <b>Relay Site</b>
-    </span>
-  </section>
-</div>
-`;
+  <script>
+    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+    window.FieldOpsSearchQueue.push({
+      page: "rf",
+      label: "RF",
+      placeholder: "Search RF...",
+      emptyText: "No RF matches found.",
+      items: [
+        {
+          id: "rf-overview",
+          title: "RF overview",
+          subtitle: "RF network map and dashboard",
+          href: "./index.html",
+          keywords: ["overview", "dashboard", "network", "map"]
+        },
+        {
+          id: "rf-sites",
+          title: "Sites",
+          subtitle: "RF site directory and status",
+          href: "./sites.html",
+          keywords: ["site", "sites", "transmitter", "relay", "tx"]
+        },
+        {
+          id: "rf-paths",
+          title: "Paths",
+          subtitle: "RF paths and link analysis",
+          href: "./paths.html",
+          keywords: ["path", "paths", "link", "links", "microwave", "frequency"]
+        },
+        {
+          id: "rf-equipment",
+          title: "Equipment",
+          subtitle: "Transmitters, antennas, receivers",
+          href: "./equipment.html",
+          keywords: ["equipment", "tx", "antenna", "receiver", "rack"]
+        },
+        {
+          id: "rf-dtt",
+          title: "DTT services",
+          subtitle: "Digital terrestrial television",
+          href: "./dtt.html",
+          keywords: ["dtt", "mux", "multiplex", "television", "tv"]
+        },
+        {
+          id: "rf-dab",
+          title: "DAB services",
+          subtitle: "Digital audio broadcasting",
+          href: "./dab.html",
+          keywords: ["dab", "radio", "audio", "ensemble"]
+        },
+        {
+          id: "rf-fm",
+          title: "FM services",
+          subtitle: "FM radio services",
+          href: "./fm.html",
+          keywords: ["fm", "radio", "audio"]
+        },
+        {
+          id: "rf-services",
+          title: "All RF services",
+          subtitle: "DTT, DAB, FM and service groups",
+          href: "./services.html",
+          keywords: ["services", "more", "dtt", "dab", "fm"]
+        },
+        {
+          id: "site-hilltop",
+          title: "Hilltop Relay",
+          subtitle: "Recently opened RF relay site",
+          href: "./sites.html#hilltop",
+          keywords: ["hilltop", "relay", "site", "online"]
+        },
+        {
+          id: "site-ridgeway",
+          title: "Ridgeway Relay",
+          subtitle: "Recently opened RF relay site",
+          href: "./sites.html#ridgeway",
+          keywords: ["ridgeway", "relay", "site", "online"]
+        },
+        {
+          id: "site-london-core",
+          title: "London Core",
+          subtitle: "Recently opened core TX site",
+          href: "./sites.html#london-core",
+          keywords: ["london", "core", "tx", "site", "transmitter"]
+        },
+        {
+          id: "path-north-ridge-hilltop",
+          title: "North Ridge to Hilltop",
+          subtitle: "Selected RF path Â· 6.725 GHz",
+          href: "./paths.html#north-ridge-hilltop",
+          keywords: ["north ridge", "hilltop", "6.725", "ghz", "horizontal", "path"]
+        }
+      ]
+    });
+  </script>
 
-  function makeFragment(html) {
-    const template = document.createElement("template");
-    template.innerHTML = html.trim();
-    return template.content.cloneNode(true);
-  }
+  <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
+  <script src="./rf-panes.js?v=1.1.37-shell-only" defer></script>
+  <script src="./rf-network-map.js?v=1.1.39-network-owns-map-key" defer></script>
+  <script src="./rf-path-details.js?v=1.1.41-render-on-pane-ready-once" defer></script>
+  <script>
+    /* RF load toast | Version: 1.1.41-load-toast */
+    (() => {
+      "use strict";
 
-  function getMapPaper(root = document) {
-    return root.querySelector(MAP_PAPER_SELECTOR);
-  }
+      const PAGE_VERSION = "1.1.41";
+      const TOAST_VERSION = "1.1.41-load-toast";
+      const TOAST_ID = "rfLoadToast";
 
-  function getPane(root = document) {
-    const mapPaper = getMapPaper(root);
-    return mapPaper ? mapPaper.querySelector(PANE_SELECTOR) : null;
-  }
-
-  function removeLegacyDetailMounts(root = document) {
-    root
-      .querySelectorAll("[data-rf-path-details-mount], [data-rf-path-details-body]")
-      .forEach((node) => node.remove());
-  }
-
-  function removeExistingBodies(pane) {
-    if (!pane) {
-      return;
-    }
-
-    pane
-      .querySelectorAll(":scope > .rf-path-pane-body")
-      .forEach((body) => body.remove());
-  }
-
-  function renderDetails(root = document) {
-    const mapPaper = getMapPaper(root);
-    const pane = getPane(root);
-
-    if (!mapPaper || !pane) {
-      return false;
-    }
-
-    removeLegacyDetailMounts(mapPaper);
-    removeExistingBodies(pane);
-
-    const fragment = makeFragment(PATH_DETAILS_BODY_TEMPLATE);
-    const body = fragment.querySelector(".rf-path-pane-body");
-
-    if (!body) {
-      return false;
-    }
-
-    body.dataset.rfDetailsLoaded = "true";
-    body.dataset.rfDetailsVersion = VERSION;
-
-    pane.appendChild(body);
-    pane.dataset.rfDetailsLoaded = "true";
-    pane.dataset.rfDetailsVersion = VERSION;
-    mapPaper.classList.add(DETAILS_READY_CLASS);
-
-    mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-path-details-ready", {
-      bubbles: true,
-      detail: {
-        version: VERSION,
-        pane: "path-details"
+      function versionOf(globalName) {
+        return window[globalName]?.VERSION || "missing";
       }
-    }));
 
-    return true;
-  }
+      function makeToast() {
+        const toast = document.createElement("div");
+        toast.id = TOAST_ID;
+        toast.setAttribute("role", "status");
+        toast.setAttribute("aria-live", "polite");
+        toast.style.cssText = [
+          "position:fixed",
+          "left:12px",
+          "right:12px",
+          "bottom:72px",
+          "z-index:99999",
+          "padding:10px 12px",
+          "border:1px solid rgba(237,191,99,.62)",
+          "border-radius:14px",
+          "background:rgba(2,13,28,.92)",
+          "color:#ffdda0",
+          "font:700 11px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
+          "box-shadow:0 12px 28px rgba(0,0,0,.28)",
+          "backdrop-filter:blur(10px)",
+          "transition:opacity .25s ease,transform .25s ease",
+          "opacity:0",
+          "transform:translateY(8px)",
+          "pointer-events:none"
+        ].join(";");
 
-  function init() {
-    removeLegacyDetailMounts();
+        return toast;
+      }
 
-    if (renderDetails()) {
-      return;
-    }
+      function showToast() {
+        const existing = document.getElementById(TOAST_ID);
+        if (existing) {
+          existing.remove();
+        }
 
-    document.addEventListener(PANE_READY_EVENT, () => {
-      renderDetails();
-    }, { once: true });
-  }
+        const toast = makeToast();
+        const lines = [
+          `RF index v${PAGE_VERSION}`,
+          `toast ${TOAST_VERSION}`,
+          `panes ${versionOf("FieldOpsRFPanes")}`,
+          `map ${versionOf("FieldOpsRFNetworkMap")}`,
+          `details ${versionOf("FieldOpsRFPathDetails")}`
+        ];
 
-  window.FieldOpsRFPathDetails = {
-    VERSION,
-    renderDetails
-  };
+        toast.innerHTML = lines.join("<br>");
+        document.body.appendChild(toast);
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
-})();
+        requestAnimationFrame(() => {
+          toast.style.opacity = "1";
+          toast.style.transform = "translateY(0)";
+        });
+
+        window.setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateY(8px)";
+        }, 6500);
+
+        window.setTimeout(() => {
+          toast.remove();
+        }, 7000);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          window.setTimeout(showToast, 450);
+        }, { once: true });
+      } else {
+        window.setTimeout(showToast, 450);
+      }
+    })();
+  </script>
+
+</body>
+</html>
