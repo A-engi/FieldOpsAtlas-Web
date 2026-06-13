@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.33-clean-map-insets-original-nodes
+   Version: 1.1.39-network-owns-map-key
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -10,6 +10,7 @@
    - Reflow when the RF path pane changes the map holder size.
    - Match the SVG viewBox to the holder aspect ratio so the map fills vertically without flattening.
    - Apply clearer top/left map insets and explicit node radius rules.
+   - Own the static RF map key so no extra key script is needed.
    - Fit graph coordinates into a taller map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
@@ -17,7 +18,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.33-clean-map-insets-original-nodes";
+  const VERSION = "1.1.39-network-owns-map-key";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -39,6 +40,31 @@
     relay: 20,
     large: 25
   };
+
+  const MAP_KEY_TEMPLATE = String.raw`
+<aside class="rf-map-key" aria-label="RF map key" data-rf-map-key>
+  <div class="rf-map-key-title">Key</div>
+  <ul class="rf-map-key-list">
+    <li>
+      <span class="rf-map-key-swatch is-core" aria-hidden="true"></span>
+      <span>Core site</span>
+    </li>
+    <li>
+      <span class="rf-map-key-swatch is-relay" aria-hidden="true"></span>
+      <span>Relay site</span>
+    </li>
+    <li>
+      <span class="rf-map-key-line is-selected" aria-hidden="true"></span>
+      <span>Selected path</span>
+    </li>
+    <li>
+      <span class="rf-map-key-line is-standby" aria-hidden="true"></span>
+      <span>Standby path</span>
+    </li>
+  </ul>
+</aside>
+`;
+
 
   const FALLBACK_GRAPH = {
     selectedPathId: "london-hilltop",
@@ -200,6 +226,12 @@
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
+  }
+
+  function makeFragment(html) {
+    const template = document.createElement("template");
+    template.innerHTML = html.trim();
+    return template.content.cloneNode(true);
   }
 
   function getViewBoxForMount(mount) {
@@ -531,6 +563,36 @@
     }));
   }
 
+  function attachMapKey(mount) {
+    const mapPaper = mount.closest(".rf-map-paper");
+
+    if (!mapPaper || mapPaper.dataset.rfNetworkMapKeyInit === "true") {
+      return;
+    }
+
+    mapPaper
+      .querySelectorAll(":scope > .rf-map-key")
+      .forEach((key) => key.remove());
+
+    const fragment = makeFragment(MAP_KEY_TEMPLATE);
+    const key = fragment.querySelector(".rf-map-key");
+
+    if (!key) {
+      return;
+    }
+
+    mapPaper.appendChild(key);
+    mapPaper.dataset.rfNetworkMapKeyInit = "true";
+
+    mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-map-key-ready", {
+      bubbles: true,
+      detail: {
+        version: VERSION
+      }
+    }));
+  }
+
+
   /* ==========================================================================
      8. Mount resize and path-pane reflow
 
@@ -591,6 +653,7 @@
     getGraphData().then((graph) => {
       state.graph = graph;
       renderMount(mount, state.graph);
+      attachMapKey(mount);
     });
 
     const toggle = mount.closest(".rf-map-paper")?.querySelector(".rf-path-toggle");
