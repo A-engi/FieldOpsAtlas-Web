@@ -1,24 +1,23 @@
 /* ==========================================================================
    FieldOps Atlas RF path details
    File: FieldOpsAtlas/Features/RF/rf-path-details.js
-   Version: 1.1.37-path-details-direct-render
+   Version: 1.1.41-render-on-pane-ready-once
 
    Purpose:
    - Own the visible Path details content only.
    - Render the zigzag signal SVG and 6 GHz/service detail rows.
-   - Append the details body directly into .rf-path-pane.
+   - Render once when the pane shell is ready.
+   - Do not wait for the RF map render event.
    - Do not create an empty mount or placeholder.
-   - Remove duplicate detail bodies before and after rendering.
+   - Remove duplicate detail bodies before rendering.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.37-path-details-direct-render";
+  const VERSION = "1.1.41-render-on-pane-ready-once";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
-  const MAP_STAGE_SELECTOR = ".rf-map-stage";
   const PANE_SELECTOR = ".rf-path-pane";
-  const MAP_READY_EVENT = "fieldops:rf-network-map-rendered";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
   const DETAILS_READY_CLASS = "is-path-details-ready";
 
@@ -119,53 +118,41 @@
     return template.content.cloneNode(true);
   }
 
-  function getParts(root = document) {
-    const mapPaper = root.querySelector(MAP_PAPER_SELECTOR);
-    const mapStage = mapPaper ? mapPaper.querySelector(MAP_STAGE_SELECTOR) : null;
-    const pane = mapPaper ? mapPaper.querySelector(PANE_SELECTOR) : null;
-
-    return {
-      mapPaper,
-      mapStage,
-      pane
-    };
+  function getMapPaper(root = document) {
+    return root.querySelector(MAP_PAPER_SELECTOR);
   }
 
-  function enforceSingleDetailsBody(pane) {
+  function getPane(root = document) {
+    const mapPaper = getMapPaper(root);
+    return mapPaper ? mapPaper.querySelector(PANE_SELECTOR) : null;
+  }
+
+  function removeLegacyDetailMounts(root = document) {
+    root
+      .querySelectorAll("[data-rf-path-details-mount], [data-rf-path-details-body]")
+      .forEach((node) => node.remove());
+  }
+
+  function removeExistingBodies(pane) {
     if (!pane) {
       return;
     }
 
-    const bodies = Array.from(pane.querySelectorAll(":scope > .rf-path-pane-body"));
-    if (bodies.length <= 1) {
-      return;
-    }
-
-    bodies.slice(0, -1).forEach((body) => body.remove());
-  }
-
-  function bindDuplicateGuard(pane) {
-    if (!pane || pane.dataset.rfDetailsGuard === "true") {
-      return;
-    }
-
-    pane.dataset.rfDetailsGuard = "true";
-
-    const observer = new MutationObserver(() => {
-      enforceSingleDetailsBody(pane);
-    });
-
-    observer.observe(pane, {
-      childList: true
-    });
+    pane
+      .querySelectorAll(":scope > .rf-path-pane-body")
+      .forEach((body) => body.remove());
   }
 
   function renderDetails(root = document) {
-    const { mapPaper, pane } = getParts(root);
+    const mapPaper = getMapPaper(root);
+    const pane = getPane(root);
 
     if (!mapPaper || !pane) {
       return false;
     }
+
+    removeLegacyDetailMounts(mapPaper);
+    removeExistingBodies(pane);
 
     const fragment = makeFragment(PATH_DETAILS_BODY_TEMPLATE);
     const body = fragment.querySelector(".rf-path-pane-body");
@@ -174,17 +161,13 @@
       return false;
     }
 
-    pane
-      .querySelectorAll(":scope > .rf-path-pane-body")
-      .forEach((existingBody) => existingBody.remove());
-
     body.dataset.rfDetailsLoaded = "true";
+    body.dataset.rfDetailsVersion = VERSION;
+
     pane.appendChild(body);
     pane.dataset.rfDetailsLoaded = "true";
+    pane.dataset.rfDetailsVersion = VERSION;
     mapPaper.classList.add(DETAILS_READY_CLASS);
-
-    bindDuplicateGuard(pane);
-    enforceSingleDetailsBody(pane);
 
     mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-path-details-ready", {
       bubbles: true,
@@ -197,39 +180,21 @@
     return true;
   }
 
-  function renderWhenMapIsReady() {
-    const { mapStage, pane } = getParts();
-
-    if (!pane) {
-      return false;
-    }
-
-    if (mapStage?.dataset.rfNetworkMapLoaded === "true") {
-      return renderDetails();
-    }
-
-    return false;
-  }
-
-  function scheduleRender() {
-    window.requestAnimationFrame(() => {
-      renderWhenMapIsReady();
-    });
-  }
-
   function init() {
-    if (renderWhenMapIsReady()) {
+    removeLegacyDetailMounts();
+
+    if (renderDetails()) {
       return;
     }
 
-    document.addEventListener(PANE_READY_EVENT, scheduleRender);
-    document.addEventListener(MAP_READY_EVENT, scheduleRender);
+    document.addEventListener(PANE_READY_EVENT, () => {
+      renderDetails();
+    }, { once: true });
   }
 
   window.FieldOpsRFPathDetails = {
     VERSION,
-    renderDetails,
-    renderWhenMapIsReady
+    renderDetails
   };
 
   if (document.readyState === "loading") {
