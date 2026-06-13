@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.42-key-under-map-node-size-clean
+   Version: 1.1.44-restore-map-node-circles
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -12,7 +12,7 @@
    - Apply clearer top/left map insets and explicit node radius rules.
    - Own the static RF map key so no extra key script is needed.
    - Place the key in the reserved strip below the graph, not over graph content.
-   - Draw node circles from one radius rule only.
+   - Draw node circles from one visible radius rule and halos from one halo rule.
    - Fit graph coordinates into a taller map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
@@ -20,7 +20,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.42-key-under-map-node-size-clean";
+  const VERSION = "1.1.44-restore-map-node-circles";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -38,15 +38,15 @@
   };
 
   const NODE_RADIUS = {
-    default: 11,
-    relay: 12,
-    large: 14
+    default: 15,
+    relay: 17,
+    large: 21
   };
 
   const NODE_HALO_RADIUS = {
-    default: 17,
-    relay: 18,
-    large: 21
+    default: 23,
+    relay: 25,
+    large: 31
   };
 
   const MAP_KEY_TEMPLATE = String.raw`
