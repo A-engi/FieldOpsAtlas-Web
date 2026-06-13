@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.30-graph-fit-key-reserve
+   Version: 1.1.31-tall-viewbox-map-spread
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -9,14 +9,14 @@
    - Keep a stable viewBox so page resizing does not flatten paths or circles.
    - Reflow when the RF path pane changes the map holder size.
    - Match the SVG viewBox to the holder aspect ratio so the map fills vertically without flattening.
-   - Fit graph coordinates into a balanced map area, reserving bottom-left room for the standalone key.
+   - Fit graph coordinates into a taller map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.30-graph-fit-key-reserve";
+  const VERSION = "1.1.31-tall-viewbox-map-spread";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -27,10 +27,10 @@
   };
 
   const MAP_CONTENT_INSET = {
-    left: 54,
-    right: 96,
-    top: 48,
-    bottom: 124
+    left: 56,
+    right: 94,
+    top: 44,
+    bottom: 176
   };
 
   const FALLBACK_GRAPH = {
@@ -204,7 +204,7 @@
       ? measuredWidth / measuredHeight
       : BASE_VIEWBOX.width / BASE_VIEWBOX.height;
 
-    const height = clamp(Math.round(width / aspect), 520, 980);
+    const height = clamp(Math.round(width / aspect), 620, 1800);
 
     return {
       width,
