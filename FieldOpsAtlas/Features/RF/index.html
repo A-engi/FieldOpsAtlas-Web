@@ -1,322 +1,324 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.40</title>
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
-  <link rel="stylesheet" href="./rf.css?v=1.1.39-network-key-styles">
-  <link rel="stylesheet" href="./rf-pane.css?v=1.1.37-absolute-details-body">
-  <link rel="stylesheet" href="./background.css?v=1.1.38-compass-and-key-background">
-</head>
-<body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.40">
-    <section class="content-canvas" aria-label="RF Atlas content">
-      <article class="rf-home">
-        <section class="rf-network" aria-labelledby="rfNetworkTitle">
-          <div class="rf-network-head">
-            <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
-            <div class="rf-tabs" aria-label="Network layer filter">
-              <span class="rf-tab is-active">RF</span>
-              <span class="rf-tab">IP</span>
-              <span class="rf-tab">MW</span>
-              <span class="rf-tab">All</span>
-            </div>
-          </div>
+/* ==========================================================================
+   FieldOps Atlas RF pane styles
+   File: FieldOpsAtlas/Features/RF/rf-pane.css
+   Version: 1.1.41-path-details-top-lock
 
-          <div class="rf-map-recent">
-            <div class="rf-map-paper">
-              <div
-                class="rf-map-stage"
-                id="rfMapStage"
-                data-rf-network-map
-                role="img"
-                aria-label="RF network map"
-              ></div>
-            </div>
+   Purpose:
+   - Own RF path details pane styling.
+   - Keep the path pane layered above the dynamic map.
+   - Keep the map holder beside the pane when the pane is open.
+   - Keep the detail body absolutely positioned inside the pane.
+   ========================================================================== */
 
-            <section class="rf-recent" aria-labelledby="rfRecentTitle">
-              <div class="rf-recent-head">
-                <h2 class="rf-recent-title" id="rfRecentTitle">
-                  <span class="rf-clock" aria-hidden="true"></span>
-                  <span>Recently opened</span>
-                </h2>
-                <a class="rf-viewall" href="./sites.html">View all</a>
-              </div>
+/* ==========================================================================
+   1. Map holder relationship to pane
+   ========================================================================== */
 
-              <div class="rf-recent-grid">
-                <a class="rf-recent-card" href="./sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Hilltop<br>Relay</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
+.rf-map-stage {
+  position: absolute;
+  top: 0;
+  right: calc(var(--path-pane-width) - var(--path-handle-width));
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 12px 0 0 0;
+  transition: right 180ms ease;
+}
 
-                <a class="rf-recent-card" href="./sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Ridgeway<br>Relay</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
+.rf-path-toggle:not(:checked) ~ .rf-map-stage {
+  right: var(--path-handle-width);
+}
 
-                <a class="rf-recent-card" href="./sites.html">
-                  <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">London<br>Core</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
+/* ==========================================================================
+   2. Toggle and pane shell
+   ========================================================================== */
 
-                <a class="rf-recent-card" href="./sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Pinewood<br>Remote</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
-              </div>
-            </section>
-          </div>
-        </section>
+.rf-path-toggle {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
 
-        <div class="rf-bottom">
-          <section class="rf-small" aria-labelledby="rfServicesTitle">
-            <h2 class="rf-small-title" id="rfServicesTitle">Services</h2>
-            <table class="rf-table">
-              <thead>
-                <tr>
-                  <th scope="col">Service</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><a href="./dtt.html">DTT MUX 1</a></td>
-                  <td>DTT</td>
-                  <td><span class="status">Online</span></td>
-                </tr>
-                <tr>
-                  <td><a href="./dab.html">DAB National</a></td>
-                  <td>DAB</td>
-                  <td><span class="status">Online</span></td>
-                </tr>
-                <tr>
-                  <td><a href="./fm.html">FM Service</a></td>
-                  <td>FM</td>
-                  <td><span class="status">Online</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+.rf-path-pane {
+  --path-pane-pad-x: 8px;
+  --path-pane-pad-y: 8px;
+  --path-row-gap: 6px;
+  --path-title-height: 24px;
+  --path-node-size: 22px;
+  --path-node-icon-size: 9px;
+  --path-node-row-height: 46px;
+  --path-mid-height: 142px;
+  --path-signal-width: 34px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  width: var(--path-pane-width);
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(237, 191, 99, 0.70);
+  border-radius: 0 12px 12px 0;
+  background:
+    radial-gradient(circle at 48% 0%, rgba(255, 215, 115, 0.10), transparent 34%),
+    linear-gradient(180deg, #061f38 0%, #011532 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    -6px 0 14px rgba(3, 10, 20, 0.20);
+  transform: translateX(0);
+  transition: transform 180ms ease;
+}
 
-          <section class="rf-small" aria-labelledby="rfEquipmentTitle">
-            <h2 class="rf-small-title" id="rfEquipmentTitle">Equipment</h2>
-            <div class="rf-equipment">
-              <a class="rf-equipment-item" href="./equipment.html">
-                <strong>2</strong>
-                <span>TX</span>
-              </a>
-              <a class="rf-equipment-item" href="./equipment.html">
-                <strong>3</strong>
-                <span>ANT</span>
-              </a>
-              <a class="rf-equipment-item" href="./paths.html">
-                <strong>2</strong>
-                <span>Links</span>
-              </a>
-            </div>
-          </section>
-        </div>
-      </article>
-    </section>
-  </main>
+.rf-path-toggle:not(:checked) ~ .rf-path-pane {
+  transform: translateX(calc(100% - var(--path-handle-width)));
+}
 
-  <script>
-    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
-    window.FieldOpsSearchQueue.push({
-      page: "rf",
-      label: "RF",
-      placeholder: "Search RF...",
-      emptyText: "No RF matches found.",
-      items: [
-        {
-          id: "rf-overview",
-          title: "RF overview",
-          subtitle: "RF network map and dashboard",
-          href: "./index.html",
-          keywords: ["overview", "dashboard", "network", "map"]
-        },
-        {
-          id: "rf-sites",
-          title: "Sites",
-          subtitle: "RF site directory and status",
-          href: "./sites.html",
-          keywords: ["site", "sites", "transmitter", "relay", "tx"]
-        },
-        {
-          id: "rf-paths",
-          title: "Paths",
-          subtitle: "RF paths and link analysis",
-          href: "./paths.html",
-          keywords: ["path", "paths", "link", "links", "microwave", "frequency"]
-        },
-        {
-          id: "rf-equipment",
-          title: "Equipment",
-          subtitle: "Transmitters, antennas, receivers",
-          href: "./equipment.html",
-          keywords: ["equipment", "tx", "antenna", "receiver", "rack"]
-        },
-        {
-          id: "rf-dtt",
-          title: "DTT services",
-          subtitle: "Digital terrestrial television",
-          href: "./dtt.html",
-          keywords: ["dtt", "mux", "multiplex", "television", "tv"]
-        },
-        {
-          id: "rf-dab",
-          title: "DAB services",
-          subtitle: "Digital audio broadcasting",
-          href: "./dab.html",
-          keywords: ["dab", "radio", "audio", "ensemble"]
-        },
-        {
-          id: "rf-fm",
-          title: "FM services",
-          subtitle: "FM radio services",
-          href: "./fm.html",
-          keywords: ["fm", "radio", "audio"]
-        },
-        {
-          id: "rf-services",
-          title: "All RF services",
-          subtitle: "DTT, DAB, FM and service groups",
-          href: "./services.html",
-          keywords: ["services", "more", "dtt", "dab", "fm"]
-        },
-        {
-          id: "site-hilltop",
-          title: "Hilltop Relay",
-          subtitle: "Recently opened RF relay site",
-          href: "./sites.html#hilltop",
-          keywords: ["hilltop", "relay", "site", "online"]
-        },
-        {
-          id: "site-ridgeway",
-          title: "Ridgeway Relay",
-          subtitle: "Recently opened RF relay site",
-          href: "./sites.html#ridgeway",
-          keywords: ["ridgeway", "relay", "site", "online"]
-        },
-        {
-          id: "site-london-core",
-          title: "London Core",
-          subtitle: "Recently opened core TX site",
-          href: "./sites.html#london-core",
-          keywords: ["london", "core", "tx", "site", "transmitter"]
-        },
-        {
-          id: "path-north-ridge-hilltop",
-          title: "North Ridge to Hilltop",
-          subtitle: "Selected RF path Â· 6.725 GHz",
-          href: "./paths.html#north-ridge-hilltop",
-          keywords: ["north ridge", "hilltop", "6.725", "ghz", "horizontal", "path"]
-        }
-      ]
-    });
-  </script>
+.rf-path-handle {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--path-handle-width);
+  display: grid;
+  place-items: center;
+  color: var(--gold-soft, #ffdda0);
+  cursor: pointer;
+  border-right: 1px solid rgba(237, 191, 99, 0.32);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)),
+    rgba(4, 16, 30, 0.78);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.24);
+}
 
-  <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-panes.js?v=1.1.37-shell-only" defer></script>
-  <script src="./rf-network-map.js?v=1.1.39-network-owns-map-key" defer></script>
-  <script src="./rf-path-details.js?v=1.1.37-path-details-direct-render" defer></script>
-  <script>
-    /* RF load toast | Version: 1.1.40-load-toast */
-    (() => {
-      "use strict";
+.rf-path-handle-icon {
+  width: 8px;
+  height: 14px;
+  object-fit: contain;
+  transition: transform 180ms ease;
+}
 
-      const PAGE_VERSION = "1.1.40";
-      const TOAST_VERSION = "1.1.40-load-toast";
-      const TOAST_ID = "rfLoadToast";
+.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle-icon {
+  transform: rotate(180deg);
+}
 
-      function versionOf(globalName) {
-        return window[globalName]?.VERSION || "missing";
-      }
+/* ==========================================================================
+   3. Deferred path details body
+   ========================================================================== */
 
-      function makeToast() {
-        const toast = document.createElement("div");
-        toast.id = TOAST_ID;
-        toast.setAttribute("role", "status");
-        toast.setAttribute("aria-live", "polite");
-        toast.style.cssText = [
-          "position:fixed",
-          "left:12px",
-          "right:12px",
-          "bottom:72px",
-          "z-index:99999",
-          "padding:10px 12px",
-          "border:1px solid rgba(237,191,99,.62)",
-          "border-radius:14px",
-          "background:rgba(2,13,28,.92)",
-          "color:#ffdda0",
-          "font:700 11px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
-          "box-shadow:0 12px 28px rgba(0,0,0,.28)",
-          "backdrop-filter:blur(10px)",
-          "transition:opacity .25s ease,transform .25s ease",
-          "opacity:0",
-          "transform:translateY(8px)",
-          "pointer-events:none"
-        ].join(";");
 
-        return toast;
-      }
+.rf-path-pane-body {
+  position: absolute;
+  inset: 0 0 0 var(--path-handle-width);
+  min-height: 0;
+  padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
+  display: grid;
+  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
+  grid-template-rows:
+    var(--path-title-height)
+    var(--path-node-row-height)
+    var(--path-mid-height)
+    var(--path-node-row-height);
+  align-content: start;
+  column-gap: 7px;
+  row-gap: var(--path-row-gap);
+  overflow: hidden;
+}
 
-      function showToast() {
-        const existing = document.getElementById(TOAST_ID);
-        if (existing) {
-          existing.remove();
-        }
+.rf-path-pane-title {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-width: 0;
+  padding-bottom: 4px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+}
 
-        const toast = makeToast();
-        const lines = [
-          `RF index v${PAGE_VERSION}`,
-          `toast ${TOAST_VERSION}`,
-          `panes ${versionOf("FieldOpsRFPanes")}`,
-          `map ${versionOf("FieldOpsRFNetworkMap")}`,
-          `details ${versionOf("FieldOpsRFPathDetails")}`
-        ];
+.rf-path-title-wave {
+  width: 22px;
+  height: 10px;
+  object-fit: contain;
+}
 
-        toast.innerHTML = lines.join("<br>");
-        document.body.appendChild(toast);
+.rf-path-pane-title span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--gold-soft, #ffdda0);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 
-        requestAnimationFrame(() => {
-          toast.style.opacity = "1";
-          toast.style.transform = "translateY(0)";
-        });
+/* ==========================================================================
+   4. Path site blocks
+   ========================================================================== */
 
-        window.setTimeout(() => {
-          toast.style.opacity = "0";
-          toast.style.transform = "translateY(8px)";
-        }, 6500);
+.rf-path-site {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 7px;
+}
 
-        window.setTimeout(() => {
-          toast.remove();
-        }, 7000);
-      }
+.rf-path-site.is-from {
+  grid-row: 2;
+}
 
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", () => {
-          window.setTimeout(showToast, 450);
-        }, { once: true });
-      } else {
-        window.setTimeout(showToast, 450);
-      }
-    })();
-  </script>
+.rf-path-site.is-to {
+  grid-row: 4;
+}
 
-</body>
-</html>
+.rf-path-mast {
+  width: var(--path-node-size);
+  height: var(--path-node-size);
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rf-path-mast img {
+  width: var(--path-node-icon-size);
+  height: var(--path-node-icon-size);
+  display: block;
+  object-fit: contain;
+}
+
+.rf-path-site.is-from .rf-path-mast {
+  border: 1px solid rgba(140, 255, 67, 0.48);
+  box-shadow: 0 0 8px rgba(140, 255, 67, 0.16);
+}
+
+.rf-path-site.is-to .rf-path-mast {
+  border: 1px solid rgba(255, 90, 58, 0.48);
+  box-shadow: 0 0 8px rgba(255, 90, 58, 0.16);
+}
+
+.rf-path-site-copy {
+  min-width: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.rf-path-site-copy small {
+  display: block;
+  margin: 0 0 2px;
+  color: rgba(219, 228, 242, 0.78);
+  font-size: 5.4px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.rf-path-site-copy b {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 7.4px;
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
+}
+
+/* ==========================================================================
+   5. Frequency and path data
+   ========================================================================== */
+
+.rf-path-mid {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
+  align-items: start;
+  column-gap: 7px;
+  padding-top: 5px;
+  overflow: hidden;
+}
+
+.rf-path-signal-vertical {
+  width: 28px;
+  height: 130px;
+  justify-self: center;
+  object-fit: contain;
+}
+
+.rf-path-frequency {
+  min-width: 0;
+  padding-top: 18px;
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.rf-path-frequency strong {
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.rf-path-frequency > span {
+  color: rgba(219, 228, 242, 0.78);
+  font-size: 5.4px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.rf-path-data {
+  margin: 4px 0 0;
+  display: grid;
+  gap: 0;
+}
+
+.rf-path-data div {
+  min-width: 0;
+  padding: 3px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.rf-path-data dt {
+  color: rgba(219, 228, 242, 0.72);
+  font-size: 5px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rf-path-data dd {
+  margin: 0;
+  color: #fff;
+  font-size: 5.4px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.rf-path-data i {
+  width: 5px;
+  height: 5px;
+  margin-right: 3px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #8cff43;
+  box-shadow: 0 0 6px rgba(140, 255, 67, 0.74);
+  vertical-align: middle;
+}
