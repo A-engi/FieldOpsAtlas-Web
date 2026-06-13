@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF background
    File: FieldOpsAtlas/Features/RF/background.css
-   Version: 1.1.33-compass-in-map-background
+   Version: 1.1.38-compass-and-key-background
    Purpose: RF page background and RF network map pane background only.
    ========================================================================== */
 
@@ -94,15 +94,15 @@ body {
 .rf-map-paper {
   background-color: #f8ecd2;
   background-image:
-    url("../../../data/icons/rf-map-compass.svg?v=1.1.33-visible-map-background-compass"),
+    url("../../../data/icons/rf-map-compass.svg?v=1.1.38-restore-corner-compass"),
     radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.72), transparent 44%),
     linear-gradient(180deg, #fff8e8, #f8ecd2);
   background-position:
-    left 30px bottom 34px,
+    left 54px bottom 24px,
     center,
     center;
   background-size:
-    116px 116px,
+    82px 82px,
     100% 100%,
     100% 100%;
   background-repeat:
