@@ -1,16 +1,15 @@
-/* ========================================================================== 
+/* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.21-smoke-buttons-background-split
-   Purpose: RF landing page content only.
+   Version: 1.1.21-rf-network-map-split
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
-   - RF owns the RF canvas, network demo, path pane, recent cards, services, and equipment.
-   - This file does not style shared shell chrome.
+   - RF owns the RF canvas, network map, path pane, recent cards, services, and equipment.
+   - The RF map background is an external SVG asset in FieldOpsAtlas/Resources/Logos.
    ========================================================================== */
 
-/* ========================================================================== 
+/* ==========================================================================
    0. RF page variables
    ========================================================================== */
 
@@ -20,18 +19,19 @@
   --rf-content-radius: 20px;
   --rf-content-top: calc(var(--top-height, 54px) + 8px);
   --rf-bottom-space: calc(var(--safe-bottom, 0px) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + var(--rf-content-gap));
+
   --rf-button-text: #f5fbff;
-  --rf-button-blue-top: #236fa3;
-  --rf-button-blue-mid: #15527f;
-  --rf-button-blue-bottom: #0b3560;
-  --rf-button-blue-dark-top: rgba(12, 56, 96, 0.94);
-  --rf-button-blue-dark-bottom: rgba(3, 22, 45, 0.96);
-  --rf-button-cyan-border: rgba(150, 197, 228, 0.46);
+  --rf-button-blue-top: #1887ff;
+  --rf-button-blue-mid: #0d66d8;
+  --rf-button-blue-bottom: #073f94;
+  --rf-button-blue-dark-top: rgba(13, 73, 150, 0.92);
+  --rf-button-blue-dark-bottom: rgba(3, 27, 67, 0.94);
+  --rf-button-cyan-border: rgba(128, 221, 255, 0.46);
   --rf-button-gold-border: rgba(255, 207, 105, 0.78);
   --rf-button-gold-strong: #ffcf69;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    1. RF canvas
    ========================================================================== */
 
@@ -85,7 +85,7 @@
   flex-direction: column;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    2. Network header and tabs
    ========================================================================== */
 
@@ -151,14 +151,14 @@
   border-color: var(--rf-button-gold-strong);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 42%),
-    linear-gradient(180deg, #2b779f 0%, #174f75 52%, #0b314f 100%);
+    linear-gradient(180deg, #1b91ff 0%, #116fe8 48%, #073e91 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.26),
     0 0 0 1px rgba(255, 207, 105, 0.18),
     0 6px 12px rgba(2, 9, 20, 0.18);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    3. Map and path pane
    ========================================================================== */
 
@@ -182,24 +182,19 @@
   border: 1px solid rgba(130, 91, 22, 0.14);
   border-bottom: 0;
   border-radius: 13px 13px 0 0;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.72), transparent 44%),
-    linear-gradient(180deg, #fff8e8, #f8ecd2);
+  background: #f8ecd2;
 }
 
-.rf-map-paper::before {
-  content: "";
+.rf-map-background {
   position: absolute;
   inset: 0;
-  opacity: 0.30;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
   pointer-events: none;
-  background-image:
-    radial-gradient(ellipse at 18% 20%, transparent 0 34%, rgba(124, 119, 104, 0.22) 35%, transparent 36%),
-    radial-gradient(ellipse at 72% 48%, transparent 0 36%, rgba(124, 119, 104, 0.18) 37%, transparent 38%),
-    radial-gradient(ellipse at 48% 78%, transparent 0 30%, rgba(124, 119, 104, 0.16) 31%, transparent 32%),
-    linear-gradient(24deg, transparent 0 42%, rgba(7, 28, 50, 0.08) 42.25%, transparent 42.8%),
-    linear-gradient(136deg, transparent 0 54%, rgba(7, 28, 50, 0.07) 54.25%, transparent 54.8%);
-  background-size: 100% 100%;
+  user-select: none;
 }
 
 .rf-map-stage {
@@ -216,13 +211,6 @@
 
 .rf-path-toggle:not(:checked) ~ .rf-map-stage {
   right: var(--path-handle-width);
-}
-
-.rf-map-stage svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
 }
 
 .rf-path-toggle {
@@ -276,7 +264,9 @@
   color: var(--gold-soft, #ffdda0);
   cursor: pointer;
   border-right: 1px solid rgba(237, 191, 99, 0.32);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)), rgba(4, 16, 30, 0.78);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)),
+    rgba(4, 16, 30, 0.78);
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.24);
 }
 
@@ -489,8 +479,8 @@
   vertical-align: middle;
 }
 
-/* ========================================================================== 
-   4. RF demo map SVG
+/* ==========================================================================
+   4. RF network map SVG
    ========================================================================== */
 
 .rf-map-stage svg {
@@ -500,8 +490,23 @@
   overflow: visible;
 }
 
-.demo-map-bg {
-  fill: transparent;
+.rf-network-map-svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.demo-route,
+.demo-link-soft,
+.demo-route-dot,
+.demo-node circle,
+.demo-original-halo circle,
+.demo-original-halo path,
+.demo-compass,
+.demo-compass path,
+.demo-legend,
+.demo-node .mast,
+.demo-node .mast path {
+  vector-effect: non-scaling-stroke;
 }
 
 .demo-route {
@@ -513,6 +518,7 @@
 .demo-link-soft {
   opacity: 0.22;
   stroke-width: 7;
+  fill: none;
 }
 
 .demo-link-soft.is-main {
@@ -521,6 +527,10 @@
 
 .demo-link-soft.is-backup {
   stroke: #1b5c92;
+}
+
+.demo-link-soft.is-alert {
+  stroke: #c5291e;
 }
 
 .demo-route.is-main {
@@ -539,7 +549,9 @@
 }
 
 .demo-route.is-selected-path {
-  filter: drop-shadow(0 0 4px rgba(255, 94, 51, 0.38)) drop-shadow(0 0 10px rgba(255, 214, 122, 0.20));
+  filter:
+    drop-shadow(0 0 4px rgba(255, 94, 51, 0.38))
+    drop-shadow(0 0 10px rgba(255, 214, 122, 0.20));
 }
 
 .demo-route-dot {
@@ -563,17 +575,17 @@
   color: #fff7de;
 }
 
-.demo-node .halo {
+.demo-node-halos .halo {
   opacity: 0.42;
 }
 
-.demo-node .halo.core,
-.demo-node .halo.main,
-.demo-node .halo.remote {
+.demo-node-halos .halo.core,
+.demo-node-halos .halo.main,
+.demo-node-halos .halo.remote {
   fill: #e8d9a0;
 }
 
-.demo-node .halo.relay {
+.demo-node-halos .halo.relay {
   fill: #ff5d32;
 }
 
@@ -603,7 +615,9 @@
 .demo-node.is-selected circle.core,
 .demo-node.is-selected circle.main,
 .demo-node.is-selected circle.remote {
-  filter: drop-shadow(0 0 5px rgba(255, 218, 123, 0.48)) drop-shadow(0 0 12px rgba(255, 94, 51, 0.30));
+  filter:
+    drop-shadow(0 0 5px rgba(255, 218, 123, 0.48))
+    drop-shadow(0 0 12px rgba(255, 94, 51, 0.30));
 }
 
 .demo-node .mast {
@@ -647,13 +661,13 @@
   fill: #071c32;
   paint-order: stroke;
   stroke: rgba(255, 248, 231, 0.88);
-  stroke-width: 3px;
+  stroke-width: 7px;
   stroke-linejoin: round;
 }
 
 .demo-label .name {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 9px;
+  font-size: 22px;
   font-weight: 900;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -661,7 +675,7 @@
 
 .demo-label .type {
   fill: rgba(7, 28, 50, 0.58);
-  font-size: 5.5px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -672,17 +686,17 @@
 
 .demo-compass {
   fill: none;
-  stroke: rgba(130, 91, 22, 0.16);
-  stroke-width: 1.2;
+  stroke: rgba(130, 91, 22, 0.18);
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .demo-compass text {
-  fill: rgba(130, 91, 22, 0.34);
+  fill: rgba(130, 91, 22, 0.36);
   stroke: none;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 8px;
+  font-size: 20px;
   font-weight: 900;
 }
 
@@ -695,11 +709,11 @@
 .demo-legend-text {
   fill: #071c32;
   stroke: none;
-  font-size: 6px;
+  font-size: 15px;
   font-weight: 800;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    5. Recent, services, and equipment
    ========================================================================== */
 
@@ -917,7 +931,7 @@
   text-transform: uppercase;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    6. Small screens
    ========================================================================== */
 
