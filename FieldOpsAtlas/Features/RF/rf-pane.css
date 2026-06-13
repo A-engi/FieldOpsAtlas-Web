@@ -1,13 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF pane styles
    File: FieldOpsAtlas/Features/RF/rf-pane.css
-   Version: 1.1.32-clean-path-pane-layering
+   Version: 1.1.37-absolute-details-body
 
    Purpose:
    - Own RF path details pane styling.
    - Keep the path pane layered above the dynamic map.
    - Keep the map holder beside the pane when the pane is open.
-   - Keep all pane content out of normal layout flow.
+   - Keep the detail body absolutely positioned inside the pane.
    ========================================================================== */
 
 /* ==========================================================================
@@ -57,7 +57,6 @@
   bottom: 0;
   z-index: 6;
   width: var(--path-pane-width);
-  padding-left: var(--path-handle-width);
   overflow: hidden;
   color: #fff;
   border: 1px solid rgba(237, 191, 99, 0.70);
@@ -106,15 +105,10 @@
    3. Deferred path details body
    ========================================================================== */
 
-.rf-path-pane-body[hidden] {
-  display: block;
-  height: 100%;
-  min-height: 0;
-  visibility: hidden;
-}
 
 .rf-path-pane-body {
-  height: 100%;
+  position: absolute;
+  inset: 0 0 0 var(--path-handle-width);
   min-height: 0;
   padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
   display: grid;
