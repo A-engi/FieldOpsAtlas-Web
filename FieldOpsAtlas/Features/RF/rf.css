@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.39-network-key-styles
+   Version: 1.1.42-key-under-map-node-size-clean
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -686,56 +686,65 @@
 .rf-map-key {
   position: absolute;
   left: 16px;
-  bottom: 12px;
+  right: calc(var(--path-pane-width) + 12px);
+  bottom: 10px;
   z-index: 5;
-  width: 118px;
-  padding: 7px 8px 8px;
+  min-height: 42px;
+  padding: 7px 10px 8px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
   color: rgba(7, 31, 56, 0.84);
-  border: 1px solid rgba(130, 91, 22, 0.22);
+  border: 1px solid rgba(130, 91, 22, 0.20);
   border-radius: 10px;
-  background: rgba(255, 248, 232, 0.66);
+  background: rgba(255, 248, 232, 0.64);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 4px 10px rgba(28, 18, 6, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 4px 10px rgba(28, 18, 6, 0.07);
   pointer-events: none;
 }
 
 .rf-map-key-title {
-  margin: 0 0 5px;
-  color: rgba(7, 31, 56, 0.78);
+  color: rgba(7, 31, 56, 0.74);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.08em;
   line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .rf-map-key-list {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 4px;
+  grid-template-columns: repeat(4, minmax(0, auto));
+  align-items: center;
+  justify-content: start;
+  column-gap: 10px;
+  row-gap: 4px;
   list-style: none;
 }
 
 .rf-map-key-list li {
   min-width: 0;
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-columns: 16px auto;
   align-items: center;
-  gap: 5px;
-  color: rgba(7, 31, 56, 0.72);
-  font-size: 6.5px;
+  gap: 4px;
+  color: rgba(7, 31, 56, 0.70);
+  font-size: 6.3px;
   font-weight: 800;
-  letter-spacing: 0.015em;
+  letter-spacing: 0.01em;
   line-height: 1;
   white-space: nowrap;
 }
 
 .rf-map-key-swatch {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   justify-self: center;
   border-radius: 50%;
   display: block;
@@ -743,16 +752,16 @@
 
 .rf-map-key-swatch.is-core {
   background: rgba(0, 130, 150, 0.84);
-  box-shadow: 0 0 0 2px rgba(0, 130, 150, 0.16);
+  box-shadow: 0 0 0 2px rgba(0, 130, 150, 0.14);
 }
 
 .rf-map-key-swatch.is-relay {
   background: rgba(210, 128, 28, 0.86);
-  box-shadow: 0 0 0 2px rgba(210, 128, 28, 0.16);
+  box-shadow: 0 0 0 2px rgba(210, 128, 28, 0.14);
 }
 
 .rf-map-key-line {
-  width: 16px;
+  width: 15px;
   height: 0;
   justify-self: center;
   display: block;
