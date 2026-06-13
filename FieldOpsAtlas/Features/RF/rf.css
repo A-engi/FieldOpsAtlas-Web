@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.43-key-flush-bottom-strip
+   Version: 1.1.44-slim-short-key-strip
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -684,38 +684,38 @@
    ========================================================================== */
 
 .rf-map-key {
-  --rf-map-key-strip-height: 44px;
+  --rf-map-key-strip-height: 30px;
   position: absolute;
-  left: 0;
-  right: calc(var(--path-pane-width) - var(--path-handle-width));
+  left: 22px;
+  right: calc(var(--path-pane-width) + 84px);
   bottom: 0;
   z-index: 5;
   height: var(--rf-map-key-strip-height);
   min-height: 0;
-  padding: 6px 12px;
+  padding: 4px 9px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  column-gap: 12px;
-  color: rgba(7, 31, 56, 0.84);
-  border-top: 1px solid rgba(130, 91, 22, 0.20);
-  border-right: 1px solid rgba(130, 91, 22, 0.16);
-  border-radius: 0 0 0 11px;
-  background: rgba(255, 248, 232, 0.70);
+  column-gap: 9px;
+  color: rgba(7, 31, 56, 0.78);
+  border: 1px solid rgba(130, 91, 22, 0.16);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255, 248, 232, 0.56);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.42),
-    0 -4px 10px rgba(28, 18, 6, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 -3px 8px rgba(28, 18, 6, 0.04);
   pointer-events: none;
 }
 
 .rf-path-toggle:not(:checked) ~ .rf-map-key {
-  right: var(--path-handle-width);
+  right: calc(var(--path-handle-width) + 84px);
 }
 
 .rf-map-key-title {
-  color: rgba(7, 31, 56, 0.74);
+  color: rgba(7, 31, 56, 0.68);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 800;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -731,56 +731,56 @@
   grid-template-columns: repeat(4, minmax(0, auto));
   align-items: center;
   justify-content: start;
-  column-gap: 11px;
-  row-gap: 4px;
+  column-gap: 8px;
+  row-gap: 2px;
   list-style: none;
 }
 
 .rf-map-key-list li {
   min-width: 0;
   display: grid;
-  grid-template-columns: 16px auto;
+  grid-template-columns: 13px auto;
   align-items: center;
-  gap: 4px;
-  color: rgba(7, 31, 56, 0.70);
-  font-size: 6.3px;
+  gap: 3px;
+  color: rgba(7, 31, 56, 0.66);
+  font-size: 5.7px;
   font-weight: 800;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   line-height: 1;
   white-space: nowrap;
 }
 
 .rf-map-key-swatch {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   justify-self: center;
   border-radius: 50%;
   display: block;
 }
 
 .rf-map-key-swatch.is-core {
-  background: rgba(0, 130, 150, 0.84);
-  box-shadow: 0 0 0 2px rgba(0, 130, 150, 0.14);
+  background: rgba(0, 130, 150, 0.80);
+  box-shadow: 0 0 0 1.5px rgba(0, 130, 150, 0.13);
 }
 
 .rf-map-key-swatch.is-relay {
-  background: rgba(210, 128, 28, 0.86);
-  box-shadow: 0 0 0 2px rgba(210, 128, 28, 0.14);
+  background: rgba(210, 128, 28, 0.82);
+  box-shadow: 0 0 0 1.5px rgba(210, 128, 28, 0.13);
 }
 
 .rf-map-key-line {
-  width: 15px;
+  width: 12px;
   height: 0;
   justify-self: center;
   display: block;
-  border-top: 2px solid rgba(7, 31, 56, 0.54);
+  border-top: 1.5px solid rgba(7, 31, 56, 0.50);
 }
 
 .rf-map-key-line.is-selected {
-  border-top-color: rgba(201, 126, 28, 0.88);
+  border-top-color: rgba(201, 126, 28, 0.82);
 }
 
 .rf-map-key-line.is-standby {
   border-top-style: dashed;
-  border-top-color: rgba(7, 31, 56, 0.44);
+  border-top-color: rgba(7, 31, 56, 0.40);
 }
