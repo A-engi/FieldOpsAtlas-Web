@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.css
-   Version: 1.1.20-shell-preview-colours
+   Version: 1.1.21-shell-smoke-controls
    Purpose:
    - One shared root shell for every page.
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -35,14 +35,15 @@
   --gold-glow: rgba(237, 191, 99, 0.42);
 
   /* Shared control surfaces */
-  --button-border: rgba(130, 165, 200, 0.42);
-  --button-top: #214f7c;
-  --button-bottom: #1d456f;
+  --button-border: rgba(150, 197, 228, 0.42);
+  --button-top: #285a82;
+  --button-bottom: #14395f;
   --button-bg:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.018)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
     linear-gradient(180deg, var(--button-top), var(--button-bottom));
   --button-bg-strong:
-    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.07), transparent 34%),
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.055), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.012)),
     linear-gradient(180deg, var(--button-top), var(--button-bottom));
   --button-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
