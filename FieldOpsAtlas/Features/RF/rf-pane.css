@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF pane styles
    File: FieldOpsAtlas/Features/RF/rf-pane.css
-   Version: 1.1.37-absolute-details-body
+   Version: 1.1.41-path-details-top-lock
 
    Purpose:
    - Own RF path details pane styling.
@@ -44,12 +44,13 @@
 
 .rf-path-pane {
   --path-pane-pad-x: 8px;
-  --path-pane-pad-y: 7px;
-  --path-row-gap: 5px;
-  --path-title-height: 22px;
+  --path-pane-pad-y: 8px;
+  --path-row-gap: 6px;
+  --path-title-height: 24px;
   --path-node-size: 22px;
   --path-node-icon-size: 9px;
-  --path-node-row-height: 44px;
+  --path-node-row-height: 46px;
+  --path-mid-height: 142px;
   --path-signal-width: 34px;
   position: absolute;
   top: 0;
@@ -113,7 +114,12 @@
   padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  grid-template-rows: var(--path-title-height) var(--path-node-row-height) minmax(0, 1fr) var(--path-node-row-height);
+  grid-template-rows:
+    var(--path-title-height)
+    var(--path-node-row-height)
+    var(--path-mid-height)
+    var(--path-node-row-height);
+  align-content: start;
   column-gap: 7px;
   row-gap: var(--path-row-gap);
   overflow: hidden;
@@ -238,22 +244,26 @@
   min-height: 0;
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   column-gap: 7px;
+  padding-top: 5px;
+  overflow: hidden;
 }
 
 .rf-path-signal-vertical {
   width: 28px;
-  height: min(100%, 210px);
+  height: 130px;
   justify-self: center;
   object-fit: contain;
 }
 
 .rf-path-frequency {
   min-width: 0;
+  padding-top: 18px;
   display: grid;
-  align-content: center;
+  align-content: start;
   gap: 3px;
+  overflow: hidden;
 }
 
 .rf-path-frequency strong {
