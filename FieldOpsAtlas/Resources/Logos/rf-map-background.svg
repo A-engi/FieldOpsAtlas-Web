@@ -1,0 +1,43 @@
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid slice" role="img" aria-label="RF map background">
+  <defs>
+    <radialGradient id="paperGlow" cx="50%" cy="40%" r="62%">
+      <stop offset="0%" stop-color="#fffdf5"/>
+      <stop offset="56%" stop-color="#fff4d8"/>
+      <stop offset="100%" stop-color="#f4dfb7"/>
+    </radialGradient>
+    <linearGradient id="paperWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff8e8"/>
+      <stop offset="100%" stop-color="#f8ecd2"/>
+    </linearGradient>
+    <pattern id="paperGrid" width="82" height="82" patternUnits="userSpaceOnUse">
+      <path d="M82 0H0V82" fill="none" stroke="#7c7768" stroke-width="1" opacity="0.07"/>
+    </pattern>
+    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="650" fill="url(#paperWash)"/>
+  <rect width="1000" height="650" fill="url(#paperGlow)" opacity="0.88"/>
+  <rect width="1000" height="650" fill="url(#paperGrid)" opacity="0.58"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.42">
+    <path d="M80 134C170 84 254 82 338 128S514 207 628 154 844 95 936 154" stroke="#2e6a85" stroke-width="3" opacity="0.10"/>
+    <path d="M72 470C184 410 281 392 391 432S594 536 716 471 859 399 944 438" stroke="#825b16" stroke-width="3" opacity="0.10"/>
+    <path d="M182 66C168 180 182 291 244 395S360 542 454 604" stroke="#071c32" stroke-width="2" opacity="0.06"/>
+    <path d="M796 70C735 171 721 266 760 356S847 490 832 594" stroke="#071c32" stroke-width="2" opacity="0.06"/>
+  </g>
+
+  <g filter="url(#softBlur)" opacity="0.30">
+    <ellipse cx="175" cy="135" rx="116" ry="48" fill="none" stroke="#7c7768" stroke-width="8" opacity="0.20"/>
+    <ellipse cx="725" cy="314" rx="140" ry="62" fill="none" stroke="#7c7768" stroke-width="8" opacity="0.16"/>
+    <ellipse cx="486" cy="508" rx="124" ry="54" fill="none" stroke="#7c7768" stroke-width="8" opacity="0.14"/>
+  </g>
+
+  <g opacity="0.13" stroke="#071c32" stroke-width="2">
+    <path d="M0 274H1000"/>
+    <path d="M0 422H1000"/>
+    <path d="M236 0V650"/>
+    <path d="M628 0V650"/>
+  </g>
+</svg>
