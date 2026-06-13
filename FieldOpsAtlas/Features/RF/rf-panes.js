@@ -1,137 +1,142 @@
 /* ==========================================================================
    FieldOps Atlas RF panes
    File: FieldOpsAtlas/Features/RF/rf-panes.js
-   Version: 1.1.30-pane-shell-first-details-after-map
+   Version: 1.1.32-clean-path-details-loader
 
    Purpose:
-   - Own RF pane markup that should not live in index.html.
-   - Attach the path details pane shell directly inside .rf-map-paper before the
-     dynamic network map renders.
-   - Load path details content only after the dynamic network map has rendered.
-   - Keep the pane out of normal layout flow so it never pushes the map down.
-   - Leave pane styling and open/close behaviour in rf-pane.css.
+   - Own RF path details pane markup.
+   - Attach the path pane directly into .rf-map-paper.
+   - Keep the pane out of normal layout flow.
+   - Load the pane shell before the dynamic map.
+   - Load the path details body after the dynamic map has rendered.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.30-pane-shell-first-details-after-map";
+  const VERSION = "1.1.32-clean-path-details-loader";
+  const MAP_PAPER_SELECTOR = ".rf-map-paper";
+  const MAP_STAGE_SELECTOR = ".rf-map-stage";
+  const MAP_READY_EVENT = "fieldops:rf-network-map-rendered";
+  const DETAILS_READY_CLASS = "is-path-details-ready";
+  const DETAILS_FALLBACK_DELAY_MS = 1200;
 
   const PATH_TOGGLE_TEMPLATE = String.raw`
 <input
-                class="rf-path-toggle"
-                id="rfPathPaneToggle"
-                type="checkbox"
-                checked
-                aria-label="Toggle path details"
-              >
+  class="rf-path-toggle"
+  id="rfPathPaneToggle"
+  type="checkbox"
+  checked
+  aria-label="Toggle path details"
+>
 `;
 
   const PATH_PANE_SHELL_TEMPLATE = String.raw`
-<aside class="rf-path-pane" aria-label="Selected RF path details">
-                <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
-                  <img
-                    class="rf-path-handle-icon"
-                    src="../../../data/icons/path-pane-chevron-gold.svg"
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                    decoding="async"
-                  >
-                </label>
+<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane>
+  <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
+    <img
+      class="rf-path-handle-icon"
+      src="../../../data/icons/path-pane-chevron-gold.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
+  </label>
 
-                <div class="rf-path-pane-body" data-rf-path-details-body hidden></div>
-              </aside>
+  <div class="rf-path-pane-body" data-rf-path-details-body hidden></div>
+</aside>
 `;
 
   const PATH_DETAILS_BODY_TEMPLATE = String.raw`
 <div class="rf-path-pane-body">
-                  <header class="rf-path-pane-title">
-                    <img
-                      class="rf-path-title-wave"
-                      src="../../../data/icons/path-details-wave.svg"
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                    >
-                    <span>Path details</span>
-                  </header>
+  <header class="rf-path-pane-title">
+    <img
+      class="rf-path-title-wave"
+      src="../../../data/icons/path-details-wave.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
+    <span>Path details</span>
+  </header>
 
-                  <section class="rf-path-site is-from" aria-label="Source site">
-                    <span class="rf-path-mast" aria-hidden="true">
-                      <img
-                        src="../../../data/icons/atlas-transmitter-gold.svg"
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      >
-                    </span>
-                    <span class="rf-path-site-copy">
-                      <small>From</small>
-                      <b>North Ridge</b>
-                      <b>TX Site</b>
-                    </span>
-                  </section>
+  <section class="rf-path-site is-from" aria-label="Source site">
+    <span class="rf-path-mast" aria-hidden="true">
+      <img
+        src="../../../data/icons/atlas-transmitter-gold.svg"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      >
+    </span>
+    <span class="rf-path-site-copy">
+      <small>From</small>
+      <b>North Ridge</b>
+      <b>TX Site</b>
+    </span>
+  </section>
 
-                  <section class="rf-path-mid" aria-label="Selected RF path">
-                    <img
-                      class="rf-path-signal-vertical"
-                      src="../../../data/icons/path-signal-glow.svg"
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                    >
+  <section class="rf-path-mid" aria-label="Selected RF path">
+    <img
+      class="rf-path-signal-vertical"
+      src="../../../data/icons/path-signal-glow.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
 
-                    <div class="rf-path-frequency">
-                      <strong>6.725 GHz</strong>
-                      <span>Horizontal</span>
-                      <dl class="rf-path-data">
-                        <div>
-                          <dt>Service</dt>
-                          <dd>DTT 1</dd>
-                        </div>
-                        <div>
-                          <dt>Band</dt>
-                          <dd>28 MHz</dd>
-                        </div>
-                        <div>
-                          <dt>Mode</dt>
-                          <dd>64QAM</dd>
-                        </div>
-                        <div>
-                          <dt>Power</dt>
-                          <dd>18 dBm</dd>
-                        </div>
-                        <div>
-                          <dt>Avail</dt>
-                          <dd>99.98%</dd>
-                        </div>
-                        <div>
-                          <dt>Status</dt>
-                          <dd><i aria-hidden="true"></i>Online</dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </section>
+    <div class="rf-path-frequency">
+      <strong>6.725 GHz</strong>
+      <span>Horizontal</span>
 
-                  <section class="rf-path-site is-to" aria-label="Destination site">
-                    <span class="rf-path-mast" aria-hidden="true">
-                      <img
-                        src="../../../data/icons/atlas-transmitter-gold.svg"
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      >
-                    </span>
-                    <span class="rf-path-site-copy">
-                      <small>To</small>
-                      <b>Hilltop</b>
-                      <b>Relay Site</b>
-                    </span>
-                  </section>
-                </div>
+      <dl class="rf-path-data">
+        <div>
+          <dt>Service</dt>
+          <dd>DTT 1</dd>
+        </div>
+        <div>
+          <dt>Band</dt>
+          <dd>28 MHz</dd>
+        </div>
+        <div>
+          <dt>Mode</dt>
+          <dd>64QAM</dd>
+        </div>
+        <div>
+          <dt>Power</dt>
+          <dd>18 dBm</dd>
+        </div>
+        <div>
+          <dt>Avail</dt>
+          <dd>99.98%</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><i aria-hidden="true"></i>Online</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="rf-path-site is-to" aria-label="Destination site">
+    <span class="rf-path-mast" aria-hidden="true">
+      <img
+        src="../../../data/icons/atlas-transmitter-gold.svg"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      >
+    </span>
+    <span class="rf-path-site-copy">
+      <small>To</small>
+      <b>Hilltop</b>
+      <b>Relay Site</b>
+    </span>
+  </section>
+</div>
 `;
 
   function makeFragment(html) {
@@ -140,14 +145,21 @@
     return template.content.cloneNode(true);
   }
 
-  function removePlaceholderMounts(root) {
+  function removeLegacyPaneMounts(root) {
     root
       .querySelectorAll("[data-rf-path-pane-mount]")
       .forEach((mount) => mount.remove());
   }
 
+  function removeLegacyInlinePanes(mapPaper) {
+    mapPaper
+      .querySelectorAll(":scope > .rf-path-toggle, :scope > .rf-path-pane")
+      .forEach((node) => node.remove());
+  }
+
   function loadPathDetailsBody(mapPaper) {
     const bodyMount = mapPaper.querySelector("[data-rf-path-details-body]");
+
     if (!bodyMount || bodyMount.dataset.rfDetailsLoaded === "true") {
       return;
     }
@@ -159,9 +171,9 @@
       return;
     }
 
-    body.removeAttribute("hidden");
     body.dataset.rfDetailsLoaded = "true";
     bodyMount.replaceWith(body);
+    mapPaper.classList.add(DETAILS_READY_CLASS);
 
     mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-path-details-ready", {
       bubbles: true,
@@ -172,38 +184,38 @@
     }));
   }
 
-  function bindDetailsAfterMap(mapPaper) {
-    const mapStage = mapPaper.querySelector(".rf-map-stage");
+  function bindDetailsLoad(mapPaper) {
+    const mapStage = mapPaper.querySelector(MAP_STAGE_SELECTOR);
 
     if (mapStage?.dataset.rfNetworkMapLoaded === "true") {
       window.requestAnimationFrame(() => loadPathDetailsBody(mapPaper));
       return;
     }
 
-    mapPaper.addEventListener("fieldops:rf-network-map-rendered", () => {
+    mapPaper.addEventListener(MAP_READY_EVENT, () => {
       window.requestAnimationFrame(() => loadPathDetailsBody(mapPaper));
     }, { once: true });
 
-    window.setTimeout(() => loadPathDetailsBody(mapPaper), 1200);
+    window.setTimeout(() => loadPathDetailsBody(mapPaper), DETAILS_FALLBACK_DELAY_MS);
   }
 
-  function initPathPane(mapPaper) {
+  function attachPathPane(mapPaper) {
     if (!mapPaper || mapPaper.dataset.rfPaneInit === "true") {
       return;
     }
 
-    const mapStage = mapPaper.querySelector(".rf-map-stage");
+    const mapStage = mapPaper.querySelector(MAP_STAGE_SELECTOR);
+
     if (!mapStage) {
       return;
     }
 
-    mapPaper.dataset.rfPaneInit = "true";
+    removeLegacyInlinePanes(mapPaper);
 
     const toggleFragment = makeFragment(PATH_TOGGLE_TEMPLATE);
-    const shellFragment = makeFragment(PATH_PANE_SHELL_TEMPLATE);
-
+    const paneFragment = makeFragment(PATH_PANE_SHELL_TEMPLATE);
     const toggle = toggleFragment.querySelector(".rf-path-toggle");
-    const pane = shellFragment.querySelector(".rf-path-pane");
+    const pane = paneFragment.querySelector(".rf-path-pane");
 
     if (!toggle || !pane) {
       return;
@@ -211,6 +223,7 @@
 
     mapPaper.insertBefore(toggle, mapStage);
     mapStage.insertAdjacentElement("afterend", pane);
+    mapPaper.dataset.rfPaneInit = "true";
 
     mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-pane-shell-ready", {
       bubbles: true,
@@ -220,15 +233,15 @@
       }
     }));
 
-    bindDetailsAfterMap(mapPaper);
+    bindDetailsLoad(mapPaper);
   }
 
   function initAll(root = document) {
-    removePlaceholderMounts(root);
+    removeLegacyPaneMounts(root);
 
     root
-      .querySelectorAll(".rf-map-paper")
-      .forEach(initPathPane);
+      .querySelectorAll(MAP_PAPER_SELECTOR)
+      .forEach(attachPathPane);
   }
 
   window.FieldOpsRFPanes = {
