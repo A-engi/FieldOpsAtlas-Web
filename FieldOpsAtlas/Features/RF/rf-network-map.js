@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF network map renderer
    File: FieldOpsAtlas/Features/RF/rf-network-map.js
-   Version: 1.1.29-adaptive-viewbox-height-fill
+   Version: 1.1.30-graph-fit-key-reserve
 
    Purpose:
    - Render only the foreground RF network SVG.
@@ -9,13 +9,14 @@
    - Keep a stable viewBox so page resizing does not flatten paths or circles.
    - Reflow when the RF path pane changes the map holder size.
    - Match the SVG viewBox to the holder aspect ratio so the map fills vertically without flattening.
+   - Fit graph coordinates into a balanced map area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.29-adaptive-viewbox-height-fill";
+  const VERSION = "1.1.30-graph-fit-key-reserve";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -23,6 +24,13 @@
     width: 1000,
     height: 650,
     safeEdge: 28
+  };
+
+  const MAP_CONTENT_INSET = {
+    left: 54,
+    right: 96,
+    top: 48,
+    bottom: 124
   };
 
   const FALLBACK_GRAPH = {
@@ -224,6 +232,40 @@
     };
   }
 
+  function fitNodesToMapArea(nodes, viewBox) {
+    if (!nodes.length) {
+      return nodes;
+    }
+
+    const minX = Math.min(...nodes.map((node) => node.x));
+    const maxX = Math.max(...nodes.map((node) => node.x));
+    const minY = Math.min(...nodes.map((node) => node.y));
+    const maxY = Math.max(...nodes.map((node) => node.y));
+
+    const sourceWidth = Math.max(1, maxX - minX);
+    const sourceHeight = Math.max(1, maxY - minY);
+    const targetLeft = MAP_CONTENT_INSET.left;
+    const targetRight = viewBox.width - MAP_CONTENT_INSET.right;
+    const targetTop = MAP_CONTENT_INSET.top;
+    const targetBottom = viewBox.height - MAP_CONTENT_INSET.bottom;
+    const targetWidth = Math.max(1, targetRight - targetLeft);
+    const targetHeight = Math.max(1, targetBottom - targetTop);
+
+    return nodes.map((node) => ({
+      ...node,
+      x: clamp(
+        targetLeft + ((node.x - minX) / sourceWidth) * targetWidth,
+        viewBox.safeEdge,
+        viewBox.width - viewBox.safeEdge
+      ),
+      y: clamp(
+        targetTop + ((node.y - minY) / sourceHeight) * targetHeight,
+        viewBox.safeEdge,
+        viewBox.height - viewBox.safeEdge
+      )
+    }));
+  }
+
   function markerRadius(node) {
     if (node.size === "large") {
       return 21;
@@ -348,7 +390,8 @@
   }
 
   function normaliseGraph(graph, viewBox) {
-    const nodes = graph.nodes.map((node) => projectNode(node, viewBox));
+    const projectedNodes = graph.nodes.map((node) => projectNode(node, viewBox));
+    const nodes = fitNodesToMapArea(projectedNodes, viewBox);
     const nodeById = new Map(nodes.map((node) => [node.id, node]));
     const links = graph.links
       .map((link) => ({
