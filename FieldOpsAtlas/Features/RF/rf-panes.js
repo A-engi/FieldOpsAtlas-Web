@@ -1,18 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas RF panes
    File: FieldOpsAtlas/Features/RF/rf-panes.js
-   Version: 1.1.26-rf-path-pane-split
+   Version: 1.1.28-pane-attaches-to-map-paper
 
    Purpose:
    - Own RF pane markup that should not live in index.html.
-   - Keep the path details pane as plain DOM beside the dynamic map holder.
-   - Leave pane styling and open/close behaviour in rf.css.
+   - Attach the path details pane directly inside .rf-map-paper.
+   - Keep the pane out of normal layout flow so it never pushes the map down.
+   - Leave pane styling and open/close behaviour in rf-pane.css.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.26-rf-path-pane-split";
+  const VERSION = "1.1.28-pane-attaches-to-map-paper";
 
   const PATH_DETAILS_TEMPLATE = String.raw`
 <input
@@ -125,20 +126,43 @@
               </aside>
 `;
 
-  function initPathPaneMount(mount) {
-    if (!mount || mount.dataset.rfPaneInit === "true") {
+  function createPathPaneFragment() {
+    const template = document.createElement("template");
+    template.innerHTML = PATH_DETAILS_TEMPLATE.trim();
+    return template.content.cloneNode(true);
+  }
+
+  function removePlaceholderMounts(root) {
+    root
+      .querySelectorAll("[data-rf-path-pane-mount]")
+      .forEach((mount) => mount.remove());
+  }
+
+  function initPathPane(mapPaper) {
+    if (!mapPaper || mapPaper.dataset.rfPaneInit === "true") {
       return;
     }
 
-    mount.dataset.rfPaneInit = "true";
+    const mapStage = mapPaper.querySelector(".rf-map-stage");
+    if (!mapStage) {
+      return;
+    }
 
-    const template = document.createElement("template");
-    template.innerHTML = PATH_DETAILS_TEMPLATE.trim();
+    mapPaper.dataset.rfPaneInit = "true";
 
-    const fragment = template.content.cloneNode(true);
-    mount.replaceWith(fragment);
+    const fragment = createPathPaneFragment();
+    const toggle = fragment.querySelector(".rf-path-toggle");
+    const pane = fragment.querySelector(".rf-path-pane");
 
-    document.dispatchEvent(new CustomEvent("fieldops:rf-panes-ready", {
+    if (!toggle || !pane) {
+      return;
+    }
+
+    mapPaper.insertBefore(toggle, mapStage);
+    mapStage.insertAdjacentElement("afterend", pane);
+
+    mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-pane-ready", {
+      bubbles: true,
       detail: {
         version: VERSION,
         pane: "path-details"
@@ -147,9 +171,11 @@
   }
 
   function initAll(root = document) {
+    removePlaceholderMounts(root);
+
     root
-      .querySelectorAll("[data-rf-path-pane-mount]")
-      .forEach(initPathPaneMount);
+      .querySelectorAll(".rf-map-paper")
+      .forEach(initPathPane);
   }
 
   window.FieldOpsRFPanes = {
