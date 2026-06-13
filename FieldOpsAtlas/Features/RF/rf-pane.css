@@ -1,17 +1,38 @@
 /* ==========================================================================
    FieldOps Atlas RF pane styles
    File: FieldOpsAtlas/Features/RF/rf-pane.css
-   Version: 1.1.27-rf-pane-css-split
+   Version: 1.1.32-clean-path-pane-layering
 
    Purpose:
    - Own RF path details pane styling.
-   - Keep pane styling separate from RF page layout and dynamic SVG rendering.
-   - Pane markup is injected by rf-panes.js.
+   - Keep the path pane layered above the dynamic map.
+   - Keep the map holder beside the pane when the pane is open.
+   - Keep all pane content out of normal layout flow.
    ========================================================================== */
+
+/* ==========================================================================
+   1. Map holder relationship to pane
+   ========================================================================== */
+
+.rf-map-stage {
+  position: absolute;
+  top: 0;
+  right: calc(var(--path-pane-width) - var(--path-handle-width));
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 12px 0 0 0;
+  transition: right 180ms ease;
+}
 
 .rf-path-toggle:not(:checked) ~ .rf-map-stage {
   right: var(--path-handle-width);
 }
+
+/* ==========================================================================
+   2. Toggle and pane shell
+   ========================================================================== */
 
 .rf-path-toggle {
   position: absolute;
@@ -81,6 +102,17 @@
   transform: rotate(180deg);
 }
 
+/* ==========================================================================
+   3. Deferred path details body
+   ========================================================================== */
+
+.rf-path-pane-body[hidden] {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  visibility: hidden;
+}
+
 .rf-path-pane-body {
   height: 100%;
   min-height: 0;
@@ -123,6 +155,10 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   4. Path site blocks
+   ========================================================================== */
 
 .rf-path-site {
   grid-column: 1 / -1;
@@ -197,6 +233,10 @@
   white-space: nowrap;
   text-shadow: 0 2px 1px rgba(0, 0, 0, 0.48);
 }
+
+/* ==========================================================================
+   5. Frequency and path data
+   ========================================================================== */
 
 .rf-path-mid {
   grid-column: 1 / -1;
