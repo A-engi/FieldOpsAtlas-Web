@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.47-key-left-zero-slim-compact
+   Version: 1.1.48-fixed-key-original-halo
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -231,6 +231,7 @@
 
 .demo-route,
 .demo-link-soft,
+.demo-node-halos .halo,
 .demo-node circle,
 .demo-compass,
 .demo-compass path,
@@ -293,6 +294,20 @@
 
 
 
+
+.demo-node-halos .halo {
+  opacity: 0.42;
+}
+
+.demo-node-halos .halo.core,
+.demo-node-halos .halo.main,
+.demo-node-halos .halo.remote {
+  fill: #e8d9a0;
+}
+
+.demo-node-halos .halo.relay {
+  fill: #ff5d32;
+}
 
 .demo-node circle.core,
 .demo-node circle.main {
@@ -623,12 +638,12 @@
    ========================================================================== */
 
 .rf-map-key {
-  --rf-map-key-strip-height: 22px;
+  --rf-map-key-strip-height: 20px;
   position: absolute;
   left: 0;
-  right: calc(var(--path-pane-width) + 34%);
   bottom: 0;
   z-index: 5;
+  width: 50%;
   height: var(--rf-map-key-strip-height);
   min-height: 0;
   padding: 2px 7px;
@@ -649,14 +664,10 @@
   pointer-events: none;
 }
 
-.rf-path-toggle:not(:checked) ~ .rf-map-key {
-  right: calc(var(--path-handle-width) + 34%);
-}
-
 .rf-map-key-title {
   color: rgba(7, 31, 56, 0.62);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 5.9px;
+  font-size: 5.7px;
   font-weight: 800;
   letter-spacing: 0.07em;
   line-height: 1;
@@ -684,7 +695,7 @@
   align-items: center;
   gap: 2px;
   color: rgba(7, 31, 56, 0.60);
-  font-size: 4.6px;
+  font-size: 4.4px;
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1;
