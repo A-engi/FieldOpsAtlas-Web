@@ -1,4 +1,316 @@
+/*/* ==========================================================================
+   FieldOps Atlas RF topology visuals
+   File: FieldOpsAtlas/Features/RF/rf-topology.css
+   Version: 1.1.68-topology-map-compat
+
+   Ownership:
+   - Dynamic RF topology SVG styling with old map-name compatibility.
+   - Demo node/link/label visual styling.
+   - Selected path mesh/radar halo styling.
+   - RF topology key styling.
+
+   Non-ownership:
+   - Page canvas/header/buttons stay in rf.css.
+   - Map paper/holder, path pane, popups, cards, and panels stay in rf-pane.css.
+   ========================================================================== */
+
 /* ==========================================================================
+   1. RF topology SVG
+   ========================================================================== */
+
+.rf-topology-svg,
+.rf-network-map-svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.demo-route,
+.demo-link-soft,
+.demo-node circle,
+.demo-original-halo circle,
+.demo-original-halo path,
+.demo-compass,
+.demo-compass path,
+.demo-legend {
+  vector-effect: non-scaling-stroke;
+}
+
+.demo-route {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-link-soft {
+  opacity: 0.22;
+  stroke-width: 7;
+  fill: none;
+}
+
+.demo-link-soft.is-main {
+  stroke: #126832;
+}
+
+.demo-link-soft.is-backup {
+  stroke: #1b5c92;
+}
+
+.demo-link-soft.is-alert {
+  stroke: #c5291e;
+}
+
+.demo-route.is-main {
+  stroke: #106228;
+  stroke-width: 3.2;
+}
+
+.demo-route.is-backup {
+  stroke: #1f5f98;
+  stroke-width: 2.8;
+}
+
+.demo-route.is-alert {
+  stroke: #c5291e;
+  stroke-width: 3.5;
+}
+
+.demo-route.is-selected-path {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 94, 51, 0.38))
+    drop-shadow(0 0 10px rgba(255, 214, 122, 0.20));
+}
+
+
+.demo-node {
+  color: #fff7de;
+}
+
+
+.demo-node circle.core,
+.demo-node circle.main {
+  fill: #13733a;
+  stroke: #fff7de;
+  stroke-width: 2.2;
+}
+
+.demo-node circle.remote {
+  fill: #1f5f98;
+  stroke: #fff7de;
+  stroke-width: 2.2;
+}
+
+.demo-node circle.relay {
+  fill: #b82a21;
+  stroke: #fff7de;
+  stroke-width: 2.2;
+}
+
+
+.demo-node.is-selected circle.relay,
+.demo-node.is-selected circle.core,
+.demo-node.is-selected circle.main,
+.demo-node.is-selected circle.remote {
+  filter:
+    drop-shadow(0 0 5px rgba(255, 218, 123, 0.48))
+    drop-shadow(0 0 12px rgba(255, 94, 51, 0.30));
+}
+
+
+.demo-original-halo {
+  fill: none;
+  pointer-events: none;
+}
+
+.relay-halo-ring {
+  stroke: rgba(201, 42, 31, 0.24);
+  stroke-width: 1;
+}
+
+.relay-halo-ring.is-outer {
+  stroke: rgba(201, 42, 31, 0.18);
+}
+
+.relay-halo-line {
+  stroke: rgba(201, 42, 31, 0.18);
+  stroke-width: 0.7;
+}
+
+.relay-halo-line.strong {
+  stroke: rgba(201, 42, 31, 0.26);
+  stroke-width: 0.9;
+}
+
+.demo-label {
+  fill: #071c32;
+  paint-order: stroke;
+  stroke: rgba(255, 248, 231, 0.88);
+  stroke-width: 7px;
+  stroke-linejoin: round;
+}
+
+.demo-label .name {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.demo-label .type {
+  fill: rgba(7, 28, 50, 0.58);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.demo-label.hide-type .type {
+  display: none;
+}
+
+.demo-compass {
+  fill: none;
+  stroke: rgba(130, 91, 22, 0.18);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-compass text {
+  fill: rgba(130, 91, 22, 0.36);
+  stroke: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.demo-legend {
+  fill: rgba(255, 255, 255, 0.56);
+  stroke: rgba(130, 91, 22, 0.14);
+  stroke-width: 1;
+}
+
+.demo-legend-text {
+  fill: #071c32;
+  stroke: none;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   2. RF topology key
+   ========================================================================== */
+
+.rf-topology-key,
+.rf-map-key {
+  --rf-topology-key-strip-height: 20px;
+  --rf-map-key-strip-height: var(--rf-topology-key-strip-height, var(--rf-map-key-strip-height, 20px));
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 50%;
+  height: var(--rf-topology-key-strip-height);
+  min-height: 0;
+  padding: 2px 7px;
+  display: grid;
+  grid-template-columns: auto minmax(0, max-content);
+  align-items: center;
+  justify-content: start;
+  column-gap: 6px;
+  color: rgba(7, 31, 56, 0.74);
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0 7px 0 0;
+  background: rgba(255, 248, 232, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 -2px 6px rgba(28, 18, 6, 0.03);
+  pointer-events: none;
+}
+
+.rf-topology-key-title,
+.rf-map-key-title {
+  color: rgba(7, 31, 56, 0.62);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 5.7px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-topology-key-list,
+.rf-map-key-list {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  align-items: center;
+  justify-content: start;
+  column-gap: 5px;
+  row-gap: 1px;
+  list-style: none;
+}
+
+.rf-topology-key-list li,
+.rf-map-key-list li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 9px max-content;
+  align-items: center;
+  gap: 2px;
+  color: rgba(7, 31, 56, 0.60);
+  font-size: 4.4px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-topology-key-swatch,
+.rf-map-key-swatch {
+  width: 5px;
+  height: 5px;
+  justify-self: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.rf-topology-key-swatch.is-core,
+.rf-map-key-swatch.is-core {
+  background: rgba(0, 130, 150, 0.76);
+  box-shadow: 0 0 0 1px rgba(0, 130, 150, 0.11);
+}
+
+.rf-topology-key-swatch.is-relay,
+.rf-map-key-swatch.is-relay {
+  background: rgba(210, 128, 28, 0.78);
+  box-shadow: 0 0 0 1px rgba(210, 128, 28, 0.11);
+}
+
+.rf-topology-key-line,
+.rf-map-key-line {
+  width: 8px;
+  height: 0;
+  justify-self: center;
+  display: block;
+  border-top: 1.1px solid rgba(7, 31, 56, 0.46);
+}
+
+.rf-topology-key-line.is-selected,
+.rf-map-key-line.is-selected {
+  border-top-color: rgba(201, 126, 28, 0.78);
+}
+
+.rf-topology-key-line.is-standby,
+.rf-map-key-line.is-standby {
+  border-top-style: dashed;
+  border-top-color: rgba(7, 31, 56, 0.36);
+}
+ ==========================================================================
    FieldOps Atlas RF map visuals
    File: FieldOpsAtlas/Features/RF/rf-map.css
    Version: 1.1.52-map-visual-css-split
