@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.98-remove-mid-icon
+   Version: 1.1.101-mid-svg-right-fit
 
    Purpose:
    - Build the selected RF path model from topology, site, service, and path data.
@@ -10,14 +10,14 @@
    - Render the built path model into the existing RF interface pane.
    - Use the visible path details slot from rf-interface.js.
    - Paste the real path details body into the permanent visible slot from rf-interface.js.
-   - Render the middle RF values without the left-side signal icon placeholder.
+   - Keep the middle RF signal SVG placeholder on the left of the RF values.
    - Remove duplicate path-builder bodies before rendering.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.98-remove-mid-icon";
+  const VERSION = "1.1.101-mid-svg-right-fit";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const PANE_SELECTOR = ".rf-path-pane";
   const PATH_DETAILS_SLOT_SELECTOR = "[data-rf-path-details]";
@@ -55,6 +55,15 @@
   </section>
 
   <section class="rf-path-mid" aria-label="Selected RF path">
+    <img
+      class="rf-path-signal-vertical"
+      src="../../../data/icons/path-signal-glow.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
+
     <div class="rf-path-frequency">
       <strong>6.725 GHz</strong>
       <span>Horizontal</span>
