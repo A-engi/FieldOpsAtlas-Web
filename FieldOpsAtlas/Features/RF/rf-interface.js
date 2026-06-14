@@ -1,12 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.79-clean-interface-panels
+   Version: 1.1.80-remove-service-type-filter
 
    Purpose:
    - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All controls, service type filter,
-     map holder, recent cards, Services panel, Equipment panel, and path pane shell.
+   - Create the RF title, RF/IP/MW/All controls, map holder, recent cards, Services panel, Equipment panel, and path pane shell.
    - Leave topology/graph drawing to rf-topology.js.
    - Leave selected path data/body rendering to rf-path-builder.js.
    ========================================================================== */
@@ -14,7 +13,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.79-clean-interface-panels";
+  const VERSION = "1.1.80-remove-service-type-filter";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
@@ -42,30 +41,6 @@
       <button class="rf-tab" type="button">All</button>
     </div>
   </div>
-
-  <section class="rf-service-type-filter" aria-labelledby="rfServiceTypeFilterTitle" data-rf-service-type-filter>
-    <div class="rf-filter-handle" aria-hidden="true"></div>
-    <h2 class="rf-service-type-title" id="rfServiceTypeFilterTitle">Service type filter</h2>
-    <div class="rf-service-type-actions">
-      <a class="rf-service-type-pill is-dtt" href="../RFPages/dtt.html">
-        <b>DTT</b>
-        <span>MUX 1</span>
-      </a>
-      <a class="rf-service-type-pill is-dab" href="../RFPages/dab.html">
-        <b>DAB</b>
-        <span>National</span>
-      </a>
-      <a class="rf-service-type-pill is-fm" href="../RFPages/fm.html">
-        <b>FM</b>
-        <span>Service</span>
-      </a>
-      <a class="rf-service-type-pill is-equipment" href="../RFPages/equipment.html">
-        <b>EQ</b>
-        <span>Kit</span>
-      </a>
-    </div>
-  </section>
-
   <div class="rf-map-recent">
     <div class="rf-map-paper">
       <div
@@ -276,3 +251,5 @@
     initAll();
   }
 })();
+
+/* End of FieldOpsAtlas/Features/RF/rf-interface.js */
