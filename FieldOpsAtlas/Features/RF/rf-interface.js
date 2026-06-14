@@ -1,11 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.80-remove-service-type-filter
+   Version: 1.1.82-restore-map-filters
 
    Purpose:
    - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All controls, map holder, recent cards, Services panel, Equipment panel, and path pane shell.
+   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and path pane shell.
    - Leave topology/graph drawing to rf-topology.js.
    - Leave selected path data/body rendering to rf-path-builder.js.
    ========================================================================== */
@@ -13,7 +13,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.80-remove-service-type-filter";
+  const VERSION = "1.1.82-restore-map-filters";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
