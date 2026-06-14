@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.89-slot-text-cleanup
+   Version: 1.1.91-delete-slot-junk
 
    Purpose:
    - Own the RF interface shell and static RF UI.
    - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and path pane shell.
    - Leave graph drawing to rf-graph.js.
    - Leave selected path data/body rendering to rf-path-builder.js; this interface file does not fetch path data.
-   - Keep only a plain slot text marker until rf-path-builder.js replaces it.
+   - Create the permanent empty path-details slot only; no fake placeholder text.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.89-slot-text-cleanup";
+  const VERSION = "1.1.91-delete-slot-junk";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
@@ -164,12 +164,8 @@
     class="rf-path-details-slot"
     data-rf-path-details
     role="group"
-    aria-label="Path details slot"
-  >
-    <span class="rf-path-slot-text" data-rf-path-placeholder>
-      Path details slot
-    </span>
-  </div>
+    aria-label="Selected path details content"
+  ></div>
 </aside>
 `;
 
