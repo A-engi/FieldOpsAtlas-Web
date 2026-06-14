@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.69</title>
+  <title>FieldOps Atlas RF v1.1.72</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.60-visible-services-row">
   <link rel="stylesheet" href="./rf.css?v=legacy-fallback">
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./page.css?v=legacy-fallback">
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.69">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.72">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
         <section class="rf-network" aria-labelledby="rfNetworkTitle">
@@ -242,12 +242,12 @@
   <script src="./rf-path-details.js?v=legacy-fallback" defer></script>
   <script src="./rf-path-builder.js?v=1.1.67-rf-path-builder-rename" defer></script>
   <script>
-    /* RF load toast | Version: 1.1.69-mixed-name-recovery */
+    /* RF load toast | Version: 1.1.72-explicit-file-toast */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.69";
-      const TOAST_VERSION = "1.1.69-mixed-name-recovery";
+      const PAGE_VERSION = "1.1.72";
+      const TOAST_VERSION = "1.1.72-explicit-file-toast";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -290,14 +290,14 @@
 
         const toast = makeToast();
         const lines = [
-          `RF index v${PAGE_VERSION}`,
+          `RF index.html v${PAGE_VERSION}`,
           `toast ${TOAST_VERSION}`,
-          `interface ${versionOf("FieldOpsRFInterface")}`,
-          `old panes ${versionOf("FieldOpsRFPanes")}`,
-          `topology ${versionOf("FieldOpsRFTopology")}`,
-          `old map ${versionOf("FieldOpsRFNetworkMap")}`,
-          `builder ${versionOf("FieldOpsRFPathBuilder")}`,
-          `old details ${versionOf("FieldOpsRFPathDetails")}`
+          `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
+          `legacy rf-panes.js ${versionOf("FieldOpsRFPanes")}`,
+          `rf-topology.js ${versionOf("FieldOpsRFTopology")}`,
+          `legacy rf-network-map.js ${versionOf("FieldOpsRFNetworkMap")}`,
+          `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
+          `legacy rf-path-details.js ${versionOf("FieldOpsRFPathDetails")}`
         ];
 
         toast.innerHTML = lines.join("<br>");
