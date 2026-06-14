@@ -1,10 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.91-delete-slot-junk
+   Version: 1.1.92-slot-frame-on-top
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, path pane shell styling, and visible path-details slot outline.
+   - Draw the path-details slot frame above the builder-rendered body so the receiving box remains visible.
    - Leave topology/graph drawing to rf-graph.css/js.
    - Leave selected path content data to rf-path-builder.js.
    ========================================================================== */
@@ -239,10 +240,26 @@
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.04),
     inset 0 0 12px rgba(255, 221, 160, 0.035);
+  isolation: isolate;
+}
+
+.rf-path-details-slot::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: 4;
+  pointer-events: none;
+  border: 1px solid rgba(255, 221, 160, 0.78);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 0 1px rgba(0, 0, 0, 0.18),
+    0 0 16px rgba(255, 221, 160, 0.10);
 }
 
 .rf-path-pane-body {
   position: relative;
+  z-index: 1;
   min-width: 0;
   min-height: 0;
   height: 100%;
