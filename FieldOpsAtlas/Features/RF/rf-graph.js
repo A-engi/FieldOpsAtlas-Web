@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.84-path-details-visible
+   Version: 1.1.85-path-toggle-button
 
    Purpose:
    - Render only the foreground RF graph SVG.
    - Keep RF backgrounds and static compass decoration out of the dynamic SVG.
    - Keep a stable viewBox so page resizing does not flatten paths or circles.
+   - Reflow when the RF path pane expands or collapses.
    - Match the SVG viewBox to the holder aspect ratio so the graph fills vertically without flattening.
    - Apply clearer top/left map insets and explicit node radius rules.
    - Own the static RF graph key so no extra key script is needed.
@@ -21,7 +22,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.84-path-details-visible";
+  const VERSION = "1.1.85-path-toggle-button";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -571,12 +572,37 @@
 
 
   /* ==========================================================================
-     8. Mount resize
+     8. Mount resize and path-pane reflow
 
      Ownership:
      - The interface shell stays in rf-interface.js.
-     - This renderer redraws when the graph holder changes size.
+     - Pane movement and styling stay in rf-interface.css.
+     - This renderer only listens for holder shape changes so the SVG redraws
+       cleanly when the pane changes the available graph area.
      ========================================================================== */
+
+  function bindGraphReflowTriggers(mount, scheduleRender) {
+    const mapPaper = mount.closest(".rf-map-paper");
+    const pathPane = mapPaper ? mapPaper.querySelector(".rf-path-pane") : null;
+
+    const scheduleReflowBurst = () => {
+      scheduleRender();
+      window.requestAnimationFrame(scheduleRender);
+      window.setTimeout(scheduleRender, 220);
+    };
+
+    if (mapPaper) {
+      mapPaper.addEventListener("fieldops:rf-path-pane-toggle", scheduleReflowBurst);
+    }
+
+    if (pathPane) {
+      pathPane.addEventListener("transitionend", (event) => {
+        if (event.propertyName === "transform" || event.propertyName === "right") {
+          scheduleReflowBurst();
+        }
+      });
+    }
+  }
 
   function initMount(mount) {
     if (!mount || mount.dataset.rfGraphInit === "true") {
@@ -606,6 +632,8 @@
       renderMount(mount, state.graph);
       attachGraphKey(mount);
     });
+
+    bindGraphReflowTriggers(mount, scheduleRender);
 
     if ("ResizeObserver" in window) {
       const observer = new ResizeObserver(scheduleRender);
