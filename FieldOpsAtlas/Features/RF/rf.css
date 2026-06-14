@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.48-fixed-key-original-halo
+   Version: 1.1.49-original-mesh-halo-fixed-key
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
@@ -231,8 +231,9 @@
 
 .demo-route,
 .demo-link-soft,
-.demo-node-halos .halo,
 .demo-node circle,
+.demo-original-halo circle,
+.demo-original-halo path,
 .demo-compass,
 .demo-compass path,
 .demo-legend {
@@ -295,19 +296,6 @@
 
 
 
-.demo-node-halos .halo {
-  opacity: 0.42;
-}
-
-.demo-node-halos .halo.core,
-.demo-node-halos .halo.main,
-.demo-node-halos .halo.remote {
-  fill: #e8d9a0;
-}
-
-.demo-node-halos .halo.relay {
-  fill: #ff5d32;
-}
 
 .demo-node circle.core,
 .demo-node circle.main {
@@ -344,6 +332,30 @@
 
 
 
+
+.demo-original-halo {
+  fill: none;
+  pointer-events: none;
+}
+
+.relay-halo-ring {
+  stroke: rgba(201, 42, 31, 0.24);
+  stroke-width: 1;
+}
+
+.relay-halo-ring.is-outer {
+  stroke: rgba(201, 42, 31, 0.18);
+}
+
+.relay-halo-line {
+  stroke: rgba(201, 42, 31, 0.18);
+  stroke-width: 0.7;
+}
+
+.relay-halo-line.strong {
+  stroke: rgba(201, 42, 31, 0.26);
+  stroke-width: 0.9;
+}
 
 .demo-label {
   fill: #071c32;
