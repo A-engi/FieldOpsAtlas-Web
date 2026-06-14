@@ -1,8 +1,8 @@
 /* ==========================================================================
    FieldOps Atlas RF background
    File: FieldOpsAtlas/Features/RF/background.css
-   Version: 1.1.68-rf-layout-stability
-   Purpose: RF page background, RF canvas, reserved Services/Equipment row, and RF topology pane background.
+   Version: 1.1.75-background-only
+   Purpose: RF page background, RF canvas, and RF topology pane background.
    ========================================================================== */
 
 /* ==========================================================================
@@ -190,6 +190,6 @@ body {
   min-height: 0;
   padding: 7px;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(108px, auto);
-  gap: 6px;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
 }
