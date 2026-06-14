@@ -1,13 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.82-restore-map-filters
+   Version: 1.1.85-snipsnip-checked
 
    Purpose:
-   - Own RF interface layout, panels, cards, controls, path pane shell styling,
-     recent cards, Services panel, and Equipment panel.
-   - Leave topology/graph drawing to rf-topology.css/js.
-   - Leave selected path content data to rf-path-builder.js.
+   - Own visible RF interface layout, panels, cards, controls, recent cards,
+     Services panel, and Equipment panel.
+   - Leave topology/graph drawing to rf-graph.css/js.
+   - Do not style the archived path-details pane, hidden toggle, or handle.
    ========================================================================== */
 
 /* ==========================================================================
@@ -89,7 +89,6 @@
     rgba(221, 190, 132, 0.34);
 }
 
-
 /* ==========================================================================
    2. Map holder and topology slot
    ========================================================================== */
@@ -103,8 +102,6 @@
 }
 
 .rf-map-paper {
-  --path-pane-width: clamp(142px, 35%, 158px);
-  --path-handle-width: 14px;
   position: relative;
   min-height: 0;
   overflow: hidden;
@@ -129,18 +126,10 @@
 
 .rf-map-stage {
   position: absolute;
-  top: 0;
-  right: calc(var(--path-pane-width) - var(--path-handle-width));
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 2;
   overflow: hidden;
-  border-radius: 12px 0 0 0;
-  transition: right 180ms ease;
-}
-
-.rf-path-toggle:not(:checked) ~ .rf-map-stage {
-  right: var(--path-handle-width);
+  border-radius: 12px 12px 0 0;
 }
 
 .rf-map-stage svg {
@@ -151,289 +140,7 @@
 }
 
 /* ==========================================================================
-   3. Path pane shell
-   ========================================================================== */
-
-.rf-path-toggle {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.rf-path-pane {
-  --path-pane-pad-x: 8px;
-  --path-pane-pad-y: 7px;
-  --path-row-gap: 5px;
-  --path-title-height: 23px;
-  --path-node-row-height: 43px;
-  --path-mid-height: minmax(122px, 1fr);
-  --path-node-size: 22px;
-  --path-node-icon-size: 9px;
-  --path-signal-width: 34px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 6;
-  width: var(--path-pane-width);
-  overflow: hidden;
-  color: #fff;
-  border: 1px solid rgba(237, 191, 99, 0.70);
-  border-radius: 0 12px 0 0;
-  background:
-    radial-gradient(circle at 48% 0%, rgba(255, 215, 115, 0.10), transparent 34%),
-    linear-gradient(180deg, #061f38 0%, #011532 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    -6px 0 14px rgba(3, 10, 20, 0.20);
-  transform: translateX(0);
-  transition: transform 180ms ease;
-}
-
-.rf-path-toggle:not(:checked) ~ .rf-path-pane {
-  transform: translateX(calc(100% - var(--path-handle-width)));
-}
-
-.rf-path-handle {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: var(--path-handle-width);
-  display: grid;
-  place-items: center;
-  color: #ffdda0;
-  cursor: pointer;
-  border-right: 1px solid rgba(237, 191, 99, 0.32);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)),
-    rgba(4, 16, 30, 0.78);
-}
-
-.rf-path-handle-icon {
-  width: 8px;
-  height: 14px;
-  object-fit: contain;
-  transition: transform 180ms ease;
-}
-
-.rf-path-toggle:not(:checked) ~ .rf-path-pane .rf-path-handle-icon {
-  transform: rotate(180deg);
-}
-
-/* ==========================================================================
-   4. Path detail content from rf-path-builder.js
-   ========================================================================== */
-
-.rf-path-pane-body {
-  position: absolute;
-  inset: 0 0 0 var(--path-handle-width);
-  min-height: 0;
-  height: 100%;
-  padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
-  display: grid;
-  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  grid-template-rows:
-    var(--path-title-height)
-    var(--path-node-row-height)
-    var(--path-mid-height)
-    var(--path-node-row-height);
-  column-gap: 7px;
-  row-gap: var(--path-row-gap);
-  overflow: hidden;
-}
-
-.rf-path-pane-title {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  min-width: 0;
-  padding-bottom: 4px;
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
-  align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.rf-path-title-wave {
-  width: 18px;
-  height: 10px;
-  display: block;
-  object-fit: contain;
-}
-
-.rf-path-pane-title span {
-  min-width: 0;
-  overflow: hidden;
-  color: #f8d892;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 9px;
-  font-weight: 950;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.rf-path-site {
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: var(--path-node-size) minmax(0, 1fr);
-  align-items: center;
-  gap: 9px;
-}
-
-.rf-path-site.is-from {
-  grid-column: 1 / -1;
-  grid-row: 2;
-}
-
-.rf-path-site.is-to {
-  grid-column: 1 / -1;
-  grid-row: 4;
-}
-
-.rf-path-mast {
-  width: var(--path-node-size);
-  height: var(--path-node-size);
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(109, 246, 80, 0.60);
-  border-radius: 50%;
-  background: rgba(12, 62, 65, 0.42);
-  box-shadow: 0 0 12px rgba(103, 255, 82, 0.18);
-}
-
-.rf-path-site.is-to .rf-path-mast {
-  border-color: rgba(255, 102, 92, 0.70);
-  background: rgba(67, 32, 43, 0.42);
-  box-shadow: 0 0 12px rgba(255, 102, 92, 0.16);
-}
-
-.rf-path-mast img {
-  width: var(--path-node-icon-size);
-  height: var(--path-node-icon-size);
-  object-fit: contain;
-}
-
-.rf-path-site-copy {
-  min-width: 0;
-  display: grid;
-  gap: 1px;
-}
-
-.rf-path-site-copy small {
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 5.6px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.rf-path-site-copy b {
-  min-width: 0;
-  overflow: hidden;
-  color: #fff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 8px;
-  font-weight: 950;
-  letter-spacing: 0.02em;
-  line-height: 0.92;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.rf-path-mid {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  gap: 8px;
-  align-items: center;
-  overflow: hidden;
-}
-
-.rf-path-signal-vertical {
-  width: var(--path-signal-width);
-  height: min(138px, 100%);
-  display: block;
-  object-fit: contain;
-}
-
-.rf-path-frequency {
-  min-width: 0;
-  align-self: center;
-  display: grid;
-  gap: 4px;
-}
-
-.rf-path-frequency strong {
-  color: #fff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 14px;
-  font-weight: 950;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.rf-path-frequency > span {
-  color: rgba(255, 255, 255, 0.70);
-  font-size: 5.6px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.rf-path-data {
-  margin: 3px 0 0;
-  display: grid;
-  gap: 0;
-}
-
-.rf-path-data div {
-  min-width: 0;
-  min-height: 15px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 5px;
-  border-top: 1px solid rgba(255, 255, 255, 0.11);
-}
-
-.rf-path-data dt {
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 5.5px;
-  font-weight: 900;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-}
-
-.rf-path-data dd {
-  margin: 0;
-  color: #fff;
-  font-size: 5.7px;
-  font-weight: 950;
-  white-space: nowrap;
-}
-
-.rf-path-data i {
-  width: 5px;
-  height: 5px;
-  margin-right: 3px;
-  display: inline-block;
-  border-radius: 50%;
-  background: #75ff36;
-  box-shadow: 0 0 8px rgba(117, 255, 54, 0.74);
-  vertical-align: middle;
-}
-
-/* ==========================================================================
-   5. Recent cards
+   3. Recent cards
    ========================================================================== */
 
 .rf-recent {
@@ -554,7 +261,7 @@
 }
 
 /* ==========================================================================
-   6. Services and equipment panels
+   4. Services and equipment panels
    ========================================================================== */
 
 .rf-interface-panels {
@@ -677,14 +384,13 @@
 }
 
 /* ==========================================================================
-   7. Small screens
+   5. Small screens
    ========================================================================== */
 
 @media (max-width: 380px) {
   .rf-network {
     grid-template-rows: 24px minmax(0, 1fr) 122px;
   }
-
 
   .rf-map-recent {
     grid-template-rows: minmax(0, 1fr) 68px;
@@ -712,4 +418,4 @@
   }
 }
 
-/* End of FieldOpsAtlas/Features/RF/rf-interface.css */
+/* End of FieldOpsAtlas/Features/RF/rf-interface.css | bottom/end of file */
