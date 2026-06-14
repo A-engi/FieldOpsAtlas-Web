@@ -1,17 +1,57 @@
 /* ==========================================================================
    FieldOps Atlas RF pane styles
    File: FieldOpsAtlas/Features/RF/rf-pane.css
-   Version: 1.1.41-path-details-top-lock
+   Version: 1.1.51-pane-panel-css-home
 
    Purpose:
    - Own RF path details pane styling.
    - Keep the path pane layered above the dynamic map.
    - Keep the map holder beside the pane when the pane is open.
    - Keep the detail body absolutely positioned inside the pane.
+   - Own RF page panels, pop-up-style surfaces, recent cards, services, equipment, and map holder.
    ========================================================================== */
 
 /* ==========================================================================
-   1. Map holder relationship to pane
+   1. Map paper and holder panel
+   ========================================================================== */
+
+.rf-map-recent {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 72px;
+  gap: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+}
+
+.rf-map-paper {
+  --path-pane-width: clamp(142px, 35%, 158px);
+  --path-handle-width: 14px;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(130, 91, 22, 0.14);
+  border-bottom: 0;
+  border-radius: 13px 13px 0 0;
+  background: #f8ecd2;
+}
+
+.rf-map-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ==========================================================================
+   2. Map holder relationship to pane
    ========================================================================== */
 
 .rf-map-stage {
@@ -30,8 +70,15 @@
   right: var(--path-handle-width);
 }
 
+.rf-map-stage svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
 /* ==========================================================================
-   2. Toggle and pane shell
+   3. Toggle and pane shell
    ========================================================================== */
 
 .rf-path-toggle {
@@ -103,9 +150,8 @@
 }
 
 /* ==========================================================================
-   3. Deferred path details body
+   4. Deferred path details body
    ========================================================================== */
-
 
 .rf-path-pane-body {
   position: absolute;
@@ -157,7 +203,7 @@
 }
 
 /* ==========================================================================
-   4. Path site blocks
+   5. Path site blocks
    ========================================================================== */
 
 .rf-path-site {
@@ -235,7 +281,7 @@
 }
 
 /* ==========================================================================
-   5. Frequency and path data
+   6. Frequency and path data
    ========================================================================== */
 
 .rf-path-mid {
@@ -321,4 +367,246 @@
   background: #8cff43;
   box-shadow: 0 0 6px rgba(140, 255, 67, 0.74);
   vertical-align: middle;
+}
+
+.rf-small-title,
+.rf-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   7. Recent, services, and equipment panels
+   ========================================================================== */
+
+.rf-recent {
+  min-height: 0;
+  padding: 6px 8px;
+  display: grid;
+  grid-template-rows: 18px minmax(0, 1fr);
+  gap: 5px;
+  border: 1px solid rgba(130, 91, 22, 0.14);
+  border-radius: 0 0 13px 13px;
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.rf-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rf-recent-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.rf-clock {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border: 2px solid #071c32;
+  border-radius: 50%;
+  position: relative;
+}
+
+.rf-clock::before,
+.rf-clock::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  border-radius: 99px;
+  background: #071c32;
+  transform-origin: bottom center;
+}
+
+.rf-clock::before {
+  height: 5px;
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.rf-clock::after {
+  height: 4px;
+  transform: translateX(-50%) rotate(120deg);
+}
+
+.rf-viewall {
+  color: #071c32;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.rf-recent-grid {
+  min-width: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rf-recent-card {
+  min-width: 0;
+  padding: 4px 5px;
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+  color: var(--rf-button-text);
+  border: 1px solid rgba(255, 207, 105, 0.46);
+  border-radius: 9px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.10), transparent 48%),
+    linear-gradient(180deg, var(--rf-button-blue-dark-top), var(--rf-button-blue-dark-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 5px 10px rgba(2, 9, 20, 0.12);
+  text-decoration: none;
+}
+
+.rf-recent-card img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.rf-recent-name {
+  display: block;
+  overflow: hidden;
+  color: var(--rf-button-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6.6px;
+  font-weight: 800;
+  line-height: 0.96;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.42);
+}
+
+.rf-status {
+  display: block;
+  margin-top: 1px;
+  color: #9bf7ff;
+  font-size: 6px;
+  line-height: 1;
+  text-decoration: underline;
+}
+
+.rf-bottom {
+  flex: 0 0 auto;
+  min-height: 0;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  gap: 8px;
+}
+
+.rf-small {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(130, 91, 22, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.50);
+}
+
+.rf-small-title {
+  margin-bottom: 8px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.rf-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #071c32;
+  font-size: 6.3px;
+}
+
+.rf-table th {
+  padding: 3px 4px 5px 0;
+  color: rgba(7, 28, 50, 0.58);
+  font-size: 5.4px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(130, 91, 22, 0.16);
+}
+
+.rf-table td {
+  padding: 4px 4px 4px 0;
+  border-bottom: 1px solid rgba(130, 91, 22, 0.12);
+  white-space: nowrap;
+}
+
+.rf-table a {
+  color: #091f7e;
+}
+
+.rf-equipment {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.rf-equipment-item {
+  min-width: 0;
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  color: var(--rf-button-text);
+  border: 1px solid var(--rf-button-cyan-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 46%),
+    linear-gradient(180deg, var(--rf-button-blue-top), var(--rf-button-blue-mid) 48%, var(--rf-button-blue-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 6px 12px rgba(2, 9, 20, 0.13);
+  text-align: center;
+  text-decoration: underline;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.38);
+}
+
+.rf-equipment-item:nth-child(2) {
+  border-color: var(--rf-button-gold-border);
+}
+
+.rf-equipment-item strong {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.rf-equipment-item span {
+  color: rgba(245, 251, 255, 0.90);
+  font-size: 6.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   8. Small-screen panel rules
+   ========================================================================== */
+
+@media (max-width: 380px) {
+  .rf-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-equipment-item {
+    min-height: 42px;
+  }
 }
