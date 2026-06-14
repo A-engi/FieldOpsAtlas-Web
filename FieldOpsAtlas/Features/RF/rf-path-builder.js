@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.74-path-builder-global-fix
+   Version: 1.1.79-path-title-icon-fit
 
    Purpose:
    - Build the selected RF path model from topology, site, service, and path data.
@@ -15,7 +15,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.74-path-builder-global-fix";
+  const VERSION = "1.1.79-path-title-icon-fit";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const PANE_SELECTOR = ".rf-path-pane";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
@@ -26,7 +26,7 @@
   <header class="rf-path-pane-title">
     <img
       class="rf-path-title-wave"
-      src="../../../data/icons/path-builder-wave.svg"
+      src="../../../data/icons/path-details-wave.svg"
       alt=""
       aria-hidden="true"
       loading="lazy"
