@@ -1,14 +1,14 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.75-interface-owned-service-strip
+   Version: 1.1.76-interface-panels-restored
 
    Purpose:
    - Own RF path details pane styling.
    - Keep the path pane layered above the dynamic map.
    - Keep the map holder beside the pane when the pane is open.
    - Keep the detail body absolutely positioned inside the pane.
-   - Own RF interface elements: path pane, panels, cards, pop-up-style surfaces, visible service strip, section switcher, controls, buttons, tabs, and RF detail-page cards/lists/metrics.
+   - Own RF interface elements: path pane, panels, cards, pop-up-style surfaces, visible service strip, restored Services/Equipment panel row, section switcher, controls, buttons, tabs, and RF detail-page cards/lists/metrics.
    ========================================================================== */
 
 /* ==========================================================================
@@ -512,6 +512,16 @@
   }
 }
 
+
+.rf-interface-panels {
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.rf-interface-panels .rf-bottom {
+  height: 100%;
+}
+
 /* ==========================================================================
    7. Recent, services, and equipment panels
    ========================================================================== */
@@ -635,8 +645,8 @@
 }
 
 .rf-bottom {
-  min-height: 108px;
-  max-height: 148px;
+  min-height: 118px;
+  max-height: 150px;
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
