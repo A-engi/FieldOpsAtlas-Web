@@ -1,8 +1,8 @@
 /* ==========================================================================
    FieldOps Atlas RF background
    File: FieldOpsAtlas/Features/RF/background.css
-   Version: 1.1.57-background-canvas-only
-   Purpose: RF page background, RF canvas, and RF network map pane background.
+   Version: 1.1.60-visible-services-row
+   Purpose: RF page background, RF canvas, visible Services/Equipment row, and RF network map pane background.
    ========================================================================== */
 
 /* ==========================================================================
@@ -189,6 +189,7 @@ body {
   height: 100%;
   min-height: 0;
   padding: 7px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
 }
