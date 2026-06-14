@@ -1,191 +1,115 @@
-/* ==========================================================================
-   FieldOps Atlas RF interface
-   File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.79-clean-interface-panels
+* ==========================================================================
+   FieldOps Atlas RF path builder
+   File: FieldOpsAtlas/Features/RF/rf-path-builder.js
+   Version: 1.1.79-path-title-icon-fit
 
    Purpose:
-   - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All controls, service type filter,
-     map holder, recent cards, Services panel, Equipment panel, and path pane shell.
-   - Leave topology/graph drawing to rf-topology.js.
-   - Leave selected path data/body rendering to rf-path-builder.js.
+   - Build the selected RF path model from topology, site, service, and path data.
+   - Currently renders the demo selected-path values until topology/site/service data is wired.
+   - Keep pane shell, controls, and styling in rf-interface.js / rf-interface.css.
+   - Render the built path model into the existing RF interface pane.
+   - Do not create an empty mount or placeholder.
+   - Remove duplicate path-builder bodies before rendering.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.79-clean-interface-panels";
-
-  const HOME_SELECTOR = ".rf-home";
+  const VERSION = "1.1.79-path-title-icon-fit";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
-  const MAP_STAGE_SELECTOR = ".rf-map-stage";
+  const PANE_SELECTOR = ".rf-path-pane";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
+  const PATH_BUILDER_READY_CLASS = "is-path-builder-ready";
 
-  const PATH_TOGGLE_TEMPLATE = String.raw`
-<input
-  class="rf-path-toggle"
-  id="rfPathPaneToggle"
-  type="checkbox"
-  checked
-  aria-label="Toggle path details"
->
-`;
-
-  const MAIN_INTERFACE_TEMPLATE = String.raw`
-<section class="rf-network" aria-labelledby="rfNetworkTitle" data-rf-interface-main>
-  <div class="rf-network-head">
-    <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
-    <div class="rf-tabs" aria-label="Network layer filter">
-      <button class="rf-tab is-active" type="button">RF</button>
-      <button class="rf-tab" type="button">IP</button>
-      <button class="rf-tab" type="button">MW</button>
-      <button class="rf-tab" type="button">All</button>
-    </div>
-  </div>
-
-  <section class="rf-service-type-filter" aria-labelledby="rfServiceTypeFilterTitle" data-rf-service-type-filter>
-    <div class="rf-filter-handle" aria-hidden="true"></div>
-    <h2 class="rf-service-type-title" id="rfServiceTypeFilterTitle">Service type filter</h2>
-    <div class="rf-service-type-actions">
-      <a class="rf-service-type-pill is-dtt" href="../RFPages/dtt.html">
-        <b>DTT</b>
-        <span>MUX 1</span>
-      </a>
-      <a class="rf-service-type-pill is-dab" href="../RFPages/dab.html">
-        <b>DAB</b>
-        <span>National</span>
-      </a>
-      <a class="rf-service-type-pill is-fm" href="../RFPages/fm.html">
-        <b>FM</b>
-        <span>Service</span>
-      </a>
-      <a class="rf-service-type-pill is-equipment" href="../RFPages/equipment.html">
-        <b>EQ</b>
-        <span>Kit</span>
-      </a>
-    </div>
-  </section>
-
-  <div class="rf-map-recent">
-    <div class="rf-map-paper">
-      <div
-        class="rf-map-stage"
-        id="rfMapStage"
-        data-rf-topology
-        role="img"
-        aria-label="RF topology graph"
-      ></div>
-    </div>
-
-    <section class="rf-recent" aria-labelledby="rfRecentTitle">
-      <div class="rf-recent-head">
-        <h2 class="rf-recent-title" id="rfRecentTitle">
-          <span class="rf-clock" aria-hidden="true"></span>
-          <span>Recently opened</span>
-        </h2>
-        <a class="rf-viewall" href="../RFPages/sites.html">View all</a>
-      </div>
-
-      <div class="rf-recent-grid">
-        <a class="rf-recent-card" href="../RFPages/sites.html">
-          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span>
-            <span class="rf-recent-name">Hilltop<br>Relay</span>
-            <span class="rf-status">Online</span>
-          </span>
-        </a>
-
-        <a class="rf-recent-card" href="../RFPages/sites.html">
-          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span>
-            <span class="rf-recent-name">Ridgeway<br>Relay</span>
-            <span class="rf-status">Online</span>
-          </span>
-        </a>
-
-        <a class="rf-recent-card" href="../RFPages/sites.html">
-          <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span>
-            <span class="rf-recent-name">London<br>Core</span>
-            <span class="rf-status">Online</span>
-          </span>
-        </a>
-
-        <a class="rf-recent-card" href="../RFPages/sites.html">
-          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span>
-            <span class="rf-recent-name">Pinewood<br>Remote</span>
-            <span class="rf-status">Online</span>
-          </span>
-        </a>
-      </div>
-    </section>
-  </div>
-
-  <section class="rf-interface-panels" aria-label="RF services and equipment panels" data-rf-interface-panels>
-    <section class="rf-panel rf-services-panel" aria-labelledby="rfServicesPanelTitle">
-      <h3 class="rf-panel-title" id="rfServicesPanelTitle">Services</h3>
-      <div class="rf-services-table" role="table" aria-label="Service status">
-        <div class="rf-services-table-head" role="row">
-          <span role="columnheader">Service</span>
-          <span role="columnheader">Type</span>
-          <span role="columnheader">Status</span>
-        </div>
-
-        <a class="rf-service-row" href="../RFPages/dtt.html" role="row">
-          <span role="cell">DTT MUX 1</span>
-          <span role="cell">DTT</span>
-          <b role="cell">Online</b>
-        </a>
-
-        <a class="rf-service-row" href="../RFPages/dab.html" role="row">
-          <span role="cell">DAB National</span>
-          <span role="cell">DAB</span>
-          <b role="cell">Online</b>
-        </a>
-
-        <a class="rf-service-row" href="../RFPages/fm.html" role="row">
-          <span role="cell">FM Service</span>
-          <span role="cell">FM</span>
-          <b role="cell">Online</b>
-        </a>
-      </div>
-    </section>
-
-    <section class="rf-panel rf-equipment-panel" aria-labelledby="rfEquipmentPanelTitle">
-      <h3 class="rf-panel-title" id="rfEquipmentPanelTitle">Equipment</h3>
-      <div class="rf-equipment-grid">
-        <a class="rf-equipment-card" href="../RFPages/equipment.html">
-          <strong>2</strong>
-          <span>TX</span>
-        </a>
-        <a class="rf-equipment-card" href="../RFPages/sites.html">
-          <strong>3</strong>
-          <span>ANT</span>
-        </a>
-        <a class="rf-equipment-card" href="../RFPages/paths.html">
-          <strong>2</strong>
-          <span>Links</span>
-        </a>
-      </div>
-    </section>
-  </section>
-</section>
-`;
-
-  const PATH_PANE_SHELL_TEMPLATE = String.raw`
-<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane>
-  <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
+  const PATH_BUILDER_BODY_TEMPLATE = String.raw`
+<div class="rf-path-pane-body">
+  <header class="rf-path-pane-title">
     <img
-      class="rf-path-handle-icon"
-      src="../../../data/icons/path-pane-chevron-gold.svg"
+      class="rf-path-title-wave"
+      src="../../../data/icons/path-details-wave.svg"
       alt=""
       aria-hidden="true"
       loading="lazy"
       decoding="async"
     >
-  </label>
-</aside>
+    <span>Path details</span>
+  </header>
+
+  <section class="rf-path-site is-from" aria-label="Source site">
+    <span class="rf-path-mast" aria-hidden="true">
+      <img
+        src="../../../data/icons/atlas-transmitter-gold.svg"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      >
+    </span>
+    <span class="rf-path-site-copy">
+      <small>From</small>
+      <b>North Ridge</b>
+      <b>TX Site</b>
+    </span>
+  </section>
+
+  <section class="rf-path-mid" aria-label="Selected RF path">
+    <img
+      class="rf-path-signal-vertical"
+      src="../../../data/icons/path-signal-glow.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
+
+    <div class="rf-path-frequency">
+      <strong>6.725 GHz</strong>
+      <span>Horizontal</span>
+
+      <dl class="rf-path-data">
+        <div>
+          <dt>Service</dt>
+          <dd>DTT 1</dd>
+        </div>
+        <div>
+          <dt>Band</dt>
+          <dd>28 MHz</dd>
+        </div>
+        <div>
+          <dt>Mode</dt>
+          <dd>64QAM</dd>
+        </div>
+        <div>
+          <dt>Power</dt>
+          <dd>18 dBm</dd>
+        </div>
+        <div>
+          <dt>Avail</dt>
+          <dd>99.98%</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><i aria-hidden="true"></i>Online</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="rf-path-site is-to" aria-label="Destination site">
+    <span class="rf-path-mast" aria-hidden="true">
+      <img
+        src="../../../data/icons/atlas-transmitter-gold.svg"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      >
+    </span>
+    <span class="rf-path-site-copy">
+      <small>To</small>
+      <b>Hilltop</b>
+      <b>Relay Site</b>
+    </span>
+  </section>
+</div>
 `;
 
   function makeFragment(html) {
@@ -194,85 +118,88 @@
     return template.content.cloneNode(true);
   }
 
-  function resetHome(root = document) {
-    const home = root.querySelector(HOME_SELECTOR);
-    if (!home) {
-      return null;
-    }
-
-    home.replaceChildren();
-    delete home.dataset.rfInterfaceInit;
-    return home;
+  function getMapPaper(root = document) {
+    return root.querySelector(MAP_PAPER_SELECTOR);
   }
 
-  function attachMainInterface(root = document) {
-    const home = root.querySelector(HOME_SELECTOR);
-    if (!home || home.dataset.rfInterfaceInit === "true") {
-      return;
-    }
-
-    home.appendChild(makeFragment(MAIN_INTERFACE_TEMPLATE));
-    home.dataset.rfInterfaceInit = "true";
+  function getPane(root = document) {
+    const mapPaper = getMapPaper(root);
+    return mapPaper ? mapPaper.querySelector(PANE_SELECTOR) : null;
   }
 
-  function resetPathPane(mapPaper) {
-    mapPaper
-      .querySelectorAll(":scope > .rf-path-toggle, :scope > .rf-path-pane")
+  function removeLegacyPathBuilderMounts(root = document) {
+    root
+      .querySelectorAll("[data-rf-path-builder-mount], [data-rf-path-builder-body]")
       .forEach((node) => node.remove());
-    delete mapPaper.dataset.rfInterfacePathPane;
   }
 
-  function attachPathPane(mapPaper) {
-    if (!mapPaper || mapPaper.dataset.rfInterfacePathPane === "true") {
+  function removeExistingBodies(pane) {
+    if (!pane) {
       return;
     }
 
-    const mapStage = mapPaper.querySelector(MAP_STAGE_SELECTOR);
-    if (!mapStage) {
-      return;
+    pane
+      .querySelectorAll(":scope > .rf-path-pane-body")
+      .forEach((body) => body.remove());
+  }
+
+  function renderPathBuilder(root = document) {
+    const mapPaper = getMapPaper(root);
+    const pane = getPane(root);
+
+    if (!mapPaper || !pane) {
+      return false;
     }
 
-    resetPathPane(mapPaper);
+    removeLegacyPathBuilderMounts(mapPaper);
+    removeExistingBodies(pane);
 
-    const toggleFragment = makeFragment(PATH_TOGGLE_TEMPLATE);
-    const paneFragment = makeFragment(PATH_PANE_SHELL_TEMPLATE);
-    const toggle = toggleFragment.querySelector(".rf-path-toggle");
-    const pane = paneFragment.querySelector(".rf-path-pane");
+    const fragment = makeFragment(PATH_BUILDER_BODY_TEMPLATE);
+    const body = fragment.querySelector(".rf-path-pane-body");
 
-    if (!toggle || !pane) {
-      return;
+    if (!body) {
+      return false;
     }
 
-    mapPaper.insertBefore(toggle, mapStage);
-    mapStage.insertAdjacentElement("afterend", pane);
-    mapPaper.dataset.rfInterfacePathPane = "true";
+    body.dataset.rfPathBuilderLoaded = "true";
+    body.dataset.rfPathBuilderVersion = VERSION;
 
-    mapPaper.dispatchEvent(new CustomEvent(PANE_READY_EVENT, {
+    pane.appendChild(body);
+    pane.dataset.rfPathBuilderLoaded = "true";
+    pane.dataset.rfPathBuilderVersion = VERSION;
+    mapPaper.classList.add(PATH_BUILDER_READY_CLASS);
+
+    mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-path-builder-ready", {
       bubbles: true,
       detail: {
         version: VERSION,
-        pane: "path-details"
+        pane: "path-builder"
       }
     }));
+
+    return true;
   }
 
-  function initAll(root = document) {
-    resetHome(root);
-    attachMainInterface(root);
+  function init() {
+    removeLegacyPathBuilderMounts();
 
-    root
-      .querySelectorAll(MAP_PAPER_SELECTOR)
-      .forEach(attachPathPane);
+    if (renderPathBuilder()) {
+      return;
+    }
+
+    document.addEventListener(PANE_READY_EVENT, () => {
+      renderPathBuilder();
+    }, { once: true });
   }
 
-  window.FieldOpsRFInterface = {
+  window.FieldOpsRFPathBuilder = {
     VERSION,
-    initAll
+    renderPathBuilder
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => initAll(), { once: true });
+    document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
-    initAll();
+    init();
   }
 })();
