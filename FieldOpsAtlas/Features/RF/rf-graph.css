@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF graph visuals
    File: FieldOpsAtlas/Features/RF/rf-graph.css
-   Version: 1.1.85-snipsnip-checked
+   Version: 1.1.84-path-details-visible
 
    Ownership:
    - Dynamic RF graph SVG styling.
@@ -160,6 +160,10 @@
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
+}
+
+.demo-label.hide-type .type {
+  display: none;
 }
 
 .demo-compass {
