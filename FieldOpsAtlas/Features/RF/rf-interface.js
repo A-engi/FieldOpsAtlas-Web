@@ -1,21 +1,25 @@
-/* ==========================================================================
+/* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.85-snipsnip-checked
+   Version: 1.1.84-path-details-visible
 
    Purpose:
-   - Own the visible RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All graph filter controls, map holder,
-     recent cards, Services panel, and Equipment panel.
+   - Own the RF interface shell and static RF UI.
+   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, visible path pane shell, recent cards, Services panel, and Equipment panel.
    - Leave graph drawing to rf-graph.js.
-   - Do not create the archived path-details pane, hidden toggle, or handle.
+   - Leave selected path data/body rendering to rf-path-builder.js.
+   - Keep Path details visible; do not create the old hidden checkbox, handle, or slide/collapse behaviour.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.85-snipsnip-checked";
+  const VERSION = "1.1.84-path-details-visible";
+
   const HOME_SELECTOR = ".rf-home";
+  const MAP_PAPER_SELECTOR = ".rf-map-paper";
+  const MAP_STAGE_SELECTOR = ".rf-map-stage";
+  const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
 
   const MAIN_INTERFACE_TEMPLATE = String.raw`
 <section class="rf-network" aria-labelledby="rfNetworkTitle" data-rf-interface-main>
@@ -28,7 +32,6 @@
       <button class="rf-tab" type="button">All</button>
     </div>
   </div>
-
   <div class="rf-map-recent">
     <div class="rf-map-paper">
       <div
@@ -136,6 +139,10 @@
 </section>
 `;
 
+  const PATH_PANE_SHELL_TEMPLATE = String.raw`
+<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane></aside>
+`;
+
   function makeFragment(html) {
     const template = document.createElement("template");
     template.innerHTML = html.trim();
@@ -163,9 +170,51 @@
     home.dataset.rfInterfaceInit = "true";
   }
 
+  function resetPathPane(mapPaper) {
+    mapPaper
+      .querySelectorAll(":scope > .rf-path-pane")
+      .forEach((node) => node.remove());
+    delete mapPaper.dataset.rfInterfacePathPane;
+  }
+
+  function attachPathPane(mapPaper) {
+    if (!mapPaper || mapPaper.dataset.rfInterfacePathPane === "true") {
+      return;
+    }
+
+    const mapStage = mapPaper.querySelector(MAP_STAGE_SELECTOR);
+    if (!mapStage) {
+      return;
+    }
+
+    resetPathPane(mapPaper);
+
+    const paneFragment = makeFragment(PATH_PANE_SHELL_TEMPLATE);
+    const pane = paneFragment.querySelector(".rf-path-pane");
+
+    if (!pane) {
+      return;
+    }
+
+    mapStage.insertAdjacentElement("afterend", pane);
+    mapPaper.dataset.rfInterfacePathPane = "true";
+
+    mapPaper.dispatchEvent(new CustomEvent(PANE_READY_EVENT, {
+      bubbles: true,
+      detail: {
+        version: VERSION,
+        pane: "path-details"
+      }
+    }));
+  }
+
   function initAll(root = document) {
     resetHome(root);
     attachMainInterface(root);
+
+    root
+      .querySelectorAll(MAP_PAPER_SELECTOR)
+      .forEach(attachPathPane);
   }
 
   window.FieldOpsRFInterface = {
