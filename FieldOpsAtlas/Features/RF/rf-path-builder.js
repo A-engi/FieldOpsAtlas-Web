@@ -1,29 +1,30 @@
 /* ==========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.84-path-details-visible
+   Version: 1.1.86-path-slot-visible
 
    Purpose:
    - Build the selected RF path model from topology, site, service, and path data.
    - Currently renders the demo selected-path values until topology/site/service data is wired.
    - Keep pane shell, controls, and styling in rf-interface.js / rf-interface.css.
    - Render the built path model into the existing RF interface pane.
-   - Do not create an empty mount or placeholder.
+   - Use the visible path details slot from rf-interface.js.
    - Remove duplicate path-builder bodies before rendering.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.84-path-details-visible";
+  const VERSION = "1.1.86-path-slot-visible";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const PANE_SELECTOR = ".rf-path-pane";
+  const PATH_DETAILS_SLOT_SELECTOR = "[data-rf-path-details]";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
   const PATH_BUILDER_READY_CLASS = "is-path-builder-ready";
 
   const PATH_BUILDER_BODY_TEMPLATE = String.raw`
 <div class="rf-path-pane-body">
-  <header class="rf-path-pane-title" id="rfPathPaneTitle">
+  <header class="rf-path-pane-title">
     <img
       class="rf-path-title-wave"
       src="../../../data/icons/path-details-wave.svg"
@@ -127,32 +128,41 @@
     return mapPaper ? mapPaper.querySelector(PANE_SELECTOR) : null;
   }
 
+  function getPathDetailsSlot(pane) {
+    return pane ? pane.querySelector(PATH_DETAILS_SLOT_SELECTOR) : null;
+  }
+
   function removeLegacyPathBuilderMounts(root = document) {
     root
       .querySelectorAll("[data-rf-path-builder-mount], [data-rf-path-builder-body]")
       .forEach((node) => node.remove());
   }
 
-  function removeExistingBodies(pane) {
-    if (!pane) {
-      return;
+  function removeExistingBodies(pane, slot) {
+    if (pane) {
+      pane
+        .querySelectorAll(":scope > .rf-path-pane-body")
+        .forEach((body) => body.remove());
     }
 
-    pane
-      .querySelectorAll(":scope > .rf-path-pane-body")
-      .forEach((body) => body.remove());
+    if (slot) {
+      slot
+        .querySelectorAll(":scope > .rf-path-pane-body")
+        .forEach((body) => body.remove());
+    }
   }
 
   function renderPathBuilder(root = document) {
     const mapPaper = getMapPaper(root);
     const pane = getPane(root);
+    const slot = getPathDetailsSlot(pane);
 
-    if (!mapPaper || !pane) {
+    if (!mapPaper || !pane || !slot) {
       return false;
     }
 
     removeLegacyPathBuilderMounts(mapPaper);
-    removeExistingBodies(pane);
+    removeExistingBodies(pane, slot);
 
     const fragment = makeFragment(PATH_BUILDER_BODY_TEMPLATE);
     const body = fragment.querySelector(".rf-path-pane-body");
@@ -164,8 +174,9 @@
     body.dataset.rfPathBuilderLoaded = "true";
     body.dataset.rfPathBuilderVersion = VERSION;
 
-    pane.appendChild(body);
-    pane.setAttribute("aria-labelledby", "rfPathPaneTitle");
+    slot.replaceChildren(body);
+    slot.dataset.rfPathBuilderLoaded = "true";
+    slot.dataset.rfPathBuilderVersion = VERSION;
     pane.dataset.rfPathBuilderLoaded = "true";
     pane.dataset.rfPathBuilderVersion = VERSION;
     mapPaper.classList.add(PATH_BUILDER_READY_CLASS);
@@ -204,3 +215,5 @@
     init();
   }
 })();
+
+/* End of FieldOpsAtlas/Features/RF/rf-path-builder.js | bottom/end of file */
