@@ -3,85 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.76</title>
+  <title>FieldOps Atlas RF v1.1.77</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
   <link rel="stylesheet" href="./rf-topology.css?v=1.1.73-exact-new-file-names">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.76-interface-panels-restored">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.77-interface-owns-all-ui">
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.76">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.77">
     <section class="content-canvas" aria-label="RF Atlas content">
-      <article class="rf-home">
-        <section class="rf-network" aria-labelledby="rfNetworkTitle">
-          <div class="rf-network-head">
-            <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
-            <div class="rf-tabs" aria-label="Network layer filter">
-              <span class="rf-tab is-active">RF</span>
-              <span class="rf-tab">IP</span>
-              <span class="rf-tab">MW</span>
-              <span class="rf-tab">All</span>
-            </div>
-          </div>
-
-          <div class="rf-map-recent">
-            <div class="rf-map-paper">
-              <div
-                class="rf-map-stage"
-                id="rfMapStage"
-                data-rf-topology
-                role="img"
-                aria-label="RF network map"
-              ></div>
-            </div>
-
-            <section class="rf-recent" aria-labelledby="rfRecentTitle">
-              <div class="rf-recent-head">
-                <h2 class="rf-recent-title" id="rfRecentTitle">
-                  <span class="rf-clock" aria-hidden="true"></span>
-                  <span>Recently opened</span>
-                </h2>
-                <a class="rf-viewall" href="../RFPages/sites.html">View all</a>
-              </div>
-
-              <div class="rf-recent-grid">
-                <a class="rf-recent-card" href="../RFPages/sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Hilltop<br>Relay</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
-
-                <a class="rf-recent-card" href="../RFPages/sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Ridgeway<br>Relay</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
-
-                <a class="rf-recent-card" href="../RFPages/sites.html">
-                  <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">London<br>Core</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
-
-                <a class="rf-recent-card" href="../RFPages/sites.html">
-                  <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                  <span>
-                    <span class="rf-recent-name">Pinewood<br>Remote</span>
-                    <span class="rf-status">Online</span>
-                  </span>
-                </a>
-              </div>
-            </section>
-          </div>
-        </section>
-
-      </article>
+      <article class="rf-home" data-rf-interface-root></article>
     </section>
   </main>
 
@@ -173,7 +104,7 @@
         {
           id: "path-north-ridge-hilltop",
           title: "North Ridge to Hilltop",
-          subtitle: "Selected RF path · 6.725 GHz",
+          subtitle: "Selected RF path Â· 6.725 GHz",
           href: "../RFPages/paths.html#north-ridge-hilltop",
           keywords: ["north ridge", "hilltop", "6.725", "ghz", "horizontal", "path"]
         }
@@ -182,16 +113,16 @@
   </script>
 
   <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-interface.js?v=1.1.76-interface-panels-restored" defer></script>
+  <script src="./rf-interface.js?v=1.1.77-interface-owns-all-ui" defer></script>
   <script src="./rf-topology.js?v=1.1.73-exact-new-file-names" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.67-rf-path-builder-rename" defer></script>
+  <script src="./rf-path-builder.js?v=1.1.74-path-builder-global-fix" defer></script>
   <script>
-    /* RF load toast | Version: 1.1.76-interface-panels-restored */
+    /* RF load toast | Version: 1.1.77-interface-owns-all-ui */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.76";
-      const TOAST_VERSION = "1.1.76-interface-panels-restored";
+      const PAGE_VERSION = "1.1.77";
+      const TOAST_VERSION = "1.1.77-interface-owns-all-ui";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -236,7 +167,7 @@
         const lines = [
           `index.html ${PAGE_VERSION}`,
           `background.css 1.1.75-background-only`,
-          `rf-interface.css 1.1.76-interface-panels-restored`,
+          `rf-interface.css 1.1.77-interface-owns-all-ui`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-topology.css 1.1.73-exact-new-file-names`,
           `rf-topology.js ${versionOf("FieldOpsRFTopology")}`,
