@@ -1,28 +1,28 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.76-interface-panels-restored
+   Version: 1.1.77-interface-owns-all-ui
 
    Purpose:
-   - Own RF interface shell behaviour.
-   - Insert the invisible path-pane toggle and visible pane handle.
-   - Insert the visible RF service strip for DTT/DAB/FM/Equipment links.
-   - Restore the Services/Equipment panel row as interface-owned markup.
+   - Own RF interface shell behaviour and UI markup.
+   - Insert RF title/tabs, map holder, service strip, recent cards, Services/Equipment panels, and path pane shell.
    - Do not render 6 GHz/path detail text.
-   - Do not render a details mount or placeholder.
-   - Keep the pane shell out of normal layout flow.
+   - Do not calculate selected path data.
+   - Keep path data rendering in rf-path-builder.js.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.76-interface-panels-restored";
+  const VERSION = "1.1.77-interface-owns-all-ui";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
   const NETWORK_SELECTOR = ".rf-network";
   const NETWORK_HEAD_SELECTOR = ".rf-network-head";
   const RECENT_SELECTOR = ".rf-recent";
   const CANVAS_SELECTOR = ".content-canvas";
+  const HOME_SELECTOR = ".rf-home";
+  const MAP_RECENT_SELECTOR = ".rf-map-recent";
 
   const PATH_TOGGLE_TEMPLATE = String.raw`
 <input
@@ -34,6 +34,77 @@
 >
 `;
 
+
+
+  const MAIN_INTERFACE_TEMPLATE = String.raw`
+<section class="rf-network" aria-labelledby="rfNetworkTitle" data-rf-interface-main>
+  <div class="rf-network-head">
+    <h1 class="rf-title" id="rfNetworkTitle">RF network map</h1>
+    <div class="rf-tabs" aria-label="Network layer filter">
+      <button class="rf-tab is-active" type="button">RF</button>
+      <button class="rf-tab" type="button">IP</button>
+      <button class="rf-tab" type="button">MW</button>
+      <button class="rf-tab" type="button">All</button>
+    </div>
+  </div>
+
+  <div class="rf-map-recent">
+    <div class="rf-map-paper">
+      <div
+        class="rf-map-stage"
+        id="rfMapStage"
+        data-rf-topology
+        role="img"
+        aria-label="RF topology"
+      ></div>
+    </div>
+
+    <section class="rf-recent" aria-labelledby="rfRecentTitle">
+      <div class="rf-recent-head">
+        <h2 class="rf-recent-title" id="rfRecentTitle">
+          <span class="rf-clock" aria-hidden="true"></span>
+          <span>Recently opened</span>
+        </h2>
+        <a class="rf-viewall" href="../RFPages/sites.html">View all</a>
+      </div>
+
+      <div class="rf-recent-grid">
+        <a class="rf-recent-card" href="../RFPages/sites.html">
+          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          <span>
+            <span class="rf-recent-name">Hilltop<br>Relay</span>
+            <span class="rf-status">Online</span>
+          </span>
+        </a>
+
+        <a class="rf-recent-card" href="../RFPages/sites.html">
+          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          <span>
+            <span class="rf-recent-name">Ridgeway<br>Relay</span>
+            <span class="rf-status">Online</span>
+          </span>
+        </a>
+
+        <a class="rf-recent-card" href="../RFPages/sites.html">
+          <img src="../../../data/icons/atlas-transmitter-gold.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          <span>
+            <span class="rf-recent-name">London<br>Core</span>
+            <span class="rf-status">Online</span>
+          </span>
+        </a>
+
+        <a class="rf-recent-card" href="../RFPages/sites.html">
+          <img src="../../../data/icons/sites.svg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          <span>
+            <span class="rf-recent-name">Pinewood<br>Remote</span>
+            <span class="rf-status">Online</span>
+          </span>
+        </a>
+      </div>
+    </section>
+  </div>
+</section>
+`;
 
   const SERVICE_STRIP_TEMPLATE = String.raw`
 <section class="rf-service-strip" aria-labelledby="rfServicesTitle" data-rf-service-strip>
@@ -58,7 +129,6 @@
   </div>
 </section>
 `;
-
 
   const INTERFACE_PANELS_TEMPLATE = String.raw`
 <section class="rf-interface-panels" aria-label="RF services and equipment panels" data-rf-interface-panels>
@@ -98,6 +168,7 @@
 </section>
 `;
 
+
   const PATH_PANE_SHELL_TEMPLATE = String.raw`
 <aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane>
   <label class="rf-path-handle" for="rfPathPaneToggle" aria-label="Collapse path details">
@@ -117,6 +188,22 @@
     const template = document.createElement("template");
     template.innerHTML = html.trim();
     return template.content.cloneNode(true);
+  }
+
+
+  function attachMainInterface(root = document) {
+    const home = root.querySelector(HOME_SELECTOR);
+    if (!home || home.dataset.rfInterfaceMain === "true") {
+      return;
+    }
+
+    home
+      .querySelectorAll(":scope > .rf-network, :scope > .rf-interface-panels")
+      .forEach((node) => node.remove());
+
+    const fragment = makeFragment(MAIN_INTERFACE_TEMPLATE);
+    home.appendChild(fragment);
+    home.dataset.rfInterfaceMain = "true";
   }
 
   function removeLegacyPaneMounts(root) {
@@ -166,16 +253,16 @@
 
 
   function attachInterfacePanels(root = document) {
-    const canvas = root.querySelector(CANVAS_SELECTOR);
-    if (!canvas || canvas.dataset.rfInterfacePanels === "true") {
+    const network = root.querySelector(NETWORK_SELECTOR);
+    if (!network || network.dataset.rfInterfacePanels === "true") {
       return;
     }
 
-    canvas
+    network
       .querySelectorAll(":scope > .rf-interface-panels")
       .forEach((panel) => panel.remove());
 
-    const recent = canvas.querySelector(RECENT_SELECTOR);
+    const mapRecent = network.querySelector(MAP_RECENT_SELECTOR);
     const panelFragment = makeFragment(INTERFACE_PANELS_TEMPLATE);
     const panel = panelFragment.querySelector(".rf-interface-panels");
 
@@ -183,13 +270,13 @@
       return;
     }
 
-    if (recent) {
-      recent.insertAdjacentElement("afterend", panel);
+    if (mapRecent) {
+      mapRecent.insertAdjacentElement("afterend", panel);
     } else {
-      canvas.appendChild(panel);
+      network.appendChild(panel);
     }
 
-    canvas.dataset.rfInterfacePanels = "true";
+    network.dataset.rfInterfacePanels = "true";
   }
 
   function attachPathPane(mapPaper) {
@@ -227,6 +314,7 @@
   }
 
   function initAll(root = document) {
+    attachMainInterface(root);
     removeLegacyPaneMounts(root);
     removeLegacyServicePanels(root);
     attachServiceStrip(root);
