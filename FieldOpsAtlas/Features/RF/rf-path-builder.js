@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.90-textbox-slot
+   Version: 1.1.91-delete-slot-junk
 
    Purpose:
    - Build the selected RF path model from topology, site, service, and path data.
@@ -9,15 +9,14 @@
    - Keep pane shell, controls, and styling in rf-interface.js / rf-interface.css.
    - Render the built path model into the existing RF interface pane.
    - Use the visible path details slot from rf-interface.js.
-   - Keep the visible slot marker as the textbox label.
-   - Paste the real path details body into that visible slot.
+   - Paste the real path details body into the permanent visible slot from rf-interface.js.
    - Remove duplicate path-builder bodies before rendering.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.90-textbox-slot";
+  const VERSION = "1.1.91-delete-slot-junk";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const PANE_SELECTOR = ".rf-path-pane";
   const PATH_DETAILS_SLOT_SELECTOR = "[data-rf-path-details]";
