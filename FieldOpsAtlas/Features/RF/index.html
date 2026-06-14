@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.59</title>
+  <title>FieldOps Atlas RF v1.1.61</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
-  <link rel="stylesheet" href="./background.css?v=1.1.57-background-canvas-only">
+  <link rel="stylesheet" href="./background.css?v=1.1.60-visible-services-row">
   <link rel="stylesheet" href="./rf-map.css?v=1.1.52-map-visual-css-split">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.59-rf-interface-css-home">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.60-visible-services-row">
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.59">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.61">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home">
         <section class="rf-network" aria-labelledby="rfNetworkTitle">
@@ -231,16 +231,16 @@
   </script>
 
   <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-panes.js?v=1.1.37-shell-only" defer></script>
+  <script src="./rf-interface.js?v=1.1.61-rf-interface-js-rename" defer></script>
   <script src="./rf-network-map.js?v=1.1.49-restore-original-mesh-halo" defer></script>
   <script src="./rf-path-details.js?v=1.1.41-render-on-pane-ready-once" defer></script>
   <script>
-    /* RF load toast | Version: 1.1.59-load-rf-interface */
+    /* RF load toast | Version: 1.1.61-load-rf-interface-js */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.59";
-      const TOAST_VERSION = "1.1.59-load-rf-interface";
+      const PAGE_VERSION = "1.1.61";
+      const TOAST_VERSION = "1.1.61-load-rf-interface-js";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -285,7 +285,7 @@
         const lines = [
           `RF index v${PAGE_VERSION}`,
           `toast ${TOAST_VERSION}`,
-          `panes ${versionOf("FieldOpsRFPanes")}`,
+          `interface ${versionOf("FieldOpsRFInterface")}`,
           `map ${versionOf("FieldOpsRFNetworkMap")}`,
           `details ${versionOf("FieldOpsRFPathDetails")}`
         ];
