@@ -1,12 +1,13 @@
-# Archived RF path details panel
+Archived RF path details pane renderer
 
 Archived from the active RF page during the Snipsnip clean-up.
 
 Source page version before removal: RF v1.1.83
-Archived active file: FieldOpsAtlas/Features/RF/rf-path-builder.js v1.1.79-path-title-icon-fit
-Reason: the selected path details pane and handle were sliding off the RF page and were removed so the RF map can be rebuilt cleanly later.
+Archived source file: `FieldOpsAtlas/Features/RF/rf-path-builder.js` v1.1.79-path-title-icon-fit
 
-The active page no longer loads this builder. The replacement active rf-path-builder.js is a no-op safety shim only.
+Reason: the previous visible Path details pane, handle, and slide/collapse shell were drifting off the RF page. That view layer has been removed from the active page so the RF map can be tidied and a cleaner visible section can be rebuilt later.
+
+Important: the active `rf-path-builder.js` should **not** be deleted or reduced to a no-op. It remains as a data-only path model builder/fetcher and creates no DOM. This archive is only for the old pane-rendering markup.
 
 ```js
 /* ==========================================================================
