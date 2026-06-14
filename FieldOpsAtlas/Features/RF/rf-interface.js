@@ -1,19 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.86-path-slot-visible
+   Version: 1.1.87-visible-boxes
 
    Purpose:
    - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and visible path pane shell.
+   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and visible path pane shell and visible path-details slot marker.
    - Leave graph drawing to rf-graph.js.
-   - Leave selected path data/body rendering to rf-path-builder.js.
+   - Leave selected path data/body rendering to rf-path-builder.js; this interface file does not fetch path data.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.86-path-slot-visible";
+  const VERSION = "1.1.87-visible-boxes";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
@@ -165,9 +165,13 @@
     role="group"
     aria-label="Path details content"
   >
-    <div class="rf-path-placeholder" data-rf-path-placeholder>
-      <strong>Path details</strong>
-      <span>Waiting for path builder</span>
+    <div
+      class="rf-path-placeholder"
+      data-rf-path-placeholder
+      aria-label="Visible interface placeholder for path-builder content"
+    >
+      <strong>Interface path box</strong>
+      <span>Visible slot â builder fills below</span>
     </div>
   </div>
 </aside>
