@@ -1,25 +1,26 @@
-/* ===========================================================================
+/* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.84-path-details-visible
+   Version: 1.1.85-path-toggle-button
 
    Purpose:
    - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, visible path pane shell, recent cards, Services panel, and Equipment panel.
+   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and visible path pane shell.
    - Leave graph drawing to rf-graph.js.
    - Leave selected path data/body rendering to rf-path-builder.js.
-   - Keep Path details visible; do not create the old hidden checkbox, handle, or slide/collapse behaviour.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.84-path-details-visible";
+  const VERSION = "1.1.85-path-toggle-button";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
+  const PANE_TOGGLE_EVENT = "fieldops:rf-path-pane-toggle";
+  const PANE_COLLAPSED_CLASS = "is-path-pane-collapsed";
 
   const MAIN_INTERFACE_TEMPLATE = String.raw`
 <section class="rf-network" aria-labelledby="rfNetworkTitle" data-rf-interface-main>
@@ -140,7 +141,24 @@
 `;
 
   const PATH_PANE_SHELL_TEMPLATE = String.raw`
-<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane></aside>
+<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane>
+  <button
+    class="rf-path-handle"
+    type="button"
+    aria-label="Collapse path details"
+    aria-expanded="true"
+    data-rf-path-handle
+  >
+    <img
+      class="rf-path-handle-icon"
+      src="../../../data/icons/path-pane-chevron-gold.svg"
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    >
+  </button>
+</aside>
 `;
 
   function makeFragment(html) {
@@ -175,6 +193,39 @@
       .querySelectorAll(":scope > .rf-path-pane")
       .forEach((node) => node.remove());
     delete mapPaper.dataset.rfInterfacePathPane;
+    mapPaper.classList.remove(PANE_COLLAPSED_CLASS);
+  }
+
+  function syncPathHandleState(mapPaper, handle) {
+    const collapsed = mapPaper.classList.contains(PANE_COLLAPSED_CLASS);
+    handle.setAttribute("aria-expanded", String(!collapsed));
+    handle.setAttribute(
+      "aria-label",
+      collapsed ? "Expand path details" : "Collapse path details"
+    );
+  }
+
+  function bindPathHandle(mapPaper, pane) {
+    const handle = pane.querySelector("[data-rf-path-handle]");
+    if (!handle) {
+      return;
+    }
+
+    syncPathHandleState(mapPaper, handle);
+
+    handle.addEventListener("click", () => {
+      mapPaper.classList.toggle(PANE_COLLAPSED_CLASS);
+      syncPathHandleState(mapPaper, handle);
+
+      mapPaper.dispatchEvent(new CustomEvent(PANE_TOGGLE_EVENT, {
+        bubbles: true,
+        detail: {
+          version: VERSION,
+          collapsed: mapPaper.classList.contains(PANE_COLLAPSED_CLASS),
+          pane: "path-details"
+        }
+      }));
+    });
   }
 
   function attachPathPane(mapPaper) {
@@ -197,6 +248,7 @@
     }
 
     mapStage.insertAdjacentElement("afterend", pane);
+    bindPathHandle(mapPaper, pane);
     mapPaper.dataset.rfInterfacePathPane = "true";
 
     mapPaper.dispatchEvent(new CustomEvent(PANE_READY_EVENT, {
