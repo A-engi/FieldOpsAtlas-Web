@@ -1,12 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF page
    File: FieldOpsAtlas/Features/RF/rf.css
-   Version: 1.1.50-muted-rf-buttons
+   Version: 1.1.51-pane-panel-css-split
 
    Ownership:
    - Root shell owns top buttons, search, drawer, filter, and bottom nav.
-   - RF owns the RF canvas, network map, path pane, recent cards, services, and equipment.
-   - The RF map background is an external SVG asset in FieldOpsAtlas/Resources/Logos.
+   - RF owns the RF canvas, network map SVG visuals, key, and RF button accents.
+   - Pane, popup, panel, card, services, equipment, and map-holder styles live in rf-pane.css.
    ========================================================================== */
 
 /* ==========================================================================
@@ -105,9 +105,7 @@
   padding: 0 3px;
 }
 
-.rf-title,
-.rf-small-title,
-.rf-recent-title {
+.rf-title {
   margin: 0;
   color: #071c32;
   font-family: Georgia, "Times New Roman", serif;
@@ -159,70 +157,8 @@
 }
 
 /* ==========================================================================
-   3. Map and path pane
-   ========================================================================== */
-
-.rf-map-recent {
-  min-height: 0;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) 72px;
-  gap: 0;
-  overflow: hidden;
-  border: 0;
-  background: transparent;
-}
-
-.rf-map-paper {
-  --path-pane-width: clamp(142px, 35%, 158px);
-  --path-handle-width: 14px;
-  position: relative;
-  min-height: 0;
-  overflow: hidden;
-  isolation: isolate;
-  border: 1px solid rgba(130, 91, 22, 0.14);
-  border-bottom: 0;
-  border-radius: 13px 13px 0 0;
-  background: #f8ecd2;
-}
-
-.rf-map-background {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
-}
-
-.rf-map-stage {
-  position: absolute;
-  top: 0;
-  right: calc(var(--path-pane-width) - var(--path-handle-width));
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  overflow: hidden;
-  border-radius: 12px 0 0 0;
-  transition: right 180ms ease;
-}
-
-.rf-path-toggle:not(:checked) ~ .rf-map-stage {
-  right: var(--path-handle-width);
-}
-
-/* ==========================================================================
    4. RF network map SVG
    ========================================================================== */
-
-.rf-map-stage svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
 
 .rf-network-map-svg {
   max-width: 100%;
@@ -286,15 +222,9 @@
 }
 
 
-
-
-
 .demo-node {
   color: #fff7de;
 }
-
-
-
 
 
 .demo-node circle.core,
@@ -324,4 +254,273 @@
   filter:
     drop-shadow(0 0 5px rgba(255, 218, 123, 0.48))
     drop-shadow(0 0 12px rgba(255, 94, 51, 0.30));
+}
+
+
+.demo-original-halo {
+  fill: none;
+  pointer-events: none;
+}
+
+.relay-halo-ring {
+  stroke: rgba(201, 42, 31, 0.24);
+  stroke-width: 1;
+}
+
+.relay-halo-ring.is-outer {
+  stroke: rgba(201, 42, 31, 0.18);
+}
+
+.relay-halo-line {
+  stroke: rgba(201, 42, 31, 0.18);
+  stroke-width: 0.7;
+}
+
+.relay-halo-line.strong {
+  stroke: rgba(201, 42, 31, 0.26);
+  stroke-width: 0.9;
+}
+
+.demo-label {
+  fill: #071c32;
+  paint-order: stroke;
+  stroke: rgba(255, 248, 231, 0.88);
+  stroke-width: 7px;
+  stroke-linejoin: round;
+}
+
+.demo-label .name {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.demo-label .type {
+  fill: rgba(7, 28, 50, 0.58);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.demo-label.hide-type .type {
+  display: none;
+}
+
+.demo-compass {
+  fill: none;
+  stroke: rgba(130, 91, 22, 0.18);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-compass text {
+  fill: rgba(130, 91, 22, 0.36);
+  stroke: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.demo-legend {
+  fill: rgba(255, 255, 255, 0.56);
+  stroke: rgba(130, 91, 22, 0.14);
+  stroke-width: 1;
+}
+
+.demo-legend-text {
+  fill: #071c32;
+  stroke: none;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   RF map key
+   ========================================================================== */
+
+.rf-map-key {
+  --rf-map-key-strip-height: 20px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 50%;
+  height: var(--rf-map-key-strip-height);
+  min-height: 0;
+  padding: 2px 7px;
+  display: grid;
+  grid-template-columns: auto minmax(0, max-content);
+  align-items: center;
+  justify-content: start;
+  column-gap: 6px;
+  color: rgba(7, 31, 56, 0.74);
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0 7px 0 0;
+  background: rgba(255, 248, 232, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 -2px 6px rgba(28, 18, 6, 0.03);
+  pointer-events: none;
+}
+
+.rf-map-key-title {
+  color: rgba(7, 31, 56, 0.62);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 5.7px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-map-key-list {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  align-items: center;
+  justify-content: start;
+  column-gap: 5px;
+  row-gap: 1px;
+  list-style: none;
+}
+
+.rf-map-key-list li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 9px max-content;
+  align-items: center;
+  gap: 2px;
+  color: rgba(7, 31, 56, 0.60);
+  font-size: 4.4px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-map-key-swatch {
+  width: 5px;
+  height: 5px;
+  justify-self: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.rf-map-key-swatch.is-core {
+  background: rgba(0, 130, 150, 0.76);
+  box-shadow: 0 0 0 1px rgba(0, 130, 150, 0.11);
+}
+
+.rf-map-key-swatch.is-relay {
+  background: rgba(210, 128, 28, 0.78);
+  box-shadow: 0 0 0 1px rgba(210, 128, 28, 0.11);
+}
+
+.rf-map-key-line {
+  width: 8px;
+  height: 0;
+  justify-self: center;
+  display: block;
+  border-top: 1.1px solid rgba(7, 31, 56, 0.46);
+}
+
+.rf-map-key-line.is-selected {
+  border-top-color: rgba(201, 126, 28, 0.78);
+}
+
+.rf-map-key-line.is-standby {
+  border-top-style: dashed;
+  border-top-color: rgba(7, 31, 56, 0.36);
+}
+
+/* ==========================================================================
+   RF muted button accents
+   ========================================================================== */
+
+.rf-page button,
+.rf-page .rf-action,
+.rf-page .rf-chip,
+.rf-page .rf-tab,
+.rf-page .rf-pill,
+.rf-page .rf-control,
+.rf-page .rf-toolbar button,
+.rf-page .rf-map-control,
+.rf-page [type="button"] {
+  --rf-button-bg: rgba(255, 248, 232, 0.76);
+  --rf-button-border: rgba(130, 91, 22, 0.22);
+  --rf-button-text: rgba(7, 31, 56, 0.78);
+  --rf-button-hover-bg: rgba(239, 228, 200, 0.88);
+  --rf-button-active-bg: rgba(221, 190, 132, 0.28);
+  --rf-button-accent: rgba(15, 111, 120, 0.82);
+  color: var(--rf-button-text);
+  border-color: var(--rf-button-border);
+}
+
+.rf-page button:not(.rf-path-handle):not(.rf-map-node-button):not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out),
+.rf-page .rf-action,
+.rf-page .rf-chip,
+.rf-page .rf-tab,
+.rf-page .rf-pill,
+.rf-page .rf-control,
+.rf-page .rf-toolbar button,
+.rf-page .rf-map-control,
+.rf-page [type="button"] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 248, 232, 0.18)),
+    var(--rf-button-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 4px 12px rgba(28, 18, 6, 0.08);
+}
+
+.rf-page button:not(.rf-path-handle):not(.rf-map-node-button):not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out):hover,
+.rf-page .rf-action:hover,
+.rf-page .rf-chip:hover,
+.rf-page .rf-tab:hover,
+.rf-page .rf-pill:hover,
+.rf-page .rf-control:hover,
+.rf-page .rf-toolbar button:hover,
+.rf-page .rf-map-control:hover,
+.rf-page [type="button"]:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 248, 232, 0.20)),
+    var(--rf-button-hover-bg);
+}
+
+.rf-page button.is-active,
+.rf-page button[aria-pressed="true"],
+.rf-page .rf-action.is-active,
+.rf-page .rf-chip.is-active,
+.rf-page .rf-tab.is-active,
+.rf-page .rf-pill.is-active,
+.rf-page .rf-control.is-active,
+.rf-page .rf-map-control.is-active {
+  color: rgba(7, 31, 56, 0.86);
+  border-color: rgba(15, 111, 120, 0.34);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 248, 232, 0.18)),
+    var(--rf-button-active-bg);
+}
+
+.rf-page a.button,
+.rf-page .button,
+.rf-page .primary,
+.rf-page .is-primary {
+  border-color: rgba(15, 111, 120, 0.34);
+  background:
+    linear-gradient(180deg, rgba(28, 127, 134, 0.16), rgba(15, 111, 120, 0.10)),
+    rgba(255, 248, 232, 0.72);
+  color: rgba(7, 31, 56, 0.84);
+}
+
+.rf-page :focus-visible {
+  outline-color: rgba(15, 111, 120, 0.60);
 }
