@@ -1,11 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.99-path-flush-boxes
+   Version: 1.1.100-mid-responsive-svg-fit
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
-   - Let the path-builder body sit flush in the pane, with From/To rows as boxes and the RF values using full width.
+   - Keep the existing path-builder middle details box snapped between From and To, with responsive text and room for the existing signal SVG.
    - Leave topology/graph drawing to rf-graph.css/js.
    - Leave selected path content data to rf-path-builder.js.
    ========================================================================== */
@@ -160,10 +160,10 @@
   --path-row-gap: 4px;
   --path-title-height: 22px;
   --path-node-row-height: 38px;
-  --path-mid-height: 104px;
+  --path-mid-height: 112px;
   --path-node-size: 21px;
   --path-node-icon-size: 9px;
-  --path-signal-width: 0px;
+  --path-signal-width: 24px;
   position: absolute;
   top: 0;
   right: 0;
@@ -224,7 +224,7 @@
 
 .rf-path-details-slot {
   position: absolute;
-  inset: 0 0 0 var(--path-handle-width);
+  inset: 7px 7px 7px calc(var(--path-handle-width) + 7px);
   z-index: 2;
   min-width: 0;
   min-height: 0;
@@ -239,23 +239,20 @@
   min-width: 0;
   min-height: 0;
   height: 100%;
-  padding: 6px;
-  display: grid;
-  grid-template-rows:
-    var(--path-title-height)
-    minmax(34px, auto)
-    minmax(0, 1fr)
-    minmax(34px, auto);
-  gap: 5px;
+  padding: 0;
+  display: block;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 0 11px 0 0;
-  background: rgba(1, 17, 39, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  background: rgba(1, 17, 39, 0.70);
 }
 
 .rf-path-pane-title {
-  grid-column: 1 / -1;
-  grid-row: 1;
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  left: 6px;
+  height: var(--path-title-height);
   min-width: 0;
   padding-bottom: 4px;
   display: grid;
@@ -288,25 +285,26 @@
 .rf-path-site {
   min-width: 0;
   min-height: 0;
-  padding: 4px 5px;
   display: grid;
   grid-template-columns: var(--path-node-size) minmax(0, 1fr);
   align-items: center;
-  gap: 7px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 221, 160, 0.34);
-  border-radius: 8px;
-  background: rgba(255, 221, 160, 0.028);
+  gap: 9px;
 }
 
 .rf-path-site.is-from {
-  grid-column: 1 / -1;
-  grid-row: 2;
+  position: absolute;
+  top: 36px;
+  right: 6px;
+  left: 6px;
+  height: var(--path-node-row-height);
 }
 
 .rf-path-site.is-to {
-  grid-column: 1 / -1;
-  grid-row: 4;
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  left: 6px;
+  height: var(--path-node-row-height);
 }
 
 .rf-path-mast {
@@ -340,7 +338,7 @@
 
 .rf-path-site-copy small {
   color: rgba(255, 255, 255, 0.62);
-  font-size: 4.9px;
+  font-size: 5.6px;
   font-weight: 900;
   letter-spacing: 0.14em;
   line-height: 1;
@@ -362,22 +360,29 @@
 }
 
 .rf-path-mid {
-  grid-column: 1 / -1;
-  grid-row: 3;
+  position: absolute;
+  top: 78px;
+  right: 0;
+  bottom: 46px;
+  left: 2px;
   min-width: 0;
   min-height: 0;
-  padding: 5px 6px;
+  padding: 4px 5px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
+  gap: 5px;
   align-items: center;
   overflow: hidden;
   border: 1px solid rgba(255, 221, 160, 0.48);
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
   background: rgba(255, 221, 160, 0.035);
 }
 
 .rf-path-signal-vertical {
-  display: none;
+  width: var(--path-signal-width);
+  height: min(82px, 100%);
+  display: block;
+  object-fit: contain;
 }
 
 .rf-path-frequency {
@@ -389,21 +394,27 @@
 }
 
 .rf-path-frequency strong {
+  min-width: 0;
   color: #fff;
+  overflow: hidden;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 9.8px;
+  font-size: clamp(8px, 2.8vw, 10.8px);
   font-weight: 950;
   line-height: 1;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .rf-path-frequency > span {
   color: rgba(255, 255, 255, 0.70);
-  font-size: 5.6px;
+  overflow: hidden;
+  font-size: clamp(4.7px, 1.25vw, 5.4px);
   font-weight: 900;
   letter-spacing: 0.14em;
   line-height: 1;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .rf-path-data {
@@ -414,8 +425,8 @@
 
 .rf-path-data div {
   min-width: 0;
-  min-height: 14px;
-  padding: 2px 0 1px;
+  min-height: 13px;
+  padding: 1px 0 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
@@ -424,19 +435,23 @@
 }
 
 .rf-path-data dt {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 4.8px;
+  color: rgba(255, 255, 255, 0.60);
+  overflow: hidden;
+  font-size: clamp(4.4px, 1.25vw, 5px);
   font-weight: 900;
   letter-spacing: 0.10em;
   line-height: 1;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .rf-path-data dd {
   margin: 0;
+  min-width: 0;
   color: #fff;
   overflow: hidden;
-  font-size: 5.8px;
+  font-size: clamp(5.2px, 1.45vw, 6px);
   font-weight: 950;
   line-height: 1;
   text-overflow: ellipsis;
