@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.85-snipsnip-checked
+   Version: 1.1.84-path-details-visible
 
    Purpose:
    - Render only the foreground RF graph SVG.
@@ -21,7 +21,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.85-snipsnip-checked";
+  const VERSION = "1.1.84-path-details-visible";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -407,7 +407,7 @@
     const labelY = clamp(node.y + dy, 18, viewBox.height - 18);
 
     const labelText = svg("text", {
-      class: `demo-label ${node.type || "site"}`,
+      class: `demo-label ${node.type || "site"}${tight ? " hide-type" : ""}`,
       x: labelX,
       y: labelY,
       "text-anchor": anchor
@@ -416,13 +416,10 @@
     const name = svg("tspan", { class: "name", x: labelX, y: labelY });
     name.append(text(node.name || node.id));
 
-    labelText.append(name);
+    const type = svg("tspan", { class: "type", x: labelX, dy: 18 });
+    type.append(text(typeLabel(node.type)));
 
-    if (!tight) {
-      const type = svg("tspan", { class: "type", x: labelX, dy: 18 });
-      type.append(text(typeLabel(node.type)));
-      labelText.append(type);
-    }
+    labelText.append(name, type);
     return labelText;
   }
 
@@ -578,10 +575,8 @@
 
      Ownership:
      - The interface shell stays in rf-interface.js.
-     - This renderer only listens for holder shape changes so the SVG redraws
-       cleanly when the graph holder changes size.
+     - This renderer redraws when the graph holder changes size.
      ========================================================================== */
-
 
   function initMount(mount) {
     if (!mount || mount.dataset.rfGraphInit === "true") {
