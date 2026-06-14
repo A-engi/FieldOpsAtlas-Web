@@ -1,11 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.100-mid-responsive-svg-fit
+   Version: 1.1.101-mid-svg-right-fit
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
-   - Keep the existing path-builder middle details box snapped between From and To, with responsive text and room for the existing signal SVG.
+   - Keep the existing path-builder middle details box full width, with the signal SVG restored on the left and values aligned on the right.
    - Leave topology/graph drawing to rf-graph.css/js.
    - Leave selected path content data to rf-path-builder.js.
    ========================================================================== */
@@ -163,7 +163,7 @@
   --path-mid-height: 112px;
   --path-node-size: 21px;
   --path-node-icon-size: 9px;
-  --path-signal-width: 24px;
+  --path-signal-width: 28px;
   position: absolute;
   top: 0;
   right: 0;
@@ -364,23 +364,24 @@
   top: 78px;
   right: 0;
   bottom: 46px;
-  left: 2px;
+  left: 0;
   min-width: 0;
   min-height: 0;
-  padding: 4px 5px;
+  padding: 4px 4px 4px 3px;
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
-  gap: 5px;
+  gap: 4px;
   align-items: center;
   overflow: hidden;
   border: 1px solid rgba(255, 221, 160, 0.48);
+  border-right-color: rgba(255, 221, 160, 0.62);
   border-radius: 8px 0 0 8px;
   background: rgba(255, 221, 160, 0.035);
 }
 
 .rf-path-signal-vertical {
   width: var(--path-signal-width);
-  height: min(82px, 100%);
+  height: min(84px, 100%);
   display: block;
   object-fit: contain;
 }
@@ -396,23 +397,19 @@
 .rf-path-frequency strong {
   min-width: 0;
   color: #fff;
-  overflow: hidden;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(8px, 2.8vw, 10.8px);
+  font-size: clamp(7.4px, 2.25vw, 9.8px);
   font-weight: 950;
   line-height: 1;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .rf-path-frequency > span {
   color: rgba(255, 255, 255, 0.70);
-  overflow: hidden;
-  font-size: clamp(4.7px, 1.25vw, 5.4px);
+  font-size: clamp(4.5px, 1.18vw, 5.2px);
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   line-height: 1;
-  text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -425,23 +422,23 @@
 
 .rf-path-data div {
   min-width: 0;
-  min-height: 13px;
+  min-height: 11px;
   padding: 1px 0 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: 1px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
   border-top: 1px solid rgba(255, 255, 255, 0.11);
 }
 
 .rf-path-data dt {
+  min-width: 0;
   color: rgba(255, 255, 255, 0.60);
   overflow: hidden;
-  font-size: clamp(4.4px, 1.25vw, 5px);
+  font-size: clamp(4.3px, 1.12vw, 4.8px);
   font-weight: 900;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.08em;
   line-height: 1;
-  text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -450,11 +447,10 @@
   margin: 0;
   min-width: 0;
   color: #fff;
-  overflow: hidden;
-  font-size: clamp(5.2px, 1.45vw, 6px);
+  font-size: clamp(4.7px, 1.22vw, 5.5px);
   font-weight: 950;
   line-height: 1;
-  text-overflow: ellipsis;
+  text-align: right;
   white-space: nowrap;
 }
 
