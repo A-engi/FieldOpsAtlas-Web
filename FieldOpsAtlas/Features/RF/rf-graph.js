@@ -1,13 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.83-rename-graph-files
+   Version: 1.1.85-snipsnip-checked
 
    Purpose:
    - Render only the foreground RF graph SVG.
    - Keep RF backgrounds and static compass decoration out of the dynamic SVG.
    - Keep a stable viewBox so page resizing does not flatten paths or circles.
-   - Reflow when the RF path pane changes the map holder size.
    - Match the SVG viewBox to the holder aspect ratio so the graph fills vertically without flattening.
    - Apply clearer top/left map insets and explicit node radius rules.
    - Own the static RF graph key so no extra key script is needed.
@@ -22,7 +21,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.83-rename-graph-files";
+  const VERSION = "1.1.85-snipsnip-checked";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-network-map.json";
 
@@ -408,7 +407,7 @@
     const labelY = clamp(node.y + dy, 18, viewBox.height - 18);
 
     const labelText = svg("text", {
-      class: `demo-label ${node.type || "site"}${tight ? " hide-type" : ""}`,
+      class: `demo-label ${node.type || "site"}`,
       x: labelX,
       y: labelY,
       "text-anchor": anchor
@@ -417,10 +416,13 @@
     const name = svg("tspan", { class: "name", x: labelX, y: labelY });
     name.append(text(node.name || node.id));
 
-    const type = svg("tspan", { class: "type", x: labelX, dy: 18 });
-    type.append(text(typeLabel(node.type)));
+    labelText.append(name);
 
-    labelText.append(name, type);
+    if (!tight) {
+      const type = svg("tspan", { class: "type", x: labelX, dy: 18 });
+      type.append(text(typeLabel(node.type)));
+      labelText.append(type);
+    }
     return labelText;
   }
 
@@ -572,38 +574,14 @@
 
 
   /* ==========================================================================
-     8. Mount resize and path-pane reflow
+     8. Mount resize
 
      Ownership:
      - The interface shell stays in rf-interface.js.
-     - Pane movement and styling stay in rf-interface.css.
      - This renderer only listens for holder shape changes so the SVG redraws
-       cleanly when the pane changes the available graph area.
+       cleanly when the graph holder changes size.
      ========================================================================== */
 
-  function bindGraphReflowTriggers(mount, scheduleRender) {
-    bindGraphReflowTriggers(mount, scheduleRender);
-
-    const mapPaper = mount.closest(".rf-map-paper");
-    const paneToggle = mapPaper ? mapPaper.querySelector(".rf-path-toggle") : null;
-    const pathPane = mapPaper ? mapPaper.querySelector(".rf-path-pane") : null;
-
-    if (paneToggle) {
-      paneToggle.addEventListener("change", () => {
-        scheduleRender();
-        window.requestAnimationFrame(scheduleRender);
-        window.setTimeout(scheduleRender, 220);
-      });
-    }
-
-    if (pathPane) {
-      pathPane.addEventListener("transitionend", (event) => {
-        if (event.propertyName === "transform" || event.propertyName === "right") {
-          scheduleRender();
-        }
-      });
-    }
-  }
 
   function initMount(mount) {
     if (!mount || mount.dataset.rfGraphInit === "true") {
@@ -634,11 +612,6 @@
       attachGraphKey(mount);
     });
 
-    const toggle = mount.closest(".rf-map-paper")?.querySelector(".rf-path-toggle");
-    if (toggle) {
-      toggle.addEventListener("change", scheduleRender);
-    }
-
     if ("ResizeObserver" in window) {
       const observer = new ResizeObserver(scheduleRender);
       observer.observe(mount);
@@ -666,4 +639,4 @@
   }
 })();
 
-/* End of FieldOpsAtlas/Features/RF/rf-graph.js */
+/* End of FieldOpsAtlas/Features/RF/rf-graph.js | bottom/end of file */
