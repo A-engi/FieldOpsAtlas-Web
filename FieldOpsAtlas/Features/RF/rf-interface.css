@@ -1,13 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.86-path-slot-visible
+   Version: 1.1.87-visible-boxes
 
    Purpose:
-   - Own RF interface layout, panels, cards, controls, visible path pane shell styling,
+   - Own RF interface layout, panels, cards, controls, visible path pane shell styling, visible slot/debug marker,
      recent cards, Services panel, and Equipment panel.
    - Leave topology/graph drawing to rf-graph.css/js.
-   - Leave selected path content data to rf-path-builder.js.
+   - Leave selected path content data to rf-path-builder.js; this stylesheet only makes the boxes visible.
    ========================================================================== */
 
 /* ==========================================================================
@@ -160,7 +160,7 @@
   --path-row-gap: 5px;
   --path-title-height: 23px;
   --path-node-row-height: 43px;
-  --path-mid-height: minmax(122px, 1fr);
+  --path-mid-height: minmax(84px, 1fr);
   --path-node-size: 22px;
   --path-node-icon-size: 9px;
   --path-signal-width: 34px;
@@ -227,7 +227,10 @@
   inset: 0 0 0 var(--path-handle-width);
   min-width: 0;
   min-height: 0;
+  padding: 7px 7px 7px 8px;
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 5px;
   color: #fff;
   border-left: 1px solid rgba(237, 191, 99, 0.22);
 }
@@ -235,21 +238,21 @@
 .rf-path-placeholder {
   min-width: 0;
   min-height: 0;
-  margin: 7px;
-  padding: 8px;
+  padding: 5px 6px;
   display: grid;
   place-content: center;
-  gap: 5px;
+  gap: 3px;
   text-align: center;
-  border: 1px dashed rgba(255, 221, 160, 0.54);
-  border-radius: 10px;
-  background: rgba(255, 221, 160, 0.07);
+  border: 1px dashed rgba(255, 221, 160, 0.72);
+  border-radius: 8px;
+  background: rgba(255, 221, 160, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .rf-path-placeholder strong {
   color: #f8d892;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 950;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -258,7 +261,7 @@
 
 .rf-path-placeholder span {
   color: rgba(255, 255, 255, 0.70);
-  font-size: 6px;
+  font-size: 5.5px;
   font-weight: 900;
   letter-spacing: 0.12em;
   line-height: 1.25;
@@ -269,8 +272,8 @@
   position: relative;
   min-width: 0;
   min-height: 0;
-  height: 100%;
-  padding: var(--path-pane-pad-y) 7px var(--path-pane-pad-y) var(--path-pane-pad-x);
+  height: auto;
+  padding: 5px 6px;
   display: grid;
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
   grid-template-rows:
@@ -281,6 +284,9 @@
   column-gap: 7px;
   row-gap: var(--path-row-gap);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .rf-path-pane-title {
