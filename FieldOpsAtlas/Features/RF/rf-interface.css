@@ -1,11 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.93-existing-slot-visible
+   Version: 1.1.94-path-mid-visible
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, path pane shell styling, and visible path-details slot outline.
    - Keep the real path-details receiving slot permanently visible by insetting it above the pane background.
+   - Keep the path-builder middle details visible after CSS loads.
    - Leave topology/graph drawing to rf-graph.css/js.
    - Leave selected path content data to rf-path-builder.js.
    ========================================================================== */
@@ -157,11 +158,11 @@
 .rf-path-pane {
   --path-pane-pad-x: 8px;
   --path-pane-pad-y: 7px;
-  --path-row-gap: 5px;
-  --path-title-height: 23px;
-  --path-node-row-height: 43px;
-  --path-mid-height: minmax(84px, 1fr);
-  --path-node-size: 22px;
+  --path-row-gap: 4px;
+  --path-title-height: 22px;
+  --path-node-row-height: 39px;
+  --path-mid-height: minmax(112px, 1fr);
+  --path-node-size: 21px;
   --path-node-icon-size: 9px;
   --path-signal-width: 34px;
   position: absolute;
@@ -375,27 +376,28 @@
   grid-template-columns: var(--path-signal-width) minmax(0, 1fr);
   gap: 8px;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .rf-path-signal-vertical {
   width: var(--path-signal-width);
-  height: min(138px, 100%);
+  height: min(116px, 100%);
   display: block;
   object-fit: contain;
 }
 
 .rf-path-frequency {
   min-width: 0;
+  min-height: 0;
   align-self: center;
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .rf-path-frequency strong {
   color: #fff;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 14px;
+  font-size: 12.8px;
   font-weight: 950;
   line-height: 1;
   white-space: nowrap;
@@ -411,14 +413,14 @@
 }
 
 .rf-path-data {
-  margin: 3px 0 0;
+  margin: 2px 0 0;
   display: grid;
   gap: 0;
 }
 
 .rf-path-data div {
   min-width: 0;
-  min-height: 15px;
+  min-height: 12px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -428,7 +430,7 @@
 
 .rf-path-data dt {
   color: rgba(255, 255, 255, 0.62);
-  font-size: 5.5px;
+  font-size: 5.1px;
   font-weight: 900;
   letter-spacing: 0.10em;
   text-transform: uppercase;
@@ -437,7 +439,7 @@
 .rf-path-data dd {
   margin: 0;
   color: #fff;
-  font-size: 5.7px;
+  font-size: 5.2px;
   font-weight: 950;
   white-space: nowrap;
 }
