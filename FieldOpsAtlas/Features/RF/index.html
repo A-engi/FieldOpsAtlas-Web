@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.114</title>
+  <title>FieldOps Atlas RF v1.1.116</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.114-pane-trim-measured-svg">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.115-site-pack-panel">
 
   <style>
     .rf-load-toast {
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.114">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.116">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -112,25 +112,25 @@
           keywords: ["services", "more", "dtt", "dab", "fm"]
         },
         {
-          id: "site-hilltop",
-          title: "Hilltop Relay",
-          subtitle: "Recently opened RF relay site",
-          href: "../RFPages/sites.html#hilltop",
-          keywords: ["hilltop", "relay", "site", "online"]
+          id: "site-1",
+          title: "Site 1",
+          subtitle: "Generic demo RF site",
+          href: "../RFPages/sites.html#site-1",
+          keywords: ["site", "site 1", "demo", "tx"]
         },
         {
-          id: "site-ridgeway",
-          title: "Ridgeway Relay",
-          subtitle: "Recently opened RF relay site",
-          href: "../RFPages/sites.html#ridgeway",
-          keywords: ["ridgeway", "relay", "site", "online"]
+          id: "site-2",
+          title: "Site 2",
+          subtitle: "Generic demo RF site",
+          href: "../RFPages/sites.html#site-2",
+          keywords: ["site", "site 2", "demo", "rx"]
         },
         {
-          id: "site-london-core",
-          title: "London Core",
-          subtitle: "Recently opened core TX site",
-          href: "../RFPages/sites.html#london-core",
-          keywords: ["london", "core", "tx", "site", "transmitter"]
+          id: "site-3",
+          title: "Site 3",
+          subtitle: "Generic demo RF site",
+          href: "../RFPages/sites.html#site-3",
+          keywords: ["site", "site 3", "demo", "relay"]
         }
       ]
     });
@@ -138,14 +138,15 @@
 
   <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
   <script src="./rf-interface.js?v=1.1.104-signal-chevron-handle" defer></script>
+  <script src="./rf-path-builder.js?v=1.1.116-generic-demo-builder" defer></script>
   <script src="./rf-graph.js?v=1.1.85-path-toggle-button" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.114-pane-trim-measured-svg */
+    /* RF load toast | Version: 1.1.116-generic-demo-builder */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.114-pane-trim-measured-svg";
+      const PAGE_VERSION = "1.1.116-generic-demo-builder";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -176,9 +177,10 @@
           "shell.css 1.1.12-single-rf-doc",
           "background.css 1.1.75-background-only",
           "rf-graph.css 1.1.83-rename-graph-files",
-          "rf-interface.css 1.1.114-pane-trim-measured-svg",
+          "rf-interface.css 1.1.115-site-pack-panel",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
+          `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
           `rf-graph.js ${versionOf("FieldOpsRFGraph")}`
         ];
 
