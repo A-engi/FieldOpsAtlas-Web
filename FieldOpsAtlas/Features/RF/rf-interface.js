@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.91-delete-slot-junk
+   Version: 1.1.104-signal-chevron-handle
 
    Purpose:
    - Own the RF interface shell and static RF UI.
-   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and path pane shell.
+   - Create the RF title, RF/IP/MW/All graph filter controls, map holder, recent cards, Services panel, Equipment panel, and a simple collapsible path pane.
+   - Use the signal-chevron handle icon from the icons folder.
    - Leave graph drawing to rf-graph.js.
-   - Leave selected path data/body rendering to rf-path-builder.js; this interface file does not fetch path data.
-   - Create the permanent empty path-details slot only; no fake placeholder text.
+   - Do not render or fetch selected path data in this version; the path pane is intentionally blank except for its title.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.91-delete-slot-junk";
+  const VERSION = "1.1.104-signal-chevron-handle";
 
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
@@ -142,7 +142,7 @@
 `;
 
   const PATH_PANE_SHELL_TEMPLATE = String.raw`
-<aside class="rf-path-pane" aria-label="Selected RF path details" data-rf-path-pane>
+<aside class="rf-path-pane" aria-labelledby="rfPathPaneTitle" data-rf-path-pane>
   <button
     class="rf-path-handle"
     type="button"
@@ -152,7 +152,7 @@
   >
     <img
       class="rf-path-handle-icon"
-      src="../../../data/icons/path-pane-chevron-gold.svg"
+      src="../../../data/icons/path-pane-signal-chevron-gold.svg"
       alt=""
       aria-hidden="true"
       loading="lazy"
@@ -160,12 +160,9 @@
     >
   </button>
 
-  <div
-    class="rf-path-details-slot"
-    data-rf-path-details
-    role="group"
-    aria-label="Selected path details content"
-  ></div>
+  <section class="rf-path-blank" aria-label="Path details panel">
+    <h2 class="rf-path-blank-title" id="rfPathPaneTitle">Path details</h2>
+  </section>
 </aside>
 `;
 
