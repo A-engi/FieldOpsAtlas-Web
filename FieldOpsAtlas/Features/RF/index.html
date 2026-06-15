@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.104</title>
+  <title>FieldOps Atlas RF v1.1.106</title>
+
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.104-signal-chevron-handle">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.106-path-pane-wide">
 
   <style>
     .rf-load-toast {
@@ -37,10 +38,10 @@
       transform: translateY(0);
     }
   </style>
-
 </head>
+
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.104">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.106">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -140,11 +141,11 @@
   <script src="./rf-graph.js?v=1.1.85-path-toggle-button" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.104-signal-chevron-handle */
+    /* RF load toast | Version: 1.1.106-path-pane-wide */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.104-signal-chevron-handle";
+      const PAGE_VERSION = "1.1.106-path-pane-wide";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -159,6 +160,7 @@
 
       function showToast() {
         const existingToast = document.getElementById(TOAST_ID);
+
         if (existingToast) {
           existingToast.remove();
         }
@@ -174,7 +176,7 @@
           "shell.css 1.1.12-single-rf-doc",
           "background.css 1.1.75-background-only",
           "rf-graph.css 1.1.83-rename-graph-files",
-          "rf-interface.css 1.1.104-signal-chevron-handle",
+          "rf-interface.css 1.1.106-path-pane-wide",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-graph.js ${versionOf("FieldOpsRFGraph")}`
@@ -205,8 +207,6 @@
       }
     })();
   </script>
-
 </body>
 </html>
-
 <!-- End of FieldOpsAtlas/Features/RF/index.html | bottom/end of file -->
