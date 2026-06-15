@@ -1,9 +1,9 @@
-<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="28" height="320" viewBox="0 0 28 320" fill="none">
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="28" height="420" viewBox="0 0 28 420" fill="none">
   <title>Path pane signal chevron</title>
-  <!-- Version: 1.1.113-longer-straights-sharp-tx -->
+  <!-- Version: 1.1.114-measured-straights-sharp-tx -->
 
   <defs>
-    <linearGradient id="signalPathGradient" x1="12" y1="8" x2="12" y2="308" gradientUnits="userSpaceOnUse">
+    <linearGradient id="signalPathGradient" x1="12" y1="8" x2="12" y2="408" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#8CFF43" />
       <stop offset="0.28" stop-color="#F5FF69" />
       <stop offset="0.43" stop-color="#F5FF69" />
@@ -40,19 +40,19 @@
   </defs>
 
   <path
-    d="M12 12V108
-       L8 120
-       L16 132
-       L11.4 138.9
-       M8 144
-       L24 160
-       L8 176
-       M11.4 181.1
-       L16 188
-       L8 200
-       L16 212
-       L12 224
-       V308"
+    d="M12 12V158
+       L8 170
+       L16 182
+       L11.4 188.9
+       M8 194
+       L24 210
+       L8 226
+       M11.4 231.1
+       L16 238
+       L8 250
+       L16 262
+       L12 274
+       V408"
     stroke="url(#signalPathGradient)"
     stroke-width="3.4"
     stroke-linecap="round"
@@ -62,7 +62,7 @@
 
   <g filter="url(#nodeGlow)">
     <circle cx="12" cy="12" r="11" fill="#102235" fill-opacity="0.94" stroke="#8CFF43" stroke-width="2" />
-    <circle cx="12" cy="308" r="11" fill="#102235" fill-opacity="0.94" stroke="#FF4432" stroke-width="2" />
+    <circle cx="12" cy="408" r="11" fill="#102235" fill-opacity="0.94" stroke="#FF4432" stroke-width="2" />
   </g>
 
   <g>
@@ -70,7 +70,7 @@
       <use href="#oneWaySignal" />
     </g>
 
-    <g transform="translate(12 308)">
+    <g transform="translate(12 408)">
       <use href="#oneWaySignal" />
     </g>
   </g>
