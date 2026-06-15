@@ -1,16 +1,17 @@
-* ==========================================================================
+/* ========================================================================== 
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.106-path-pane-wide
+   Version: 1.1.107-compact-path-details
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
-   - Render a wider collapsible blank path pane with a title only.
-   - Use the existing big glowy signal icon from the icons folder for the pane handle.
+   - Keep the collapsible path pane compact so it does not steal graph space.
+   - Use smaller path-detail typography/spacing instead of widening the pane.
+   - Use the signal chevron icon from the icons folder for the pane handle.
    - Leave topology/graph drawing to rf-graph.css/js.
    ========================================================================== */
 
-/* ==========================================================================
+/* ========================================================================== 
    1. RF interface layout
    ========================================================================== */
 
@@ -89,7 +90,7 @@
     rgba(221, 190, 132, 0.34);
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    2. Map holder and topology slot
    ========================================================================== */
 
@@ -102,8 +103,8 @@
 }
 
 .rf-map-paper {
-  --path-pane-width: clamp(190px, 52%, 226px);
-  --path-handle-width: 20px;
+  --path-pane-width: clamp(146px, 35%, 160px);
+  --path-handle-width: 14px;
 
   position: relative;
   min-height: 0;
@@ -150,12 +151,12 @@
   overflow: visible;
 }
 
-/* ==========================================================================
-   3. Simple collapsible path pane
+/* ========================================================================== 
+   3. Compact collapsible path pane
    ========================================================================== */
 
 .rf-path-pane {
-  --path-handle-width: 20px;
+  --path-handle-width: 14px;
 
   position: absolute;
   top: 0;
@@ -201,8 +202,8 @@
 }
 
 .rf-path-handle-icon {
-  width: 18px;
-  height: 180px;
+  width: 13px;
+  height: 132px;
   display: block;
   object-fit: contain;
   transition: transform 180ms ease;
@@ -217,29 +218,71 @@
   inset: 0 0 0 var(--path-handle-width);
   min-width: 0;
   min-height: 0;
-  padding: 10px 11px 10px 12px;
+  padding: 7px 7px 7px 8px;
   display: block;
   overflow: hidden;
 }
 
 .rf-path-blank-title {
   margin: 0;
-  padding-bottom: 7px;
+  padding-bottom: 5px;
   color: #f8d892;
   border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(9px, 2.4vw, 11px);
+  font-size: clamp(7px, 2vw, 9px);
   font-weight: 950;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
   line-height: 1;
   text-transform: uppercase;
 }
 
-/* ==========================================================================
-   4. Path details reserved
+/* ========================================================================== 
+   4. Compact path details reserved
    ========================================================================== */
 
-/* ==========================================================================
+.rf-path-details {
+  min-width: 0;
+  margin-top: 6px;
+  display: grid;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.rf-path-detail {
+  min-width: 0;
+  padding: 5px 5px 4px;
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(248, 216, 146, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.rf-path-detail-name {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffe2a3;
+  font-size: 6.7px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-path-detail-meta {
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(230, 241, 255, 0.68);
+  font-size: 5.9px;
+  font-weight: 760;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========================================================================== 
    5. Recent cards
    ========================================================================== */
 
@@ -359,7 +402,7 @@
   line-height: 1;
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    6. Services and equipment panels
    ========================================================================== */
 
@@ -482,7 +525,7 @@
   text-transform: uppercase;
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    7. Small screens
    ========================================================================== */
 
@@ -496,8 +539,8 @@
   }
 
   .rf-map-paper {
-    --path-pane-width: clamp(184px, 54%, 214px);
-    --path-handle-width: 20px;
+    --path-pane-width: clamp(140px, 35%, 154px);
+    --path-handle-width: 14px;
   }
 
   .rf-interface-panels {
