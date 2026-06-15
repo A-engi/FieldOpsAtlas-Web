@@ -1,5 +1,6 @@
 <svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="28" height="280" viewBox="0 0 28 280" fill="none">
   <title>Path pane signal chevron</title>
+  <!-- Version: 1.1.109-dot-pole -->
 
   <defs>
     <linearGradient id="signalPathGradient" x1="12" y1="8" x2="12" y2="272" gradientUnits="userSpaceOnUse">
@@ -30,15 +31,11 @@
       </feMerge>
     </filter>
 
-    <g id="oneWayTransmitter" stroke="#FFD96A" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="-2" cy="-4" r="1.5" fill="none" />
-      <path d="M-2 -2.5V2.5" />
-      <path d="M-4.8 0H0.8" />
-      <path d="M-6 4H2" />
-      <path d="M-2 2.5L-4.8 8.2" />
-      <path d="M-2 2.5L0.8 8.2" />
-      <path d="M3 -4.8C4.2 -3.4 4.9 -1.8 4.9 0C4.9 1.8 4.2 3.4 3 4.8" />
-      <path d="M5.7 -6.7C7.5 -4.8 8.5 -2.4 8.5 0C8.5 2.4 7.5 4.8 5.7 6.7" />
+    <g id="oneWaySignal" stroke="#FFD96A" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-1.2" cy="0" r="1.65" fill="#FFD96A" stroke="none" />
+      <path d="M-1.2 1.85V5.2" />
+      <path d="M2.1 -3.3C3.3 -2.2 4 -1.1 4 0C4 1.1 3.3 2.2 2.1 3.3" />
+      <path d="M4.9 -5.4C6.8 -3.8 7.9 -1.9 7.9 0C7.9 1.9 6.8 3.8 4.9 5.4" />
     </g>
   </defs>
 
@@ -68,11 +65,11 @@
     <circle cx="12" cy="268" r="11" fill="#102235" fill-opacity="0.94" stroke="#FF4432" stroke-width="2" />
 
     <g transform="translate(12 12)">
-      <use href="#oneWayTransmitter" />
+      <use href="#oneWaySignal" />
     </g>
 
     <g transform="translate(12 268)">
-      <use href="#oneWayTransmitter" />
+      <use href="#oneWaySignal" />
     </g>
   </g>
 </svg>
