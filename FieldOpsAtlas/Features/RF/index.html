@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.109</title>
+  <title>FieldOps Atlas RF v1.1.110</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.109-path-pane-right-heavy">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.110-compact-pane-dot-pole">
 
   <style>
     .rf-load-toast {
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.109">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.110">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -55,17 +55,83 @@
       placeholder: "Search RF...",
       emptyText: "No RF matches found.",
       items: [
-        { id: "rf-overview", title: "RF overview", subtitle: "RF network map and dashboard", href: "./index.html", keywords: ["overview", "dashboard", "network", "map"] },
-        { id: "rf-sites", title: "Sites", subtitle: "RF site directory and status", href: "../RFPages/sites.html", keywords: ["site", "sites", "transmitter", "relay", "tx"] },
-        { id: "rf-paths", title: "Paths", subtitle: "RF paths and link analysis", href: "../RFPages/paths.html", keywords: ["path", "paths", "link", "links", "microwave", "frequency"] },
-        { id: "rf-equipment", title: "Equipment", subtitle: "Transmitters, antennas, receivers", href: "../RFPages/equipment.html", keywords: ["equipment", "tx", "antenna", "receiver", "rack"] },
-        { id: "rf-dtt", title: "DTT services", subtitle: "Digital terrestrial television", href: "../RFPages/dtt.html", keywords: ["dtt", "mux", "multiplex", "television", "tv"] },
-        { id: "rf-dab", title: "DAB services", subtitle: "Digital audio broadcasting", href: "../RFPages/dab.html", keywords: ["dab", "radio", "audio", "ensemble"] },
-        { id: "rf-fm", title: "FM services", subtitle: "FM radio services", href: "../RFPages/fm.html", keywords: ["fm", "radio", "audio"] },
-        { id: "rf-services", title: "All RF services", subtitle: "DTT, DAB, FM and service groups", href: "../RFPages/services.html", keywords: ["services", "more", "dtt", "dab", "fm"] },
-        { id: "site-hilltop", title: "Hilltop Relay", subtitle: "Recently opened RF relay site", href: "../RFPages/sites.html#hilltop", keywords: ["hilltop", "relay", "site", "online"] },
-        { id: "site-ridgeway", title: "Ridgeway Relay", subtitle: "Recently opened RF relay site", href: "../RFPages/sites.html#ridgeway", keywords: ["ridgeway", "relay", "site", "online"] },
-        { id: "site-london-core", title: "London Core", subtitle: "Recently opened core TX site", href: "../RFPages/sites.html#london-core", keywords: ["london", "core", "tx", "site", "transmitter"] }
+        {
+          id: "rf-overview",
+          title: "RF overview",
+          subtitle: "RF network map and dashboard",
+          href: "./index.html",
+          keywords: ["overview", "dashboard", "network", "map"]
+        },
+        {
+          id: "rf-sites",
+          title: "Sites",
+          subtitle: "RF site directory and status",
+          href: "../RFPages/sites.html",
+          keywords: ["site", "sites", "transmitter", "relay", "tx"]
+        },
+        {
+          id: "rf-paths",
+          title: "Paths",
+          subtitle: "RF paths and link analysis",
+          href: "../RFPages/paths.html",
+          keywords: ["path", "paths", "link", "links", "microwave", "frequency"]
+        },
+        {
+          id: "rf-equipment",
+          title: "Equipment",
+          subtitle: "Transmitters, antennas, receivers",
+          href: "../RFPages/equipment.html",
+          keywords: ["equipment", "tx", "antenna", "receiver", "rack"]
+        },
+        {
+          id: "rf-dtt",
+          title: "DTT services",
+          subtitle: "Digital terrestrial television",
+          href: "../RFPages/dtt.html",
+          keywords: ["dtt", "mux", "multiplex", "television", "tv"]
+        },
+        {
+          id: "rf-dab",
+          title: "DAB services",
+          subtitle: "Digital audio broadcasting",
+          href: "../RFPages/dab.html",
+          keywords: ["dab", "radio", "audio", "ensemble"]
+        },
+        {
+          id: "rf-fm",
+          title: "FM services",
+          subtitle: "FM radio services",
+          href: "../RFPages/fm.html",
+          keywords: ["fm", "radio", "audio"]
+        },
+        {
+          id: "rf-services",
+          title: "All RF services",
+          subtitle: "DTT, DAB, FM and service groups",
+          href: "../RFPages/services.html",
+          keywords: ["services", "more", "dtt", "dab", "fm"]
+        },
+        {
+          id: "site-hilltop",
+          title: "Hilltop Relay",
+          subtitle: "Recently opened RF relay site",
+          href: "../RFPages/sites.html#hilltop",
+          keywords: ["hilltop", "relay", "site", "online"]
+        },
+        {
+          id: "site-ridgeway",
+          title: "Ridgeway Relay",
+          subtitle: "Recently opened RF relay site",
+          href: "../RFPages/sites.html#ridgeway",
+          keywords: ["ridgeway", "relay", "site", "online"]
+        },
+        {
+          id: "site-london-core",
+          title: "London Core",
+          subtitle: "Recently opened core TX site",
+          href: "../RFPages/sites.html#london-core",
+          keywords: ["london", "core", "tx", "site", "transmitter"]
+        }
       ]
     });
   </script>
@@ -75,21 +141,29 @@
   <script src="./rf-graph.js?v=1.1.85-path-toggle-button" defer></script>
 
   <script>
+    /* RF load toast | Version: 1.1.110-compact-pane-dot-pole */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.109-path-pane-right-heavy";
+      const PAGE_VERSION = "1.1.110-compact-pane-dot-pole";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
         const globalValue = window[globalName];
-        if (!globalValue) return "missing";
+
+        if (!globalValue) {
+          return "missing";
+        }
+
         return globalValue.VERSION || globalValue.version || "loaded";
       }
 
       function showToast() {
         const existingToast = document.getElementById(TOAST_ID);
-        if (existingToast) existingToast.remove();
+
+        if (existingToast) {
+          existingToast.remove();
+        }
 
         const toast = document.createElement("div");
         toast.id = TOAST_ID;
@@ -97,17 +171,18 @@
         toast.setAttribute("role", "status");
         toast.setAttribute("aria-live", "polite");
 
-        toast.textContent = [
+        const lines = [
           `index.html ${PAGE_VERSION}`,
           "shell.css 1.1.12-single-rf-doc",
           "background.css 1.1.75-background-only",
           "rf-graph.css 1.1.83-rename-graph-files",
-          "rf-interface.css 1.1.109-path-pane-right-heavy",
+          "rf-interface.css 1.1.110-compact-pane-dot-pole",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-graph.js ${versionOf("FieldOpsRFGraph")}`
-        ].join("\n");
+        ];
 
+        toast.textContent = lines.join("\n");
         document.body.appendChild(toast);
 
         requestAnimationFrame(() => {
