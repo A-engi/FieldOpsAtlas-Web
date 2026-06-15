@@ -1,13 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.114-pane-trim-measured-svg
+   Version: 1.1.115-site-pack-panel
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
-   - Trim the path-details pane further from the left and size the handle icon to the measured vertical slot.
-   - Keep the combined pane and handle footprint below the last generated width.
-   - Use the signal chevron icon from the icons folder for the pane handle.
+   - Keep the compact path panel, measured handle icon, and site-pack detail layout.
+      - Use the signal chevron icon from the icons folder for the pane handle.
    - Leave topology/graph drawing to rf-graph.css/js.
    ========================================================================== */
 
@@ -239,47 +238,96 @@
 }
 
 /* ==========================================================================
-   4. Compact path details
+   4. Path details
    ========================================================================== */
 
 .rf-path-details {
   min-width: 0;
   margin-top: 6px;
-  display: grid;
-  gap: 5px;
   overflow: hidden;
 }
 
-.rf-path-detail {
+.rf-path-pack {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+  color: rgba(239, 247, 255, 0.82);
+}
+
+.rf-path-sites {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.rf-path-site {
   min-width: 0;
   padding: 5px 5px 4px;
   display: grid;
-  gap: 2px;
+  gap: 1px;
   border: 1px solid rgba(248, 216, 146, 0.18);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
 }
 
-.rf-path-detail-name {
-  min-width: 0;
+.rf-path-site small,
+.rf-path-info dt {
+  overflow: hidden;
+  color: rgba(248, 216, 146, 0.66);
+  font-size: 5.3px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-path-site b {
   overflow: hidden;
   color: #ffe2a3;
-  font-size: 6.6px;
-  font-weight: 900;
-  letter-spacing: 0.025em;
+  font-size: 6.9px;
+  font-weight: 950;
+  letter-spacing: 0.02em;
   line-height: 1.05;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.rf-path-detail-meta {
-  min-width: 0;
+.rf-path-site span {
   overflow: hidden;
   color: rgba(230, 241, 255, 0.68);
   font-size: 5.8px;
+  font-weight: 750;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-path-info {
+  min-width: 0;
+  margin: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.rf-path-info-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(34px, 0.78fr) minmax(0, 1fr);
+  gap: 4px;
+  align-items: baseline;
+}
+
+.rf-path-info dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: rgba(239, 247, 255, 0.84);
+  font-size: 5.7px;
   font-weight: 760;
   line-height: 1.08;
+  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
