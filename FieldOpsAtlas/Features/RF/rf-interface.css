@@ -1,12 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.104-signal-chevron-handle
+   Version: 1.1.105-existing-glow-handle
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
    - Render a simple collapsible blank path pane with a title only.
-   - Use the signal-chevron handle icon from the icons folder.
+   - Use the existing big glowy signal icon from the icons folder for the pane handle.
    - Leave topology/graph drawing to rf-graph.css/js.
    ========================================================================== */
 
@@ -200,8 +200,8 @@
 }
 
 .rf-path-handle-icon {
-  width: 11px;
-  height: 42px;
+  width: 12px;
+  height: 58px;
   display: block;
   object-fit: contain;
   transition: transform 180ms ease;
