@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.102</title>
+  <title>FieldOps Atlas RF v1.1.104</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
   <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.102-path-pane-rewrite">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.104-signal-chevron-handle">
 
   <style>
     .rf-load-toast {
@@ -40,7 +40,7 @@
 
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.102">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.104">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -136,16 +136,15 @@
   </script>
 
   <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-interface.js?v=1.1.91-delete-slot-junk" defer></script>
+  <script src="./rf-interface.js?v=1.1.104-signal-chevron-handle" defer></script>
   <script src="./rf-graph.js?v=1.1.85-path-toggle-button" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.102-path-pane-rewrite" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.102-path-pane-rewrite */
+    /* RF load toast | Version: 1.1.104-signal-chevron-handle */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.102-path-pane-rewrite";
+      const PAGE_VERSION = "1.1.104-signal-chevron-handle";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -175,11 +174,10 @@
           "shell.css 1.1.12-single-rf-doc",
           "background.css 1.1.75-background-only",
           "rf-graph.css 1.1.83-rename-graph-files",
-          "rf-interface.css 1.1.102-path-pane-rewrite",
+          "rf-interface.css 1.1.104-signal-chevron-handle",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
-          `rf-graph.js ${versionOf("FieldOpsRFGraph")}`,
-          `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`
+          `rf-graph.js ${versionOf("FieldOpsRFGraph")}`
         ];
 
         toast.textContent = lines.join("\n");
