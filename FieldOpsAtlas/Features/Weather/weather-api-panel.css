@@ -1,0 +1,250 @@
+:root {
+  --weather-panel-top: calc(92px + env(safe-area-inset-top, 0px));
+  --weather-panel-side: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
+  --weather-panel-width: min(384px, calc(100vw - 24px));
+  --weather-glass-line: rgba(184, 226, 255, 0.18);
+  --weather-glass-text: rgba(239, 249, 255, 0.96);
+  --weather-glass-muted: rgba(205, 234, 255, 0.74);
+  --weather-gold: #f5c34b;
+}
+
+.weather-map-theme {
+  position: fixed;
+  top: var(--weather-panel-top);
+  left: var(--weather-panel-side);
+  z-index: 38;
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid var(--weather-glass-line);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(9, 34, 63, 0.80), rgba(5, 18, 36, 0.66)),
+    rgba(7, 22, 42, 0.72);
+  box-shadow: 0 18px 42px rgba(0, 12, 28, 0.26);
+  pointer-events: auto;
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+
+.weather-map-theme-button,
+.weather-api-mini-button,
+.weather-api-source,
+.weather-api-panel-open {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(184, 226, 255, 0.16);
+  color: var(--weather-glass-text);
+  background: rgba(255, 255, 255, 0.06);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.weather-map-theme-button {
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.weather-map-theme-button[aria-pressed="true"] {
+  color: #08213b;
+  border-color: rgba(255, 255, 255, 0.42);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(205, 235, 255, 0.90));
+}
+
+.weather-api-panel {
+  position: fixed;
+  right: var(--weather-panel-side);
+  bottom: calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + var(--nav-height, 38px) + 14px);
+  z-index: 38;
+  width: var(--weather-panel-width);
+  max-height: min(58dvh, 540px);
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--weather-glass-line);
+  border-radius: 24px;
+  color: var(--weather-glass-text);
+  background:
+    linear-gradient(180deg, rgba(8, 31, 58, 0.84), rgba(5, 18, 36, 0.68)),
+    rgba(7, 22, 42, 0.66);
+  box-shadow: 0 18px 42px rgba(0, 12, 28, 0.28);
+  pointer-events: auto;
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+
+.weather-api-panel[hidden],
+.weather-api-panel-open[hidden] {
+  display: none;
+}
+
+.weather-api-panel-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+}
+
+.weather-api-kicker {
+  margin: 0 0 4px;
+  color: rgba(125, 210, 255, 0.92);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.weather-api-panel h1 {
+  margin: 0;
+  color: var(--weather-glass-text);
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.weather-api-copy {
+  margin: 10px 0 12px;
+  color: var(--weather-glass-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.weather-api-mini-button {
+  min-height: 32px;
+  padding: 0 11px;
+  border-radius: 999px;
+}
+
+.weather-api-sources {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.weather-api-source {
+  min-height: 42px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  text-align: left;
+  line-height: 1.15;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(125, 194, 255, 0.12), transparent 52%),
+    rgba(8, 31, 58, 0.76);
+}
+
+.weather-api-source[data-active="true"] {
+  color: #06182f;
+  border-color: rgba(245, 195, 75, 0.72);
+  background: linear-gradient(180deg, #ffe08a, var(--weather-gold));
+}
+
+.weather-api-fields {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.weather-api-field {
+  display: grid;
+  gap: 5px;
+  color: var(--weather-glass-muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.weather-api-field input {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  color: var(--weather-glass-text);
+  border: 1px solid rgba(184, 226, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(2, 13, 29, 0.32);
+  outline: none;
+}
+
+.weather-api-output {
+  min-height: 132px;
+  margin: 12px 0 0;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid rgba(184, 226, 255, 0.12);
+  border-radius: 16px;
+  color: rgba(232, 246, 255, 0.86);
+  background: rgba(0, 0, 0, 0.22);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+}
+
+.weather-api-panel-open {
+  position: fixed;
+  right: var(--weather-panel-side);
+  bottom: calc(var(--safe-bottom, env(safe-area-inset-bottom, 0px)) + var(--nav-height, 38px) + 14px);
+  z-index: 38;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(9, 34, 63, 0.80), rgba(5, 18, 36, 0.66)),
+    rgba(7, 22, 42, 0.72);
+  box-shadow: 0 18px 42px rgba(0, 12, 28, 0.26);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-map-theme,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel-open {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(230, 244, 255, 0.74)),
+    rgba(255, 255, 255, 0.78);
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel {
+  color: #0a2038;
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-copy,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-field,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-output {
+  color: rgba(22, 52, 82, 0.70);
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-field input,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-output {
+  color: #0a2038;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-map-theme .weather-map-theme-button,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-mini-button,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-source,
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel-open {
+  color: rgba(12, 36, 62, 0.76);
+  background: rgba(12, 36, 62, 0.05);
+}
+
+.osmmaps-page[data-theme="light"] ~ .weather-map-theme .weather-map-theme-button[aria-pressed="true"],
+.osmmaps-page[data-theme="light"] ~ .weather-api-panel .weather-api-source[data-active="true"] {
+  color: rgba(239, 249, 255, 0.96);
+  background: linear-gradient(180deg, rgba(20, 73, 124, 0.92), rgba(8, 38, 74, 0.92));
+}
+
+@media (max-width: 430px) {
+  .weather-api-sources {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-api-panel {
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+}
+
+/* End of file: FieldOpsAtlas/Features/Weather/weather-api-panel.css */
