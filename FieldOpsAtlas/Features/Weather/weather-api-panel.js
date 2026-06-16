@@ -1,17 +1,17 @@
 /* ==========================================================================
    FieldOps Atlas weather API panel
    File: FieldOpsAtlas/Features/Weather/weather-api-panel.js
-   Version: v1.0.3-preseli-forecast-slider
+   Version: v1.0.4-weather-activate-history
    Purpose:
    - Keep one map only: the existing FieldOps Atlas OSM map.
-   - Weather button opens a compact Preseli forecast panel.
-   - Activate button loads a small forecast slider.
+   - Weather button opens a compact Preseli preview panel.
+   - Activate link opens the Weather pages at the History anchor.
    ========================================================================== */
 
 (function fieldOpsWeatherApiPanel() {
   "use strict";
 
-  var VERSION = "v1.0.3-preseli-forecast-slider";
+  var VERSION = "v1.0.4-weather-activate-history";
   var OPEN_METEO_API = "https://api.open-meteo.com/v1/forecast";
   var STORAGE_KEY = "fieldops-osmmaps-theme-v1";
   var PRESELI = {
@@ -20,12 +20,11 @@
     longitude: -4.735
   };
 
+  var forecastLoaded = false;
+  var forecastLoading = false;
+
   function qs(selector, root) {
     return (root || document).querySelector(selector);
-  }
-
-  function qsa(selector, root) {
-    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
   }
 
   function safeLocalGet(key) {
@@ -69,6 +68,8 @@
     if (icon) {
       icon.setAttribute("aria-expanded", "true");
     }
+
+    loadPreseliForecast();
   }
 
   function closePanel() {
@@ -181,8 +182,9 @@
       ].join("");
     }).join("");
 
+    forecastLoaded = true;
     updatedLabel("Updated " + new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }));
-    status("Preseli forecast loaded. " + VERSION);
+    status("Activate opens Weather history. " + VERSION);
   }
 
   function fetchJson(url) {
@@ -200,9 +202,17 @@
     });
   }
 
-  function activatePreseliForecast() {
-    var button = qs("[data-weather-activate]");
-    var params = new URLSearchParams({
+  function loadPreseliForecast() {
+    var params;
+
+    if (forecastLoaded || forecastLoading) {
+      return;
+    }
+
+    forecastLoading = true;
+    status("Loading Preseli forecast preview...");
+
+    params = new URLSearchParams({
       latitude: PRESELI.latitude,
       longitude: PRESELI.longitude,
       daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_gusts_10m_max",
@@ -211,25 +221,13 @@
       wind_speed_unit: "mph"
     });
 
-    openPanel();
-
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Loading…";
-    }
-
-    status("Loading Preseli forecast...");
-
     fetchJson(OPEN_METEO_API + "?" + params.toString())
       .then(renderForecast)
       .catch(function handleError(error) {
-        status("Preseli forecast failed: " + error.message);
+        status("Preseli forecast preview failed: " + error.message);
       })
-      .finally(function restoreButton() {
-        if (button) {
-          button.disabled = false;
-          button.textContent = "Activate";
-        }
+      .finally(function clearLoading() {
+        forecastLoading = false;
       });
   }
 
@@ -267,11 +265,6 @@
 
       if (event.target.closest("[data-weather-panel-close]")) {
         closePanel();
-        return;
-      }
-
-      if (event.target.closest("[data-weather-activate]")) {
-        activatePreseliForecast();
       }
     });
   }
@@ -285,7 +278,7 @@
       version: VERSION,
       open: openPanel,
       close: closePanel,
-      activate: activatePreseliForecast
+      loadPreseliForecast: loadPreseliForecast
     };
   }
 
