@@ -3,102 +3,127 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <meta name="theme-color" content="#061426">
- <title>FieldOps Atlas · Weather</title>
-
+ <title>Weather</title>
  <link rel="stylesheet" href="../../../shell.css">
- <link rel="stylesheet" href="../maps/background.css?v=weather-map-icon-toast-20260616">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
- <link rel="stylesheet" href="../maps/OSMmaps.css?v=weather-map-icon-toast-20260616">
- <link rel="stylesheet" href="../maps/OSMpanes.css?v=weather-map-icon-toast-20260616">
- <link rel="stylesheet" href="./weather-api-panel.css?v=weather-map-icon-toast-20260616">
+ <link rel="stylesheet" href="./weather-api-panel.css?v=weather-pages-recovery-20260616">
 </head>
 <body>
  <div class="fieldops-shell-root" data-page="weather"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-weather-map-page data-version="v1.0.2-weather-map-icon-toast">
-  <div id="OSMmaps" class="osmmaps-canvas" aria-label="FieldOps Atlas weather map"></div>
-
-  <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
-   <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
-
-   <article class="osmmaps-filter-card" aria-label="Map region filter">
-    <header class="osmmaps-filter-header">
-     <div>
-      <p class="osmmaps-kicker">Filter</p>
-      <h1>Choose region</h1>
-     </div>
-
-     <button class="osmmaps-small-button" type="button" data-region-overlay-close>Close</button>
-    </header>
-
-    <p class="osmmaps-filter-note">
-     Only the selected region's walks are loaded.
-    </p>
-
-    <div class="osmmaps-region-list" data-region-list></div>
-   </article>
+ <main class="weather-page" data-weather-page data-weather-page-state="history">
+  <section class="weather-hero" aria-labelledby="weatherPageTitle">
+   <p class="weather-kicker">Weather</p>
+   <h1 id="weatherPageTitle" data-weather-page-title>History</h1>
+   <p class="weather-copy">
+    Separate weather pages with a small shared Atlas map context. This page does not load the full Maps feature.
+   </p>
   </section>
 
-  <section class="osmpanes-details" data-selected-panel hidden aria-live="polite"></section>
+  <nav class="weather-page-nav" aria-label="Weather pages">
+   <a class="weather-page-tab" href="#history" data-weather-route="history" aria-current="page">History</a>
+   <a class="weather-page-tab" href="#forecast" data-weather-route="forecast">Forecast</a>
+   <a class="weather-page-tab" href="#rain" data-weather-route="rain">Rain</a>
+   <a class="weather-page-tab" href="#sources" data-weather-route="sources">Sources</a>
+  </nav>
+
+  <section class="weather-map-card" aria-label="Preseli map context">
+   <header class="weather-card-header">
+    <div>
+     <p class="weather-card-kicker">Map context</p>
+     <h2>Preseli area</h2>
+    </div>
+    <span class="weather-pill">OSM</span>
+   </header>
+
+   <div id="weatherMiniMap" class="weather-mini-map" data-weather-mini-map aria-label="Preseli area map"></div>
+  </section>
+
+  <section class="weather-section" data-weather-section="history" aria-labelledby="weatherHistoryTitle">
+   <header class="weather-card-header">
+    <div>
+     <p class="weather-card-kicker">Start page</p>
+     <h2 id="weatherHistoryTitle">Weather history</h2>
+    </div>
+    <span class="weather-pill">Active</span>
+   </header>
+
+   <div class="weather-history-grid">
+    <article class="weather-info-card">
+     <h3>Recent pattern</h3>
+     <p>Use this page for historic notes, previous site conditions, and weather context before field work.</p>
+    </article>
+
+    <article class="weather-info-card">
+     <h3>Preseli baseline</h3>
+     <p>Open the forecast page for the live seven-day preview. Historic provider data can be wired here later.</p>
+    </article>
+   </div>
+  </section>
+
+  <section class="weather-section" data-weather-section="forecast" aria-labelledby="weatherForecastTitle" hidden>
+   <header class="weather-card-header">
+    <div>
+     <p class="weather-card-kicker">Forecast</p>
+     <h2 id="weatherForecastTitle">Preseli forecast</h2>
+    </div>
+    <button class="weather-small-button" type="button" data-weather-refresh>Refresh</button>
+   </header>
+
+   <section class="weather-forecast-slider" aria-label="Preseli forecast slider">
+    <header class="weather-forecast-header">
+     <span>Preseli area</span>
+     <span data-weather-forecast-updated>Not loaded</span>
+    </header>
+
+    <div class="weather-forecast-track" data-weather-forecast-track tabindex="0" role="list">
+     <article class="weather-forecast-card weather-forecast-card-placeholder" role="listitem">
+      Loading forecast…
+     </article>
+    </div>
+   </section>
+  </section>
+
+  <section class="weather-section" data-weather-section="rain" aria-labelledby="weatherRainTitle" hidden>
+   <header class="weather-card-header">
+    <div>
+     <p class="weather-card-kicker">Rain</p>
+     <h2 id="weatherRainTitle">Rain checks</h2>
+    </div>
+    <span class="weather-pill">No map overlay</span>
+   </header>
+
+   <div class="weather-control-list">
+    <button class="weather-control-button" type="button" data-weather-source="rainviewer">Check RainViewer metadata</button>
+    <button class="weather-control-button" type="button" data-weather-source="ea">Check EA rain gauges</button>
+   </div>
+
+   <pre class="weather-source-output" data-weather-source-output>Rain controls are separated from the map page.</pre>
+  </section>
+
+  <section class="weather-section" data-weather-section="sources" aria-labelledby="weatherSourcesTitle" hidden>
+   <header class="weather-card-header">
+    <div>
+     <p class="weather-card-kicker">Sources</p>
+     <h2 id="weatherSourcesTitle">API source checks</h2>
+    </div>
+    <span class="weather-pill">Controls</span>
+   </header>
+
+   <div class="weather-control-list">
+    <button class="weather-control-button" type="button" data-weather-source="openmeteo">Open-Meteo forecast health</button>
+    <button class="weather-control-button" type="button" data-weather-source="metoffice">Met Office placeholder</button>
+   </div>
+
+   <pre class="weather-source-output" data-weather-source-output>Choose a source check.</pre>
+  </section>
+
+  <p class="weather-version-toast">v1.0.6-weather-pages-recovery</p>
  </main>
 
- <section class="weather-map-theme" aria-label="Map appearance">
-  <button class="weather-map-theme-button" type="button" data-weather-theme="dark" aria-pressed="false">Dark</button>
-  <button class="weather-map-theme-button" type="button" data-weather-theme="light" aria-pressed="false">Light</button>
- </section>
-
- <button class="weather-map-icon-button" type="button" data-weather-panel-open aria-label="Open weather API checks">
-  <span aria-hidden="true">☁</span>
- </button>
-
- <aside class="weather-api-panel" aria-label="Weather API checks" hidden>
-  <header class="weather-api-panel-header">
-   <div>
-    <p class="weather-api-kicker">Weather</p>
-    <h1>API checks</h1>
-   </div>
-   <button class="weather-api-mini-button" type="button" data-weather-panel-close aria-label="Close weather API checks">Close</button>
-  </header>
-
-  <p class="weather-api-copy">
-   Uses the existing Atlas OSM map. Select a marker, then run a source check. Provider-owned maps and weather-map previews are not rendered here.
-  </p>
-
-  <div class="weather-api-sources" aria-label="Weather source actions">
-   <button class="weather-api-source" type="button" data-weather-source="openmeteo">Open-Meteo site risk</button>
-   <button class="weather-api-source" type="button" data-weather-source="rainviewer">RainViewer metadata</button>
-   <button class="weather-api-source" type="button" data-weather-source="metoffice">Met Office order list</button>
-   <button class="weather-api-source" type="button" data-weather-source="ea">EA rain gauges</button>
-  </div>
-
-  <div class="weather-api-fields" data-weather-metoffice-fields hidden>
-   <label class="weather-api-field">
-    DataHub API key
-    <input type="password" autocomplete="off" data-metoffice-key placeholder="Typed locally only">
-   </label>
-
-   <label class="weather-api-field">
-    API Order ID
-    <input type="text" data-metoffice-order placeholder="Example: maps-uk1">
-   </label>
-  </div>
-
-  <pre class="weather-api-output" data-weather-output>Select a marker, then choose a weather source.</pre>
- </aside>
-
- <div class="weather-version-toast" aria-label="Current weather page version">v1.0.2-weather-map-icon-toast</div>
-
- <div class="background-item" aria-hidden="true">
-  <div class="atlas-top-fade"></div>
-  <div class="atlas-top-fade atlas-bottom-fade"></div>
- </div>
-
- <script src="../../../shell.js?v=weather-map-icon-toast-20260616"></script>
+ <script src="../../../shell.js?v=weather-pages-recovery-20260616"></script>
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <script src="../maps/OSMpanes.js?v=weather-map-icon-toast-20260616"></script>
- <script src="../maps/OSMmaps.js?v=weather-map-icon-toast-20260616"></script>
- <script src="./weather-api-panel.js?v=weather-map-icon-toast-20260616"></script>
+ <script src="./weather-api-panel.js?v=weather-pages-recovery-20260616"></script>
 </body>
 </html>
 <!-- End of file: FieldOpsAtlas/Features/Weather/index.html -->
