@@ -3,39 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas Weather Lab v0.2.4</title>
-  <link rel="stylesheet" href="styles.css?v=0.2.4-fieldops-web-lab" />
+  <title>FieldOps Atlas Weather v0.3.1</title>
+  <link rel="stylesheet" href="styles.css?v=0.3.1-weather-demapped" />
 </head>
 <body>
   <main class="lab-shell lab-home">
     <header class="lab-header">
       <a class="back-link" href="../maps/index.html">Atlas Map</a>
       <div>
-        <p class="eyebrow">Weather API lab</p>
-        <h1>Separate provider tests</h1>
+        <p class="eyebrow">Weather</p>
+        <h1>Weather provider checks</h1>
       </div>
-      <span class="version-pill">v0.2.4-fieldops-web-lab</span>
+      <span class="version-pill">v0.3.1-weather-demapped</span>
     </header>
 
     <section class="hero-card">
       <div class="hero-icon" aria-hidden="true">⚡</div>
       <div>
-        <h2>Test each weather source on its own page.</h2>
-        <p>Rain blobs, site risk, Met Office images, and measured rainfall gauges now load separately so one provider cannot confuse the result of another.</p>
+        <h2>Check each weather source separately.</h2>
+        <p>Rain frames, forecast risk, Met Office images, and measured rainfall gauges are kept separate so one provider cannot confuse another.</p>
       </div>
     </section>
 
-    <section class="page-grid" aria-label="Weather provider test pages">
+    <section class="page-grid" aria-label="Weather provider pages">
       <a class="page-card radar" href="rainviewer.html">
         <span class="card-icon" aria-hidden="true">🌧</span>
         <strong>RainViewer radar</strong>
-        <span>UK-wide radar/blob tile overlay.</span>
+        <span>Radar frames and tile URLs.</span>
       </a>
 
       <a class="page-card risk" href="openmeteo.html">
         <span class="card-icon" aria-hidden="true">⚠</span>
         <strong>Open-Meteo site risk</strong>
-        <span>Visible region sites, batched forecast values, hazard cards.</span>
+        <span>Batched forecast values and hazard cards.</span>
       </a>
 
       <a class="page-card metoffice" href="metoffice.html">
@@ -52,12 +52,12 @@
     </section>
 
     <section class="decision-card">
-      <h2>What this lab decides</h2>
+      <h2>What this page checks</h2>
       <ul>
-        <li><strong>Overlay:</strong> Which source gives the best weather blob layer.</li>
-        <li><strong>Risk:</strong> Which source gives the best site-level hazard numbers.</li>
-        <li><strong>Performance:</strong> How many visible region sites can be handled on mobile.</li>
-        <li><strong>Integration:</strong> Whether Atlas can stay static or needs a proxy/native layer.</li>
+        <li><strong>Radar:</strong> Which source gives the best rain frame data.</li>
+        <li><strong>Risk:</strong> Which source gives the best site-level hazard values.</li>
+        <li><strong>Rainfall:</strong> Whether measured gauges support the forecast view.</li>
+        <li><strong>Integration:</strong> Which provider data should feed the final Weather page.</li>
       </ul>
     </section>
   </main>
