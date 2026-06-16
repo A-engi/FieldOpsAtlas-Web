@@ -4,90 +4,20 @@
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
  <meta name="theme-color" content="#061426">
- <title>FieldOps Atlas · Weather Map</title>
+ <title>FieldOps Atlas · Weather</title>
 
  <link rel="stylesheet" href="../../../shell.css">
- <link rel="stylesheet" href="../maps/background.css?v=weather-map-call-20260616">
+ <link rel="stylesheet" href="../maps/background.css?v=existing-map-weather-api-20260616">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
- <link rel="stylesheet" href="../maps/OSMmaps.css?v=weather-map-call-20260616">
- <link rel="stylesheet" href="../maps/OSMpanes.css?v=weather-map-call-20260616">
-
- <style>
-  :root {
-   --weather-control-top: calc(92px + env(safe-area-inset-top, 0px));
-   --weather-control-side: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
-  }
-
-  .weather-map-mode {
-   position: fixed;
-   top: var(--weather-control-top);
-   left: var(--weather-control-side);
-   z-index: 38;
-   display: flex;
-   gap: 8px;
-   padding: 6px;
-   border: 1px solid rgba(184, 226, 255, 0.18);
-   border-radius: 999px;
-   background:
-    linear-gradient(180deg, rgba(9, 34, 63, 0.80), rgba(5, 18, 36, 0.66)),
-    rgba(7, 22, 42, 0.72);
-   box-shadow: 0 18px 42px rgba(0, 12, 28, 0.26);
-   pointer-events: auto;
-   backdrop-filter: blur(18px) saturate(135%);
-   -webkit-backdrop-filter: blur(18px) saturate(135%);
-  }
-
-  .weather-map-theme-button {
-   appearance: none;
-   -webkit-appearance: none;
-   min-height: 34px;
-   padding: 0 13px;
-   border: 1px solid rgba(184, 226, 255, 0.16);
-   border-radius: 999px;
-   color: rgba(239, 249, 255, 0.86);
-   background: rgba(255, 255, 255, 0.06);
-   font: inherit;
-   font-size: 12px;
-   font-weight: 850;
-   letter-spacing: 0.02em;
-   cursor: pointer;
-  }
-
-  .weather-map-theme-button[aria-pressed="true"] {
-   color: #08213b;
-   border-color: rgba(255, 255, 255, 0.42);
-   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(205, 235, 255, 0.90));
-  }
-
-  .osmmaps-page[data-theme="light"] ~ .weather-map-mode {
-   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(230, 244, 255, 0.70)),
-    rgba(255, 255, 255, 0.76);
-  }
-
-  .osmmaps-page[data-theme="light"] ~ .weather-map-mode .weather-map-theme-button {
-   color: rgba(12, 36, 62, 0.70);
-   background: rgba(12, 36, 62, 0.05);
-  }
-
-  .osmmaps-page[data-theme="light"] ~ .weather-map-mode .weather-map-theme-button[aria-pressed="true"] {
-   color: rgba(239, 249, 255, 0.96);
-   background: linear-gradient(180deg, rgba(20, 73, 124, 0.92), rgba(8, 38, 74, 0.92));
-  }
-
-  @media (max-width: 380px) {
-   .weather-map-mode {
-    top: calc(88px + env(safe-area-inset-top, 0px));
-    left: 9px;
-   }
-  }
- </style>
+ <link rel="stylesheet" href="../maps/OSMmaps.css?v=existing-map-weather-api-20260616">
+ <link rel="stylesheet" href="../maps/OSMpanes.css?v=existing-map-weather-api-20260616">
+ <link rel="stylesheet" href="./weather-api-panel.css?v=existing-map-weather-api-20260616">
 </head>
 <body>
  <div class="fieldops-shell-root" data-page="weather"></div>
 
  <main class="osmmaps-page" data-osmmaps-page data-weather-map-page>
-  <div id="OSMmaps" class="osmmaps-canvas" aria-label="Weather map using existing FieldOps Atlas OSM map"></div>
+  <div id="OSMmaps" class="osmmaps-canvas" aria-label="FieldOps Atlas weather map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
    <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
@@ -113,86 +43,58 @@
   <section class="osmpanes-details" data-selected-panel hidden aria-live="polite"></section>
  </main>
 
- <section class="weather-map-mode" aria-label="Map appearance">
-  <button class="weather-map-theme-button" type="button" data-weather-map-theme="dark" aria-pressed="false">Dark</button>
-  <button class="weather-map-theme-button" type="button" data-weather-map-theme="light" aria-pressed="false">Light</button>
+ <section class="weather-map-theme" aria-label="Map appearance">
+  <button class="weather-map-theme-button" type="button" data-weather-theme="dark" aria-pressed="false">Dark</button>
+  <button class="weather-map-theme-button" type="button" data-weather-theme="light" aria-pressed="false">Light</button>
  </section>
+
+ <aside class="weather-api-panel" aria-label="Weather API checks">
+  <header class="weather-api-panel-header">
+   <div>
+    <p class="weather-api-kicker">Weather</p>
+    <h1>API checks</h1>
+   </div>
+   <button class="weather-api-mini-button" type="button" data-weather-panel-toggle>Hide</button>
+  </header>
+
+  <p class="weather-api-copy">
+   Uses the existing Atlas OSM map on this page. Provider map previews are removed.
+  </p>
+
+  <div class="weather-api-sources" aria-label="Weather source actions">
+   <button class="weather-api-source" type="button" data-weather-source="openmeteo">Open-Meteo site risk</button>
+   <button class="weather-api-source" type="button" data-weather-source="rainviewer">RainViewer metadata</button>
+   <button class="weather-api-source" type="button" data-weather-source="metoffice">Met Office order list</button>
+   <button class="weather-api-source" type="button" data-weather-source="ea">EA rain gauges</button>
+  </div>
+
+  <div class="weather-api-fields" data-weather-metoffice-fields hidden>
+   <label class="weather-api-field">
+    DataHub API key
+    <input type="password" autocomplete="off" data-metoffice-key placeholder="Typed locally only">
+   </label>
+
+   <label class="weather-api-field">
+    API Order ID
+    <input type="text" data-metoffice-order placeholder="Example: maps-uk1">
+   </label>
+  </div>
+
+  <pre class="weather-api-output" data-weather-output>Select a source. For site checks, select a map marker first.</pre>
+ </aside>
+
+ <button class="weather-api-panel-open" type="button" data-weather-panel-open hidden>Weather API checks</button>
 
  <div class="background-item" aria-hidden="true">
   <div class="atlas-top-fade"></div>
   <div class="atlas-top-fade atlas-bottom-fade"></div>
  </div>
 
- <script src="../../../shell.js?v=weather-map-call-20260616"></script>
+ <script src="../../../shell.js?v=existing-map-weather-api-20260616"></script>
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <script src="../maps/OSMpanes.js?v=weather-map-call-20260616"></script>
- <script src="../maps/OSMmaps.js?v=weather-map-call-20260616"></script>
-
- <script>
-  (function fieldOpsWeatherMapThemeControls() {
-   "use strict";
-
-   var STORAGE_KEY = "fieldops-osmmaps-theme-v1";
-   var page = document.querySelector("[data-osmmaps-page]");
-   var buttons = Array.prototype.slice.call(document.querySelectorAll("[data-weather-map-theme]"));
-
-   function safeGetTheme() {
-    try {
-     return window.localStorage.getItem(STORAGE_KEY) || "";
-    } catch (error) {
-     return "";
-    }
-   }
-
-   function safeSetTheme(theme) {
-    try {
-     window.localStorage.setItem(STORAGE_KEY, theme);
-    } catch (error) {
-     // Storage can be unavailable in previews or restricted webviews.
-    }
-   }
-
-   function preferredTheme() {
-    var stored = safeGetTheme();
-
-    if (stored === "light" || stored === "dark") {
-     return stored;
-    }
-
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-     return "light";
-    }
-
-    return "dark";
-   }
-
-   function applyTheme(theme) {
-    var nextTheme = theme === "light" ? "light" : "dark";
-
-    if (page) {
-     page.setAttribute("data-theme", nextTheme);
-    }
-
-    buttons.forEach(function updateButton(button) {
-     button.setAttribute("aria-pressed", button.getAttribute("data-weather-map-theme") === nextTheme ? "true" : "false");
-    });
-
-    safeSetTheme(nextTheme);
-
-    if (window.FieldOpsOSMmaps && typeof window.FieldOpsOSMmaps.fitVisible === "function") {
-     window.setTimeout(window.FieldOpsOSMmaps.fitVisible, 80);
-    }
-   }
-
-   buttons.forEach(function wireButton(button) {
-    button.addEventListener("click", function onThemeClick() {
-     applyTheme(button.getAttribute("data-weather-map-theme"));
-    });
-   });
-
-   applyTheme(preferredTheme());
-  })();
- </script>
+ <script src="../maps/OSMpanes.js?v=existing-map-weather-api-20260616"></script>
+ <script src="../maps/OSMmaps.js?v=existing-map-weather-api-20260616"></script>
+ <script src="./weather-api-panel.js?v=existing-map-weather-api-20260616"></script>
 </body>
 </html>
 <!-- End of file: FieldOpsAtlas/Features/Weather/index.html -->
