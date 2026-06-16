@@ -1,0 +1,33 @@
+name: Fetch Met Office map images
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-metoffice-map-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch latest Met Office rainfall image
+        env:
+          METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
+          METOFFICE_ORDER_ID: ${{ secrets.METOFFICE_ORDER_ID }}
+        run: node scripts/fetch-metoffice-map-images.mjs
+
+      - name: Commit public weather output
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update Met Office weather map image"
+          file_pattern: FieldOpsAtlas/Features/Weather/data/metoffice-map-images/*
