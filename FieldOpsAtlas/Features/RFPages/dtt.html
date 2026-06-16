@@ -3,68 +3,68 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas RF DTT v1.1.64</title>
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc" />
-  <link rel="stylesheet" href="../RF/background.css?v=1.1.60-visible-services-row" />
+  <title>FieldOps Atlas RF DAB v1.1.65</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls" />
+  <link rel="stylesheet" href="../RF/background.css?v=1.1.76-graph-label" />
   <link rel="stylesheet" href="../RF/rf-interface.css?v=1.1.64-interface-owns-rfpages" />
 </head>
 <body>
-  <main class="phone" data-page="dtt" data-nav="rf" data-service="dtt" data-version="1.1.64">
-    <section class="content-canvas" aria-label="FieldOps Atlas RF DTT content">
+  <main class="phone" data-page="dab" data-nav="rf" data-service="dab" data-version="1.1.65">
+    <section class="content-canvas" aria-label="FieldOps Atlas RF DAB content">
       <article class="page-content">
         <header class="page-head">
-          <div class="page-kicker">Digital terrestrial</div>
-          <h1 class="page-title">DTT</h1>
-          <p class="page-lede">Multiplex overview, transmitter coverage, and public-safe service status.</p>
+          <div class="page-kicker">Digital audio</div>
+          <h1 class="page-title">DAB</h1>
+          <p class="page-lede">DAB ensembles, audio service groups, and transmitter status.</p>
         </header>
 
-      <section class="card" aria-labelledby="dttOverviewTitle">
-        <h2 class="card-title" id="dttOverviewTitle">DTT overview</h2>
+      <section class="card" aria-labelledby="dabOverviewTitle">
+        <h2 class="card-title" id="dabOverviewTitle">DAB overview</h2>
         <div class="metric-grid">
-          <div class="metric"><strong>6</strong><span>Muxes</span></div>
-          <div class="metric"><strong>94%</strong><span>Healthy</span></div>
-          <div class="metric"><strong>2</strong><span>Alerts</span></div>
+          <div class="metric"><strong>12</strong><span>Ensembles</span></div>
+          <div class="metric"><strong>36</strong><span>Services</span></div>
+          <div class="metric"><strong>1</strong><span>Alert</span></div>
         </div>
       </section>
-      <section class="card" aria-labelledby="dttMultiplexTitle">
-        <h2 class="card-title" id="dttMultiplexTitle">Multiplexes</h2>
+      <section class="card" aria-labelledby="dabEnsemblesTitle">
+        <h2 class="card-title" id="dabEnsemblesTitle">Ensembles</h2>
         <div class="list">
           <a class="list-row" href="./services.html">
-            <span class="row-icon">TV</span>
+            <span class="row-icon">DAB</span>
             <span>
-              <b class="row-title">DTT MUX 1</b>
-              <span class="row-sub">London Core - 6.725 GHz path</span>
+              <b class="row-title">National DAB</b>
+              <span class="row-sub">Main national audio layer</span>
             </span>
             <span class="status">Online</span>
           </a>
           <a class="list-row" href="./services.html">
-            <span class="row-icon">TV</span>
+            <span class="row-icon">DAB</span>
             <span>
-              <b class="row-title">DTT MUX 2</b>
-              <span class="row-sub">Manchester Main - regional feed</span>
+              <b class="row-title">Local DAB</b>
+              <span class="row-sub">Regional ensemble group</span>
             </span>
-            <span class="status">Online</span>
+            <span class="status warn">Watch</span>
           </a>
           <a class="list-row" href="./paths.html">
             <span class="row-icon">RF</span>
             <span>
-              <b class="row-title">Backup path</b>
-              <span class="row-sub">Public demo route - standby</span>
+              <b class="row-title">Contribution path</b>
+              <span class="row-sub">Public demo bearer - monitored</span>
             </span>
-            <span class="status warn">Watch</span>
+            <span class="status">Online</span>
           </a>
         </div>
       </section>
-      <section class="card" aria-labelledby="dttChecksTitle">
-        <h2 class="card-title" id="dttChecksTitle">Checks</h2>
+      <section class="card" aria-labelledby="dabChecksTitle">
+        <h2 class="card-title" id="dabChecksTitle">Checks</h2>
         <div class="action-grid">
           <a class="action-card" href="./sites.html">
-            <span class="action-icon" aria-hidden="true">TX</span>
-            <strong>Coverage sites</strong>
+            <span class="action-icon" aria-hidden="true">SITE</span>
+            <strong>Site list</strong>
           </a>
           <a class="action-card" href="./equipment.html">
-            <span class="action-icon" aria-hidden="true">ANT</span>
-            <strong>Equipment view</strong>
+            <span class="action-icon" aria-hidden="true">RX</span>
+            <strong>Receiver view</strong>
           </a>
         </div>
       </section>
@@ -72,6 +72,6 @@
     </section>
   </main>
 
-  <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
+  <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
 </body>
 </html>
