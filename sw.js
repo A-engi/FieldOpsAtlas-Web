@@ -1,9 +1,10 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.5-rescan-clear
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.6-weather-map-cache
    Keeps the browser prototype usable offline where possible.
    Maps remains the main fallback page.
+   Bumps the cache so Weather v0.3.5 replaces stale Weather provider-test assets.
 */
 
-const CACHE_NAME = "fieldops-atlas-v1.1.5-rescan-clear";
+const CACHE_NAME = "fieldops-atlas-v1.1.6-weather-map-cache";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -36,17 +37,17 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/Docs/index.html",
   "./FieldOpsAtlas/Features/Tools/index.html",
   "./FieldOpsAtlas/Features/Weather/index.html",
-  "./FieldOpsAtlas/Features/Weather/styles.css?v=0.2.4-fieldops-weather-root",
-  "./FieldOpsAtlas/Features/Weather/app.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/styles.css?v=0.3.5-stadia-smooth-base-filter",
+  "./FieldOpsAtlas/Features/Weather/weather-map.js?v=0.3.5-stadia-smooth-base-filter",
   "./FieldOpsAtlas/Features/Weather/rainviewer.html",
-  "./FieldOpsAtlas/Features/Weather/rainviewer.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/rainviewer.js?v=0.3.4-real-rainviewer-overlay",
   "./FieldOpsAtlas/Features/Weather/openmeteo.html",
-  "./FieldOpsAtlas/Features/Weather/openmeteo.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/openmeteo.js?v=0.3.0-demapped-weather-apis",
   "./FieldOpsAtlas/Features/Weather/metoffice.html",
-  "./FieldOpsAtlas/Features/Weather/metoffice.css?v=0.2.4-fieldops-weather-root",
-  "./FieldOpsAtlas/Features/Weather/metoffice.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/metoffice.css?v=0.3.1-metoffice-single-colour",
+  "./FieldOpsAtlas/Features/Weather/metoffice.js?v=0.3.1-metoffice-single-colour",
   "./FieldOpsAtlas/Features/Weather/ea-rainfall.html",
-  "./FieldOpsAtlas/Features/Weather/ea-rainfall.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/ea-rainfall.js?v=0.3.0-demapped-weather-apis",
   "./FieldOpsAtlas/Features/Weather/data/regions.json"
 ];
 
