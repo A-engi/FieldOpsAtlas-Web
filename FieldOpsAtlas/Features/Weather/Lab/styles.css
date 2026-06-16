@@ -1,0 +1,215 @@
+:root {
+  --weather-bg: #06182f;
+  --weather-bg-soft: #0d294a;
+  --weather-card: rgba(9, 31, 59, 0.78);
+  --weather-card-line: rgba(147, 205, 255, 0.22);
+  --weather-text: #edf8ff;
+  --weather-muted: rgba(237, 248, 255, 0.68);
+  --weather-blue: #5ed0ff;
+  --weather-gold: #f5c34b;
+  --weather-red: #ff6b6b;
+  --weather-radius-lg: 24px;
+  --weather-radius-md: 16px;
+  --weather-shadow: 0 20px 58px rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--weather-text);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(94, 208, 255, 0.20), transparent 28rem),
+    linear-gradient(180deg, #031325 0%, var(--weather-bg) 48%, #020912 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.weather-lab-page {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) 18px 32px;
+}
+
+.weather-lab-hero {
+  padding: 22px;
+  border: 1px solid var(--weather-card-line);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(94, 208, 255, 0.18), transparent 18rem),
+    linear-gradient(180deg, rgba(16, 55, 98, 0.78), rgba(7, 24, 47, 0.88));
+  box-shadow: var(--weather-shadow);
+}
+
+.weather-lab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.weather-lab-nav a,
+.weather-button {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 40px;
+  padding: 0 14px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(94, 208, 255, 0.26);
+  border-radius: 999px;
+  color: var(--weather-text);
+  background: rgba(255, 255, 255, 0.075);
+  text-decoration: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.weather-button {
+  width: 100%;
+  color: #06182f;
+  border-color: rgba(245, 195, 75, 0.72);
+  background: linear-gradient(180deg, #ffe08a, var(--weather-gold));
+}
+
+.weather-lab-kicker,
+.weather-lab-version {
+  margin: 0;
+  color: var(--weather-blue);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.weather-lab-hero h1 {
+  margin: 8px 0 8px;
+  font-size: clamp(34px, 10vw, 72px);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+}
+
+.weather-lab-copy {
+  max-width: 720px;
+  margin: 0 0 18px;
+  color: var(--weather-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.weather-lab-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.weather-card,
+.weather-lab-notes {
+  padding: 18px;
+  border: 1px solid var(--weather-card-line);
+  border-radius: var(--weather-radius-lg);
+  background: var(--weather-card);
+  box-shadow: var(--weather-shadow);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+}
+
+.weather-card header {
+  min-height: 82px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.weather-card-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(94, 208, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(94, 208, 255, 0.08);
+  font-size: 22px;
+}
+
+.weather-card h2,
+.weather-lab-notes h2 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.weather-card p {
+  margin: 6px 0 0;
+  color: var(--weather-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.weather-field {
+  margin: 12px 0;
+  display: grid;
+  gap: 6px;
+  color: var(--weather-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.weather-field input,
+.weather-field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  color: var(--weather-text);
+  border: 1px solid rgba(94, 208, 255, 0.22);
+  border-radius: var(--weather-radius-md);
+  background: rgba(3, 15, 29, 0.86);
+  outline: 0;
+}
+
+.weather-output {
+  min-height: 128px;
+  margin: 12px 0 0;
+  padding: 12px;
+  overflow: auto;
+  color: rgba(237, 248, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--weather-radius-md);
+  background: rgba(0, 0, 0, 0.24);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+}
+
+.weather-lab-notes {
+  margin-top: 18px;
+}
+
+.weather-lab-notes ul {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  color: var(--weather-muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+  .weather-lab-page {
+    padding-inline: 12px;
+  }
+
+  .weather-lab-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* End of file: FieldOpsAtlas/Features/Weather/Lab/styles.css */
