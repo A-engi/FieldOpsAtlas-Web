@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.116</title>
+  <title>FieldOps Atlas RF v1.1.118</title>
 
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.12-single-rf-doc">
-  <link rel="stylesheet" href="./background.css?v=1.1.75-background-only">
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
   <link rel="stylesheet" href="./rf-interface.css?v=1.1.115-site-pack-panel">
 
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.116">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.118">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -58,9 +58,9 @@
         {
           id: "rf-overview",
           title: "RF overview",
-          subtitle: "RF network map and dashboard",
+          subtitle: "RF graph and dashboard",
           href: "./index.html",
-          keywords: ["overview", "dashboard", "network", "map"]
+          keywords: ["overview", "dashboard", "network", "graph", "map"]
         },
         {
           id: "rf-sites",
@@ -136,13 +136,13 @@
     });
   </script>
 
-  <script src="../../../shell.js?v=1.1.12-single-rf-doc" defer></script>
-  <script src="./rf-interface.js?v=1.1.104-signal-chevron-handle" defer></script>
+  <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
+  <script src="./rf-interface.js?v=1.1.118-graph-labels" defer></script>
   <script src="./rf-path-builder.js?v=1.1.116-generic-demo-builder" defer></script>
-  <script src="./rf-graph.js?v=1.1.85-path-toggle-button" defer></script>
+  <script src="./rf-graph.js?v=1.1.86-graph-data-rename" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.116-generic-demo-builder */
+    /* RF load toast | Version: 1.1.118-graph-labels */
     (() => {
       "use strict";
 
@@ -174,8 +174,8 @@
 
         const lines = [
           `index.html ${PAGE_VERSION}`,
-          "shell.css 1.1.12-single-rf-doc",
-          "background.css 1.1.75-background-only",
+          "shell.css 1.1.21-shell-smoke-controls",
+          "background.css 1.1.76-graph-label",
           "rf-graph.css 1.1.83-rename-graph-files",
           "rf-interface.css 1.1.115-site-pack-panel",
           `shell.js ${versionOf("FieldOpsEditor")}`,
@@ -211,4 +211,3 @@
   </script>
 </body>
 </html>
-<!-- End of FieldOpsAtlas/Features/RF/index.html | bottom/end of file -->
