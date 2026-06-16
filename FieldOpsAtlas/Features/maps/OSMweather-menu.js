@@ -1,18 +1,18 @@
 /* ==========================================================================
    FieldOps Atlas OSM weather menu
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.0-weather-lab-menu
+   Version: 1.0.1-weather-root-menu
    Purpose:
    - Converts each walk details weather button into a small menu.
    - Keeps the existing Open-Meteo activate action via data-load-weather.
-   - Adds a local Weather Lab link under FieldOpsAtlas/Features/Weather/Lab/.
+   - Adds a local Weather link under FieldOpsAtlas/Features/Weather/.
    ========================================================================== */
 
 (function fieldOpsOSMWeatherMenu() {
   "use strict";
 
-  var VERSION = "1.0.0-weather-lab-menu";
-  var LAB_URL = "../Weather/Lab/index.html";
+  var VERSION = "1.0.1-weather-root-menu";
+  var WEATHER_URL = "../Weather/index.html";
 
   function enhanceWeatherButton(button) {
     var walkId = button.getAttribute("data-load-weather");
@@ -29,7 +29,7 @@
 
     var copy = document.createElement("p");
     copy.className = "osmpanes-weather-menu-copy";
-    copy.textContent = "Choose whether to activate quick site weather here or open the provider test lab.";
+    copy.textContent = "Choose whether to activate quick site weather here or open the provider weather pages.";
 
     var actions = document.createElement("div");
     actions.className = "osmpanes-weather-menu-actions";
@@ -42,8 +42,8 @@
 
     var lab = document.createElement("a");
     lab.className = "osmpanes-weather-menu-link";
-    lab.href = LAB_URL;
-    lab.textContent = "Open Weather Lab";
+    lab.href = WEATHER_URL;
+    lab.textContent = "Open Weather";
 
     actions.appendChild(activate);
     actions.appendChild(lab);
