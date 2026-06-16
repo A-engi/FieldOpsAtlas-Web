@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.118-graph-labels
+   Version: 1.1.119-cream-graph-assets
    Purpose:
    - Own the RF interface shell and static RF UI.
    - Create the RF title, RF/IP/MW/All graph filter controls, graph holder,
@@ -13,7 +13,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.118-graph-labels";
+  const VERSION = "1.1.119-cream-graph-assets";
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
@@ -22,7 +22,7 @@
   const PANE_COLLAPSED_CLASS = "is-path-pane-collapsed";
 
   const MAIN_INTERFACE_TEMPLATE = String.raw`
-    <section class="rf-network" aria-label="RF network">
+    <section class="rf-network" aria-label="RF graph">
       <header class="rf-network-head">
         <h1 class="rf-title">RF graph</h1>
         <div class="rf-tabs" role="group" aria-label="RF graph filters">
@@ -37,7 +37,7 @@
         <article class="rf-map-paper" aria-label="RF graph topology">
           <img
             class="rf-map-background"
-            src="../../../data/icons/rf-current-background.svg?v=1.1.1"
+            src="../../../data/icons/rf-current-background.svg?v=1.1.119-cream-graph"
             alt=""
             aria-hidden="true"
           >
@@ -153,7 +153,7 @@
       >
         <img
           class="rf-path-handle-icon"
-          src="../../../data/icons/path-pane-signal-chevron-gold.svg?v=1.1.1"
+          src="../../../data/icons/path-pane-signal-chevron-gold.svg?v=1.1.116-cream-zigzag"
           alt=""
           aria-hidden="true"
         >
@@ -336,3 +336,5 @@
   }
 })();
 
+/* Destination: FieldOpsAtlas/Features/RF/rf-interface.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-interface.js */
