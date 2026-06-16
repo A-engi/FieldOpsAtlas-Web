@@ -1,20 +1,52 @@
-<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 73 337 568" preserveAspectRatio="none">
-<defs>
-<linearGradient id="c" x1="195" y1="0" x2="195" y2="844" gradientUnits="userSpaceOnUse"><stop stop-color="#dffcff" stop-opacity=".98"/><stop offset=".08" stop-color="#8ae7ff" stop-opacity=".9"/><stop offset=".28" stop-color="#37b7ff" stop-opacity=".55"/><stop offset=".52" stop-color="#7de0ff" stop-opacity=".82"/><stop offset=".8" stop-color="#2192e6" stop-opacity=".42"/><stop offset="1" stop-color="#dffcff" stop-opacity=".98"/></linearGradient>
-<linearGradient id="g" x1="195" y1="844" x2="390" y2="422" gradientUnits="userSpaceOnUse"><stop stop-color="#fff2bc" stop-opacity=".98"/><stop offset=".18" stop-color="#ffd66b" stop-opacity=".84"/><stop offset=".52" stop-color="#e5ba58" stop-opacity=".26"/><stop offset="1" stop-color="#fff2bc" stop-opacity=".82"/></linearGradient>
-<linearGradient id="s" x1="195" y1="0" x2="390" y2="246" gradientUnits="userSpaceOnUse"><stop stop-color="#e6ffff" stop-opacity=".98"/><stop offset=".18" stop-color="#8eeeff" stop-opacity=".84"/><stop offset=".54" stop-color="#2aabff" stop-opacity=".34"/><stop offset="1" stop-color="#d9fdff" stop-opacity=".68"/></linearGradient>
-<filter id="x" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter><filter id="y" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="22"/></filter><filter id="z" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="38"/></filter>
-<path id="t" d="M195 0C242 54 291 126 338 205C359 240 375 271 390 300"/>
-<path id="m" d="M195 0C234 70 278 164 325 290C348 352 369 395 390 422C355 474 323 564 290 657C264 731 232 794 195 844"/>
-<path id="w" d="M195 844C234 758 288 656 344 548C362 512 377 470 390 422"/>
-</defs>
-<rect x="0" y="73" width="337" height="568" fill="#061a3a"/>
-<g fill="none">
-<path d="M195 0C242 54 291 126 338 205C359 240 375 271 390 300" stroke="url(#s)" stroke-width="54" stroke-linecap="butt" filter="url(#y)" opacity=".88"/><use href="#t" stroke="url(#s)" stroke-width="14" stroke-linecap="butt" filter="url(#x)" opacity=".94"/><use href="#t" stroke="#eaffff" stroke-width="2" stroke-linecap="butt" opacity=".78"/>
-<use href="#m" stroke="#001029" stroke-width="126" stroke-linecap="butt" filter="url(#z)" opacity=".54"/><use href="#m" stroke="url(#c)" stroke-width="88" stroke-linecap="butt" filter="url(#y)" opacity=".9"/><use href="#m" stroke="url(#c)" stroke-width="42" stroke-linecap="butt" filter="url(#x)" opacity=".94"/><use href="#m" stroke="#e9ffff" stroke-width="4" stroke-linecap="butt" opacity=".92"/>
-<use href="#w" stroke="url(#c)" stroke-width="78" stroke-linecap="butt" filter="url(#y)" opacity=".64"/><use href="#w" stroke="url(#g)" stroke-width="24" stroke-linecap="butt" filter="url(#x)" opacity=".94"/><use href="#w" stroke="#fff3c7" stroke-width="3" stroke-linecap="butt" opacity=".9"/>
-<path d="M195 0L195 26" stroke="#f4ffff" stroke-width="6" stroke-linecap="butt" filter="url(#x)" opacity=".95"/><path d="M195 822L195 844" stroke="#f4ffff" stroke-width="6" stroke-linecap="butt" filter="url(#x)" opacity=".95"/><path d="M374 422L390 422" stroke="#f2ffff" stroke-width="5" stroke-linecap="butt" filter="url(#x)" opacity=".82"/>
-<path d="M195 642C260 596 323 534 390 438" stroke="#c7fbff" stroke-width="58" stroke-linecap="butt" filter="url(#z)" opacity=".1"/>
-<path d="M195 674C262 618 328 552 390 452M390 388C363 479 325 566 274 654C251 693 224 739 195 792" stroke="#9ef2ff" stroke-width="1.25" stroke-linecap="butt" opacity=".24"/>
-</g>
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 73 337 568" preserveAspectRatio="none" role="img" aria-labelledby="rfCurrentTitle rfCurrentDesc">
+  <title id="rfCurrentTitle">RF graph cream background currents</title>
+  <desc id="rfCurrentDesc">Subtle transparent RF current lines for the cream RF graph canvas.</desc>
+  <!-- Version: 1.1.119-cream-graph -->
+
+  <defs>
+    <linearGradient id="creamGoldCurrent" x1="32" y1="641" x2="330" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff6d7" stop-opacity="0" />
+      <stop offset="0.28" stop-color="#efd59a" stop-opacity="0.18" />
+      <stop offset="0.50" stop-color="#ffffff" stop-opacity="0.40" />
+      <stop offset="0.72" stop-color="#e7c071" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#fff6d7" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="creamBlueCurrent" x1="4" y1="108" x2="332" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#dffcff" stop-opacity="0" />
+      <stop offset="0.32" stop-color="#8bd6e4" stop-opacity="0.12" />
+      <stop offset="0.52" stop-color="#ffffff" stop-opacity="0.20" />
+      <stop offset="0.78" stop-color="#78bfd1" stop-opacity="0.10" />
+      <stop offset="1" stop-color="#dffcff" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+
+    <filter id="fineGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3.2" />
+    </filter>
+
+    <path id="upperCurrent" d="M-12 158C52 190 102 206 158 216C226 228 275 255 349 314" />
+    <path id="centreCurrent" d="M28 128C92 190 130 264 166 338C203 414 236 473 270 532C298 582 314 625 330 690" />
+    <path id="lowerCurrent" d="M-26 598C68 558 146 527 209 487C270 449 309 397 360 308" />
+  </defs>
+
+  <g fill="none" stroke-linecap="round" pointer-events="none">
+    <use href="#upperCurrent" stroke="url(#creamBlueCurrent)" stroke-width="44" opacity="0.58" filter="url(#softGlow)" />
+    <use href="#upperCurrent" stroke="url(#creamBlueCurrent)" stroke-width="7" opacity="0.38" filter="url(#fineGlow)" />
+    <use href="#upperCurrent" stroke="#ffffff" stroke-width="1.1" opacity="0.26" />
+
+    <use href="#centreCurrent" stroke="url(#creamBlueCurrent)" stroke-width="70" opacity="0.38" filter="url(#softGlow)" />
+    <use href="#centreCurrent" stroke="url(#creamBlueCurrent)" stroke-width="24" opacity="0.30" filter="url(#fineGlow)" />
+    <use href="#centreCurrent" stroke="#ffffff" stroke-width="1.4" opacity="0.28" />
+
+    <use href="#lowerCurrent" stroke="url(#creamGoldCurrent)" stroke-width="58" opacity="0.48" filter="url(#softGlow)" />
+    <use href="#lowerCurrent" stroke="url(#creamGoldCurrent)" stroke-width="15" opacity="0.42" filter="url(#fineGlow)" />
+    <use href="#lowerCurrent" stroke="#fffdf3" stroke-width="1.5" opacity="0.30" />
+  </g>
+
+  <!-- Destination: data/icons/rf-current-background.svg -->
+  <!-- End of file: data/icons/rf-current-background.svg -->
 </svg>
