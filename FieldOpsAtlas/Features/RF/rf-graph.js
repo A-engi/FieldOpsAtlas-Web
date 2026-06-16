@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.85-path-toggle-button
+   Version: 1.1.86-graph-data-rename
 
    Purpose:
    - Render only the foreground RF graph SVG.
@@ -22,9 +22,9 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.85-path-toggle-button";
+  const VERSION = "1.1.86-graph-data-rename";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
-  const GRAPH_URL = "../../../data/rf-network-map.json";
+  const GRAPH_URL = "../../../data/rf-graph.json";
 
   const BASE_VIEWBOX = {
     width: 1000,
@@ -662,4 +662,3 @@
   }
 })();
 
-/* End of FieldOpsAtlas/Features/RF/rf-graph.js | bottom/end of file */
