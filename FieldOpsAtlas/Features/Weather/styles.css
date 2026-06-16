@@ -1,9 +1,8 @@
-/* FieldOps Atlas Weather provider test styles v0.3.2
+/* FieldOps Atlas Weather styles v0.3.5
    Destination: FieldOpsAtlas/Features/Weather/styles.css
 
-   Weather provider-test stylesheet only.
-   It intentionally contains no map canvas, markers, weather overlay,
-   or Met Office repaint/debug-panel styling.
+   Weather provider-test and lightweight Weather map stylesheet.
+   The Weather map filters the base pane only; future weather overlays remain unfiltered.
 */
 
 :root {
@@ -543,6 +542,146 @@ button:disabled {
   padding: 10px 12px;
   color: var(--text-soft);
   font-size: 0.88rem;
+}
+
+.weather-map-body {
+  overflow: hidden;
+  background: #08111e;
+}
+
+.weather-map-shell {
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.weather-map-header {
+  position: relative;
+  z-index: 700;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: calc(var(--safe-top) + 10px) 12px 10px;
+  background: rgba(8, 17, 30, 0.9);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+}
+
+.weather-map-header h1 {
+  margin: 0;
+  line-height: 1.08;
+  font-size: clamp(20px, 5.8vw, 34px);
+}
+
+.weather-map-stage {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.weather-map-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: #e7ece8;
+}
+
+.weather-base-pane {
+  filter:
+    brightness(1.04)
+    contrast(0.9)
+    saturate(0.78);
+}
+
+.weather-layer-pane,
+.weather-layer-pane img,
+.weather-marker-pane,
+.weather-control-pane {
+  filter: none;
+}
+
+.weather-map-float {
+  position: absolute;
+  z-index: 680;
+  left: 12px;
+  top: 12px;
+  width: min(360px, calc(100vw - 24px));
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(8, 17, 30, 0.86);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.weather-map-float h2 {
+  margin: 0 0 6px;
+}
+
+.weather-map-float p {
+  margin: 0 0 10px;
+  color: var(--text-soft);
+  line-height: 1.38;
+}
+
+.weather-map-provider-links {
+  position: absolute;
+  z-index: 680;
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--safe-bottom) + 12px);
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(8, 17, 30, 0.82);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.weather-map-provider-links a {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.84rem;
+}
+
+.weather-map-provider-links a:first-child {
+  border-color: rgba(34, 217, 255, 0.5);
+  background: rgba(34, 217, 255, 0.16);
+}
+
+@media (max-width: 760px) {
+  .weather-map-header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .weather-map-header .version-pill {
+    grid-column: 1 / -1;
+    justify-self: start;
+    min-height: 38px;
+  }
+
+  .weather-map-float {
+    top: 10px;
+    padding: 12px;
+  }
+
+  .weather-map-float .source-note {
+    display: none;
+  }
 }
 
 @media (max-width: 760px) {
