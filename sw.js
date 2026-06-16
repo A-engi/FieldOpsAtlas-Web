@@ -1,9 +1,9 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.2-web-maps-rfpages
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.3-weather-lab
    Keeps the browser prototype usable offline where possible.
    Maps remains the main fallback page.
 */
 
-const CACHE_NAME = "fieldops-atlas-v1.1.2-web-maps-rfpages";
+const CACHE_NAME = "fieldops-atlas-v1.1.3-weather-lab";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -33,7 +33,20 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RFPages/settings.html",
   "./FieldOpsAtlas/Features/Network/index.html",
   "./FieldOpsAtlas/Features/Docs/index.html",
-  "./FieldOpsAtlas/Features/Tools/index.html"
+  "./FieldOpsAtlas/Features/Tools/index.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/index.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/styles.css?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/app.js?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/rainviewer.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/rainviewer.js?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/openmeteo.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/openmeteo.js?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.css?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.js?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/ea-rainfall.html",
+  "./FieldOpsAtlas/Features/Weather/Lab/ea-rainfall.js?v=0.2.3-fieldops-web-lab",
+  "./FieldOpsAtlas/Features/Weather/Lab/data/regions.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -48,7 +61,11 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      ))
       .then(() => self.clients.claim())
   );
 });
@@ -69,3 +86,5 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
+
+/* End of file: sw.js */
