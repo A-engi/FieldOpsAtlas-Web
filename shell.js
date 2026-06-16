@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas shared shell
    Root file: shell.js
-   Version: 1.1.19-settings-editor-fix
+   Version: 1.1.20-web-repo-profile-link
    Purpose:
    - Inject one shared root shell into the current page root.
    - Root shell owns menu, top controls, search, filter, bottom nav.
@@ -12,7 +12,7 @@
 (function fieldOpsSharedShell() {
   "use strict";
 
-  var VERSION = "1.1.19-settings-editor-fix";
+  var VERSION = "1.1.20-web-repo-profile-link";
   var ROOT_SELECTOR = ".phone, .app-shell, .fieldops-shell-root";
   var CHROME_SELECTOR = [
     ":scope > .top-shell",
@@ -73,7 +73,7 @@
   var editorState = {
     token: localGet(EDITOR_KEYS.token),
     owner: localGet(EDITOR_KEYS.owner) || "A-engi",
-    repo: localGet(EDITOR_KEYS.repo) || "FieldOpsAtlas-iOS",
+    repo: localGet(EDITOR_KEYS.repo) || "FieldOpsAtlas-Web",
     branch: localGet(EDITOR_KEYS.branch) || "main",
     online: localGet(EDITOR_KEYS.online) === "true"
   };
@@ -144,7 +144,7 @@
       return "map";
     }
 
-    if (path.indexOf("/features/rf/") !== -1) {
+    if (path.indexOf("/features/rf/") !== -1 || path.indexOf("/features/rfpages/") !== -1) {
       return "rf";
     }
 
@@ -763,6 +763,7 @@
           source: "drawer"
         });
         controller.setDrawerOpen(false);
+        window.location.href = asset("FieldOpsAtlas/Features/Profile/index.html");
       });
     }
 
@@ -1084,7 +1085,7 @@
   ShellController.prototype.saveEditorConfig = function saveEditorConfig() {
     editorState.token = this.refs.editorToken ? this.refs.editorToken.value.trim() : editorState.token;
     editorState.owner = this.refs.editorOwner ? this.refs.editorOwner.value.trim() || "A-engi" : editorState.owner;
-    editorState.repo = this.refs.editorRepo ? this.refs.editorRepo.value.trim() || "FieldOpsAtlas-iOS" : editorState.repo;
+    editorState.repo = this.refs.editorRepo ? this.refs.editorRepo.value.trim() || "FieldOpsAtlas-Web" : editorState.repo;
     editorState.branch = this.refs.editorBranch ? this.refs.editorBranch.value.trim() || "main" : editorState.branch;
     editorState.online = Boolean(editorState.token);
 
