@@ -1,23 +1,33 @@
-/* ==========================================================================
+/* ========================================================================== 
    FieldOps Atlas OSM weather menu
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.1-weather-root-menu
+   Version: 1.0.2-preview-freeze-fix
    Purpose:
-   - Converts each walk details weather button into a small menu.
-   - Keeps the existing Open-Meteo activate action via data-load-weather.
-   - Adds a local Weather link under FieldOpsAtlas/Features/Weather/.
+   - Converts each walk details weather button into a small site-weather menu.
+   - Keeps the existing Open-Meteo quick site weather action via data-load-weather.
+   - Adds a link to the full Weather feature page.
+   - Prevents the MutationObserver from repeatedly enhancing its own inserted button.
    ========================================================================== */
-
 (function fieldOpsOSMWeatherMenu() {
   "use strict";
 
-  var VERSION = "1.0.1-weather-root-menu";
+  var VERSION = "1.0.2-preview-freeze-fix";
   var WEATHER_URL = "../Weather/index.html";
 
-  function enhanceWeatherButton(button) {
-    var walkId = button.getAttribute("data-load-weather");
+  function shouldEnhance(button) {
+    return Boolean(
+      button &&
+      button.matches &&
+      button.matches("[data-load-weather]") &&
+      button.dataset.weatherMenuEnhanced !== "true" &&
+      !button.closest("[data-weather-menu]")
+    );
+  }
 
-    if (!walkId || button.dataset.weatherMenuEnhanced === "true") {
+  function enhanceWeatherButton(button) {
+    var walkId = button && button.getAttribute("data-load-weather");
+
+    if (!walkId || !shouldEnhance(button)) {
       return;
     }
 
@@ -29,7 +39,7 @@
 
     var copy = document.createElement("p");
     copy.className = "osmpanes-weather-menu-copy";
-    copy.textContent = "Choose whether to activate quick site weather here or open the provider weather pages.";
+    copy.textContent = "Quick site weather here, or open the full Weather page.";
 
     var actions = document.createElement("div");
     actions.className = "osmpanes-weather-menu-actions";
@@ -38,15 +48,16 @@
     activate.className = "osmpanes-weather-menu-activate";
     activate.type = "button";
     activate.setAttribute("data-load-weather", walkId);
-    activate.textContent = "Activate weather";
+    activate.setAttribute("data-weather-menu-activate", "true");
+    activate.textContent = "Activate site weather";
 
-    var lab = document.createElement("a");
-    lab.className = "osmpanes-weather-menu-link";
-    lab.href = WEATHER_URL;
-    lab.textContent = "Open Weather";
+    var weatherPage = document.createElement("a");
+    weatherPage.className = "osmpanes-weather-menu-link";
+    weatherPage.href = WEATHER_URL;
+    weatherPage.textContent = "Open Weather page";
 
     actions.appendChild(activate);
-    actions.appendChild(lab);
+    actions.appendChild(weatherPage);
     menu.appendChild(copy);
     menu.appendChild(actions);
 
@@ -55,7 +66,21 @@
 
   function enhanceWeatherMenus(root) {
     var scope = root || document;
-    scope.querySelectorAll("[data-load-weather]").forEach(enhanceWeatherButton);
+
+    if (scope.nodeType !== 1 && scope.nodeType !== 9 && scope.nodeType !== 11) {
+      return;
+    }
+
+    if (scope.matches && shouldEnhance(scope)) {
+      enhanceWeatherButton(scope);
+      return;
+    }
+
+    scope.querySelectorAll("[data-load-weather]").forEach(function eachWeatherButton(button) {
+      if (shouldEnhance(button)) {
+        enhanceWeatherButton(button);
+      }
+    });
   }
 
   function init() {
@@ -64,24 +89,12 @@
     var observer = new MutationObserver(function onMutations(mutations) {
       mutations.forEach(function onMutation(mutation) {
         mutation.addedNodes.forEach(function onAddedNode(node) {
-          if (!node || node.nodeType !== 1) {
-            return;
-          }
-
-          if (node.matches && node.matches("[data-load-weather]")) {
-            enhanceWeatherButton(node);
-            return;
-          }
-
           enhanceWeatherMenus(node);
         });
       });
     });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
     window.FieldOpsOSMWeatherMenu = {
       version: VERSION,
@@ -94,6 +107,6 @@
   } else {
     init();
   }
-})();
+}());
 
-// End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js
+// End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js | bottom/end of file
