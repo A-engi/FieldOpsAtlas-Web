@@ -1,8 +1,8 @@
-/* FieldOps Atlas Weather styles v0.3.5
+/* FieldOps Atlas Weather styles v0.3.6
    Destination: FieldOpsAtlas/Features/Weather/styles.css
 
    Weather provider-test and lightweight Weather map stylesheet.
-   The Weather map filters the base pane only; future weather overlays remain unfiltered.
+   The Weather map filters the base pane only; RainViewer weather overlays remain unfiltered.
 */
 
 :root {
@@ -627,6 +627,15 @@ button:disabled {
   margin: 0 0 10px;
   color: var(--text-soft);
   line-height: 1.38;
+}
+
+.weather-map-frame-time {
+  min-height: 24px;
+  font-weight: 800;
+}
+
+.weather-map-float .range-control {
+  accent-color: var(--accent);
 }
 
 .weather-map-provider-links {
