@@ -1,1616 +1,198 @@
 <!doctype html>
-<html lang="en" data-page="weather-only">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#061426">
-  <title>FieldOps Atlas · Weather</title>
-
-  <style>
-    /* ==========================================================================
-       FieldOps Atlas Weather
-       Root file: FieldOpsAtlas/Features/Weather/index.html
-       Version: 1.0.0-weather-only
-
-       Purpose:
-       - Weather feature only.
-       - Uses Open-Meteo forecast and geocoding APIs directly.
-       - Keeps weather-related controls, panels, saved locations, field checks,
-         external warning links, hourly forecast, daily forecast, and current
-         field conditions.
-       - Does not load shared app frame, drawer, map UI, or app bars.
-       ========================================================================== */
-
-    :root {
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-
-      --page-width: 430px;
-      --side: 7px;
-
-      --bg-deep: #020812;
-      --bg-page: #061426;
-      --bg-panel: rgba(8, 26, 47, 0.88);
-      --bg-panel-strong: rgba(7, 22, 40, 0.97);
-      --bg-control:
-        radial-gradient(circle at 50% 0%, rgba(255, 217, 133, 0.08), transparent 34%),
-        linear-gradient(180deg, rgba(16, 43, 73, 0.97), rgba(12, 35, 61, 0.97));
-
-      --text: rgba(255, 255, 255, 0.94);
-      --text-soft: rgba(226, 241, 255, 0.78);
-      --text-muted: rgba(226, 241, 255, 0.62);
-      --text-faint: rgba(226, 241, 255, 0.46);
-
-      --gold: #edbf63;
-      --gold-soft: #ffdda0;
-      --gold-line: rgba(237, 191, 99, 0.36);
-      --gold-glow: rgba(237, 191, 99, 0.42);
-
-      --blue: #5ed0ff;
-      --blue-soft: rgba(137, 220, 255, 0.82);
-      --blue-line: rgba(94, 208, 255, 0.30);
-
-      --green: #7de7b0;
-      --amber: #ffc66d;
-      --red: #ff7a94;
-
-      --shadow-panel:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 18px 38px rgba(0, 0, 0, 0.38);
-
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 9px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 50% -8%, rgba(59, 136, 196, 0.42), transparent 46%),
-        radial-gradient(circle at 50% 104%, rgba(237, 191, 99, 0.14), transparent 36%),
-        linear-gradient(180deg, #07172a, var(--bg-deep));
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      overflow-x: hidden;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    .weather-shell {
-      position: relative;
-      width: min(100vw, var(--page-width));
-      min-height: 100vh;
-      min-height: 100dvh;
-      margin-inline: auto;
-      padding:
-        calc(var(--safe-top) + 10px)
-        var(--side)
-        calc(var(--safe-bottom) + 14px);
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(94, 208, 255, 0.18), transparent 34%),
-        radial-gradient(circle at 98% 20%, rgba(237, 191, 99, 0.14), transparent 32%),
-        linear-gradient(180deg, rgba(6, 20, 38, 0.96), rgba(2, 8, 18, 0.98));
-    }
-
-    .weather-stack {
-      display: grid;
-      gap: 10px;
-    }
-
-    .weather-hero {
-      padding: 14px;
-      border: 1px solid var(--gold-line);
-      border-radius: var(--radius-lg);
-      background:
-        radial-gradient(circle at 14% 0%, rgba(94, 208, 255, 0.18), transparent 34%),
-        radial-gradient(circle at 100% 100%, rgba(237, 191, 99, 0.12), transparent 34%),
-        var(--bg-panel-strong);
-      box-shadow: var(--shadow-panel);
-    }
-
-    .hero-top {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .eyebrow {
-      margin: 0 0 6px;
-      color: var(--gold-soft);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .weather-title {
-      margin: 0;
-      color: var(--text);
-      font-size: 23px;
-      font-weight: 950;
-      line-height: 1;
-      letter-spacing: -0.03em;
-    }
-
-    .weather-subtitle {
-      margin: 6px 0 0;
-      color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    .weather-code-mark {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 221, 160, 0.28);
-      border-radius: 17px;
-      background:
-        radial-gradient(circle at 50% 22%, rgba(255, 221, 160, 0.24), transparent 36%),
-        rgba(255, 255, 255, 0.055);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 10px 20px rgba(0, 0, 0, 0.20);
-      font-size: 27px;
-    }
-
-    .current-grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .temp-card {
-      min-width: 0;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.055);
-    }
-
-    .temp-value {
-      margin: 0;
-      color: #fffdf7;
-      font-size: clamp(42px, 14vw, 58px);
-      font-weight: 950;
-      line-height: 0.95;
-      letter-spacing: -0.08em;
-    }
-
-    .temp-meta {
-      margin: 6px 0 0;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .condition-card {
-      min-width: 0;
-      padding: 12px;
-      display: grid;
-      gap: 8px;
-      border: 1px solid rgba(94, 208, 255, 0.18);
-      border-radius: var(--radius-md);
-      background: rgba(94, 208, 255, 0.07);
-    }
-
-    .condition-label {
-      margin: 0;
-      color: var(--blue-soft);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .condition-value {
-      margin: 0;
-      color: var(--text);
-      font-size: 16px;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    .condition-detail {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.3;
-    }
-
-    .search-panel,
-    .card,
-    .panel {
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: var(--radius-lg);
-      background: var(--bg-panel);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.055),
-        0 14px 30px rgba(0, 0, 0, 0.22);
-      -webkit-backdrop-filter: blur(14px) saturate(118%);
-      backdrop-filter: blur(14px) saturate(118%);
-    }
-
-    .search-panel {
-      padding: 10px;
-      display: grid;
-      gap: 9px;
-    }
-
-    .search-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px;
-    }
-
-    .search-input {
-      min-height: 42px;
-      padding: 0 12px;
-      color: var(--text);
-      border: 1px solid rgba(94, 208, 255, 0.22);
-      border-radius: var(--radius-md);
-      background: rgba(4, 15, 29, 0.72);
-      outline: 0;
-    }
-
-    .search-input::placeholder {
-      color: var(--text-faint);
-    }
-
-    .button,
-    .link-button,
-    .location-button,
-    .saved-location-button {
-      appearance: none;
-      -webkit-appearance: none;
-      min-height: 38px;
-      border: 1px solid rgba(42, 67, 93, 0.72);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      background: var(--bg-control);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 8px 18px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 850;
-    }
-
-    .button {
-      padding: 0 11px;
-      display: inline-grid;
-      place-items: center;
-    }
-
-    .button.is-gold,
-    .link-button.is-gold {
-      color: var(--gold-soft);
-      border-color: rgba(237, 191, 99, 0.64);
-    }
-
-    .button.is-danger {
-      color: #ffb3c2;
-      border-color: rgba(255, 75, 110, 0.45);
-    }
-
-    .search-actions {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .search-results,
-    .saved-locations {
-      display: grid;
-      gap: 7px;
-    }
-
-    .location-button,
-    .saved-location-button {
-      width: 100%;
-      min-height: 42px;
-      padding: 8px 10px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px;
-      align-items: center;
-      text-align: left;
-    }
-
-    .location-copy {
-      min-width: 0;
-      display: grid;
-      gap: 3px;
-    }
-
-    .location-name {
-      overflow: hidden;
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 900;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .location-meta {
-      overflow: hidden;
-      color: var(--text-muted);
-      font-size: 11px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .section-title {
-      margin: 0;
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 950;
-      letter-spacing: -0.02em;
-    }
-
-    .section-head {
-      padding: 12px 12px 0;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .section-copy {
-      margin: 4px 0 0;
-      color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    .risk-grid {
-      padding: 12px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .risk-card {
-      min-width: 0;
-      padding: 10px;
-      display: grid;
-      gap: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .risk-card[data-risk="ok"] {
-      border-color: rgba(125, 231, 176, 0.28);
-    }
-
-    .risk-card[data-risk="watch"] {
-      border-color: rgba(255, 198, 109, 0.34);
-    }
-
-    .risk-card[data-risk="high"] {
-      border-color: rgba(255, 122, 148, 0.44);
-    }
-
-    .risk-label {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .risk-value {
-      margin: 0;
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    .risk-note {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 11px;
-      line-height: 1.25;
-    }
-
-    .hourly-strip,
-    .daily-list {
-      padding: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .hourly-strip {
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(92px, 1fr);
-      overflow-x: auto;
-      overscroll-behavior-inline: contain;
-      scroll-snap-type: x proximity;
-    }
-
-    .hour-card,
-    .day-card {
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .hour-card {
-      min-height: 112px;
-      padding: 10px;
-      display: grid;
-      gap: 6px;
-      scroll-snap-align: start;
-    }
-
-    .hour-time,
-    .day-date {
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 850;
-    }
-
-    .hour-icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .hour-temp {
-      color: var(--text);
-      font-size: 18px;
-      font-weight: 950;
-      line-height: 1;
-    }
-
-    .hour-meta {
-      color: var(--text-muted);
-      font-size: 11px;
-      line-height: 1.25;
-    }
-
-    .day-card {
-      padding: 10px;
-      display: grid;
-      grid-template-columns: 38px minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .day-icon {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 221, 160, 0.18);
-      border-radius: 13px;
-      background: rgba(255, 255, 255, 0.045);
-      font-size: 22px;
-    }
-
-    .day-main {
-      min-width: 0;
-      display: grid;
-      gap: 3px;
-    }
-
-    .day-condition {
-      overflow: hidden;
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 900;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .day-meta {
-      overflow: hidden;
-      color: var(--text-muted);
-      font-size: 11px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .day-temp {
-      color: var(--gold-soft);
-      font-size: 13px;
-      font-weight: 950;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .links-grid {
-      padding: 12px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .link-button {
-      min-height: 42px;
-      padding: 9px 10px;
-      display: grid;
-      gap: 3px;
-      align-content: center;
-      text-align: left;
-    }
-
-    .link-title {
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .link-meta {
-      color: var(--text-muted);
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .field-notes {
-      padding: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .notes-input {
-      min-height: 86px;
-      padding: 10px;
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.055);
-      resize: vertical;
-      outline: 0;
-    }
-
-    .status-toast {
-      position: fixed;
-      z-index: 90;
-      right: max(var(--side), calc((100vw - var(--page-width)) / 2 + var(--side)));
-      bottom: calc(var(--safe-bottom) + 12px);
-      left: max(var(--side), calc((100vw - var(--page-width)) / 2 + var(--side)));
-      min-height: 34px;
-      padding: 9px 12px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 221, 160, 0.30);
-      border-radius: 14px;
-      color: var(--text-soft);
-      background: rgba(6, 18, 34, 0.90);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
-      opacity: 0;
-      transform: translateY(12px);
-      transition:
-        opacity 180ms ease,
-        transform 180ms ease;
-      pointer-events: none;
-      font-size: 12px;
-      font-weight: 750;
-    }
-
-    .status-toast.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .empty-state {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    .error-state {
-      padding: 10px;
-      color: #ffd6df;
-      border: 1px solid rgba(255, 75, 110, 0.35);
-      border-radius: var(--radius-md);
-      background: rgba(255, 75, 110, 0.08);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    @media (max-width: 360px) {
-      .current-grid,
-      .risk-grid,
-      .links-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .search-actions {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+ <meta name="theme-color" content="#061426">
+ <title>FieldOps Atlas · Weather Map</title>
+
+ <link rel="stylesheet" href="../../../shell.css">
+ <link rel="stylesheet" href="../maps/background.css?v=weather-map-call-20260616">
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+ <link rel="stylesheet" href="../maps/OSMmaps.css?v=weather-map-call-20260616">
+ <link rel="stylesheet" href="../maps/OSMpanes.css?v=weather-map-call-20260616">
+
+ <style>
+  :root {
+   --weather-control-top: calc(92px + env(safe-area-inset-top, 0px));
+   --weather-control-side: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
+  }
+
+  .weather-map-mode {
+   position: fixed;
+   top: var(--weather-control-top);
+   left: var(--weather-control-side);
+   z-index: 38;
+   display: flex;
+   gap: 8px;
+   padding: 6px;
+   border: 1px solid rgba(184, 226, 255, 0.18);
+   border-radius: 999px;
+   background:
+    linear-gradient(180deg, rgba(9, 34, 63, 0.80), rgba(5, 18, 36, 0.66)),
+    rgba(7, 22, 42, 0.72);
+   box-shadow: 0 18px 42px rgba(0, 12, 28, 0.26);
+   pointer-events: auto;
+   backdrop-filter: blur(18px) saturate(135%);
+   -webkit-backdrop-filter: blur(18px) saturate(135%);
+  }
+
+  .weather-map-theme-button {
+   appearance: none;
+   -webkit-appearance: none;
+   min-height: 34px;
+   padding: 0 13px;
+   border: 1px solid rgba(184, 226, 255, 0.16);
+   border-radius: 999px;
+   color: rgba(239, 249, 255, 0.86);
+   background: rgba(255, 255, 255, 0.06);
+   font: inherit;
+   font-size: 12px;
+   font-weight: 850;
+   letter-spacing: 0.02em;
+   cursor: pointer;
+  }
+
+  .weather-map-theme-button[aria-pressed="true"] {
+   color: #08213b;
+   border-color: rgba(255, 255, 255, 0.42);
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(205, 235, 255, 0.90));
+  }
+
+  .osmmaps-page[data-theme="light"] ~ .weather-map-mode {
+   background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(230, 244, 255, 0.70)),
+    rgba(255, 255, 255, 0.76);
+  }
+
+  .osmmaps-page[data-theme="light"] ~ .weather-map-mode .weather-map-theme-button {
+   color: rgba(12, 36, 62, 0.70);
+   background: rgba(12, 36, 62, 0.05);
+  }
+
+  .osmmaps-page[data-theme="light"] ~ .weather-map-mode .weather-map-theme-button[aria-pressed="true"] {
+   color: rgba(239, 249, 255, 0.96);
+   background: linear-gradient(180deg, rgba(20, 73, 124, 0.92), rgba(8, 38, 74, 0.92));
+  }
+
+  @media (max-width: 380px) {
+   .weather-map-mode {
+    top: calc(88px + env(safe-area-inset-top, 0px));
+    left: 9px;
+   }
+  }
+ </style>
 </head>
-
 <body>
-  <main class="weather-shell" aria-label="FieldOps Atlas weather feature">
-    <div class="weather-stack">
-      <section class="weather-hero" aria-label="Current weather">
-        <div class="hero-top">
-          <div>
-            <p class="eyebrow">Weather</p>
-            <h1 id="locationTitle" class="weather-title">Select location</h1>
-            <p id="locationSubtitle" class="weather-subtitle">
-              Search for a site, town, postcode area, or use device location.
-            </p>
-          </div>
-          <div id="currentWeatherIcon" class="weather-code-mark" aria-hidden="true">⛅</div>
-        </div>
-
-        <div class="current-grid">
-          <article class="temp-card">
-            <p id="currentTemperature" class="temp-value">--°</p>
-            <p id="currentFeelsLike" class="temp-meta">Feels like --°</p>
-          </article>
-
-          <article class="condition-card">
-            <p class="condition-label">Now</p>
-            <p id="currentCondition" class="condition-value">No forecast loaded</p>
-            <p id="currentDetail" class="condition-detail">Wind, rain, humidity and pressure will appear here.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="search-panel" aria-label="Weather location search">
-        <div class="search-row">
-          <input
-            id="locationSearchInput"
-            class="search-input"
-            type="search"
-            autocomplete="off"
-            placeholder="Search location"
-            aria-label="Search location"
-          >
-          <button id="searchLocationButton" class="button is-gold" type="button">
-            Search
-          </button>
-        </div>
-
-        <div class="search-actions">
-          <button id="useDeviceLocationButton" class="button" type="button">
-            Use GPS
-          </button>
-          <button id="saveLocationButton" class="button" type="button">
-            Save
-          </button>
-          <button id="refreshWeatherButton" class="button" type="button">
-            Refresh
-          </button>
-        </div>
-
-        <div id="searchResults" class="search-results" aria-live="polite"></div>
-        <div id="savedLocations" class="saved-locations"></div>
-      </section>
-
-      <section class="card" aria-label="Field weather checks">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">Field checks</h2>
-            <p id="fieldSummary" class="section-copy">Load weather to assess wind, rain, visibility and lightning risk.</p>
-          </div>
-        </div>
-
-        <div id="riskGrid" class="risk-grid">
-          <article class="risk-card" data-risk="watch">
-            <p class="risk-label">Wind</p>
-            <p class="risk-value">--</p>
-            <p class="risk-note">Waiting for forecast.</p>
-          </article>
-          <article class="risk-card" data-risk="watch">
-            <p class="risk-label">Rain</p>
-            <p class="risk-value">--</p>
-            <p class="risk-note">Waiting for forecast.</p>
-          </article>
-          <article class="risk-card" data-risk="watch">
-            <p class="risk-label">Visibility</p>
-            <p class="risk-value">--</p>
-            <p class="risk-note">Waiting for forecast.</p>
-          </article>
-          <article class="risk-card" data-risk="watch">
-            <p class="risk-label">Pressure</p>
-            <p class="risk-value">--</p>
-            <p class="risk-note">Waiting for forecast.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="card" aria-label="Hourly forecast">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">Next 12 hours</h2>
-            <p class="section-copy">Temperature, rain probability, wind and gusts.</p>
-          </div>
-        </div>
-        <div id="hourlyStrip" class="hourly-strip">
-          <p class="empty-state">No hourly forecast loaded.</p>
-        </div>
-      </section>
-
-      <section class="card" aria-label="Daily forecast">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">7 day outlook</h2>
-            <p class="section-copy">Daily highs, lows, rain totals, wind and UV.</p>
-          </div>
-        </div>
-        <div id="dailyList" class="daily-list">
-          <p class="empty-state">No daily forecast loaded.</p>
-        </div>
-      </section>
-
-      <section class="card" aria-label="Weather links">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">Weather links</h2>
-            <p class="section-copy">External field checks. Opens in a new tab.</p>
-          </div>
-        </div>
-
-        <div class="links-grid">
-          <a class="link-button is-gold" href="https://www.metoffice.gov.uk/weather/warnings-and-advice/uk-warnings" target="_blank" rel="noopener noreferrer">
-            <span class="link-title">Met Office warnings</span>
-            <span class="link-meta">UK warning map</span>
-          </a>
-          <a class="link-button" href="https://www.blitzortung.org/en/live_lightning_maps.php" target="_blank" rel="noopener noreferrer">
-            <span class="link-title">Lightning map</span>
-            <span class="link-meta">Live strikes</span>
-          </a>
-          <a class="link-button" href="https://check-for-flooding.service.gov.uk/" target="_blank" rel="noopener noreferrer">
-            <span class="link-title">Flood warnings</span>
-            <span class="link-meta">England service</span>
-          </a>
-          <a class="link-button" href="https://www.nationalgrid.co.uk/power-cuts" target="_blank" rel="noopener noreferrer">
-            <span class="link-title">Power cuts</span>
-            <span class="link-meta">Network checks</span>
-          </a>
-        </div>
-      </section>
-
-      <section class="card" aria-label="Weather notes">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">Weather notes</h2>
-            <p class="section-copy">Local browser note for field planning.</p>
-          </div>
-        </div>
-
-        <div class="field-notes">
-          <textarea
-            id="weatherNotesInput"
-            class="notes-input"
-            placeholder="Example: check mast access after heavy rain, bring waterproofs, monitor gusts."
-            aria-label="Weather notes"
-          ></textarea>
-
-          <div class="search-actions">
-            <button id="saveWeatherNotesButton" class="button is-gold" type="button">
-              Save note
-            </button>
-            <button id="clearWeatherNotesButton" class="button is-danger" type="button">
-              Clear
-            </button>
-            <button id="copyWeatherSummaryButton" class="button" type="button">
-              Copy summary
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div id="statusToast" class="status-toast" role="status" aria-live="polite"></div>
-  </main>
-
-  <script>
-    /* ==========================================================================
-       FieldOps Atlas Weather logic
-       Version: 1.0.0-weather-only
-       ========================================================================== */
-
-    (function fieldOpsWeatherOnly() {
-      "use strict";
-
-      const VERSION = "1.0.0-weather-only";
-
-      const STORAGE_KEYS = {
-        savedLocations: "fieldops-weather-saved-locations",
-        currentLocation: "fieldops-weather-current-location",
-        notes: "fieldops-weather-notes"
-      };
-
-      const els = {
-        locationTitle: byId("locationTitle"),
-        locationSubtitle: byId("locationSubtitle"),
-        currentWeatherIcon: byId("currentWeatherIcon"),
-        currentTemperature: byId("currentTemperature"),
-        currentFeelsLike: byId("currentFeelsLike"),
-        currentCondition: byId("currentCondition"),
-        currentDetail: byId("currentDetail"),
-        locationSearchInput: byId("locationSearchInput"),
-        searchLocationButton: byId("searchLocationButton"),
-        useDeviceLocationButton: byId("useDeviceLocationButton"),
-        saveLocationButton: byId("saveLocationButton"),
-        refreshWeatherButton: byId("refreshWeatherButton"),
-        searchResults: byId("searchResults"),
-        savedLocations: byId("savedLocations"),
-        fieldSummary: byId("fieldSummary"),
-        riskGrid: byId("riskGrid"),
-        hourlyStrip: byId("hourlyStrip"),
-        dailyList: byId("dailyList"),
-        weatherNotesInput: byId("weatherNotesInput"),
-        saveWeatherNotesButton: byId("saveWeatherNotesButton"),
-        clearWeatherNotesButton: byId("clearWeatherNotesButton"),
-        copyWeatherSummaryButton: byId("copyWeatherSummaryButton"),
-        statusToast: byId("statusToast")
-      };
-
-      let state = {
-        currentLocation: null,
-        forecast: null,
-        searchResults: [],
-        savedLocations: loadJson(STORAGE_KEYS.savedLocations, [])
-      };
-
-      function byId(id) {
-        return document.getElementById(id);
-      }
-
-      function loadJson(key, fallback) {
-        try {
-          const raw = localStorage.getItem(key);
-          return raw ? JSON.parse(raw) : fallback;
-        } catch (error) {
-          return fallback;
-        }
-      }
-
-      function saveJson(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-      }
-
-      function showToast(message) {
-        els.statusToast.textContent = message;
-        els.statusToast.classList.add("is-visible");
-
-        window.clearTimeout(showToast.timer);
-        showToast.timer = window.setTimeout(function hideToast() {
-          els.statusToast.classList.remove("is-visible");
-        }, 1900);
-      }
-
-      function setBusy(isBusy) {
-        document.documentElement.dataset.weatherBusy = isBusy ? "true" : "false";
-        [
-          els.searchLocationButton,
-          els.useDeviceLocationButton,
-          els.saveLocationButton,
-          els.refreshWeatherButton
-        ].forEach(function updateButton(button) {
-          if (button) {
-            button.disabled = Boolean(isBusy);
-          }
-        });
-      }
-
-      function formatTemp(value) {
-        if (value === null || value === undefined || Number.isNaN(Number(value))) {
-          return "--°";
-        }
-        return Math.round(Number(value)) + "°";
-      }
-
-      function formatNumber(value, suffix) {
-        if (value === null || value === undefined || Number.isNaN(Number(value))) {
-          return "--" + (suffix || "");
-        }
-        return Math.round(Number(value)) + (suffix || "");
-      }
-
-      function formatTime(value) {
-        if (!value) {
-          return "--";
-        }
-        return new Date(value).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-      }
-
-      function formatDay(value) {
-        if (!value) {
-          return "--";
-        }
-        return new Date(value + "T12:00:00").toLocaleDateString([], {
-          weekday: "short",
-          day: "numeric",
-          month: "short"
-        });
-      }
-
-      function weatherCode(code) {
-        const map = {
-          0: ["☀️", "Clear"],
-          1: ["🌤️", "Mainly clear"],
-          2: ["⛅", "Partly cloudy"],
-          3: ["☁️", "Overcast"],
-          45: ["🌫️", "Fog"],
-          48: ["🌫️", "Depositing rime fog"],
-          51: ["🌦️", "Light drizzle"],
-          53: ["🌦️", "Drizzle"],
-          55: ["🌧️", "Heavy drizzle"],
-          56: ["🌧️", "Freezing drizzle"],
-          57: ["🌧️", "Heavy freezing drizzle"],
-          61: ["🌧️", "Slight rain"],
-          63: ["🌧️", "Rain"],
-          65: ["🌧️", "Heavy rain"],
-          66: ["🌧️", "Freezing rain"],
-          67: ["🌧️", "Heavy freezing rain"],
-          71: ["🌨️", "Slight snow"],
-          73: ["🌨️", "Snow"],
-          75: ["❄️", "Heavy snow"],
-          77: ["❄️", "Snow grains"],
-          80: ["🌦️", "Slight showers"],
-          81: ["🌧️", "Showers"],
-          82: ["⛈️", "Violent showers"],
-          85: ["🌨️", "Snow showers"],
-          86: ["❄️", "Heavy snow showers"],
-          95: ["⛈️", "Thunderstorm"],
-          96: ["⛈️", "Thunderstorm with hail"],
-          99: ["⛈️", "Severe thunderstorm with hail"]
-        };
-
-        return map[Number(code)] || ["⛅", "Unknown"];
-      }
-
-      function riskLevel(value, watchThreshold, highThreshold) {
-        const numeric = Number(value);
-
-        if (Number.isNaN(numeric)) {
-          return "watch";
-        }
-
-        if (numeric >= highThreshold) {
-          return "high";
-        }
-
-        if (numeric >= watchThreshold) {
-          return "watch";
-        }
-
-        return "ok";
-      }
-
-      function riskLabel(level) {
-        if (level === "high") {
-          return "High";
-        }
-        if (level === "watch") {
-          return "Watch";
-        }
-        return "OK";
-      }
-
-      function makeLocationTitle(location) {
-        return [
-          location.name,
-          location.admin1,
-          location.country_code || location.country
-        ].filter(Boolean).join(", ");
-      }
-
-      function normaliseLocation(result) {
-        return {
-          id: String(result.id || [result.latitude, result.longitude, result.name].join(":")),
-          name: result.name || "Selected location",
-          admin1: result.admin1 || "",
-          country: result.country || "",
-          country_code: result.country_code || "",
-          latitude: Number(result.latitude),
-          longitude: Number(result.longitude),
-          timezone: result.timezone || "auto",
-          source: result.source || "search"
-        };
-      }
-
-      function renderSearchResults(results) {
-        els.searchResults.innerHTML = "";
-
-        if (!results.length) {
-          return;
-        }
-
-        results.forEach(function renderLocation(result) {
-          const location = normaliseLocation(result);
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "location-button";
-          button.innerHTML = [
-            '<span class="location-copy">',
-            '<span class="location-name"></span>',
-            '<span class="location-meta"></span>',
-            '</span>',
-            '<span>Use</span>'
-          ].join("");
-
-          button.querySelector(".location-name").textContent = makeLocationTitle(location);
-          button.querySelector(".location-meta").textContent = [
-            formatCoordinate(location.latitude),
-            formatCoordinate(location.longitude),
-            location.timezone
-          ].filter(Boolean).join(" · ");
-
-          button.addEventListener("click", function handleLocationClick() {
-            selectLocation(location);
-          });
-
-          els.searchResults.appendChild(button);
-        });
-      }
-
-      function renderSavedLocations() {
-        els.savedLocations.innerHTML = "";
-
-        if (!state.savedLocations.length) {
-          const empty = document.createElement("p");
-          empty.className = "empty-state";
-          empty.textContent = "No saved weather locations yet.";
-          els.savedLocations.appendChild(empty);
-          return;
-        }
-
-        state.savedLocations.forEach(function renderSaved(location) {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "saved-location-button";
-          button.innerHTML = [
-            '<span class="location-copy">',
-            '<span class="location-name"></span>',
-            '<span class="location-meta"></span>',
-            '</span>',
-            '<span>Open</span>'
-          ].join("");
-
-          button.querySelector(".location-name").textContent = makeLocationTitle(location);
-          button.querySelector(".location-meta").textContent = "Saved · " + formatCoordinate(location.latitude) + ", " + formatCoordinate(location.longitude);
-
-          button.addEventListener("click", function handleSavedClick() {
-            selectLocation(location);
-          });
-
-          els.savedLocations.appendChild(button);
-        });
-      }
-
-      function formatCoordinate(value) {
-        if (value === null || value === undefined || Number.isNaN(Number(value))) {
-          return "";
-        }
-        return Number(value).toFixed(4);
-      }
-
-      function showError(container, message) {
-        container.innerHTML = "";
-        const error = document.createElement("div");
-        error.className = "error-state";
-        error.textContent = message;
-        container.appendChild(error);
-      }
-
-      async function searchLocations() {
-        const query = els.locationSearchInput.value.trim();
-
-        if (!query) {
-          showToast("Enter a location first");
-          return;
-        }
-
-        setBusy(true);
-        els.searchResults.innerHTML = '<p class="empty-state">Searching...</p>';
-
-        try {
-          const url = new URL("https://geocoding-api.open-meteo.com/v1/search");
-          url.searchParams.set("name", query);
-          url.searchParams.set("count", "8");
-          url.searchParams.set("language", "en");
-          url.searchParams.set("format", "json");
-
-          const response = await fetch(url.toString());
-
-          if (!response.ok) {
-            throw new Error("Location search failed");
-          }
-
-          const data = await response.json();
-          state.searchResults = Array.isArray(data.results) ? data.results : [];
-
-          if (!state.searchResults.length) {
-            showError(els.searchResults, "No locations found. Try a nearby town or postcode area.");
-            return;
-          }
-
-          renderSearchResults(state.searchResults);
-        } catch (error) {
-          showError(els.searchResults, "Could not search locations. Check signal and try again.");
-        } finally {
-          setBusy(false);
-        }
-      }
-
-      function useDeviceLocation() {
-        if (!navigator.geolocation) {
-          showToast("GPS is not available in this browser");
-          return;
-        }
-
-        setBusy(true);
-        showToast("Requesting device location");
-
-        navigator.geolocation.getCurrentPosition(function handlePosition(position) {
-          const coords = position.coords;
-          const location = {
-            id: "gps:" + coords.latitude.toFixed(5) + ":" + coords.longitude.toFixed(5),
-            name: "Current location",
-            admin1: "",
-            country: "",
-            country_code: "",
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-            timezone: "auto",
-            source: "gps"
-          };
-
-          selectLocation(location).finally(function clearBusy() {
-            setBusy(false);
-          });
-        }, function handlePositionError() {
-          setBusy(false);
-          showToast("Location permission was not available");
-        }, {
-          enableHighAccuracy: true,
-          timeout: 9000,
-          maximumAge: 300000
-        });
-      }
-
-      async function selectLocation(location) {
-        state.currentLocation = location;
-        saveJson(STORAGE_KEYS.currentLocation, location);
-
-        els.locationTitle.textContent = makeLocationTitle(location);
-        els.locationSubtitle.textContent = [
-          formatCoordinate(location.latitude),
-          formatCoordinate(location.longitude),
-          location.timezone
-        ].filter(Boolean).join(" · ");
-
-        await fetchForecast(location);
-      }
-
-      async function fetchForecast(location) {
-        if (!location) {
-          showToast("Select a location first");
-          return;
-        }
-
-        setBusy(true);
-
-        try {
-          const url = new URL("https://api.open-meteo.com/v1/forecast");
-
-          url.searchParams.set("latitude", String(location.latitude));
-          url.searchParams.set("longitude", String(location.longitude));
-          url.searchParams.set("timezone", "auto");
-          url.searchParams.set("forecast_days", "7");
-          url.searchParams.set("current", [
-            "temperature_2m",
-            "relative_humidity_2m",
-            "apparent_temperature",
-            "is_day",
-            "precipitation",
-            "rain",
-            "showers",
-            "snowfall",
-            "weather_code",
-            "cloud_cover",
-            "pressure_msl",
-            "surface_pressure",
-            "wind_speed_10m",
-            "wind_direction_10m",
-            "wind_gusts_10m"
-          ].join(","));
-          url.searchParams.set("hourly", [
-            "temperature_2m",
-            "apparent_temperature",
-            "precipitation_probability",
-            "precipitation",
-            "rain",
-            "showers",
-            "snowfall",
-            "weather_code",
-            "cloud_cover",
-            "visibility",
-            "wind_speed_10m",
-            "wind_direction_10m",
-            "wind_gusts_10m",
-            "pressure_msl",
-            "relative_humidity_2m"
-          ].join(","));
-          url.searchParams.set("daily", [
-            "weather_code",
-            "temperature_2m_max",
-            "temperature_2m_min",
-            "apparent_temperature_max",
-            "apparent_temperature_min",
-            "precipitation_sum",
-            "precipitation_probability_max",
-            "rain_sum",
-            "showers_sum",
-            "snowfall_sum",
-            "wind_speed_10m_max",
-            "wind_gusts_10m_max",
-            "wind_direction_10m_dominant",
-            "sunrise",
-            "sunset",
-            "uv_index_max"
-          ].join(","));
-
-          const response = await fetch(url.toString());
-
-          if (!response.ok) {
-            throw new Error("Forecast request failed");
-          }
-
-          const data = await response.json();
-          state.forecast = data;
-
-          renderForecast(location, data);
-          showToast("Weather updated");
-        } catch (error) {
-          showToast("Could not load weather");
-          els.currentCondition.textContent = "Weather unavailable";
-          els.currentDetail.textContent = "Check signal and try refresh.";
-        } finally {
-          setBusy(false);
-        }
-      }
-
-      function renderForecast(location, forecast) {
-        const current = forecast.current || {};
-        const code = weatherCode(current.weather_code);
-
-        els.currentWeatherIcon.textContent = code[0];
-        els.currentTemperature.textContent = formatTemp(current.temperature_2m);
-        els.currentFeelsLike.textContent = "Feels like " + formatTemp(current.apparent_temperature);
-        els.currentCondition.textContent = code[1];
-
-        els.currentDetail.textContent = [
-          "Wind " + formatNumber(current.wind_speed_10m, " km/h"),
-          "gusts " + formatNumber(current.wind_gusts_10m, " km/h"),
-          "humidity " + formatNumber(current.relative_humidity_2m, "%"),
-          "pressure " + formatNumber(current.pressure_msl, " hPa")
-        ].join(" · ");
-
-        renderRisks(forecast);
-        renderHourly(forecast);
-        renderDaily(forecast);
-      }
-
-      function renderRisks(forecast) {
-        const current = forecast.current || {};
-        const hourly = forecast.hourly || {};
-        const nextIndexes = nextHourlyIndexes(hourly, 12);
-
-        const maxGust = maxFrom(hourly.wind_gusts_10m, nextIndexes, current.wind_gusts_10m);
-        const maxRainProb = maxFrom(hourly.precipitation_probability, nextIndexes, 0);
-        const minVisibility = minFrom(hourly.visibility, nextIndexes, null);
-        const pressure = current.pressure_msl;
-
-        const windRisk = riskLevel(maxGust, 45, 65);
-        const rainRisk = riskLevel(maxRainProb, 45, 75);
-        const visibilityKm = minVisibility === null ? null : minVisibility / 1000;
-        const visibilityRisk = visibilityKm === null ? "watch" : (visibilityKm < 2 ? "high" : visibilityKm < 5 ? "watch" : "ok");
-        const pressureRisk = pressure === null || pressure === undefined ? "watch" : (pressure < 985 ? "high" : pressure < 1000 ? "watch" : "ok");
-
-        const risks = [
-          {
-            label: "Wind",
-            value: riskLabel(windRisk) + " · " + formatNumber(maxGust, " km/h"),
-            note: "Highest gust in next 12 hours.",
-            level: windRisk
-          },
-          {
-            label: "Rain",
-            value: riskLabel(rainRisk) + " · " + formatNumber(maxRainProb, "%"),
-            note: "Highest precipitation probability.",
-            level: rainRisk
-          },
-          {
-            label: "Visibility",
-            value: riskLabel(visibilityRisk) + " · " + (visibilityKm === null ? "-- km" : visibilityKm.toFixed(1) + " km"),
-            note: "Lowest model visibility in next 12 hours.",
-            level: visibilityRisk
-          },
-          {
-            label: "Pressure",
-            value: riskLabel(pressureRisk) + " · " + formatNumber(pressure, " hPa"),
-            note: "Low pressure can indicate unsettled conditions.",
-            level: pressureRisk
-          }
-        ];
-
-        els.riskGrid.innerHTML = "";
-
-        risks.forEach(function renderRisk(risk) {
-          const card = document.createElement("article");
-          card.className = "risk-card";
-          card.dataset.risk = risk.level;
-          card.innerHTML = [
-            '<p class="risk-label"></p>',
-            '<p class="risk-value"></p>',
-            '<p class="risk-note"></p>'
-          ].join("");
-          card.querySelector(".risk-label").textContent = risk.label;
-          card.querySelector(".risk-value").textContent = risk.value;
-          card.querySelector(".risk-note").textContent = risk.note;
-          els.riskGrid.appendChild(card);
-        });
-
-        const highest = risks.some(function hasHigh(risk) { return risk.level === "high"; })
-          ? "High risk weather flags present."
-          : risks.some(function hasWatch(risk) { return risk.level === "watch"; })
-            ? "Weather watch items present."
-            : "Weather looks workable from the current model run.";
-
-        els.fieldSummary.textContent = highest;
-      }
-
-      function nextHourlyIndexes(hourly, hours) {
-        const times = hourly.time || [];
-        const now = Date.now();
-        const indexes = [];
-
-        for (let index = 0; index < times.length; index += 1) {
-          const time = new Date(times[index]).getTime();
-
-          if (time >= now && indexes.length < hours) {
-            indexes.push(index);
-          }
-        }
-
-        if (!indexes.length) {
-          for (let index = 0; index < Math.min(hours, times.length); index += 1) {
-            indexes.push(index);
-          }
-        }
-
-        return indexes;
-      }
-
-      function maxFrom(values, indexes, fallback) {
-        if (!Array.isArray(values)) {
-          return fallback;
-        }
-
-        const numbers = indexes
-          .map(function getValue(index) { return Number(values[index]); })
-          .filter(function valid(value) { return !Number.isNaN(value); });
-
-        return numbers.length ? Math.max.apply(null, numbers) : fallback;
-      }
-
-      function minFrom(values, indexes, fallback) {
-        if (!Array.isArray(values)) {
-          return fallback;
-        }
-
-        const numbers = indexes
-          .map(function getValue(index) { return Number(values[index]); })
-          .filter(function valid(value) { return !Number.isNaN(value); });
-
-        return numbers.length ? Math.min.apply(null, numbers) : fallback;
-      }
-
-      function renderHourly(forecast) {
-        const hourly = forecast.hourly || {};
-        const indexes = nextHourlyIndexes(hourly, 12);
-
-        els.hourlyStrip.innerHTML = "";
-
-        if (!indexes.length) {
-          els.hourlyStrip.innerHTML = '<p class="empty-state">No hourly forecast loaded.</p>';
-          return;
-        }
-
-        indexes.forEach(function renderHour(index) {
-          const code = weatherCode(hourly.weather_code && hourly.weather_code[index]);
-          const card = document.createElement("article");
-          card.className = "hour-card";
-          card.innerHTML = [
-            '<div class="hour-time"></div>',
-            '<div class="hour-icon"></div>',
-            '<div class="hour-temp"></div>',
-            '<div class="hour-meta"></div>'
-          ].join("");
-
-          card.querySelector(".hour-time").textContent = formatTime(hourly.time[index]);
-          card.querySelector(".hour-icon").textContent = code[0];
-          card.querySelector(".hour-temp").textContent = formatTemp(hourly.temperature_2m && hourly.temperature_2m[index]);
-          card.querySelector(".hour-meta").textContent = [
-            formatNumber(hourly.precipitation_probability && hourly.precipitation_probability[index], "% rain"),
-            formatNumber(hourly.wind_speed_10m && hourly.wind_speed_10m[index], " km/h")
-          ].join(" · ");
-
-          els.hourlyStrip.appendChild(card);
-        });
-      }
-
-      function renderDaily(forecast) {
-        const daily = forecast.daily || {};
-        const times = daily.time || [];
-
-        els.dailyList.innerHTML = "";
-
-        if (!times.length) {
-          els.dailyList.innerHTML = '<p class="empty-state">No daily forecast loaded.</p>';
-          return;
-        }
-
-        times.forEach(function renderDay(day, index) {
-          const code = weatherCode(daily.weather_code && daily.weather_code[index]);
-          const card = document.createElement("article");
-          card.className = "day-card";
-          card.innerHTML = [
-            '<div class="day-icon"></div>',
-            '<div class="day-main">',
-            '<div class="day-date"></div>',
-            '<div class="day-condition"></div>',
-            '<div class="day-meta"></div>',
-            '</div>',
-            '<div class="day-temp"></div>'
-          ].join("");
-
-          card.querySelector(".day-icon").textContent = code[0];
-          card.querySelector(".day-date").textContent = formatDay(day);
-          card.querySelector(".day-condition").textContent = code[1];
-          card.querySelector(".day-meta").textContent = [
-            formatNumber(daily.precipitation_probability_max && daily.precipitation_probability_max[index], "% rain"),
-            formatNumber(daily.precipitation_sum && daily.precipitation_sum[index], " mm"),
-            "gusts " + formatNumber(daily.wind_gusts_10m_max && daily.wind_gusts_10m_max[index], " km/h"),
-            "UV " + formatNumber(daily.uv_index_max && daily.uv_index_max[index], "")
-          ].join(" · ");
-          card.querySelector(".day-temp").textContent =
-            formatTemp(daily.temperature_2m_min && daily.temperature_2m_min[index]) +
-            " / " +
-            formatTemp(daily.temperature_2m_max && daily.temperature_2m_max[index]);
-
-          els.dailyList.appendChild(card);
-        });
-      }
-
-      function saveCurrentLocation() {
-        if (!state.currentLocation) {
-          showToast("Select a location first");
-          return;
-        }
-
-        const exists = state.savedLocations.some(function alreadySaved(location) {
-          return location.id === state.currentLocation.id;
-        });
-
-        if (!exists) {
-          state.savedLocations.unshift(state.currentLocation);
-          state.savedLocations = state.savedLocations.slice(0, 8);
-          saveJson(STORAGE_KEYS.savedLocations, state.savedLocations);
-          renderSavedLocations();
-        }
-
-        showToast("Location saved");
-      }
-
-      function saveNotes() {
-        localStorage.setItem(STORAGE_KEYS.notes, els.weatherNotesInput.value);
-        showToast("Weather note saved");
-      }
-
-      function clearNotes() {
-        els.weatherNotesInput.value = "";
-        localStorage.removeItem(STORAGE_KEYS.notes);
-        showToast("Weather note cleared");
-      }
-
-      async function copyWeatherSummary() {
-        const location = state.currentLocation ? makeLocationTitle(state.currentLocation) : "No location selected";
-        const summary = [
-          "Weather summary: " + location,
-          "Current: " + els.currentTemperature.textContent + ", " + els.currentCondition.textContent,
-          "Detail: " + els.currentDetail.textContent,
-          "Field check: " + els.fieldSummary.textContent,
-          "Notes: " + (els.weatherNotesInput.value.trim() || "-")
-        ].join("\n");
-
-        try {
-          await navigator.clipboard.writeText(summary);
-          showToast("Weather summary copied");
-        } catch (error) {
-          showToast("Could not copy summary");
-        }
-      }
-
-      function bindEvents() {
-        els.searchLocationButton.addEventListener("click", searchLocations);
-
-        els.locationSearchInput.addEventListener("keydown", function handleSearchKeydown(event) {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            searchLocations();
-          }
-        });
-
-        els.useDeviceLocationButton.addEventListener("click", useDeviceLocation);
-        els.saveLocationButton.addEventListener("click", saveCurrentLocation);
-        els.refreshWeatherButton.addEventListener("click", function refreshWeather() {
-          fetchForecast(state.currentLocation);
-        });
-
-        els.saveWeatherNotesButton.addEventListener("click", saveNotes);
-        els.clearWeatherNotesButton.addEventListener("click", clearNotes);
-        els.copyWeatherSummaryButton.addEventListener("click", copyWeatherSummary);
-      }
-
-      function boot() {
-        document.documentElement.dataset.weatherVersion = VERSION;
-        bindEvents();
-
-        els.weatherNotesInput.value = localStorage.getItem(STORAGE_KEYS.notes) || "";
-        renderSavedLocations();
-
-        const savedCurrent = loadJson(STORAGE_KEYS.currentLocation, null);
-        if (savedCurrent && savedCurrent.latitude && savedCurrent.longitude) {
-          selectLocation(savedCurrent);
-        }
-      }
-
-      boot();
-    }());
-  </script>
+ <div class="fieldops-shell-root" data-page="weather"></div>
+
+ <main class="osmmaps-page" data-osmmaps-page data-weather-map-page>
+  <div id="OSMmaps" class="osmmaps-canvas" aria-label="Weather map using existing FieldOps Atlas OSM map"></div>
+
+  <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
+   <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
+
+   <article class="osmmaps-filter-card" aria-label="Map region filter">
+    <header class="osmmaps-filter-header">
+     <div>
+      <p class="osmmaps-kicker">Filter</p>
+      <h1>Choose region</h1>
+     </div>
+
+     <button class="osmmaps-small-button" type="button" data-region-overlay-close>Close</button>
+    </header>
+
+    <p class="osmmaps-filter-note">
+     Only the selected region's walks are loaded.
+    </p>
+
+    <div class="osmmaps-region-list" data-region-list></div>
+   </article>
+  </section>
+
+  <section class="osmpanes-details" data-selected-panel hidden aria-live="polite"></section>
+ </main>
+
+ <section class="weather-map-mode" aria-label="Map appearance">
+  <button class="weather-map-theme-button" type="button" data-weather-map-theme="dark" aria-pressed="false">Dark</button>
+  <button class="weather-map-theme-button" type="button" data-weather-map-theme="light" aria-pressed="false">Light</button>
+ </section>
+
+ <div class="background-item" aria-hidden="true">
+  <div class="atlas-top-fade"></div>
+  <div class="atlas-top-fade atlas-bottom-fade"></div>
+ </div>
+
+ <script src="../../../shell.js?v=weather-map-call-20260616"></script>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ <script src="../maps/OSMpanes.js?v=weather-map-call-20260616"></script>
+ <script src="../maps/OSMmaps.js?v=weather-map-call-20260616"></script>
+
+ <script>
+  (function fieldOpsWeatherMapThemeControls() {
+   "use strict";
+
+   var STORAGE_KEY = "fieldops-osmmaps-theme-v1";
+   var page = document.querySelector("[data-osmmaps-page]");
+   var buttons = Array.prototype.slice.call(document.querySelectorAll("[data-weather-map-theme]"));
+
+   function safeGetTheme() {
+    try {
+     return window.localStorage.getItem(STORAGE_KEY) || "";
+    } catch (error) {
+     return "";
+    }
+   }
+
+   function safeSetTheme(theme) {
+    try {
+     window.localStorage.setItem(STORAGE_KEY, theme);
+    } catch (error) {
+     // Storage can be unavailable in previews or restricted webviews.
+    }
+   }
+
+   function preferredTheme() {
+    var stored = safeGetTheme();
+
+    if (stored === "light" || stored === "dark") {
+     return stored;
+    }
+
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+     return "light";
+    }
+
+    return "dark";
+   }
+
+   function applyTheme(theme) {
+    var nextTheme = theme === "light" ? "light" : "dark";
+
+    if (page) {
+     page.setAttribute("data-theme", nextTheme);
+    }
+
+    buttons.forEach(function updateButton(button) {
+     button.setAttribute("aria-pressed", button.getAttribute("data-weather-map-theme") === nextTheme ? "true" : "false");
+    });
+
+    safeSetTheme(nextTheme);
+
+    if (window.FieldOpsOSMmaps && typeof window.FieldOpsOSMmaps.fitVisible === "function") {
+     window.setTimeout(window.FieldOpsOSMmaps.fitVisible, 80);
+    }
+   }
+
+   buttons.forEach(function wireButton(button) {
+    button.addEventListener("click", function onThemeClick() {
+     applyTheme(button.getAttribute("data-weather-map-theme"));
+    });
+   });
+
+   applyTheme(preferredTheme());
+  })();
+ </script>
 </body>
 </html>
+<!-- End of file: FieldOpsAtlas/Features/Weather/index.html -->
