@@ -1,12 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.115-site-pack-panel
+   Version: 1.1.116-cream-zigzag-slider
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
    - Keep the compact path panel, measured handle icon, and site-pack detail layout.
-      - Use the signal chevron icon from the icons folder for the pane handle.
+      - Use the wider cream/gold signal chevron icon from the icons folder for the pane handle.
    - Leave topology/graph drawing to rf-graph.css/js.
    ========================================================================== */
 
@@ -102,8 +102,8 @@
 }
 
 .rf-map-paper {
-  --path-pane-width: clamp(112px, 29%, 128px);
-  --path-handle-width: 20px;
+  --path-pane-width: clamp(122px, 31%, 142px);
+  --path-handle-width: 42px;
 
   position: relative;
   min-height: 0;
@@ -155,7 +155,7 @@
    ========================================================================== */
 
 .rf-path-pane {
-  --path-handle-width: 20px;
+  --path-handle-width: 42px;
 
   position: absolute;
   top: 0;
@@ -191,7 +191,7 @@
   padding: 0;
   display: grid;
   place-items: start center;
-  padding-top: 28px;
+  padding-top: 8px;
   padding-bottom: 8px;
   color: #ffdda0;
   cursor: pointer;
@@ -203,7 +203,7 @@
 }
 
 .rf-path-handle-icon {
-  width: 18px;
+  width: 40px;
   height: 100%;
   display: block;
   object-fit: contain;
@@ -589,8 +589,16 @@
   }
 
   .rf-map-paper {
-    --path-pane-width: clamp(108px, 29%, 122px);
-    --path-handle-width: 20px;
+    --path-pane-width: clamp(122px, 31%, 136px);
+    --path-handle-width: 40px;
+  }
+
+  .rf-path-pane {
+    --path-handle-width: 40px;
+  }
+
+  .rf-path-handle-icon {
+    width: 38px;
   }
 
   .rf-interface-panels {
