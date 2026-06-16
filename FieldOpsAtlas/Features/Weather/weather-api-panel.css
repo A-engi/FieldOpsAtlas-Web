@@ -141,11 +141,7 @@
   background: linear-gradient(180deg, #ffe08a, var(--weather-gold));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
   font-size: 15px;
-}
-
-.weather-api-activate[disabled] {
-  opacity: 0.68;
-  cursor: wait;
+  text-decoration: none;
 }
 
 .weather-forecast-slider {
@@ -191,7 +187,7 @@
 }
 
 .weather-forecast-card-placeholder {
-  flex-basis: 140px;
+  flex-basis: 160px;
   min-height: 58px;
   display: grid;
   place-items: center;
