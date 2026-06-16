@@ -10,7 +10,7 @@
  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMweather-menu.css?v=weather-lab-menu-20260616">
- <link rel="stylesheet" href="../Weather/weather-api-panel.css?v=maps-weather-activate-history-20260616">
+ <link rel="stylesheet" href="../Weather/weather-api-panel.css?v=weather-pages-recovery-20260616">
 </head>
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
@@ -43,22 +43,22 @@
  </main>
 
  <section class="weather-map-icon-strip" aria-label="Weather controls">
-  <button class="weather-map-icon-button" type="button" data-weather-panel-open aria-expanded="false" aria-label="Open Preseli weather forecast">
-   <img class="weather-map-icon-image" src="./icons/weather.svg?v=maps-weather-activate-history-20260616" alt="" aria-hidden="true">
+  <button class="weather-map-icon-button" type="button" data-weather-panel-open aria-expanded="false" aria-label="Open Preseli weather preview">
+   <span class="weather-map-icon-glyph" aria-hidden="true">☁</span>
   </button>
  </section>
 
- <aside class="weather-api-panel" aria-label="Preseli weather forecast" hidden>
+ <aside class="weather-api-panel" aria-label="Preseli weather preview" hidden>
   <header class="weather-api-panel-header">
    <div>
     <p class="weather-api-kicker">Weather</p>
-    <h1>Preseli forecast</h1>
+    <h1>Preseli preview</h1>
    </div>
-   <button class="weather-api-mini-button" type="button" data-weather-panel-close aria-label="Close Preseli weather forecast">Close</button>
+   <button class="weather-api-mini-button" type="button" data-weather-panel-close aria-label="Close Preseli weather preview">Close</button>
   </header>
 
   <p class="weather-api-copy">
-   Small Preseli forecast preview. Activate opens the Weather pages, starting at History.
+   Small weather preview only. Activate opens the Weather pages, starting with History.
   </p>
 
   <a class="weather-api-activate" href="../Weather/index.html#history" data-weather-activate>
@@ -78,7 +78,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.4-weather-activate-history</p>
+  <p class="weather-api-status" data-weather-output>v1.0.6-weather-pages-recovery</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -91,7 +91,7 @@
  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
  <script src="./OSMweather-menu.js?v=weather-lab-menu-20260616"></script>
- <script src="../Weather/weather-api-panel.js?v=maps-weather-activate-history-20260616"></script>
+ <script src="../Weather/weather-api-panel.js?v=weather-pages-recovery-20260616"></script>
 </body>
 </html>
 <!-- End of file: FieldOpsAtlas/Features/maps/index.html -->
