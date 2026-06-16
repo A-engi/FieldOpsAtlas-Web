@@ -39,7 +39,7 @@ FieldOpsAtlas/Features/maps/index.html
     │   ├── Tools/
     │   ├── Profile/
     │   └── Weather/
-    │       └── Lab/
+    │       └── data/
     ├── Resources/
     └── Assets.xcassets/
 ```
@@ -99,10 +99,10 @@ FieldOpsAtlas/Features/Network/index.html
 FieldOpsAtlas/Features/Docs/index.html
 FieldOpsAtlas/Features/Tools/index.html
 FieldOpsAtlas/Features/Profile/index.html
-FieldOpsAtlas/Features/Weather/Lab/index.html
+FieldOpsAtlas/Features/Weather/index.html
 ```
 
-Network, Docs, Tools, Profile, and Weather are feature-owned pages/folders. Weather currently contains the provider test lab for RainViewer, Open-Meteo, Met Office DataHub Map Images, and EA rainfall gauges.
+Network, Docs, Tools, Profile, and Weather are feature-owned pages/folders. Weather contains the provider test pages for RainViewer, Open-Meteo, Met Office DataHub Map Images, and EA rainfall gauges.
 
 ## Public prototype data rule
 
@@ -115,7 +115,7 @@ Public transmitter/site names, locations, and frequencies can be used as prototy
 Maps loads regions and markers
 Maps details pane opens and closes
 Maps RF button opens RF
-Maps Weather Lab link opens FieldOpsAtlas/Features/Weather/Lab/index.html
+Maps Weather link opens FieldOpsAtlas/Features/Weather/index.html
 RF loads shell and graph
 RFPages links open under FieldOpsAtlas/Features/RFPages/
 Network, Docs, and Tools links resolve to active feature/RFPages paths
