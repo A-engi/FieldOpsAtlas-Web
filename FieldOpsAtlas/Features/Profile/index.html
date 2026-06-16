@@ -1,38 +1,95 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas Profile / Setup</title>
-  <link rel="stylesheet" href="../RF/shell.css?v=1.1.1-profile" />
-  <link rel="stylesheet" href="../RF/page.css?v=1.1.1-profile" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Web Profile v1.1.2</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <style>
-    .setup-form {
-      display: grid;
-      gap: 12px;
+    .content-canvas {
+      position: absolute;
+      z-index: 1;
+      top: calc(var(--safe-top) + var(--top-height) + 7px);
+      right: 7px;
+      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + 7px);
+      left: 7px;
+      min-height: 0;
+      overflow: hidden;
+      border: 2px solid var(--gold-border);
+      border-radius: 20px;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 0 0 1px rgba(255, 231, 168, 0.20),
+        0 14px 30px rgba(2, 9, 20, 0.26);
     }
 
-    .setup-grid {
+    .profile-page {
+      height: 100%;
+      min-height: 0;
+      padding: 10px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .profile-card,
+    .profile-hero {
+      padding: 12px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.26),
+        0 6px 18px rgba(37, 24, 8, 0.10);
+    }
+
+    .profile-kicker,
+    .profile-label {
+      margin: 0 0 5px;
+      color: rgba(68, 80, 92, 0.68);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .profile-title {
+      margin: 0;
+      color: #172b3e;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .profile-copy,
+    .profile-note {
+      margin: 7px 0 0;
+      color: rgba(22, 43, 62, 0.72);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .profile-grid,
+    .profile-form {
       display: grid;
       gap: 10px;
     }
 
-    .setup-field {
+    .profile-field {
       display: grid;
       gap: 5px;
     }
 
-    .setup-field span {
-      color: rgba(16, 32, 51, 0.72);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .setup-field input,
-    .setup-field select,
-    .setup-field textarea {
+    .profile-field input,
+    .profile-field select,
+    .profile-field textarea {
       width: 100%;
       min-width: 0;
       padding: 10px 11px;
@@ -44,104 +101,89 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
     }
 
-    .setup-field textarea {
-      min-height: 82px;
+    .profile-field textarea {
+      min-height: 74px;
       resize: vertical;
     }
 
-    .setup-actions {
+    .profile-actions,
+    .profile-pill-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
 
-    .setup-button {
+    .profile-button,
+    .profile-pill {
       min-height: 36px;
       padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #071c32;
       background: rgba(255, 221, 160, 0.92);
       border: 0;
       border-radius: 12px;
       font-weight: 900;
+      text-decoration: none;
     }
 
-    .setup-button.secondary {
+    .profile-button.secondary,
+    .profile-pill {
       color: #102033;
       background: rgba(255, 255, 255, 0.74);
       border: 1px solid rgba(42, 67, 93, 0.18);
     }
 
-    .setup-button.danger {
+    .profile-button.danger {
       color: #fff;
       background: #8d2f2f;
     }
 
-    .setup-status {
+    .profile-status {
       min-height: 18px;
       color: rgba(16, 32, 51, 0.68);
       font-size: 11px;
       font-weight: 700;
     }
 
-    .setup-pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    .setup-pill {
+    .profile-pill {
+      min-height: 0;
       padding: 7px 9px;
-      color: #102033;
-      background: rgba(255, 255, 255, 0.64);
-      border: 1px solid rgba(42, 67, 93, 0.16);
       border-radius: 999px;
       font-size: 11px;
       font-weight: 800;
     }
-
-    .setup-warning {
-      margin: 0;
-      color: rgba(16, 32, 51, 0.72);
-      font-size: 12px;
-      line-height: 1.45;
-    }
   </style>
 </head>
 <body>
-  <main class="phone" data-page="profile" data-nav="map" data-quick="collapsed" data-version="1.1.1">
-    <section class="content-canvas" aria-label="FieldOps Atlas Profile / Setup content">
-      <article class="page-content">
-        <header class="page-head">
-          <div class="page-kicker">Local setup</div>
-          <h1 class="page-title">Profile / Setup</h1>
-          <p class="page-lede">
-            Save local preferences for this browser only. The map remains the main page, and region choice stays flexible.
-          </p>
+  <main class="phone" data-page="tools" data-nav="profile" data-version="1.1.2">
+    <section class="content-canvas" aria-label="FieldOps Atlas Web profile content">
+      <article class="profile-page">
+        <header class="profile-hero">
+          <p class="profile-kicker">Local setup</p>
+          <h1 class="profile-title">Profile</h1>
+          <p class="profile-copy">Save browser-only preferences. Keep operational details, credentials, access notes, contacts, IPs, switch ports, and job data out of this public prototype.</p>
         </header>
 
-        <section class="card">
-          <h2 class="card-title">Engineer setup</h2>
-          <form id="profileSetupForm" class="setup-form" autocomplete="off">
-            <div class="setup-grid">
-              <label class="setup-field" for="setupName">
-                <span>Name / initials</span>
+        <section class="profile-card" aria-labelledby="profileSetupTitle">
+          <h2 class="profile-title" id="profileSetupTitle">Engineer setup</h2>
+          <form id="profileSetupForm" class="profile-form" autocomplete="off">
+            <div class="profile-grid">
+              <label class="profile-field" for="setupName">
+                <span class="profile-label">Name / initials</span>
                 <input id="setupName" name="name" type="text" placeholder="Optional local label">
               </label>
 
-              <label class="setup-field" for="setupTeam">
-                <span>Team / patch</span>
-                <input id="setupTeam" name="team" type="text" placeholder="Optional">
+              <label class="profile-field" for="setupPatch">
+                <span class="profile-label">Patch / area</span>
+                <input id="setupPatch" name="patch" type="text" placeholder="Optional">
               </label>
 
-              <label class="setup-field" for="setupRegionHint">
-                <span>Default region hint</span>
-                <input id="setupRegionHint" name="regionHint" type="text" placeholder="Optional only - map region selector still wins">
-              </label>
-
-              <label class="setup-field" for="setupStartPage">
-                <span>Preferred start point</span>
+              <label class="profile-field" for="setupStartPage">
+                <span class="profile-label">Preferred start point</span>
                 <select id="setupStartPage" name="startPage">
-                  <option value="map">Map</option>
+                  <option value="maps">Maps</option>
                   <option value="rf">RF</option>
                   <option value="network">Network</option>
                   <option value="docs">Docs</option>
@@ -149,8 +191,8 @@
                 </select>
               </label>
 
-              <label class="setup-field" for="setupNavApp">
-                <span>Preferred navigation app</span>
+              <label class="profile-field" for="setupNavApp">
+                <span class="profile-label">Navigation app</span>
                 <select id="setupNavApp" name="navApp">
                   <option value="">No preference</option>
                   <option value="apple">Apple Maps</option>
@@ -161,75 +203,60 @@
               </label>
             </div>
 
-            <div class="setup-actions">
-              <button class="setup-button" type="submit">Save setup</button>
-              <button id="clearProfileSetupButton" class="setup-button danger" type="button">Clear setup</button>
-              <a class="setup-button secondary" href="../Map/index.html">Open map</a>
+            <div class="profile-actions">
+              <button class="profile-button" type="submit">Save setup</button>
+              <button id="clearProfileSetupButton" class="profile-button danger" type="button">Clear</button>
+              <a class="profile-button secondary" href="../maps/index.html">Open maps</a>
             </div>
 
-            <div id="profileSetupStatus" class="setup-status" role="status" aria-live="polite"></div>
+            <div id="profileSetupStatus" class="profile-status" role="status" aria-live="polite"></div>
           </form>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">Job source prompts</h2>
-          <p class="setup-warning">
-            These are prompts and reminders only. Do not commit real job details, private SharePoint links, access notes,
-            contacts, credentials, IPs, switch ports, spares locations, or private fault/change details into the public repo.
-          </p>
+        <section class="profile-card" aria-labelledby="profilePromptsTitle">
+          <h2 class="profile-title" id="profilePromptsTitle">Source prompts</h2>
+          <p class="profile-note">Prompts are local reminders only. They do not connect to ServiceNow, SharePoint, mail, or private systems.</p>
 
-          <form id="sourcePromptForm" class="setup-form" autocomplete="off">
-            <label class="setup-field" for="setupServiceNowPrompt">
-              <span>ServiceNow prompt</span>
-              <textarea id="setupServiceNowPrompt" name="serviceNowPrompt" placeholder="Example: search by job, fault, change, site, or outage window."></textarea>
+          <form id="sourcePromptForm" class="profile-form" autocomplete="off">
+            <label class="profile-field" for="setupServiceNowPrompt">
+              <span class="profile-label">ServiceNow prompt</span>
+              <textarea id="setupServiceNowPrompt" name="serviceNowPrompt" placeholder="Example: search by public demo site, date, or outage window."></textarea>
             </label>
 
-            <label class="setup-field" for="setupPermitPrompt">
-              <span>Permit email prompt</span>
-              <textarea id="setupPermitPrompt" name="permitPrompt" placeholder="Example: permit + site name + date / outage / access."></textarea>
+            <label class="profile-field" for="setupSitePackPrompt">
+              <span class="profile-label">Site pack prompt</span>
+              <textarea id="setupSitePackPrompt" name="sitePackPrompt" placeholder="Example: check local site pack copy or diagram status."></textarea>
             </label>
 
-            <label class="setup-field" for="setupSitePackPrompt">
-              <span>Site pack prompt</span>
-              <textarea id="setupSitePackPrompt" name="sitePackPrompt" placeholder="Example: SharePoint site pack, paper diagram, missing diagram, or scan needed."></textarea>
-            </label>
-
-            <label class="setup-field" for="setupServiceParamsPrompt">
-              <span>Service parameters page prompt</span>
-              <textarea id="setupServiceParamsPrompt" name="serviceParamsPrompt" placeholder="Name of the login page when remembered; keep actual login/private info out of repo."></textarea>
-            </label>
-
-            <div class="setup-actions">
-              <button class="setup-button" type="submit">Save prompts</button>
-              <button id="clearSourcePromptButton" class="setup-button danger" type="button">Clear prompts</button>
+            <div class="profile-actions">
+              <button class="profile-button" type="submit">Save prompts</button>
+              <button id="clearSourcePromptButton" class="profile-button danger" type="button">Clear</button>
             </div>
 
-            <div id="sourcePromptStatus" class="setup-status" role="status" aria-live="polite"></div>
+            <div id="sourcePromptStatus" class="profile-status" role="status" aria-live="polite"></div>
           </form>
         </section>
 
-        <section class="card">
-          <h2 class="card-title">What this is for</h2>
-          <div class="setup-pill-row" aria-label="Profile scope">
-            <span class="setup-pill">Local only</span>
-            <span class="setup-pill">Map remains main</span>
-            <span class="setup-pill">Regions stay flexible</span>
-            <span class="setup-pill">No ServiceNow API</span>
-            <span class="setup-pill">No SharePoint sync</span>
+        <section class="profile-card" aria-labelledby="profileScopeTitle">
+          <h2 class="profile-title" id="profileScopeTitle">Scope</h2>
+          <div class="profile-pill-row" aria-label="Profile scope">
+            <span class="profile-pill">Local only</span>
+            <span class="profile-pill">No private data</span>
+            <span class="profile-pill">Maps folder</span>
+            <span class="profile-pill">Web prototype</span>
           </div>
         </section>
       </article>
     </section>
   </main>
 
-  <script src="../RF/shell.js?v=1.1.1-profile"></script>
+  <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script>
     (() => {
       "use strict";
 
-      const PROFILE_KEY = "fieldOpsAtlas.profileSetup.v1";
-      const SOURCE_KEY = "fieldOpsAtlas.sourcePrompts.v1";
-
+      const PROFILE_KEY = "fieldOpsAtlas.web.profileSetup.v1";
+      const SOURCE_KEY = "fieldOpsAtlas.web.sourcePrompts.v1";
       const profileForm = document.getElementById("profileSetupForm");
       const sourceForm = document.getElementById("sourcePromptForm");
       const profileStatus = document.getElementById("profileSetupStatus");
@@ -261,14 +288,12 @@
         }, {});
       };
 
-      const stamp = () => {
-        return new Date().toLocaleString([], {
-          day: "2-digit",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-      };
+      const stamp = () => new Date().toLocaleString([], {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
 
       setFormValues(profileForm, readStored(PROFILE_KEY));
       setFormValues(sourceForm, readStored(SOURCE_KEY));
