@@ -1,104 +1,241 @@
 /* ========================================================================== 
-   FieldOps Atlas OSM weather menu
+   FieldOps Atlas OSM weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.2-preview-freeze-fix
+   Version: 1.0.10-lazy-weather-preview
    Purpose:
-   - Converts each walk details weather button into a small site-weather menu.
-   - Keeps the existing Open-Meteo quick site weather action via data-load-weather.
-   - Adds a link to the full Weather feature page.
-   - Prevents the MutationObserver from repeatedly enhancing its own inserted button.
+   - Controls the small map Weather preview panel.
+   - Makes no Weather API request until Activate preview is tapped.
+   - Does not load the full Weather feature from the map page.
    ========================================================================== */
-(function fieldOpsOSMWeatherMenu() {
+
+(function fieldOpsOSMWeatherPreview() {
   "use strict";
 
-  var VERSION = "1.0.2-preview-freeze-fix";
-  var WEATHER_URL = "../Weather/index.html";
+  var VERSION = "1.0.10-lazy-weather-preview";
+  var PRESELI = {
+    name: "Preseli area",
+    lat: 51.921,
+    lng: -4.742
+  };
+  var FORECAST_CACHE_MS = 10 * 60 * 1000;
+  var cache = null;
 
-  function shouldEnhance(button) {
-    return Boolean(
-      button &&
-      button.matches &&
-      button.matches("[data-load-weather]") &&
-      button.dataset.weatherMenuEnhanced !== "true" &&
-      !button.closest("[data-weather-menu]")
-    );
+  function qs(selector, root) {
+    return (root || document).querySelector(selector);
   }
 
-  function enhanceWeatherButton(button) {
-    var walkId = button && button.getAttribute("data-load-weather");
-
-    if (!walkId || !shouldEnhance(button)) {
-      return;
-    }
-
-    button.dataset.weatherMenuEnhanced = "true";
-
-    var menu = document.createElement("div");
-    menu.className = "osmpanes-weather-menu";
-    menu.setAttribute("data-weather-menu", "true");
-
-    var copy = document.createElement("p");
-    copy.className = "osmpanes-weather-menu-copy";
-    copy.textContent = "Quick site weather here, or open the full Weather page.";
-
-    var actions = document.createElement("div");
-    actions.className = "osmpanes-weather-menu-actions";
-
-    var activate = document.createElement("button");
-    activate.className = "osmpanes-weather-menu-activate";
-    activate.type = "button";
-    activate.setAttribute("data-load-weather", walkId);
-    activate.setAttribute("data-weather-menu-activate", "true");
-    activate.textContent = "Activate site weather";
-
-    var weatherPage = document.createElement("a");
-    weatherPage.className = "osmpanes-weather-menu-link";
-    weatherPage.href = WEATHER_URL;
-    weatherPage.textContent = "Open Weather page";
-
-    actions.appendChild(activate);
-    actions.appendChild(weatherPage);
-    menu.appendChild(copy);
-    menu.appendChild(actions);
-
-    button.replaceWith(menu);
+  function qsa(selector, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
   }
 
-  function enhanceWeatherMenus(root) {
-    var scope = root || document;
+  function weatherCodeText(code) {
+    var labels = {
+      0: "Clear",
+      1: "Mainly clear",
+      2: "Partly cloudy",
+      3: "Overcast",
+      45: "Fog",
+      48: "Rime fog",
+      51: "Light drizzle",
+      53: "Drizzle",
+      55: "Dense drizzle",
+      61: "Light rain",
+      63: "Rain",
+      65: "Heavy rain",
+      71: "Light snow",
+      73: "Snow",
+      75: "Heavy snow",
+      80: "Rain showers",
+      81: "Heavy showers",
+      82: "Violent showers",
+      95: "Thunderstorm",
+      96: "Thunderstorm hail",
+      99: "Heavy thunderstorm hail"
+    };
 
-    if (scope.nodeType !== 1 && scope.nodeType !== 9 && scope.nodeType !== 11) {
-      return;
-    }
+    return labels[Number(code)] || "Weather code " + code;
+  }
 
-    if (scope.matches && shouldEnhance(scope)) {
-      enhanceWeatherButton(scope);
-      return;
-    }
-
-    scope.querySelectorAll("[data-load-weather]").forEach(function eachWeatherButton(button) {
-      if (shouldEnhance(button)) {
-        enhanceWeatherButton(button);
-      }
+  function forecastUrl() {
+    var params = new URLSearchParams({
+      latitude: PRESELI.lat.toFixed(4),
+      longitude: PRESELI.lng.toFixed(4),
+      daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
+      timezone: "Europe/London",
+      forecast_days: "5"
     });
+
+    return "https://api.open-meteo.com/v1/forecast?" + params.toString();
+  }
+
+  function setPanelOpen(open) {
+    var panel = qs(".weather-api-panel");
+    var openButton = qs("[data-weather-panel-open]");
+
+    if (panel) {
+      panel.hidden = !open;
+    }
+
+    if (openButton) {
+      openButton.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+  }
+
+  function setStatus(message) {
+    var output = qs("[data-weather-output]");
+
+    if (output) {
+      output.textContent = message;
+    }
+  }
+
+  function setUpdated(message) {
+    var output = qs("[data-weather-forecast-updated]");
+
+    if (output) {
+      output.textContent = message;
+    }
+  }
+
+  function renderPlaceholder(message) {
+    var track = qs("[data-weather-forecast-track]");
+
+    if (!track) {
+      return;
+    }
+
+    track.innerHTML = [
+      '<article class="weather-forecast-card weather-forecast-card-placeholder" role="listitem">',
+      message,
+      "</article>"
+    ].join("");
+  }
+
+  function formatDay(dateText) {
+    var date = new Date(dateText + "T12:00:00");
+
+    if (Number.isNaN(date.getTime())) {
+      return dateText;
+    }
+
+    return date.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short"
+    });
+  }
+
+  function renderForecast(payload) {
+    var track = qs("[data-weather-forecast-track]");
+    var daily = payload && payload.daily;
+
+    if (!track || !daily || !Array.isArray(daily.time)) {
+      throw new Error("Forecast payload missing daily data.");
+    }
+
+    track.innerHTML = daily.time.map(function renderDay(dateText, index) {
+      var max = Math.round(Number(daily.temperature_2m_max[index]));
+      var min = Math.round(Number(daily.temperature_2m_min[index]));
+      var rain = Number(daily.precipitation_sum[index] || 0).toFixed(1);
+      var wind = Math.round(Number(daily.wind_speed_10m_max[index] || 0));
+      var summary = weatherCodeText(daily.weather_code[index]);
+
+      return [
+        '<article class="weather-forecast-card" role="listitem">',
+        "<strong>", formatDay(dateText), "</strong>",
+        "<span>", summary, "</span>",
+        "<span>", min, "–", max, "°C</span>",
+        "<span>Rain ", rain, " mm</span>",
+        "<span>Wind ", wind, " km/h</span>",
+        "</article>"
+      ].join("");
+    }).join("");
+
+    setUpdated("Updated now");
+    setStatus("Preview loaded for " + PRESELI.name + ".");
+  }
+
+  function activatePreview() {
+    if (cache && Date.now() - cache.time < FORECAST_CACHE_MS) {
+      renderForecast(cache.payload);
+      return;
+    }
+
+    setUpdated("Loading");
+    setStatus("Loading Preseli preview...");
+    renderPlaceholder("Loading preview...");
+
+    fetch(forecastUrl(), {
+      headers: {
+        Accept: "application/json"
+      }
+    })
+      .then(function handleResponse(response) {
+        if (!response.ok) {
+          throw new Error("Forecast unavailable.");
+        }
+
+        return response.json();
+      })
+      .then(function handlePayload(payload) {
+        cache = {
+          time: Date.now(),
+          payload: payload
+        };
+        renderForecast(payload);
+      })
+      .catch(function handleError() {
+        setUpdated("Not loaded");
+        setStatus("Preseli preview unavailable.");
+        renderPlaceholder("Preview unavailable. Open full Weather for provider pages.");
+      });
+  }
+
+  function wirePreview() {
+    document.addEventListener("click", function onClick(event) {
+      var openButton = event.target.closest("[data-weather-panel-open]");
+      var closeButton = event.target.closest("[data-weather-panel-close]");
+      var activateButton = event.target.closest("[data-weather-activate]");
+
+      if (openButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        setPanelOpen(true);
+        return;
+      }
+
+      if (closeButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        setPanelOpen(false);
+        return;
+      }
+
+      if (activateButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        activatePreview();
+      }
+    }, false);
   }
 
   function init() {
-    enhanceWeatherMenus(document);
-
-    var observer = new MutationObserver(function onMutations(mutations) {
-      mutations.forEach(function onMutation(mutation) {
-        mutation.addedNodes.forEach(function onAddedNode(node) {
-          enhanceWeatherMenus(node);
-        });
-      });
+    qsa("[data-weather-panel-open]").forEach(function initButton(button) {
+      button.setAttribute("aria-expanded", "false");
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    renderPlaceholder("Tap Activate preview.");
+    wirePreview();
 
     window.FieldOpsOSMWeatherMenu = {
       version: VERSION,
-      enhance: enhanceWeatherMenus
+      open: function open() {
+        setPanelOpen(true);
+      },
+      close: function close() {
+        setPanelOpen(false);
+      },
+      activate: activatePreview
     };
   }
 
@@ -107,6 +244,6 @@
   } else {
     init();
   }
-}());
+})();
 
 // End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js | bottom/end of file
