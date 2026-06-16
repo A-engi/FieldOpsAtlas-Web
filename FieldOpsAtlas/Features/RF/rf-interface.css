@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.116-cream-zigzag-slider
+   Version: 1.1.117-rfpages-layout-clear
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
@@ -575,8 +575,230 @@
   text-transform: uppercase;
 }
 
+
 /* ==========================================================================
-   7. Small screens
+   7. RF subpage layout
+   ========================================================================== */
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .content-canvas {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--safe-top, 0px) + var(--top-height, 54px) + 8px);
+  right: 7px;
+  bottom: calc(var(--safe-bottom, 0px) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + 7px);
+  left: 7px;
+  min-height: 0;
+  overflow: hidden;
+  border: 2px solid var(--gold-border, rgba(237, 191, 99, 0.78));
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.82), transparent 39%),
+    linear-gradient(180deg, rgba(255, 253, 246, 0.95) 0%, rgba(251, 242, 223, 0.93) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    inset 0 0 0 1px rgba(255, 231, 168, 0.26),
+    0 -2px 0 rgba(255, 226, 160, 0.20),
+    0 0 0 1px rgba(85, 55, 10, 0.14),
+    0 14px 30px rgba(2, 9, 20, 0.26);
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-content {
+  height: 100%;
+  min-height: 0;
+  padding: 12px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: #071c32;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-head {
+  padding: 12px;
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.72), transparent 46%),
+    linear-gradient(180deg, rgba(255, 250, 238, 0.88), rgba(245, 232, 204, 0.62));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-kicker {
+  margin-bottom: 5px;
+  color: rgba(7, 31, 56, 0.62);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-title {
+  margin: 0;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-lede {
+  margin: 7px 0 0;
+  color: rgba(7, 31, 56, 0.68);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .card {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid rgba(130, 91, 22, 0.13);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55), transparent 46%),
+    linear-gradient(180deg, rgba(255, 252, 242, 0.84), rgba(248, 236, 211, 0.72));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52);
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .card-title {
+  margin: 0 0 9px;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .metric-grid,
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-grid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .metric,
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-card {
+  min-width: 0;
+  min-height: 58px;
+  padding: 8px;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  color: #071c32;
+  border: 1px solid rgba(239, 198, 120, 0.58);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.60), transparent 52%),
+    linear-gradient(180deg, rgba(255, 248, 232, 0.82), rgba(239, 228, 200, 0.70));
+  text-align: center;
+  text-decoration: none;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .metric strong,
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-card strong {
+  color: #173052;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .metric span,
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-card span {
+  color: #1b4883;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .list {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .list-row {
+  min-width: 0;
+  min-height: 46px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  color: #071c32;
+  border: 1px solid rgba(239, 198, 120, 0.58);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(255, 246, 224, 0.24));
+  text-decoration: none;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .row-icon,
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-icon {
+  min-width: 0;
+  color: #173052;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .row-title {
+  display: block;
+  overflow: hidden;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .row-sub {
+  display: block;
+  margin-top: 2px;
+  overflow: hidden;
+  color: rgba(7, 31, 56, 0.64);
+  font-size: 7px;
+  font-weight: 750;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .status,
+.phone[data-nav="rf"]:not([data-page="rf"]) .row-value {
+  color: #1c9570;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-align: right;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .status.warn {
+  color: #b67b08;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .action-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ==========================================================================
+   8. Small screens
    ========================================================================== */
 
 @media (max-width: 380px) {
@@ -623,4 +845,5 @@
   }
 }
 
-/* End of FieldOpsAtlas/Features/RF/rf-interface.css | bottom/end of file */
+/* Destination: FieldOpsAtlas/Features/RF/rf-interface.css */
+/* End of file: FieldOpsAtlas/Features/RF/rf-interface.css */
