@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Open-Meteo Site Risk · Atlas Weather API Lab</title>
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=0.2.3-fieldops-web-lab" />
+</head>
+<body>
+  <main class="lab-shell map-shell" data-page="openmeteo">
+    <header class="map-header">
+      <a class="shell-button" href="rainviewer.html" aria-label="Previous test">‹</a>
+      <label class="search-box" for="siteSearch">
+        <span aria-hidden="true">⌕</span>
+        <input id="siteSearch" autocomplete="off" placeholder="Find sample site" />
+      </label>
+      <a class="shell-button" href="metoffice.html" aria-label="Next test">›</a>
+    </header>
+
+    <nav class="mini-nav" aria-label="Weather lab pages">
+      <a href="rainviewer.html">Radar</a>
+      <a class="is-active" href="openmeteo.html">Sites</a>
+      <a href="metoffice.html">Met Office</a>
+      <a href="ea-rainfall.html">Gauges</a>
+    </nav>
+
+    <div id="map" class="map"></div>
+
+    <section class="mode-pill is-on warning">
+      <span class="mode-pulse" aria-hidden="true">⚡</span>
+      <strong>SITE HAZARD TEST</strong>
+    </section>
+
+    <section class="floating-panel provider-panel wide-panel" id="providerPanel">
+      <div class="panel-head panel-head-with-action">
+        <span class="hazard-icon" aria-hidden="true">⚠</span>
+        <div>
+          <p class="eyebrow">Visible regions only</p>
+          <h2>Open-Meteo site risk</h2>
+        </div>
+        <button class="panel-close-button" type="button" data-panel-close="providerPanel" aria-label="Close site hazard controls">×</button>
+      </div>
+      <p id="statusText">Visible region sites and risk values load automatically. Move the map to auto-refresh the shown region set.</p>
+      <div class="quick-grid two">
+        <article><strong id="regionCount">0</strong><span>Regions</span></article>
+        <article><strong id="siteCount">0</strong><span>Sites</span></article>
+      </div>
+      <div class="button-stack">
+        <button class="primary-action" id="loadSitesButton">Refresh visible sites</button>
+        <button class="secondary-action" id="fetchRiskButton">Refresh risk</button>
+      </div>
+      <div class="risk-list compact" id="riskList"></div>
+    </section>
+
+    <button class="panel-open-button warning" type="button" data-panel-open="providerPanel" hidden>
+      <span aria-hidden="true">⚡</span>
+      <strong>Site controls</strong>
+    </button>
+
+    <section class="site-detail-panel" id="siteDetailPanel" hidden aria-label="Site weather feature sheet">
+      <div class="panel-head panel-head-with-action sticky-detail-head">
+        <div>
+          <p class="eyebrow">Maximum feature dump</p>
+          <h2>Site weather features</h2>
+        </div>
+        <button class="panel-close-button" id="siteDetailCloseButton" type="button" aria-label="Close site weather features">×</button>
+      </div>
+      <div id="siteDetailContent" class="site-detail-content"></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js?v=0.2.3-fieldops-web-lab"></script>
+  <script src="openmeteo.js?v=0.2.3-fieldops-web-lab"></script>
+</body>
+</html>
+<!-- End of file: FieldOpsAtlas/Features/Weather/openmeteo.html -->

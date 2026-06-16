@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>FieldOps Atlas Weather Lab</title>
+  <link rel="stylesheet" href="styles.css?v=0.2.3-fieldops-web-lab" />
+</head>
+<body>
+  <main class="lab-shell lab-home">
+    <header class="lab-header">
+      <a class="back-link" href="../../maps/index.html">Atlas Map</a>
+      <div>
+        <p class="eyebrow">Weather API lab</p>
+        <h1>Separate provider tests</h1>
+      </div>
+      <span class="version-pill">v0.2.3-fieldops-web-lab</span>
+    </header>
+
+    <section class="hero-card">
+      <div class="hero-icon" aria-hidden="true">⚡</div>
+      <div>
+        <h2>Test each weather source on its own page.</h2>
+        <p>Rain blobs, site risk, Met Office images, and measured rainfall gauges now load separately so one provider cannot confuse the result of another.</p>
+      </div>
+    </section>
+
+    <section class="page-grid" aria-label="Weather provider test pages">
+      <a class="page-card radar" href="rainviewer.html">
+        <span class="card-icon" aria-hidden="true">🌧</span>
+        <strong>RainViewer radar</strong>
+        <span>UK-wide radar/blob tile overlay.</span>
+      </a>
+
+      <a class="page-card risk" href="openmeteo.html">
+        <span class="card-icon" aria-hidden="true">⚠</span>
+        <strong>Open-Meteo site risk</strong>
+        <span>Visible region sites, batched forecast values, hazard cards.</span>
+      </a>
+
+      <a class="page-card metoffice" href="metoffice.html">
+        <span class="card-icon" aria-hidden="true">🛰</span>
+        <strong>Met Office DataHub</strong>
+        <span>Map Images order test with your own key.</span>
+      </a>
+
+      <a class="page-card gauges" href="ea-rainfall.html">
+        <span class="card-icon" aria-hidden="true">☔</span>
+        <strong>EA rainfall gauges</strong>
+        <span>Nearby measured rainfall stations for verification.</span>
+      </a>
+    </section>
+
+    <section class="decision-card">
+      <h2>What this lab decides</h2>
+      <ul>
+        <li><strong>Overlay:</strong> Which source gives the best weather blob layer.</li>
+        <li><strong>Risk:</strong> Which source gives the best site-level hazard numbers.</li>
+        <li><strong>Performance:</strong> How many visible region sites can be handled on mobile.</li>
+        <li><strong>Integration:</strong> Whether Atlas can stay static or needs a proxy/native layer.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
+<!-- End of file: FieldOpsAtlas/Features/Weather/index.html -->
