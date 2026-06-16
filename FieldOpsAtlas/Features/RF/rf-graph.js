@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.86-graph-data-rename
+   Version: 1.1.87-rf-graph-source
 
    Purpose:
    - Render only the foreground RF graph SVG.
@@ -17,12 +17,13 @@
    - Do not draw plain blob halos, transmitter/mast icons, inner rings, or route dots.
    - Fit graph coordinates into a taller graph area, reserving bottom-left room for the standalone key.
    - Accept future graph input with normalized node coordinates.
+   - Prefer window.ATLAS_RF_GRAPH and remove the retired network graph source.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.86-graph-data-rename";
+  const VERSION = "1.1.87-rf-graph-source";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
   const GRAPH_URL = "../../../data/rf-graph.json";
 
@@ -180,12 +181,12 @@
   }
 
   async function getGraphData() {
-    if (isUsableGraph(window.ATLAS_PRIVATE_GRAPH)) {
-      return window.ATLAS_PRIVATE_GRAPH;
+    if (isUsableGraph(window.ATLAS_RF_GRAPH)) {
+      return window.ATLAS_RF_GRAPH;
     }
 
-    if (isUsableGraph(window.ATLAS_NETWORK_GRAPH)) {
-      return window.ATLAS_NETWORK_GRAPH;
+    if (isUsableGraph(window.ATLAS_PRIVATE_GRAPH)) {
+      return window.ATLAS_PRIVATE_GRAPH;
     }
 
     try {
@@ -661,4 +662,5 @@
     initAll();
   }
 })();
-
+/* Destination: FieldOpsAtlas/Features/RF/rf-graph.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-graph.js */
