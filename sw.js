@@ -1,9 +1,9 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.3-weather-lab
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.4-weather-root
    Keeps the browser prototype usable offline where possible.
    Maps remains the main fallback page.
 */
 
-const CACHE_NAME = "fieldops-atlas-v1.1.3-weather-lab";
+const CACHE_NAME = "fieldops-atlas-v1.1.4-weather-root";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -34,19 +34,19 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/Network/index.html",
   "./FieldOpsAtlas/Features/Docs/index.html",
   "./FieldOpsAtlas/Features/Tools/index.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/index.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/styles.css?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/app.js?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/rainviewer.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/rainviewer.js?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/openmeteo.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/openmeteo.js?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.css?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/metoffice.js?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/ea-rainfall.html",
-  "./FieldOpsAtlas/Features/Weather/Lab/ea-rainfall.js?v=0.2.3-fieldops-web-lab",
-  "./FieldOpsAtlas/Features/Weather/Lab/data/regions.json"
+  "./FieldOpsAtlas/Features/Weather/index.html",
+  "./FieldOpsAtlas/Features/Weather/styles.css?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/app.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/rainviewer.html",
+  "./FieldOpsAtlas/Features/Weather/rainviewer.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/openmeteo.html",
+  "./FieldOpsAtlas/Features/Weather/openmeteo.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/metoffice.html",
+  "./FieldOpsAtlas/Features/Weather/metoffice.css?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/metoffice.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/ea-rainfall.html",
+  "./FieldOpsAtlas/Features/Weather/ea-rainfall.js?v=0.2.4-fieldops-weather-root",
+  "./FieldOpsAtlas/Features/Weather/data/regions.json"
 ];
 
 self.addEventListener("install", (event) => {
