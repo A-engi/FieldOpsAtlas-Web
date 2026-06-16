@@ -39,6 +39,7 @@ FieldOpsAtlas/Features/maps/index.html
     │   ├── Tools/
     │   ├── Profile/
     │   └── Weather/
+    │       └── Lab/
     ├── Resources/
     └── Assets.xcassets/
 ```
@@ -87,7 +88,9 @@ FieldOpsAtlas/Features/RF/rf-path-builder.js
 FieldOpsAtlas/Features/RFPages/*.html
 ```
 
-RF owns the RF dashboard, RF graph, service pages, path details pane, and RF navigation. The dynamic graph loads external data from `data/rf-graph.json` when present and otherwise keeps using the embedded demo graph.
+RF owns the RF dashboard, RF graph, service pages, path details pane, and RF navigation.
+
+The dynamic graph loads external data from `data/rf-graph.json` when present and otherwise keeps using the embedded demo graph.
 
 ### Feature pages
 
@@ -96,10 +99,10 @@ FieldOpsAtlas/Features/Network/index.html
 FieldOpsAtlas/Features/Docs/index.html
 FieldOpsAtlas/Features/Tools/index.html
 FieldOpsAtlas/Features/Profile/index.html
-FieldOpsAtlas/Features/Weather/
+FieldOpsAtlas/Features/Weather/Lab/index.html
 ```
 
-Network, Docs, Tools, Profile, and Weather are feature-owned pages/folders. Weather is intentionally light until weather files are added.
+Network, Docs, Tools, Profile, and Weather are feature-owned pages/folders. Weather currently contains the provider test lab for RainViewer, Open-Meteo, Met Office DataHub Map Images, and EA rainfall gauges.
 
 ## Public prototype data rule
 
@@ -112,9 +115,11 @@ Public transmitter/site names, locations, and frequencies can be used as prototy
 Maps loads regions and markers
 Maps details pane opens and closes
 Maps RF button opens RF
+Maps Weather Lab link opens FieldOpsAtlas/Features/Weather/Lab/index.html
 RF loads shell and graph
 RFPages links open under FieldOpsAtlas/Features/RFPages/
 Network, Docs, and Tools links resolve to active feature/RFPages paths
 Profile opens from the drawer user row
 ```
 
+<!-- End of file: README.md -->
