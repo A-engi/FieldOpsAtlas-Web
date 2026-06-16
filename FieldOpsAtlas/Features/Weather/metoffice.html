@@ -3,143 +3,76 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Met Office Map Images · Atlas Weather API Lab</title>
-  <link rel="stylesheet" href="styles.css?v=0.2.3-fieldops-web-lab" />
-  <link rel="stylesheet" href="metoffice.css?v=0.2.3-fieldops-web-lab" />
+  <title>Met Office Map Images · FieldOps Atlas Weather</title>
+  <link rel="stylesheet" href="styles.css?v=0.3.0-demapped-weather-apis" />
+  <link rel="stylesheet" href="metoffice.css?v=0.4.1-single-colour" />
 </head>
 <body class="metoffice-redo-page">
   <main class="mo-shell" data-page="metoffice">
-    <section class="mo-stage" aria-label="Met Office map image preview">
-      <img id="moImage" class="mo-image" alt="Met Office Map Images preview" hidden />
-      <div id="moPlaceholder" class="mo-empty-state">
-        <strong>Met Office forecast image</strong>
-        <span>Paste your local Map Images key/order once. The order list is cached locally and only the selected PNG frame is loaded.</span>
+    <header class="mo-topbar">
+      <a class="mo-nav" href="openmeteo.html">‹ Open-Meteo</a>
+      <div>
+        <p class="mo-eyebrow">Weather API</p>
+        <h1>Met Office Map Images</h1>
       </div>
-    </section>
-
-    <header class="mo-topbar" aria-label="Met Office page header">
-      <a class="mo-round-button" href="index.html" aria-label="Back to lab home">‹</a>
-      <div class="mo-title">
-        <span>Provider test</span>
-        <strong>Met Office Maps</strong>
-      </div>
-      <button class="mo-round-button" id="moOpenSettings" type="button" aria-label="Open Met Office settings">⚙</button>
+      <a class="mo-nav" href="ea-rainfall.html">EA gauges ›</a>
     </header>
 
-    <nav class="mo-provider-nav" aria-label="Provider pages">
-      <a href="rainviewer.html">Radar</a>
-      <a href="openmeteo.html">Sites</a>
-      <a class="is-active" href="metoffice.html">Met Office</a>
-      <a href="ea-rainfall.html">Gauges</a>
+    <nav class="provider-tabs mo-tabs" aria-label="Weather provider screens">
+      <a class="provider-tab" href="rainviewer.html">RainViewer</a>
+      <a class="provider-tab" href="openmeteo.html">Open-Meteo</a>
+      <a class="provider-tab active" href="metoffice.html">Met Office</a>
+      <a class="provider-tab" href="ea-rainfall.html">EA gauges</a>
     </nav>
 
-    <section class="mo-status" id="moStatus" aria-live="polite">
-      <strong>Waiting for setup</strong>
-      <span>Saved Map Images key/order will auto-load from this browser if already stored.</span>
-    </section>
-
-    <section class="mo-bottom-panel" id="moPanel" aria-label="Met Office image controls">
-      <button class="mo-panel-summary" id="moPanelToggle" type="button" aria-expanded="true">
-        <span class="mo-summary-name" id="moCompactLayer">Rainfall</span>
-        <span class="mo-summary-step" id="moCompactStep">T+0</span>
-        <span id="moCompactUtc">Valid UTC: --</span>
-        <span id="moCompactUk">Valid UK: --</span>
-        <strong id="moPanelToggleText">Collapse</strong>
-      </button>
-
-      <div class="mo-panel-body" id="moPanelBody">
-        <div class="mo-control-section">
-          <div class="mo-section-head">
-            <span>Layer</span>
-            <button class="mo-small-button" id="moRefreshOrder" type="button">Refresh list</button>
-          </div>
-          <div class="mo-layer-grid" aria-label="Met Office layers">
-            <button class="mo-layer-button is-active" type="button" data-layer="rainfall">Rainfall</button>
-            <button class="mo-layer-button" type="button" data-layer="cloud">Cloud</button>
-            <button class="mo-layer-button" type="button" data-layer="pressure">Pressure</button>
-            <button class="mo-layer-button" type="button" data-layer="temperature">Temp</button>
-          </div>
-        </div>
-
-        <div class="mo-control-section">
-          <div class="mo-section-head">
-            <span>Frame</span>
-            <span id="moFrameCount">Load order first</span>
-          </div>
-          <div class="mo-frame-controls">
-            <button id="moPrevFrame" type="button" aria-label="Previous Met Office frame">‹</button>
-            <input id="moFrameSlider" type="range" min="0" max="0" value="0" disabled />
-            <button id="moNextFrame" type="button" aria-label="Next Met Office frame">›</button>
-          </div>
-          <div class="mo-time-grid" aria-live="polite">
-            <div><span>Run</span><strong id="moRunLabel">--</strong></div>
-            <div><span>Step</span><strong id="moStepLabel">--</strong></div>
-            <div><span>Valid UTC</span><strong id="moValidUtcLabel">--</strong></div>
-            <div><span>Valid UK</span><strong id="moValidUkLabel">--</strong></div>
-          </div>
-        </div>
-
-        <div class="mo-control-section">
-          <div class="mo-section-head">
-            <span>Reference</span>
-            <button class="mo-small-button" id="moOpenSettingsInline" type="button">Settings</button>
-          </div>
-          <div class="mo-view-toggle" role="group" aria-label="Rainfall colour comparison">
-            <button class="is-active" id="moCleanView" type="button">Clean mm/h</button>
-            <button id="moRawView" type="button">Raw Met Office</button>
-          </div>
-          <p class="mo-note" id="moMetaLabel">Full model extent will appear after the order list loads.</p>
-        </div>
-
-        <details class="mo-band-debug" id="moBandDebug" open>
-          <summary>Rainfall band debug</summary>
-          <div class="mo-debug-actions">
-            <button class="mo-small-button" id="moAllBands" type="button">All bands</button>
-            <button class="mo-small-button" id="moNoBands" type="button">No bands</button>
-            <label class="mo-land-toggle"><input id="moShowLand" type="checkbox" checked /> Land #B3D0AE</label>
-          </div>
-          <div class="mo-band-list" id="moBandList" aria-label="Rainfall band filters"></div>
-          <div class="mo-count-grid" id="moCountGrid" aria-label="Pixel classification counts"></div>
-        </details>
+    <section class="mo-setup" aria-label="Met Office local credentials">
+      <label>
+        <span>Map Images key</span>
+        <input id="moApiKey" type="password" autocomplete="off" placeholder="Stored in this browser only" />
+      </label>
+      <label>
+        <span>Order ID</span>
+        <input id="moOrderId" type="text" autocomplete="off" placeholder="Stored in this browser only" />
+      </label>
+      <div class="mo-button-row">
+        <button id="moSaveSettings" class="mo-primary" type="button">Save</button>
+        <button id="moForgetSettings" class="mo-secondary" type="button">Forget</button>
+        <button id="moRefreshOrder" class="mo-secondary" type="button">Refresh order</button>
       </div>
     </section>
 
-    <section class="mo-settings-panel" id="moSettingsPanel" aria-label="Met Office setup" hidden>
-      <div class="mo-settings-card">
-        <div class="mo-settings-head">
-          <div>
-            <span>Local setup</span>
-            <strong>Met Office key</strong>
-            <p>The key/order are stored only in this browser. Nothing is committed to GitHub.</p>
-          </div>
-          <button class="mo-close-button" id="moCloseSettings" type="button" aria-label="Close settings">×</button>
-        </div>
-
-        <label class="mo-input-row">
-          <span>API key</span>
-          <input id="moApiKey" type="password" autocomplete="off" placeholder="Paste Map Images key" />
-        </label>
-
-        <label class="mo-input-row">
-          <span>API Order ID</span>
-          <input id="moOrderId" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="maps-uk1" />
-        </label>
-
-        <div class="mo-settings-actions">
-          <button class="mo-primary-button" id="moSaveSettings" type="button">Save & load</button>
-          <button class="mo-secondary-button" id="moCloseSetup" type="button">Close</button>
-        </div>
-
-        <div class="mo-settings-actions mo-settings-actions-secondary">
-          <button class="mo-secondary-button" id="moForgetSettings" type="button">Forget saved key</button>
-        </div>
-
-        <p class="mo-note" id="moStorageNote">Key/order are not saved in GitHub.</p>
+    <section class="mo-controls" aria-label="Met Office frame controls">
+      <div class="mo-layer-buttons" role="group" aria-label="Layer type">
+        <button class="mo-layer-button" type="button" data-layer="rainfall">Rainfall</button>
+        <button class="mo-layer-button" type="button" data-layer="cloud">Cloud</button>
+        <button class="mo-layer-button" type="button" data-layer="pressure">Pressure</button>
+        <button class="mo-layer-button" type="button" data-layer="temperature">Temp</button>
+      </div>
+      <div class="mo-frame-controls">
+        <button id="moPrevFrame" class="mo-secondary" type="button">‹</button>
+        <input id="moFrameSlider" type="range" min="0" max="0" value="0" />
+        <button id="moNextFrame" class="mo-secondary" type="button">›</button>
       </div>
     </section>
+
+    <section class="mo-stage" aria-label="Met Office image preview">
+      <img id="moImage" class="mo-image" alt="Met Office Map Images preview" hidden />
+      <div id="moPlaceholder" class="mo-empty-state">
+        <strong>Met Office image</strong>
+        <span>Paste your local key/order, then load a frame. This screen does not use an OSM map.</span>
+      </div>
+    </section>
+
+    <footer class="mo-statusbar" aria-live="polite">
+      <span id="moStatus">Ready.</span>
+      <span id="moFrameCount">0/0</span>
+      <span id="moValidUkLabel">UK time unavailable</span>
+    </footer>
   </main>
 
-  <script src="metoffice.js?v=0.2.3-fieldops-web-lab"></script>
+  <script src="weather-display-style.js?v=0.1.2"></script>
+  <script src="app.js?v=0.3.0-demapped-weather-apis"></script>
+  <script src="metoffice.js?v=0.4.1-single-colour"></script>
 </body>
 </html>
 <!-- End of file: FieldOpsAtlas/Features/Weather/metoffice.html -->
