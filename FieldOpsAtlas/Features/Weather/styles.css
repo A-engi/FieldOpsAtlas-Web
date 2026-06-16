@@ -2200,3 +2200,180 @@ button, a, input, select {
 }
 
 /* End of file: FieldOpsAtlas/Features/Weather/styles.css */
+
+/* v0.3.0 demapped provider screens */
+.provider-shell {
+  gap: 14px;
+}
+
+.provider-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.provider-tab {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.provider-tab.active {
+  border-color: rgba(34, 217, 255, 0.55);
+  background: rgba(34, 217, 255, 0.18);
+}
+
+.provider-card-stack,
+.weather-data-card {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.weather-card-header,
+.risk-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.primary-button,
+.secondary-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0 14px;
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+}
+
+.primary-button {
+  border-color: rgba(34, 217, 255, 0.55);
+  background: rgba(34, 217, 255, 0.2);
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.text-input,
+.range-control {
+  width: 100%;
+}
+
+.text-input {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0 12px;
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--text);
+  font: inherit;
+}
+
+.field-label {
+  display: block;
+  margin: 10px 0 6px;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.metric-pill,
+.risk-pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.status-text {
+  color: var(--text-soft);
+}
+
+.code-panel {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.compact-list,
+.risk-list {
+  display: grid;
+  gap: 10px;
+}
+
+.list-row,
+.risk-card {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--risk-colour, rgba(34, 217, 255, 0.7));
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+}
+
+.list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 10px;
+  text-align: left;
+  font: inherit;
+}
+
+.list-row.active {
+  border-color: rgba(34, 217, 255, 0.6);
+  background: rgba(34, 217, 255, 0.14);
+}
+
+.list-row small {
+  grid-column: 1 / -1;
+  color: var(--text-soft);
+}
+
+.risk-card h3 {
+  margin: 0 0 4px;
+}
+
+.risk-card p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+button:disabled {
+  opacity: 0.55;
+}
+
+@media (max-width: 760px) {
+  .weather-card-header,
+  .risk-card-top {
+    flex-direction: column;
+  }
+}
+
+/* End of v0.3.0 demapped provider screen styles */
+
+/* End of file: FieldOpsAtlas/Features/Weather/styles.css */
