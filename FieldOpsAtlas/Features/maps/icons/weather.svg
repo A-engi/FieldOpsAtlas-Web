@@ -1,0 +1,19 @@
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 0 128 128" role="img" aria-label="Weather">
+  <defs>
+    <linearGradient id="weather-cloud" x1="28" y1="24" x2="104" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.52" stop-color="#dff5ff"/>
+      <stop offset="1" stop-color="#75d5ff"/>
+    </linearGradient>
+    <linearGradient id="weather-sun" x1="24" y1="18" x2="68" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff4b0"/>
+      <stop offset="1" stop-color="#f5c34b"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="44" cy="42" r="18" fill="url(#weather-sun)" stroke="rgba(255,255,255,0.62)" stroke-width="4"/>
+    <path d="M29 78c-10 0-18-8-18-18s8-18 18-18c3 0 6 .8 8.5 2.1C42 32 54.8 22 70 22c18.2 0 33 14.8 33 33v1c8.2 2.8 14 10.5 14 19.7C117 87 108 96 96.7 96H30" fill="url(#weather-cloud)" stroke="rgba(255,255,255,0.72)" stroke-width="5"/>
+    <path d="M48 106l-5 12M70 106l-5 12M92 106l-5 12" stroke="#75d5ff" stroke-width="6"/>
+  </g>
+</svg>
+<!-- End of file: FieldOpsAtlas/Features/maps/icons/weather.svg -->
