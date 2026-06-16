@@ -1,33 +1,36 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.1-profile
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.2-web-maps-rfpages
    Keeps the browser prototype usable offline where possible.
-   Map remains the main fallback page.
+   Maps remains the main fallback page.
 */
-const CACHE_NAME = "fieldops-atlas-v1.1.1-profile";
-const MAP_FALLBACK = "./FieldOpsAtlas/Features/Map/index.html";
+
+const CACHE_NAME = "fieldops-atlas-v1.1.2-web-maps-rfpages";
+const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
   "./",
   "./index.html",
   MAP_FALLBACK,
+  "./shell.css?v=1.1.21-shell-smoke-controls",
+  "./shell.js?v=1.1.20-web-repo-profile-link",
+  "./components.css",
+  "./theme.css",
+  "./settings.html",
   "./FieldOpsAtlas/Features/Profile/index.html",
   "./FieldOpsAtlas/Features/RF/index.html",
-  "./FieldOpsAtlas/Features/RF/sites.html",
-  "./FieldOpsAtlas/Features/RF/dtt.html",
-  "./FieldOpsAtlas/Features/RF/dab.html",
-  "./FieldOpsAtlas/Features/RF/fm.html",
-  "./FieldOpsAtlas/Features/RF/services.html",
-  "./FieldOpsAtlas/Features/RF/equipment.html",
-  "./FieldOpsAtlas/Features/RF/paths.html",
-  "./FieldOpsAtlas/Features/RF/settings.html",
-  "./FieldOpsAtlas/Features/RF/shell.css?v=1.1.1",
-  "./FieldOpsAtlas/Features/RF/shell.css?v=1.1.1-profile",
-  "./FieldOpsAtlas/Features/RF/shell.js?v=1.1.1",
-  "./FieldOpsAtlas/Features/RF/shell.js?v=1.1.1-profile",
-  "./FieldOpsAtlas/Features/RF/page.css?v=1.1.1",
-  "./FieldOpsAtlas/Features/RF/page.css?v=1.1.1-profile",
-  "./FieldOpsAtlas/Features/RF/rf.css?v=1.1.1",
-  "./FieldOpsAtlas/Features/RF/rf.css?v=1.1.1-profile",
-  "./FieldOpsAtlas/Features/RF/rf-demo-map.js",
+  "./FieldOpsAtlas/Features/RF/background.css?v=1.1.76-graph-label",
+  "./FieldOpsAtlas/Features/RF/rf-graph.css?v=1.1.83-rename-graph-files",
+  "./FieldOpsAtlas/Features/RF/rf-graph.js?v=1.1.86-graph-data-rename",
+  "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.115-site-pack-panel",
+  "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.118-graph-labels",
+  "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.116-generic-demo-builder",
+  "./FieldOpsAtlas/Features/RFPages/sites.html",
+  "./FieldOpsAtlas/Features/RFPages/dtt.html",
+  "./FieldOpsAtlas/Features/RFPages/dab.html",
+  "./FieldOpsAtlas/Features/RFPages/fm.html",
+  "./FieldOpsAtlas/Features/RFPages/services.html",
+  "./FieldOpsAtlas/Features/RFPages/equipment.html",
+  "./FieldOpsAtlas/Features/RFPages/paths.html",
+  "./FieldOpsAtlas/Features/RFPages/settings.html",
   "./FieldOpsAtlas/Features/Network/index.html",
   "./FieldOpsAtlas/Features/Docs/index.html",
   "./FieldOpsAtlas/Features/Tools/index.html"
