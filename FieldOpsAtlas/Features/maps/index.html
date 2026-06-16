@@ -9,44 +9,13 @@
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
- <style>
-  .osmmaps-weather-button {
-   position: fixed;
-   top: calc(96px + env(safe-area-inset-top, 0px));
-   right: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
-   z-index: 34;
-   min-height: 36px;
-   display: inline-flex;
-   align-items: center;
-   justify-content: center;
-   padding: 0 12px;
-   border: 1px solid rgba(184, 226, 255, 0.18);
-   border-radius: 999px;
-   color: rgba(239, 249, 255, 0.94);
-   background:
-    radial-gradient(circle at 50% 0%, rgba(121, 198, 255, 0.14), transparent 46%),
-    linear-gradient(180deg, rgba(22, 68, 116, 0.62), rgba(6, 24, 48, 0.68));
-   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 24px rgba(0, 14, 32, 0.18);
-   font: inherit;
-   font-size: 13px;
-   font-weight: 850;
-   text-decoration: none;
-   pointer-events: auto;
-  }
- </style>
+ <link rel="stylesheet" href="./OSMweather-menu.css?v=weather-lab-menu-20260616">
 </head>
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
  <main class="osmmaps-page" data-osmmaps-page>
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
-
-  <a
-   class="osmmaps-weather-button"
-   href="../Weather/index.html"
-   data-map-weather-button
-   aria-label="Open Weather"
-  >Weather</a>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
    <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
@@ -81,6 +50,7 @@
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
+ <script src="./OSMweather-menu.js?v=weather-lab-menu-20260616"></script>
 </body>
 </html>
-<!-- End of FieldOpsAtlas/Features/maps/index.html | bottom/end of file -->
+<!-- End of file: FieldOpsAtlas/Features/maps/index.html -->
