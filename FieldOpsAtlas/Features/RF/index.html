@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.126</title>
+  <title>FieldOps Atlas RF v1.1.127</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.84-path-details-visible">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.118-selected-path-pane">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.119-endpoint-icons">
 
   <style>
     .rf-load-toast {
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.126">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.127">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -137,16 +137,16 @@
   </script>
 
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
-  <script src="./rf-interface.js?v=1.1.120-network-map-title" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.123-selected-path-pane" defer></script>
+  <script src="./rf-interface.js?v=1.1.121-clean-path-rail" defer></script>
+  <script src="./rf-path-builder.js?v=1.1.124-endpoint-icons" defer></script>
   <script src="./rf-graph.js?v=1.1.90-demo-builder-source" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.126-selected-path-pane */
+    /* RF load toast | Version: 1.1.127-clean-path-rail */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.126-selected-path-pane";
+      const PAGE_VERSION = "1.1.127-clean-path-rail";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -177,7 +177,7 @@
           "shell.css 1.1.21-shell-smoke-controls",
           "background.css 1.1.76-graph-label",
           "rf-graph.css 1.1.84-path-details-visible",
-          "rf-interface.css 1.1.118-selected-path-pane",
+          "rf-interface.css 1.1.119-endpoint-icons",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
