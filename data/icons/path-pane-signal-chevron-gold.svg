@@ -1,7 +1,7 @@
 <svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="42" height="420" viewBox="0 0 42 420" fill="none" role="img" aria-labelledby="pathSignalTitle pathSignalDesc">
-  <title id="pathSignalTitle">Path pane cream gold signal chevron</title>
-  <desc id="pathSignalDesc">Site 1 and Site 2 transmitter nodes with a cream-centred gold zig-zag RF path between them.</desc>
-  <!-- Version: 1.1.116-cream-zigzag -->
+  <title id="pathSignalTitle">Path pane cream gold signal rail</title>
+  <desc id="pathSignalDesc">A cream-centred gold zig-zag RF path rail without site labels.</desc>
+  <!-- Version: 1.1.117-rail-only -->
 
   <defs>
     <linearGradient id="signalOuterGold" x1="11" y1="18" x2="11" y2="402" gradientUnits="userSpaceOnUse">
@@ -19,11 +19,6 @@
       <stop offset="1" stop-color="#fff0bd" />
     </linearGradient>
 
-    <linearGradient id="nodeFill" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#58a83f" />
-      <stop offset="1" stop-color="#2e721e" />
-    </linearGradient>
-
     <filter id="signalGlowWide" x="-150%" y="-10%" width="400%" height="120%" color-interpolation-filters="sRGB">
       <feGaussianBlur stdDeviation="3.4" result="blur" />
       <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 0.82 0 0 0  0 0 0.24 0 0  0 0 0 0.60 0" result="glow" />
@@ -37,53 +32,13 @@
       <feGaussianBlur stdDeviation="8" />
     </filter>
 
-    <filter id="nodeGlow" x="-90%" y="-90%" width="280%" height="280%" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="1.35" result="blur" />
-      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 0.88 0 0 0  0 0 0.30 0 0  0 0 0 0.46 0" result="glow" />
-      <feMerge>
-        <feMergeNode in="glow" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-
-    <g id="txNode" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M0 -4.6L-3.6 5.5H3.6Z" stroke-width="1.25" />
-      <path d="M0 -2.1V5.2" stroke-width="1.05" />
-      <path d="M-2.2 2H2.2" stroke-width="1.05" />
-      <path d="M-4.8 -3.6C-6.4 -2.2 -6.4 2.2 -4.8 3.6" stroke-width="1" />
-      <path d="M4.8 -3.6C6.4 -2.2 6.4 2.2 4.8 3.6" stroke-width="1" />
-    </g>
-
-    <path id="zigZagPath" d="M11 34V152L7 165L18 180L7 196L19 212L7 228L18 244L7 260L16 274L11 288V386" />
+    <path id="zigZagPath" d="M11 38V152L7 165L18 180L7 196L19 212L7 228L18 244L7 260L16 274L11 288V386" />
   </defs>
 
   <g aria-hidden="true">
-    <text x="22" y="17" fill="#fff1bd" font-family="Arial, Helvetica, sans-serif" font-size="5.1" font-weight="900" letter-spacing="0.45">SITE 1</text>
-    <text x="22" y="24" fill="#dfefff" opacity="0.78" font-family="Arial, Helvetica, sans-serif" font-size="3.6" font-weight="800" letter-spacing="0.3">TX NODE</text>
-
-    <g filter="url(#nodeGlow)">
-      <circle cx="11" cy="20" r="10" fill="url(#nodeFill)" stroke="#e7db86" stroke-width="1.45" />
-      <g transform="translate(11 20)">
-        <use href="#txNode" />
-      </g>
-    </g>
-
-    <path d="M11 30L11 38" stroke="#d7a947" stroke-width="1.4" stroke-linecap="round" opacity="0.86" />
-    <path d="M11 43L7.2 36.5H14.8Z" fill="#d7a947" opacity="0.86" />
-
     <use href="#zigZagPath" stroke="#b98619" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.22" filter="url(#signalGlowSoft)" />
     <use href="#zigZagPath" stroke="url(#signalOuterGold)" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.72" filter="url(#signalGlowWide)" />
     <use href="#zigZagPath" stroke="url(#signalCoreCream)" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" />
-
-    <g filter="url(#nodeGlow)">
-      <circle cx="11" cy="400" r="10" fill="url(#nodeFill)" stroke="#e7db86" stroke-width="1.45" />
-      <g transform="translate(11 400)">
-        <use href="#txNode" />
-      </g>
-    </g>
-
-    <text x="22" y="397" fill="#fff1bd" font-family="Arial, Helvetica, sans-serif" font-size="5.1" font-weight="900" letter-spacing="0.45">SITE 2</text>
-    <text x="22" y="404" fill="#dfefff" opacity="0.78" font-family="Arial, Helvetica, sans-serif" font-size="3.6" font-weight="800" letter-spacing="0.3">RX NODE</text>
   </g>
 
   <!-- Destination: data/icons/path-pane-signal-chevron-gold.svg -->
