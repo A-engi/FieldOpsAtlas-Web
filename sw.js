@@ -1,10 +1,10 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.10-rf-demo-graph-ready
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.12-rf-demo-separate-fields
    Keeps the browser prototype usable offline where possible.
    Maps remains the main fallback page.
    Bumps the RF cache so Graph data is sourced from rf-path-builder.js.
 */
 
-const CACHE_NAME = "fieldops-atlas-v1.1.10-rf-demo-graph-ready";
+const CACHE_NAME = "fieldops-atlas-v1.1.12-rf-demo-separate-fields";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -24,7 +24,7 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RF/rf-graph.js?v=1.1.90-demo-builder-source",
   "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.117-rfpages-layout-clear",
   "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.119-cream-graph-assets",
-  "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.119-demo-graph-ready",
+  "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.121-demo-separate-fields",
   "./FieldOpsAtlas/Features/RFPages/sites.html",
   "./FieldOpsAtlas/Features/RFPages/dtt.html",
   "./FieldOpsAtlas/Features/RFPages/dab.html",
