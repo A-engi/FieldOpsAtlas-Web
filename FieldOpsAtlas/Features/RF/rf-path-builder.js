@@ -1,17 +1,15 @@
 /* ===========================================================================
-   FieldOps Atlas RF path builder
+   FieldOps Atlas RF site/path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.121-demo-separate-fields
+   Version: 1.1.122-site-builder-source
 
    Purpose:
-   - Own the RF demo model used by both Path Details and the Graph renderer.
-   - Provide one ready demo graph through FieldOpsRFPathBuilder.buildGraph().
+   - Own the RF demo site model used by both Path Details and the Graph renderer.
+   - Build graph nodes from named RF sites first, not placeholder path labels.
    - Keep graph drawing in rf-graph.js.
    - Keep the demo graph clearly marked as placeholder data.
-   - Use Path 1 / Path 2 / Path 3 placeholder labels until real RF path
-     records exist.
    - Do not use service/equipment records as graph site names.
-   - Render Path, Summary, Service, Equipment, and Frequency items as separate
+   - Render Site, Summary, Service, Equipment, and Frequency items as separate
      path-detail fields.
    - Leave pane shell, collapse behaviour, and sizing to rf-interface.js/css.
    ========================================================================== */
@@ -19,17 +17,75 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.121-demo-separate-fields";
+  const VERSION = "1.1.122-site-builder-source";
   const SLOT_SELECTOR = "[data-rf-path-details]";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
   const RENDERED_EVENT = "fieldops:rf-path-details-rendered";
   const DISPLAY_LIMIT = 4;
 
-  const DEMO_PATHS = [
-    { id: "path-1", name: "Path 1", role: "Demo path" },
-    { id: "path-2", name: "Path 2", role: "Demo path" },
-    { id: "path-3", name: "Path 3", role: "Demo path" }
+  const FALLBACK_SITES = [
+    {
+      id: "london-core",
+      name: "London Core",
+      role: "Primary network node",
+      status: "Online",
+      nodeType: "core",
+      size: "large",
+      href: "../RFPages/sites.html#london-core"
+    },
+    {
+      id: "hilltop",
+      name: "Hilltop Relay",
+      role: "Relay site",
+      status: "Online",
+      nodeType: "relay",
+      href: "../RFPages/sites.html#hilltop"
+    },
+    {
+      id: "ridgeway",
+      name: "Ridgeway Relay",
+      role: "Regional relay",
+      status: "Watch",
+      nodeType: "relay",
+      href: "../RFPages/sites.html#ridgeway"
+    },
+    {
+      id: "pinewood",
+      name: "Pinewood Remote",
+      role: "Remote monitored site",
+      status: "Online",
+      nodeType: "remote",
+      size: "large",
+      href: "../RFPages/sites.html#pinewood"
+    }
   ];
+
+  const SITE_LAYOUTS = {
+    "london-core": {
+      x: 0.15,
+      y: 0.72,
+      label: { dx: 0, dy: 54, anchor: "middle" },
+      labelTight: { dx: 0, dy: 50, anchor: "middle" }
+    },
+    hilltop: {
+      x: 0.50,
+      y: 0.28,
+      label: { dx: 0, dy: -42, anchor: "middle" },
+      labelTight: { dx: 0, dy: -38, anchor: "middle" }
+    },
+    ridgeway: {
+      x: 0.85,
+      y: 0.72,
+      label: { dx: 0, dy: 54, anchor: "middle" },
+      labelTight: { dx: 0, dy: 50, anchor: "middle" }
+    },
+    pinewood: {
+      x: 0.30,
+      y: 0.13,
+      label: { dx: 0, dy: -34, anchor: "middle" },
+      labelTight: { dx: 0, dy: -32, anchor: "middle" }
+    }
+  };
 
   const GLOBAL_SOURCES = {
     sites: ["FieldOpsRFSites", "FieldOpsSites", "FieldOpsSiteFiles"],
@@ -68,6 +124,12 @@
     return id || fallback;
   }
 
+  function idFromHrefOrText(href, text, fallback) {
+    const rawHref = cleanText(href);
+    const hash = rawHref.includes("#") ? rawHref.split("#").pop() : "";
+    return stableId(hash || text, fallback);
+  }
+
   function readGlobalLists(names) {
     return names.flatMap((name) => asList(window[name]));
   }
@@ -77,40 +139,104 @@
     return `${count} source ${count === 1 ? "item" : "items"}`;
   }
 
+  function siteTypeFromText(value, fallback = "relay") {
+    const text = cleanText(value).toLowerCase();
+
+    if (/\b(core|primary|main)\b/.test(text)) return "core";
+    if (/\b(remote|rem)\b/.test(text)) return "remote";
+    if (/\b(relay|tx)\b/.test(text)) return "relay";
+
+    return fallback;
+  }
+
   function normaliseSourceRecord(record, index, fallbackType) {
+    const name = cleanText(record.name || record.title || record.label || record.id || `${fallbackType} ${index + 1}`);
+    const href = cleanText(record.href || record.url || "");
+    const id = idFromHrefOrText(href, record.id || record.slug || name, `${fallbackType}-${index + 1}`);
+
     return {
-      id: stableId(record.id || record.slug || record.name || record.title || record.label, `${fallbackType}-${index + 1}`),
-      type: fallbackType
+      id,
+      name,
+      role: cleanText(record.role || record.subtitle || record.description || fallbackType),
+      status: cleanText(record.status || ""),
+      href,
+      type: fallbackType,
+      nodeType: cleanText(record.nodeType || record.siteType || record.kind || siteTypeFromText(`${name} ${record.role || record.subtitle || ""}`))
     };
+  }
+
+  function normaliseFallbackSite(site, index) {
+    return {
+      id: stableId(site.id || site.name, `site-${index + 1}`),
+      name: cleanText(site.name || `Site ${index + 1}`),
+      role: cleanText(site.role || "Demo RF site"),
+      status: cleanText(site.status || ""),
+      href: cleanText(site.href || ""),
+      type: "site",
+      nodeType: cleanText(site.nodeType || siteTypeFromText(`${site.name} ${site.role}`, "relay")),
+      size: cleanText(site.size || "")
+    };
+  }
+
+  function readRecentCards(root) {
+    return [...root.querySelectorAll(".rf-recent-card")].map((card, index) => {
+      const name = cleanText(card.querySelector(".rf-recent-name")?.textContent || card.textContent || `Site ${index + 1}`);
+      const status = cleanText(card.querySelector(".rf-status")?.textContent || "");
+      const href = cleanText(card.getAttribute("href") || "");
+
+      return {
+        id: idFromHrefOrText(href, name, `site-${index + 1}`),
+        name,
+        role: siteTypeFromText(name, "relay") === "core" ? "Primary network node" : "RF site",
+        status,
+        href,
+        type: "site",
+        nodeType: siteTypeFromText(name, "relay")
+      };
+    });
+  }
+
+  function isQueuedSiteItem(item) {
+    const id = cleanText(item.id).toLowerCase();
+    const title = cleanText(item.title);
+    const keywords = asList(item.keywords).join(" ").toLowerCase();
+
+    if (title.toLowerCase() === "sites") return false;
+    if (id.startsWith("site-")) return true;
+
+    return /\b(relay|core|remote|transmitter|tx site)\b/.test(`${title.toLowerCase()} ${keywords}`);
   }
 
   function collectQueuedSiteSources() {
     return asList(window.FieldOpsSearchQueue)
       .flatMap((group) => asList(group.items))
-      .filter((item) => {
-        const id = cleanText(item.id).toLowerCase();
-        const keywords = asList(item.keywords).join(" ").toLowerCase();
-        return id.startsWith("site-") || /\b(site|relay|transmitter|tx)\b/.test(keywords);
-      })
+      .filter(isQueuedSiteItem)
       .map((item, index) => normaliseSourceRecord(item, index, "site"));
   }
 
-  function collectSiteSources() {
-    const siteSources = [
+  function collectSiteSources(root = document) {
+    const candidates = [
+      ...readRecentCards(root),
       ...readGlobalLists(GLOBAL_SOURCES.sites).map((record, index) => normaliseSourceRecord(record, index, "site")),
-      ...collectQueuedSiteSources()
+      ...collectQueuedSiteSources(),
+      ...FALLBACK_SITES.map(normaliseFallbackSite)
     ];
 
     const unique = new Map();
-    siteSources.forEach((site) => {
+
+    candidates.forEach((site) => {
+      if (!site.name) return;
       if (!unique.has(site.id)) unique.set(site.id, site);
     });
-    return [...unique.values()];
+
+    return [...unique.values()].slice(0, DISPLAY_LIMIT);
   }
 
   function collectServiceSources(root) {
     const currentRows = [...root.querySelectorAll(".rf-service-row")].map((row, index) => ({
-      id: stableId(row.getAttribute("href") || row.textContent, `service-${index + 1}`),
+      id: idFromHrefOrText(row.getAttribute("href"), row.textContent, `service-${index + 1}`),
+      name: cleanText(row.querySelector("span")?.textContent || row.textContent || `Service ${index + 1}`),
+      role: "Source item",
       type: "service"
     }));
     const futureRows = readGlobalLists(GLOBAL_SOURCES.services).map((record, index) => normaliseSourceRecord(record, index, "service"));
@@ -119,7 +245,9 @@
 
   function collectEquipmentSources(root) {
     const currentRows = [...root.querySelectorAll(".rf-equipment-card")].map((card, index) => ({
-      id: stableId(card.getAttribute("href") || card.textContent, `equipment-${index + 1}`),
+      id: idFromHrefOrText(card.getAttribute("href"), card.textContent, `equipment-${index + 1}`),
+      name: cleanText(card.querySelector("span")?.textContent || card.textContent || `Equipment ${index + 1}`),
+      role: "Source item",
       type: "equipment"
     }));
     const futureRows = readGlobalLists(GLOBAL_SOURCES.equipment).map((record, index) => normaliseSourceRecord(record, index, "equipment"));
@@ -132,34 +260,38 @@
 
   function buildSourceCounts(root = document) {
     return {
-      sites: collectSiteSources().length,
+      sites: collectSiteSources(root).length,
       services: collectServiceSources(root).length,
       equipment: collectEquipmentSources(root).length,
       frequencies: collectFrequencySources().length
     };
   }
 
-  function genericRows(sources, label, sourcedValue, emptyValue) {
-    const rowCount = sources.length ? Math.min(sources.length, DISPLAY_LIMIT) : 1;
-    return Array.from({ length: rowCount }, (_, index) => ({
+  function rowsFromSources(sources, label, emptyTitle, emptyDetail) {
+    if (!sources.length) {
+      return [{ label, value: emptyTitle, detail: emptyDetail }];
+    }
+
+    return sources.slice(0, DISPLAY_LIMIT).map((source, index) => ({
       label: `${label} ${index + 1}`,
-      value: sources.length ? sourcedValue : emptyValue
+      value: source.name || source.id || "Source item",
+      detail: source.role || source.status || source.type || "Source item"
     }));
   }
 
   function buildGenericInfo(sourceCounts) {
     return [
-      { label: "Mode", value: "Demo placeholder" },
-      { label: "Graph", value: "Path labels only" },
-      { label: "Paths", value: "Path 1 / Path 2 / Path 3" },
-      { label: "Data", value: "Awaiting real path records" },
-      { label: "Sources", value: sourceCountLabel(sourceCounts.sites, "No source pack") }
+      { label: "Mode", value: "Site builder", detail: "Demo-safe model" },
+      { label: "Graph", value: "Named RF sites", detail: "No path-label fallback" },
+      { label: "Sites", value: `${sourceCounts.sites} loaded`, detail: "Current RF page first" },
+      { label: "Data", value: "Prototype-safe", detail: "Replace when real records exist" },
+      { label: "Sources", value: sourceCountLabel(sourceCounts.sites, "No source pack"), detail: "Site records only" }
     ];
   }
 
   function buildSitePack(root = document) {
     const sources = {
-      sites: collectSiteSources(),
+      sites: collectSiteSources(root),
       services: collectServiceSources(root),
       equipment: collectEquipmentSources(root),
       frequencies: collectFrequencySources()
@@ -173,20 +305,85 @@
     };
 
     return {
-      id: "demo-path-pack",
-      from: DEMO_PATHS[0],
-      via: DEMO_PATHS[1],
-      to: DEMO_PATHS[2],
+      id: "demo-site-pack",
+      sites: sources.sites,
+      from: sources.sites[0],
+      via: sources.sites[1],
+      to: sources.sites[2],
       genericInfo: buildGenericInfo(sourceCounts),
-      services: genericRows(sources.services, "Service", "Source item", "Future service file"),
-      equipment: genericRows(sources.equipment, "Equipment", "Source item", "Future equipment file"),
-      frequencies: genericRows(sources.frequencies, "Frequency", "Source item", "Future frequency file"),
+      services: rowsFromSources(sources.services, "Service", "Future service file", "Service field"),
+      equipment: rowsFromSources(sources.equipment, "Equipment", "Future equipment file", "Equipment field"),
+      frequencies: rowsFromSources(sources.frequencies, "Frequency", "Future frequency file", "Frequency field"),
       sourceCounts
     };
   }
 
   function isUsableGraph(data) {
     return Boolean(data && Array.isArray(data.nodes) && data.nodes.length > 0 && Array.isArray(data.links));
+  }
+
+  function nodeLayout(site, index) {
+    return SITE_LAYOUTS[site.id] || [
+      {
+        x: 0.15,
+        y: 0.72,
+        label: { dx: 0, dy: 54, anchor: "middle" },
+        labelTight: { dx: 0, dy: 50, anchor: "middle" }
+      },
+      {
+        x: 0.50,
+        y: 0.28,
+        label: { dx: 0, dy: -42, anchor: "middle" },
+        labelTight: { dx: 0, dy: -38, anchor: "middle" }
+      },
+      {
+        x: 0.85,
+        y: 0.72,
+        label: { dx: 0, dy: 54, anchor: "middle" },
+        labelTight: { dx: 0, dy: 50, anchor: "middle" }
+      },
+      {
+        x: 0.30,
+        y: 0.13,
+        label: { dx: 0, dy: -34, anchor: "middle" },
+        labelTight: { dx: 0, dy: -32, anchor: "middle" }
+      }
+    ][index % DISPLAY_LIMIT];
+  }
+
+  function graphNodeFromSite(site, index) {
+    const layout = nodeLayout(site, index);
+
+    return {
+      id: site.id,
+      name: site.name,
+      type: site.nodeType || siteTypeFromText(`${site.name} ${site.role}`, "relay"),
+      size: site.size || (site.nodeType === "core" || site.nodeType === "remote" ? "large" : ""),
+      x: layout.x,
+      y: layout.y,
+      label: layout.label,
+      labelTight: layout.labelTight
+    };
+  }
+
+  function graphLinksFromSites(sites) {
+    const links = [];
+
+    if (sites.length >= 2) {
+      links.push({ id: `${sites[0].id}-${sites[1].id}`, from: sites[0].id, to: sites[1].id, type: "alert" });
+    }
+
+    if (sites.length >= 3) {
+      links.push({ id: `${sites[1].id}-${sites[2].id}`, from: sites[1].id, to: sites[2].id, type: "main" });
+      links.push({ id: `${sites[0].id}-${sites[2].id}`, from: sites[0].id, to: sites[2].id, type: "backup" });
+    }
+
+    if (sites.length >= 4) {
+      links.push({ id: `${sites[2].id}-${sites[3].id}`, from: sites[2].id, to: sites[3].id, type: "backup" });
+      links.push({ id: `${sites[3].id}-${sites[1].id}`, from: sites[3].id, to: sites[1].id, type: "main" });
+    }
+
+    return links;
   }
 
   function buildGraph(root = document) {
@@ -202,33 +399,22 @@
       };
     }
 
+    const sites = collectSiteSources(root);
     const sourceCounts = buildSourceCounts(root);
 
     return {
-      id: "rf-demo-path-graph",
-      selectedPathId: "path-1-path-2",
+      id: "rf-demo-site-graph",
+      selectedPathId: sites.length >= 2 ? `${sites[0].id}-${sites[1].id}` : "",
       meta: {
         source: "FieldOpsRFPathBuilder",
         builderVersion: VERSION,
-        mode: "demo-placeholder",
-        note: "Invented demo path graph. Replace with real RF path records when available.",
-        readyFor: "real-rf-path-model",
+        mode: "demo-site-builder",
+        note: "Demo-safe RF site graph. Replace with real RF path records when available.",
+        readyFor: "real-rf-site-path-model",
         sourceCounts
       },
-      nodes: [
-        { id: "path-1", name: "Path 1", type: "core", size: "large", x: 0.15, y: 0.72, label: { dx: 0, dy: 54, anchor: "middle" }, labelTight: { dx: 0, dy: 50, anchor: "middle" } },
-        { id: "path-2", name: "Path 2", type: "relay", x: 0.50, y: 0.28, label: { dx: 0, dy: -42, anchor: "middle" }, labelTight: { dx: 0, dy: -38, anchor: "middle" } },
-        { id: "path-3", name: "Path 3", type: "remote", size: "large", x: 0.85, y: 0.72, label: { dx: 0, dy: 54, anchor: "middle" }, labelTight: { dx: 0, dy: 50, anchor: "middle" } },
-        { id: "path-4", name: "Path 4", type: "main", x: 0.30, y: 0.13, label: { dx: 0, dy: -34, anchor: "middle" }, labelTight: { dx: 0, dy: -32, anchor: "middle" } },
-        { id: "path-5", name: "Path 5", type: "main", x: 0.70, y: 0.13, label: { dx: 0, dy: -34, anchor: "middle" }, labelTight: { dx: 0, dy: -32, anchor: "middle" } }
-      ],
-      links: [
-        { id: "path-1-path-2", from: "path-1", to: "path-2", type: "alert" },
-        { id: "path-2-path-3", from: "path-2", to: "path-3", type: "backup" },
-        { id: "path-1-path-3", from: "path-1", to: "path-3", type: "backup" },
-        { id: "path-4-path-2", from: "path-4", to: "path-2", type: "main" },
-        { id: "path-5-path-2", from: "path-5", to: "path-2", type: "main" }
-      ]
+      nodes: sites.map(graphNodeFromSite),
+      links: graphLinksFromSites(sites)
     };
   }
 
@@ -242,24 +428,24 @@
     `;
   }
 
-  function renderPath(path) {
-    return renderField("Path", path.name, path.role);
+  function renderSite(site) {
+    if (!site) return "";
+    const detail = [site.role, site.status].filter(Boolean).join(" · ") || "RF site";
+    return renderField("Site", site.name, detail);
   }
 
   function renderFields(rows, fallbackDetail) {
     return rows
       .slice(0, DISPLAY_LIMIT)
-      .map((row) => renderField(row.label, row.value, fallbackDetail))
+      .map((row) => renderField(row.label, row.value, row.detail || fallbackDetail))
       .join("");
   }
 
   function renderPathDetails(pack) {
     return `
       <article class="rf-path-pack" data-rf-path-builder-body data-rf-path-id="${escapeHTML(pack.id)}">
-        <section class="rf-path-sites" aria-label="Demo path fields">
-          ${renderPath(pack.from)}
-          ${pack.via ? renderPath(pack.via) : ""}
-          ${renderPath(pack.to)}
+        <section class="rf-path-sites" aria-label="Demo site fields">
+          ${pack.sites.map(renderSite).join("")}
         </section>
 
         <section class="rf-path-sites" aria-label="Demo summary fields">
@@ -295,7 +481,7 @@
       detail: {
         version: VERSION,
         pathId: sitePack.id,
-        source: "demo-separate-fields",
+        source: "site-builder-source",
         sourceCounts: sitePack.sourceCounts,
         graph: buildGraph(root)
       }
@@ -311,6 +497,7 @@
 
   window.FieldOpsRFPathBuilder = {
     VERSION,
+    buildSites: collectSiteSources,
     buildSitePack,
     buildGraph,
     render
