@@ -1,17 +1,13 @@
-/* ==========================================================================
+/* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.117-rfpages-layout-clear
+   Version: 1.1.118-selected-path-pane
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
-   - Keep the compact path panel, measured handle icon, and site-pack detail layout.
-      - Use the wider cream/gold signal chevron icon from the icons folder for the pane handle.
-   - Leave topology/graph drawing to rf-graph.css/js.
-   ========================================================================== */
-
-/* ==========================================================================
-   1. RF interface layout
+   - Keep the collapsible signal/zigzag rail inside the RF path pane.
+   - Keep selected-path detail layout compact enough for the pane.
+   - Leave topology/graph drawing and map colours to rf-graph.css/js.
    ========================================================================== */
 
 .rf-home,
@@ -89,10 +85,6 @@
     rgba(221, 190, 132, 0.34);
 }
 
-/* ==========================================================================
-   2. Map holder and topology slot
-   ========================================================================== */
-
 .rf-map-recent {
   min-height: 0;
   display: grid;
@@ -102,8 +94,8 @@
 }
 
 .rf-map-paper {
-  --path-pane-width: clamp(122px, 31%, 142px);
-  --path-handle-width: 42px;
+  --path-pane-width: clamp(162px, 34%, 196px);
+  --path-handle-width: 44px;
 
   position: relative;
   min-height: 0;
@@ -150,12 +142,8 @@
   overflow: visible;
 }
 
-/* ==========================================================================
-   3. Measured collapsible path pane
-   ========================================================================== */
-
 .rf-path-pane {
-  --path-handle-width: 42px;
+  --path-handle-width: 44px;
 
   position: absolute;
   top: 0;
@@ -188,11 +176,9 @@
   inset: 0 auto 0 0;
   z-index: 3;
   width: var(--path-handle-width);
-  padding: 0;
+  padding: 7px 0;
   display: grid;
-  place-items: start center;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  place-items: center;
   color: #ffdda0;
   cursor: pointer;
   border: 0;
@@ -219,62 +205,65 @@
   inset: 0 0 0 var(--path-handle-width);
   min-width: 0;
   min-height: 0;
-  padding: 7px 5px 7px 6px;
-  display: block;
+  padding: 8px 7px 8px 8px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
 }
 
 .rf-path-blank-title {
   margin: 0;
-  padding-bottom: 5px;
+  padding-bottom: 6px;
   color: #f8d892;
   border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(6.6px, 1.7vw, 8.4px);
+  font-size: clamp(7px, 1.8vw, 9px);
   font-weight: 950;
   letter-spacing: 0.035em;
   line-height: 1;
   text-transform: uppercase;
 }
 
-/* ==========================================================================
-   4. Path details
-   ========================================================================== */
-
 .rf-path-details {
   min-width: 0;
-  margin-top: 6px;
-  overflow: hidden;
+  min-height: 0;
+  margin-top: 7px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.rf-path-details::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .rf-path-pack {
   min-width: 0;
   display: grid;
-  gap: 6px;
+  gap: 8px;
   color: rgba(239, 247, 255, 0.82);
 }
 
-.rf-path-sites {
+.rf-path-selected-head {
   min-width: 0;
+  padding-bottom: 6px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) 8px auto;
+  align-items: center;
   gap: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
 }
 
-.rf-path-site {
-  min-width: 0;
-  padding: 5px 5px 4px;
-  display: grid;
-  gap: 1px;
-  border: 1px solid rgba(248, 216, 146, 0.18);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.rf-path-site small,
-.rf-path-info dt {
+.rf-path-selected-head small,
+.rf-selected-endpoint small,
+.rf-path-frequency-card small,
+.rf-service-bundle small,
+.rf-path-metric dt {
   overflow: hidden;
-  color: rgba(248, 216, 146, 0.66);
-  font-size: 5.3px;
+  color: rgba(225, 239, 255, 0.68);
+  font-size: 5.6px;
   font-weight: 900;
   letter-spacing: 0.07em;
   line-height: 1;
@@ -282,59 +271,188 @@
   white-space: nowrap;
 }
 
-.rf-path-site b {
-  overflow: hidden;
-  color: #ffe2a3;
-  font-size: 6.9px;
+.rf-path-selected-head b {
+  color: #79e85e;
+  font-size: 6.4px;
   font-weight: 950;
-  letter-spacing: 0.02em;
-  line-height: 1.05;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
+  line-height: 1;
   white-space: nowrap;
 }
 
-.rf-path-site span {
-  overflow: hidden;
-  color: rgba(230, 241, 255, 0.68);
-  font-size: 5.8px;
-  font-weight: 750;
-  line-height: 1.08;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.rf-path-active-dot {
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
+  background: #79e85e;
+  box-shadow: 0 0 8px rgba(121, 232, 94, 0.64);
 }
 
-.rf-path-info {
+.rf-selected-endpoint {
   min-width: 0;
-  margin: 0;
   display: grid;
   gap: 2px;
 }
 
-.rf-path-info-row {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: minmax(34px, 0.78fr) minmax(0, 1fr);
-  gap: 4px;
-  align-items: baseline;
-}
-
-.rf-path-info dd {
-  min-width: 0;
-  margin: 0;
+.rf-selected-endpoint b,
+.rf-path-frequency-card b {
   overflow: hidden;
-  color: rgba(239, 247, 255, 0.84);
-  font-size: 5.7px;
-  font-weight: 760;
-  line-height: 1.08;
-  text-align: right;
+  color: #ffe2a3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  text-transform: uppercase;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ==========================================================================
-   5. Recent cards
-   ========================================================================== */
+.rf-selected-endpoint span {
+  overflow: hidden;
+  color: rgba(230, 241, 255, 0.84);
+  font-size: 6.5px;
+  font-weight: 820;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-selected-endpoint em {
+  width: max-content;
+  max-width: 100%;
+  margin-top: 2px;
+  overflow: hidden;
+  padding: 2px 5px;
+  color: rgba(239, 247, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.055);
+  font-size: 5.9px;
+  font-style: normal;
+  font-weight: 820;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-path-frequency-card {
+  min-width: 0;
+  padding: 5px 0;
+  display: grid;
+  gap: 3px;
+  text-align: center;
+}
+
+.rf-path-frequency-card b {
+  font-size: 11px;
+  text-align: center;
+}
+
+.rf-path-frequency-card span {
+  color: rgba(230, 241, 255, 0.78);
+  font-size: 6.2px;
+  font-weight: 820;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-path-frequency-card i {
+  color: rgba(248, 216, 146, 0.72);
+  font-style: normal;
+}
+
+.rf-service-bundle {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.rf-service-bundle header {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  align-items: center;
+}
+
+.rf-service-bundle header b {
+  padding: 2px 5px;
+  color: #eaffdc;
+  border-radius: 999px;
+  background: rgba(28, 149, 112, 0.78);
+  font-size: 5.7px;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-service-bundle ul {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  list-style: none;
+}
+
+.rf-service-bundle li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 27px minmax(0, 1fr);
+  gap: 5px;
+  align-items: center;
+}
+
+.rf-service-bundle li b {
+  padding: 2px 0;
+  color: #eaffdc;
+  border-radius: 4px;
+  background: rgba(28, 149, 112, 0.72);
+  font-size: 5.6px;
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
+}
+
+.rf-service-bundle li span {
+  overflow: hidden;
+  color: rgba(239, 247, 255, 0.84);
+  font-size: 6px;
+  font-weight: 800;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-path-metrics {
+  min-width: 0;
+  margin: 0;
+  padding-top: 7px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.rf-path-metric {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.rf-path-metric dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: rgba(239, 247, 255, 0.92);
+  font-size: 7px;
+  font-weight: 900;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .rf-recent {
   min-height: 0;
@@ -451,10 +569,6 @@
   font-weight: 850;
   line-height: 1;
 }
-
-/* ==========================================================================
-   6. Services and equipment panels
-   ========================================================================== */
 
 .rf-interface-panels {
   min-height: 0;
@@ -575,11 +689,6 @@
   text-transform: uppercase;
 }
 
-
-/* ==========================================================================
-   7. RF subpage layout
-   ========================================================================== */
-
 .phone[data-nav="rf"]:not([data-page="rf"]) .content-canvas {
   position: absolute;
   z-index: 1;
@@ -615,234 +724,48 @@
   color: #071c32;
 }
 
-.phone[data-nav="rf"]:not([data-page="rf"]) .page-head {
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-head,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section {
   padding: 12px;
   border: 1px solid rgba(130, 91, 22, 0.12);
-  border-radius: 15px;
-  background:
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.72), transparent 46%),
-    linear-gradient(180deg, rgba(255, 250, 238, 0.88), rgba(245, 232, 204, 0.62));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.34);
 }
 
-.phone[data-nav="rf"]:not([data-page="rf"]) .page-kicker {
-  margin-bottom: 5px;
-  color: rgba(7, 31, 56, 0.62);
-  font-size: 8px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  line-height: 1;
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-title,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section-title {
+  margin: 0;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 950;
   text-transform: uppercase;
 }
 
 .phone[data-nav="rf"]:not([data-page="rf"]) .page-title {
-  margin: 0;
-  color: #071c32;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 24px;
-  font-weight: 950;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  font-size: 18px;
 }
 
-.phone[data-nav="rf"]:not([data-page="rf"]) .page-lede {
-  margin: 7px 0 0;
-  color: rgba(7, 31, 56, 0.68);
-  font-size: 11px;
-  font-weight: 650;
-  line-height: 1.35;
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section-title {
+  margin-bottom: 8px;
+  font-size: 13px;
 }
 
-.phone[data-nav="rf"]:not([data-page="rf"]) .card {
-  min-width: 0;
-  padding: 11px;
-  border: 1px solid rgba(130, 91, 22, 0.13);
-  border-radius: 15px;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55), transparent 46%),
-    linear-gradient(180deg, rgba(255, 252, 242, 0.84), rgba(248, 236, 211, 0.72));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52);
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .card-title {
-  margin: 0 0 9px;
-  color: #071c32;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .metric-grid,
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-grid {
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-list,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-grid {
   min-width: 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
-.phone[data-nav="rf"]:not([data-page="rf"]) .metric,
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-card {
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-card,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-row {
   min-width: 0;
-  min-height: 58px;
-  padding: 8px;
-  display: grid;
-  align-content: center;
-  gap: 4px;
+  padding: 9px;
   color: #071c32;
-  border: 1px solid rgba(239, 198, 120, 0.58);
+  border: 1px solid rgba(130, 91, 22, 0.12);
   border-radius: 12px;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.60), transparent 52%),
-    linear-gradient(180deg, rgba(255, 248, 232, 0.82), rgba(239, 228, 200, 0.70));
-  text-align: center;
+  background: rgba(255, 255, 255, 0.40);
   text-decoration: none;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .metric strong,
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-card strong {
-  color: #173052;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  font-weight: 950;
-  line-height: 1;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .metric span,
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-card span {
-  color: #1b4883;
-  font-size: 7px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .list {
-  min-width: 0;
-  display: grid;
-  gap: 7px;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .list-row {
-  min-width: 0;
-  min-height: 46px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: center;
-  color: #071c32;
-  border: 1px solid rgba(239, 198, 120, 0.58);
-  border-radius: 12px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(255, 246, 224, 0.24));
-  text-decoration: none;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .row-icon,
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-icon {
-  min-width: 0;
-  color: #173052;
-  font-size: 9px;
-  font-weight: 950;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .row-title {
-  display: block;
-  overflow: hidden;
-  color: #071c32;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 10px;
-  font-weight: 950;
-  line-height: 1.05;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .row-sub {
-  display: block;
-  margin-top: 2px;
-  overflow: hidden;
-  color: rgba(7, 31, 56, 0.64);
-  font-size: 7px;
-  font-weight: 750;
-  line-height: 1.1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .status,
-.phone[data-nav="rf"]:not([data-page="rf"]) .row-value {
-  color: #1c9570;
-  font-size: 7px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-align: right;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .status.warn {
-  color: #b67b08;
-}
-
-.phone[data-nav="rf"]:not([data-page="rf"]) .action-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-/* ==========================================================================
-   8. Small screens
-   ========================================================================== */
-
-@media (max-width: 380px) {
-  .rf-network {
-    grid-template-rows: 24px minmax(0, 1fr) 122px;
-  }
-
-  .rf-map-recent {
-    grid-template-rows: minmax(0, 1fr) 68px;
-  }
-
-  .rf-map-paper {
-    --path-pane-width: clamp(122px, 31%, 136px);
-    --path-handle-width: 40px;
-  }
-
-  .rf-path-pane {
-    --path-handle-width: 40px;
-  }
-
-  .rf-path-handle-icon {
-    width: 38px;
-  }
-
-  .rf-interface-panels {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
-    gap: 7px;
-  }
-
-  .rf-panel {
-    padding: 8px 8px;
-  }
-
-  .rf-panel-title {
-    font-size: 9.5px;
-  }
-
-  .rf-equipment-grid {
-    gap: 6px;
-  }
-
-  .rf-equipment-card {
-    min-height: 52px;
-  }
 }
 
 /* Destination: FieldOpsAtlas/Features/RF/rf-interface.css */
