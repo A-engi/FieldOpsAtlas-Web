@@ -1,31 +1,23 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.87-rf-graph-source
+   Version: 1.1.90-demo-builder-source
 
    Purpose:
    - Render only the foreground RF graph SVG.
+   - Fetch graph data from FieldOpsRFPathBuilder.buildGraph().
+   - Keep the demo graph/model in rf-path-builder.js so there is one graph data source.
    - Keep RF backgrounds and static compass decoration out of the dynamic SVG.
    - Keep a stable viewBox so page resizing does not flatten paths or circles.
    - Reflow when the RF path pane expands or collapses.
-   - Match the SVG viewBox to the holder aspect ratio so the graph fills vertically without flattening.
-   - Apply clearer top/left map insets and explicit node radius rules.
    - Own the static RF graph key so no extra key script is needed.
-   - Place the key in the reserved strip below the graph, not over graph content.
-   - Draw each RF graph node as one SVG circle only.
-   - Restore only the original selected-node mesh/radar halo.
-   - Do not draw plain blob halos, transmitter/mast icons, inner rings, or route dots.
-   - Fit graph coordinates into a taller graph area, reserving bottom-left room for the standalone key.
-   - Accept future graph input with normalized node coordinates.
-   - Prefer window.ATLAS_RF_GRAPH and remove the retired network graph source.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.87-rf-graph-source";
+  const VERSION = "1.1.90-demo-builder-source";
   const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
-  const GRAPH_URL = "../../../data/rf-graph.json";
 
   const BASE_VIEWBOX = {
     width: 1000,
@@ -45,7 +37,6 @@
     relay: 17,
     large: 21
   };
-
 
   const TOPOLOGY_KEY_TEMPLATE = String.raw`
 <aside class="rf-graph-key" aria-label="RF graph key" data-rf-graph-key>
@@ -71,106 +62,6 @@
 </aside>
 `;
 
-
-  const FALLBACK_GRAPH = {
-    selectedPathId: "london-hilltop",
-    nodes: [
-      {
-        id: "glasgow",
-        name: "Glasgow",
-        type: "core",
-        x: 0.12,
-        y: 0.13,
-        label: { dx: 38, dy: -16, anchor: "start" },
-        labelTight: { dx: 34, dy: -18, anchor: "start" }
-      },
-      {
-        id: "edinburgh",
-        name: "Edinburgh",
-        type: "core",
-        x: 0.66,
-        y: 0.13,
-        label: { dx: 38, dy: -16, anchor: "start" },
-        labelTight: { dx: 34, dy: -18, anchor: "start" }
-      },
-      {
-        id: "manchester",
-        name: "Manchester",
-        type: "main",
-        x: 0.34,
-        y: 0.37,
-        label: { dx: 36, dy: -6, anchor: "start" },
-        labelTight: { dx: 33, dy: -8, anchor: "start" }
-      },
-      {
-        id: "birmingham",
-        name: "Birmingham",
-        type: "main",
-        x: 0.39,
-        y: 0.58,
-        label: { dx: 36, dy: 4, anchor: "start" },
-        labelTight: { dx: -34, dy: 31, anchor: "end" }
-      },
-      {
-        id: "london",
-        name: "London",
-        type: "core",
-        size: "large",
-        x: 0.52,
-        y: 0.86,
-        label: { dx: 0, dy: 54, anchor: "middle" },
-        labelTight: { dx: 0, dy: 50, anchor: "middle" }
-      },
-      {
-        id: "hilltop",
-        name: "Hilltop",
-        type: "relay",
-        x: 0.75,
-        y: 0.39,
-        label: { dx: 38, dy: -13, anchor: "start" },
-        labelTight: { dx: 35, dy: -15, anchor: "start" }
-      },
-      {
-        id: "ridgeway",
-        name: "Ridgeway",
-        type: "relay",
-        x: 0.88,
-        y: 0.61,
-        label: { dx: -38, dy: 2, anchor: "end" },
-        labelTight: { dx: -35, dy: -4, anchor: "end" }
-      },
-      {
-        id: "valley",
-        name: "Valley",
-        type: "remote",
-        x: 0.14,
-        y: 0.75,
-        label: { dx: 38, dy: 28, anchor: "start" },
-        labelTight: { dx: 35, dy: 25, anchor: "start" }
-      },
-      {
-        id: "pinewood",
-        name: "Pinewood",
-        type: "remote",
-        x: 0.88,
-        y: 0.86,
-        label: { dx: -38, dy: 36, anchor: "end" },
-        labelTight: { dx: -35, dy: 31, anchor: "end" }
-      }
-    ],
-    links: [
-      { id: "glasgow-manchester", from: "glasgow", to: "manchester", type: "main" },
-      { id: "edinburgh-manchester", from: "edinburgh", to: "manchester", type: "main" },
-      { id: "manchester-birmingham", from: "manchester", to: "birmingham", type: "main" },
-      { id: "birmingham-london", from: "birmingham", to: "london", type: "main" },
-      { id: "london-valley", from: "london", to: "valley", type: "backup" },
-      { id: "london-pinewood", from: "london", to: "pinewood", type: "backup" },
-      { id: "london-hilltop", from: "london", to: "hilltop", type: "alert" },
-      { id: "hilltop-ridgeway", from: "hilltop", to: "ridgeway", type: "backup" },
-      { id: "ridgeway-pinewood", from: "ridgeway", to: "pinewood", type: "backup" }
-    ]
-  };
-
   function isUsableGraph(data) {
     return Boolean(
       data &&
@@ -180,28 +71,18 @@
     );
   }
 
-  async function getGraphData() {
-    if (isUsableGraph(window.ATLAS_RF_GRAPH)) {
-      return window.ATLAS_RF_GRAPH;
-    }
+  function getGraphData(root = document) {
+    const builder = window.FieldOpsRFPathBuilder;
 
-    if (isUsableGraph(window.ATLAS_PRIVATE_GRAPH)) {
-      return window.ATLAS_PRIVATE_GRAPH;
-    }
+    if (builder && typeof builder.buildGraph === "function") {
+      const graph = builder.buildGraph(root);
 
-    try {
-      const response = await fetch(GRAPH_URL, { cache: "no-store" });
-      if (response.ok) {
-        const json = await response.json();
-        if (isUsableGraph(json)) {
-          return json;
-        }
+      if (isUsableGraph(graph)) {
+        return graph;
       }
-    } catch {
-      // Local previews and offline field checks should still render the demo graph.
     }
 
-    return FALLBACK_GRAPH;
+    return null;
   }
 
   function svg(tagName, attributes = {}, children = []) {
@@ -224,7 +105,7 @@
   function typeLabel(type) {
     return {
       core: "CORE",
-      main: "MAIN",
+      main: "SOURCE",
       relay: "RELAY",
       remote: "REMOTE"
     }[type] || String(type || "SITE").toUpperCase();
@@ -249,11 +130,9 @@
       ? measuredWidth / measuredHeight
       : BASE_VIEWBOX.width / BASE_VIEWBOX.height;
 
-    const height = clamp(Math.round(width / aspect), 620, 1800);
-
     return {
       width,
-      height,
+      height: clamp(Math.round(width / aspect), 620, 1800),
       safeEdge: BASE_VIEWBOX.safeEdge
     };
   }
@@ -262,13 +141,8 @@
     const sourceX = Number.isFinite(Number(node.x)) ? Number(node.x) : 0.5;
     const sourceY = Number.isFinite(Number(node.y)) ? Number(node.y) : 0.5;
 
-    const x = sourceX >= 0 && sourceX <= 1
-      ? sourceX * viewBox.width
-      : sourceX;
-
-    const y = sourceY >= 0 && sourceY <= 1
-      ? sourceY * viewBox.height
-      : sourceY;
+    const x = sourceX >= 0 && sourceX <= 1 ? sourceX * viewBox.width : sourceX;
+    const y = sourceY >= 0 && sourceY <= 1 ? sourceY * viewBox.height : sourceY;
 
     return {
       ...node,
@@ -350,23 +224,6 @@
     ].join(" ");
   }
 
-  function cubicPoint(geometry, t) {
-    const inv = 1 - t;
-    const x =
-      inv ** 3 * geometry.x1 +
-      3 * inv ** 2 * t * geometry.c1x +
-      3 * inv * t ** 2 * geometry.c2x +
-      t ** 3 * geometry.x2;
-
-    const y =
-      inv ** 3 * geometry.y1 +
-      3 * inv ** 2 * t * geometry.c1y +
-      3 * inv * t ** 2 * geometry.c2y +
-      t ** 3 * geometry.y2;
-
-    return { x, y };
-  }
-
   function findSelectedLink(graph) {
     if (!graph.links.length) {
       return null;
@@ -445,7 +302,36 @@
     };
   }
 
+  function renderUnavailable(mount) {
+    const root = svg("svg", {
+      class: "rf-graph-svg",
+      viewBox: "0 0 1000 650",
+      preserveAspectRatio: "xMidYMid meet",
+      role: "img",
+      "aria-label": "RF graph unavailable",
+      "data-rf-graph-version": VERSION
+    });
+
+    const label = svg("text", {
+      class: "demo-label",
+      x: 500,
+      y: 325,
+      "text-anchor": "middle"
+    });
+
+    label.append(text("Graph data unavailable"));
+    root.append(label);
+    mount.replaceChildren(root);
+    mount.dataset.rfGraphLoaded = "false";
+    mount.dataset.rfGraphVersion = VERSION;
+  }
+
   function renderMount(mount, sourceGraph) {
+    if (!isUsableGraph(sourceGraph)) {
+      renderUnavailable(mount);
+      return;
+    }
+
     const viewBox = getViewBoxForMount(mount);
     const graph = normaliseGraph(sourceGraph, viewBox);
     const tight = mount.getBoundingClientRect().width < 340;
@@ -490,7 +376,6 @@
         d: path,
         "vector-effect": "non-scaling-stroke"
       }));
-
     });
 
     graph.nodes.forEach((node) => {
@@ -528,12 +413,16 @@
 
     mount.replaceChildren(root);
     mount.dataset.rfGraphLoaded = "true";
+    mount.dataset.rfGraphVersion = VERSION;
+    mount.dataset.rfGraphSource = graph.meta?.source || "FieldOpsRFPathBuilder";
 
     mount.dispatchEvent(new CustomEvent("fieldops:rf-graph-rendered", {
       bubbles: true,
       detail: {
         version: VERSION,
-        selectedPathId: selectedLink ? selectedLink.id : null
+        selectedPathId: selectedLink ? selectedLink.id : null,
+        source: graph.meta?.source || "FieldOpsRFPathBuilder",
+        builderVersion: graph.meta?.builderVersion || ""
       }
     }));
   }
@@ -549,10 +438,6 @@
       .querySelectorAll(":scope > .rf-graph-key")
       .forEach((key) => key.remove());
 
-    if (mapPaper.dataset.rfGraphKeyInit === "true") {
-      mapPaper.dataset.rfGraphKeyInit = "false";
-    }
-
     const fragment = makeFragment(TOPOLOGY_KEY_TEMPLATE);
     const key = fragment.querySelector(".rf-graph-key");
 
@@ -562,6 +447,7 @@
 
     mapPaper.appendChild(key);
     mapPaper.dataset.rfGraphKeyInit = "true";
+    mapPaper.dataset.rfGraphKeyVersion = VERSION;
 
     mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-graph-key-ready", {
       bubbles: true,
@@ -570,17 +456,6 @@
       }
     }));
   }
-
-
-  /* ==========================================================================
-     8. Mount resize and path-pane reflow
-
-     Ownership:
-     - The interface shell stays in rf-interface.js.
-     - Pane movement and styling stay in rf-interface.css.
-     - This renderer only listens for holder shape changes so the SVG redraws
-       cleanly when the pane changes the available graph area.
-     ========================================================================== */
 
   function bindGraphReflowTriggers(mount, scheduleRender) {
     const mapPaper = mount.closest(".rf-map-paper");
@@ -603,6 +478,8 @@
         }
       });
     }
+
+    document.addEventListener("fieldops:rf-path-data-ready", scheduleReflowBurst);
   }
 
   function initMount(mount) {
@@ -617,23 +494,24 @@
       frame: 0
     };
 
+    const refreshGraph = () => {
+      state.graph = getGraphData(document);
+      renderMount(mount, state.graph);
+      attachGraphKey(mount);
+    };
+
     const scheduleRender = () => {
-      if (!state.graph || state.frame) {
+      if (state.frame) {
         return;
       }
 
       state.frame = window.requestAnimationFrame(() => {
         state.frame = 0;
-        renderMount(mount, state.graph);
+        refreshGraph();
       });
     };
 
-    getGraphData().then((graph) => {
-      state.graph = graph;
-      renderMount(mount, state.graph);
-      attachGraphKey(mount);
-    });
-
+    refreshGraph();
     bindGraphReflowTriggers(mount, scheduleRender);
 
     if ("ResizeObserver" in window) {
@@ -653,7 +531,8 @@
   window.FieldOpsRFGraph = {
     VERSION,
     init: initMount,
-    initAll
+    initAll,
+    getGraphData: () => getGraphData(document)
   };
 
   if (document.readyState === "loading") {
@@ -662,5 +541,6 @@
     initAll();
   }
 })();
+
 /* Destination: FieldOpsAtlas/Features/RF/rf-graph.js */
 /* End of file: FieldOpsAtlas/Features/RF/rf-graph.js */
