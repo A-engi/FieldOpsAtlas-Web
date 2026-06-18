@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.119</title>
+  <title>FieldOps Atlas RF v1.1.122</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
-  <link rel="stylesheet" href="./rf-graph.css?v=1.1.83-rename-graph-files">
-  <link rel="stylesheet" href="./rf-interface.css?v=1.1.116-cream-zigzag-slider">
+  <link rel="stylesheet" href="./rf-graph.css?v=1.1.84-path-details-visible">
+  <link rel="stylesheet" href="./rf-interface.css?v=1.1.117-rfpages-layout-clear">
 
   <style>
     .rf-load-toast {
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.119">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.122">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -138,15 +138,15 @@
 
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.119-cream-graph-assets" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.116-generic-demo-builder" defer></script>
-  <script src="./rf-graph.js?v=1.1.87-rf-graph-source" defer></script>
+  <script src="./rf-path-builder.js?v=1.1.119-demo-graph-ready" defer></script>
+  <script src="./rf-graph.js?v=1.1.90-demo-builder-source" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.119-cream-graph-assets */
+    /* RF load toast | Version: 1.1.122-demo-graph-ready */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.119-cream-graph-assets";
+      const PAGE_VERSION = "1.1.122-demo-graph-ready";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -176,8 +176,8 @@
           `index.html ${PAGE_VERSION}`,
           "shell.css 1.1.21-shell-smoke-controls",
           "background.css 1.1.76-graph-label",
-          "rf-graph.css 1.1.83-rename-graph-files",
-          "rf-interface.css 1.1.116-cream-zigzag-slider",
+          "rf-graph.css 1.1.84-path-details-visible",
+          "rf-interface.css 1.1.117-rfpages-layout-clear",
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
