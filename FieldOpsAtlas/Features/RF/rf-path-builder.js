@@ -1,28 +1,32 @@
 /* ===========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.116-generic-demo-builder
+   Version: 1.1.119-demo-graph-ready
 
    Purpose:
-   - Build a compact generic Path Details demo from available RF page/source data.
-   - Use generic Site 1 / Site 2 labels so demo data is not confused with real data.
-   - Count current/future source records without exposing real site/service/equipment names.
-   - Leave the future site-pack file/model for a later build.
+   - Own the RF demo model used by both Path Details and the Graph renderer.
+   - Provide one ready demo graph through FieldOpsRFPathBuilder.buildGraph().
+   - Keep graph drawing in rf-graph.js.
+   - Keep the demo graph clearly marked as placeholder data.
+   - Do not imply real topology can be derived before site/path records exist.
+   - Count current/future source records for Path Details only.
    - Leave pane shell, collapse behaviour, and sizing to rf-interface.js/css.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "1.1.116-generic-demo-builder";
+  const VERSION = "1.1.119-demo-graph-ready";
   const SLOT_SELECTOR = "[data-rf-path-details]";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
   const RENDERED_EVENT = "fieldops:rf-path-details-rendered";
+  const DATA_READY_EVENT = "fieldops:rf-path-data-ready";
   const DISPLAY_LIMIT = 4;
 
   const DEMO_SITES = [
-    { id: "site-1", name: "Site 1", role: "Generic TX site" },
-    { id: "site-2", name: "Site 2", role: "Generic RX site" }
+    { id: "site-1", name: "Site 1", role: "Generic source site" },
+    { id: "site-2", name: "Site 2", role: "Generic relay site" },
+    { id: "site-3", name: "Site 3", role: "Generic receive site" }
   ];
 
   const GLOBAL_SOURCES = {
@@ -95,14 +99,25 @@
     };
   }
 
+  function searchProviderItems(page) {
+    const providers = window.FieldOpsSearch && window.FieldOpsSearch.providers;
+    return asList(providers && providers[page]);
+  }
+
+  function queuedItems() {
+    return [
+      ...asList(window.FieldOpsSearchQueue).flatMap((group) => asList(group.items)),
+      ...searchProviderItems("rf")
+    ];
+  }
+
   function collectQueuedSiteSources() {
-    return asList(window.FieldOpsSearchQueue)
-      .flatMap((group) => asList(group.items))
+    return queuedItems()
       .filter((item) => {
         const id = cleanText(item.id).toLowerCase();
         const keywords = asList(item.keywords).join(" ").toLowerCase();
 
-        return id.startsWith("site-") || /\b(site|relay|transmitter|tx)\b/.test(keywords);
+        return id.startsWith("site-") || /\b(site|relay|transmitter|tx|rx)\b/.test(keywords);
       })
       .map((item, index) => normaliseSourceRecord(item, index, "site"));
   }
@@ -164,38 +179,140 @@
 
   function buildGenericInfo(sourceCounts) {
     return [
-      { label: "Mode", value: "Generic demo" },
-      { label: "Sites", value: sourceCountLabel(sourceCounts.sites, "Site 1 / Site 2") },
-      { label: "Pack", value: "Future build" },
-      { label: "Data", value: "Current + future sources" }
+      { label: "Mode", value: "Demo placeholder" },
+      { label: "Sites", value: sourceCountLabel(sourceCounts.sites, "Site 1 / Site 2 / Site 3") },
+      { label: "Graph", value: "Ready demo model" },
+      { label: "Data", value: "Awaiting real path records" }
     ];
   }
 
-  function buildSitePack(root = document) {
-    const sources = {
+  function collectSources(root = document) {
+    return {
       sites: collectSiteSources(),
       services: collectServiceSources(root),
       equipment: collectEquipmentSources(root),
       frequencies: collectFrequencySources()
     };
+  }
 
-    const sourceCounts = {
+  function sourceCountsFrom(sources) {
+    return {
       sites: sources.sites.length,
       services: sources.services.length,
       equipment: sources.equipment.length,
       frequencies: sources.frequencies.length
     };
+  }
+
+  function buildSitePack(root = document) {
+    const sources = collectSources(root);
+    const sourceCounts = sourceCountsFrom(sources);
 
     return {
-      id: "site-1-to-site-2",
+      id: "site-1-to-site-3",
       from: DEMO_SITES[0],
-      to: DEMO_SITES[1],
+      via: DEMO_SITES[1],
+      to: DEMO_SITES[2],
       genericInfo: buildGenericInfo(sourceCounts),
       services: genericRows(sources.services, "Service", "Source item", "Future service file"),
       equipment: genericRows(sources.equipment, "Equipment", "Source item", "Future equipment file"),
       frequencies: genericRows(sources.frequencies, "Frequency", "Source item", "Future frequency file"),
       sourceCounts
     };
+  }
+
+  function buildGraph(root = document) {
+    if (isUsableGraph(window.ATLAS_RF_GRAPH)) {
+      return {
+        ...window.ATLAS_RF_GRAPH,
+        meta: {
+          ...(window.ATLAS_RF_GRAPH.meta || {}),
+          source: "window.ATLAS_RF_GRAPH",
+          builderVersion: VERSION,
+          mode: "external-model"
+        }
+      };
+    }
+
+    const sitePack = buildSitePack(root);
+
+    return {
+      id: "rf-demo-graph-ready",
+      selectedPathId: "demo-main-path",
+      meta: {
+        source: "FieldOpsRFPathBuilder",
+        builderVersion: VERSION,
+        mode: "demo-placeholder",
+        note: "Invented demo graph. Replace with real site/path records when available.",
+        readyFor: "real-rf-path-model",
+        sourceCounts: sitePack.sourceCounts
+      },
+      nodes: [
+        {
+          id: sitePack.from.id,
+          name: sitePack.from.name,
+          type: "core",
+          size: "large",
+          x: 0.14,
+          y: 0.72,
+          label: { dx: 0, dy: 54, anchor: "middle" },
+          labelTight: { dx: 0, dy: 50, anchor: "middle" }
+        },
+        {
+          id: sitePack.via.id,
+          name: sitePack.via.name,
+          type: "relay",
+          x: 0.50,
+          y: 0.32,
+          label: { dx: 0, dy: -42, anchor: "middle" },
+          labelTight: { dx: 0, dy: -38, anchor: "middle" }
+        },
+        {
+          id: sitePack.to.id,
+          name: sitePack.to.name,
+          type: "remote",
+          size: "large",
+          x: 0.86,
+          y: 0.72,
+          label: { dx: 0, dy: 54, anchor: "middle" },
+          labelTight: { dx: 0, dy: 50, anchor: "middle" }
+        },
+        {
+          id: "demo-service",
+          name: "Service",
+          type: "main",
+          x: 0.30,
+          y: 0.14,
+          label: { dx: 0, dy: -34, anchor: "middle" },
+          labelTight: { dx: 0, dy: -32, anchor: "middle" }
+        },
+        {
+          id: "demo-equipment",
+          name: "Equipment",
+          type: "main",
+          x: 0.70,
+          y: 0.14,
+          label: { dx: 0, dy: -34, anchor: "middle" },
+          labelTight: { dx: 0, dy: -32, anchor: "middle" }
+        }
+      ],
+      links: [
+        { id: "demo-main-path", from: sitePack.from.id, to: sitePack.to.id, type: "alert" },
+        { id: "demo-hop-a", from: sitePack.from.id, to: sitePack.via.id, type: "backup" },
+        { id: "demo-hop-b", from: sitePack.via.id, to: sitePack.to.id, type: "backup" },
+        { id: "demo-service-feed", from: "demo-service", to: sitePack.via.id, type: "main" },
+        { id: "demo-equipment-feed", from: "demo-equipment", to: sitePack.via.id, type: "main" }
+      ]
+    };
+  }
+
+  function isUsableGraph(data) {
+    return Boolean(
+      data &&
+      Array.isArray(data.nodes) &&
+      data.nodes.length > 0 &&
+      Array.isArray(data.links)
+    );
   }
 
   function renderSite(site, label) {
@@ -225,6 +342,7 @@
       <article class="rf-path-pack" data-rf-path-builder-body data-rf-path-id="${escapeHTML(pack.id)}">
         <section class="rf-path-sites" aria-label="Generic RF sites">
           ${renderSite(pack.from, "From")}
+          ${pack.via ? renderSite(pack.via, "Via") : ""}
           ${renderSite(pack.to, "To")}
         </section>
 
@@ -247,6 +365,17 @@
     `;
   }
 
+  function dispatchDataReady(sitePack, graph) {
+    document.dispatchEvent(new CustomEvent(DATA_READY_EVENT, {
+      detail: {
+        version: VERSION,
+        pathId: sitePack.id,
+        graph,
+        sourceCounts: sitePack.sourceCounts
+      }
+    }));
+  }
+
   function render(root = document) {
     const slot = root.querySelector(SLOT_SELECTOR);
 
@@ -255,21 +384,24 @@
     }
 
     const sitePack = buildSitePack(root);
+    const graph = buildGraph(root);
 
     slot.replaceChildren();
     slot.insertAdjacentHTML("beforeend", renderPathDetails(sitePack));
     slot.dataset.rfPathBuilderLoaded = "true";
     slot.dataset.rfPathBuilderVersion = VERSION;
+    slot.dataset.rfPathBuilderGraphSource = graph.meta?.source || "FieldOpsRFPathBuilder";
 
     document.dispatchEvent(new CustomEvent(RENDERED_EVENT, {
       detail: {
         version: VERSION,
         pathId: sitePack.id,
-        source: "generic-demo-builder",
+        source: "demo-graph-ready",
         sourceCounts: sitePack.sourceCounts
       }
     }));
 
+    dispatchDataReady(sitePack, graph);
     return true;
   }
 
@@ -286,6 +418,7 @@
   window.FieldOpsRFPathBuilder = {
     VERSION,
     buildSitePack,
+    buildGraph,
     render
   };
 
@@ -295,4 +428,6 @@
     init();
   }
 })();
-/* End of FieldOpsAtlas/Features/RF/rf-path-builder.js | bottom/end of file */
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-path-builder.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-path-builder.js */
