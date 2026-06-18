@@ -1,10 +1,10 @@
-/* FIELDOPS ATLAS SERVICE WORKER v1.1.7-weather-rainviewer-map
+/* FIELDOPS ATLAS SERVICE WORKER v1.1.10-rf-demo-graph-ready
    Keeps the browser prototype usable offline where possible.
    Maps remains the main fallback page.
-   Bumps the cache so Weather v0.3.6 replaces the key-box test surface.
+   Bumps the RF cache so Graph data is sourced from rf-path-builder.js.
 */
 
-const CACHE_NAME = "fieldops-atlas-v1.1.7-weather-rainviewer-map";
+const CACHE_NAME = "fieldops-atlas-v1.1.10-rf-demo-graph-ready";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -20,11 +20,11 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/Profile/index.html",
   "./FieldOpsAtlas/Features/RF/index.html",
   "./FieldOpsAtlas/Features/RF/background.css?v=1.1.76-graph-label",
-  "./FieldOpsAtlas/Features/RF/rf-graph.css?v=1.1.83-rename-graph-files",
-  "./FieldOpsAtlas/Features/RF/rf-graph.js?v=1.1.87-rf-graph-source",
+  "./FieldOpsAtlas/Features/RF/rf-graph.css?v=1.1.84-path-details-visible",
+  "./FieldOpsAtlas/Features/RF/rf-graph.js?v=1.1.90-demo-builder-source",
   "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.117-rfpages-layout-clear",
   "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.119-cream-graph-assets",
-  "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.116-generic-demo-builder",
+  "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.119-demo-graph-ready",
   "./FieldOpsAtlas/Features/RFPages/sites.html",
   "./FieldOpsAtlas/Features/RFPages/dtt.html",
   "./FieldOpsAtlas/Features/RFPages/dab.html",
