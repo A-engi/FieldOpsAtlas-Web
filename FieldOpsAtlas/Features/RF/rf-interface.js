@@ -1,7 +1,7 @@
 /* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.120-network-map-title
+   Version: 1.1.121-clean-path-rail
    Purpose:
    - Own the RF interface shell and static RF UI.
    - Create the RF title, RF/IP/MW/All graph filter controls, graph holder,
@@ -13,7 +13,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.120-network-map-title";
+  const VERSION = "1.1.121-clean-path-rail";
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
@@ -153,7 +153,7 @@
       >
         <img
           class="rf-path-handle-icon"
-          src="../../../data/icons/path-pane-signal-chevron-gold.svg?v=1.1.116-cream-zigzag"
+          src="../../../data/icons/path-pane-signal-chevron-gold.svg?v=1.1.117-rail-only"
           alt=""
           aria-hidden="true"
         >
