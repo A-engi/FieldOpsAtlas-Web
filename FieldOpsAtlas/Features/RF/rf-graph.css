@@ -1,307 +1,546 @@
 /* ==========================================================================
-   FieldOps Atlas RF graph visuals
-   File: FieldOpsAtlas/Features/RF/rf-graph.css
-   Version: 1.1.85-network-topology
+   FieldOps Atlas RF graph renderer
+   File: FieldOpsAtlas/Features/RF/rf-graph.js
+   Version: 1.1.90-demo-builder-source
 
-   Ownership:
-   - RF topology SVG nodes, links, labels, route badges, and graph legends.
-   - RF page layout and path pane styling remain in rf-interface.css.
+   Purpose:
+   - Render only the foreground RF graph SVG.
+   - Fetch graph data from FieldOpsRFPathBuilder.buildGraph().
+   - Keep the demo graph/model in rf-path-builder.js so there is one graph data source.
+   - Keep RF backgrounds and static compass decoration out of the dynamic SVG.
+   - Keep a stable viewBox so page resizing does not flatten paths or circles.
+   - Reflow when the RF path pane expands or collapses.
+   - Own the static RF graph key so no extra key script is needed.
    ========================================================================== */
 
-.rf-graph-svg {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-}
+(() => {
+  "use strict";
 
-.rf-route,
-.rf-route-soft,
-.rf-node-disc,
-.rf-node-halo circle,
-.rf-node-tower path {
-  vector-effect: non-scaling-stroke;
-}
+  const VERSION = "1.1.90-demo-builder-source";
+  const SVG_NS = ["http:", "", "www.w3.org", "2000", "svg"].join("/");
 
-.rf-route,
-.rf-route-soft {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+  const BASE_VIEWBOX = {
+    width: 1000,
+    height: 650,
+    safeEdge: 28
+  };
 
-.rf-route-soft {
-  opacity: 0.20;
-  stroke-width: 9;
-}
+  const TOPOLOGY_CONTENT_INSET = {
+    left: 112,
+    right: 94,
+    top: 88,
+    bottom: 176
+  };
 
-.rf-route-soft.is-main {
-  stroke: #176f35;
-}
+  const NODE_RADIUS = {
+    default: 15,
+    relay: 17,
+    large: 21
+  };
 
-.rf-route-soft.is-alert {
-  stroke: #c5291e;
-}
+  const TOPOLOGY_KEY_TEMPLATE = String.raw`
+<aside class="rf-graph-key" aria-label="RF graph key" data-rf-graph-key>
+  <div class="rf-graph-key-title">Key</div>
+  <ul class="rf-graph-key-list">
+    <li>
+      <span class="rf-graph-key-swatch is-core" aria-hidden="true"></span>
+      <span>Core site</span>
+    </li>
+    <li>
+      <span class="rf-graph-key-swatch is-relay" aria-hidden="true"></span>
+      <span>Relay site</span>
+    </li>
+    <li>
+      <span class="rf-graph-key-line is-selected" aria-hidden="true"></span>
+      <span>Selected path</span>
+    </li>
+    <li>
+      <span class="rf-graph-key-line is-standby" aria-hidden="true"></span>
+      <span>Standby path</span>
+    </li>
+  </ul>
+</aside>
+`;
 
-.rf-route-soft.is-fm,
-.rf-route-soft.is-backup {
-  stroke: #2566a0;
-}
+  function isUsableGraph(data) {
+    return Boolean(
+      data &&
+      Array.isArray(data.nodes) &&
+      data.nodes.length > 0 &&
+      Array.isArray(data.links)
+    );
+  }
 
-.rf-route-soft.is-standby {
-  stroke: #8f969c;
-}
+  function getGraphData(root = document) {
+    const builder = window.FieldOpsRFPathBuilder;
 
-.rf-route {
-  stroke-width: 3.2;
-}
+    if (builder && typeof builder.buildGraph === "function") {
+      const graph = builder.buildGraph(root);
 
-.rf-route.is-main {
-  stroke: #176f35;
-}
+      if (isUsableGraph(graph)) {
+        return graph;
+      }
+    }
 
-.rf-route.is-alert {
-  stroke: #c5291e;
-}
+    return null;
+  }
 
-.rf-route.is-fm,
-.rf-route.is-backup {
-  stroke: #2566a0;
-  stroke-dasharray: 8 8;
-}
+  function svg(tagName, attributes = {}, children = []) {
+    const element = document.createElementNS(SVG_NS, tagName);
 
-.rf-route.is-standby {
-  stroke: #8f969c;
-  stroke-width: 2.5;
-  stroke-dasharray: 9 9;
-}
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        element.setAttribute(key, String(value));
+      }
+    });
 
-.rf-route.is-selected {
-  filter:
-    drop-shadow(0 0 4px rgba(255, 220, 126, 0.44))
-    drop-shadow(0 0 10px rgba(23, 111, 53, 0.22));
-}
+    children.forEach((child) => element.append(child));
+    return element;
+  }
 
-.rf-route-badge circle {
-  fill: #187744;
-  stroke: rgba(255, 244, 202, 0.84);
-  stroke-width: 2;
-  filter: drop-shadow(0 0 6px rgba(23, 111, 53, 0.28));
-}
+  function text(value) {
+    return document.createTextNode(value);
+  }
 
-.rf-route-badge text {
-  fill: #fff8df;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: 20px;
-  font-weight: 950;
-  letter-spacing: -0.03em;
-}
+  function typeLabel(type) {
+    return {
+      core: "CORE",
+      main: "SOURCE",
+      relay: "RELAY",
+      remote: "REMOTE"
+    }[type] || String(type || "SITE").toUpperCase();
+  }
 
-.rf-node-halo {
-  fill: none;
-  pointer-events: none;
-}
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
 
-.rf-node-halo circle {
-  fill: rgba(255, 253, 241, 0.34);
-  stroke: rgba(237, 191, 99, 0.22);
-  stroke-width: 2;
-}
+  function makeFragment(html) {
+    const template = document.createElement("template");
+    template.innerHTML = html.trim();
+    return template.content.cloneNode(true);
+  }
 
-.rf-node-halo circle + circle {
-  fill: none;
-  stroke: rgba(20, 112, 55, 0.18);
-  stroke-width: 2;
-}
+  function getViewBoxForMount(mount) {
+    const rect = mount.getBoundingClientRect();
+    const width = BASE_VIEWBOX.width;
+    const measuredWidth = rect.width || width;
+    const measuredHeight = rect.height || BASE_VIEWBOX.height;
+    const aspect = measuredWidth > 0 && measuredHeight > 0
+      ? measuredWidth / measuredHeight
+      : BASE_VIEWBOX.width / BASE_VIEWBOX.height;
 
-.rf-node.is-relay .rf-node-halo circle + circle {
-  stroke: rgba(197, 41, 30, 0.20);
-}
+    return {
+      width,
+      height: clamp(Math.round(width / aspect), 620, 1800),
+      safeEdge: BASE_VIEWBOX.safeEdge
+    };
+  }
 
-.rf-node.is-remote .rf-node-halo circle + circle {
-  stroke: rgba(37, 102, 160, 0.20);
-}
+  function projectNode(node, viewBox) {
+    const sourceX = Number.isFinite(Number(node.x)) ? Number(node.x) : 0.5;
+    const sourceY = Number.isFinite(Number(node.y)) ? Number(node.y) : 0.5;
 
-.rf-node-halo.is-selected circle {
-  stroke: rgba(237, 191, 99, 0.44);
-  filter: drop-shadow(0 0 8px rgba(237, 191, 99, 0.28));
-}
+    const x = sourceX >= 0 && sourceX <= 1 ? sourceX * viewBox.width : sourceX;
+    const y = sourceY >= 0 && sourceY <= 1 ? sourceY * viewBox.height : sourceY;
 
-.rf-node-halo.is-selected circle.is-outer {
-  fill: none;
-  stroke: rgba(197, 41, 30, 0.18);
-  stroke-dasharray: 4 4;
-}
+    return {
+      ...node,
+      x: clamp(x, viewBox.safeEdge, viewBox.width - viewBox.safeEdge),
+      y: clamp(y, viewBox.safeEdge, viewBox.height - viewBox.safeEdge)
+    };
+  }
 
-.rf-node-disc {
-  stroke: #fff7de;
-  stroke-width: 3;
-}
+  function fitNodesToMapArea(nodes, viewBox) {
+    if (!nodes.length) {
+      return nodes;
+    }
 
-.rf-node.is-core .rf-node-disc {
-  fill: #13733a;
-}
+    const minX = Math.min(...nodes.map((node) => node.x));
+    const maxX = Math.max(...nodes.map((node) => node.x));
+    const minY = Math.min(...nodes.map((node) => node.y));
+    const maxY = Math.max(...nodes.map((node) => node.y));
 
-.rf-node.is-relay .rf-node-disc {
-  fill: #b82a21;
-}
+    const sourceWidth = Math.max(1, maxX - minX);
+    const sourceHeight = Math.max(1, maxY - minY);
+    const targetLeft = TOPOLOGY_CONTENT_INSET.left;
+    const targetRight = viewBox.width - TOPOLOGY_CONTENT_INSET.right;
+    const targetTop = TOPOLOGY_CONTENT_INSET.top;
+    const targetBottom = viewBox.height - TOPOLOGY_CONTENT_INSET.bottom;
+    const targetWidth = Math.max(1, targetRight - targetLeft);
+    const targetHeight = Math.max(1, targetBottom - targetTop);
 
-.rf-node.is-remote .rf-node-disc {
-  fill: #2566a0;
-}
+    return nodes.map((node) => ({
+      ...node,
+      x: clamp(
+        targetLeft + ((node.x - minX) / sourceWidth) * targetWidth,
+        viewBox.safeEdge,
+        viewBox.width - viewBox.safeEdge
+      ),
+      y: clamp(
+        targetTop + ((node.y - minY) / sourceHeight) * targetHeight,
+        viewBox.safeEdge,
+        viewBox.height - viewBox.safeEdge
+      )
+    }));
+  }
 
-.rf-node.is-selected .rf-node-disc {
-  filter:
-    drop-shadow(0 0 6px rgba(255, 218, 123, 0.44))
-    drop-shadow(0 0 14px rgba(255, 255, 255, 0.18));
-}
+  function markerRadius(node) {
+    if (node.size === "large") {
+      return NODE_RADIUS.large;
+    }
 
-.rf-node-tower {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.96);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+    if (node.type === "relay") {
+      return NODE_RADIUS.relay;
+    }
 
-.rf-node-label {
-  fill: #071c32;
-  paint-order: stroke;
-  stroke: rgba(255, 250, 236, 0.92);
-  stroke-width: 8px;
-  stroke-linejoin: round;
-}
+    return NODE_RADIUS.default;
+  }
 
-.rf-node-label-name {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 27px;
-  font-weight: 950;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-}
+  function linkGeometry(from, to) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const curve = clamp(dx * 0.12, -78, 78);
+    const bow = clamp(dy * 0.08, -36, 36);
 
-.rf-node-label-type {
-  fill: #1b7444;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 19px;
-  font-weight: 850;
-  stroke-width: 6px;
-}
+    return {
+      x1: from.x,
+      y1: from.y,
+      c1x: from.x + curve,
+      c1y: from.y + bow,
+      c2x: to.x - curve,
+      c2y: to.y - bow,
+      x2: to.x,
+      y2: to.y
+    };
+  }
 
-.rf-node-label.is-relay .rf-node-label-type {
-  fill: #173052;
-}
+  function geometryPath(geometry) {
+    return [
+      `M${geometry.x1} ${geometry.y1}`,
+      `C${geometry.c1x} ${geometry.c1y},`,
+      `${geometry.c2x} ${geometry.c2y},`,
+      `${geometry.x2} ${geometry.y2}`
+    ].join(" ");
+  }
 
-.rf-node-label.is-remote .rf-node-label-type {
-  fill: #2566a0;
-}
+  function findSelectedLink(graph) {
+    if (!graph.links.length) {
+      return null;
+    }
 
-.rf-graph-legends {
-  position: absolute;
-  z-index: 5;
-  right: calc(var(--path-pane-width) - var(--path-handle-width) + 8px);
-  bottom: 8px;
-  left: 8px;
-  min-width: 0;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 8px;
-  pointer-events: none;
-  transition: right 180ms ease;
-}
+    return (
+      graph.links.find((link) => link.id === graph.selectedPathId) ||
+      graph.links.find((link) => `${link.from}-${link.to}` === graph.selectedPathId) ||
+      graph.links.find((link) => link.type === "alert") ||
+      graph.links[0]
+    );
+  }
 
-.rf-map-paper.is-path-pane-collapsed .rf-graph-legends {
-  right: calc(var(--path-handle-width) + 8px);
-}
+  function makeSelectedHalo(radius) {
+    const scale = clamp((radius + 22) / 54, 0.72, 0.90);
 
-.rf-graph-legend-card {
-  min-width: 0;
-  padding: 6px 7px;
-  color: rgba(7, 31, 56, 0.78);
-  border: 1px solid rgba(130, 91, 22, 0.14);
-  border-radius: 10px;
-  background: rgba(255, 250, 238, 0.78);
-  box-shadow: 0 5px 14px rgba(28, 18, 6, 0.06);
-}
+    return svg("g", { class: "demo-original-halo", transform: `scale(${scale})` }, [
+      svg("circle", { class: "relay-halo-ring", r: 51 }),
+      svg("circle", { class: "relay-halo-ring", r: 61 }),
+      svg("circle", { class: "relay-halo-ring is-outer", r: 72 }),
+      svg("path", {
+        class: "relay-halo-line",
+        d: "M42.3 7.5L72.9 12.8 M40.4 14.7L69.5 25.3 M32.9 27.6L56.7 47.6 M27.6 32.9L47.6 56.7 M14.7 40.4L25.3 69.5 M7.5 42.3L12.8 72.9 M-7.5 42.3L-12.8 72.9 M-14.7 40.4L-25.3 69.5 M-27.6 32.9L-47.6 56.7 M-32.9 27.6L-56.7 47.6 M-40.4 14.7L-69.5 25.3 M-42.3 7.5L-72.9 12.8 M-42.3 -7.5L-72.9 -12.8 M-40.4 -14.7L-69.5 -25.3 M-32.9 -27.6L-56.7 -47.6 M-27.6 -32.9L-47.6 -56.7 M-14.7 -40.4L-25.3 -69.5 M-7.5 -42.3L-12.8 -72.9 M7.5 -42.3L12.8 -72.9 M14.7 -40.4L25.3 -69.5 M27.6 -32.9L47.6 -56.7 M32.9 -27.6L56.7 -47.6 M40.4 -14.7L69.5 -25.3 M42.3 -7.5L72.9 -12.8"
+      }),
+      svg("path", {
+        class: "relay-halo-line strong",
+        d: "M38 0L82 0 M32.9 19L71 41 M19 32.9L41 71 M0 38L0 82 M-19 32.9L-41 71 M-32.9 19L-71 41 M-38 0L-82 0 M-32.9 -19L-71 -41 M-19 -32.9L-41 -71 M0 -38L0 -82 M19 -32.9L41 -71 M32.9 -19L71 -41 M-82 0L82 0 M0 -82L0 82"
+      })
+    ]);
+  }
 
-.rf-graph-legend-card.is-inputs {
-  width: min(44%, 112px);
-}
+  function makeLabel(node, tight, viewBox) {
+    const radius = markerRadius(node);
+    const label = tight && node.labelTight ? node.labelTight : (node.label || {});
+    const fallbackSide = node.x > viewBox.width * 0.72 ? -1 : 1;
+    const anchor = label.anchor || (fallbackSide < 0 ? "end" : "start");
+    const dx = Number.isFinite(Number(label.dx)) ? Number(label.dx) : fallbackSide * (radius + 24);
+    const dy = Number.isFinite(Number(label.dy)) ? Number(label.dy) : -10;
+    const labelX = clamp(node.x + dx, 12, viewBox.width - 12);
+    const labelY = clamp(node.y + dy, 18, viewBox.height - 18);
 
-.rf-graph-legend-card.is-links {
-  width: min(44%, 108px);
-}
+    const labelText = svg("text", {
+      class: `demo-label ${node.type || "site"}${tight ? " hide-type" : ""}`,
+      x: labelX,
+      y: labelY,
+      "text-anchor": anchor
+    });
 
-.rf-graph-legend-card h3 {
-  margin: 0 0 4px;
-  color: #071c32;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 6px;
-  font-weight: 950;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  text-transform: uppercase;
-}
+    const name = svg("tspan", { class: "name", x: labelX, y: labelY });
+    name.append(text(node.name || node.id));
 
-.rf-graph-legend-card ul {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 3px;
-  list-style: none;
-}
+    const type = svg("tspan", { class: "type", x: labelX, dy: 18 });
+    type.append(text(typeLabel(node.type)));
 
-.rf-graph-legend-card li {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
-  gap: 4px;
-  align-items: center;
-  font-size: 5.2px;
-  font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
-}
+    labelText.append(name, type);
+    return labelText;
+  }
 
-.rf-input-symbol {
-  height: 11px;
-  display: grid;
-  place-items: center;
-  color: #173052;
-  border: 1px solid rgba(23, 48, 82, 0.18);
-  border-radius: 4px;
-  font-size: 4.4px;
-  font-weight: 950;
-  letter-spacing: -0.03em;
-}
+  function normaliseGraph(graph, viewBox) {
+    const projectedNodes = graph.nodes.map((node) => projectNode(node, viewBox));
+    const nodes = fitNodesToMapArea(projectedNodes, viewBox);
+    const nodeById = new Map(nodes.map((node) => [node.id, node]));
+    const links = graph.links
+      .map((link) => ({
+        ...link,
+        fromNode: nodeById.get(link.from),
+        toNode: nodeById.get(link.to),
+        type: link.type || "backup"
+      }))
+      .filter((link) => link.fromNode && link.toNode);
 
-.rf-link-swatch {
-  width: 16px;
-  height: 0;
-  display: block;
-  border-top: 2px solid #176f35;
-}
+    return {
+      ...graph,
+      nodes,
+      links
+    };
+  }
 
-.rf-link-swatch.is-dab {
-  border-top-style: dashed;
-  border-top-color: #176f35;
-}
+  function renderUnavailable(mount) {
+    const root = svg("svg", {
+      class: "rf-graph-svg",
+      viewBox: "0 0 1000 650",
+      preserveAspectRatio: "xMidYMid meet",
+      role: "img",
+      "aria-label": "RF graph unavailable",
+      "data-rf-graph-version": VERSION
+    });
 
-.rf-link-swatch.is-fm {
-  border-top-style: dashed;
-  border-top-color: #2566a0;
-}
+    const label = svg("text", {
+      class: "demo-label",
+      x: 500,
+      y: 325,
+      "text-anchor": "middle"
+    });
 
-.rf-link-swatch.is-ip {
-  border-top-color: #7d5a9e;
-}
+    label.append(text("Graph data unavailable"));
+    root.append(label);
+    mount.replaceChildren(root);
+    mount.dataset.rfGraphLoaded = "false";
+    mount.dataset.rfGraphVersion = VERSION;
+  }
 
-.rf-link-swatch.is-standby {
-  border-top-style: dashed;
-  border-top-color: #8f969c;
-}
+  function renderMount(mount, sourceGraph) {
+    if (!isUsableGraph(sourceGraph)) {
+      renderUnavailable(mount);
+      return;
+    }
 
-/* Destination: FieldOpsAtlas/Features/RF/rf-graph.css */
-/* End of file: FieldOpsAtlas/Features/RF/rf-graph.css */
+    const viewBox = getViewBoxForMount(mount);
+    const graph = normaliseGraph(sourceGraph, viewBox);
+    const tight = mount.getBoundingClientRect().width < 340;
+    const selectedLink = findSelectedLink(graph);
+    const selectedNodeIds = new Set();
+
+    if (selectedLink) {
+      selectedNodeIds.add(selectedLink.from);
+      selectedNodeIds.add(selectedLink.to);
+    }
+
+    const root = svg("svg", {
+      class: "rf-graph-svg",
+      viewBox: `0 0 ${viewBox.width} ${viewBox.height}`,
+      preserveAspectRatio: "xMidYMid meet",
+      role: "img",
+      "aria-label": mount.getAttribute("aria-label") || "RF graph",
+      "data-rf-graph-version": VERSION
+    });
+
+    const linksSoftGroup = svg("g", { class: "demo-links-soft" });
+    const linksGroup = svg("g", { class: "demo-links" });
+    const halosGroup = svg("g", { class: "demo-node-halos" });
+    const nodesGroup = svg("g", { class: "demo-nodes" });
+    const labelsGroup = svg("g", { class: "demo-labels" });
+
+    graph.links.forEach((link) => {
+      const geometry = linkGeometry(link.fromNode, link.toNode);
+      const path = geometryPath(geometry);
+      const isSelected = selectedLink && link.id === selectedLink.id;
+      const routeType = isSelected ? "alert" : link.type;
+      const routeClass = `demo-route is-${routeType}${isSelected ? " is-selected-path" : ""}`;
+
+      linksSoftGroup.append(svg("path", {
+        class: `demo-link-soft is-${routeType}`,
+        d: path,
+        "vector-effect": "non-scaling-stroke"
+      }));
+
+      linksGroup.append(svg("path", {
+        class: routeClass,
+        d: path,
+        "vector-effect": "non-scaling-stroke"
+      }));
+    });
+
+    graph.nodes.forEach((node) => {
+      const radius = markerRadius(node);
+      const selected = selectedNodeIds.has(node.id);
+
+      if (selected) {
+        halosGroup.append(svg("g", { transform: `translate(${node.x} ${node.y})` }, [
+          makeSelectedHalo(radius)
+        ]));
+      }
+
+      const nodeGroup = svg("g", {
+        class: `demo-node ${selected ? "is-selected" : ""}`,
+        transform: `translate(${node.x} ${node.y})`
+      });
+
+      nodeGroup.append(svg("circle", {
+        class: node.type || "site",
+        r: radius,
+        "vector-effect": "non-scaling-stroke"
+      }));
+
+      nodesGroup.append(nodeGroup);
+      labelsGroup.append(makeLabel(node, tight, viewBox));
+    });
+
+    root.append(
+      linksSoftGroup,
+      linksGroup,
+      halosGroup,
+      nodesGroup,
+      labelsGroup
+    );
+
+    mount.replaceChildren(root);
+    mount.dataset.rfGraphLoaded = "true";
+    mount.dataset.rfGraphVersion = VERSION;
+    mount.dataset.rfGraphSource = graph.meta?.source || "FieldOpsRFPathBuilder";
+
+    mount.dispatchEvent(new CustomEvent("fieldops:rf-graph-rendered", {
+      bubbles: true,
+      detail: {
+        version: VERSION,
+        selectedPathId: selectedLink ? selectedLink.id : null,
+        source: graph.meta?.source || "FieldOpsRFPathBuilder",
+        builderVersion: graph.meta?.builderVersion || ""
+      }
+    }));
+  }
+
+  function attachGraphKey(mount) {
+    const mapPaper = mount.closest(".rf-map-paper");
+
+    if (!mapPaper) {
+      return;
+    }
+
+    mapPaper
+      .querySelectorAll(":scope > .rf-graph-key")
+      .forEach((key) => key.remove());
+
+    const fragment = makeFragment(TOPOLOGY_KEY_TEMPLATE);
+    const key = fragment.querySelector(".rf-graph-key");
+
+    if (!key) {
+      return;
+    }
+
+    mapPaper.appendChild(key);
+    mapPaper.dataset.rfGraphKeyInit = "true";
+    mapPaper.dataset.rfGraphKeyVersion = VERSION;
+
+    mapPaper.dispatchEvent(new CustomEvent("fieldops:rf-graph-key-ready", {
+      bubbles: true,
+      detail: {
+        version: VERSION
+      }
+    }));
+  }
+
+  function bindGraphReflowTriggers(mount, scheduleRender) {
+    const mapPaper = mount.closest(".rf-map-paper");
+    const pathPane = mapPaper ? mapPaper.querySelector(".rf-path-pane") : null;
+
+    const scheduleReflowBurst = () => {
+      scheduleRender();
+      window.requestAnimationFrame(scheduleRender);
+      window.setTimeout(scheduleRender, 220);
+    };
+
+    if (mapPaper) {
+      mapPaper.addEventListener("fieldops:rf-path-pane-toggle", scheduleReflowBurst);
+    }
+
+    if (pathPane) {
+      pathPane.addEventListener("transitionend", (event) => {
+        if (event.propertyName === "transform" || event.propertyName === "right") {
+          scheduleReflowBurst();
+        }
+      });
+    }
+
+    document.addEventListener("fieldops:rf-path-data-ready", scheduleReflowBurst);
+  }
+
+  function initMount(mount) {
+    if (!mount || mount.dataset.rfGraphInit === "true") {
+      return;
+    }
+
+    mount.dataset.rfGraphInit = "true";
+
+    const state = {
+      graph: null,
+      frame: 0
+    };
+
+    const refreshGraph = () => {
+      state.graph = getGraphData(document);
+      renderMount(mount, state.graph);
+      attachGraphKey(mount);
+    };
+
+    const scheduleRender = () => {
+      if (state.frame) {
+        return;
+      }
+
+      state.frame = window.requestAnimationFrame(() => {
+        state.frame = 0;
+        refreshGraph();
+      });
+    };
+
+    refreshGraph();
+    bindGraphReflowTriggers(mount, scheduleRender);
+
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(scheduleRender);
+      observer.observe(mount);
+    } else {
+      window.addEventListener("resize", scheduleRender, { passive: true });
+    }
+  }
+
+  function initAll(root = document) {
+    root
+      .querySelectorAll("[data-rf-graph]")
+      .forEach(initMount);
+  }
+
+  window.FieldOpsRFGraph = {
+    VERSION,
+    init: initMount,
+    initAll,
+    getGraphData: () => getGraphData(document)
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initAll(), { once: true });
+  } else {
+    initAll();
+  }
+})();
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-graph.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-graph.js */
