@@ -1,13 +1,16 @@
 /* ==========================================================================
    FieldOps Atlas map service controls and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.22-multi-cluster-checkboxes
+   Version: 1.0.23-stable-service-paths
    Purpose:
    - Controls the collapsible DTT, DAB, FM, and Weather rail.
    - Opens an attached checkbox cluster picker for service controls.
    - Filters existing region markers using each region record's services array.
    - Reads lightweight service clusters and path summaries from data/regions.json.
    - Supports rendering one or more selected clusters with a performance warning.
+   - Uses stable non-animated fitting before laying out RF labels.
+   - Colours RF paths by service and stacks compact labels over the line.
+   - Supports CSS-only virtual satellite backup endpoints.
    - Loads full path/transmitter details only after a rendered path is selected.
    - Does not request RF details during page, service, or cluster selection.
    - Controls the existing lazy Weather preview.
@@ -16,7 +19,7 @@
 (function fieldOpsOSMServiceControls() {
   "use strict";
 
-  var VERSION = "1.0.22-multi-cluster-checkboxes";
+  var VERSION = "1.0.23-stable-service-paths";
   var PRESELI = {
     name: "Preseli area",
     lat: 51.921,
@@ -40,6 +43,26 @@
       detailUrls: {}
     }
   };
+  var SERVICE_STYLES = {
+    dtt: {
+      line: "#16a34a",
+      selected: "#86efac",
+      label: "#15803d",
+      text: "#f0fdf4"
+    },
+    dab: {
+      line: "#1686d9",
+      selected: "#7dd3fc",
+      label: "#0369a1",
+      text: "#f0f9ff"
+    },
+    fm: {
+      line: "#a23bb7",
+      selected: "#e879f9",
+      label: "#86198f",
+      text: "#fdf4ff"
+    }
+  };
   var FORECAST_CACHE_MS = 10 * 60 * 1000;
   var TOOLBAR_STORAGE_KEY = "fieldops.maps.quick-tools.collapsed";
   var TOOLBAR_COLLAPSED_CLASS = "is-collapsed";
@@ -55,6 +78,7 @@
     map: null,
     lineLayer: null,
     endpointLayer: null,
+    virtualLayer: null,
     siteLabelLayer: null,
     pathLabelLayer: null,
     activePayload: null,
@@ -63,10 +87,12 @@
     activePaths: [],
     siteDetails: new Map(),
     pathLines: new Map(),
+    virtualEndpoints: new Map(),
     selectedPathId: "",
     activeServiceId: "",
     activeRegionId: "",
     redrawTimer: 0,
+    stagedTimers: [],
     mapEventsBound: false
   };
 
@@ -267,6 +293,28 @@
     applyServiceFilter(serviceId);
   }
 
+  function stableFitWalks(map, walks, maxZoom) {
+    if (!map || !window.L || !walks || !walks.length) {
+      return;
+    }
+
+    var bounds = window.L.latLngBounds(walks.map(function toLatLng(walk) {
+      return [walk.lat, walk.lng];
+    }));
+
+    map.stop();
+    map.invalidateSize({
+      pan: false,
+      debounceMoveend: true
+    });
+    map.fitBounds(bounds.pad(0.14), {
+      animate: false,
+      maxZoom: Number(maxZoom || 11)
+    });
+
+    scheduleRfLabelLayoutStaged();
+  }
+
   function applyVisibleSiteIds(mapApi, map, siteIds, fit) {
     var visibleIds = new Set((siteIds || []).map(String));
     var walks = mapApi.getWalks();
@@ -283,15 +331,8 @@
       }
     });
 
-    if (fit && visibleWalks.length) {
-      var bounds = window.L.latLngBounds(visibleWalks.map(function toLatLng(walk) {
-        return [walk.lat, walk.lng];
-      }));
-
-      map.fitBounds(bounds.pad(0.18), {
-        animate: true,
-        maxZoom: 11
-      });
+    if (fit) {
+      stableFitWalks(map, visibleWalks, 11);
     }
 
     return visibleWalks;
@@ -698,6 +739,10 @@
       rfOverlay.endpointLayer = window.L.layerGroup().addTo(map);
     }
 
+    if (!rfOverlay.virtualLayer) {
+      rfOverlay.virtualLayer = window.L.layerGroup().addTo(map);
+    }
+
     if (!rfOverlay.siteLabelLayer) {
       rfOverlay.siteLabelLayer = window.L.layerGroup().addTo(map);
     }
@@ -707,7 +752,7 @@
     }
 
     if (!rfOverlay.mapEventsBound) {
-      ["zoomend", "moveend", "resize"].forEach(function bindLabelLayout(eventName) {
+      ["zoomend", "moveend", "resize", "viewreset"].forEach(function bindLabelLayout(eventName) {
         map.on(eventName, scheduleRfLabelLayout);
       });
       rfOverlay.mapEventsBound = true;
@@ -718,6 +763,7 @@
     [
       rfOverlay.lineLayer,
       rfOverlay.endpointLayer,
+      rfOverlay.virtualLayer,
       rfOverlay.siteLabelLayer,
       rfOverlay.pathLabelLayer
     ].forEach(function clearLayer(layer) {
@@ -732,6 +778,7 @@
     rfOverlay.activePaths = [];
     rfOverlay.siteDetails = new Map();
     rfOverlay.pathLines = new Map();
+    rfOverlay.virtualEndpoints = new Map();
     rfOverlay.selectedPathId = "";
     rfOverlay.activeServiceId = "";
     rfOverlay.activeRegionId = "";
@@ -740,6 +787,11 @@
       window.clearTimeout(rfOverlay.redrawTimer);
       rfOverlay.redrawTimer = 0;
     }
+
+    rfOverlay.stagedTimers.forEach(function clearStagedTimer(timerId) {
+      window.clearTimeout(timerId);
+    });
+    rfOverlay.stagedTimers = [];
   }
 
   function siteDetailMap(payload) {
@@ -773,13 +825,49 @@
     return result;
   }
 
+  function normaliseVirtualEndpoint(rawEndpoint, fallbackId) {
+    if (!rawEndpoint || typeof rawEndpoint !== "object") {
+      return null;
+    }
+
+    var lat = Number(rawEndpoint.lat);
+    var lng = Number(rawEndpoint.lng);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return null;
+    }
+
+    return {
+      id: String(rawEndpoint.id || fallbackId || "virtual-endpoint"),
+      name: String(rawEndpoint.name || rawEndpoint.label || "Virtual endpoint"),
+      label: String(rawEndpoint.label || rawEndpoint.name || "Virtual endpoint"),
+      type: String(rawEndpoint.type || "virtual"),
+      lat: lat,
+      lng: lng,
+      isVirtual: true
+    };
+  }
+
+  function pathEndpoint(path, side, walksById) {
+    var feeding = side === "feeding";
+    var siteId = feeding ? path.feedingSiteId : path.receivingSiteId;
+    var virtualKey = feeding ? "virtualFeeder" : "virtualReceiver";
+    var walk = walksById.get(String(siteId || ""));
+
+    if (walk) {
+      return walk;
+    }
+
+    return normaliseVirtualEndpoint(path[virtualKey], siteId);
+  }
+
   function pathsForCluster(cluster, walksById) {
     var list = cluster && Array.isArray(cluster.paths) ? cluster.paths : [];
 
     return list.filter(function usablePath(path) {
       return path &&
-        walksById.has(String(path.feedingSiteId || "")) &&
-        walksById.has(String(path.receivingSiteId || ""));
+        pathEndpoint(path, "feeding", walksById) &&
+        pathEndpoint(path, "receiving", walksById);
     });
   }
 
@@ -909,8 +997,8 @@
   }
 
   function pathDetailsHtml(path, walksById) {
-    var fromWalk = walksById.get(String(path.feedingSiteId));
-    var toWalk = walksById.get(String(path.receivingSiteId));
+    var fromWalk = pathEndpoint(path, "feeding", walksById);
+    var toWalk = pathEndpoint(path, "receiving", walksById);
     var fromDetail = rfOverlay.siteDetails.get(String(path.feedingSiteId)) || {};
     var toDetail = rfOverlay.siteDetails.get(String(path.receivingSiteId)) || {};
     var feedSummary = path.feedSummary || {};
@@ -949,15 +1037,21 @@
     ].join("");
   }
 
+  function serviceStyle(serviceId) {
+    var id = String(serviceId || "dtt").toLowerCase();
+    return SERVICE_STYLES[id] || SERVICE_STYLES.dtt;
+  }
+
   function lineStyle(path, selected) {
     var backup = String(path.routeType || "primary").toLowerCase() !== "primary";
+    var style = serviceStyle(path.serviceType);
 
     return {
       pane: "fieldopsRfPaths",
-      color: selected ? "#ffe39a" : "#f3bd4e",
-      weight: selected ? 7 : 4,
-      opacity: selected ? 1 : 0.86,
-      dashArray: backup ? "10 8" : null,
+      color: selected ? style.selected : style.line,
+      weight: selected ? 8 : 5,
+      opacity: selected ? 1 : 0.88,
+      dashArray: backup ? "11 8" : null,
       lineCap: "round",
       lineJoin: "round",
       interactive: true
@@ -988,25 +1082,27 @@
       }
     });
 
-    [selectedPath.feedingSiteId, selectedPath.receivingSiteId].forEach(function addEndpoint(siteId, index) {
-      var walk = walksById.get(String(siteId));
+    ["feeding", "receiving"].forEach(function addEndpoint(side, index) {
+      var endpoint = pathEndpoint(selectedPath, side, walksById);
 
-      if (!walk) {
+      if (!endpoint) {
         return;
       }
 
-      window.L.circleMarker([walk.lat, walk.lng], {
+      window.L.circleMarker([endpoint.lat, endpoint.lng], {
         pane: "fieldopsRfEndpoints",
-        radius: index === 0 ? 11 : 9,
-        color: "#fff0bd",
+        radius: endpoint.isVirtual ? 10 : (index === 0 ? 11 : 9),
+        color: "#f8fafc",
         weight: 3,
-        fillColor: index === 0 ? "#f3bd4e" : "#102a43",
-        fillOpacity: 0.92,
+        fillColor: endpoint.isVirtual
+          ? serviceStyle(selectedPath.serviceType).line
+          : (index === 0 ? serviceStyle(selectedPath.serviceType).selected : "#102a43"),
+        fillOpacity: 0.94,
         interactive: false
       }).addTo(rfOverlay.endpointLayer);
     });
 
-    scheduleRfLabelLayout();
+    scheduleRfLabelLayoutStaged();
 
     if (openPopup) {
       detailPopup = window.L.popup({
@@ -1042,7 +1138,7 @@
         }
 
         rfOverlay.siteDetails = siteDetailMap(payload);
-        scheduleRfLabelLayout();
+        scheduleRfLabelLayoutStaged();
 
         if (detailPopup) {
           detailPopup.setContent(pathDetailsHtml(detailedPath, walksById));
@@ -1062,6 +1158,20 @@
       });
   }
 
+  function satelliteNodeIcon(endpoint, serviceId) {
+    var service = String(serviceId || "dtt").toLowerCase();
+    var label = String(endpoint.label || "SAT").replace(/^Satellite\s*/i, "SAT ");
+
+    return window.L.divIcon({
+      className: "osmmaps-rf-satellite-icon is-" + service,
+      html: '<span class="osmmaps-rf-satellite-node"><strong>SAT</strong><small>' +
+        escapeHtml(label.replace(/^SAT\s*/i, "")) +
+        '</small></span>',
+      iconSize: [42, 42],
+      iconAnchor: [21, 21]
+    });
+  }
+
   function renderRfLines(map, serviceId, regionId, cluster, walks) {
     var walksById = walkMap(walks);
     var activePaths = pathsForCluster(cluster, walksById);
@@ -1069,9 +1179,11 @@
     ensureRfLayers(map);
     rfOverlay.lineLayer.clearLayers();
     rfOverlay.endpointLayer.clearLayers();
+    rfOverlay.virtualLayer.clearLayers();
     rfOverlay.siteLabelLayer.clearLayers();
     rfOverlay.pathLabelLayer.clearLayers();
     rfOverlay.pathLines = new Map();
+    rfOverlay.virtualEndpoints = new Map();
     rfOverlay.activePayload = cluster;
     rfOverlay.activeCluster = cluster;
     rfOverlay.activeWalks = walks.slice();
@@ -1082,12 +1194,26 @@
     rfOverlay.activeRegionId = regionId;
 
     rfOverlay.activePaths.forEach(function addPathLine(path) {
-      var fromWalk = walksById.get(String(path.feedingSiteId));
-      var toWalk = walksById.get(String(path.receivingSiteId));
+      var fromWalk = pathEndpoint(path, "feeding", walksById);
+      var toWalk = pathEndpoint(path, "receiving", walksById);
       var line = window.L.polyline(
         [[fromWalk.lat, fromWalk.lng], [toWalk.lat, toWalk.lng]],
         lineStyle(path, false)
       );
+
+      [fromWalk, toWalk].forEach(function addVirtualEndpoint(endpoint) {
+        if (!endpoint || !endpoint.isVirtual || rfOverlay.virtualEndpoints.has(String(endpoint.id))) {
+          return;
+        }
+
+        rfOverlay.virtualEndpoints.set(String(endpoint.id), endpoint);
+        window.L.marker([endpoint.lat, endpoint.lng], {
+          pane: "fieldopsRfEndpoints",
+          icon: satelliteNodeIcon(endpoint, serviceId),
+          interactive: false,
+          keyboard: false
+        }).addTo(rfOverlay.virtualLayer);
+      });
 
       line.on("click", function onPathClick(event) {
         selectRfPath(path.id, true, event.latlng);
@@ -1097,7 +1223,7 @@
       rfOverlay.pathLines.set(String(path.id), line);
     });
 
-    scheduleRfLabelLayout();
+    scheduleRfLabelLayoutStaged();
   }
 
   function mapUiRects(map) {
@@ -1157,14 +1283,21 @@
   }
 
   function markerObstacleRects(map, walks) {
-    return walks.map(function markerRect(walk) {
+    var endpoints = (walks || []).slice();
+
+    rfOverlay.virtualEndpoints.forEach(function addVirtualEndpoint(endpoint) {
+      endpoints.push(endpoint);
+    });
+
+    return endpoints.map(function markerRect(walk) {
       var point = map.latLngToContainerPoint([walk.lat, walk.lng]);
+      var radius = walk.isVirtual ? 23 : 14;
 
       return {
-        left: point.x - 14,
-        top: point.y - 14,
-        right: point.x + 14,
-        bottom: point.y + 14
+        left: point.x - radius,
+        top: point.y - radius,
+        right: point.x + radius,
+        bottom: point.y + radius
       };
     });
   }
@@ -1308,8 +1441,8 @@
     var length = Math.sqrt(dx * dx + dy * dy) || 1;
     var perpendicularX = -dy / length;
     var perpendicularY = dx / length;
-    var along = [0.5, 0.42, 0.58, 0.34, 0.66];
-    var offsets = [0, 20, -20, 38, -38, 56, -56];
+    var along = [0.5, 0.46, 0.54, 0.4, 0.6];
+    var offsets = [0, 8, -8, 15, -15, 24, -24];
     var candidates = [];
 
     along.forEach(function addAlong(position) {
@@ -1336,6 +1469,25 @@
     return candidates;
   }
 
+  function pathLabelHtml(path) {
+    var service = String(path.serviceType || "dtt").toUpperCase();
+    var mux = Number(path.bundleCount);
+    var backup = String(path.routeType || "primary").toLowerCase() !== "primary";
+    var note = backup
+      ? (String(path.feedMethod || "").toLowerCase() === "satellite"
+        ? "SAT"
+        : "B" + String(path.backupNumber || path.routeIndex || ""))
+      : "";
+
+    return [
+      '<span class="osmmaps-rf-path-label">',
+      '<strong>', escapeHtml(service), '</strong>',
+      '<span>', Number.isFinite(mux) ? "×" + escapeHtml(mux) : "—", '</span>',
+      note ? '<small>' + escapeHtml(note) + '</small>' : "",
+      '</span>'
+    ].join("");
+  }
+
   function placePathLabels(map, obstacles) {
     var walksById = walkMap(rfOverlay.activeWalks);
     var orderedPaths = rfOverlay.activePaths.slice().sort(function selectedFirst(a, b) {
@@ -1344,19 +1496,20 @@
     });
 
     orderedPaths.forEach(function addPathLabel(path) {
-      var fromWalk = walksById.get(String(path.feedingSiteId));
-      var toWalk = walksById.get(String(path.receivingSiteId));
+      var fromWalk = pathEndpoint(path, "feeding", walksById);
+      var toWalk = pathEndpoint(path, "receiving", walksById);
 
       if (!fromWalk || !toWalk) {
         return;
       }
 
-      var label = path.labelText || pathLabelText(path);
-      var width = Math.min(138, Math.max(76, Math.ceil(label.length * 6.5 + 18)));
-      var height = 24;
+      var backup = String(path.routeType || "primary").toLowerCase() !== "primary";
+      var service = String(path.serviceType || "dtt").toLowerCase();
+      var width = backup ? 48 : 42;
+      var height = backup ? 46 : 36;
       var placement = pathLabelCandidates(map, fromWalk, toWalk, width, height).find(function clearCandidate(candidate) {
         return rectInsideMap(candidate.rect, map, 5) &&
-          !rectOverlaps(candidate.rect, obstacles, 4);
+          !rectOverlaps(candidate.rect, obstacles, 2);
       });
 
       if (!placement) {
@@ -1365,8 +1518,10 @@
 
       var isSelected = String(path.id) === rfOverlay.selectedPathId;
       var icon = window.L.divIcon({
-        className: "osmmaps-rf-path-label-icon" + (isSelected ? " is-selected" : ""),
-        html: '<span class="osmmaps-rf-path-label">' + escapeHtml(label) + '</span>',
+        className: "osmmaps-rf-path-label-icon is-" + service +
+          (backup ? " is-backup" : "") +
+          (isSelected ? " is-selected" : ""),
+        html: pathLabelHtml(path),
         iconSize: [width, height],
         iconAnchor: [width / 2, height / 2]
       });
@@ -1394,8 +1549,10 @@
     rfOverlay.pathLabelLayer.clearLayers();
 
     var obstacles = mapUiRects(map).concat(markerObstacleRects(map, rfOverlay.activeWalks));
-    placeSiteLabels(map, obstacles);
+
+    // Path badges stay on the route where possible. Site labels move or hide first.
     placePathLabels(map, obstacles);
+    placeSiteLabels(map, obstacles);
   }
 
   function scheduleRfLabelLayout() {
@@ -1406,7 +1563,23 @@
     rfOverlay.redrawTimer = window.setTimeout(function redrawLabels() {
       rfOverlay.redrawTimer = 0;
       layoutRfLabels();
-    }, 40);
+    }, 48);
+  }
+
+  function scheduleRfLabelLayoutStaged() {
+    scheduleRfLabelLayout();
+
+    window.requestAnimationFrame(function firstFrame() {
+      window.requestAnimationFrame(scheduleRfLabelLayout);
+    });
+
+    rfOverlay.stagedTimers.forEach(function clearOldTimer(timerId) {
+      window.clearTimeout(timerId);
+    });
+
+    rfOverlay.stagedTimers = [90, 220, 480].map(function stageLayout(delay) {
+      return window.setTimeout(scheduleRfLabelLayout, delay);
+    });
   }
 
   function focusClustersOnMap(serviceId, clusterIds) {
@@ -1496,10 +1669,11 @@
           mapApi,
           map,
           Array.from(visibleIds),
-          true
+          false
         );
 
         renderRfLines(map, serviceId, context.regionId, combinedCluster, visibleWalks);
+        stableFitWalks(map, visibleWalks, clusters.length > 1 ? 10 : 11);
         setActiveService(serviceId);
         syncClusterCheckboxes(serviceId);
 
