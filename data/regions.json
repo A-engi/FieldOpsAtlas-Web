@@ -105,6 +105,29 @@
               "labelText": "DTT · 3 mux",
               "relationshipType": "synthetic-presentational-path",
               "confidence": "synthetic-demo"
+            },
+            {
+              "id": "dtt-satellite-backup-a--stone-shelf-loop-backup-1",
+              "feedingSiteId": "satellite-backup-a",
+              "receivingSiteId": "stone-shelf-loop",
+              "clusterId": "wenvoe-central",
+              "routeType": "backup",
+              "backupNumber": 1,
+              "bundleCount": 6,
+              "serviceType": "dtt",
+              "feedMethod": "satellite",
+              "sourceType": "satellite",
+              "labelText": "DTT · 6 mux · SAT",
+              "relationshipType": "synthetic-presentational-path",
+              "confidence": "synthetic-demo",
+              "virtualFeeder": {
+                "id": "satellite-backup-a",
+                "name": "Satellite Backup A",
+                "label": "SAT A",
+                "type": "satellite",
+                "lat": 51.515,
+                "lng": -3.455
+              }
             }
           ]
         },
@@ -324,6 +347,29 @@
               "labelText": "DTT · 3 mux",
               "relationshipType": "synthetic-presentational-path",
               "confidence": "synthetic-demo"
+            },
+            {
+              "id": "dtt-satellite-backup-b--fern-warren-walk-backup-2",
+              "feedingSiteId": "satellite-backup-b",
+              "receivingSiteId": "fern-warren-walk",
+              "clusterId": "rhondda-cynon",
+              "routeType": "backup",
+              "backupNumber": 2,
+              "bundleCount": 6,
+              "serviceType": "dtt",
+              "feedMethod": "satellite",
+              "sourceType": "satellite",
+              "labelText": "DTT · 6 mux · SAT",
+              "relationshipType": "synthetic-presentational-path",
+              "confidence": "synthetic-demo",
+              "virtualFeeder": {
+                "id": "satellite-backup-b",
+                "name": "Satellite Backup B",
+                "label": "SAT B",
+                "type": "satellite",
+                "lat": 51.735,
+                "lng": -3.49
+              }
             }
           ]
         },
