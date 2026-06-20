@@ -1,7 +1,7 @@
 /* ========================================================================== 
    FieldOps Atlas map quick tools and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.css
-   Version: 1.0.11-map-quick-tools
+   Version: 1.0.12-top-attached-tools
    Purpose:
    - Styles the collapsible DTT, DAB, FM, and Weather button rail.
    - Styles the existing lazy-loaded map weather preview panel.
@@ -10,8 +10,8 @@
 .map-quick-tools {
   position: fixed;
   z-index: 58;
+  top: calc(var(--safe-top) + var(--top-height) - 1px);
   right: auto;
-  bottom: calc(54px + env(safe-area-inset-bottom));
   left: 50%;
   width: min(calc(100vw - 14px), 416px);
   display: grid;
@@ -29,7 +29,8 @@
   gap: 6px;
   overflow: hidden;
   border: 1px solid rgba(139, 194, 231, 0.22);
-  border-radius: 21px;
+  border-top: 0;
+  border-radius: 0 0 21px 21px;
   background:
     radial-gradient(circle at 50% 0%, rgba(121, 198, 255, 0.10), transparent 48%),
     rgba(5, 20, 39, 0.82);
@@ -56,13 +57,14 @@
   border-width: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(12px);
+  transform: translateY(-12px);
 }
 
 .map-quick-tool {
   appearance: none;
   -webkit-appearance: none;
   min-width: 0;
+  height: 66px;
   min-height: 66px;
   padding: 8px 6px;
   display: flex;
@@ -124,6 +126,11 @@
     linear-gradient(135deg, rgba(27, 71, 110, 0.98), rgba(8, 35, 67, 0.98));
 }
 
+.map-quick-tool.is-weather img {
+  width: 34px;
+  height: 34px;
+}
+
 .map-quick-tool:active {
   transform: translateY(1px);
 }
@@ -178,7 +185,7 @@
   position: fixed;
   z-index: 68;
   right: max(14px, calc((100vw - min(100vw, 430px)) / 2 + 14px));
-  top: calc(82px + env(safe-area-inset-top));
+  top: calc(var(--safe-top) + var(--top-height) + 104px);
   width: min(330px, calc(100vw - 28px));
   max-height: min(520px, calc(100vh - 188px));
   overflow: auto;
@@ -321,6 +328,7 @@
   }
 
   .map-quick-tool {
+    height: 59px;
     min-height: 59px;
     padding-inline: 4px;
     gap: 4px;
