@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas map service controls and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.21-regions-path-source
+   Version: 1.0.22-multi-cluster-checkboxes
    Purpose:
    - Controls the collapsible DTT, DAB, FM, and Weather rail.
-   - Opens an attached map-cluster picker for service controls.
+   - Opens an attached checkbox cluster picker for service controls.
    - Filters existing region markers using each region record's services array.
    - Reads lightweight service clusters and path summaries from data/regions.json.
+   - Supports rendering one or more selected clusters with a performance warning.
    - Loads full path/transmitter details only after a rendered path is selected.
    - Does not request RF details during page, service, or cluster selection.
    - Controls the existing lazy Weather preview.
@@ -15,7 +16,7 @@
 (function fieldOpsOSMServiceControls() {
   "use strict";
 
-  var VERSION = "1.0.21-regions-path-source";
+  var VERSION = "1.0.22-multi-cluster-checkboxes";
   var PRESELI = {
     name: "Preseli area",
     lat: 51.921,
@@ -44,8 +45,10 @@
   var TOOLBAR_COLLAPSED_CLASS = "is-collapsed";
   var regionLookupCache = null;
   var detailCache = new Map();
+  var clusterSelections = new Map();
   var activeServiceId = "";
   var serviceRequestId = 0;
+  var clusterRenderRequestId = 0;
   var weatherCache = null;
   var capturedMap = null;
   var rfOverlay = {
@@ -184,11 +187,12 @@
     });
   }
 
-  function setServiceStatus(message) {
+  function setServiceStatus(message, warning) {
     var output = qs("[data-map-service-status]");
 
     if (output) {
       output.textContent = message || "";
+      output.classList.toggle("is-warning", Boolean(warning));
     }
   }
 
@@ -239,6 +243,7 @@
   function openServicePicker(serviceId) {
     var picker = qs("[data-map-service-picker]");
     var service = SERVICE_FILES[serviceId];
+    var sameService = activeServiceId === serviceId;
 
     if (!picker || !service) {
       return;
@@ -251,8 +256,14 @@
 
     setWeatherPanelOpen(false);
     setActiveService(serviceId);
-    setServiceHeading(serviceId, "Choose cluster");
+    setServiceHeading(serviceId, "Choose one or more clusters");
     showServicePicker(serviceId);
+
+    if (sameService && qs("[data-map-service-options]") && qs("[data-map-service-options]").children.length) {
+      return;
+    }
+
+    clusterSelections.set(serviceId, new Set());
     applyServiceFilter(serviceId);
   }
 
@@ -349,6 +360,65 @@
         Array.isArray(cluster.siteIds) &&
         cluster.siteIds.length > 0;
     });
+  }
+
+  function selectedClusterSet(serviceId) {
+    var key = String(serviceId || "");
+
+    if (!clusterSelections.has(key)) {
+      clusterSelections.set(key, new Set());
+    }
+
+    return clusterSelections.get(key);
+  }
+
+  function syncClusterCheckboxes(serviceId) {
+    var selected = selectedClusterSet(serviceId);
+
+    qsa('input[data-map-cluster][data-map-service-id="' + serviceId + '"]').forEach(function syncCheckbox(checkbox) {
+      var checked = selected.has(String(checkbox.getAttribute("data-map-cluster") || ""));
+      var row = checkbox.closest(".map-service-cluster");
+
+      checkbox.checked = checked;
+
+      if (row) {
+        row.classList.toggle("is-selected", checked);
+      }
+    });
+  }
+
+  function combineClusters(clusters) {
+    var siteIds = new Set();
+    var paths = new Map();
+    var headSiteIds = new Set();
+
+    (clusters || []).forEach(function collectCluster(cluster) {
+      (cluster.siteIds || []).forEach(function collectSite(siteId) {
+        siteIds.add(String(siteId));
+      });
+
+      (cluster.paths || []).forEach(function collectPath(path) {
+        if (path && path.id) {
+          paths.set(String(path.id), path);
+        }
+      });
+
+      if (cluster.headSiteId) {
+        headSiteIds.add(String(cluster.headSiteId));
+      }
+    });
+
+    return {
+      id: clusters.length === 1 ? String(clusters[0].id) : "multiple-clusters",
+      name: clusters.length === 1 ? String(clusters[0].name) : clusters.length + " clusters",
+      headSiteId: headSiteIds.size === 1 ? Array.from(headSiteIds)[0] : "",
+      siteCount: siteIds.size,
+      siteIds: Array.from(siteIds),
+      paths: Array.from(paths.values()),
+      selectedClusterIds: clusters.map(function clusterId(cluster) {
+        return String(cluster.id);
+      })
+    };
   }
 
   function detailUrlFor(serviceId, regionId) {
@@ -506,6 +576,7 @@
   function renderServiceClusters(serviceId, clusters, siteCount) {
     var options = qs("[data-map-service-options]");
     var service = SERVICE_FILES[serviceId];
+    var selected = selectedClusterSet(serviceId);
 
     if (!options) {
       return;
@@ -521,27 +592,36 @@
       return;
     }
 
-    options.innerHTML = clusters.map(function clusterButton(cluster) {
+    options.innerHTML = clusters.map(function clusterCheckbox(cluster) {
+      var checked = selected.has(String(cluster.id));
+
       return [
-        '<button class="map-service-cluster" type="button" data-map-cluster="',
+        '<label class="map-service-cluster',
+        checked ? ' is-selected' : '',
+        '">',
+        '<input class="map-service-cluster__checkbox" type="checkbox" data-map-cluster="',
         escapeHtml(cluster.id),
         '" data-map-service-id="',
         escapeHtml(serviceId),
-        '">',
-        "<strong>",
+        '"',
+        checked ? ' checked' : '',
+        '>',
+        '<span class="map-service-cluster__body">',
+        '<strong>',
         escapeHtml(cluster.name),
-        "</strong>",
-        "<span>",
+        '</strong>',
+        '<span>',
         escapeHtml(cluster.siteCount || cluster.siteIds.length),
-        " sites</span>",
-        "</button>"
+        ' sites</span>',
+        '</span>',
+        '</label>'
       ].join("");
     }).join("");
 
     setServiceStatus(
       Number(siteCount || 0) + " " +
       (service ? service.label : "service") +
-      " sites shown. Choose a cluster for its paths."
+      " sites shown. Tick one or more clusters."
     );
   }
 
@@ -1329,47 +1409,63 @@
     }, 40);
   }
 
-  function focusClusterOnMap(serviceId, clusterId) {
+  function focusClustersOnMap(serviceId, clusterIds) {
     var service = SERVICE_FILES[serviceId];
+    var wantedIds = new Set((clusterIds || []).map(String));
+    var requestId = ++clusterRenderRequestId;
 
     if (!service) {
       return;
     }
 
-    setServiceStatus("Loading " + service.label + " cluster paths...");
+    if (!wantedIds.size) {
+      applyServiceFilter(serviceId);
+      return;
+    }
+
+    setServiceStatus(
+      "Loading " + wantedIds.size + " " + service.label +
+      (wantedIds.size === 1 ? " cluster..." : " clusters...")
+    );
 
     Promise.all([
       loadRegionLookup(),
       waitForMapApi()
     ])
-      .then(function prepareCluster(values) {
+      .then(function prepareClusters(values) {
         var regions = values[0];
         var mapApi = values[1];
         var regionId = currentRegionId(mapApi);
         var region = regionFromLookup(regions, regionId);
-        var cluster = clustersFromRegion(region, serviceId).find(function findCluster(item) {
-          return String(item.id) === String(clusterId);
+        var selectedClusters = clustersFromRegion(region, serviceId).filter(function selectedCluster(item) {
+          return wantedIds.has(String(item.id));
         });
 
         if (!regionId || !region) {
-          throw new Error("Choose a map region before selecting a cluster.");
+          throw new Error("Choose a map region before selecting clusters.");
         }
 
-        if (!cluster) {
-          throw new Error("The selected cluster was not found in the region lookup.");
+        if (!selectedClusters.length) {
+          throw new Error("The selected clusters were not found in the region lookup.");
         }
 
         return mapApi.selectRegion(regionId).then(function regionLoaded() {
           return {
             mapApi: mapApi,
             regionId: regionId,
-            cluster: cluster
+            clusters: selectedClusters,
+            combinedCluster: combineClusters(selectedClusters)
           };
         });
       })
-      .then(function applyCluster(context) {
+      .then(function applyClusters(context) {
+        if (requestId !== clusterRenderRequestId || activeServiceId !== serviceId) {
+          return;
+        }
+
         var mapApi = context.mapApi;
-        var cluster = context.cluster;
+        var clusters = context.clusters;
+        var combinedCluster = context.combinedCluster;
         var allWalks = mapApi.getWalks();
         var serviceWalks = allWalks.filter(function filterByRegionService(walk) {
           return walkHasService(walk, serviceId);
@@ -1377,11 +1473,11 @@
         var serviceIds = new Set(serviceWalks.map(function serviceSiteId(walk) {
           return String(walk.id);
         }));
-        var memberIds = new Set(cluster.siteIds.map(String).filter(function validMember(siteId) {
+        var memberIds = new Set(combinedCluster.siteIds.map(String).filter(function validMember(siteId) {
           return serviceIds.has(siteId);
         }));
         var walksById = walkMap(allWalks);
-        var clusterPaths = pathsForCluster(cluster, walksById);
+        var clusterPaths = pathsForCluster(combinedCluster, walksById);
         var visibleIds = new Set(memberIds);
 
         clusterPaths.forEach(function includePathEndpoints(path) {
@@ -1403,16 +1499,36 @@
           true
         );
 
-        renderRfLines(map, serviceId, context.regionId, cluster, visibleWalks);
+        renderRfLines(map, serviceId, context.regionId, combinedCluster, visibleWalks);
         setActiveService(serviceId);
+        syncClusterCheckboxes(serviceId);
+
+        if (clusters.length > 1) {
+          setServiceStatus(
+            "Warning: " + clusters.length + " clusters and " + clusterPaths.length +
+            " paths are being rendered. Performance may reduce and some labels may be hidden.",
+            true
+          );
+        } else {
+          setServiceStatus(
+            clusters[0].name + " rendered with " + clusterPaths.length + " paths."
+          );
+        }
 
         window.dispatchEvent(new CustomEvent("fieldops:map-service-cluster-selected", {
           detail: {
             version: VERSION,
             regionId: context.regionId,
             serviceType: serviceId,
-            clusterId: cluster.id,
-            clusterName: cluster.name,
+            clusterId: clusters.length === 1 ? clusters[0].id : "multiple-clusters",
+            clusterName: clusters.length === 1 ? clusters[0].name : clusters.length + " clusters",
+            clusterIds: clusters.map(function clusterId(cluster) {
+              return cluster.id;
+            }),
+            clusterNames: clusters.map(function clusterName(cluster) {
+              return cluster.name;
+            }),
+            clusterCount: clusters.length,
             siteCount: memberIds.size,
             visibleSiteCount: visibleWalks.length,
             pathCount: clusterPaths.length,
@@ -1420,14 +1536,52 @@
             detailsLoaded: false
           }
         }));
-
-        closeServicePicker();
       })
       .catch(function handleClusterError(error) {
+        if (requestId !== clusterRenderRequestId) {
+          return;
+        }
+
         clearRfOverlay();
-        setServiceStatus(error.message || "Could not focus the selected cluster.");
+        setServiceStatus(error.message || "Could not focus the selected clusters.");
       });
   }
+
+  function setClusterSelected(serviceId, clusterId, checked) {
+    var selected = selectedClusterSet(serviceId);
+    var id = String(clusterId || "");
+
+    if (!id) {
+      return;
+    }
+
+    if (checked) {
+      selected.add(id);
+    } else {
+      selected.delete(id);
+    }
+
+    syncClusterCheckboxes(serviceId);
+
+    if (!selected.size) {
+      clusterRenderRequestId += 1;
+      clearRfOverlay();
+      applyServiceFilter(serviceId);
+      return;
+    }
+
+    focusClustersOnMap(serviceId, Array.from(selected));
+  }
+
+  function focusClusterOnMap(serviceId, clusterId) {
+    var selected = selectedClusterSet(serviceId);
+
+    selected.clear();
+    selected.add(String(clusterId));
+    syncClusterCheckboxes(serviceId);
+    focusClustersOnMap(serviceId, Array.from(selected));
+  }
+
 
   function weatherCodeText(code) {
     var labels = {
@@ -1596,7 +1750,6 @@
       var toolbarToggle = event.target.closest("[data-map-quick-toggle]");
       var serviceControl = event.target.closest("[data-map-service]");
       var serviceClose = event.target.closest("[data-map-service-close]");
-      var clusterControl = event.target.closest("[data-map-cluster]");
       var weatherOpen = event.target.closest("[data-weather-panel-open]");
       var weatherClose = event.target.closest("[data-weather-panel-close]");
       var weatherActivate = event.target.closest("[data-weather-activate]");
@@ -1622,16 +1775,6 @@
         return;
       }
 
-      if (clusterControl) {
-        event.preventDefault();
-        event.stopPropagation();
-        focusClusterOnMap(
-          clusterControl.getAttribute("data-map-service-id"),
-          clusterControl.getAttribute("data-map-cluster")
-        );
-        return;
-      }
-
       if (weatherOpen) {
         event.preventDefault();
         event.stopPropagation();
@@ -1653,6 +1796,21 @@
         activatePreview();
       }
     }, false);
+
+    document.addEventListener("change", function onChange(event) {
+      var clusterCheckbox = event.target.closest(".map-service-cluster__checkbox[data-map-cluster]");
+
+      if (!clusterCheckbox) {
+        return;
+      }
+
+      event.stopPropagation();
+      setClusterSelected(
+        clusterCheckbox.getAttribute("data-map-service-id"),
+        clusterCheckbox.getAttribute("data-map-cluster"),
+        clusterCheckbox.checked
+      );
+    });
 
     document.addEventListener("keydown", function onKeyDown(event) {
       if (event.key === "Escape") {
@@ -1689,6 +1847,7 @@
       closeService: closeServicePicker,
       filterService: applyServiceFilter,
       focusCluster: focusClusterOnMap,
+      focusClusters: focusClustersOnMap,
       clearRfOverlay: clearRfOverlay,
       collapseTools: function collapseTools() {
         setToolbarCollapsed(true);
