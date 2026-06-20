@@ -1,6 +1,6 @@
 {
   "schema": "fieldops-rf-dtt-details-v1",
-  "version": "1.1.4-service-hash-sync",
+  "version": "1.1.5-radial-branches",
   "regionId": "wenvoe",
   "serviceType": "dtt",
   "displayName": "Wenvoe Demo DTT",
@@ -16,7 +16,9 @@
     "The existing eight clusters contain between 4 and 16 sites and are used directly by the map cluster picker.",
     "Distance, bearing and compass direction are not stored; calculate them from the linked region-site coordinates.",
     "All paths, equipment, powers, channels outside the main Wenvoe seed set, telemetry and masked IP values are synthetic demo data.",
-    "No backup routes are included in this first DTT-only file."
+    "The visual topology is rooted at the Wenvoe main site and uses shallow geographic branches rather than nearest-neighbour chains.",
+    "Relationship lines are synthetic presentational paths and must not be treated as verified current operational feed routes.",
+    "No backup routes are included in this DTT demo file."
   ],
   "clusters": [
     {
@@ -32,12 +34,13 @@
         "foxglove-field-cave",
         "heather-ridge-hollow",
         "bright-path-cave"
-      ]
+      ],
+      "branchSiteId": null
     },
     {
       "id": "rhondda-cynon",
       "name": "Rhondda & Cynon Valleys",
-      "headSiteId": "fern-warren-walk",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 16,
       "siteIds": [
         "spring-copse-ridge",
@@ -56,12 +59,13 @@
         "river-edge-loop",
         "golden-basin-ramble",
         "sunset-shore-path"
-      ]
+      ],
+      "branchSiteId": "fern-warren-walk"
     },
     {
       "id": "bridgend-maesteg",
       "name": "Bridgend & Maesteg",
-      "headSiteId": "maple-camp-walk",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 10,
       "siteIds": [
         "honey-haven-cave",
@@ -74,12 +78,13 @@
         "starling-thicket-trail",
         "high-water-walk",
         "dawn-spring-trail"
-      ]
+      ],
+      "branchSiteId": "maple-camp-walk"
     },
     {
       "id": "upper-valleys-west",
       "name": "Upper Valleys West",
-      "headSiteId": "pebble-arch-hollow",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 6,
       "siteIds": [
         "cinder-mill-cave",
@@ -88,12 +93,13 @@
         "dawn-pool-ramble",
         "stone-mere-walk",
         "woodland-cliff-ramble"
-      ]
+      ],
+      "branchSiteId": "pebble-arch-hollow"
     },
     {
       "id": "gwent-valleys",
       "name": "Gwent Valleys",
-      "headSiteId": "brook-thicket-cave",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 12,
       "siteIds": [
         "bluebell-haven-loop",
@@ -108,12 +114,13 @@
         "thistle-bend-loop",
         "ashen-way-hollow",
         "shadow-camp-trail"
-      ]
+      ],
+      "branchSiteId": "brook-thicket-cave"
     },
     {
       "id": "monmouthshire",
       "name": "Monmouthshire",
-      "headSiteId": "foxglove-quarry-path",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 5,
       "siteIds": [
         "winter-tarn-ridge",
@@ -121,12 +128,13 @@
         "heather-field-cave",
         "foxglove-quarry-path",
         "shadow-stone-path"
-      ]
+      ],
+      "branchSiteId": "foxglove-quarry-path"
     },
     {
       "id": "newport-east",
       "name": "Newport & East",
-      "headSiteId": "spring-falls-loop",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 16,
       "siteIds": [
         "iron-tor-trail",
@@ -145,19 +153,21 @@
         "amber-drift-hollow",
         "shadow-pool-ridge",
         "bramble-ledge-cave"
-      ]
+      ],
+      "branchSiteId": "spring-falls-loop"
     },
     {
       "id": "vale-coast",
       "name": "Vale & Coast",
-      "headSiteId": "red-vale-hollow",
+      "headSiteId": "stone-shelf-loop",
       "siteCount": 4,
       "siteIds": [
         "bracken-basin-ramble",
         "summer-ford-hollow",
         "red-vale-hollow",
         "ivy-ford-ramble"
-      ]
+      ],
+      "branchSiteId": "red-vale-hollow"
     }
   ],
   "siteDetails": [
@@ -183,7 +193,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "golden-falls-ridge",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -223,7 +233,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "stone-mere-walk",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -263,7 +273,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "river-edge-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -303,7 +313,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "elder-cove-ridge",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -343,7 +353,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "cedar-coast-ridge",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -383,7 +393,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "shadow-camp-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -423,7 +433,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "dawn-spring-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -463,7 +473,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bluebell-haven-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -503,7 +513,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "starling-hollow-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -583,7 +593,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "elm-tarn-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -623,7 +633,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "misty-ridge-walk",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -741,7 +751,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "river-edge-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -781,7 +791,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "honey-haven-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -873,7 +883,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "thistle-bend-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -913,7 +923,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "misty-pool-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -993,7 +1003,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "emerald-arch-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1073,7 +1083,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "drift-lantern-hollow",
+        "fromSiteId": "spring-falls-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1113,7 +1123,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "misty-dale-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1153,7 +1163,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bright-harbour-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1193,7 +1203,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "meadow-camp-path",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1233,7 +1243,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "meadow-camp-path",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1273,7 +1283,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bramble-ledge-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1353,7 +1363,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "drift-vale-hollow",
+        "fromSiteId": "spring-falls-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1393,7 +1403,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bluebell-field-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1433,7 +1443,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "shadow-camp-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1473,7 +1483,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "red-vale-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1553,7 +1563,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "lantern-stone-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1593,7 +1603,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "heather-field-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1633,7 +1643,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "foxglove-quarry-path",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1673,7 +1683,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "heather-ridge-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1713,7 +1723,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "dawn-pool-ramble",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1833,7 +1843,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "foxglove-quarry-path",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1913,7 +1923,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "honey-haven-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -1953,7 +1963,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "elder-glen-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2033,7 +2043,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "woodland-cliff-ramble",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2073,7 +2083,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "high-water-walk",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2153,7 +2163,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "dusk-hollow-ramble",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2193,7 +2203,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bright-path-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2233,7 +2243,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "crystal-valley-path",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2273,7 +2283,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "pebble-arch-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2313,7 +2323,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "misty-ridge-walk",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2353,7 +2363,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "hidden-coast-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2393,7 +2403,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "elm-grove-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2433,7 +2443,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "amber-drift-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2513,7 +2523,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bramble-ledge-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2553,7 +2563,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "emerald-arch-loop",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2593,7 +2603,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "pebble-vale-ridge",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2633,7 +2643,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "ashen-way-hollow",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2793,7 +2803,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "hidden-drift-trail",
+        "fromSiteId": "fern-warren-walk",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2925,7 +2935,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "bracken-basin-ramble",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -2965,7 +2975,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "robin-spring-trail",
+        "fromSiteId": "fern-warren-walk",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -3005,7 +3015,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "misty-pool-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -3045,7 +3055,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "starling-thicket-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -3085,7 +3095,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "hidden-drift-trail",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -3165,7 +3175,7 @@
       },
       "rx": {
         "inputMode": "off-air-demo",
-        "fromSiteId": "elm-tarn-cave",
+        "fromSiteId": "stone-shelf-loop",
         "receiverType": "Demo UHF off-air receiver",
         "receivingAntennaType": "Demo UHF yagi receiving antenna",
         "channels": [
@@ -3226,679 +3236,979 @@
   ],
   "paths": [
     {
+      "id": "dtt-stone-shelf-loop--crystal-valley-path-primary",
       "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "fern-warren-walk",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 6,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "maple-camp-walk",
-      "clusterId": "bridgend-maesteg",
+      "receivingSiteId": "crystal-valley-path",
+      "clusterId": "wenvoe-central",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "pebble-arch-hollow",
-      "clusterId": "upper-valleys-west",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "brook-thicket-cave",
-      "clusterId": "gwent-valleys",
-      "routeType": "primary",
-      "bundleCount": 6,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "foxglove-quarry-path",
-      "clusterId": "monmouthshire",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "spring-falls-loop",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "stone-shelf-loop",
-      "receivingSiteId": "red-vale-hollow",
-      "clusterId": "vale-coast",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
+      "id": "dtt-stone-shelf-loop--lantern-stone-hollow-primary",
       "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "lantern-stone-hollow",
       "clusterId": "wenvoe-central",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "lantern-stone-hollow",
+      "id": "dtt-stone-shelf-loop--starling-hollow-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "starling-hollow-trail",
       "clusterId": "wenvoe-central",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "starling-hollow-trail",
-      "receivingSiteId": "crystal-valley-path",
-      "clusterId": "wenvoe-central",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "crystal-valley-path",
-      "receivingSiteId": "bright-path-cave",
-      "clusterId": "wenvoe-central",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bright-path-cave",
-      "receivingSiteId": "heather-ridge-hollow",
-      "clusterId": "wenvoe-central",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "heather-ridge-hollow",
+      "id": "dtt-stone-shelf-loop--foxglove-field-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "foxglove-field-cave",
       "clusterId": "wenvoe-central",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-stone-shelf-loop--heather-ridge-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "heather-ridge-hollow",
+      "clusterId": "wenvoe-central",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--bright-path-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "bright-path-cave",
+      "clusterId": "wenvoe-central",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--fern-warren-walk-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "fern-warren-walk",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 6,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--spring-copse-ridge-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "spring-copse-ridge",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--hidden-coast-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "hidden-coast-hollow",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--dusk-hollow-ramble-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "dusk-hollow-ramble",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--harbour-coast-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "harbour-coast-cave",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--misty-ridge-walk-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "misty-ridge-walk",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--cedar-coast-ridge-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "cedar-coast-ridge",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--hidden-drift-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "hidden-drift-trail",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--sparrow-moor-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "sparrow-moor-trail",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--oak-dale-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "oak-dale-trail",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-fern-warren-walk--robin-spring-trail-primary",
       "feedingSiteId": "fern-warren-walk",
       "receivingSiteId": "robin-spring-trail",
       "clusterId": "rhondda-cynon",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "robin-spring-trail",
-      "receivingSiteId": "river-edge-loop",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "river-edge-loop",
-      "receivingSiteId": "spring-copse-ridge",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "river-edge-loop",
-      "receivingSiteId": "misty-ridge-walk",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "misty-ridge-walk",
-      "receivingSiteId": "sparrow-moor-trail",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "misty-ridge-walk",
-      "receivingSiteId": "harbour-coast-cave",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
+      "id": "dtt-fern-warren-walk--misty-pool-cave-primary",
       "feedingSiteId": "fern-warren-walk",
       "receivingSiteId": "misty-pool-cave",
       "clusterId": "rhondda-cynon",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "misty-pool-cave",
-      "receivingSiteId": "cedar-coast-ridge",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "cedar-coast-ridge",
-      "receivingSiteId": "dusk-hollow-ramble",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "dusk-hollow-ramble",
-      "receivingSiteId": "hidden-drift-trail",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "hidden-drift-trail",
+      "id": "dtt-fern-warren-walk--elder-cove-ridge-primary",
+      "feedingSiteId": "fern-warren-walk",
       "receivingSiteId": "elder-cove-ridge",
       "clusterId": "rhondda-cynon",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "hidden-drift-trail",
-      "receivingSiteId": "sunset-shore-path",
+      "id": "dtt-fern-warren-walk--river-edge-loop-primary",
+      "feedingSiteId": "fern-warren-walk",
+      "receivingSiteId": "river-edge-loop",
       "clusterId": "rhondda-cynon",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "elder-cove-ridge",
-      "receivingSiteId": "hidden-coast-hollow",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "hidden-coast-hollow",
-      "receivingSiteId": "oak-dale-trail",
-      "clusterId": "rhondda-cynon",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "misty-pool-cave",
+      "id": "dtt-stone-shelf-loop--golden-basin-ramble-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "golden-basin-ramble",
       "clusterId": "rhondda-cynon",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-stone-shelf-loop--sunset-shore-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "sunset-shore-path",
+      "clusterId": "rhondda-cynon",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--maple-camp-walk-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "maple-camp-walk",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--honey-haven-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "honey-haven-cave",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--amber-loop-ramble-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "amber-loop-ramble",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--crystal-arch-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "crystal-arch-cave",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--elm-grove-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "elm-grove-hollow",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--bluebell-field-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "bluebell-field-cave",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--elm-view-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "elm-view-trail",
+      "clusterId": "bridgend-maesteg",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-maple-camp-walk--starling-thicket-trail-primary",
       "feedingSiteId": "maple-camp-walk",
       "receivingSiteId": "starling-thicket-trail",
       "clusterId": "bridgend-maesteg",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-maple-camp-walk--high-water-walk-primary",
       "feedingSiteId": "maple-camp-walk",
       "receivingSiteId": "high-water-walk",
       "clusterId": "bridgend-maesteg",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "high-water-walk",
-      "receivingSiteId": "bluebell-field-cave",
-      "clusterId": "bridgend-maesteg",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "starling-thicket-trail",
+      "id": "dtt-stone-shelf-loop--dawn-spring-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "dawn-spring-trail",
       "clusterId": "bridgend-maesteg",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "dawn-spring-trail",
-      "receivingSiteId": "honey-haven-cave",
-      "clusterId": "bridgend-maesteg",
+      "id": "dtt-stone-shelf-loop--pebble-arch-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "pebble-arch-hollow",
+      "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "honey-haven-cave",
-      "receivingSiteId": "elm-grove-hollow",
-      "clusterId": "bridgend-maesteg",
+      "id": "dtt-stone-shelf-loop--cinder-mill-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "cinder-mill-cave",
+      "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "elm-grove-hollow",
-      "receivingSiteId": "elm-view-trail",
-      "clusterId": "bridgend-maesteg",
+      "id": "dtt-stone-shelf-loop--quiet-shelf-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "quiet-shelf-path",
+      "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "bluebell-field-cave",
-      "receivingSiteId": "crystal-arch-cave",
-      "clusterId": "bridgend-maesteg",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "honey-haven-cave",
-      "receivingSiteId": "amber-loop-ramble",
-      "clusterId": "bridgend-maesteg",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
+      "id": "dtt-pebble-arch-hollow--dawn-pool-ramble-primary",
       "feedingSiteId": "pebble-arch-hollow",
       "receivingSiteId": "dawn-pool-ramble",
       "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "pebble-arch-hollow",
-      "receivingSiteId": "woodland-cliff-ramble",
-      "clusterId": "upper-valleys-west",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "dawn-pool-ramble",
-      "receivingSiteId": "quiet-shelf-path",
-      "clusterId": "upper-valleys-west",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "woodland-cliff-ramble",
+      "id": "dtt-stone-shelf-loop--stone-mere-walk-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "stone-mere-walk",
       "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "stone-mere-walk",
-      "receivingSiteId": "cinder-mill-cave",
+      "id": "dtt-stone-shelf-loop--woodland-cliff-ramble-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "woodland-cliff-ramble",
       "clusterId": "upper-valleys-west",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "brook-thicket-cave",
-      "receivingSiteId": "pebble-vale-ridge",
+      "id": "dtt-stone-shelf-loop--brook-thicket-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "brook-thicket-cave",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 6,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--bluebell-haven-loop-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "bluebell-haven-loop",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-stone-shelf-loop--meadow-way-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "meadow-way-hollow",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--hazel-bank-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "hazel-bank-trail",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--velvet-loop-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "velvet-loop-cave",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-brook-thicket-cave--elder-glen-hollow-primary",
       "feedingSiteId": "brook-thicket-cave",
       "receivingSiteId": "elder-glen-hollow",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "elder-glen-hollow",
+      "id": "dtt-stone-shelf-loop--low-ladder-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "low-ladder-cave",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-brook-thicket-cave--pebble-vale-ridge-primary",
+      "feedingSiteId": "brook-thicket-cave",
+      "receivingSiteId": "pebble-vale-ridge",
+      "clusterId": "gwent-valleys",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--golden-falls-ridge-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "golden-falls-ridge",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-brook-thicket-cave--thistle-bend-loop-primary",
       "feedingSiteId": "brook-thicket-cave",
       "receivingSiteId": "thistle-bend-loop",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "pebble-vale-ridge",
+      "id": "dtt-stone-shelf-loop--ashen-way-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "ashen-way-hollow",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "ashen-way-hollow",
+      "id": "dtt-stone-shelf-loop--shadow-camp-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "shadow-camp-trail",
       "clusterId": "gwent-valleys",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "shadow-camp-trail",
-      "receivingSiteId": "low-ladder-cave",
-      "clusterId": "gwent-valleys",
+      "id": "dtt-stone-shelf-loop--foxglove-quarry-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "foxglove-quarry-path",
+      "clusterId": "monmouthshire",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "golden-falls-ridge",
-      "receivingSiteId": "bluebell-haven-loop",
-      "clusterId": "gwent-valleys",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bluebell-haven-loop",
-      "receivingSiteId": "hazel-bank-trail",
-      "clusterId": "gwent-valleys",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "thistle-bend-loop",
-      "receivingSiteId": "velvet-loop-cave",
-      "clusterId": "gwent-valleys",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "shadow-camp-trail",
-      "receivingSiteId": "meadow-way-hollow",
-      "clusterId": "gwent-valleys",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
+      "id": "dtt-foxglove-quarry-path--winter-tarn-ridge-primary",
       "feedingSiteId": "foxglove-quarry-path",
       "receivingSiteId": "winter-tarn-ridge",
       "clusterId": "monmouthshire",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "foxglove-quarry-path",
-      "receivingSiteId": "shadow-stone-path",
-      "clusterId": "monmouthshire",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "foxglove-quarry-path",
-      "receivingSiteId": "heather-field-cave",
-      "clusterId": "monmouthshire",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "heather-field-cave",
+      "id": "dtt-stone-shelf-loop--maple-warren-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "maple-warren-trail",
       "clusterId": "monmouthshire",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "spring-falls-loop",
-      "receivingSiteId": "elm-tarn-cave",
+      "id": "dtt-stone-shelf-loop--heather-field-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "heather-field-cave",
+      "clusterId": "monmouthshire",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--shadow-stone-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "shadow-stone-path",
+      "clusterId": "monmouthshire",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--spring-falls-loop-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "spring-falls-loop",
       "clusterId": "newport-east",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-stone-shelf-loop--iron-tor-trail-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "iron-tor-trail",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-spring-falls-loop--drift-vale-hollow-primary",
       "feedingSiteId": "spring-falls-loop",
       "receivingSiteId": "drift-vale-hollow",
       "clusterId": "newport-east",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "drift-vale-hollow",
-      "receivingSiteId": "bright-harbour-cave",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bright-harbour-cave",
-      "receivingSiteId": "meadow-camp-path",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "meadow-camp-path",
-      "receivingSiteId": "low-lane-path",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "meadow-camp-path",
-      "receivingSiteId": "emerald-arch-loop",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "elm-tarn-cave",
-      "receivingSiteId": "bramble-ledge-cave",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bramble-ledge-cave",
-      "receivingSiteId": "amber-drift-hollow",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "amber-drift-hollow",
-      "receivingSiteId": "dawn-well-loop",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bramble-ledge-cave",
-      "receivingSiteId": "misty-dale-loop",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "misty-dale-loop",
-      "receivingSiteId": "drift-lantern-hollow",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "drift-lantern-hollow",
-      "receivingSiteId": "green-view-trail",
-      "clusterId": "newport-east",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "emerald-arch-loop",
+      "id": "dtt-stone-shelf-loop--cairn-gate-ridge-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "cairn-gate-ridge",
       "clusterId": "newport-east",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "elm-tarn-cave",
-      "receivingSiteId": "iron-tor-trail",
+      "id": "dtt-spring-falls-loop--green-view-trail-primary",
+      "feedingSiteId": "spring-falls-loop",
+      "receivingSiteId": "green-view-trail",
       "clusterId": "newport-east",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
-      "feedingSiteId": "emerald-arch-loop",
+      "id": "dtt-stone-shelf-loop--drift-lantern-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "drift-lantern-hollow",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--meadow-camp-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "meadow-camp-path",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--emerald-arch-loop-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "emerald-arch-loop",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--low-lane-path-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "low-lane-path",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--misty-dale-loop-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "misty-dale-loop",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-spring-falls-loop--bright-harbour-cave-primary",
+      "feedingSiteId": "spring-falls-loop",
+      "receivingSiteId": "bright-harbour-cave",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--dawn-well-loop-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "dawn-well-loop",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-spring-falls-loop--elm-tarn-cave-primary",
+      "feedingSiteId": "spring-falls-loop",
+      "receivingSiteId": "elm-tarn-cave",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--amber-drift-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "amber-drift-hollow",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--shadow-pool-ridge-primary",
+      "feedingSiteId": "stone-shelf-loop",
       "receivingSiteId": "shadow-pool-ridge",
       "clusterId": "newport-east",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     },
     {
+      "id": "dtt-stone-shelf-loop--bramble-ledge-cave-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "bramble-ledge-cave",
+      "clusterId": "newport-east",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--red-vale-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "red-vale-hollow",
+      "clusterId": "vale-coast",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--bracken-basin-ramble-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "bracken-basin-ramble",
+      "clusterId": "vale-coast",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-stone-shelf-loop--summer-ford-hollow-primary",
+      "feedingSiteId": "stone-shelf-loop",
+      "receivingSiteId": "summer-ford-hollow",
+      "clusterId": "vale-coast",
+      "routeType": "primary",
+      "bundleCount": 3,
+      "serviceType": "dtt",
+      "feedMethod": "off-air-demo",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-red-vale-hollow--ivy-ford-ramble-primary",
       "feedingSiteId": "red-vale-hollow",
       "receivingSiteId": "ivy-ford-ramble",
       "clusterId": "vale-coast",
       "routeType": "primary",
       "bundleCount": 3,
+      "serviceType": "dtt",
       "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "red-vale-hollow",
-      "receivingSiteId": "bracken-basin-ramble",
-      "clusterId": "vale-coast",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
-    },
-    {
-      "feedingSiteId": "bracken-basin-ramble",
-      "receivingSiteId": "summer-ford-hollow",
-      "clusterId": "vale-coast",
-      "routeType": "primary",
-      "bundleCount": 3,
-      "feedMethod": "off-air-demo",
-      "confidence": "synthetic-demo"
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
     }
   ],
   "_endOfFile": "Bottom/end of file: data/rf/wenvoe/dtt-details.json"
