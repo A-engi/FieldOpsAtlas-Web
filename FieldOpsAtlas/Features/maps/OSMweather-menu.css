@@ -1,7 +1,7 @@
 /* ========================================================================== 
    FieldOps Atlas map quick tools and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.css
-   Version: 1.0.12-top-attached-tools
+   Version: 1.0.13-top-bar-height
    Purpose:
    - Styles the collapsible DTT, DAB, FM, and Weather button rail.
    - Styles the existing lazy-loaded map weather preview panel.
@@ -22,15 +22,16 @@
 
 .map-quick-tools__rail {
   width: 100%;
-  max-height: 82px;
-  padding: 6px;
+  height: var(--top-height);
+  max-height: var(--top-height);
+  padding: 5px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  gap: 5px;
   overflow: hidden;
   border: 1px solid rgba(139, 194, 231, 0.22);
   border-top: 0;
-  border-radius: 0 0 21px 21px;
+  border-radius: 0 0 15px 15px;
   background:
     radial-gradient(circle at 50% 0%, rgba(121, 198, 255, 0.10), transparent 48%),
     rgba(5, 20, 39, 0.82);
@@ -64,23 +65,23 @@
   appearance: none;
   -webkit-appearance: none;
   min-width: 0;
-  height: 66px;
-  min-height: 66px;
-  padding: 8px 6px;
+  height: calc(var(--top-height) - 10px);
+  min-height: calc(var(--top-height) - 10px);
+  padding: 5px 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 5px;
   overflow: hidden;
   color: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(176, 217, 245, 0.22);
-  border-radius: 15px;
+  border-radius: 11px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.13),
     0 8px 18px rgba(0, 0, 0, 0.20);
   text-decoration: none;
   font: inherit;
-  font-size: clamp(12px, 3.8vw, 17px);
+  font-size: clamp(11px, 3.4vw, 15px);
   font-weight: 850;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -88,8 +89,8 @@
 }
 
 .map-quick-tool img {
-  width: clamp(23px, 6.8vw, 30px);
-  height: clamp(23px, 6.8vw, 30px);
+  width: clamp(20px, 5.8vw, 26px);
+  height: clamp(20px, 5.8vw, 26px);
   flex: 0 0 auto;
   display: block;
   object-fit: contain;
@@ -127,8 +128,8 @@
 }
 
 .map-quick-tool.is-weather img {
-  width: 34px;
-  height: 34px;
+  width: 29px;
+  height: 29px;
 }
 
 .map-quick-tool:active {
@@ -185,7 +186,7 @@
   position: fixed;
   z-index: 68;
   right: max(14px, calc((100vw - min(100vw, 430px)) / 2 + 14px));
-  top: calc(var(--safe-top) + var(--top-height) + 104px);
+  top: calc(var(--safe-top) + (var(--top-height) * 2) + 22px);
   width: min(330px, calc(100vw - 28px));
   max-height: min(520px, calc(100vh - 188px));
   overflow: auto;
@@ -328,16 +329,21 @@
   }
 
   .map-quick-tool {
-    height: 59px;
-    min-height: 59px;
+    height: calc(var(--top-height) - 10px);
+    min-height: calc(var(--top-height) - 10px);
     padding-inline: 4px;
     gap: 4px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .map-quick-tool img {
-    width: 23px;
-    height: 23px;
+    width: 21px;
+    height: 21px;
+  }
+
+  .map-quick-tool.is-weather img {
+    width: 27px;
+    height: 27px;
   }
 }
 
