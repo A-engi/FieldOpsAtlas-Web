@@ -15,7 +15,919 @@
     "id": "wenvoe",
     "name": "Wenvoe Demo",
     "color": "#16a34a",
-    "notes": "Public demo walk region."
+    "notes": "Public demo walk region.",
+    "serviceClusters": {
+      "dtt": [
+        {
+          "id": "wenvoe-central",
+          "name": "Wenvoe Central",
+          "headSiteId": "stone-shelf-loop",
+          "siteCount": 7,
+          "siteIds": [
+            "crystal-valley-path",
+            "stone-shelf-loop",
+            "lantern-stone-hollow",
+            "starling-hollow-trail",
+            "foxglove-field-cave",
+            "heather-ridge-hollow",
+            "bright-path-cave"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--lantern-stone-hollow-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "lantern-stone-hollow",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-lantern-stone-hollow--starling-hollow-trail-primary",
+              "feedingSiteId": "lantern-stone-hollow",
+              "receivingSiteId": "starling-hollow-trail",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-starling-hollow-trail--crystal-valley-path-primary",
+              "feedingSiteId": "starling-hollow-trail",
+              "receivingSiteId": "crystal-valley-path",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-crystal-valley-path--bright-path-cave-primary",
+              "feedingSiteId": "crystal-valley-path",
+              "receivingSiteId": "bright-path-cave",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bright-path-cave--heather-ridge-hollow-primary",
+              "feedingSiteId": "bright-path-cave",
+              "receivingSiteId": "heather-ridge-hollow",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-heather-ridge-hollow--foxglove-field-cave-primary",
+              "feedingSiteId": "heather-ridge-hollow",
+              "receivingSiteId": "foxglove-field-cave",
+              "clusterId": "wenvoe-central",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "rhondda-cynon",
+          "name": "Rhondda & Cynon Valleys",
+          "headSiteId": "fern-warren-walk",
+          "siteCount": 16,
+          "siteIds": [
+            "spring-copse-ridge",
+            "hidden-coast-hollow",
+            "dusk-hollow-ramble",
+            "harbour-coast-cave",
+            "misty-ridge-walk",
+            "cedar-coast-ridge",
+            "hidden-drift-trail",
+            "sparrow-moor-trail",
+            "oak-dale-trail",
+            "robin-spring-trail",
+            "misty-pool-cave",
+            "elder-cove-ridge",
+            "fern-warren-walk",
+            "river-edge-loop",
+            "golden-basin-ramble",
+            "sunset-shore-path"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--fern-warren-walk-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "fern-warren-walk",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 6,
+              "serviceType": "dtt",
+              "labelText": "DTT · 6 mux"
+            },
+            {
+              "id": "dtt-fern-warren-walk--robin-spring-trail-primary",
+              "feedingSiteId": "fern-warren-walk",
+              "receivingSiteId": "robin-spring-trail",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-robin-spring-trail--river-edge-loop-primary",
+              "feedingSiteId": "robin-spring-trail",
+              "receivingSiteId": "river-edge-loop",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-river-edge-loop--spring-copse-ridge-primary",
+              "feedingSiteId": "river-edge-loop",
+              "receivingSiteId": "spring-copse-ridge",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-river-edge-loop--misty-ridge-walk-primary",
+              "feedingSiteId": "river-edge-loop",
+              "receivingSiteId": "misty-ridge-walk",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-misty-ridge-walk--sparrow-moor-trail-primary",
+              "feedingSiteId": "misty-ridge-walk",
+              "receivingSiteId": "sparrow-moor-trail",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-misty-ridge-walk--harbour-coast-cave-primary",
+              "feedingSiteId": "misty-ridge-walk",
+              "receivingSiteId": "harbour-coast-cave",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-fern-warren-walk--misty-pool-cave-primary",
+              "feedingSiteId": "fern-warren-walk",
+              "receivingSiteId": "misty-pool-cave",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-misty-pool-cave--cedar-coast-ridge-primary",
+              "feedingSiteId": "misty-pool-cave",
+              "receivingSiteId": "cedar-coast-ridge",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-cedar-coast-ridge--dusk-hollow-ramble-primary",
+              "feedingSiteId": "cedar-coast-ridge",
+              "receivingSiteId": "dusk-hollow-ramble",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-dusk-hollow-ramble--hidden-drift-trail-primary",
+              "feedingSiteId": "dusk-hollow-ramble",
+              "receivingSiteId": "hidden-drift-trail",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-hidden-drift-trail--elder-cove-ridge-primary",
+              "feedingSiteId": "hidden-drift-trail",
+              "receivingSiteId": "elder-cove-ridge",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-hidden-drift-trail--sunset-shore-path-primary",
+              "feedingSiteId": "hidden-drift-trail",
+              "receivingSiteId": "sunset-shore-path",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-elder-cove-ridge--hidden-coast-hollow-primary",
+              "feedingSiteId": "elder-cove-ridge",
+              "receivingSiteId": "hidden-coast-hollow",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-hidden-coast-hollow--oak-dale-trail-primary",
+              "feedingSiteId": "hidden-coast-hollow",
+              "receivingSiteId": "oak-dale-trail",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-misty-pool-cave--golden-basin-ramble-primary",
+              "feedingSiteId": "misty-pool-cave",
+              "receivingSiteId": "golden-basin-ramble",
+              "clusterId": "rhondda-cynon",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "bridgend-maesteg",
+          "name": "Bridgend & Maesteg",
+          "headSiteId": "maple-camp-walk",
+          "siteCount": 10,
+          "siteIds": [
+            "honey-haven-cave",
+            "amber-loop-ramble",
+            "crystal-arch-cave",
+            "elm-grove-hollow",
+            "bluebell-field-cave",
+            "maple-camp-walk",
+            "elm-view-trail",
+            "starling-thicket-trail",
+            "high-water-walk",
+            "dawn-spring-trail"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--maple-camp-walk-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "maple-camp-walk",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-maple-camp-walk--starling-thicket-trail-primary",
+              "feedingSiteId": "maple-camp-walk",
+              "receivingSiteId": "starling-thicket-trail",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-maple-camp-walk--high-water-walk-primary",
+              "feedingSiteId": "maple-camp-walk",
+              "receivingSiteId": "high-water-walk",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-high-water-walk--bluebell-field-cave-primary",
+              "feedingSiteId": "high-water-walk",
+              "receivingSiteId": "bluebell-field-cave",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-starling-thicket-trail--dawn-spring-trail-primary",
+              "feedingSiteId": "starling-thicket-trail",
+              "receivingSiteId": "dawn-spring-trail",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-dawn-spring-trail--honey-haven-cave-primary",
+              "feedingSiteId": "dawn-spring-trail",
+              "receivingSiteId": "honey-haven-cave",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-honey-haven-cave--elm-grove-hollow-primary",
+              "feedingSiteId": "honey-haven-cave",
+              "receivingSiteId": "elm-grove-hollow",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-elm-grove-hollow--elm-view-trail-primary",
+              "feedingSiteId": "elm-grove-hollow",
+              "receivingSiteId": "elm-view-trail",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bluebell-field-cave--crystal-arch-cave-primary",
+              "feedingSiteId": "bluebell-field-cave",
+              "receivingSiteId": "crystal-arch-cave",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-honey-haven-cave--amber-loop-ramble-primary",
+              "feedingSiteId": "honey-haven-cave",
+              "receivingSiteId": "amber-loop-ramble",
+              "clusterId": "bridgend-maesteg",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "upper-valleys-west",
+          "name": "Upper Valleys West",
+          "headSiteId": "pebble-arch-hollow",
+          "siteCount": 6,
+          "siteIds": [
+            "cinder-mill-cave",
+            "pebble-arch-hollow",
+            "quiet-shelf-path",
+            "dawn-pool-ramble",
+            "stone-mere-walk",
+            "woodland-cliff-ramble"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--pebble-arch-hollow-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "pebble-arch-hollow",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-pebble-arch-hollow--dawn-pool-ramble-primary",
+              "feedingSiteId": "pebble-arch-hollow",
+              "receivingSiteId": "dawn-pool-ramble",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-pebble-arch-hollow--woodland-cliff-ramble-primary",
+              "feedingSiteId": "pebble-arch-hollow",
+              "receivingSiteId": "woodland-cliff-ramble",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-dawn-pool-ramble--quiet-shelf-path-primary",
+              "feedingSiteId": "dawn-pool-ramble",
+              "receivingSiteId": "quiet-shelf-path",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-woodland-cliff-ramble--stone-mere-walk-primary",
+              "feedingSiteId": "woodland-cliff-ramble",
+              "receivingSiteId": "stone-mere-walk",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-stone-mere-walk--cinder-mill-cave-primary",
+              "feedingSiteId": "stone-mere-walk",
+              "receivingSiteId": "cinder-mill-cave",
+              "clusterId": "upper-valleys-west",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "gwent-valleys",
+          "name": "Gwent Valleys",
+          "headSiteId": "brook-thicket-cave",
+          "siteCount": 12,
+          "siteIds": [
+            "bluebell-haven-loop",
+            "meadow-way-hollow",
+            "hazel-bank-trail",
+            "brook-thicket-cave",
+            "velvet-loop-cave",
+            "elder-glen-hollow",
+            "low-ladder-cave",
+            "pebble-vale-ridge",
+            "golden-falls-ridge",
+            "thistle-bend-loop",
+            "ashen-way-hollow",
+            "shadow-camp-trail"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--brook-thicket-cave-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "brook-thicket-cave",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 6,
+              "serviceType": "dtt",
+              "labelText": "DTT · 6 mux"
+            },
+            {
+              "id": "dtt-brook-thicket-cave--pebble-vale-ridge-primary",
+              "feedingSiteId": "brook-thicket-cave",
+              "receivingSiteId": "pebble-vale-ridge",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-brook-thicket-cave--elder-glen-hollow-primary",
+              "feedingSiteId": "brook-thicket-cave",
+              "receivingSiteId": "elder-glen-hollow",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-elder-glen-hollow--golden-falls-ridge-primary",
+              "feedingSiteId": "elder-glen-hollow",
+              "receivingSiteId": "golden-falls-ridge",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-brook-thicket-cave--thistle-bend-loop-primary",
+              "feedingSiteId": "brook-thicket-cave",
+              "receivingSiteId": "thistle-bend-loop",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-pebble-vale-ridge--ashen-way-hollow-primary",
+              "feedingSiteId": "pebble-vale-ridge",
+              "receivingSiteId": "ashen-way-hollow",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-ashen-way-hollow--shadow-camp-trail-primary",
+              "feedingSiteId": "ashen-way-hollow",
+              "receivingSiteId": "shadow-camp-trail",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-shadow-camp-trail--low-ladder-cave-primary",
+              "feedingSiteId": "shadow-camp-trail",
+              "receivingSiteId": "low-ladder-cave",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-golden-falls-ridge--bluebell-haven-loop-primary",
+              "feedingSiteId": "golden-falls-ridge",
+              "receivingSiteId": "bluebell-haven-loop",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bluebell-haven-loop--hazel-bank-trail-primary",
+              "feedingSiteId": "bluebell-haven-loop",
+              "receivingSiteId": "hazel-bank-trail",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-thistle-bend-loop--velvet-loop-cave-primary",
+              "feedingSiteId": "thistle-bend-loop",
+              "receivingSiteId": "velvet-loop-cave",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-shadow-camp-trail--meadow-way-hollow-primary",
+              "feedingSiteId": "shadow-camp-trail",
+              "receivingSiteId": "meadow-way-hollow",
+              "clusterId": "gwent-valleys",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "monmouthshire",
+          "name": "Monmouthshire",
+          "headSiteId": "foxglove-quarry-path",
+          "siteCount": 5,
+          "siteIds": [
+            "winter-tarn-ridge",
+            "maple-warren-trail",
+            "heather-field-cave",
+            "foxglove-quarry-path",
+            "shadow-stone-path"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--foxglove-quarry-path-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "foxglove-quarry-path",
+              "clusterId": "monmouthshire",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-foxglove-quarry-path--winter-tarn-ridge-primary",
+              "feedingSiteId": "foxglove-quarry-path",
+              "receivingSiteId": "winter-tarn-ridge",
+              "clusterId": "monmouthshire",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-foxglove-quarry-path--shadow-stone-path-primary",
+              "feedingSiteId": "foxglove-quarry-path",
+              "receivingSiteId": "shadow-stone-path",
+              "clusterId": "monmouthshire",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-foxglove-quarry-path--heather-field-cave-primary",
+              "feedingSiteId": "foxglove-quarry-path",
+              "receivingSiteId": "heather-field-cave",
+              "clusterId": "monmouthshire",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-heather-field-cave--maple-warren-trail-primary",
+              "feedingSiteId": "heather-field-cave",
+              "receivingSiteId": "maple-warren-trail",
+              "clusterId": "monmouthshire",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "newport-east",
+          "name": "Newport & East",
+          "headSiteId": "spring-falls-loop",
+          "siteCount": 16,
+          "siteIds": [
+            "iron-tor-trail",
+            "drift-vale-hollow",
+            "cairn-gate-ridge",
+            "green-view-trail",
+            "drift-lantern-hollow",
+            "meadow-camp-path",
+            "emerald-arch-loop",
+            "low-lane-path",
+            "misty-dale-loop",
+            "spring-falls-loop",
+            "bright-harbour-cave",
+            "dawn-well-loop",
+            "elm-tarn-cave",
+            "amber-drift-hollow",
+            "shadow-pool-ridge",
+            "bramble-ledge-cave"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--spring-falls-loop-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "spring-falls-loop",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-spring-falls-loop--elm-tarn-cave-primary",
+              "feedingSiteId": "spring-falls-loop",
+              "receivingSiteId": "elm-tarn-cave",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-spring-falls-loop--drift-vale-hollow-primary",
+              "feedingSiteId": "spring-falls-loop",
+              "receivingSiteId": "drift-vale-hollow",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-drift-vale-hollow--bright-harbour-cave-primary",
+              "feedingSiteId": "drift-vale-hollow",
+              "receivingSiteId": "bright-harbour-cave",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bright-harbour-cave--meadow-camp-path-primary",
+              "feedingSiteId": "bright-harbour-cave",
+              "receivingSiteId": "meadow-camp-path",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-meadow-camp-path--low-lane-path-primary",
+              "feedingSiteId": "meadow-camp-path",
+              "receivingSiteId": "low-lane-path",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-meadow-camp-path--emerald-arch-loop-primary",
+              "feedingSiteId": "meadow-camp-path",
+              "receivingSiteId": "emerald-arch-loop",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-elm-tarn-cave--bramble-ledge-cave-primary",
+              "feedingSiteId": "elm-tarn-cave",
+              "receivingSiteId": "bramble-ledge-cave",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bramble-ledge-cave--amber-drift-hollow-primary",
+              "feedingSiteId": "bramble-ledge-cave",
+              "receivingSiteId": "amber-drift-hollow",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-amber-drift-hollow--dawn-well-loop-primary",
+              "feedingSiteId": "amber-drift-hollow",
+              "receivingSiteId": "dawn-well-loop",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bramble-ledge-cave--misty-dale-loop-primary",
+              "feedingSiteId": "bramble-ledge-cave",
+              "receivingSiteId": "misty-dale-loop",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-misty-dale-loop--drift-lantern-hollow-primary",
+              "feedingSiteId": "misty-dale-loop",
+              "receivingSiteId": "drift-lantern-hollow",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-drift-lantern-hollow--green-view-trail-primary",
+              "feedingSiteId": "drift-lantern-hollow",
+              "receivingSiteId": "green-view-trail",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-emerald-arch-loop--cairn-gate-ridge-primary",
+              "feedingSiteId": "emerald-arch-loop",
+              "receivingSiteId": "cairn-gate-ridge",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-elm-tarn-cave--iron-tor-trail-primary",
+              "feedingSiteId": "elm-tarn-cave",
+              "receivingSiteId": "iron-tor-trail",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-emerald-arch-loop--shadow-pool-ridge-primary",
+              "feedingSiteId": "emerald-arch-loop",
+              "receivingSiteId": "shadow-pool-ridge",
+              "clusterId": "newport-east",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        },
+        {
+          "id": "vale-coast",
+          "name": "Vale & Coast",
+          "headSiteId": "red-vale-hollow",
+          "siteCount": 4,
+          "siteIds": [
+            "bracken-basin-ramble",
+            "summer-ford-hollow",
+            "red-vale-hollow",
+            "ivy-ford-ramble"
+          ],
+          "paths": [
+            {
+              "id": "dtt-stone-shelf-loop--red-vale-hollow-primary",
+              "feedingSiteId": "stone-shelf-loop",
+              "receivingSiteId": "red-vale-hollow",
+              "clusterId": "vale-coast",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-red-vale-hollow--ivy-ford-ramble-primary",
+              "feedingSiteId": "red-vale-hollow",
+              "receivingSiteId": "ivy-ford-ramble",
+              "clusterId": "vale-coast",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-red-vale-hollow--bracken-basin-ramble-primary",
+              "feedingSiteId": "red-vale-hollow",
+              "receivingSiteId": "bracken-basin-ramble",
+              "clusterId": "vale-coast",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            },
+            {
+              "id": "dtt-bracken-basin-ramble--summer-ford-hollow-primary",
+              "feedingSiteId": "bracken-basin-ramble",
+              "receivingSiteId": "summer-ford-hollow",
+              "clusterId": "vale-coast",
+              "routeType": "primary",
+              "bundleCount": 3,
+              "serviceType": "dtt",
+              "labelText": "DTT · 3 mux"
+            }
+          ]
+        }
+      ],
+      "fm": [],
+      "dab": []
+    }
   },
   {
     "id": "north-wales",
