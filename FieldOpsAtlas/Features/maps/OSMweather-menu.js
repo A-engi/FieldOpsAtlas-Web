@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas map service controls and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.23-stable-service-paths
+   Version: 1.0.25-input-svg-assets
    Purpose:
    - Controls the collapsible DTT, DAB, FM, and Weather rail.
    - Opens an attached checkbox cluster picker for service controls.
@@ -10,7 +10,7 @@
    - Supports rendering one or more selected clusters with a performance warning.
    - Uses stable non-animated fitting before laying out RF labels.
    - Colours RF paths by service and stacks compact labels over the line.
-   - Supports CSS-only virtual satellite backup endpoints.
+   - Uses external SVG assets for satellite and fibre virtual input endpoints.
    - Loads full path/transmitter details only after a rendered path is selected.
    - Does not request RF details during page, service, or cluster selection.
    - Controls the existing lazy Weather preview.
@@ -19,13 +19,17 @@
 (function fieldOpsOSMServiceControls() {
   "use strict";
 
-  var VERSION = "1.0.23-stable-service-paths";
+  var VERSION = "1.0.25-input-svg-assets";
   var PRESELI = {
     name: "Preseli area",
     lat: 51.921,
     lng: -4.742
   };
   var REGIONS_URL = "../../../data/regions.json";
+  var INPUT_ICON_URLS = {
+    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.1",
+    fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
+  };
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var SERVICE_FILES = {
     dtt: {
@@ -1158,17 +1162,35 @@
       });
   }
 
-  function satelliteNodeIcon(endpoint, serviceId) {
+  function virtualInputKind(endpoint, path) {
+    var values = [
+      endpoint && endpoint.type,
+      path && path.sourceType,
+      path && path.feedMethod
+    ].map(function normaliseValue(value) {
+      return String(value || "").toLowerCase();
+    }).join(" ");
+
+    return /fibre|fiber|ethernet|line/.test(values) ? "fibre" : "satellite";
+  }
+
+  function virtualInputIcon(endpoint, serviceId, path) {
     var service = String(serviceId || "dtt").toLowerCase();
-    var label = String(endpoint.label || "SAT").replace(/^Satellite\s*/i, "SAT ");
+    var kind = virtualInputKind(endpoint, path);
+    var iconUrl = INPUT_ICON_URLS[kind] || INPUT_ICON_URLS.satellite;
+    var accessibleName = String(endpoint.name || endpoint.label || titleCase(kind) + " input");
 
     return window.L.divIcon({
-      className: "osmmaps-rf-satellite-icon is-" + service,
-      html: '<span class="osmmaps-rf-satellite-node"><strong>SAT</strong><small>' +
-        escapeHtml(label.replace(/^SAT\s*/i, "")) +
-        '</small></span>',
-      iconSize: [42, 42],
-      iconAnchor: [21, 21]
+      className: "osmmaps-rf-input-icon is-" + service + " is-" + kind,
+      html: [
+        '<span class="osmmaps-rf-input-node" role="img" aria-label="',
+        escapeHtml(accessibleName),
+        '"><img src="',
+        iconUrl,
+        '" alt="" aria-hidden="true"></span>'
+      ].join(""),
+      iconSize: [58, 58],
+      iconAnchor: [29, 29]
     });
   }
 
@@ -1209,7 +1231,7 @@
         rfOverlay.virtualEndpoints.set(String(endpoint.id), endpoint);
         window.L.marker([endpoint.lat, endpoint.lng], {
           pane: "fieldopsRfEndpoints",
-          icon: satelliteNodeIcon(endpoint, serviceId),
+          icon: virtualInputIcon(endpoint, serviceId, path),
           interactive: false,
           keyboard: false
         }).addTo(rfOverlay.virtualLayer);
@@ -1291,7 +1313,7 @@
 
     return endpoints.map(function markerRect(walk) {
       var point = map.latLngToContainerPoint([walk.lat, walk.lng]);
-      var radius = walk.isVirtual ? 23 : 14;
+      var radius = walk.isVirtual ? 31 : 14;
 
       return {
         left: point.x - radius,
