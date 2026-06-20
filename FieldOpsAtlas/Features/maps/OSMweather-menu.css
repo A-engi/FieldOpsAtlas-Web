@@ -1,10 +1,11 @@
 /* ========================================================================== 
    FieldOps Atlas map quick tools and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.css
-   Version: 1.0.19-regions-path-source
+   Version: 1.0.20-multi-cluster-checkboxes
    Purpose:
    - Styles the collapsible DTT, DAB, FM, and Weather button rail.
    - Styles the existing lazy-loaded map weather preview panel.
+   - Styles checkbox multi-cluster selection and rendering warnings.
    - Styles collision-aware RF transmitter and path labels.
    ========================================================================== */
 
@@ -207,42 +208,73 @@
 
 .map-service-picker__header button,
 .map-service-cluster {
-  appearance: none;
-  -webkit-appearance: none;
-  color: inherit;
-  border: 1px solid rgba(151, 201, 236, 0.24);
-  background:
-    linear-gradient(180deg, rgba(36, 83, 126, 0.88), rgba(9, 38, 70, 0.90));
-  font: inherit;
-  cursor: pointer;
-}
-
-.map-service-picker__header button {
-  min-height: 30px;
-  padding: 0 10px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.map-service-picker__options {
-  display: grid;
-  gap: 7px;
-}
-
-.map-service-cluster {
   width: 100%;
-  min-height: 44px;
+  min-height: 46px;
   padding: 7px 10px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 10px;
   align-items: center;
   border-radius: 12px;
   text-align: left;
 }
 
-.map-service-cluster strong {
+.map-service-cluster.is-selected {
+  border-color: rgba(255, 224, 150, 0.72);
+  background:
+    linear-gradient(180deg, rgba(53, 105, 147, 0.94), rgba(12, 48, 83, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(255, 216, 122, 0.08);
+}
+
+.map-service-cluster__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 19px;
+  height: 19px;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(205, 232, 250, 0.58);
+  border-radius: 6px;
+  background: rgba(4, 22, 40, 0.82);
+  cursor: pointer;
+}
+
+.map-service-cluster__checkbox::after {
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #1a2937;
+  border-bottom: 2px solid #1a2937;
+  content: "";
+  opacity: 0;
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+.map-service-cluster__checkbox:checked {
+  border-color: rgba(255, 226, 158, 0.94);
+  background: #f3bd4e;
+}
+
+.map-service-cluster__checkbox:checked::after {
+  opacity: 1;
+}
+
+.map-service-cluster__checkbox:focus-visible {
+  outline: 2px solid rgba(255, 220, 138, 0.94);
+  outline-offset: 2px;
+}
+
+.map-service-cluster__body {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.map-service-cluster__body strong {
   min-width: 0;
   overflow: hidden;
   font-size: 13px;
@@ -250,14 +282,13 @@
   white-space: nowrap;
 }
 
-.map-service-cluster span {
+.map-service-cluster__body > span {
   color: rgba(215, 237, 251, 0.70);
   font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
 }
 
-.map-service-cluster:focus-visible,
 .map-service-picker__header button:focus-visible {
   outline: 2px solid rgba(255, 220, 138, 0.94);
   outline-offset: 2px;
@@ -268,6 +299,14 @@
   color: rgba(215, 237, 251, 0.66);
   font-size: 11px;
   line-height: 1.35;
+}
+
+.map-service-picker__status.is-warning {
+  padding: 8px 9px;
+  border: 1px solid rgba(255, 211, 112, 0.44);
+  border-radius: 10px;
+  color: rgba(255, 232, 178, 0.96);
+  background: rgba(89, 58, 7, 0.36);
 }
 
 .map-quick-tools.has-service-picker .map-quick-tools__toggle {
