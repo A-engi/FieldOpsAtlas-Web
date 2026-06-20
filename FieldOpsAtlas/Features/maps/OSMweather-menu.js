@@ -1,23 +1,25 @@
 /* ========================================================================== 
-   FieldOps Atlas OSM weather preview
+   FieldOps Atlas map quick tools and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.10-lazy-weather-preview
+   Version: 1.0.11-map-quick-tools
    Purpose:
+   - Controls the collapsible DTT, DAB, FM, and Weather button rail.
    - Controls the small map Weather preview panel.
    - Makes no Weather API request until Activate preview is tapped.
-   - Does not load the full Weather feature from the map page.
    ========================================================================== */
 
 (function fieldOpsOSMWeatherPreview() {
   "use strict";
 
-  var VERSION = "1.0.10-lazy-weather-preview";
+  var VERSION = "1.0.11-map-quick-tools";
   var PRESELI = {
     name: "Preseli area",
     lat: 51.921,
     lng: -4.742
   };
   var FORECAST_CACHE_MS = 10 * 60 * 1000;
+  var TOOLBAR_STORAGE_KEY = "fieldops.maps.quick-tools.collapsed";
+  var TOOLBAR_COLLAPSED_CLASS = "is-collapsed";
   var cache = null;
 
   function qs(selector, root) {
@@ -26,6 +28,56 @@
 
   function qsa(selector, root) {
     return Array.prototype.slice.call((root || document).querySelectorAll(selector));
+  }
+
+  function readToolbarCollapsed() {
+    try {
+      return window.localStorage.getItem(TOOLBAR_STORAGE_KEY) === "true";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function saveToolbarCollapsed(collapsed) {
+    try {
+      window.localStorage.setItem(TOOLBAR_STORAGE_KEY, String(collapsed));
+    } catch (error) {
+      // Storage can be blocked inside previews and webviews.
+    }
+  }
+
+  function setToolbarCollapsed(collapsed, persist) {
+    var toolbar = qs("[data-map-quick-tools]");
+    var toggle = qs("[data-map-quick-toggle]");
+
+    if (!toolbar || !toggle) {
+      return;
+    }
+
+    toolbar.classList.toggle(TOOLBAR_COLLAPSED_CLASS, collapsed);
+    toggle.setAttribute("aria-expanded", String(!collapsed));
+    toggle.setAttribute(
+      "aria-label",
+      collapsed ? "Expand map quick tools" : "Collapse map quick tools"
+    );
+
+    if (collapsed) {
+      setPanelOpen(false);
+    }
+
+    if (persist !== false) {
+      saveToolbarCollapsed(collapsed);
+    }
+  }
+
+  function toggleToolbar() {
+    var toolbar = qs("[data-map-quick-tools]");
+
+    if (!toolbar) {
+      return;
+    }
+
+    setToolbarCollapsed(!toolbar.classList.contains(TOOLBAR_COLLAPSED_CLASS));
   }
 
   function weatherCodeText(code) {
@@ -70,15 +122,14 @@
 
   function setPanelOpen(open) {
     var panel = qs(".weather-api-panel");
-    var openButton = qs("[data-weather-panel-open]");
 
     if (panel) {
       panel.hidden = !open;
     }
 
-    if (openButton) {
-      openButton.setAttribute("aria-expanded", open ? "true" : "false");
-    }
+    qsa("[data-weather-panel-open]").forEach(function syncOpenButton(button) {
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+    });
   }
 
   function setStatus(message) {
@@ -193,9 +244,17 @@
 
   function wirePreview() {
     document.addEventListener("click", function onClick(event) {
+      var toolbarToggle = event.target.closest("[data-map-quick-toggle]");
       var openButton = event.target.closest("[data-weather-panel-open]");
       var closeButton = event.target.closest("[data-weather-panel-close]");
       var activateButton = event.target.closest("[data-weather-activate]");
+
+      if (toolbarToggle) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleToolbar();
+        return;
+      }
 
       if (openButton) {
         event.preventDefault();
@@ -217,6 +276,12 @@
         activatePreview();
       }
     }, false);
+
+    document.addEventListener("keydown", function onKeyDown(event) {
+      if (event.key === "Escape") {
+        setPanelOpen(false);
+      }
+    });
   }
 
   function init() {
@@ -224,10 +289,12 @@
       button.setAttribute("aria-expanded", "false");
     });
 
+    setToolbarCollapsed(readToolbarCollapsed(), false);
     renderPlaceholder("Tap Activate preview.");
     wirePreview();
 
     window.FieldOpsOSMWeatherMenu = {
+      VERSION: VERSION,
       version: VERSION,
       open: function open() {
         setPanelOpen(true);
@@ -235,7 +302,13 @@
       close: function close() {
         setPanelOpen(false);
       },
-      activate: activatePreview
+      activate: activatePreview,
+      collapseTools: function collapseTools() {
+        setToolbarCollapsed(true);
+      },
+      expandTools: function expandTools() {
+        setToolbarCollapsed(false);
+      }
     };
   }
 
@@ -246,4 +319,5 @@
   }
 })();
 
-// End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js | bottom/end of file
+/* Destination: FieldOpsAtlas/Features/maps/OSMweather-menu.js */
+/* End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js | bottom/end of file */
