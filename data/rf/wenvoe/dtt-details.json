@@ -1,6 +1,6 @@
 {
   "schema": "fieldops-rf-dtt-details-v1",
-  "version": "1.1.5-radial-branches",
+  "version": "1.1.6-satellite-backups",
   "regionId": "wenvoe",
   "serviceType": "dtt",
   "displayName": "Wenvoe Demo DTT",
@@ -8,7 +8,7 @@
   "sourceSiteFile": "data/regions/wenvoe-sites.json",
   "sourceSiteFileSha": "aa72578e1a43bca12edc5b603de9c125e274fb8e",
   "participatingSiteCount": 76,
-  "pathCount": 75,
+  "pathCount": 77,
   "notes": [
     "Prototype-safe DTT data joined to the existing Wenvoe region records by siteId.",
     "The region site file remains authoritative for site name, coordinates, physical site type, status and location metadata.",
@@ -18,7 +18,8 @@
     "All paths, equipment, powers, channels outside the main Wenvoe seed set, telemetry and masked IP values are synthetic demo data.",
     "The visual topology is rooted at the Wenvoe main site and uses shallow geographic branches rather than nearest-neighbour chains.",
     "Relationship lines are synthetic presentational paths and must not be treated as verified current operational feed routes.",
-    "No backup routes are included in this DTT demo file."
+    "Two synthetic satellite input backup paths are included for interface demonstration.",
+    "Satellite backup nodes are virtual map endpoints and are not physical records in the region site file."
   ],
   "clusters": [
     {
@@ -687,7 +688,16 @@
         "powerDbm": null
       },
       "telemetryType": "Demo telemetry unit",
-      "siteServiceIp": "10.24.13.xx"
+      "siteServiceIp": "10.24.13.xx",
+      "backupInputs": [
+        {
+          "pathId": "dtt-satellite-backup-a--stone-shelf-loop-backup-1",
+          "type": "satellite",
+          "label": "Satellite Backup A",
+          "bundleCount": 6,
+          "status": "demo"
+        }
+      ]
     },
     {
       "siteId": "drift-vale-hollow",
@@ -2871,7 +2881,16 @@
         "powerDbm": -72.4
       },
       "telemetryType": "Demo telemetry unit",
-      "siteServiceIp": "10.25.67.xx"
+      "siteServiceIp": "10.25.67.xx",
+      "backupInputs": [
+        {
+          "pathId": "dtt-satellite-backup-b--fern-warren-walk-backup-2",
+          "type": "satellite",
+          "label": "Satellite Backup B",
+          "bundleCount": 6,
+          "status": "demo"
+        }
+      ]
     },
     {
       "siteId": "high-water-walk",
@@ -4209,6 +4228,78 @@
       "relationshipType": "synthetic-presentational-path",
       "confidence": "synthetic-demo",
       "notes": "Presentational Wenvoe-style dependency line only; not a verified current operational feed route."
+    },
+    {
+      "id": "dtt-satellite-backup-a--stone-shelf-loop-backup-1",
+      "feedingSiteId": "satellite-backup-a",
+      "receivingSiteId": "stone-shelf-loop",
+      "clusterId": "wenvoe-central",
+      "routeType": "backup",
+      "backupNumber": 1,
+      "bundleCount": 6,
+      "serviceType": "dtt",
+      "feedMethod": "satellite",
+      "sourceType": "satellite",
+      "labelText": "DTT · 6 mux · SAT",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "virtualFeeder": {
+        "id": "satellite-backup-a",
+        "name": "Satellite Backup A",
+        "label": "SAT A",
+        "type": "satellite",
+        "lat": 51.515,
+        "lng": -3.455
+      },
+      "notes": "Synthetic satellite input backup for interface demonstration; not a verified operational route.",
+      "feedSummary": {
+        "transmitterType": "Demo satellite distribution feed",
+        "outputAntennaType": "Demo satellite downlink"
+      },
+      "receiveSummary": {
+        "inputMode": "satellite-backup-demo",
+        "receiverType": "Demo satellite receiver",
+        "receivingAntennaType": "Demo satellite dish",
+        "rxChannels": [],
+        "rxFrequenciesMHz": [],
+        "rxPowerDbm": null
+      }
+    },
+    {
+      "id": "dtt-satellite-backup-b--fern-warren-walk-backup-2",
+      "feedingSiteId": "satellite-backup-b",
+      "receivingSiteId": "fern-warren-walk",
+      "clusterId": "rhondda-cynon",
+      "routeType": "backup",
+      "backupNumber": 2,
+      "bundleCount": 6,
+      "serviceType": "dtt",
+      "feedMethod": "satellite",
+      "sourceType": "satellite",
+      "labelText": "DTT · 6 mux · SAT",
+      "relationshipType": "synthetic-presentational-path",
+      "confidence": "synthetic-demo",
+      "virtualFeeder": {
+        "id": "satellite-backup-b",
+        "name": "Satellite Backup B",
+        "label": "SAT B",
+        "type": "satellite",
+        "lat": 51.735,
+        "lng": -3.49
+      },
+      "notes": "Synthetic satellite input backup for interface demonstration; not a verified operational route.",
+      "feedSummary": {
+        "transmitterType": "Demo satellite distribution feed",
+        "outputAntennaType": "Demo satellite downlink"
+      },
+      "receiveSummary": {
+        "inputMode": "satellite-backup-demo",
+        "receiverType": "Demo satellite receiver",
+        "receivingAntennaType": "Demo satellite dish",
+        "rxChannels": [],
+        "rxFrequenciesMHz": [],
+        "rxPowerDbm": null
+      }
     }
   ],
   "_endOfFile": "Bottom/end of file: data/rf/wenvoe/dtt-details.json"
