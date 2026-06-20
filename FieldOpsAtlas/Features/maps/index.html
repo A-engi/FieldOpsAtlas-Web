@@ -3,13 +3,13 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.14-control-height-match</title>
+ <title>Maps v1.0.15-service-cluster-picker</title>
  <link rel="stylesheet" href="../../../shell.css">
  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
- <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.14-control-height-match">
+ <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.15-service-cluster-picker">
  <style>
  .maps-load-toast {
   position: fixed;
@@ -42,7 +42,7 @@
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.14-control-height-match">
+ <main class="osmmaps-page" data-osmmaps-page data-version="1.0.15-service-cluster-picker">
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -71,20 +71,41 @@
 
  <section class="map-quick-tools" data-map-quick-tools aria-label="Map quick tools">
   <div class="map-quick-tools__rail" id="mapQuickToolsRail">
-   <a class="map-quick-tool is-dtt" href="../RFPages/dtt.html" aria-label="Open DTT services">
+   <button
+    class="map-quick-tool is-dtt"
+    type="button"
+    data-map-service="dtt"
+    aria-controls="mapServicePicker"
+    aria-expanded="false"
+    aria-label="Choose DTT map cluster"
+   >
     <img src="../../../data/icons/dtt.svg?v=1.1.1" alt="" aria-hidden="true">
     <span>DTT</span>
-   </a>
+   </button>
 
-   <a class="map-quick-tool is-dab" href="../RFPages/dab.html" aria-label="Open DAB services">
+   <button
+    class="map-quick-tool is-dab"
+    type="button"
+    data-map-service="dab"
+    aria-controls="mapServicePicker"
+    aria-expanded="false"
+    aria-label="Choose DAB map cluster"
+   >
     <img src="../../../data/icons/dab.svg?v=1.1.1" alt="" aria-hidden="true">
     <span>DAB</span>
-   </a>
+   </button>
 
-   <a class="map-quick-tool is-fm" href="../RFPages/fm.html" aria-label="Open FM services">
+   <button
+    class="map-quick-tool is-fm"
+    type="button"
+    data-map-service="fm"
+    aria-controls="mapServicePicker"
+    aria-expanded="false"
+    aria-label="Choose FM map cluster"
+   >
     <img src="../../../data/icons/fm.svg?v=1.1.1" alt="" aria-hidden="true">
     <span>FM</span>
-   </a>
+   </button>
 
    <button
     class="map-quick-tool is-weather"
@@ -96,6 +117,24 @@
     <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
    </button>
   </div>
+
+  <section
+   class="map-service-picker"
+   id="mapServicePicker"
+   data-map-service-picker
+   aria-label="Choose map service cluster"
+   hidden
+  >
+   <header class="map-service-picker__header">
+    <div>
+     <small data-map-service-kicker>Service map</small>
+     <strong data-map-service-title>Choose area</strong>
+    </div>
+    <button type="button" data-map-service-close aria-label="Close service cluster chooser">Close</button>
+   </header>
+   <div class="map-service-picker__options" data-map-service-options></div>
+   <p class="map-service-picker__status" data-map-service-status></p>
+  </section>
 
   <button
    class="map-quick-tools__toggle"
@@ -142,7 +181,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.14-control-height-match</p>
+  <p class="weather-api-status" data-weather-output>v1.0.15-service-cluster-picker</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -153,14 +192,14 @@
  <script src="../../../shell.js?v=fade-restore-20260612g"></script>
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
+ <script src="./OSMweather-menu.js?v=1.0.15-service-cluster-picker"></script>
  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
- <script src="./OSMweather-menu.js?v=1.0.12-top-attached-tools"></script>
  <script>
- /* Maps load toast | Version: 1.0.14-control-height-match */
+ /* Maps load toast | Version: 1.0.15-service-cluster-picker */
  (() => {
   "use strict";
 
-  const PAGE_VERSION = "1.0.14-control-height-match";
+  const PAGE_VERSION = "1.0.15-service-cluster-picker";
   const TOAST_ID = "mapsLoadToast";
 
   function versionOf(globalName) {
@@ -198,7 +237,7 @@
     "leaflet.css 1.9.4",
     "OSMmaps.css fade-restore-20260612g",
     "OSMpanes.css fade-restore-20260612g",
-    "OSMweather-menu.css 1.0.14-control-height-match",
+    "OSMweather-menu.css 1.0.15-service-cluster-picker",
     `shell.js ${versionOf("FieldOpsEditor")}`,
     `leaflet.js ${leafletVersion()}`,
     `OSMpanes.js ${versionOf("FieldOpsOSMpanes")}`,
