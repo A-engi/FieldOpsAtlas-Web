@@ -3,13 +3,13 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.13-top-bar-height</title>
+ <title>Maps v1.0.14-control-height-match</title>
  <link rel="stylesheet" href="../../../shell.css">
  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
- <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.13-top-bar-height">
+ <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.14-control-height-match">
  <style>
  .maps-load-toast {
   position: fixed;
@@ -42,7 +42,7 @@
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.13-top-bar-height">
+ <main class="osmmaps-page" data-osmmaps-page data-version="1.0.14-control-height-match">
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -142,7 +142,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.13-top-bar-height</p>
+  <p class="weather-api-status" data-weather-output>v1.0.14-control-height-match</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -154,13 +154,13 @@
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
- <script src="./OSMweather-menu.js?v=1.0.13-top-bar-height"></script>
+ <script src="./OSMweather-menu.js?v=1.0.12-top-attached-tools"></script>
  <script>
- /* Maps load toast | Version: 1.0.13-top-bar-height */
+ /* Maps load toast | Version: 1.0.14-control-height-match */
  (() => {
   "use strict";
 
-  const PAGE_VERSION = "1.0.13-top-bar-height";
+  const PAGE_VERSION = "1.0.14-control-height-match";
   const TOAST_ID = "mapsLoadToast";
 
   function versionOf(globalName) {
@@ -198,7 +198,7 @@
     "leaflet.css 1.9.4",
     "OSMmaps.css fade-restore-20260612g",
     "OSMpanes.css fade-restore-20260612g",
-    "OSMweather-menu.css 1.0.13-top-bar-height",
+    "OSMweather-menu.css 1.0.14-control-height-match",
     `shell.js ${versionOf("FieldOpsEditor")}`,
     `leaflet.js ${leafletVersion()}`,
     `OSMpanes.js ${versionOf("FieldOpsOSMpanes")}`,
