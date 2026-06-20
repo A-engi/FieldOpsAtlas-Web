@@ -1,26 +1,47 @@
-/* ========================================================================== 
-   FieldOps Atlas map quick tools and weather preview
+/* ==========================================================================
+   FieldOps Atlas map service controls and weather preview
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.11-map-quick-tools
+   Version: 1.0.15-service-cluster-picker
    Purpose:
-   - Controls the collapsible DTT, DAB, FM, and Weather button rail.
-   - Controls the small map Weather preview panel.
-   - Makes no Weather API request until Activate preview is tapped.
+   - Controls the collapsible DTT, DAB, FM, and Weather rail.
+   - Opens an attached map-cluster picker for service controls.
+   - Loads only public demo RF cluster metadata.
+   - Focuses the existing Leaflet map on the selected 25-to-40-site cluster.
+   - Controls the existing lazy Weather preview.
    ========================================================================== */
 
-(function fieldOpsOSMWeatherPreview() {
+(function fieldOpsOSMServiceControls() {
   "use strict";
 
-  var VERSION = "1.0.11-map-quick-tools";
+  var VERSION = "1.0.15-service-cluster-picker";
   var PRESELI = {
     name: "Preseli area",
     lat: 51.921,
     lng: -4.742
   };
+  var SERVICE_FILES = {
+    dtt: {
+      label: "DTT",
+      regionId: "wenvoe",
+      url: "../../../data/rf/wenvoe/dtt-details.json"
+    },
+    dab: {
+      label: "DAB",
+      regionId: "wenvoe",
+      url: ""
+    },
+    fm: {
+      label: "FM",
+      regionId: "wenvoe",
+      url: ""
+    }
+  };
   var FORECAST_CACHE_MS = 10 * 60 * 1000;
   var TOOLBAR_STORAGE_KEY = "fieldops.maps.quick-tools.collapsed";
   var TOOLBAR_COLLAPSED_CLASS = "is-collapsed";
-  var cache = null;
+  var serviceCache = new Map();
+  var weatherCache = null;
+  var capturedMap = null;
 
   function qs(selector, root) {
     return (root || document).querySelector(selector);
@@ -29,6 +50,47 @@
   function qsa(selector, root) {
     return Array.prototype.slice.call((root || document).querySelectorAll(selector));
   }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function replaceCharacter(character) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[character];
+    });
+  }
+
+  function captureLeafletMap() {
+    if (!window.L || typeof window.L.map !== "function" || window.L.map.__fieldOpsCaptured) {
+      return;
+    }
+
+    var originalMap = window.L.map;
+
+    function wrappedMap() {
+      var map = originalMap.apply(this, arguments);
+      var container = map && typeof map.getContainer === "function" ? map.getContainer() : null;
+
+      if (container && container.id === "OSMmaps") {
+        capturedMap = map;
+        window.FieldOpsAtlasLeafletMap = map;
+      }
+
+      return map;
+    }
+
+    Object.keys(originalMap).forEach(function copyProperty(key) {
+      wrappedMap[key] = originalMap[key];
+    });
+
+    wrappedMap.__fieldOpsCaptured = true;
+    window.L.map = wrappedMap;
+  }
+
+  captureLeafletMap();
 
   function readToolbarCollapsed() {
     try {
@@ -62,7 +124,8 @@
     );
 
     if (collapsed) {
-      setPanelOpen(false);
+      closeServicePicker();
+      setWeatherPanelOpen(false);
     }
 
     if (persist !== false) {
@@ -78,6 +141,328 @@
     }
 
     setToolbarCollapsed(!toolbar.classList.contains(TOOLBAR_COLLAPSED_CLASS));
+  }
+
+  function setActiveService(serviceId) {
+    qsa("[data-map-service]").forEach(function syncButton(button) {
+      var active = button.getAttribute("data-map-service") === serviceId;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-expanded", String(active));
+    });
+  }
+
+  function setServiceStatus(message) {
+    var output = qs("[data-map-service-status]");
+
+    if (output) {
+      output.textContent = message || "";
+    }
+  }
+
+  function setServiceHeading(serviceId, title) {
+    var service = SERVICE_FILES[serviceId];
+    var kicker = qs("[data-map-service-kicker]");
+    var heading = qs("[data-map-service-title]");
+
+    if (kicker) {
+      kicker.textContent = service ? service.label + " map" : "Service map";
+    }
+
+    if (heading) {
+      heading.textContent = title || "Choose area";
+    }
+  }
+
+  function closeServicePicker() {
+    var toolbar = qs("[data-map-quick-tools]");
+    var picker = qs("[data-map-service-picker]");
+
+    if (picker) {
+      picker.hidden = true;
+      delete picker.dataset.activeService;
+    }
+
+    if (toolbar) {
+      toolbar.classList.remove("has-service-picker");
+    }
+
+    setActiveService("");
+  }
+
+  function openServicePicker(serviceId) {
+    var toolbar = qs("[data-map-quick-tools]");
+    var picker = qs("[data-map-service-picker]");
+    var service = SERVICE_FILES[serviceId];
+
+    if (!toolbar || !picker || !service) {
+      return;
+    }
+
+    if (!picker.hidden && picker.dataset.activeService === serviceId) {
+      closeServicePicker();
+      return;
+    }
+
+    setWeatherPanelOpen(false);
+    picker.hidden = false;
+    picker.dataset.activeService = serviceId;
+    toolbar.classList.add("has-service-picker");
+    setActiveService(serviceId);
+    setServiceHeading(serviceId, "Choose Wenvoe area");
+
+    if (!service.url) {
+      renderServiceUnavailable(serviceId);
+      return;
+    }
+
+    renderServiceLoading();
+    loadServiceData(serviceId)
+      .then(function renderLoaded(payload) {
+        renderServiceClusters(serviceId, payload);
+      })
+      .catch(function renderError(error) {
+        renderServiceError(error.message || "Service cluster data could not load.");
+      });
+  }
+
+  function renderServiceLoading() {
+    var options = qs("[data-map-service-options]");
+
+    if (options) {
+      options.innerHTML = "";
+    }
+
+    setServiceStatus("Loading cluster data...");
+  }
+
+  function renderServiceUnavailable(serviceId) {
+    var options = qs("[data-map-service-options]");
+    var service = SERVICE_FILES[serviceId];
+
+    if (options) {
+      options.innerHTML = "";
+    }
+
+    setServiceStatus((service ? service.label : "This service") + " cluster data has not been added yet.");
+  }
+
+  function renderServiceError(message) {
+    var options = qs("[data-map-service-options]");
+
+    if (options) {
+      options.innerHTML = "";
+    }
+
+    setServiceStatus(message);
+  }
+
+  function loadJson(url) {
+    return fetch(url + "?v=" + Date.now(), {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json"
+      }
+    }).then(function handleResponse(response) {
+      if (!response.ok) {
+        throw new Error("Could not load cluster data (" + response.status + ").");
+      }
+
+      return response.json();
+    });
+  }
+
+  function loadServiceData(serviceId) {
+    var service = SERVICE_FILES[serviceId];
+
+    if (!service || !service.url) {
+      return Promise.reject(new Error("No cluster file is configured."));
+    }
+
+    if (serviceCache.has(serviceId)) {
+      return Promise.resolve(serviceCache.get(serviceId));
+    }
+
+    return loadJson(service.url).then(function cachePayload(payload) {
+      serviceCache.set(serviceId, payload);
+      return payload;
+    });
+  }
+
+  function mapClustersFrom(payload) {
+    if (payload && Array.isArray(payload.mapClusters)) {
+      return payload.mapClusters.filter(function validCluster(cluster) {
+        return cluster &&
+          cluster.id &&
+          cluster.name &&
+          Array.isArray(cluster.siteIds) &&
+          cluster.siteIds.length >= 25 &&
+          cluster.siteIds.length <= 40;
+      });
+    }
+
+    return [];
+  }
+
+  function renderServiceClusters(serviceId, payload) {
+    var options = qs("[data-map-service-options]");
+    var clusters = mapClustersFrom(payload);
+
+    if (!options) {
+      return;
+    }
+
+    if (!clusters.length) {
+      options.innerHTML = "";
+      setServiceStatus("No 25-to-40-site map clusters were found.");
+      return;
+    }
+
+    options.innerHTML = clusters.map(function clusterButton(cluster) {
+      return [
+        '<button class="map-service-cluster" type="button" data-map-cluster="',
+        escapeHtml(cluster.id),
+        '" data-map-service-id="',
+        escapeHtml(serviceId),
+        '">',
+        "<strong>",
+        escapeHtml(cluster.name),
+        "</strong>",
+        "<span>",
+        escapeHtml(cluster.siteCount || cluster.siteIds.length),
+        " sites</span>",
+        "</button>"
+      ].join("");
+    }).join("");
+
+    setServiceStatus("Choose one area. Only its sites will remain visible.");
+  }
+
+  function waitForMapApi() {
+    return new Promise(function resolveMapApi(resolve, reject) {
+      var attempts = 0;
+
+      function check() {
+        if (
+          window.FieldOpsOSMmaps &&
+          typeof window.FieldOpsOSMmaps.selectRegion === "function" &&
+          typeof window.FieldOpsOSMmaps.getWalks === "function"
+        ) {
+          resolve(window.FieldOpsOSMmaps);
+          return;
+        }
+
+        attempts += 1;
+
+        if (attempts >= 80) {
+          reject(new Error("Map controls are not ready."));
+          return;
+        }
+
+        window.setTimeout(check, 50);
+      }
+
+      check();
+    });
+  }
+
+  function markerLayers(map) {
+    var markers = [];
+
+    if (!map || !window.L) {
+      return markers;
+    }
+
+    map.eachLayer(function collectLayer(layer) {
+      if (layer instanceof window.L.Marker && layer.options && layer.options.title) {
+        markers.push(layer);
+      }
+    });
+
+    return markers;
+  }
+
+  function focusClusterOnMap(serviceId, clusterId) {
+    var service = SERVICE_FILES[serviceId];
+
+    if (!service) {
+      return;
+    }
+
+    setServiceStatus("Loading " + service.label + " area...");
+
+    Promise.all([
+      loadServiceData(serviceId),
+      waitForMapApi()
+    ])
+      .then(function prepareCluster(values) {
+        var payload = values[0];
+        var mapApi = values[1];
+        var cluster = mapClustersFrom(payload).find(function findCluster(item) {
+          return item.id === clusterId;
+        });
+
+        if (!cluster) {
+          throw new Error("The selected cluster was not found.");
+        }
+
+        return mapApi.selectRegion(service.regionId).then(function regionLoaded() {
+          return {
+            mapApi: mapApi,
+            cluster: cluster
+          };
+        });
+      })
+      .then(function applyCluster(context) {
+        var mapApi = context.mapApi;
+        var cluster = context.cluster;
+        var selectedIds = new Set(cluster.siteIds.map(String));
+        var walks = mapApi.getWalks();
+        var selectedWalks = walks.filter(function selectedWalk(walk) {
+          return selectedIds.has(String(walk.id));
+        });
+        var selectedNames = new Set(selectedWalks.map(function walkName(walk) {
+          return walk.name;
+        }));
+        var map = capturedMap || window.FieldOpsAtlasLeafletMap;
+
+        if (!map || !window.L) {
+          throw new Error("Leaflet map instance is unavailable.");
+        }
+
+        markerLayers(map).forEach(function filterMarker(marker) {
+          if (!selectedNames.has(marker.options.title)) {
+            map.removeLayer(marker);
+          }
+        });
+
+        if (selectedWalks.length) {
+          var bounds = window.L.latLngBounds(selectedWalks.map(function toLatLng(walk) {
+            return [walk.lat, walk.lng];
+          }));
+
+          map.fitBounds(bounds.pad(0.18), {
+            animate: true,
+            maxZoom: 11
+          });
+        }
+
+        window.dispatchEvent(new CustomEvent("fieldops:map-service-cluster-selected", {
+          detail: {
+            version: VERSION,
+            regionId: service.regionId,
+            serviceType: serviceId,
+            clusterId: cluster.id,
+            clusterName: cluster.name,
+            siteCount: selectedWalks.length,
+            siteIds: cluster.siteIds.slice()
+          }
+        }));
+
+        closeServicePicker();
+      })
+      .catch(function handleClusterError(error) {
+        setServiceStatus(error.message || "Could not focus the selected cluster.");
+      });
   }
 
   function weatherCodeText(code) {
@@ -120,7 +505,7 @@
     return "https://api.open-meteo.com/v1/forecast?" + params.toString();
   }
 
-  function setPanelOpen(open) {
+  function setWeatherPanelOpen(open) {
     var panel = qs(".weather-api-panel");
 
     if (panel) {
@@ -132,7 +517,7 @@
     });
   }
 
-  function setStatus(message) {
+  function setWeatherStatus(message) {
     var output = qs("[data-weather-output]");
 
     if (output) {
@@ -140,7 +525,7 @@
     }
   }
 
-  function setUpdated(message) {
+  function setWeatherUpdated(message) {
     var output = qs("[data-weather-forecast-updated]");
 
     if (output) {
@@ -148,7 +533,7 @@
     }
   }
 
-  function renderPlaceholder(message) {
+  function renderWeatherPlaceholder(message) {
     var track = qs("[data-weather-forecast-track]");
 
     if (!track) {
@@ -202,19 +587,19 @@
       ].join("");
     }).join("");
 
-    setUpdated("Updated now");
-    setStatus("Preview loaded for " + PRESELI.name + ".");
+    setWeatherUpdated("Updated now");
+    setWeatherStatus("Preview loaded for " + PRESELI.name + ".");
   }
 
   function activatePreview() {
-    if (cache && Date.now() - cache.time < FORECAST_CACHE_MS) {
-      renderForecast(cache.payload);
+    if (weatherCache && Date.now() - weatherCache.time < FORECAST_CACHE_MS) {
+      renderForecast(weatherCache.payload);
       return;
     }
 
-    setUpdated("Loading");
-    setStatus("Loading Preseli preview...");
-    renderPlaceholder("Loading preview...");
+    setWeatherUpdated("Loading");
+    setWeatherStatus("Loading Preseli preview...");
+    renderWeatherPlaceholder("Loading preview...");
 
     fetch(forecastUrl(), {
       headers: {
@@ -229,25 +614,28 @@
         return response.json();
       })
       .then(function handlePayload(payload) {
-        cache = {
+        weatherCache = {
           time: Date.now(),
           payload: payload
         };
         renderForecast(payload);
       })
       .catch(function handleError() {
-        setUpdated("Not loaded");
-        setStatus("Preseli preview unavailable.");
-        renderPlaceholder("Preview unavailable. Open full Weather for provider pages.");
+        setWeatherUpdated("Not loaded");
+        setWeatherStatus("Preseli preview unavailable.");
+        renderWeatherPlaceholder("Preview unavailable. Open full Weather for provider pages.");
       });
   }
 
-  function wirePreview() {
+  function wireControls() {
     document.addEventListener("click", function onClick(event) {
       var toolbarToggle = event.target.closest("[data-map-quick-toggle]");
-      var openButton = event.target.closest("[data-weather-panel-open]");
-      var closeButton = event.target.closest("[data-weather-panel-close]");
-      var activateButton = event.target.closest("[data-weather-activate]");
+      var serviceControl = event.target.closest("[data-map-service]");
+      var serviceClose = event.target.closest("[data-map-service-close]");
+      var clusterControl = event.target.closest("[data-map-cluster]");
+      var weatherOpen = event.target.closest("[data-weather-panel-open]");
+      var weatherClose = event.target.closest("[data-weather-panel-close]");
+      var weatherActivate = event.target.closest("[data-weather-activate]");
 
       if (toolbarToggle) {
         event.preventDefault();
@@ -256,21 +644,46 @@
         return;
       }
 
-      if (openButton) {
+      if (serviceControl) {
         event.preventDefault();
         event.stopPropagation();
-        setPanelOpen(true);
+        openServicePicker(serviceControl.getAttribute("data-map-service"));
         return;
       }
 
-      if (closeButton) {
+      if (serviceClose) {
         event.preventDefault();
         event.stopPropagation();
-        setPanelOpen(false);
+        closeServicePicker();
         return;
       }
 
-      if (activateButton) {
+      if (clusterControl) {
+        event.preventDefault();
+        event.stopPropagation();
+        focusClusterOnMap(
+          clusterControl.getAttribute("data-map-service-id"),
+          clusterControl.getAttribute("data-map-cluster")
+        );
+        return;
+      }
+
+      if (weatherOpen) {
+        event.preventDefault();
+        event.stopPropagation();
+        closeServicePicker();
+        setWeatherPanelOpen(true);
+        return;
+      }
+
+      if (weatherClose) {
+        event.preventDefault();
+        event.stopPropagation();
+        setWeatherPanelOpen(false);
+        return;
+      }
+
+      if (weatherActivate) {
         event.preventDefault();
         event.stopPropagation();
         activatePreview();
@@ -279,30 +692,38 @@
 
     document.addEventListener("keydown", function onKeyDown(event) {
       if (event.key === "Escape") {
-        setPanelOpen(false);
+        closeServicePicker();
+        setWeatherPanelOpen(false);
       }
     });
   }
 
   function init() {
-    qsa("[data-weather-panel-open]").forEach(function initButton(button) {
+    qsa("[data-weather-panel-open]").forEach(function initWeatherButton(button) {
+      button.setAttribute("aria-expanded", "false");
+    });
+
+    qsa("[data-map-service]").forEach(function initServiceButton(button) {
       button.setAttribute("aria-expanded", "false");
     });
 
     setToolbarCollapsed(readToolbarCollapsed(), false);
-    renderPlaceholder("Tap Activate preview.");
-    wirePreview();
+    renderWeatherPlaceholder("Tap Activate preview.");
+    wireControls();
 
     window.FieldOpsOSMWeatherMenu = {
       VERSION: VERSION,
       version: VERSION,
       open: function open() {
-        setPanelOpen(true);
+        setWeatherPanelOpen(true);
       },
       close: function close() {
-        setPanelOpen(false);
+        setWeatherPanelOpen(false);
       },
       activate: activatePreview,
+      openService: openServicePicker,
+      closeService: closeServicePicker,
+      focusCluster: focusClusterOnMap,
       collapseTools: function collapseTools() {
         setToolbarCollapsed(true);
       },
