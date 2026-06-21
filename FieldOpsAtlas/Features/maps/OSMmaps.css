@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.15-soft-sat-glass
+   Version: 1.0.17-sat-download-progress
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -352,69 +352,45 @@ body {
   -webkit-backdrop-filter: none;
 }
 
-.osmmaps-rf-input-arrow-icon {
-  border: 0;
-  background: transparent;
-  pointer-events: none;
-}
-
-.osmmaps-rf-input-arrowhead {
-  width: 10px;
-  height: 10px;
-  display: block;
-  background: #111111;
-  clip-path: polygon(100% 50%, 0 0, 0 100%);
-  transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
-  transform-origin: center;
-}
-
 .osmmaps-rf-satellite-feed,
-.osmmaps-rf-satellite-glow {
+.osmmaps-rf-satellite-glow,
+.osmmaps-rf-satellite-progress {
   shape-rendering: geometricPrecision;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .osmmaps-rf-satellite-feed {
-  filter: drop-shadow(0 -0.35px 0 rgba(255, 255, 255, 0.20));
+  filter:
+    drop-shadow(0 -0.35px 0 rgba(255, 255, 255, 0.18))
+    drop-shadow(0 0.7px 0 rgba(8, 12, 16, 0.42));
 }
 
-.osmmaps-rf-satellite-moving-icon {
-  border: 0;
-  background: transparent;
+.osmmaps-rf-satellite-progress {
+  filter: drop-shadow(0 0 1.1px rgba(34, 197, 94, 0.34));
+}
+
+.osmmaps-rf-satellite-download-chevron {
   pointer-events: none;
+  shape-rendering: geometricPrecision;
 }
 
-.osmmaps-rf-satellite-moving-chevron {
-  position: relative;
-  width: 12px;
-  height: 12px;
-  display: block;
-  transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
-  transform-origin: center;
+.osmmaps-rf-satellite-download-chevron-shadow,
+.osmmaps-rf-satellite-download-chevron-main {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.osmmaps-rf-satellite-moving-chevron::before,
-.osmmaps-rf-satellite-moving-chevron::after {
-  content: "";
-  position: absolute;
-  right: 1px;
-  width: 8px;
-  height: 2.4px;
-  border-radius: 999px;
-  background: #d6a43a;
-  box-shadow: 0 0.8px 0 rgba(0, 0, 0, 0.72);
-  transform-origin: right center;
+.osmmaps-rf-satellite-download-chevron-shadow {
+  stroke: rgba(3, 10, 7, 0.82);
+  stroke-width: 3.5px;
+  transform: translate(0.55px, 0.7px);
 }
 
-.osmmaps-rf-satellite-moving-chevron::before {
-  top: 5px;
-  transform: rotate(42deg);
-}
-
-.osmmaps-rf-satellite-moving-chevron::after {
-  bottom: 5px;
-  transform: rotate(-42deg);
+.osmmaps-rf-satellite-download-chevron-main {
+  stroke: #16a34a;
+  stroke-width: 2.5px;
 }
 
 .osmmaps-rf-input-node img {
