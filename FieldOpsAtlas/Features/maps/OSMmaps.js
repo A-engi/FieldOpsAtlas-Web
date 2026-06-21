@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.0-cluster-map-ownership
+   Version: 1.1.1-tight-visible-fit
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.0-cluster-map-ownership";
+  var VERSION = "1.1.1-tight-visible-fit";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -502,9 +502,9 @@
 
   function fitPadding() {
     var mapRect = state.map.getContainer().getBoundingClientRect();
-    var base = 24;
-    var top = base;
-    var bottom = base;
+    var side = 16;
+    var top = 20;
+    var bottom = 20;
 
     qsa(".top-shell, [data-map-quick-tools]").forEach(function topElement(element) {
       if (!elementVisible(element)) {
@@ -514,7 +514,7 @@
       var rect = element.getBoundingClientRect();
 
       if (rect.bottom > mapRect.top && rect.top < mapRect.bottom) {
-        top = Math.max(top, rect.bottom - mapRect.top + 14);
+        top = Math.max(top, rect.bottom - mapRect.top + 10);
       }
     });
 
@@ -526,13 +526,26 @@
       var rect = element.getBoundingClientRect();
 
       if (rect.bottom > mapRect.top && rect.top < mapRect.bottom) {
-        bottom = Math.max(bottom, mapRect.bottom - rect.top + 14);
+        bottom = Math.max(bottom, mapRect.bottom - rect.top + 10);
       }
     });
 
+    /*
+     * Equalise the structural UI insets so the fitted sites remain visually
+     * centred, then reserve a small extra lower inset to lift the site group.
+     * Horizontal padding stays deliberately tight.
+     */
+    var balanced = Math.max(top, bottom);
+
     return {
-      topLeft: window.L.point(base, Math.min(top, mapRect.height * 0.46)),
-      bottomRight: window.L.point(base, Math.min(bottom, mapRect.height * 0.42))
+      topLeft: window.L.point(
+        side,
+        Math.min(balanced, mapRect.height * 0.28)
+      ),
+      bottomRight: window.L.point(
+        side,
+        Math.min(balanced + 34, mapRect.height * 0.34)
+      )
     };
   }
 
@@ -541,8 +554,18 @@
       return;
     }
 
+    var validPoints = points.filter(function validPoint(point) {
+      return point &&
+        Number.isFinite(Number(point.lat)) &&
+        Number.isFinite(Number(point.lng));
+    });
+
+    if (!validPoints.length) {
+      return;
+    }
+
     var padding = fitPadding();
-    var bounds = window.L.latLngBounds(points.map(function pointLatLng(point) {
+    var bounds = window.L.latLngBounds(validPoints.map(function pointLatLng(point) {
       return [Number(point.lat), Number(point.lng)];
     }));
 
@@ -551,9 +574,14 @@
       pan: false,
       debounceMoveend: true
     });
-    state.map.fitBounds(bounds.pad(0.12), {
+
+    /*
+     * Use the exact visible-site bounds. Leaflet's fractional zoom snapping
+     * below avoids the large empty side margins produced by whole zoom levels.
+     */
+    state.map.fitBounds(bounds, {
       animate: Boolean(animate),
-      maxZoom: Number(maxZoom || 11),
+      maxZoom: Number(maxZoom || 12),
       paddingTopLeft: padding.topLeft,
       paddingBottomRight: padding.bottomRight
     });
@@ -1607,12 +1635,11 @@
     var visible = visibleWalks();
     renderRfLines(serviceId, combined, visible);
 
-    var fitList = visible.slice();
-    state.rf.virtualEndpoints.forEach(function addVirtual(endpoint) {
-      fitList.push(endpoint);
-    });
-
-    fitPoints(fitList, clusters.length > 1 ? 10 : 11, false);
+    /*
+     * Fit only the visible physical sites. Virtual RF inputs and decorative
+     * endpoints must not enlarge the geographic bounds.
+     */
+    fitPoints(visible, 12, false);
 
     var warning = clusters.length > 1;
     var status = warning
@@ -1992,6 +2019,8 @@
       maxBounds: UK_BOUNDS,
       maxBoundsViscosity: 0.9,
       zoomControl: false,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5,
       attributionControl: true,
       preferCanvas: true,
       worldCopyJump: false
