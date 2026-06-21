@@ -1,13 +1,16 @@
 /* ==========================================================================
    FieldOps Atlas RF path fan renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.0.5-collision-optimiser
+   Version: 1.0.7-density-aware-zoom
    Purpose:
    - Keep RF path endpoints fixed.
    - Render the bearing-ordered fan immediately.
-   - Optionally detect actual screen-space path conflicts.
-   - Move only conflicting longer routes farther outward.
-   - Keep the best layout reached within a mobile time budget.
+   - Optionally detect conflicts in a fixed reference-zoom coordinate space.
+   - Keep the original bearing layout unless a real crossing or severe overlap exists.
+   - Apply small, capped repairs only to conflicting longer routes.
+   - Recheck zoomed-in layouts only when paths are still visually crowded.
+   - Leave already-clear layouts unchanged across zoom.
+   - Keep the best conservative layout reached within a mobile time budget.
    - Allow the current optimisation run to be skipped.
    - Show one abbreviated FROM → TO label for the selected path only.
    - Read site abbreviations from region site records when available.
@@ -16,23 +19,29 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.0.5-collision-optimiser";
+  var VERSION = "1.0.7-density-aware-zoom";
   var REFERENCE_ZOOM = 9;
   var CURVE_SEGMENTS = 38;
   var FAN_PADDING_DEGREES = 18;
   var MAX_FAN_HALF_SPREAD = 68;
   var BASE_GUIDE_DISTANCE_RATIO = 0.58;
-  var MAX_GUIDE_DISTANCE = 680;
-  var OUTWARD_BEARING_STEP = 4;
-  var OUTWARD_DISTANCE_STEP = 34;
-  var EXTRA_FAN_LIMIT = 34;
-  var PATH_CLEARANCE_PX = 12;
-  var SOURCE_IGNORE_PX = 30;
-  var DESTINATION_IGNORE_PX = 18;
-  var MAX_REPAIR_STEPS = 36;
-  var OPTIMISATION_BUDGET_MS = 850;
+  var MAX_GUIDE_DISTANCE = 360;
+  var OUTWARD_BEARING_STEP = 3;
+  var OUTWARD_DISTANCE_STEP = 18;
+  var EXTRA_FAN_LIMIT = 10;
+  var PATH_CLEARANCE_PX = 4;
+  var ZOOM_CLEARANCE_PX = 7;
+  var SOURCE_IGNORE_PX = 36;
+  var DESTINATION_IGNORE_PX = 20;
+  var MAX_REPAIR_STEPS = 14;
+  var MAX_REPAIRS_PER_ROUTE = 2;
+  var MAX_ADDITIONAL_BEARING = 10;
+  var MAX_ADDITIONAL_DISTANCE = 72;
+  var DENSE_GROUP_THRESHOLD = 14;
+  var OPTIMISATION_BUDGET_MS = 650;
   var OPTIMISATION_OVERLAY_DELAY_MS = 150;
   var LAYOUT_DELAY_MS = 0;
+  var ZOOM_LAYOUT_DELAY_MS = 120;
   var OPTIMISE_STORAGE_KEY = "fieldops.maps.optimise-path-layout-v1";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
@@ -50,6 +59,8 @@
   var optimiserOverlay = null;
   var optimiserNoteTimer = 0;
   var boundMap = null;
+  var zoomLayoutTimer = 0;
+  var lastMapZoom = null;
 
   function coordinateKey(value) {
     var latlng = window.L.latLng(value);
@@ -348,6 +359,9 @@
     entry.record.guideBearing = entry.guideBearing;
     entry.record.fanCentreBearing = layout.centreBearing;
     entry.record.guideDistance = entry.guideDistance;
+    entry.record.baseGuideBearing = entry.baseGuideBearing;
+    entry.record.baseGuideDistance = entry.baseGuideDistance;
+    entry.record.repairCount = entry.repairCount || 0;
     entry.record.line.setLatLngs(
       curvedLatLngs(
         map,
@@ -376,8 +390,40 @@
       );
       entry.guideDistance = baseGuideDistance(projectedLength(map, entry.record));
       entry.routeLength = projectedLength(map, entry.record);
+      entry.baseGuideBearing = entry.guideBearing;
+      entry.baseGuideDistance = entry.guideDistance;
       entry.repairCount = 0;
+      entry.record.baseGuideBearing = entry.baseGuideBearing;
+      entry.record.baseGuideDistance = entry.baseGuideDistance;
+      entry.record.repairCount = 0;
       renderEntry(map, fan, entry);
+    });
+
+    return fan;
+  }
+
+  function createExistingLayout(map, group) {
+    var fan = bearingFan(group);
+
+    fan.entries.forEach(function preserveRoute(entry) {
+      var routeLength = projectedLength(map, entry.record);
+      var fallbackDistance = baseGuideDistance(routeLength);
+      var fallbackBearing = entry.bearing;
+
+      entry.routeLength = routeLength;
+      entry.guideBearing = Number.isFinite(Number(entry.record.guideBearing))
+        ? Number(entry.record.guideBearing)
+        : fallbackBearing;
+      entry.guideDistance = Number.isFinite(Number(entry.record.guideDistance))
+        ? Number(entry.record.guideDistance)
+        : fallbackDistance;
+      entry.baseGuideBearing = Number.isFinite(Number(entry.record.baseGuideBearing))
+        ? Number(entry.record.baseGuideBearing)
+        : entry.guideBearing;
+      entry.baseGuideDistance = Number.isFinite(Number(entry.record.baseGuideDistance))
+        ? Number(entry.record.baseGuideDistance)
+        : entry.guideDistance;
+      entry.repairCount = Number(entry.record.repairCount) || 0;
     });
 
     return fan;
@@ -469,10 +515,12 @@
     );
   }
 
-  function routeScreenPoints(map, entry) {
+  function routeScreenPoints(map, entry, coordinateMode) {
     var latlngs = entry.record.line.getLatLngs();
-    var points = latlngs.map(function toLayerPoint(latlng) {
-      return map.latLngToLayerPoint(latlng);
+    var points = latlngs.map(function toConflictPoint(latlng) {
+      return coordinateMode === "screen"
+        ? map.latLngToLayerPoint(latlng)
+        : map.project(latlng, REFERENCE_ZOOM);
     });
     var source = points[0];
     var destination = points[points.length - 1];
@@ -487,13 +535,70 @@
     });
   }
 
-  function routeConflict(map, left, right) {
-    var leftPoints = routeScreenPoints(map, left);
-    var rightPoints = routeScreenPoints(map, right);
-    var clearanceSquared = PATH_CLEARANCE_PX * PATH_CLEARANCE_PX;
+  function repairPolicy(layout, coordinateMode) {
+    var pathCount = layout.entries.length;
+
+    if (coordinateMode === "screen") {
+      if (pathCount >= DENSE_GROUP_THRESHOLD) {
+        return {
+          clearancePx: 3,
+          maxRepairsPerRoute: 1,
+          maxAdditionalBearing: 3,
+          maxAdditionalDistance: 20
+        };
+      }
+
+      if (pathCount >= 9) {
+        return {
+          clearancePx: 5,
+          maxRepairsPerRoute: 1,
+          maxAdditionalBearing: 4,
+          maxAdditionalDistance: 28
+        };
+      }
+
+      return {
+        clearancePx: ZOOM_CLEARANCE_PX,
+        maxRepairsPerRoute: 1,
+        maxAdditionalBearing: 5,
+        maxAdditionalDistance: 36
+      };
+    }
+
+    if (pathCount >= DENSE_GROUP_THRESHOLD) {
+      return {
+        clearancePx: 0,
+        maxRepairsPerRoute: 1,
+        maxAdditionalBearing: 4,
+        maxAdditionalDistance: 28
+      };
+    }
+
+    if (pathCount >= 9) {
+      return {
+        clearancePx: 2,
+        maxRepairsPerRoute: 1,
+        maxAdditionalBearing: 6,
+        maxAdditionalDistance: 44
+      };
+    }
+
+    return {
+      clearancePx: PATH_CLEARANCE_PX,
+      maxRepairsPerRoute: MAX_REPAIRS_PER_ROUTE,
+      maxAdditionalBearing: MAX_ADDITIONAL_BEARING,
+      maxAdditionalDistance: MAX_ADDITIONAL_DISTANCE
+    };
+  }
+
+  function routeConflict(map, left, right, policy, coordinateMode) {
+    var leftPoints = routeScreenPoints(map, left, coordinateMode);
+    var rightPoints = routeScreenPoints(map, right, coordinateMode);
+    var clearanceSquared = policy.clearancePx * policy.clearancePx;
     var minimumDistanceSquared = Infinity;
     var leftIndex;
     var rightIndex;
+    var crossing;
     var distance;
 
     if (leftPoints.length < 2 || rightPoints.length < 2) {
@@ -502,20 +607,32 @@
 
     for (leftIndex = 0; leftIndex < leftPoints.length - 1; leftIndex += 1) {
       for (rightIndex = 0; rightIndex < rightPoints.length - 1; rightIndex += 1) {
-        distance = segmentDistanceSquared(
+        crossing = segmentsIntersect(
           leftPoints[leftIndex],
           leftPoints[leftIndex + 1],
           rightPoints[rightIndex],
           rightPoints[rightIndex + 1]
         );
+        distance = crossing
+          ? 0
+          : segmentDistanceSquared(
+              leftPoints[leftIndex],
+              leftPoints[leftIndex + 1],
+              rightPoints[rightIndex],
+              rightPoints[rightIndex + 1]
+            );
 
         minimumDistanceSquared = Math.min(minimumDistanceSquared, distance);
 
-        if (distance <= clearanceSquared) {
+        if (crossing || (policy.clearancePx > 0 && distance <= clearanceSquared)) {
           return {
             left: left,
             right: right,
-            distanceSquared: distance
+            crossing: crossing,
+            distanceSquared: distance,
+            key: String(left.record.stableKey || coordinateKey(left.record.to)) +
+              "|" +
+              String(right.record.stableKey || coordinateKey(right.record.to))
           };
         }
       }
@@ -524,8 +641,9 @@
     return null;
   }
 
-  function findConflicts(map, layout) {
+  function findConflicts(map, layout, coordinateMode) {
     var conflicts = [];
+    var policy = repairPolicy(layout, coordinateMode);
     var leftIndex;
     var rightIndex;
     var conflict;
@@ -535,7 +653,9 @@
         conflict = routeConflict(
           map,
           layout.entries[leftIndex],
-          layout.entries[rightIndex]
+          layout.entries[rightIndex],
+          policy,
+          coordinateMode
         );
 
         if (conflict) {
@@ -545,6 +665,10 @@
     }
 
     conflicts.sort(function strongestConflict(left, right) {
+      if (left.crossing !== right.crossing) {
+        return left.crossing ? -1 : 1;
+      }
+
       return left.distanceSquared - right.distanceSquared;
     });
 
@@ -564,9 +688,14 @@
       : second;
   }
 
-  function moveEntryOutside(map, layout, mover, other) {
+  function moveEntryOutside(map, layout, mover, other, coordinateMode) {
+    var policy = repairPolicy(layout, coordinateMode);
     var moverDifference = signedBearingDifference(
       mover.guideBearing,
+      layout.centreBearing
+    );
+    var baseDifference = signedBearingDifference(
+      mover.baseGuideBearing,
       layout.centreBearing
     );
     var otherDifference = signedBearingDifference(
@@ -574,49 +703,70 @@
       layout.centreBearing
     );
     var side = fanSide(moverDifference);
+    var currentOutward;
+    var otherOutward;
+    var maximumOutward;
+    var nextOutward;
+    var maximumDistance;
+    var nextDistance;
 
-    if (!side) {
-      side = fanSide(mover.difference);
-
-      if (!side) {
-        side = fanSide(otherDifference) || 1;
-      }
+    if (mover.repairCount >= policy.maxRepairsPerRoute) {
+      return false;
     }
 
-    var currentOutward = Math.abs(moverDifference);
-    var otherOutward = fanSide(otherDifference) === side
+    if (!side) {
+      side = fanSide(baseDifference) ||
+        fanSide(mover.difference) ||
+        fanSide(otherDifference) ||
+        1;
+    }
+
+    currentOutward = Math.abs(moverDifference);
+    otherOutward = fanSide(otherDifference) === side
       ? Math.abs(otherDifference)
       : 0;
-    var maximumOutward = layout.halfSpread + EXTRA_FAN_LIMIT;
-    var nextOutward = Math.min(
+    maximumOutward = Math.min(
+      layout.halfSpread + EXTRA_FAN_LIMIT,
+      Math.abs(baseDifference) + policy.maxAdditionalBearing
+    );
+    nextOutward = Math.min(
       maximumOutward,
       Math.max(
         currentOutward + OUTWARD_BEARING_STEP,
         otherOutward + OUTWARD_BEARING_STEP
       )
     );
-    var maximumDistance = Math.min(
+    maximumDistance = Math.min(
       MAX_GUIDE_DISTANCE,
-      mover.routeLength * 1.35
+      mover.baseGuideDistance + Math.min(
+        policy.maxAdditionalDistance,
+        mover.routeLength * 0.16
+      )
     );
+    nextDistance = Math.min(
+      maximumDistance,
+      mover.guideDistance + OUTWARD_DISTANCE_STEP
+    );
+
+    if (
+      nextOutward <= currentOutward + 0.01 &&
+      nextDistance <= mover.guideDistance + 0.01
+    ) {
+      return false;
+    }
 
     mover.guideBearing = normaliseBearing(
       layout.centreBearing + side * nextOutward
     );
-    mover.guideDistance = Math.min(
-      maximumDistance,
-      Math.max(
-        mover.guideDistance + OUTWARD_DISTANCE_STEP,
-        other.routeLength + PATH_CLEARANCE_PX * 2
-      )
-    );
+    mover.guideDistance = nextDistance;
     mover.repairCount += 1;
     renderEntry(map, layout, mover);
+    return true;
   }
 
-  function totalConflictCount(map, layouts) {
+  function totalConflictCount(map, layouts, coordinateMode) {
     return layouts.reduce(function addConflicts(total, layout) {
-      return total + findConflicts(map, layout).length;
+      return total + findConflicts(map, layout, coordinateMode).length;
     }, 0);
   }
 
@@ -743,8 +893,8 @@
     }
   }
 
-  function startOptimisation(map, layouts) {
-    var initialConflictCount = totalConflictCount(map, layouts);
+  function startOptimisation(map, layouts, coordinateMode) {
+    var initialConflictCount = totalConflictCount(map, layouts, coordinateMode);
 
     if (!initialConflictCount) {
       return;
@@ -762,6 +912,9 @@
         : Date.now(),
       layoutIndex: 0,
       repairSteps: 0,
+      maxRepairSteps: coordinateMode === "screen" ? 8 : MAX_REPAIR_STEPS,
+      coordinateMode: coordinateMode || "reference",
+      blockedConflicts: new Set(),
       overlayTimer: 0
     };
 
@@ -802,7 +955,7 @@
         return;
       }
 
-      if (run.repairSteps >= MAX_REPAIR_STEPS) {
+      if (run.repairSteps >= run.maxRepairSteps) {
         restoreAllSnapshots(map, layouts, run.bestSnapshots);
         finishOptimisation(
           run,
@@ -815,7 +968,7 @@
 
       while (run.layoutIndex < layouts.length) {
         layout = layouts[run.layoutIndex];
-        conflicts = findConflicts(map, layout);
+        conflicts = findConflicts(map, layout, run.coordinateMode);
 
         if (conflicts.length) {
           break;
@@ -829,20 +982,43 @@
         return;
       }
 
-      conflict = conflicts[0];
+      conflict = conflicts.find(function findRepairableConflict(candidate) {
+        var candidateMover;
+
+        if (run.blockedConflicts.has(candidate.key)) {
+          return false;
+        }
+
+        candidateMover = longerEntry(candidate.left, candidate.right);
+        return candidateMover.repairCount < repairPolicy(layout, run.coordinateMode).maxRepairsPerRoute;
+      });
+
+      if (!conflict) {
+        run.layoutIndex += 1;
+        nextFrame();
+        return;
+      }
+
       mover = longerEntry(conflict.left, conflict.right);
       other = mover === conflict.left ? conflict.right : conflict.left;
 
       setOptimiserStatus(
-        "Checking conflict " +
+        (run.coordinateMode === "screen"
+          ? "Adjusting close paths "
+          : "Checking conflict ") +
         String(run.repairSteps + 1) +
         " of " +
-        String(MAX_REPAIR_STEPS)
+        String(run.maxRepairSteps)
       );
 
-      moveEntryOutside(map, layout, mover, other);
+      if (!moveEntryOutside(map, layout, mover, other, run.coordinateMode)) {
+        run.blockedConflicts.add(conflict.key);
+        nextFrame();
+        return;
+      }
+
       run.repairSteps += 1;
-      conflictCount = totalConflictCount(map, layouts);
+      conflictCount = totalConflictCount(map, layouts, run.coordinateMode);
 
       if (conflictCount < run.bestConflictCount) {
         run.bestConflictCount = conflictCount;
@@ -860,21 +1036,61 @@
     nextFrame();
   }
 
-  function bindMapEvents(map) {
-    if (boundMap === map) {
+  function adaptiveZoomLayout() {
+    var map = activeMap();
+    var currentZoom;
+    var zoomedIn;
+    var layouts;
+
+    if (!map || !optimisationEnabled()) {
       return;
     }
 
+    currentZoom = typeof map.getZoom === "function" ? map.getZoom() : null;
+    zoomedIn = lastMapZoom == null || currentZoom == null || currentZoom > lastMapZoom;
+    lastMapZoom = currentZoom;
+
+    if (!zoomedIn) {
+      return;
+    }
+
+    layouts = groupBySource(activeRecords(map)).map(function currentFan(group) {
+      return createExistingLayout(map, group);
+    });
+
+    if (!totalConflictCount(map, layouts, "screen")) {
+      return;
+    }
+
+    cancelCurrentOptimisation(false, "");
+    startOptimisation(map, layouts, "screen");
+  }
+
+  function scheduleAdaptiveZoomLayout() {
+    if (zoomLayoutTimer) {
+      window.clearTimeout(zoomLayoutTimer);
+    }
+
+    zoomLayoutTimer = window.setTimeout(function runAdaptiveZoomLayout() {
+      zoomLayoutTimer = 0;
+      adaptiveZoomLayout();
+    }, ZOOM_LAYOUT_DELAY_MS);
+  }
+
+  function bindMapEvents(map) {
     if (boundMap && typeof boundMap.off === "function") {
-      boundMap.off("zoomend", scheduleLayout);
-      boundMap.off("resize", scheduleLayout);
+      boundMap.off("zoomend", scheduleAdaptiveZoomLayout);
+      boundMap.off("resize", scheduleAdaptiveZoomLayout);
     }
 
     boundMap = map;
+    lastMapZoom = map && typeof map.getZoom === "function"
+      ? map.getZoom()
+      : null;
 
     if (map && typeof map.on === "function") {
-      map.on("zoomend", scheduleLayout);
-      map.on("resize", scheduleLayout);
+      map.on("zoomend", scheduleAdaptiveZoomLayout);
+      map.on("resize", scheduleAdaptiveZoomLayout);
     }
   }
 
@@ -898,7 +1114,7 @@
     }
 
     if (optimisationEnabled()) {
-      startOptimisation(map, layouts);
+      startOptimisation(map, layouts, "reference");
     }
   }
 
