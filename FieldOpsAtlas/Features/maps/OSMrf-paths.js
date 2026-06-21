@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.12-solid-chevron-translucent-path
+   Version: 1.1.13-node-rim-connection
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.12-solid-chevron-translucent-path";
+  var VERSION = "1.1.13-node-rim-connection";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -25,8 +25,8 @@
   var CHEVRON_HEIGHT = 14;
   var ROUTE_HIGHLIGHT_OFFSET_PX = 4;
   var ROUTE_HIGHLIGHT_WEIGHT = 2;
-  var NODE_BRIDGE_INSET_PX = 6;
-  var NODE_BRIDGE_OUTSET_PX = 16;
+  var NODE_BRIDGE_INSET_PX = 8.5;
+  var NODE_BRIDGE_OUTSET_PX = 11.5;
   var NODE_BRIDGE_WEIGHT = 6;
   var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
@@ -327,7 +327,7 @@
       color: String(record.baseColor || "#16a34a"),
       weight: NODE_BRIDGE_WEIGHT,
       opacity: 1,
-      lineCap: "round",
+      lineCap: "butt",
       lineJoin: "round"
     };
   }
