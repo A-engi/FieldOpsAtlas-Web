@@ -3,14 +3,14 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.56-hide-rf-during-zoom</title>
+ <title>Maps v1.0.57-smooth-rf-zoom</title>
  <link rel="stylesheet" href="../../../shell.css">
  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
  <link rel="stylesheet" href="./OSMmaps.css?v=1.0.8-white-border-service-ring">
  <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
  <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
- <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.9-subtle-linear-chevrons">
+ <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.10-thicker-gold-chevrons">
  <style>
  .maps-load-toast {
   position: fixed;
@@ -43,7 +43,7 @@
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.56-hide-rf-during-zoom">
+ <main class="osmmaps-page" data-osmmaps-page data-version="1.0.57-smooth-rf-zoom">
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -182,7 +182,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.56-hide-rf-during-zoom</p>
+  <p class="weather-api-status" data-weather-output>v1.0.57-smooth-rf-zoom</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -194,16 +194,16 @@
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
  <script src="./OSMpath-generator.js?v=1.0.1-generate-once"></script>
- <script src="./OSMrf-paths.js?v=1.1.8-hide-ribbon-during-zoom"></script>
+ <script src="./OSMrf-paths.js?v=1.1.9-smooth-zoom-chevrons"></script>
  <script src="./OSMweather-menu.js?v=1.0.26-weather-data-only"></script>
 
- <script src="./OSMmaps.js?v=1.1.11-hide-attached-feed-during-zoom"></script>
+ <script src="./OSMmaps.js?v=1.1.12-smooth-attached-feed-zoom"></script>
  <script>
- /* Maps load toast | Version: 1.0.54-gold-chevron-flow */
+ /* Maps load toast | Version: 1.0.57-smooth-rf-zoom */
  (() => {
   "use strict";
 
-  const PAGE_VERSION = "1.0.54-gold-chevron-flow";
+  const PAGE_VERSION = "1.0.57-smooth-rf-zoom";
   const TOAST_ID = "mapsLoadToast";
 
   function versionOf(globalName) {
@@ -242,7 +242,7 @@
     "OSMmaps.css 1.0.8-white-border-service-ring",
     "OSMpanes.css 1.0.4-map-controls",
     "OSMweather-menu.css 1.0.24-weather-only",
-    "OSMrf-paths.css 1.0.9-subtle-linear-chevrons",
+    "OSMrf-paths.css 1.0.10-thicker-gold-chevrons",
     `shell.js ${versionOf("FieldOpsEditor")}`,
     `leaflet.js ${leafletVersion()}`,
     `OSMpath-generator.js ${versionOf("FieldOpsOSMPathGenerator")}`,
