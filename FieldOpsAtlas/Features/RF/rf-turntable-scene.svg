@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FieldOps RF turntable full scene | File: FieldOpsAtlas/Features/RF/rf-turntable-scene.svg | Version: 1.1.1-rf-turntable-scene -->
+<svg
+  xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;"
+  viewBox="0 0 1400 1560"
+  width="1400"
+  height="1560"
+  role="img"
+  aria-labelledby="title desc"
+  data-version="1.1.1-rf-turntable-scene"
+>
+  <title id="title">FieldOps RF Atlas mountain communications turntable</title>
+  <desc id="desc">
+    A layered mountain communications scene based on the supplied reference:
+    rear mountain transmitters, a central foreground transmitter site, a right-side
+    dish-loaded tower, service road, technicians, vehicle, satellite and RF links,
+    all inside a three-dimensional compass turntable.
+  </desc>
+
+  <defs>
+    <linearGradient id="page-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#010812"/>
+      <stop offset=".48" stop-color="#03162d"/>
+      <stop offset="1" stop-color="#01060d"/>
+    </linearGradient>
+
+    <linearGradient id="scene-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5278"/>
+      <stop offset=".47" stop-color="#5b7d9b"/>
+      <stop offset="1" stop-color="#17344e"/>
+    </linearGradient>
+
+    <linearGradient id="rim-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#163655"/>
+      <stop offset=".48" stop-color="#0b243e"/>
+      <stop offset="1" stop-color="#041426"/>
+    </linearGradient>
+
+    <linearGradient id="rim-side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#091b2e"/>
+      <stop offset="1" stop-color="#01050b"/>
+    </linearGradient>
+
+    <linearGradient id="far-mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#90a3b5"/>
+      <stop offset=".5" stop-color="#58728a"/>
+      <stop offset="1" stop-color="#2b4a63"/>
+    </linearGradient>
+
+    <linearGradient id="mid-mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f879d"/>
+      <stop offset=".5" stop-color="#3c5b73"/>
+      <stop offset="1" stop-color="#18354f"/>
+    </linearGradient>
+
+    <linearGradient id="left-mountain" x1=".15" y1=".08" x2=".85" y2="1">
+      <stop offset="0" stop-color="#9b9b91"/>
+      <stop offset=".25" stop-color="#6f766f"/>
+      <stop offset=".58" stop-color="#40566a"/>
+      <stop offset="1" stop-color="#10263a"/>
+    </linearGradient>
+
+    <linearGradient id="right-mountain" x1=".1" y1=".08" x2=".9" y2="1">
+      <stop offset="0" stop-color="#8d938c"/>
+      <stop offset=".3" stop-color="#606d70"/>
+      <stop offset=".63" stop-color="#354d63"/>
+      <stop offset="1" stop-color="#0c2237"/>
+    </linearGradient>
+
+    <linearGradient id="plateau-dirt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b99a65"/>
+      <stop offset=".46" stop-color="#8a7047"/>
+      <stop offset="1" stop-color="#58432a"/>
+    </linearGradient>
+
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c1a16b"/>
+      <stop offset="1" stop-color="#79613f"/>
+    </linearGradient>
+
+    <linearGradient id="tower-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b1"/>
+      <stop offset=".36" stop-color="#edbd58"/>
+      <stop offset=".75" stop-color="#bc7923"/>
+      <stop offset="1" stop-color="#754615"/>
+    </linearGradient>
+
+    <linearGradient id="dish-grey" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef1f3"/>
+      <stop offset=".54" stop-color="#c2cbd1"/>
+      <stop offset="1" stop-color="#74838f"/>
+    </linearGradient>
+
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#98afbf"/>
+      <stop offset="1" stop-color="#314a5e"/>
+    </linearGradient>
+
+    <linearGradient id="lnb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0ffff"/>
+      <stop offset=".45" stop-color="#75ddeb"/>
+      <stop offset="1" stop-color="#2d849c"/>
+    </linearGradient>
+
+    <linearGradient id="building-wall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8dcdf"/>
+      <stop offset="1" stop-color="#89949e"/>
+    </linearGradient>
+
+    <linearGradient id="vehicle-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6b65a"/>
+      <stop offset="1" stop-color="#82571e"/>
+    </linearGradient>
+
+    <radialGradient id="beacon" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff9d2"/>
+      <stop offset=".27" stop-color="#f2c65f" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#f2c65f" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="panel-shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="26" stdDeviation="24" flood-color="#00040a" flood-opacity=".72"/>
+    </filter>
+
+    <filter id="object-shadow" x="-70%" y="-70%" width="240%" height="260%">
+      <feDropShadow dx="7" dy="13" stdDeviation="8" flood-color="#00050b" flood-opacity=".62"/>
+    </filter>
+
+    <filter id="gold-glow" x="-110%" y="-110%" width="320%" height="320%">
+      <feGaussianBlur stdDeviation="2.4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="link-glow" x="-40%" y="-100%" width="180%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <clipPath id="scene-clip">
+      <ellipse cx="700" cy="770" rx="570" ry="486"/>
+    </clipPath>
+
+    <marker id="link-arrow" viewBox="0 0 12 12" refX="10" refY="6"
+            markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#fff0b2"/>
+    </marker>
+
+    <symbol id="pine" viewBox="-18 -64 36 78">
+      <path d="M0-61L-13-37H-6L-17-17H-9L-18 5H18L9-17H17L6-37H13Z" fill="#102f2d"/>
+      <path d="M0-54L-9-34H-3L-13-16H-5L-12 0H12L5-16H13L3-34H9Z" fill="#1f493a" opacity=".82"/>
+      <rect x="-3" y="3" width="6" height="12" fill="#56452f"/>
+    </symbol>
+
+    <symbol id="active-tower" viewBox="-88 -250 176 304">
+      <g fill="none" stroke="url(#tower-gold)" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M0-194L-54 36M0-194L54 36M0-194V36" stroke-width="7"/>
+        <path d="M-40-132H40M-30-72H30M-18-12H18" stroke-width="4"/>
+        <path d="M-40-132L30-72M40-132L-30-72M-30-72L18-12M30-72L-18-12M-18-12L54 36M18-12L-54 36" stroke-width="3.5"/>
+      </g>
+      <circle cx="0" cy="-210" r="28" fill="url(#beacon)"/>
+      <circle cx="0" cy="-210" r="8" fill="#fff0b2" stroke="#d59a35" stroke-width="3"/>
+      <g fill="none" stroke="#efbd5b" stroke-width="4" stroke-linecap="round">
+        <path d="M-24-226A31 31 0 0 0-24-194"/>
+        <path d="M24-226A31 31 0 0 1 24-194"/>
+        <path d="M-38-239A48 48 0 0 0-38-181"/>
+        <path d="M38-239A48 48 0 0 1 38-181"/>
+      </g>
+    </symbol>
+
+    <symbol id="distant-tower" viewBox="-54 -150 108 180">
+      <g fill="none" stroke="#c0c9d2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M0-118L-33 18M0-118L33 18M0-118V18" stroke-width="4"/>
+        <path d="M-24-78H24M-17-38H17M-9 0H9" stroke-width="2.4"/>
+        <path d="M-24-78L17-38M24-78L-17-38M-17-38L9 0M17-38L-9 0" stroke-width="2"/>
+      </g>
+      <circle cx="0" cy="-124" r="7" fill="#d8dfe5"/>
+      <g fill="none" stroke="#b7c2cc" stroke-width="2.4" opacity=".78">
+        <path d="M-16-132A21 21 0 0 0-16-116"/>
+        <path d="M16-132A21 21 0 0 1 16-116"/>
+      </g>
+    </symbol>
+  </defs>
+
+  <!-- Page and frame -->
+  <rect width="1400" height="1560" fill="url(#page-bg)"/>
+  <rect x="10" y="10" width="1380" height="1540" rx="54"
+        fill="none" stroke="#8b6632" stroke-width="2" opacity=".64"/>
+
+  <!-- Top instruction UI -->
+  <g id="top-instructions" font-family="Arial, Helvetica, sans-serif">
+    <g transform="translate(64 52)">
+      <path d="M22 50V18C22 8 34 8 34 18V42V8C34-2 46-2 46 8V42V14C46 4 58 4 58 14V47V24C58 14 70 14 70 24V60C70 80 56 94 38 94C20 94 10 80 10 62V49C10 39 22 39 22 50Z"
+            fill="none" stroke="#ba8d43" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M70 6A31 31 0 0 1 92 24" fill="none" stroke="#75808b" stroke-width="4"/>
+      <path d="M92 24L81 20M92 24L88 13" stroke="#75808b" stroke-width="4" stroke-linecap="round"/>
+      <path d="M102 0V98" stroke="#8b6632" stroke-width="2"/>
+      <text x="124" y="28" fill="#f2d59a" font-size="25">DRAG TO ROTATE</text>
+      <text x="124" y="62" fill="#b7bdc3" font-size="19">Explore the path around</text>
+      <text x="124" y="88" fill="#b7bdc3" font-size="19">the transmitter</text>
+    </g>
+
+    <g transform="translate(1008 54)">
+      <text x="0" y="26" fill="#f2d59a" font-size="25">SCROLL TO ZOOM</text>
+      <text x="0" y="60" fill="#b7bdc3" font-size="19">Zoom in/out to inspect</text>
+      <text x="0" y="86" fill="#b7bdc3" font-size="19">the landscape</text>
+      <circle cx="255" cy="31" r="30" fill="none" stroke="#6f6759" stroke-width="5"/>
+      <path d="M278 53L299 74M243 31H267M255 19V43" fill="none" stroke="#6f6759" stroke-width="5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Satellite above turntable -->
+  <g id="satellite" transform="translate(868 100) rotate(-10)" filter="url(#object-shadow)">
+    <rect x="-22" y="-18" width="44" height="36" rx="8" fill="#c6ced5" stroke="#eef3f6" stroke-width="2"/>
+    <rect x="-95" y="-25" width="64" height="50" fill="#2d6e9e" stroke="#8fc3df" stroke-width="2"/>
+    <rect x="31" y="-25" width="64" height="50" fill="#2d6e9e" stroke="#8fc3df" stroke-width="2"/>
+    <path d="M-31 0H-95M31 0H95" stroke="#cbd5dc" stroke-width="6"/>
+    <path d="M-31 0L-95-18M-31 0L-95 18M31 0L95-18M31 0L95 18" stroke="#8295a5" stroke-width="3"/>
+    <path d="M0-18V-44" stroke="#cbd5dc" stroke-width="4"/>
+    <circle cx="0" cy="-49" r="7" fill="#e8c269"/>
+  </g>
+
+  <!-- Rear half of 3D turntable -->
+  <g id="turntable-rear" filter="url(#panel-shadow)">
+    <ellipse cx="700" cy="810" rx="620" ry="536" fill="url(#rim-side)" stroke="#111b26" stroke-width="12"/>
+    <ellipse cx="700" cy="785" rx="612" ry="520" fill="#081a2e" stroke="#2d4053" stroke-width="9"/>
+    <ellipse cx="700" cy="770" rx="590" ry="505" fill="url(#rim-top)" stroke="#d0a148" stroke-width="3"/>
+    <path d="M110 770A590 505 0 0 1 1290 770"
+          fill="none" stroke="#f0c25a" stroke-width="4" opacity=".86"/>
+    <path d="M126 770A574 490 0 0 1 1274 770"
+          fill="none" stroke="#496987" stroke-width="3" opacity=".72"/>
+  </g>
+
+  <!-- Main scene, clipped to the turntable interior -->
+  <g id="scene" clip-path="url(#scene-clip)">
+    <rect x="120" y="270" width="1160" height="990" fill="url(#scene-sky)"/>
+
+    <!-- Clouds -->
+    <g id="clouds" fill="#e6e5df" opacity=".62">
+      <path d="M354 420C372 391 410 394 424 420C444 405 476 416 480 442H332C334 428 343 420 354 420Z"/>
+      <path d="M544 370C566 330 616 337 630 370C650 351 690 360 696 394H514C517 380 528 370 544 370Z"/>
+      <path d="M919 392C938 361 976 367 988 394C1011 378 1040 390 1046 416H892C896 402 904 394 919 392Z"/>
+      <path d="M236 520C250 497 282 500 294 522C310 510 336 520 340 542H214C218 530 225 522 236 520Z"/>
+    </g>
+
+    <!-- Far mountain range -->
+    <g id="far-range" opacity=".84">
+      <path d="M110 660L190 560L244 604L330 490L414 600L510 458L610 586L704 446L806 586L894 484L1000 596L1090 514L1290 660V808H110Z"
+            fill="url(#far-mountain)"/>
+      <path d="M110 660L190 560L244 604L330 490L414 600L510 458L610 586L704 446L736 808H110Z"
+            fill="#a9b5c0" opacity=".16"/>
+      <path d="M736 808L806 586L894 484L1000 596L1090 514L1290 660V808Z"
+            fill="#2c4d67" opacity=".34"/>
+      <g fill="#d8dde1" opacity=".54">
+        <path d="M304 522L330 490L354 526L334 518L322 530Z"/>
+        <path d="M482 490L510 458L542 500L518 488L502 500Z"/>
+        <path d="M672 484L704 446L736 492L708 478L692 492Z"/>
+        <path d="M864 518L894 484L924 526L900 514L884 526Z"/>
+      </g>
+    </g>
+
+    <!-- Distant center mountain and transmitter -->
+    <g id="centre-distant-mountain" opacity=".82">
+      <path d="M600 748L696 550L762 478L828 550L930 748Z" fill="url(#mid-mountain)"/>
+      <path d="M600 748L696 550L762 478L786 748Z" fill="#8496a7" opacity=".2"/>
+      <path d="M786 748L762 478L828 550L930 748Z" fill="#1f3d59" opacity=".44"/>
+      <g transform="translate(762 505) scale(.58)" opacity=".74">
+        <use href="#distant-tower" x="-54" y="-150" width="108" height="180"/>
+      </g>
+    </g>
+
+    <!-- Distant right mountain and transmitter -->
+    <g id="far-right-mountain" opacity=".86">
+      <path d="M934 786L1020 620L1082 548L1138 620L1248 786Z" fill="url(#mid-mountain)"/>
+      <path d="M934 786L1020 620L1082 548L1094 786Z" fill="#8296aa" opacity=".18"/>
+      <path d="M1094 786L1082 548L1138 620L1248 786Z" fill="#173550" opacity=".42"/>
+      <g transform="translate(1082 572) scale(.62)" opacity=".78">
+        <use href="#distant-tower" x="-54" y="-150" width="108" height="180"/>
+      </g>
+    </g>
+
+    <!-- Left mountain with transmitter -->
+    <g id="left-mountain-site" filter="url(#object-shadow)">
+      <path d="M110 1020L188 884L242 770L292 634L332 560L386 560L430 632L482 770L544 884L618 1020Z"
+            fill="url(#left-mountain)"/>
+      <path d="M110 1020L188 884L292 634L332 560L370 1020Z" fill="#a3a198" opacity=".26"/>
+      <path d="M370 1020L386 560L482 770L618 1020Z" fill="#17324a" opacity=".65"/>
+      <path d="M164 924L250 858L308 882L224 950Z" fill="#8d948f" opacity=".34"/>
+      <path d="M352 820L428 772L466 842L398 882Z" fill="#283f50"/>
+      <g fill="none" stroke="#c2c1b6" stroke-width="3" opacity=".3" stroke-linecap="round">
+        <path d="M146 962L232 906L298 916"/>
+        <path d="M206 854L288 806L344 822"/>
+        <path d="M326 724L392 690L438 710"/>
+      </g>
+
+      <path d="M286 604L320 556H392L424 592L408 626H300L274 614Z" fill="#4b3b28"/>
+      <path d="M320 556H392L424 592L404 602H296L286 604Z" fill="url(#plateau-dirt)"/>
+
+      <ellipse cx="352" cy="610" rx="72" ry="20" fill="#02070c" opacity=".34"/>
+      <g transform="translate(352 590) scale(.74)" filter="url(#gold-glow)">
+        <use href="#active-tower" x="-88" y="-250" width="176" height="304"/>
+      </g>
+
+      <g>
+        <use href="#pine" x="172" y="836" width="48" height="88"/>
+        <use href="#pine" x="232" y="772" width="44" height="82"/>
+        <use href="#pine" x="450" y="794" width="44" height="82"/>
+        <use href="#pine" x="504" y="874" width="48" height="88"/>
+      </g>
+    </g>
+
+    <!-- Right foreground mountain with dish-loaded transmitter -->
+    <g id="right-mountain-site" filter="url(#object-shadow)">
+      <path d="M830 1050L900 934L954 840L1000 748L1036 690L1112 690L1152 752L1202 840L1262 934L1320 1050Z"
+            fill="url(#right-mountain)"/>
+      <path d="M830 1050L900 934L1000 748L1036 690L1080 1050Z" fill="#969b94" opacity=".2"/>
+      <path d="M1080 1050L1112 690L1202 840L1320 1050Z" fill="#132e45" opacity=".68"/>
+      <path d="M894 966L968 904L1018 930L950 992Z" fill="#828b88" opacity=".32"/>
+      <path d="M1110 878L1182 834L1218 892L1154 932Z" fill="#243d50"/>
+      <g fill="none" stroke="#b7bbb4" stroke-width="3" opacity=".28" stroke-linecap="round">
+        <path d="M870 1000L944 950L1002 962"/>
+        <path d="M932 894L1000 850L1052 868"/>
+        <path d="M1096 806L1158 776L1200 794"/>
+      </g>
+
+      <path d="M994 724L1028 686H1116L1150 716L1134 748H1012L982 736Z" fill="#4a3927"/>
+      <path d="M1028 686H1116L1150 716L1128 726H1008L994 724Z" fill="url(#plateau-dirt)"/>
+
+      <ellipse cx="1066" cy="730" rx="76" ry="20" fill="#02070c" opacity=".36"/>
+      <g transform="translate(1066 710) scale(.78)" filter="url(#gold-glow)">
+        <use href="#active-tower" x="-88" y="-250" width="176" height="304"/>
+      </g>
+
+      <!-- two visible side-profile dishes -->
+      <g id="right-dishes">
+        <g>
+          <path d="M1096 632H1124" stroke="url(#tower-gold)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M1106 646L1124 632" stroke="#d5a148" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="1144" cy="632" rx="21" ry="27" fill="#c7cfd4" stroke="#596b79" stroke-width="3"/>
+          <path d="M1144 610L1171 632M1144 654L1171 632M1144 632H1171"
+                fill="none" stroke="url(#steel)" stroke-width="3" stroke-linecap="round"/>
+          <rect x="1169" y="626" width="13" height="13" rx="5.5" fill="url(#lnb)" stroke="#dffcff" stroke-width="1.5"/>
+        </g>
+        <g>
+          <path d="M1028 686H998" stroke="url(#tower-gold)" stroke-width="5.5" stroke-linecap="round"/>
+          <path d="M1018 700L998 686" stroke="#d5a148" stroke-width="3.2" stroke-linecap="round"/>
+          <ellipse cx="978" cy="686" rx="22" ry="28" fill="#c7cfd4" stroke="#596b79" stroke-width="3"/>
+          <path d="M978 663L950 686M978 709L950 686M978 686H950"
+                fill="none" stroke="url(#steel)" stroke-width="3.1" stroke-linecap="round"/>
+          <rect x="938" y="679" width="14" height="14" rx="6" fill="url(#lnb)" stroke="#dffcff" stroke-width="1.6"/>
+        </g>
+      </g>
+
+      <use href="#pine" x="888" y="914" width="44" height="82"/>
+      <use href="#pine" x="1198" y="910" width="46" height="86"/>
+    </g>
+
+    <!-- Central foreground plateau -->
+    <g id="central-plateau" filter="url(#object-shadow)">
+      <path d="M250 1188L302 1012L390 910L520 858L684 842L842 864L982 924L1080 1032L1128 1188Z"
+            fill="#1a3d43"/>
+      <path d="M302 1012L390 910L520 858L684 842L842 864L982 924L1080 1032L1042 1110L334 1110Z"
+            fill="url(#plateau-dirt)"/>
+      <path d="M250 1188L334 1110H1042L1128 1188Z" fill="#122d3b"/>
+      <path d="M336 1110L442 1068L568 1080L684 1048L832 1076L1042 1110"
+            fill="none" stroke="#45645f" stroke-width="8" opacity=".54"/>
+
+      <!-- winding road -->
+      <path d="M406 1068C468 1014 536 1000 612 1010C690 1020 744 998 812 966C878 936 936 942 986 978"
+            fill="none" stroke="url(#road)" stroke-width="30" stroke-linecap="round"/>
+      <path d="M406 1068C468 1014 536 1000 612 1010C690 1020 744 998 812 966C878 936 936 942 986 978"
+            fill="none" stroke="#d2b17a" stroke-width="4" stroke-linecap="round" opacity=".45"/>
+
+      <!-- central tower compound -->
+      <ellipse cx="682" cy="930" rx="112" ry="30" fill="#02070c" opacity=".38"/>
+      <path d="M584 904L614 876H768L800 904V982H584Z" fill="#6f6751" opacity=".72"/>
+      <path d="M600 892H782V972H600Z" fill="none" stroke="#3f4a4f" stroke-width="5"/>
+      <path d="M600 892L624 874M782 892L758 874M600 972L624 990M782 972L758 990"
+            stroke="#3f4a4f" stroke-width="4"/>
+
+      <g transform="translate(690 888) scale(.96)" filter="url(#gold-glow)">
+        <use href="#active-tower" x="-88" y="-250" width="176" height="304"/>
+      </g>
+
+      <!-- hut and small dish -->
+      <g id="central-building">
+        <path d="M724 930H804V986H724Z" fill="url(#building-wall)" stroke="#cbd2d7" stroke-width="2"/>
+        <path d="M714 930L732 914H794L814 930Z" fill="#455a6d" stroke="#788b9d" stroke-width="2"/>
+        <rect x="738" y="952" width="24" height="34" rx="3" fill="#4c5f70"/>
+        <rect x="770" y="948" width="20" height="16" rx="3" fill="#a8d9e9" stroke="#eefaff" stroke-width="1.5"/>
+        <path d="M752 914V890" stroke="#64798b" stroke-width="4"/>
+        <ellipse cx="752" cy="882" rx="18" ry="13" fill="#d3d8dc" stroke="#687985" stroke-width="2"/>
+        <path d="M752 882L766 876" stroke="#42596c" stroke-width="2"/>
+      </g>
+
+      <!-- truck -->
+      <g id="vehicle">
+        <path d="M420 1024H486V1056H420Z" fill="url(#vehicle-gold)" stroke="#deb057" stroke-width="2"/>
+        <path d="M484 1030H524L540 1044V1056H484Z" fill="url(#vehicle-gold)" stroke="#deb057" stroke-width="2"/>
+        <path d="M494 1033H516L530 1044H494Z" fill="#a9d9e8" stroke="#eefaff" stroke-width="1.3"/>
+        <path d="M434 1024L448 1008H476L482 1024Z" fill="#5f7180" stroke="#899aa8" stroke-width="2"/>
+        <circle cx="438" cy="1064" r="10" fill="#1d2228"/>
+        <circle cx="508" cy="1064" r="10" fill="#1d2228"/>
+      </g>
+
+      <!-- technicians -->
+      <g id="technicians">
+        <g transform="translate(478 932)">
+          <circle cx="0" cy="0" r="11" fill="#d6a57a"/>
+          <path d="M-10-2Q0-13 10-2V2H-10Z" fill="#e1b24d"/>
+          <path d="M-12 15L-16 68H16L12 15Z" fill="#e59a31"/>
+          <path d="M-6 68L-10 94M6 68L10 94" stroke="#273a4b" stroke-width="7" stroke-linecap="round"/>
+          <path d="M-13 95H-5M5 95H14" stroke="#17232e" stroke-width="7" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(824 906)">
+          <circle cx="0" cy="0" r="11" fill="#d6a57a"/>
+          <path d="M-10-2Q0-13 10-2V2H-10Z" fill="#e1b24d"/>
+          <path d="M-12 15L-16 68H16L12 15Z" fill="#e59a31"/>
+          <path d="M-6 68L-10 94M6 68L10 94" stroke="#273a4b" stroke-width="7" stroke-linecap="round"/>
+          <path d="M-13 95H-5M5 95H14" stroke="#17232e" stroke-width="7" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- foreground trees -->
+      <g id="plateau-trees">
+        <use href="#pine" x="320" y="960" width="50" height="92"/>
+        <use href="#pine" x="358" y="918" width="44" height="82"/>
+        <use href="#pine" x="530" y="872" width="42" height="78"/>
+        <use href="#pine" x="860" y="890" width="42" height="78"/>
+        <use href="#pine" x="948" y="954" width="48" height="88"/>
+        <use href="#pine" x="1010" y="1008" width="50" height="92"/>
+      </g>
+    </g>
+
+    <!-- RF links last, over physical scene -->
+    <g id="rf-links" fill="none" filter="url(#link-glow)">
+      <path d="M352 516C510 470 594 580 674 746"
+            stroke="#f1c65f" stroke-width="6" stroke-linecap="round"
+            marker-end="url(#link-arrow)"/>
+      <path d="M706 746C848 646 984 638 1056 702"
+            stroke="#f1c65f" stroke-width="6" stroke-linecap="round"
+            marker-end="url(#link-arrow)"/>
+    </g>
+
+    <!-- Central active halo -->
+    <g id="central-halo" fill="none" stroke="#f0bd55" filter="url(#link-glow)">
+      <circle cx="690" cy="674" r="24" stroke-width="3"/>
+      <circle cx="690" cy="674" r="48" stroke-width="3" opacity=".76"/>
+      <circle cx="690" cy="674" r="72" stroke-width="3" opacity=".48"/>
+    </g>
+  </g>
+
+  <!-- Satellite dashed link above everything -->
+  <path d="M868 124C850 262 812 416 744 620"
+        fill="none" stroke="#d3a344" stroke-width="3"
+        stroke-dasharray="10 9" opacity=".9"/>
+
+  <!-- Turntable tick ring -->
+  <g id="rim-ticks">
+    <path d="M700.00 289.00L700.00 265.00" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M730.46 273.68L730.88 265.69" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M760.84 275.72L761.67 267.77" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M791.04 279.12L792.30 271.22" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M821.00 283.86L822.67 276.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M848.82 296.70L852.70 282.21" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M879.85 297.32L882.32 289.72" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M908.57 306.01L911.44 298.54" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M936.72 315.97L939.97 308.66" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M964.22 327.17L967.85 320.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M983.00 353.44L995.00 332.66" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M1016.98 353.18L1021.34 346.47" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1042.09 367.92L1046.79 361.45" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1066.26 383.76L1071.30 377.54" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1089.43 400.66L1094.79 394.71" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1106.59 423.52L1117.19 412.91" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M1132.51 437.44L1138.46 432.09" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1152.30 457.23L1158.52 452.19" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1170.85 477.87L1177.32 473.17" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1188.11 499.31L1194.82 494.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1190.17 529.50L1210.95 517.50" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M1218.57 544.37L1225.69 540.73" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1231.68 567.85L1238.99 564.60" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1243.34 591.89L1250.81 589.02" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1253.51 616.42L1261.12 613.95" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1255.41 643.18L1269.90 639.30" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M1269.28 666.67L1277.11 665.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1274.83 692.25L1282.74 691.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1278.81 718.05L1286.77 717.21" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1281.20 743.99L1289.19 743.57" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1266.00 770.00L1290.00 770.00" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M1281.20 796.01L1289.19 796.43" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1278.81 821.95L1286.77 822.79" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1274.83 847.75L1282.74 849.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1269.28 873.33L1277.11 875.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1255.41 896.82L1269.90 900.70" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M1253.51 923.58L1261.12 926.05" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1243.34 948.11L1250.81 950.98" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1231.68 972.15L1238.99 975.40" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1218.57 995.63L1225.69 999.27" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1190.17 1010.50L1210.95 1022.50" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M1188.11 1040.69L1194.82 1045.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1170.85 1062.13L1177.32 1066.83" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1152.30 1082.77L1158.52 1087.81" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1132.51 1102.56L1138.46 1107.91" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1106.59 1116.48L1117.19 1127.09" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M1089.43 1139.34L1094.79 1145.29" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1066.26 1156.24L1071.30 1162.46" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1042.09 1172.08L1046.79 1178.55" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M1016.98 1186.82L1021.34 1193.53" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M983.00 1186.56L995.00 1207.34" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M964.22 1212.83L967.85 1219.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M936.72 1224.03L939.97 1231.34" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M908.57 1233.99L911.44 1241.46" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M879.85 1242.68L882.32 1250.28" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M848.82 1243.30L852.70 1257.79" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M821.00 1256.14L822.67 1263.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M791.04 1260.88L792.30 1268.78" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M760.84 1264.28L761.67 1272.23" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M730.46 1266.32L730.88 1274.31" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M700.00 1251.00L700.00 1275.00" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M669.54 1266.32L669.12 1274.31" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M639.16 1264.28L638.33 1272.23" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M608.96 1260.88L607.70 1268.78" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M579.00 1256.14L577.33 1263.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M551.18 1243.30L547.30 1257.79" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M520.15 1242.68L517.68 1250.28" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M491.43 1233.99L488.56 1241.46" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M463.28 1224.03L460.03 1231.34" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M435.78 1212.83L432.15 1219.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M417.00 1186.56L405.00 1207.34" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M383.02 1186.82L378.66 1193.53" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M357.91 1172.08L353.21 1178.55" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M333.74 1156.24L328.70 1162.46" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M310.57 1139.34L305.21 1145.29" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M293.41 1116.48L282.81 1127.09" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M267.49 1102.56L261.54 1107.91" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M247.70 1082.77L241.48 1087.81" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M229.15 1062.13L222.68 1066.83" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M211.89 1040.69L205.18 1045.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M209.83 1010.50L189.05 1022.50" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M181.43 995.63L174.31 999.27" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M168.32 972.15L161.01 975.40" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M156.66 948.11L149.19 950.98" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M146.49 923.58L138.88 926.05" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M144.59 896.82L130.10 900.70" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M130.72 873.33L122.89 875.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M125.17 847.75L117.26 849.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M121.19 821.95L113.23 822.79" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M118.80 796.01L110.81 796.43" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M134.00 770.00L110.00 770.00" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M118.80 743.99L110.81 743.57" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M121.19 718.05L113.23 717.21" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M125.17 692.25L117.26 691.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M130.72 666.67L122.89 665.00" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M144.59 643.18L130.10 639.30" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M146.49 616.42L138.88 613.95" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M156.66 591.89L149.19 589.02" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M168.32 567.85L161.01 564.60" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M181.43 544.37L174.31 540.73" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M209.83 529.50L189.05 517.50" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M211.89 499.31L205.18 494.96" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M229.15 477.87L222.68 473.17" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M247.70 457.23L241.48 452.19" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M267.49 437.44L261.54 432.09" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M293.41 423.52L282.81 412.91" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M310.57 400.66L305.21 394.71" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M333.74 383.76L328.70 377.54" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M357.91 367.92L353.21 361.45" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M383.02 353.18L378.66 346.47" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M417.00 353.44L405.00 332.66" stroke="#d7a84d" stroke-width="3.2" opacity="0.92" stroke-linecap="round"/>
+<path d="M435.78 327.17L432.15 320.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M463.28 315.97L460.03 308.66" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M491.43 306.01L488.56 298.54" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M520.15 297.32L517.68 289.72" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M551.18 296.70L547.30 282.21" stroke="#d7a84d" stroke-width="2.2" opacity="0.66" stroke-linecap="round"/>
+<path d="M579.00 283.86L577.33 276.04" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M608.96 279.12L607.70 271.22" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M639.16 275.72L638.33 267.77" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+<path d="M669.54 273.68L669.12 265.69" stroke="#d7a84d" stroke-width="1.3" opacity="0.42" stroke-linecap="round"/>
+  </g>
+
+  <!-- Cardinal labels -->
+  <g id="cardinals" fill="#efc568" font-family="Georgia, serif" text-anchor="middle">
+    <text x="700" y="278" font-size="33" font-weight="700">N</text>
+    <text x="1228" y="784" font-size="34" font-weight="700">E</text>
+    <text x="700" y="1292" font-size="34" font-weight="700">S</text>
+    <text x="170" y="784" font-size="34" font-weight="700">W</text>
+    <text x="1006" y="366" font-size="21">NE</text>
+    <text x="1008" y="1192" font-size="21">SE</text>
+    <text x="394" y="1192" font-size="21">SW</text>
+    <text x="392" y="366" font-size="21">NW</text>
+  </g>
+
+  <!-- Front half of the turntable rim -->
+  <g id="turntable-front">
+    <path d="M92 786A608 522 0 0 0 1308 786"
+          fill="none" stroke="#01050b" stroke-width="64" opacity=".98"/>
+    <path d="M110 770A590 505 0 0 0 1290 770"
+          fill="none" stroke="#d8a84e" stroke-width="5"/>
+    <path d="M128 770A572 488 0 0 0 1272 770"
+          fill="none" stroke="#496987" stroke-width="3" opacity=".72"/>
+  </g>
+
+  <!-- Bottom compass medallion -->
+  <g id="compass-medallion" transform="translate(700 1320)" filter="url(#panel-shadow)">
+    <circle r="128" fill="#071526" stroke="#a67732" stroke-width="14"/>
+    <circle r="110" fill="#0c1d31" stroke="#e0b25b" stroke-width="3"/>
+    <circle r="88" fill="none" stroke="#65778a" stroke-width="2"/>
+    <g fill="#e2c078" stroke="#f2db9c" stroke-width="1.5">
+      <path d="M0-74L14-12L0 0L-14-12Z"/>
+      <path d="M74 0L12 14L0 0L12-14Z"/>
+      <path d="M0 74L-14 12L0 0L14 12Z"/>
+      <path d="M-74 0L-12-14L0 0L-12 14Z"/>
+    </g>
+    <g fill="#9da8b2" stroke="#d6dde2" stroke-width="1.2">
+      <path d="M52-52L12-10L0 0L10-12Z"/>
+      <path d="M52 52L10 12L0 0L12 10Z"/>
+      <path d="M-52 52L-12 10L0 0L-10 12Z"/>
+      <path d="M-52-52L-10-12L0 0L-12-10Z"/>
+    </g>
+    <circle r="13" fill="#c08a34" stroke="#f0d189" stroke-width="3"/>
+    <circle r="5" fill="#071526"/>
+    <g fill="#efc568" font-family="Georgia, serif" text-anchor="middle" font-size="22" font-weight="700">
+      <text x="0" y="-92">N</text>
+      <text x="94" y="8">E</text>
+      <text x="0" y="105">S</text>
+      <text x="-94" y="8">W</text>
+    </g>
+  </g>
+
+  <!-- Lower controls -->
+  <g id="bottom-left-control" transform="translate(56 1332)" font-family="Arial, Helvetica, sans-serif">
+    <rect x="0" y="0" width="416" height="170" rx="24" fill="#061526" fill-opacity=".94" stroke="#8b6632" stroke-width="2"/>
+    <path d="M36 58C64 30 98 30 126 58" fill="none" stroke="#b98c42" stroke-width="5" stroke-linecap="round"/>
+    <path d="M36 58L46 40M36 58L54 62M126 58L116 40M126 58L108 62" fill="none" stroke="#b98c42" stroke-width="5" stroke-linecap="round"/>
+    <path d="M70 130V80C70 70 82 70 82 80V112V70C82 60 94 60 94 70V112V78C94 68 106 68 106 78V118V92C106 82 118 82 118 92V126C118 146 104 156 88 156C72 156 60 144 60 128V116C60 106 70 106 70 116Z"
+          fill="none" stroke="#d29f48" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="154" y="66" fill="#f0d59a" font-size="22">TURN WHEEL TO ROTATE</text>
+    <text x="154" y="100" fill="#b8bec4" font-size="18">Rotate the landscape</text>
+    <text x="154" y="126" fill="#b8bec4" font-size="18">around the transmitter</text>
+  </g>
+
+  <g id="legend" transform="translate(930 1298)" font-family="Arial, Helvetica, sans-serif">
+    <rect x="0" y="0" width="388" height="216" rx="24" fill="#061526" fill-opacity=".94" stroke="#8b6632" stroke-width="2"/>
+    <g fill="#efc568" stroke="#efc568">
+      <circle cx="50" cy="38" r="7"/>
+      <path d="M50 20L40 58H60Z" fill="none" stroke-width="3"/>
+      <path d="M28 82H72" stroke-width="4"/>
+      <path d="M50 104L38 146H62Z" fill="none" stroke-width="3"/>
+      <path d="M28 166H72" stroke-width="3" stroke-dasharray="8 7"/>
+      <circle cx="50" cy="196" r="7" fill="none" stroke-width="3"/>
+    </g>
+    <g fill="#d8dde1" font-size="17">
+      <text x="92" y="44">ACTIVE TRANSMITTER</text>
+      <text x="92" y="88">LINK PATH</text>
+      <text x="92" y="132">OTHER TRANSMITTERS</text>
+      <text x="92" y="176">SATELLITE LINK</text>
+      <text x="92" y="202">TECHNICIAN / VEHICLE</text>
+    </g>
+  </g>
+
+  <!-- Destination: FieldOpsAtlas/Features/RF/rf-turntable-scene.svg -->
+  <!-- Bottom/end of file: FieldOpsAtlas/Features/RF/rf-turntable-scene.svg -->
+</svg>
