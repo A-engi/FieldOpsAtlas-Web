@@ -1,3 +1,15 @@
-<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="128" height="128" viewBox="0 0 12 20" role="img" aria-label="Gold path pane chevron">
-  <path d="M8.5 3 3.5 10l5 7" fill="none" stroke="#ffdda0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" width="128" height="128" viewBox="0 0 12 20" role="img" aria-label="White-centre dark-mustard chevron">
+  <defs>
+    <linearGradient id="chevronTone" gradientUnits="userSpaceOnUse" x1="3.5" y1="10" x2="8.5" y2="10">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.12" stop-color="#fff4cf"/>
+      <stop offset="0.28" stop-color="#d2a33a"/>
+      <stop offset="0.52" stop-color="#927018"/>
+      <stop offset="1" stop-color="#574106"/>
+    </linearGradient>
+  </defs>
+  <path d="M8.5 3 3.5 10l5 7" transform="translate(0.5 0.75)" fill="none" stroke="#050505" stroke-opacity="0.92" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.5 3 3.5 10l5 7" fill="none" stroke="url(#chevronTone)" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
+<!-- Destination: data/icons/path-pane-chevron-gold.svg -->
+<!-- End of file: data/icons/path-pane-chevron-gold.svg | bottom/end of file -->
