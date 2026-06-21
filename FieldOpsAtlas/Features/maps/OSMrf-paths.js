@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.4-centre-line-hard-remove
+   Version: 1.1.5-clean-ribbon-stack
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.4-centre-line-hard-remove";
+  var VERSION = "1.1.5-clean-ribbon-stack";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -144,9 +144,67 @@
       blue.toString(16).padStart(2, "0");
   }
 
+  function ribbonDefinitions(record) {
+    var color = String(
+      record.baseColor ||
+      record.line.options.color ||
+      "#16a34a"
+    );
+
+    record.baseColor = color;
+
+    return [
+      {
+        name: "under",
+        className: "osmmaps-rf-ribbon-under",
+        style: {
+          color: "#e6fff5",
+          weight: 10,
+          opacity: 0.82
+        }
+      },
+      {
+        name: "main",
+        className: "osmmaps-rf-ribbon-main",
+        style: {
+          color: color,
+          weight: 6,
+          opacity: 1
+        }
+      },
+      {
+        name: "flow",
+        className: "osmmaps-rf-ribbon-flow",
+        style: {
+          color: lightenHex(color, 0.44),
+          weight: 10,
+          opacity: 0.98,
+          dashArray: "10 16",
+          dashOffset: "0"
+        }
+      }
+    ];
+  }
+
+  function ribbonLayerOptions(definition) {
+    return Object.assign({
+      pane: "fieldopsRfRibbon",
+      renderer: ribbonRenderer,
+      interactive: false,
+      keyboard: false,
+      className: definition.className,
+      lineCap: "round",
+      lineJoin: "round"
+    }, definition.style);
+  }
+
   function removeRibbon(record) {
-    ["under", "main", "flow"].forEach(function removePart(name) {
-      var layer = record.ribbon && record.ribbon[name];
+    if (!record.ribbon) {
+      return;
+    }
+
+    Object.keys(record.ribbon).forEach(function removeLayer(name) {
+      var layer = record.ribbon[name];
 
       if (layer && layer._map) {
         layer.remove();
@@ -156,38 +214,9 @@
     record.ribbon = null;
   }
 
-  function ribbonStyle(record) {
-    var color = String(
-      record.baseColor ||
-      record.line.options.color ||
-      "#16a34a"
-    );
-
-    record.baseColor = color;
-
-    return {
-      under: {
-        color: "#e6fff5",
-        weight: 10,
-        opacity: 0.82
-      },
-      main: {
-        color: color,
-        weight: 6,
-        opacity: 1
-      },
-      flow: {
-        color: lightenHex(color, 0.44),
-        weight: 10,
-        opacity: 0.98
-      }
-    };
-  }
-
   function createRibbon(record) {
     var map = record.line && record.line._map;
     var points = record.line ? record.line.getLatLngs() : [];
-    var style;
 
     if (!map || points.length < 2) {
       return;
@@ -195,64 +224,35 @@
 
     ensureRibbonRenderers(map);
     removeRibbon(record);
-    style = ribbonStyle(record);
+    record.ribbon = {};
 
-    record.ribbon = {
-      under: window.L.polyline(points, {
-        pane: "fieldopsRfRibbon",
-        renderer: ribbonRenderer,
-        interactive: false,
-        keyboard: false,
-        className: "osmmaps-rf-ribbon-under",
-        color: style.under.color,
-        weight: style.under.weight,
-        opacity: style.under.opacity,
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map),
-      main: window.L.polyline(points, {
-        pane: "fieldopsRfRibbon",
-        renderer: ribbonRenderer,
-        interactive: false,
-        keyboard: false,
-        className: "osmmaps-rf-ribbon-main",
-        color: style.main.color,
-        weight: style.main.weight,
-        opacity: style.main.opacity,
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map),
-      flow: window.L.polyline(points, {
-        pane: "fieldopsRfRibbon",
-        renderer: ribbonRenderer,
-        interactive: false,
-        keyboard: false,
-        className: "osmmaps-rf-ribbon-flow",
-        color: style.flow.color,
-        weight: style.flow.weight,
-        opacity: style.flow.opacity,
-        dashArray: "10 16",
-        dashOffset: "0",
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map)
-    };
+    ribbonDefinitions(record).forEach(function createLayer(definition) {
+      record.ribbon[definition.name] = window.L.polyline(
+        points,
+        ribbonLayerOptions(definition)
+      ).addTo(map);
+    });
   }
 
   function updateRibbon(record) {
     var points = record.line ? record.line.getLatLngs() : [];
-    var style;
 
     if (!record.ribbon) {
       createRibbon(record);
       return;
     }
 
-    style = ribbonStyle(record);
+    ribbonDefinitions(record).forEach(function updateLayer(definition) {
+      var layer = record.ribbon[definition.name];
 
-    record.ribbon.under.setLatLngs(points).setStyle(style.under);
-    record.ribbon.main.setLatLngs(points).setStyle(style.main);
-    record.ribbon.flow.setLatLngs(points).setStyle(style.flow);
+      if (!layer) {
+        return;
+      }
+
+      layer
+        .setLatLngs(points)
+        .setStyle(definition.style);
+    });
   }
 
   function generator() {
