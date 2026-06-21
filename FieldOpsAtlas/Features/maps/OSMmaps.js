@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.2-exact-viewport-fit
+   Version: 1.1.3-sat-fit-and-icon
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,13 +14,13 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.2-exact-viewport-fit";
+  var VERSION = "1.1.3-sat-fit-and-icon";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var INPUT_ICON_URLS = {
-    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.1",
+    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.2-rx-glass",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
   var DATA_FILES = {
@@ -1091,8 +1091,8 @@
         iconUrl,
         '" alt="" aria-hidden="true"></span>'
       ].join(""),
-      iconSize: [58, 58],
-      iconAnchor: [29, 29]
+      iconSize: [34, 34],
+      iconAnchor: [7, 28]
     });
   }
 
@@ -1275,7 +1275,7 @@
 
     return endpoints.map(function markerRect(walk) {
       var point = state.map.latLngToContainerPoint([walk.lat, walk.lng]);
-      var radius = walk.isVirtual ? 31 : 14;
+      var radius = walk.isVirtual ? 18 : 14;
 
       return {
         left: point.x - radius,
@@ -1678,10 +1678,15 @@
     renderRfLines(serviceId, combined, visible);
 
     /*
-     * Fit only the visible physical sites. Satellite/fibre virtual inputs and
-     * decorative RF endpoints must never expand the geographic bounds.
+     * Include the visible sites and the rendered virtual satellite/fibre
+     * endpoints so the full cluster path spread stays in view.
      */
-    fitPoints(visible, 12, false);
+    var fitList = visible.slice();
+    state.rf.virtualEndpoints.forEach(function addVirtual(endpoint) {
+      fitList.push(endpoint);
+    });
+
+    fitPoints(fitList, 12, false);
 
     var warning = clusters.length > 1;
     var status = warning
