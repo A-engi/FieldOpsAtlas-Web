@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path styles
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.css
-   Version: 1.0.13-svg-shadow-only
+   Version: 1.0.14-subtle-path-glow
    Purpose:
    - Hide the large path badges.
    - Show one compact route label for the selected path.
@@ -51,6 +51,14 @@
 .osmmaps-rf-ribbon-chevron {
   pointer-events: none;
   shape-rendering: geometricPrecision;
+}
+
+.osmmaps-rf-ribbon-main {
+  filter: drop-shadow(0 0 1.2px rgba(230, 255, 245, 0.44));
+}
+
+.osmmaps-rf-ribbon-highlight {
+  filter: drop-shadow(0 0 0.8px rgba(230, 255, 245, 0.30));
 }
 
 .osmmaps-rf-ribbon-chevron-image {
