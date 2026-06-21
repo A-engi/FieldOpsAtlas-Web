@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.14-visible-sat-line-arrow
+   Version: 1.1.15-black-sat-arrowhead
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,19 +14,19 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.14-visible-sat-line-arrow";
+  var VERSION = "1.1.15-black-sat-arrowhead";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var ATTACHED_INPUT_OFFSET_PX = 84;
   var ATTACHED_SITE_RADIUS_PX = 6;
+  var ATTACHED_SITE_LINE_START_PX = 13;
   var ATTACHED_INPUT_RADIUS_PX = 17;
   var INPUT_ICON_URLS = {
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
-  var SATELLITE_ARROW_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.1-visible-mustard";
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
@@ -1146,14 +1146,12 @@
     return window.L.divIcon({
       className: "osmmaps-rf-input-arrow-icon",
       html: [
-        '<img class="osmmaps-rf-input-arrow" src="',
-        SATELLITE_ARROW_ICON_URL,
-        '" alt="" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
+        '<span class="osmmaps-rf-input-arrowhead" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
         escapeHtml(angleDegrees),
-        'deg">'
+        'deg"></span>'
       ].join(""),
-      iconSize: [14, 20],
-      iconAnchor: [7, 10]
+      iconSize: [10, 10],
+      iconAnchor: [5, 5]
     });
   }
 
@@ -1165,9 +1163,9 @@
     }
 
     if (!record.arrow) {
-      record.arrow = window.L.marker(layout.lineEndLatLng, {
+      record.arrow = window.L.marker(layout.lineStartLatLng, {
         pane: "fieldopsRfEndpoints",
-        icon: satelliteLineArrowIcon(layout.arrowAngleDegrees),
+        icon: satelliteLineArrowIcon(layout.arrowAngleDegrees + 180),
         interactive: false,
         keyboard: false
       }).addTo(state.rf.virtualLayer);
@@ -1175,8 +1173,8 @@
     }
 
     record.arrow
-      .setLatLng(layout.lineEndLatLng)
-      .setIcon(satelliteLineArrowIcon(layout.arrowAngleDegrees));
+      .setLatLng(layout.lineStartLatLng)
+      .setIcon(satelliteLineArrowIcon(layout.arrowAngleDegrees + 180));
   }
 
   function attachedInputForPath(path, fromWalk, toWalk) {
@@ -1289,8 +1287,8 @@
       anchorPoint.y + direction.y * ATTACHED_INPUT_OFFSET_PX
     );
     var lineStartPoint = window.L.point(
-      anchorPoint.x + direction.x * ATTACHED_SITE_RADIUS_PX,
-      anchorPoint.y + direction.y * ATTACHED_SITE_RADIUS_PX
+      anchorPoint.x + direction.x * ATTACHED_SITE_LINE_START_PX,
+      anchorPoint.y + direction.y * ATTACHED_SITE_LINE_START_PX
     );
     var lineEndPoint = window.L.point(
       markerPoint.x - direction.x * ATTACHED_INPUT_RADIUS_PX,
@@ -1465,9 +1463,17 @@
         }
 
         style = Object.assign({}, style, {
-          pane: "fieldopsRfAttachedInputs",
-          dashArray: "8 6"
+          pane: "fieldopsRfAttachedInputs"
         });
+
+        if (virtualInputKind(attached.virtualEndpoint, path) === "satellite") {
+          style.color = "#111111";
+          style.weight = 2;
+          style.opacity = 1;
+          style.dashArray = null;
+        } else {
+          style.dashArray = "8 6";
+        }
 
         /*
          * The short satellite feed is clipped to the edges of the site and
