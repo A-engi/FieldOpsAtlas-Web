@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.14-half-speed-visible-mustard
+   Version: 1.1.15-single-fixed-chevron
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,13 +13,12 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.14-half-speed-visible-mustard";
+  var VERSION = "1.1.15-single-fixed-chevron";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
   var LAYOUT_DELAY_MS = 0;
-  var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.1-visible-mustard";
-  var CHEVRON_COUNT = 3;
+  var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.0-shadow-gradient";
   var CHEVRON_DURATION_SECONDS = 13.2;
   var CHEVRON_WIDTH = 10;
   var CHEVRON_HEIGHT = 14;
@@ -351,69 +350,59 @@
     var parent;
     var namespace;
     var pathId;
-    var chevrons = [];
-    var totalLength;
-    var chevronCount;
-    var duration;
-    var stagger;
-    var index;
+    var group;
+    var image;
+    var motion;
+    var motionPath;
 
     if (!mainPath || reducedMotionEnabled()) {
-      return chevrons;
+      return [];
     }
 
     parent = mainPath.parentNode;
     namespace = mainPath.namespaceURI;
 
     if (!parent || !namespace) {
-      return chevrons;
+      return [];
     }
-
-    totalLength = typeof mainPath.getTotalLength === "function"
-      ? Number(mainPath.getTotalLength()) || 0
-      : 0;
-    chevronCount = clamp(Math.round(totalLength / 180) || CHEVRON_COUNT, 2, 4);
-    duration = clamp(totalLength / 35, CHEVRON_DURATION_SECONDS, 17.6);
-    stagger = duration / chevronCount;
 
     ribbonSequence += 1;
     pathId = "fieldops-rf-chevron-route-" + String(ribbonSequence);
     mainPath.setAttribute("id", pathId);
 
-    for (index = 0; index < chevronCount; index += 1) {
-      var group = document.createElementNS(namespace, "g");
-      var image = document.createElementNS(namespace, "image");
-      var motion = document.createElementNS(namespace, "animateMotion");
-      var motionPath = document.createElementNS(namespace, "mpath");
+    group = document.createElementNS(namespace, "g");
+    image = document.createElementNS(namespace, "image");
+    motion = document.createElementNS(namespace, "animateMotion");
+    motionPath = document.createElementNS(namespace, "mpath");
 
-      group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
-      group.setAttribute("aria-hidden", "true");
+    group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
+    group.setAttribute("aria-hidden", "true");
 
-      image.setAttribute("class", "osmmaps-rf-ribbon-chevron-image");
-      image.setAttribute("x", String(-CHEVRON_WIDTH / 2));
-      image.setAttribute("y", String(-CHEVRON_HEIGHT / 2));
-      image.setAttribute("width", String(CHEVRON_WIDTH));
-      image.setAttribute("height", String(CHEVRON_HEIGHT));
-      image.setAttribute("preserveAspectRatio", "xMidYMid meet");
-      image.setAttribute("transform", "rotate(180)");
-      setLinkedHref(image, CHEVRON_ICON_URL);
+    image.setAttribute("class", "osmmaps-rf-ribbon-chevron-image");
+    image.setAttribute("x", String(-CHEVRON_WIDTH / 2));
+    image.setAttribute("y", String(-CHEVRON_HEIGHT / 2));
+    image.setAttribute("width", String(CHEVRON_WIDTH));
+    image.setAttribute("height", String(CHEVRON_HEIGHT));
+    image.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    image.setAttribute("transform", "rotate(180)");
+    setLinkedHref(image, CHEVRON_ICON_URL);
 
-      motion.setAttribute("dur", String(duration) + "s");
-      motion.setAttribute("begin", String(-(index * stagger)) + "s");
-      motion.setAttribute("repeatCount", "indefinite");
-      motion.setAttribute("rotate", "auto");
-      motion.setAttribute("calcMode", "linear");
+    motion.setAttribute(
+      "dur",
+      String(CHEVRON_DURATION_SECONDS) + "s"
+    );
+    motion.setAttribute("begin", "0s");
+    motion.setAttribute("repeatCount", "indefinite");
+    motion.setAttribute("rotate", "auto");
+    motion.setAttribute("calcMode", "linear");
 
-      setLinkedHref(motionPath, "#" + pathId);
-      motion.appendChild(motionPath);
+    setLinkedHref(motionPath, "#" + pathId);
+    motion.appendChild(motionPath);
+    group.appendChild(image);
+    group.appendChild(motion);
+    parent.appendChild(group);
 
-      group.appendChild(image);
-      group.appendChild(motion);
-      parent.appendChild(group);
-      chevrons.push(group);
-    }
-
-    return chevrons;
+    return [group];
   }
 
   function removeRibbon(record) {
