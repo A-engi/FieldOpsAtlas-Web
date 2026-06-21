@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.1-block-flow-no-centre-line
+   Version: 1.1.2-aligned-four-layer-flow
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.1-block-flow-no-centre-line";
+  var VERSION = "1.1.2-aligned-four-layer-flow";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -26,8 +26,7 @@
   var endpointIndex = new Map();
   var endpointDataRequests = new Map();
   var ribbonMap = null;
-  var ribbonUnderRenderer = null;
-  var ribbonOverlayRenderer = null;
+  var ribbonRenderer = null;
 
   function coordinateKey(value) {
     var latlng = window.L.latLng(value);
@@ -103,19 +102,14 @@
   }
 
   function ensureRibbonRenderers(map) {
-    if (ribbonMap === map && ribbonUnderRenderer && ribbonOverlayRenderer) {
+    if (ribbonMap === map && ribbonRenderer) {
       return;
     }
 
     ribbonMap = map;
-    ensurePane(map, "fieldopsRfRibbonUnder", 425);
-    ensurePane(map, "fieldopsRfRibbonOverlay", 435);
-    ribbonUnderRenderer = window.L.svg({
-      pane: "fieldopsRfRibbonUnder",
-      padding: 0.5
-    });
-    ribbonOverlayRenderer = window.L.svg({
-      pane: "fieldopsRfRibbonOverlay",
+    ensurePane(map, "fieldopsRfRibbon", 435);
+    ribbonRenderer = window.L.svg({
+      pane: "fieldopsRfRibbon",
       padding: 0.5
     });
   }
@@ -151,7 +145,7 @@
   }
 
   function removeRibbon(record) {
-    ["under", "highlight", "flow"].forEach(function removePart(name) {
+    ["under", "main", "highlight", "flow"].forEach(function removePart(name) {
       var layer = record.ribbon && record.ribbon[name];
 
       if (layer && layer._map) {
@@ -174,13 +168,23 @@
     return {
       under: {
         color: "#e6fff5",
-        weight: 12,
-        opacity: 0.78
+        weight: 10,
+        opacity: 0.82
+      },
+      main: {
+        color: color,
+        weight: 6,
+        opacity: 0.94
+      },
+      highlight: {
+        color: "#ffffff",
+        weight: 2,
+        opacity: 0.52
       },
       flow: {
-        color: color,
-        weight: 8,
-        opacity: 1
+        color: lightenHex(color, 0.44),
+        weight: 10,
+        opacity: 0.98
       }
     };
   }
@@ -200,8 +204,8 @@
 
     record.ribbon = {
       under: window.L.polyline(points, {
-        pane: "fieldopsRfRibbonUnder",
-        renderer: ribbonUnderRenderer,
+        pane: "fieldopsRfRibbon",
+        renderer: ribbonRenderer,
         interactive: false,
         keyboard: false,
         className: "osmmaps-rf-ribbon-under",
@@ -211,9 +215,33 @@
         lineCap: "round",
         lineJoin: "round"
       }).addTo(map),
+      main: window.L.polyline(points, {
+        pane: "fieldopsRfRibbon",
+        renderer: ribbonRenderer,
+        interactive: false,
+        keyboard: false,
+        className: "osmmaps-rf-ribbon-main",
+        color: style.main.color,
+        weight: style.main.weight,
+        opacity: style.main.opacity,
+        lineCap: "round",
+        lineJoin: "round"
+      }).addTo(map),
+      highlight: window.L.polyline(points, {
+        pane: "fieldopsRfRibbon",
+        renderer: ribbonRenderer,
+        interactive: false,
+        keyboard: false,
+        className: "osmmaps-rf-ribbon-highlight",
+        color: style.highlight.color,
+        weight: style.highlight.weight,
+        opacity: style.highlight.opacity,
+        lineCap: "round",
+        lineJoin: "round"
+      }).addTo(map),
       flow: window.L.polyline(points, {
-        pane: "fieldopsRfRibbonOverlay",
-        renderer: ribbonOverlayRenderer,
+        pane: "fieldopsRfRibbon",
+        renderer: ribbonRenderer,
         interactive: false,
         keyboard: false,
         className: "osmmaps-rf-ribbon-flow",
@@ -240,6 +268,8 @@
     style = ribbonStyle(record);
 
     record.ribbon.under.setLatLngs(points).setStyle(style.under);
+    record.ribbon.main.setLatLngs(points).setStyle(style.main);
+    record.ribbon.highlight.setLatLngs(points).setStyle(style.highlight);
     record.ribbon.flow.setLatLngs(points).setStyle(style.flow);
   }
 
