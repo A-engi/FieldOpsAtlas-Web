@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.22-active-path-filter
+   Version: 1.1.23-green-neon-download
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.22-active-path-filter";
+  var VERSION = "1.1.23-green-neon-download";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -1816,24 +1816,11 @@
             "osmmaps-rf-satellite-feed"
           ].filter(Boolean).join(" ");
 
-          glowLine = new window.L.Polyline(attachedLatLngs, {
-            pane: "fieldopsRfAttachedInputs",
-            color: "#d6a43a",
-            weight: 3.2,
-            opacity: 0.14,
-            dashArray: "5 5",
-            lineCap: "round",
-            lineJoin: "round",
-            interactive: false,
-            keyboard: false,
-            className: "osmmaps-rf-satellite-glow"
-          });
-
           progressLine = new window.L.Polyline(attachedLatLngs, {
             pane: "fieldopsRfAttachedInputs",
-            color: "#16a34a",
-            weight: 3.2,
-            opacity: 0.98,
+            color: "#46ff7d",
+            weight: 4,
+            opacity: 1,
             dashArray: "5 5",
             lineCap: "round",
             lineJoin: "round",
