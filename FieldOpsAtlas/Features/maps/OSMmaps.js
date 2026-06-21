@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.7-darker-region-nodes
+   Version: 1.1.6-sat-rx-farther-right
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,13 +14,12 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.7-darker-region-nodes";
+  var VERSION = "1.1.6-sat-rx-farther-right";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var ATTACHED_INPUT_OFFSET_PX = 30;
-  var REGION_NODE_DARKEN_FACTOR = 0.62;
   var INPUT_ICON_URLS = {
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
@@ -181,35 +180,6 @@
   function cssColor(value, fallback) {
     var candidate = String(value || "").trim();
     return candidate || fallback;
-  }
-
-  function darkerRegionNodeColor(value) {
-    var raw = String(value || "").trim().replace(/^#/, "");
-    var hex = raw.length === 3
-      ? raw.split("").map(function expandHex(character) {
-          return character + character;
-        }).join("")
-      : raw;
-
-    if (!/^[0-9a-f]{6}$/i.test(hex)) {
-      return {
-        fill: "#164e63",
-        glow: "rgba(22, 78, 99, 0.24)"
-      };
-    }
-
-    var red = Math.round(parseInt(hex.slice(0, 2), 16) * REGION_NODE_DARKEN_FACTOR);
-    var green = Math.round(parseInt(hex.slice(2, 4), 16) * REGION_NODE_DARKEN_FACTOR);
-    var blue = Math.round(parseInt(hex.slice(4, 6), 16) * REGION_NODE_DARKEN_FACTOR);
-
-    function channelHex(channel) {
-      return Math.max(0, Math.min(255, channel)).toString(16).padStart(2, "0");
-    }
-
-    return {
-      fill: "#" + channelHex(red) + channelHex(green) + channelHex(blue),
-      glow: "rgba(" + red + ", " + green + ", " + blue + ", 0.24)"
-    };
   }
 
   function safeLocalGet(key) {
@@ -472,17 +442,9 @@
   }
 
   function makeMarkerIcon(region) {
-    var nodeColor = darkerRegionNodeColor(region.color);
-
     return window.L.divIcon({
       className: "osmmaps-pin-shell",
-      html: [
-        '<span class="osmmaps-pin" style="--pin-color:',
-        escapeHtml(nodeColor.fill),
-        ';--pin-glow:',
-        escapeHtml(nodeColor.glow),
-        '"></span>'
-      ].join(""),
+      html: '<span class="osmmaps-pin" style="--pin-color:' + escapeHtml(region.color) + '"></span>',
       iconSize: [18, 18],
       iconAnchor: [9, 9],
       popupAnchor: [0, -10]
