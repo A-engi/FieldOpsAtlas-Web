@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.1-map-rf-ui
+   Version: 1.0.2-virtual-input-glass
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -319,31 +319,36 @@ body {
 }
 
 .osmmaps-rf-input-node {
-  width: 58px;
-  height: 58px;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
   overflow: hidden;
-  border: 2px solid #15803d;
+  border: 1px solid rgba(21, 128, 61, 0.58);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.18), 0 7px 16px rgba(0, 9, 22, 0.30);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.10));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 0 0 2px rgba(22, 163, 74, 0.10),
+    0 4px 10px rgba(0, 9, 22, 0.22);
+  backdrop-filter: blur(5px) saturate(125%);
+  -webkit-backdrop-filter: blur(5px) saturate(125%);
 }
 
 .osmmaps-rf-input-node img {
-  width: 46px;
-  height: 46px;
+  width: 28px;
+  height: 28px;
   display: block;
   object-fit: contain;
 }
 
 .osmmaps-rf-input-icon.is-fibre .osmmaps-rf-input-node {
-  border-radius: 13px;
+  border-radius: 10px;
 }
 
 .osmmaps-rf-input-icon.is-fibre .osmmaps-rf-input-node img {
-  width: 50px;
-  height: 50px;
+  width: 28px;
+  height: 28px;
 }
 
 .osmmaps-rf-input-icon.is-dab .osmmaps-rf-input-node {
