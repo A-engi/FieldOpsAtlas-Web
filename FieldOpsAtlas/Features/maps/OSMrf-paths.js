@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.15-single-fixed-chevron
+   Version: 1.1.15-synchronised-single-wave
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,13 +13,14 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.15-single-fixed-chevron";
+  var VERSION = "1.1.15-synchronised-single-wave";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
   var LAYOUT_DELAY_MS = 0;
   var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.0-shadow-gradient";
-  var CHEVRON_DURATION_SECONDS = 13.2;
+  var CHEVRON_SPEED_PX_PER_SECOND = 35;
+  var CHEVRON_WAVE_GAP_SECONDS = 0.8;
   var CHEVRON_WIDTH = 10;
   var CHEVRON_HEIGHT = 14;
   var ROUTE_HIGHLIGHT_OFFSET_PX = 4;
@@ -343,17 +344,40 @@
     element.setAttributeNS(XLINK_NAMESPACE, "href", value);
   }
 
-  function createChevronFlow(record) {
+  function removeChevronFlow(record) {
+    var chevrons = record.ribbon && record.ribbon.chevrons;
+
+    if (!Array.isArray(chevrons)) {
+      return;
+    }
+
+    chevrons.forEach(function removeChevron(chevron) {
+      if (chevron && chevron.parentNode) {
+        chevron.parentNode.removeChild(chevron);
+      }
+    });
+
+    record.ribbon.chevrons = [];
+  }
+
+  function createChevronFlow(
+    record,
+    travelDuration,
+    cycleDuration,
+    beginTime
+  ) {
     var mainPath = record.ribbon &&
       record.ribbon.main &&
       record.ribbon.main._path;
     var parent;
     var namespace;
     var pathId;
+    var travelFraction;
     var group;
     var image;
     var motion;
     var motionPath;
+    var opacity;
 
     if (!mainPath || reducedMotionEnabled()) {
       return [];
@@ -366,6 +390,12 @@
       return [];
     }
 
+    travelFraction = clamp(
+      travelDuration / cycleDuration,
+      0.001,
+      0.999
+    );
+
     ribbonSequence += 1;
     pathId = "fieldops-rf-chevron-route-" + String(ribbonSequence);
     mainPath.setAttribute("id", pathId);
@@ -374,6 +404,7 @@
     image = document.createElementNS(namespace, "image");
     motion = document.createElementNS(namespace, "animateMotion");
     motionPath = document.createElementNS(namespace, "mpath");
+    opacity = document.createElementNS(namespace, "animate");
 
     group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
     group.setAttribute("aria-hidden", "true");
@@ -387,22 +418,92 @@
     image.setAttribute("transform", "rotate(180)");
     setLinkedHref(image, CHEVRON_ICON_URL);
 
-    motion.setAttribute(
-      "dur",
-      String(CHEVRON_DURATION_SECONDS) + "s"
-    );
-    motion.setAttribute("begin", "0s");
+    motion.setAttribute("dur", String(cycleDuration) + "s");
+    motion.setAttribute("begin", String(beginTime) + "s");
     motion.setAttribute("repeatCount", "indefinite");
     motion.setAttribute("rotate", "auto");
     motion.setAttribute("calcMode", "linear");
+    motion.setAttribute("keyPoints", "0;1;1");
+    motion.setAttribute(
+      "keyTimes",
+      "0;" + String(travelFraction) + ";1"
+    );
 
     setLinkedHref(motionPath, "#" + pathId);
     motion.appendChild(motionPath);
+
+    opacity.setAttribute("attributeName", "opacity");
+    opacity.setAttribute("dur", String(cycleDuration) + "s");
+    opacity.setAttribute("begin", String(beginTime) + "s");
+    opacity.setAttribute("repeatCount", "indefinite");
+    opacity.setAttribute("calcMode", "discrete");
+    opacity.setAttribute("values", "1;0");
+    opacity.setAttribute(
+      "keyTimes",
+      "0;" + String(travelFraction)
+    );
+
     group.appendChild(image);
     group.appendChild(motion);
+    group.appendChild(opacity);
     parent.appendChild(group);
 
     return [group];
+  }
+
+  function synchroniseChevronWave(records) {
+    var entries;
+    var longestTravel;
+    var cycleDuration;
+    var root;
+    var beginTime;
+
+    records = Array.isArray(records)
+      ? records
+      : activeRecords(activeMap());
+
+    entries = records.map(function routeEntry(record) {
+      var mainPath = record.ribbon &&
+        record.ribbon.main &&
+        record.ribbon.main._path;
+      var length = mainPath &&
+        typeof mainPath.getTotalLength === "function"
+        ? Number(mainPath.getTotalLength()) || 0
+        : 0;
+
+      return {
+        record: record,
+        length: length,
+        travelDuration: length / CHEVRON_SPEED_PX_PER_SECOND
+      };
+    }).filter(function usableEntry(entry) {
+      return entry.length > 0;
+    });
+
+    records.forEach(removeChevronFlow);
+
+    if (!entries.length || reducedMotionEnabled()) {
+      return;
+    }
+
+    longestTravel = entries.reduce(function longest(current, entry) {
+      return Math.max(current, entry.travelDuration);
+    }, 0);
+
+    cycleDuration = longestTravel + CHEVRON_WAVE_GAP_SECONDS;
+    root = ribbonRenderer && ribbonRenderer._container;
+    beginTime = root && typeof root.getCurrentTime === "function"
+      ? root.getCurrentTime() + 0.08
+      : 0;
+
+    entries.forEach(function addSynchronizedChevron(entry) {
+      entry.record.ribbon.chevrons = createChevronFlow(
+        entry.record,
+        entry.travelDuration,
+        cycleDuration,
+        beginTime
+      );
+    });
   }
 
   function removeRibbon(record) {
@@ -465,7 +566,7 @@
       ).addTo(map);
     });
 
-    record.ribbon.chevrons = createChevronFlow(record);
+    record.ribbon.chevrons = [];
   }
 
   function updateRibbon(record) {
@@ -530,6 +631,8 @@
       updateRibbon(record);
     });
 
+    synchroniseChevronWave(records);
+
     if (selectedRecord) {
       renderSelectedLabel(false);
     }
@@ -551,6 +654,7 @@
       typeof pathGenerator.regenerate !== "function"
     ) {
       records.forEach(updateRibbon);
+      synchroniseChevronWave(records);
       return;
     }
 
