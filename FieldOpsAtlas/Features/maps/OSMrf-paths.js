@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.16-shared-distance-wave
+   Version: 1.1.17-centre-edge-routes
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.16-shared-distance-wave";
+  var VERSION = "1.1.17-centre-edge-routes";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -25,9 +25,6 @@
   var CHEVRON_HEIGHT = 14;
   var ROUTE_HIGHLIGHT_OFFSET_PX = 4;
   var ROUTE_HIGHLIGHT_WEIGHT = 2;
-  var NODE_BRIDGE_INSET_PX = 8.5;
-  var NODE_BRIDGE_OUTSET_PX = 11.5;
-  var NODE_BRIDGE_WEIGHT = 6;
   var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
   var pathRecords = [];
@@ -38,7 +35,6 @@
   var endpointDataRequests = new Map();
   var ribbonMap = null;
   var ribbonRenderer = null;
-  var nodeConnectionRenderer = null;
   var chevronMotionFrame = 0;
   var chevronMotionStartedAt = 0;
   var chevronMotionPausedAt = 0;
@@ -174,24 +170,15 @@
   }
 
   function ensureRibbonRenderers(map) {
-    if (
-      ribbonMap === map &&
-      ribbonRenderer &&
-      nodeConnectionRenderer
-    ) {
+    if (ribbonMap === map && ribbonRenderer) {
       bindRibbonZoomAnimation(map);
       return;
     }
 
     ribbonMap = map;
     ensurePane(map, "fieldopsRfRibbon", 435);
-    ensurePane(map, "fieldopsRfNodeConnections", 610);
     ribbonRenderer = window.L.svg({
       pane: "fieldopsRfRibbon",
-      padding: 0.5
-    });
-    nodeConnectionRenderer = window.L.svg({
-      pane: "fieldopsRfNodeConnections",
       padding: 0.5
     });
     bindRibbonZoomAnimation(map);
@@ -297,62 +284,6 @@
       lineCap: "round",
       lineJoin: "round"
     }, definition.style);
-  }
-
-  function nodeBridgeSegment(map, centreLatLng, adjacentLatLng) {
-    var centre = map.latLngToLayerPoint(centreLatLng);
-    var adjacent = map.latLngToLayerPoint(adjacentLatLng);
-    var dx = adjacent.x - centre.x;
-    var dy = adjacent.y - centre.y;
-    var length = Math.sqrt((dx * dx) + (dy * dy)) || 1;
-    var unitX = dx / length;
-    var unitY = dy / length;
-    var inner = window.L.point(
-      centre.x + (unitX * NODE_BRIDGE_INSET_PX),
-      centre.y + (unitY * NODE_BRIDGE_INSET_PX)
-    );
-    var outer = window.L.point(
-      centre.x + (unitX * NODE_BRIDGE_OUTSET_PX),
-      centre.y + (unitY * NODE_BRIDGE_OUTSET_PX)
-    );
-
-    return [
-      map.layerPointToLatLng(inner),
-      map.layerPointToLatLng(outer)
-    ];
-  }
-
-  function nodeBridgeSegments(map, points) {
-    if (!map || !Array.isArray(points) || points.length < 2) {
-      return {
-        start: [],
-        end: []
-      };
-    }
-
-    return {
-      start: nodeBridgeSegment(map, points[0], points[1]),
-      end: nodeBridgeSegment(
-        map,
-        points[points.length - 1],
-        points[points.length - 2]
-      )
-    };
-  }
-
-  function nodeBridgeOptions(record) {
-    return {
-      pane: "fieldopsRfNodeConnections",
-      renderer: nodeConnectionRenderer,
-      interactive: false,
-      keyboard: false,
-      className: "osmmaps-rf-node-bridge",
-      color: String(record.baseColor || "#16a34a"),
-      weight: NODE_BRIDGE_WEIGHT,
-      opacity: 1,
-      lineCap: "butt",
-      lineJoin: "round"
-    };
   }
 
   function reducedMotionEnabled() {
@@ -617,23 +548,12 @@
       return;
     }
 
-    var bridges;
-
     ensureRibbonRenderers(map);
     removeRibbon(record);
-    bridges = nodeBridgeSegments(map, points);
     record.ribbon = {
       highlight: window.L.polyline(
         longestSideHighlightPoints(map, points),
         highlightLayerOptions()
-      ).addTo(map),
-      connectionStart: window.L.polyline(
-        bridges.start,
-        nodeBridgeOptions(record)
-      ).addTo(map),
-      connectionEnd: window.L.polyline(
-        bridges.end,
-        nodeBridgeOptions(record)
       ).addTo(map)
     };
 
@@ -649,31 +569,16 @@
 
   function updateRibbon(record) {
     var points = record.line ? record.line.getLatLngs() : [];
-    var bridges;
 
     if (!record.ribbon) {
       createRibbon(record);
       return;
     }
 
-    bridges = nodeBridgeSegments(record.line._map, points);
-
     if (record.ribbon.highlight) {
       record.ribbon.highlight
         .setLatLngs(longestSideHighlightPoints(record.line._map, points))
         .setStyle(highlightLayerOptions());
-    }
-
-    if (record.ribbon.connectionStart) {
-      record.ribbon.connectionStart
-        .setLatLngs(bridges.start)
-        .setStyle(nodeBridgeOptions(record));
-    }
-
-    if (record.ribbon.connectionEnd) {
-      record.ribbon.connectionEnd
-        .setLatLngs(bridges.end)
-        .setStyle(nodeBridgeOptions(record));
     }
 
     ribbonDefinitions(record).forEach(function updateLayer(definition) {
