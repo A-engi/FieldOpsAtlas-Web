@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.9-smooth-zoom-chevrons
+   Version: 1.1.12-solid-chevron-translucent-path
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.9-smooth-zoom-chevrons";
+  var VERSION = "1.1.12-solid-chevron-translucent-path";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -23,6 +23,11 @@
   var CHEVRON_DURATION_SECONDS = 6.6;
   var CHEVRON_WIDTH = 10;
   var CHEVRON_HEIGHT = 14;
+  var ROUTE_HIGHLIGHT_OFFSET_PX = 4;
+  var ROUTE_HIGHLIGHT_WEIGHT = 2;
+  var NODE_BRIDGE_INSET_PX = 6;
+  var NODE_BRIDGE_OUTSET_PX = 16;
+  var NODE_BRIDGE_WEIGHT = 6;
   var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
   var pathRecords = [];
@@ -33,6 +38,7 @@
   var endpointDataRequests = new Map();
   var ribbonMap = null;
   var ribbonRenderer = null;
+  var nodeConnectionRenderer = null;
   var ribbonSequence = 0;
 
   function coordinateKey(value) {
@@ -145,15 +151,24 @@
   }
 
   function ensureRibbonRenderers(map) {
-    if (ribbonMap === map && ribbonRenderer) {
+    if (
+      ribbonMap === map &&
+      ribbonRenderer &&
+      nodeConnectionRenderer
+    ) {
       bindRibbonZoomAnimation(map);
       return;
     }
 
     ribbonMap = map;
     ensurePane(map, "fieldopsRfRibbon", 435);
+    ensurePane(map, "fieldopsRfNodeConnections", 610);
     ribbonRenderer = window.L.svg({
       pane: "fieldopsRfRibbon",
+      padding: 0.5
+    });
+    nodeConnectionRenderer = window.L.svg({
+      pane: "fieldopsRfNodeConnections",
       padding: 0.5
     });
     bindRibbonZoomAnimation(map);
@@ -170,24 +185,83 @@
 
     return [
       {
-        name: "under",
-        className: "osmmaps-rf-ribbon-under",
-        style: {
-          color: "#e6fff5",
-          weight: 10,
-          opacity: 0.82
-        }
-      },
-      {
         name: "main",
         className: "osmmaps-rf-ribbon-main",
         style: {
           color: color,
           weight: 6,
-          opacity: 1
+          opacity: 0.62
         }
       }
     ];
+  }
+
+  function pixelPathLength(points) {
+    var total = 0;
+    var index;
+
+    for (index = 1; index < points.length; index += 1) {
+      total += points[index - 1].distanceTo(points[index]);
+    }
+
+    return total;
+  }
+
+  function offsetPixelPath(points, offset) {
+    return points.map(function offsetPoint(point, index) {
+      var previous = points[Math.max(0, index - 1)];
+      var next = points[Math.min(points.length - 1, index + 1)];
+      var dx = next.x - previous.x;
+      var dy = next.y - previous.y;
+      var length = Math.sqrt((dx * dx) + (dy * dy)) || 1;
+      var normalX = -dy / length;
+      var normalY = dx / length;
+
+      return window.L.point(
+        point.x + (normalX * offset),
+        point.y + (normalY * offset)
+      );
+    });
+  }
+
+  function longestSideHighlightPoints(map, latlngs) {
+    var projected;
+    var left;
+    var right;
+    var selected;
+
+    if (!map || !Array.isArray(latlngs) || latlngs.length < 2) {
+      return latlngs || [];
+    }
+
+    projected = latlngs.map(function projectPoint(latlng) {
+      return map.latLngToLayerPoint(latlng);
+    });
+
+    left = offsetPixelPath(projected, ROUTE_HIGHLIGHT_OFFSET_PX);
+    right = offsetPixelPath(projected, -ROUTE_HIGHLIGHT_OFFSET_PX);
+    selected = pixelPathLength(left) >= pixelPathLength(right)
+      ? left
+      : right;
+
+    return selected.map(function unprojectPoint(point) {
+      return map.layerPointToLatLng(point);
+    });
+  }
+
+  function highlightLayerOptions() {
+    return {
+      pane: "fieldopsRfRibbon",
+      renderer: ribbonRenderer,
+      interactive: false,
+      keyboard: false,
+      className: "osmmaps-rf-ribbon-highlight",
+      color: "#e6fff5",
+      weight: ROUTE_HIGHLIGHT_WEIGHT,
+      opacity: 0.46,
+      lineCap: "round",
+      lineJoin: "round"
+    };
   }
 
   function ribbonLayerOptions(definition) {
@@ -200,6 +274,62 @@
       lineCap: "round",
       lineJoin: "round"
     }, definition.style);
+  }
+
+  function nodeBridgeSegment(map, centreLatLng, adjacentLatLng) {
+    var centre = map.latLngToLayerPoint(centreLatLng);
+    var adjacent = map.latLngToLayerPoint(adjacentLatLng);
+    var dx = adjacent.x - centre.x;
+    var dy = adjacent.y - centre.y;
+    var length = Math.sqrt((dx * dx) + (dy * dy)) || 1;
+    var unitX = dx / length;
+    var unitY = dy / length;
+    var inner = window.L.point(
+      centre.x + (unitX * NODE_BRIDGE_INSET_PX),
+      centre.y + (unitY * NODE_BRIDGE_INSET_PX)
+    );
+    var outer = window.L.point(
+      centre.x + (unitX * NODE_BRIDGE_OUTSET_PX),
+      centre.y + (unitY * NODE_BRIDGE_OUTSET_PX)
+    );
+
+    return [
+      map.layerPointToLatLng(inner),
+      map.layerPointToLatLng(outer)
+    ];
+  }
+
+  function nodeBridgeSegments(map, points) {
+    if (!map || !Array.isArray(points) || points.length < 2) {
+      return {
+        start: [],
+        end: []
+      };
+    }
+
+    return {
+      start: nodeBridgeSegment(map, points[0], points[1]),
+      end: nodeBridgeSegment(
+        map,
+        points[points.length - 1],
+        points[points.length - 2]
+      )
+    };
+  }
+
+  function nodeBridgeOptions(record) {
+    return {
+      pane: "fieldopsRfNodeConnections",
+      renderer: nodeConnectionRenderer,
+      interactive: false,
+      keyboard: false,
+      className: "osmmaps-rf-node-bridge",
+      color: String(record.baseColor || "#16a34a"),
+      weight: NODE_BRIDGE_WEIGHT,
+      opacity: 1,
+      lineCap: "round",
+      lineJoin: "round"
+    };
   }
 
   function reducedMotionEnabled() {
@@ -255,7 +385,6 @@
       var image = document.createElementNS(namespace, "image");
       var motion = document.createElementNS(namespace, "animateMotion");
       var motionPath = document.createElementNS(namespace, "mpath");
-      var opacity = document.createElementNS(namespace, "animate");
 
       group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
       group.setAttribute("aria-hidden", "true");
@@ -278,17 +407,8 @@
       setLinkedHref(motionPath, "#" + pathId);
       motion.appendChild(motionPath);
 
-      opacity.setAttribute("attributeName", "opacity");
-      opacity.setAttribute("dur", String(duration) + "s");
-      opacity.setAttribute("begin", String(-(index * stagger)) + "s");
-      opacity.setAttribute("repeatCount", "indefinite");
-      opacity.setAttribute("calcMode", "linear");
-      opacity.setAttribute("values", "0.18;0.58;0.82;0.58;0.18");
-      opacity.setAttribute("keyTimes", "0;0.18;0.5;0.82;1");
-
       group.appendChild(image);
       group.appendChild(motion);
-      group.appendChild(opacity);
       parent.appendChild(group);
       chevrons.push(group);
     }
@@ -329,9 +449,25 @@
       return;
     }
 
+    var bridges;
+
     ensureRibbonRenderers(map);
     removeRibbon(record);
-    record.ribbon = {};
+    bridges = nodeBridgeSegments(map, points);
+    record.ribbon = {
+      highlight: window.L.polyline(
+        longestSideHighlightPoints(map, points),
+        highlightLayerOptions()
+      ).addTo(map),
+      connectionStart: window.L.polyline(
+        bridges.start,
+        nodeBridgeOptions(record)
+      ).addTo(map),
+      connectionEnd: window.L.polyline(
+        bridges.end,
+        nodeBridgeOptions(record)
+      ).addTo(map)
+    };
 
     ribbonDefinitions(record).forEach(function createLayer(definition) {
       record.ribbon[definition.name] = window.L.polyline(
@@ -345,10 +481,31 @@
 
   function updateRibbon(record) {
     var points = record.line ? record.line.getLatLngs() : [];
+    var bridges;
 
     if (!record.ribbon) {
       createRibbon(record);
       return;
+    }
+
+    bridges = nodeBridgeSegments(record.line._map, points);
+
+    if (record.ribbon.highlight) {
+      record.ribbon.highlight
+        .setLatLngs(longestSideHighlightPoints(record.line._map, points))
+        .setStyle(highlightLayerOptions());
+    }
+
+    if (record.ribbon.connectionStart) {
+      record.ribbon.connectionStart
+        .setLatLngs(bridges.start)
+        .setStyle(nodeBridgeOptions(record));
+    }
+
+    if (record.ribbon.connectionEnd) {
+      record.ribbon.connectionEnd
+        .setLatLngs(bridges.end)
+        .setStyle(nodeBridgeOptions(record));
     }
 
     ribbonDefinitions(record).forEach(function updateLayer(definition) {
