@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.7-subtle-linear-chevrons
+   Version: 1.1.8-hide-ribbon-during-zoom
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.7-subtle-linear-chevrons";
+  var VERSION = "1.1.8-hide-ribbon-during-zoom";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -108,17 +108,52 @@
     return pane;
   }
 
+  function setRibbonPaneVisible(map, visible) {
+    var pane = map && map.getPane
+      ? map.getPane("fieldopsRfRibbon")
+      : null;
+
+    if (pane) {
+      pane.style.visibility = visible ? "visible" : "hidden";
+    }
+  }
+
+  function bindRibbonZoomVisibility(map) {
+    if (!map || map.__fieldOpsRfRibbonZoomVisibilityBound) {
+      return;
+    }
+
+    map.__fieldOpsRfRibbonZoomVisibilityBound = true;
+
+    map.on("zoomstart", function hideRibbonDuringZoom() {
+      setRibbonPaneVisible(map, false);
+    });
+
+    map.on("zoomend", function restoreRibbonAfterZoom() {
+      window.requestAnimationFrame(function redrawAtFinalZoom() {
+        layoutPaths(false);
+
+        window.requestAnimationFrame(function revealRedrawnRibbon() {
+          setRibbonPaneVisible(map, true);
+        });
+      });
+    });
+  }
+
   function ensureRibbonRenderers(map) {
     if (ribbonMap === map && ribbonRenderer) {
+      bindRibbonZoomVisibility(map);
       return;
     }
 
     ribbonMap = map;
     ensurePane(map, "fieldopsRfRibbon", 435);
+    setRibbonPaneVisible(map, true);
     ribbonRenderer = window.L.svg({
       pane: "fieldopsRfRibbon",
       padding: 0.5
     });
+    bindRibbonZoomVisibility(map);
   }
 
   function ribbonDefinitions(record) {
