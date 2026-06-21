@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.5-clean-ribbon-stack
+   Version: 1.1.6-gold-chevron-flow
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,11 +13,17 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.5-clean-ribbon-stack";
+  var VERSION = "1.1.6-gold-chevron-flow";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
   var LAYOUT_DELAY_MS = 0;
+  var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.0.1";
+  var CHEVRON_COUNT = 3;
+  var CHEVRON_DURATION_SECONDS = 3.9;
+  var CHEVRON_WIDTH = 12;
+  var CHEVRON_HEIGHT = 20;
+  var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
   var pathRecords = [];
   var selectedRecord = null;
@@ -27,6 +33,7 @@
   var endpointDataRequests = new Map();
   var ribbonMap = null;
   var ribbonRenderer = null;
+  var ribbonSequence = 0;
 
   function coordinateKey(value) {
     var latlng = window.L.latLng(value);
@@ -114,36 +121,6 @@
     });
   }
 
-  function lightenHex(value, amount) {
-    var raw = String(value || "").trim().replace(/^#/, "");
-    var hex = raw.length === 3
-      ? raw.split("").map(function expand(character) {
-          return character + character;
-        }).join("")
-      : raw;
-    var factor = clamp(Number(amount) || 0, 0, 1);
-    var red;
-    var green;
-    var blue;
-
-    if (!/^[0-9a-f]{6}$/i.test(hex)) {
-      return "#69f0bd";
-    }
-
-    red = parseInt(hex.slice(0, 2), 16);
-    green = parseInt(hex.slice(2, 4), 16);
-    blue = parseInt(hex.slice(4, 6), 16);
-
-    red = Math.round(red + (255 - red) * factor);
-    green = Math.round(green + (255 - green) * factor);
-    blue = Math.round(blue + (255 - blue) * factor);
-
-    return "#" +
-      red.toString(16).padStart(2, "0") +
-      green.toString(16).padStart(2, "0") +
-      blue.toString(16).padStart(2, "0");
-  }
-
   function ribbonDefinitions(record) {
     var color = String(
       record.baseColor ||
@@ -171,17 +148,6 @@
           weight: 6,
           opacity: 1
         }
-      },
-      {
-        name: "flow",
-        className: "osmmaps-rf-ribbon-flow",
-        style: {
-          color: lightenHex(color, 0.44),
-          weight: 10,
-          opacity: 0.98,
-          dashArray: "10 16",
-          dashOffset: "0"
-        }
       }
     ];
   }
@@ -198,6 +164,79 @@
     }, definition.style);
   }
 
+  function reducedMotionEnabled() {
+    return Boolean(
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  function setLinkedHref(element, value) {
+    element.setAttribute("href", value);
+    element.setAttributeNS(XLINK_NAMESPACE, "href", value);
+  }
+
+  function createChevronFlow(record) {
+    var mainPath = record.ribbon &&
+      record.ribbon.main &&
+      record.ribbon.main._path;
+    var parent;
+    var namespace;
+    var pathId;
+    var chevrons = [];
+    var index;
+
+    if (!mainPath || reducedMotionEnabled()) {
+      return chevrons;
+    }
+
+    parent = mainPath.parentNode;
+    namespace = mainPath.namespaceURI;
+
+    if (!parent || !namespace) {
+      return chevrons;
+    }
+
+    ribbonSequence += 1;
+    pathId = "fieldops-rf-chevron-route-" + String(ribbonSequence);
+    mainPath.setAttribute("id", pathId);
+
+    for (index = 0; index < CHEVRON_COUNT; index += 1) {
+      var group = document.createElementNS(namespace, "g");
+      var image = document.createElementNS(namespace, "image");
+      var motion = document.createElementNS(namespace, "animateMotion");
+      var motionPath = document.createElementNS(namespace, "mpath");
+      var stagger = CHEVRON_DURATION_SECONDS / CHEVRON_COUNT;
+
+      group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
+      group.setAttribute("aria-hidden", "true");
+
+      image.setAttribute("class", "osmmaps-rf-ribbon-chevron-image");
+      image.setAttribute("x", String(-CHEVRON_WIDTH / 2));
+      image.setAttribute("y", String(-CHEVRON_HEIGHT / 2));
+      image.setAttribute("width", String(CHEVRON_WIDTH));
+      image.setAttribute("height", String(CHEVRON_HEIGHT));
+      image.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      image.setAttribute("transform", "rotate(180)");
+      setLinkedHref(image, CHEVRON_ICON_URL);
+
+      motion.setAttribute("dur", String(CHEVRON_DURATION_SECONDS) + "s");
+      motion.setAttribute("begin", String(-(index * stagger)) + "s");
+      motion.setAttribute("repeatCount", "indefinite");
+      motion.setAttribute("rotate", "auto");
+      motion.setAttribute("calcMode", "linear");
+
+      setLinkedHref(motionPath, "#" + pathId);
+      motion.appendChild(motionPath);
+      group.appendChild(image);
+      group.appendChild(motion);
+      parent.appendChild(group);
+      chevrons.push(group);
+    }
+
+    return chevrons;
+  }
+
   function removeRibbon(record) {
     if (!record.ribbon) {
       return;
@@ -205,6 +244,15 @@
 
     Object.keys(record.ribbon).forEach(function removeLayer(name) {
       var layer = record.ribbon[name];
+
+      if (Array.isArray(layer)) {
+        layer.forEach(function removeChevron(chevron) {
+          if (chevron && chevron.parentNode) {
+            chevron.parentNode.removeChild(chevron);
+          }
+        });
+        return;
+      }
 
       if (layer && layer._map) {
         layer.remove();
@@ -232,6 +280,8 @@
         ribbonLayerOptions(definition)
       ).addTo(map);
     });
+
+    record.ribbon.chevrons = createChevronFlow(record);
   }
 
   function updateRibbon(record) {
