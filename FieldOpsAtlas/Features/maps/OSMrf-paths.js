@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.0-saved-ribbon-flow
+   Version: 1.1.1-block-flow-no-centre-line
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.0-saved-ribbon-flow";
+  var VERSION = "1.1.1-block-flow-no-centre-line";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -164,8 +164,8 @@
 
   function ribbonStyle(record) {
     var color = String(
-      record.line.options.color ||
       record.baseColor ||
+      record.line.options.color ||
       "#16a34a"
     );
 
@@ -177,15 +177,10 @@
         weight: 12,
         opacity: 0.78
       },
-      highlight: {
-        color: "#ffffff",
-        weight: 1.5,
-        opacity: 0.54
-      },
       flow: {
-        color: lightenHex(color, 0.44),
-        weight: 2.4,
-        opacity: 0.96
+        color: color,
+        weight: 8,
+        opacity: 1
       }
     };
   }
@@ -216,18 +211,6 @@
         lineCap: "round",
         lineJoin: "round"
       }).addTo(map),
-      highlight: window.L.polyline(points, {
-        pane: "fieldopsRfRibbonOverlay",
-        renderer: ribbonOverlayRenderer,
-        interactive: false,
-        keyboard: false,
-        className: "osmmaps-rf-ribbon-highlight",
-        color: style.highlight.color,
-        weight: style.highlight.weight,
-        opacity: style.highlight.opacity,
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map),
       flow: window.L.polyline(points, {
         pane: "fieldopsRfRibbonOverlay",
         renderer: ribbonOverlayRenderer,
@@ -237,7 +220,7 @@
         color: style.flow.color,
         weight: style.flow.weight,
         opacity: style.flow.opacity,
-        dashArray: "1 17",
+        dashArray: "10 16",
         dashOffset: "0",
         lineCap: "round",
         lineJoin: "round"
@@ -257,7 +240,6 @@
     style = ribbonStyle(record);
 
     record.ribbon.under.setLatLngs(points).setStyle(style.under);
-    record.ribbon.highlight.setLatLngs(points).setStyle(style.highlight);
     record.ribbon.flow.setLatLngs(points).setStyle(style.flow);
   }
 
@@ -612,7 +594,16 @@
       var from = window.L.latLng(latlngs[0]);
       var to = window.L.latLng(latlngs[1]);
       var cleanOptions = tidyPathStyle(options);
-      var line = originalPolyline.call(this, [from, to], cleanOptions);
+      var visibleColor = String(cleanOptions.color || "#16a34a");
+      var hiddenOptions = Object.assign({}, cleanOptions, {
+        opacity: 0,
+        fillOpacity: 0,
+        className: [
+          cleanOptions.className || "",
+          "osmmaps-rf-path-hit"
+        ].filter(Boolean).join(" ")
+      });
+      var line = originalPolyline.call(this, [from, to], hiddenOptions);
       var originalSetStyle = line.setStyle;
       var record = {
         line: line,
@@ -623,7 +614,7 @@
         serviceId: String(cleanOptions.fieldOpsServiceId || ""),
         stableKey: String(cleanOptions.fieldOpsPathId || "") ||
           coordinateKey(from) + "->" + coordinateKey(to),
-        baseColor: String(cleanOptions.color || "#16a34a"),
+        baseColor: visibleColor,
         ribbon: null
       };
 
@@ -632,11 +623,18 @@
       line.setStyle = function setRfPathStyle(style) {
         var selected = isSelectedStyle(style);
         var cleanStyle = tidyPathStyle(style);
-        var result = originalSetStyle.call(this, cleanStyle);
+        var hiddenStyle;
 
         if (cleanStyle.color) {
           record.baseColor = String(cleanStyle.color);
         }
+
+        hiddenStyle = Object.assign({}, cleanStyle, {
+          opacity: 0,
+          fillOpacity: 0
+        });
+
+        var result = originalSetStyle.call(this, hiddenStyle);
 
         updateRibbon(record);
 
