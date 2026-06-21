@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.9-opposite-sat-feed
+   Version: 1.1.10-path-metadata
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.9-opposite-sat-feed";
+  var VERSION = "1.1.10-path-metadata";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -1006,7 +1006,11 @@
       dashArray: backup ? "11 8" : null,
       lineCap: "round",
       lineJoin: "round",
-      interactive: true
+      interactive: true,
+      fieldOpsPathId: String(path.id || ""),
+      fieldOpsServiceId: String(path.serviceType || "dtt"),
+      fieldOpsRegionId: String(state.selectedRegionId || ""),
+      fieldOpsRouteType: String(path.routeType || "primary")
     };
   }
 
