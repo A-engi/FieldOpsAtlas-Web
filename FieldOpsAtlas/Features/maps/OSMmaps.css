@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.11-black-sat-arrowhead
+   Version: 1.0.12-no-white-node-rim
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -197,6 +197,10 @@ body {
   box-shadow:
     0 0 0 3px var(--pin-path-color, transparent),
     0 4px 10px rgba(0, 10, 24, 0.34);
+}
+
+.osmmaps-page.has-visible-rf-paths .osmmaps-pin {
+  border-color: transparent;
 }
 
 /* RF labels and endpoints -------------------------------------------------- */
