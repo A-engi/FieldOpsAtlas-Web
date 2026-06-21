@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.8-sat-offset-rx-label
+   Version: 1.1.9-opposite-sat-feed
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,14 +14,16 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.8-sat-offset-rx-label";
+  var VERSION = "1.1.9-opposite-sat-feed";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
-  var ATTACHED_INPUT_OFFSET_PX = 60;
+  var ATTACHED_INPUT_OFFSET_PX = 84;
+  var ATTACHED_SITE_RADIUS_PX = 12;
+  var ATTACHED_INPUT_RADIUS_PX = 17;
   var INPUT_ICON_URLS = {
-    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-rx-map-refresh",
+    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
   var DATA_FILES = {
@@ -1103,9 +1105,6 @@
     var kind = virtualInputKind(endpoint, path);
     var iconUrl = INPUT_ICON_URLS[kind] || INPUT_ICON_URLS.satellite;
     var accessibleName = String(endpoint.name || endpoint.label || kind + " input");
-    var rxLabel = kind === "satellite"
-      ? '<small class="osmmaps-rf-input-rx" aria-hidden="true">RX</small>'
-      : "";
 
     return window.L.divIcon({
       className: "osmmaps-rf-input-icon is-" + service + " is-" + kind,
@@ -1114,9 +1113,7 @@
         escapeHtml(accessibleName),
         '"><img src="',
         iconUrl,
-        '" alt="" aria-hidden="true">',
-        rxLabel,
-        '</span>'
+        '" alt="" aria-hidden="true"></span>'
       ].join(""),
       iconSize: [28, 28],
       iconAnchor: [14, 14]
@@ -1145,23 +1142,107 @@
     return null;
   }
 
-  function attachedInputLatLng(endpoint, anchorWalk) {
+  function attachedInputDirection(endpoint, anchorWalk) {
+    var walksById = walkMap(state.walks);
     var anchorPoint = state.map.latLngToContainerPoint([anchorWalk.lat, anchorWalk.lng]);
-    var configuredPoint = state.map.latLngToContainerPoint([endpoint.lat, endpoint.lng]);
-    var dx = configuredPoint.x - anchorPoint.x;
-    var dy = configuredPoint.y - anchorPoint.y;
-    var length = Math.sqrt(dx * dx + dy * dy);
+    var directionX = 0;
+    var directionY = 0;
+    var connectedCount = 0;
 
-    if (!Number.isFinite(length) || length < 1) {
-      dx = -1;
-      dy = -0.55;
-      length = Math.sqrt(dx * dx + dy * dy);
+    state.rf.activePaths.forEach(function includeConnectedPath(path) {
+      var counterpart = null;
+
+      if (String(path.feedingSiteId) === String(anchorWalk.id)) {
+        counterpart = pathEndpoint(path, "receiving", walksById);
+      } else if (String(path.receivingSiteId) === String(anchorWalk.id)) {
+        counterpart = pathEndpoint(path, "feeding", walksById);
+      }
+
+      if (!counterpart || counterpart.isVirtual) {
+        return;
+      }
+
+      var counterpartPoint = state.map.latLngToContainerPoint([
+        counterpart.lat,
+        counterpart.lng
+      ]);
+      var dx = counterpartPoint.x - anchorPoint.x;
+      var dy = counterpartPoint.y - anchorPoint.y;
+      var length = Math.sqrt(dx * dx + dy * dy);
+
+      if (!Number.isFinite(length) || length < 1) {
+        return;
+      }
+
+      directionX += dx / length;
+      directionY += dy / length;
+      connectedCount += 1;
+    });
+
+    /*
+     * The dish is an incoming site-level feed, so place it on the opposite
+     * side of the physical site from the other connected transmitter paths.
+     */
+    if (connectedCount) {
+      directionX *= -1;
+      directionY *= -1;
     }
 
-    return state.map.containerPointToLatLng(window.L.point(
-      anchorPoint.x + dx / length * ATTACHED_INPUT_OFFSET_PX,
-      anchorPoint.y + dy / length * ATTACHED_INPUT_OFFSET_PX
-    ));
+    var directionLength = Math.sqrt(
+      directionX * directionX + directionY * directionY
+    );
+
+    if (!Number.isFinite(directionLength) || directionLength < 0.15) {
+      var configuredPoint = state.map.latLngToContainerPoint([
+        endpoint.lat,
+        endpoint.lng
+      ]);
+
+      directionX = configuredPoint.x - anchorPoint.x;
+      directionY = configuredPoint.y - anchorPoint.y;
+      directionLength = Math.sqrt(
+        directionX * directionX + directionY * directionY
+      );
+    }
+
+    if (!Number.isFinite(directionLength) || directionLength < 1) {
+      directionX = -1;
+      directionY = -0.55;
+      directionLength = Math.sqrt(
+        directionX * directionX + directionY * directionY
+      );
+    }
+
+    return {
+      x: directionX / directionLength,
+      y: directionY / directionLength
+    };
+  }
+
+  function attachedInputLayout(endpoint, anchorWalk) {
+    var anchorPoint = state.map.latLngToContainerPoint([
+      anchorWalk.lat,
+      anchorWalk.lng
+    ]);
+    var direction = attachedInputDirection(endpoint, anchorWalk);
+    var markerPoint = window.L.point(
+      anchorPoint.x + direction.x * ATTACHED_INPUT_OFFSET_PX,
+      anchorPoint.y + direction.y * ATTACHED_INPUT_OFFSET_PX
+    );
+    var lineStartPoint = window.L.point(
+      anchorPoint.x + direction.x * ATTACHED_SITE_RADIUS_PX,
+      anchorPoint.y + direction.y * ATTACHED_SITE_RADIUS_PX
+    );
+    var lineEndPoint = window.L.point(
+      markerPoint.x - direction.x * ATTACHED_INPUT_RADIUS_PX,
+      markerPoint.y - direction.y * ATTACHED_INPUT_RADIUS_PX
+    );
+
+    return {
+      markerLatLng: state.map.containerPointToLatLng(markerPoint),
+      lineStartLatLng: state.map.containerPointToLatLng(lineStartPoint),
+      lineEndLatLng: state.map.containerPointToLatLng(lineEndPoint)
+    };
   }
 
   function ensureVirtualInputMarker(displayEndpoint, serviceId, path) {
@@ -1202,28 +1283,28 @@
   }
 
   function updateAttachedInput(record) {
-    var displayLatLng = attachedInputLatLng(record.virtualEndpoint, record.anchorWalk);
+    var layout = attachedInputLayout(
+      record.virtualEndpoint,
+      record.anchorWalk
+    );
     var displayEndpoint = record.displayEndpoint;
 
-    displayEndpoint.lat = displayLatLng.lat;
-    displayEndpoint.lng = displayLatLng.lng;
+    displayEndpoint.lat = layout.markerLatLng.lat;
+    displayEndpoint.lng = layout.markerLatLng.lng;
 
     if (record.marker) {
-      record.marker.setLatLng(displayLatLng);
+      record.marker.setLatLng(layout.markerLatLng);
     }
 
     if (record.line) {
-      var fromEndpoint = record.virtualSide === "feeding"
-        ? displayEndpoint
-        : record.anchorWalk;
-      var toEndpoint = record.virtualSide === "receiving"
-        ? displayEndpoint
-        : record.anchorWalk;
+      var fromLatLng = record.virtualSide === "feeding"
+        ? layout.lineEndLatLng
+        : layout.lineStartLatLng;
+      var toLatLng = record.virtualSide === "receiving"
+        ? layout.lineEndLatLng
+        : layout.lineStartLatLng;
 
-      record.line.setLatLngs([
-        [fromEndpoint.lat, fromEndpoint.lng],
-        [toEndpoint.lat, toEndpoint.lng]
-      ]);
+      record.line.setLatLngs([fromLatLng, toLatLng]);
     }
   }
 
@@ -1293,13 +1374,13 @@
       var style = lineStyle(path, false);
 
       if (attached) {
-        var displayLatLng = attachedInputLatLng(
+        var attachedLayout = attachedInputLayout(
           attached.virtualEndpoint,
           attached.anchorWalk
         );
         var displayEndpoint = Object.assign({}, attached.virtualEndpoint, {
-          lat: displayLatLng.lat,
-          lng: displayLatLng.lng,
+          lat: attachedLayout.markerLatLng.lat,
+          lng: attachedLayout.markerLatLng.lng,
           attachedToSiteId: attached.anchorWalk.id
         });
 
@@ -1322,15 +1403,23 @@
         }
 
         style = Object.assign({}, style, {
-          pane: "fieldopsRfAttachedInputs"
+          pane: "fieldopsRfAttachedInputs",
+          dashArray: "8 6"
         });
 
         /*
-         * Attached inputs use a plain Leaflet polyline. This short site-level
-         * connection must not be expanded by the RF fan optimiser.
+         * The short satellite feed is clipped to the edges of the site and
+         * dish markers so the service-coloured line remains clearly visible.
          */
         line = new window.L.Polyline(
-          [[displayFrom.lat, displayFrom.lng], [displayTo.lat, displayTo.lng]],
+          [
+            attached.virtualSide === "feeding"
+              ? attachedLayout.lineEndLatLng
+              : attachedLayout.lineStartLatLng,
+            attached.virtualSide === "receiving"
+              ? attachedLayout.lineEndLatLng
+              : attachedLayout.lineStartLatLng
+          ],
           style
         );
       } else {
