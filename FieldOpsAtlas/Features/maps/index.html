@@ -3,14 +3,14 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.60-solid-chevron-translucent-path</title>
+ <title>Maps v1.0.62-chevron-gradient-half-speed</title>
  <link rel="stylesheet" href="../../../shell.css">
  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
- <link rel="stylesheet" href="./OSMmaps.css?v=1.0.9-node-border-sat-arrow">
+ <link rel="stylesheet" href="./OSMmaps.css?v=1.0.10-chevron-gradient-asset">
  <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
  <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
- <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.12-solid-chevron-translucent-path">
+ <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.13-baked-chevron-shadow">
  <style>
  .maps-load-toast {
   position: fixed;
@@ -43,7 +43,7 @@
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.60-solid-chevron-translucent-path">
+ <main class="osmmaps-page" data-osmmaps-page data-version="1.0.62-chevron-gradient-half-speed">
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -182,7 +182,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.60-solid-chevron-translucent-path</p>
+  <p class="weather-api-status" data-weather-output>v1.0.62-chevron-gradient-half-speed</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -194,16 +194,16 @@
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
  <script src="./OSMpath-generator.js?v=1.0.1-generate-once"></script>
- <script src="./OSMrf-paths.js?v=1.1.12-solid-chevron-translucent-path"></script>
+ <script src="./OSMrf-paths.js?v=1.1.14-half-speed-chevron"></script>
  <script src="./OSMweather-menu.js?v=1.0.26-weather-data-only"></script>
 
  <script src="./OSMmaps.js?v=1.1.13-node-border-sat-arrow"></script>
  <script>
- /* Maps load toast | Version: 1.0.60-solid-chevron-translucent-path */
+ /* Maps load toast | Version: 1.0.62-chevron-gradient-half-speed */
  (() => {
   "use strict";
 
-  const PAGE_VERSION = "1.0.60-solid-chevron-translucent-path";
+  const PAGE_VERSION = "1.0.62-chevron-gradient-half-speed";
   const TOAST_ID = "mapsLoadToast";
 
   function versionOf(globalName) {
@@ -239,10 +239,10 @@
     "shell.css unversioned",
     "background.css fade-restore-20260612g",
     "leaflet.css 1.9.4",
-    "OSMmaps.css 1.0.9-node-border-sat-arrow",
+    "OSMmaps.css 1.0.10-chevron-gradient-asset",
     "OSMpanes.css 1.0.4-map-controls",
     "OSMweather-menu.css 1.0.24-weather-only",
-    "OSMrf-paths.css 1.0.12-solid-chevron-translucent-path",
+    "OSMrf-paths.css 1.0.13-baked-chevron-shadow",
     `shell.js ${versionOf("FieldOpsEditor")}`,
     `leaflet.js ${leafletVersion()}`,
     `OSMpath-generator.js ${versionOf("FieldOpsOSMPathGenerator")}`,
