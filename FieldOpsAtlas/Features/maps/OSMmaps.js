@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.13-node-border-sat-arrow
+   Version: 1.1.14-visible-sat-line-arrow
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.13-node-border-sat-arrow";
+  var VERSION = "1.1.14-visible-sat-line-arrow";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -26,6 +26,7 @@
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
+  var SATELLITE_ARROW_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.1-visible-mustard";
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
@@ -1126,9 +1127,6 @@
     var kind = virtualInputKind(endpoint, path);
     var iconUrl = INPUT_ICON_URLS[kind] || INPUT_ICON_URLS.satellite;
     var accessibleName = String(endpoint.name || endpoint.label || kind + " input");
-    var directionArrow = kind === "satellite"
-      ? '<span class="osmmaps-rf-input-direction" aria-hidden="true"></span>'
-      : "";
 
     return window.L.divIcon({
       className: "osmmaps-rf-input-icon is-" + service + " is-" + kind,
@@ -1137,13 +1135,48 @@
         escapeHtml(accessibleName),
         '"><img src="',
         iconUrl,
-        '" alt="" aria-hidden="true">',
-        directionArrow,
-        '</span>'
+        '" alt="" aria-hidden="true"></span>'
       ].join(""),
       iconSize: [28, 28],
       iconAnchor: [14, 14]
     });
+  }
+
+  function satelliteLineArrowIcon(angleDegrees) {
+    return window.L.divIcon({
+      className: "osmmaps-rf-input-arrow-icon",
+      html: [
+        '<img class="osmmaps-rf-input-arrow" src="',
+        SATELLITE_ARROW_ICON_URL,
+        '" alt="" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
+        escapeHtml(angleDegrees),
+        'deg">'
+      ].join(""),
+      iconSize: [14, 20],
+      iconAnchor: [7, 10]
+    });
+  }
+
+  function updateSatelliteLineArrow(record, layout) {
+    if (
+      virtualInputKind(record.virtualEndpoint, record.path) !== "satellite"
+    ) {
+      return;
+    }
+
+    if (!record.arrow) {
+      record.arrow = window.L.marker(layout.lineEndLatLng, {
+        pane: "fieldopsRfEndpoints",
+        icon: satelliteLineArrowIcon(layout.arrowAngleDegrees),
+        interactive: false,
+        keyboard: false
+      }).addTo(state.rf.virtualLayer);
+      return;
+    }
+
+    record.arrow
+      .setLatLng(layout.lineEndLatLng)
+      .setIcon(satelliteLineArrowIcon(layout.arrowAngleDegrees));
   }
 
   function attachedInputForPath(path, fromWalk, toWalk) {
@@ -1321,16 +1354,9 @@
 
     if (record.marker) {
       record.marker.setLatLng(layout.markerLatLng);
-
-      var markerElement = record.marker.getElement();
-
-      if (markerElement) {
-        markerElement.style.setProperty(
-          "--osmmaps-rf-sat-arrow-angle",
-          String(layout.arrowAngleDegrees) + "deg"
-        );
-      }
     }
+
+    updateSatelliteLineArrow(record, layout);
 
     if (record.line) {
       var fromLatLng = record.virtualSide === "feeding"
