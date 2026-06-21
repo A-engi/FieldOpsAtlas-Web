@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.15-synchronised-single-wave
+   Version: 1.1.16-shared-distance-wave
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.15-synchronised-single-wave";
+  var VERSION = "1.1.16-shared-distance-wave";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -39,7 +39,12 @@
   var ribbonMap = null;
   var ribbonRenderer = null;
   var nodeConnectionRenderer = null;
-  var ribbonSequence = 0;
+  var chevronMotionFrame = 0;
+  var chevronMotionStartedAt = 0;
+  var chevronMotionPausedAt = 0;
+  var chevronMotionPaused = false;
+  var chevronMotionCycleDistance = 0;
+  var chevronMotionEntries = [];
 
   function coordinateKey(value) {
     var latlng = window.L.latLng(value);
@@ -115,17 +120,35 @@
   }
 
   function setRibbonAnimationPaused(paused) {
-    var root = ribbonRenderer && ribbonRenderer._container;
+    var now;
 
-    if (!root) {
+    if (Boolean(paused) === chevronMotionPaused) {
       return;
     }
 
-    if (paused && typeof root.pauseAnimations === "function") {
-      root.pauseAnimations();
-    } else if (!paused && typeof root.unpauseAnimations === "function") {
-      root.unpauseAnimations();
+    now = window.performance && typeof window.performance.now === "function"
+      ? window.performance.now()
+      : Date.now();
+
+    chevronMotionPaused = Boolean(paused);
+
+    if (chevronMotionPaused) {
+      chevronMotionPausedAt = now;
+
+      if (chevronMotionFrame) {
+        window.cancelAnimationFrame(chevronMotionFrame);
+        chevronMotionFrame = 0;
+      }
+
+      return;
     }
+
+    if (chevronMotionPausedAt && chevronMotionStartedAt) {
+      chevronMotionStartedAt += now - chevronMotionPausedAt;
+    }
+
+    chevronMotionPausedAt = 0;
+    startChevronMotionFrame();
   }
 
   function bindRibbonZoomAnimation(map) {
@@ -344,8 +367,26 @@
     element.setAttributeNS(XLINK_NAMESPACE, "href", value);
   }
 
+  function stopChevronMotion() {
+    if (chevronMotionFrame) {
+      window.cancelAnimationFrame(chevronMotionFrame);
+      chevronMotionFrame = 0;
+    }
+
+    chevronMotionStartedAt = 0;
+    chevronMotionPausedAt = 0;
+    chevronMotionCycleDistance = 0;
+    chevronMotionEntries = [];
+  }
+
   function removeChevronFlow(record) {
     var chevrons = record.ribbon && record.ribbon.chevrons;
+
+    chevronMotionEntries = chevronMotionEntries.filter(
+      function keepOtherEntry(entry) {
+        return entry.record !== record;
+      }
+    );
 
     if (!Array.isArray(chevrons)) {
       return;
@@ -360,54 +401,36 @@
     record.ribbon.chevrons = [];
   }
 
-  function createChevronFlow(
-    record,
-    travelDuration,
-    cycleDuration,
-    beginTime
-  ) {
+  function createChevronFlow(record) {
     var mainPath = record.ribbon &&
       record.ribbon.main &&
       record.ribbon.main._path;
     var parent;
     var namespace;
-    var pathId;
-    var travelFraction;
+    var length;
     var group;
     var image;
-    var motion;
-    var motionPath;
-    var opacity;
 
     if (!mainPath || reducedMotionEnabled()) {
-      return [];
+      return null;
     }
 
     parent = mainPath.parentNode;
     namespace = mainPath.namespaceURI;
+    length = typeof mainPath.getTotalLength === "function"
+      ? Number(mainPath.getTotalLength()) || 0
+      : 0;
 
-    if (!parent || !namespace) {
-      return [];
+    if (!parent || !namespace || length <= 0) {
+      return null;
     }
-
-    travelFraction = clamp(
-      travelDuration / cycleDuration,
-      0.001,
-      0.999
-    );
-
-    ribbonSequence += 1;
-    pathId = "fieldops-rf-chevron-route-" + String(ribbonSequence);
-    mainPath.setAttribute("id", pathId);
 
     group = document.createElementNS(namespace, "g");
     image = document.createElementNS(namespace, "image");
-    motion = document.createElementNS(namespace, "animateMotion");
-    motionPath = document.createElementNS(namespace, "mpath");
-    opacity = document.createElementNS(namespace, "animate");
 
     group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
     group.setAttribute("aria-hidden", "true");
+    group.setAttribute("visibility", "hidden");
 
     image.setAttribute("class", "osmmaps-rf-ribbon-chevron-image");
     image.setAttribute("x", String(-CHEVRON_WIDTH / 2));
@@ -418,92 +441,147 @@
     image.setAttribute("transform", "rotate(180)");
     setLinkedHref(image, CHEVRON_ICON_URL);
 
-    motion.setAttribute("dur", String(cycleDuration) + "s");
-    motion.setAttribute("begin", String(beginTime) + "s");
-    motion.setAttribute("repeatCount", "indefinite");
-    motion.setAttribute("rotate", "auto");
-    motion.setAttribute("calcMode", "linear");
-    motion.setAttribute("keyPoints", "0;1;1");
-    motion.setAttribute(
-      "keyTimes",
-      "0;" + String(travelFraction) + ";1"
-    );
-
-    setLinkedHref(motionPath, "#" + pathId);
-    motion.appendChild(motionPath);
-
-    opacity.setAttribute("attributeName", "opacity");
-    opacity.setAttribute("dur", String(cycleDuration) + "s");
-    opacity.setAttribute("begin", String(beginTime) + "s");
-    opacity.setAttribute("repeatCount", "indefinite");
-    opacity.setAttribute("calcMode", "discrete");
-    opacity.setAttribute("values", "1;0");
-    opacity.setAttribute(
-      "keyTimes",
-      "0;" + String(travelFraction)
-    );
-
     group.appendChild(image);
-    group.appendChild(motion);
-    group.appendChild(opacity);
     parent.appendChild(group);
 
-    return [group];
+    record.ribbon.chevrons = [group];
+
+    return {
+      record: record,
+      path: mainPath,
+      group: group,
+      length: length
+    };
+  }
+
+  function pointAngle(path, distance, length) {
+    var sample = Math.min(2, Math.max(0.5, length / 160));
+    var before = path.getPointAtLength(
+      Math.max(0, distance - sample)
+    );
+    var after = path.getPointAtLength(
+      Math.min(length, distance + sample)
+    );
+
+    return Math.atan2(
+      after.y - before.y,
+      after.x - before.x
+    ) * 180 / Math.PI;
+  }
+
+  function renderChevronMotion(timestamp) {
+    var elapsedSeconds;
+    var distance;
+
+    chevronMotionFrame = 0;
+
+    if (
+      chevronMotionPaused ||
+      !chevronMotionEntries.length ||
+      chevronMotionCycleDistance <= 0
+    ) {
+      return;
+    }
+
+    if (!chevronMotionStartedAt) {
+      chevronMotionStartedAt = timestamp;
+    }
+
+    elapsedSeconds = Math.max(
+      0,
+      (timestamp - chevronMotionStartedAt) / 1000
+    );
+    distance = (
+      elapsedSeconds * CHEVRON_SPEED_PX_PER_SECOND
+    ) % chevronMotionCycleDistance;
+
+    chevronMotionEntries.forEach(function moveChevron(entry) {
+      var position;
+      var angle;
+
+      if (
+        !entry.group ||
+        !entry.group.parentNode ||
+        !entry.path ||
+        distance > entry.length
+      ) {
+        if (entry.group) {
+          entry.group.setAttribute("visibility", "hidden");
+        }
+        return;
+      }
+
+      position = entry.path.getPointAtLength(
+        Math.min(distance, entry.length)
+      );
+      angle = pointAngle(entry.path, distance, entry.length);
+
+      entry.group.setAttribute(
+        "transform",
+        "translate(" +
+          position.x +
+          " " +
+          position.y +
+          ") rotate(" +
+          angle +
+          ")"
+      );
+      entry.group.setAttribute("visibility", "visible");
+    });
+
+    chevronMotionFrame = window.requestAnimationFrame(
+      renderChevronMotion
+    );
+  }
+
+  function startChevronMotionFrame() {
+    if (
+      chevronMotionPaused ||
+      chevronMotionFrame ||
+      !chevronMotionEntries.length
+    ) {
+      return;
+    }
+
+    chevronMotionFrame = window.requestAnimationFrame(
+      renderChevronMotion
+    );
   }
 
   function synchroniseChevronWave(records) {
     var entries;
-    var longestTravel;
-    var cycleDuration;
-    var root;
-    var beginTime;
+    var longestLength;
 
     records = Array.isArray(records)
       ? records
       : activeRecords(activeMap());
 
-    entries = records.map(function routeEntry(record) {
-      var mainPath = record.ribbon &&
-        record.ribbon.main &&
-        record.ribbon.main._path;
-      var length = mainPath &&
-        typeof mainPath.getTotalLength === "function"
-        ? Number(mainPath.getTotalLength()) || 0
-        : 0;
-
-      return {
-        record: record,
-        length: length,
-        travelDuration: length / CHEVRON_SPEED_PX_PER_SECOND
-      };
-    }).filter(function usableEntry(entry) {
-      return entry.length > 0;
-    });
-
+    stopChevronMotion();
     records.forEach(removeChevronFlow);
 
-    if (!entries.length || reducedMotionEnabled()) {
+    if (reducedMotionEnabled()) {
       return;
     }
 
-    longestTravel = entries.reduce(function longest(current, entry) {
-      return Math.max(current, entry.travelDuration);
+    entries = records.map(createChevronFlow).filter(Boolean);
+
+    if (!entries.length) {
+      return;
+    }
+
+    longestLength = entries.reduce(function longest(current, entry) {
+      return Math.max(current, entry.length);
     }, 0);
 
-    cycleDuration = longestTravel + CHEVRON_WAVE_GAP_SECONDS;
-    root = ribbonRenderer && ribbonRenderer._container;
-    beginTime = root && typeof root.getCurrentTime === "function"
-      ? root.getCurrentTime() + 0.08
-      : 0;
-
-    entries.forEach(function addSynchronizedChevron(entry) {
-      entry.record.ribbon.chevrons = createChevronFlow(
-        entry.record,
-        entry.travelDuration,
-        cycleDuration,
-        beginTime
+    chevronMotionEntries = entries;
+    chevronMotionCycleDistance =
+      longestLength +
+      (
+        CHEVRON_WAVE_GAP_SECONDS *
+        CHEVRON_SPEED_PX_PER_SECOND
       );
-    });
+    chevronMotionStartedAt = 0;
+    startChevronMotionFrame();
   }
 
   function removeRibbon(record) {
