@@ -1,105 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;"
-     viewBox="0 0 350 350"
-     width="350"
-     height="350"
-     role="img"
-     aria-labelledby="title desc">
+<svg xmlns="&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x77;&#x33;&#x2E;&#x6F;&#x72;&#x67;&#x2F;&#x32;&#x30;&#x30;&#x30;&#x2F;&#x73;&#x76;&#x67;" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="glassFill" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+    <linearGradient id="dishGold" x1="16" y1="18" x2="35" y2="41" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7d879"/>
+      <stop offset="1" stop-color="#d6a43a"/>
+    </linearGradient>
+  </defs>
 
-  <title id="title">Ground satellite dish</title>
-
-  <desc id="desc">
-    A ground satellite dish with a shallow crescent bowl,
-    geometric pedestal, feed arms, and three transmission arcs.
-  </desc>
-
-  <g fill="currentColor">
-
-    <!-- Pedestal -->
-    <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
-      d="
-        M12 332
-        Q10 332 10 328
-        V319
-        Q10 313 16 313
-        H37
-        L69 216
-        C83 231 101 246 122 256
-        L140 312
-        H162
-        Q168 312 168 318
-        V332
-        Z
-
-        M73 250
-        L104 269
-        H72
-        Z
-
-        M70 282
-        H103
-        L86 312
-        H58
-        Z
-
-        M109 287
-        L124 312
-        H94
-        Z
-      "
-    />
-
-    <!-- Dish -->
-    <path
-      d="
-        M62 62
-        C44 70 41 103 46 139
-        C53 190 83 231 128 256
-        C169 279 216 275 253 257
-        C257 255 259 251 256 244
-        C219 237 177 216 138 184
-        C102 154 79 118 72 76
-        C100 83 130 100 158 123
-        L165 116
-        C133 89 99 68 68 62
-        C66 62 64 61 62 62
-        Z
-      "
-    />
-
-    <!-- Rear support -->
-    <path
-      d="
-        M195 151
-        C219 179 239 214 248 240
-        L239 244
-        C230 214 211 182 189 157
-        Z
-      "
-    />
-
-    <!-- Feed arms -->
-    <path d="M123 144 L184 119 L190 127 L128 153 Z" />
-    <path d="M148 173 L190 124 L164 188 Z" />
-
-    <!-- Feed head -->
-    <circle cx="202" cy="114" r="18" />
-
-  </g>
-
-  <!-- Transmission arcs -->
-  <g
-    fill="none"
-    stroke="currentColor"
-    stroke-width="10"
-    stroke-linecap="round"
-  >
-    <path d="M195 72 C224 76 244 96 248 119" />
-    <path d="M195 42 C237 47 269 78 278 117" />
-    <path d="M205 13 C257 19 299 58 308 113" />
-  </g>
-
-  <!-- satellite-dish-original-shape-v1.5.1-clean.svg — bottom/end of file -->
+  <circle cx="32" cy="32" r="27" fill="url(#glassFill)" fill-opacity="0.78" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.6"/>
+  <path d="M18 22c9-7 22-8 31-1-5 11-15 18-28 21-3-6-4-13-3-20Z" fill="url(#dishGold)" stroke="#111827" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M29.5 30.5 18.5 46.5" stroke="#111827" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M17 46.5h15" stroke="#111827" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M25.5 44.5v5" stroke="#111827" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="33" cy="28.5" r="2.4" fill="#111827"/>
+  <path d="M38.5 17.5c4 1 7.4 4.2 8.8 8.2" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M40.5 12.5c6.5 1.6 11.9 6.8 14 13.1" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M43 7.5c8.8 2 16 8.9 18 17.3" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="39.5" y="41.5" width="13.5" height="9" rx="4.5" fill="#111827" fill-opacity="0.70" stroke="#ffffff" stroke-opacity="0.42" stroke-width="1"/>
+  <text x="46.25" y="47.7" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="6.4" font-weight="700" fill="#f7d879">RX</text>
 </svg>
+
+<!-- Destination: data/icons/satellite-dish.svg -->
+<!-- End of file: data/icons/satellite-dish.svg | bottom/end of file -->
