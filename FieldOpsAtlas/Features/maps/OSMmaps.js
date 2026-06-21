@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.19-sat-marker-chevron
+   Version: 1.1.21-sat-download-progress
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.19-sat-marker-chevron";
+  var VERSION = "1.1.21-sat-download-progress";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -23,8 +23,8 @@
   var ATTACHED_SITE_LINE_START_PX = 15;
   var ATTACHED_ARROW_OFFSET_PX = 19;
   var ATTACHED_INPUT_RADIUS_PX = 17;
-  var SATELLITE_CHEVRON_TRAVEL_MS = 4000;
-  var SATELLITE_CHEVRON_HOLD_MS = 2000;
+  var SATELLITE_DOWNLOAD_TRAVEL_MS = 4000;
+  var SATELLITE_DOWNLOAD_HOLD_MS = 2000;
   var INPUT_ICON_URLS = {
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
@@ -99,8 +99,10 @@
       virtualEndpoints: new Map(),
       virtualMarkers: new Map(),
       attachedInputs: new Map(),
-      satelliteChevronFrame: 0,
-      satelliteChevronStartedAt: 0,
+      satelliteDownloadFrame: 0,
+      satelliteDownloadStartedAt: 0,
+      satelliteDownloadPausedAt: 0,
+      satelliteDownloadPaused: false,
       overlayFrame: 0,
       selectedPathId: "",
       serviceId: "",
@@ -1039,6 +1041,8 @@
   }
 
   function pauseRfAttachedInputLayoutDuringZoom() {
+    pauseSatelliteDownloadAnimation();
+
     if (state.rf.overlayFrame) {
       window.cancelAnimationFrame(state.rf.overlayFrame);
       state.rf.overlayFrame = 0;
@@ -1050,6 +1054,7 @@
       state.rf.overlayFrame = 0;
       layoutRfAttachedInputs();
       scheduleRfLabelLayout();
+      resumeSatelliteDownloadAnimation();
     });
   }
 
@@ -1083,7 +1088,13 @@
 
   function clearRfOverlay() {
     setRfPathMode(false);
-    stopSatelliteChevronAnimation();
+    stopSatelliteDownloadAnimation();
+
+    state.rf.attachedInputs.forEach(
+      function clearSatelliteDownload(record) {
+        removeSatelliteDownloadChevron(record);
+      }
+    );
 
     [
       state.rf.lineLayer,
@@ -1157,20 +1168,7 @@
     });
   }
 
-  function satelliteMovingChevronIcon(angleDegrees) {
-    return window.L.divIcon({
-      className: "osmmaps-rf-satellite-moving-icon",
-      html: [
-        '<span class="osmmaps-rf-satellite-moving-chevron" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
-        escapeHtml(angleDegrees),
-        'deg"></span>'
-      ].join(""),
-      iconSize: [12, 12],
-      iconAnchor: [6, 6]
-    });
-  }
-
-  function satelliteChevronEndpoints(record) {
+  function satelliteDownloadEndpoints(record) {
     var latlngs = record && record.line
       ? record.line.getLatLngs()
       : [];
@@ -1192,85 +1190,200 @@
     };
   }
 
-  function ensureSatelliteMovingChevron(record, angleDegrees) {
-    var endpoints;
+  function removeSatelliteDownloadChevron(record) {
+    if (
+      record &&
+      record.downloadChevron &&
+      record.downloadChevron.parentNode
+    ) {
+      record.downloadChevron.parentNode.removeChild(
+        record.downloadChevron
+      );
+    }
+
+    if (record) {
+      record.downloadChevron = null;
+      record.downloadChevronPath = null;
+    }
+  }
+
+  function ensureSatelliteDownloadChevron(record) {
+    var linePath;
+    var parent;
+    var namespace;
+    var group;
+    var shadow;
+    var chevron;
 
     if (
       !record ||
+      !record.line ||
       virtualInputKind(record.virtualEndpoint, record.path) !== "satellite"
     ) {
       return null;
     }
 
-    endpoints = satelliteChevronEndpoints(record);
+    linePath = record.line._path;
 
-    if (!endpoints) {
+    if (!linePath || !linePath.parentNode || !linePath.namespaceURI) {
       return null;
     }
 
-    if (!record.movingChevron) {
-      record.movingChevron = window.L.marker(endpoints.start, {
-        pane: "fieldopsRfEndpoints",
-        icon: satelliteMovingChevronIcon(angleDegrees),
-        interactive: false,
-        keyboard: false
-      }).addTo(state.rf.virtualLayer);
-      record.movingChevronAngle = angleDegrees;
-      return record.movingChevron;
+    if (
+      record.downloadChevron &&
+      record.downloadChevron.parentNode &&
+      record.downloadChevronPath === linePath
+    ) {
+      return record.downloadChevron;
     }
 
-    if (record.movingChevronAngle !== angleDegrees) {
-      record.movingChevron.setIcon(
-        satelliteMovingChevronIcon(angleDegrees)
-      );
-      record.movingChevronAngle = angleDegrees;
-    }
+    removeSatelliteDownloadChevron(record);
 
-    return record.movingChevron;
+    parent = linePath.parentNode;
+    namespace = linePath.namespaceURI;
+    group = document.createElementNS(namespace, "g");
+    shadow = document.createElementNS(namespace, "path");
+    chevron = document.createElementNS(namespace, "path");
+
+    group.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron"
+    );
+    group.setAttribute("aria-hidden", "true");
+    group.setAttribute("visibility", "hidden");
+
+    shadow.setAttribute("d", "M -5 -5 L 0 0 L -5 5");
+    shadow.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron-shadow"
+    );
+
+    chevron.setAttribute("d", "M -5 -5 L 0 0 L -5 5");
+    chevron.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron-main"
+    );
+
+    group.appendChild(shadow);
+    group.appendChild(chevron);
+    parent.appendChild(group);
+
+    record.downloadChevron = group;
+    record.downloadChevronPath = linePath;
+    return group;
   }
 
-  function stopSatelliteChevronAnimation() {
-    if (state.rf.satelliteChevronFrame) {
-      window.cancelAnimationFrame(state.rf.satelliteChevronFrame);
-      state.rf.satelliteChevronFrame = 0;
-    }
+  function satelliteDownloadAngle(path, distance, length) {
+    var sample = Math.min(2, Math.max(0.5, length / 80));
+    var before = path.getPointAtLength(
+      Math.max(0, distance - sample)
+    );
+    var after = path.getPointAtLength(
+      Math.min(length, distance + sample)
+    );
 
-    state.rf.satelliteChevronStartedAt = 0;
+    return Math.atan2(
+      after.y - before.y,
+      after.x - before.x
+    ) * 180 / Math.PI;
   }
 
-  function renderSatelliteChevrons(timestamp) {
+  function stopSatelliteDownloadAnimation() {
+    if (state.rf.satelliteDownloadFrame) {
+      window.cancelAnimationFrame(state.rf.satelliteDownloadFrame);
+      state.rf.satelliteDownloadFrame = 0;
+    }
+
+    state.rf.satelliteDownloadStartedAt = 0;
+    state.rf.satelliteDownloadPausedAt = 0;
+    state.rf.satelliteDownloadPaused = false;
+  }
+
+  function pauseSatelliteDownloadAnimation() {
+    if (state.rf.satelliteDownloadPaused) {
+      return;
+    }
+
+    state.rf.satelliteDownloadPaused = true;
+    state.rf.satelliteDownloadPausedAt =
+      window.performance &&
+      typeof window.performance.now === "function"
+        ? window.performance.now()
+        : Date.now();
+
+    if (state.rf.satelliteDownloadFrame) {
+      window.cancelAnimationFrame(state.rf.satelliteDownloadFrame);
+      state.rf.satelliteDownloadFrame = 0;
+    }
+  }
+
+  function resumeSatelliteDownloadAnimation() {
+    var now;
+
+    if (!state.rf.satelliteDownloadPaused) {
+      startSatelliteDownloadAnimation();
+      return;
+    }
+
+    now = window.performance &&
+      typeof window.performance.now === "function"
+        ? window.performance.now()
+        : Date.now();
+
+    if (
+      state.rf.satelliteDownloadStartedAt &&
+      state.rf.satelliteDownloadPausedAt
+    ) {
+      state.rf.satelliteDownloadStartedAt +=
+        now - state.rf.satelliteDownloadPausedAt;
+    }
+
+    state.rf.satelliteDownloadPaused = false;
+    state.rf.satelliteDownloadPausedAt = 0;
+    startSatelliteDownloadAnimation();
+  }
+
+  function renderSatelliteDownload(timestamp) {
     var cycleDuration =
-      SATELLITE_CHEVRON_TRAVEL_MS +
-      SATELLITE_CHEVRON_HOLD_MS;
+      SATELLITE_DOWNLOAD_TRAVEL_MS +
+      SATELLITE_DOWNLOAD_HOLD_MS;
     var elapsed;
     var progress;
     var activeCount = 0;
 
-    state.rf.satelliteChevronFrame = 0;
+    state.rf.satelliteDownloadFrame = 0;
 
-    if (!state.map || !state.rf.attachedInputs.size) {
-      state.rf.satelliteChevronStartedAt = 0;
+    if (
+      state.rf.satelliteDownloadPaused ||
+      !state.map ||
+      !state.rf.attachedInputs.size
+    ) {
       return;
     }
 
-    if (!state.rf.satelliteChevronStartedAt) {
-      state.rf.satelliteChevronStartedAt = timestamp;
+    if (!state.rf.satelliteDownloadStartedAt) {
+      state.rf.satelliteDownloadStartedAt = timestamp;
     }
 
     elapsed =
-      (timestamp - state.rf.satelliteChevronStartedAt) %
+      (timestamp - state.rf.satelliteDownloadStartedAt) %
       cycleDuration;
-    progress = elapsed < SATELLITE_CHEVRON_TRAVEL_MS
-      ? elapsed / SATELLITE_CHEVRON_TRAVEL_MS
+    progress = elapsed < SATELLITE_DOWNLOAD_TRAVEL_MS
+      ? elapsed / SATELLITE_DOWNLOAD_TRAVEL_MS
       : 1;
 
     state.rf.attachedInputs.forEach(
-      function moveSatelliteChevron(record) {
+      function moveSatelliteDownload(record) {
         var endpoints;
         var startPoint;
         var endPoint;
-        var point;
-        var marker;
+        var currentPoint;
+        var currentLatLng;
+        var path;
+        var length;
+        var distance;
+        var angle;
+        var group;
 
         if (
           virtualInputKind(record.virtualEndpoint, record.path) !==
@@ -1279,86 +1392,87 @@
           return;
         }
 
-        endpoints = satelliteChevronEndpoints(record);
+        endpoints = satelliteDownloadEndpoints(record);
 
-        if (!endpoints) {
-          return;
-        }
-
-        marker = ensureSatelliteMovingChevron(
-          record,
-          record.satelliteChevronAngle
-        );
-
-        if (!marker) {
+        if (!endpoints || !record.progressLine || !record.line) {
           return;
         }
 
         startPoint = state.map.latLngToContainerPoint(endpoints.start);
         endPoint = state.map.latLngToContainerPoint(endpoints.end);
-        point = window.L.point(
+        currentPoint = window.L.point(
           startPoint.x + ((endPoint.x - startPoint.x) * progress),
           startPoint.y + ((endPoint.y - startPoint.y) * progress)
         );
+        currentLatLng = state.map.containerPointToLatLng(currentPoint);
 
-        marker.setLatLng(state.map.containerPointToLatLng(point));
+        record.progressLine.setLatLngs([
+          endpoints.start,
+          currentLatLng
+        ]);
+
+        path = record.line._path;
+        group = ensureSatelliteDownloadChevron(record);
+
+        if (
+          path &&
+          group &&
+          typeof path.getTotalLength === "function"
+        ) {
+          length = Number(path.getTotalLength()) || 0;
+
+          if (length > 0) {
+            distance = record.virtualSide === "feeding"
+              ? progress * length
+              : (1 - progress) * length;
+            angle = satelliteDownloadAngle(
+              path,
+              distance,
+              length
+            );
+
+            if (record.virtualSide !== "feeding") {
+              angle += 180;
+            }
+
+            currentPoint = path.getPointAtLength(distance);
+            group.setAttribute(
+              "transform",
+              "translate(" +
+                currentPoint.x +
+                " " +
+                currentPoint.y +
+                ") rotate(" +
+                angle +
+                ")"
+            );
+            group.setAttribute("visibility", "visible");
+          }
+        }
+
         activeCount += 1;
       }
     );
 
     if (activeCount) {
-      state.rf.satelliteChevronFrame =
-        window.requestAnimationFrame(renderSatelliteChevrons);
+      state.rf.satelliteDownloadFrame =
+        window.requestAnimationFrame(renderSatelliteDownload);
     } else {
-      state.rf.satelliteChevronStartedAt = 0;
+      state.rf.satelliteDownloadStartedAt = 0;
     }
   }
 
-  function startSatelliteChevronAnimation() {
+  function startSatelliteDownloadAnimation() {
     if (
-      state.rf.satelliteChevronFrame ||
+      state.rf.satelliteDownloadPaused ||
+      state.rf.satelliteDownloadFrame ||
       !state.rf.attachedInputs.size
     ) {
       return;
     }
 
-    state.rf.satelliteChevronFrame =
-      window.requestAnimationFrame(renderSatelliteChevrons);
-  }
-
-  function satelliteLineArrowIcon(angleDegrees) {
-    return window.L.divIcon({
-      className: "osmmaps-rf-input-arrow-icon",
-      html: [
-        '<span class="osmmaps-rf-input-arrowhead" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
-        escapeHtml(angleDegrees),
-        'deg"></span>'
-      ].join(""),
-      iconSize: [10, 10],
-      iconAnchor: [5, 5]
-    });
-  }
-
-  function updateSatelliteLineArrow(record, layout) {
-    if (
-      virtualInputKind(record.virtualEndpoint, record.path) !== "satellite"
-    ) {
-      return;
-    }
-
-    if (!record.arrow) {
-      record.arrow = window.L.marker(layout.arrowLatLng, {
-        pane: "fieldopsRfEndpoints",
-        icon: satelliteLineArrowIcon(layout.arrowAngleDegrees + 180),
-        interactive: false,
-        keyboard: false
-      }).addTo(state.rf.virtualLayer);
-      return;
-    }
-
-    record.arrow
-      .setLatLng(layout.arrowLatLng)
-      .setIcon(satelliteLineArrowIcon(layout.arrowAngleDegrees + 180));
+    state.rf.satelliteDownloadFrame =
+      window.requestAnimationFrame(renderSatelliteDownload);
   }
 
   function attachedInputForPath(path, fromWalk, toWalk) {
@@ -1543,10 +1657,6 @@
       record.marker.setLatLng(layout.markerLatLng);
     }
 
-    updateSatelliteLineArrow(record, layout);
-    record.satelliteChevronAngle =
-      layout.arrowAngleDegrees + 180;
-
     if (record.line) {
       var fromLatLng = record.virtualSide === "feeding"
         ? layout.lineEndLatLng
@@ -1562,10 +1672,18 @@
         record.glowLine.setLatLngs(satelliteLatLngs);
       }
 
-      ensureSatelliteMovingChevron(
-        record,
-        record.satelliteChevronAngle
-      );
+      if (record.progressLine) {
+        var downloadEndpoints = satelliteDownloadEndpoints(record);
+
+        if (downloadEndpoints) {
+          record.progressLine.setLatLngs([
+            downloadEndpoints.start,
+            downloadEndpoints.start
+          ]);
+        }
+      }
+
+      ensureSatelliteDownloadChevron(record);
     }
   }
 
@@ -1634,6 +1752,7 @@
       var displayTo = toWalk;
       var line;
       var glowLine = null;
+      var progressLine = null;
       var attachedLatLngs = null;
       var style = lineStyle(path, false);
 
@@ -1680,10 +1799,10 @@
         ];
 
         if (virtualInputKind(attached.virtualEndpoint, path) === "satellite") {
-          style.color = "#343a40";
-          style.weight = 2;
-          style.opacity = 0.90;
-          style.dashArray = "7 5";
+          style.color = "#454c54";
+          style.weight = 2.6;
+          style.opacity = 0.88;
+          style.dashArray = "5 5";
           style.className = [
             style.className || "",
             "osmmaps-rf-satellite-feed"
@@ -1692,14 +1811,27 @@
           glowLine = new window.L.Polyline(attachedLatLngs, {
             pane: "fieldopsRfAttachedInputs",
             color: "#d6a43a",
-            weight: 3.5,
-            opacity: 0.24,
-            dashArray: "7 5",
+            weight: 3.2,
+            opacity: 0.14,
+            dashArray: "5 5",
             lineCap: "round",
             lineJoin: "round",
             interactive: false,
             keyboard: false,
             className: "osmmaps-rf-satellite-glow"
+          });
+
+          progressLine = new window.L.Polyline(attachedLatLngs, {
+            pane: "fieldopsRfAttachedInputs",
+            color: "#16a34a",
+            weight: 3.2,
+            opacity: 0.98,
+            dashArray: "5 5",
+            lineCap: "round",
+            lineJoin: "round",
+            interactive: false,
+            keyboard: false,
+            className: "osmmaps-rf-satellite-progress"
           });
         } else {
           style.dashArray = "8 6";
@@ -1735,23 +1867,36 @@
       }
 
       line.addTo(state.rf.lineLayer);
+
+      if (progressLine) {
+        progressLine.addTo(state.rf.lineLayer);
+      }
       state.rf.pathLines.set(String(path.id), line);
 
       if (attached) {
         attached.line = line;
         attached.glowLine = glowLine;
-        attached.satelliteChevronAngle =
-          attachedLayout.arrowAngleDegrees + 180;
+        attached.progressLine = progressLine;
         state.rf.attachedInputs.set(String(path.id), attached);
-        ensureSatelliteMovingChevron(
-          attached,
-          attached.satelliteChevronAngle
-        );
+
+        if (progressLine) {
+          var initialDownloadEndpoints =
+            satelliteDownloadEndpoints(attached);
+
+          if (initialDownloadEndpoints) {
+            progressLine.setLatLngs([
+              initialDownloadEndpoints.start,
+              initialDownloadEndpoints.start
+            ]);
+          }
+        }
+
+        ensureSatelliteDownloadChevron(attached);
       }
     });
 
     layoutRfAttachedInputs();
-    startSatelliteChevronAnimation();
+    startSatelliteDownloadAnimation();
     scheduleRfLabelLayoutStaged();
   }
 
