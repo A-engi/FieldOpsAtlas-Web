@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.2-aligned-four-layer-flow
+   Version: 1.1.4-centre-line-hard-remove
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.2-aligned-four-layer-flow";
+  var VERSION = "1.1.4-centre-line-hard-remove";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -145,7 +145,7 @@
   }
 
   function removeRibbon(record) {
-    ["under", "main", "highlight", "flow"].forEach(function removePart(name) {
+    ["under", "main", "flow"].forEach(function removePart(name) {
       var layer = record.ribbon && record.ribbon[name];
 
       if (layer && layer._map) {
@@ -174,12 +174,7 @@
       main: {
         color: color,
         weight: 6,
-        opacity: 0.94
-      },
-      highlight: {
-        color: "#ffffff",
-        weight: 2,
-        opacity: 0.52
+        opacity: 1
       },
       flow: {
         color: lightenHex(color, 0.44),
@@ -227,18 +222,6 @@
         lineCap: "round",
         lineJoin: "round"
       }).addTo(map),
-      highlight: window.L.polyline(points, {
-        pane: "fieldopsRfRibbon",
-        renderer: ribbonRenderer,
-        interactive: false,
-        keyboard: false,
-        className: "osmmaps-rf-ribbon-highlight",
-        color: style.highlight.color,
-        weight: style.highlight.weight,
-        opacity: style.highlight.opacity,
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map),
       flow: window.L.polyline(points, {
         pane: "fieldopsRfRibbon",
         renderer: ribbonRenderer,
@@ -269,7 +252,6 @@
 
     record.ribbon.under.setLatLngs(points).setStyle(style.under);
     record.ribbon.main.setLatLngs(points).setStyle(style.main);
-    record.ribbon.highlight.setLatLngs(points).setStyle(style.highlight);
     record.ribbon.flow.setLatLngs(points).setStyle(style.flow);
   }
 
