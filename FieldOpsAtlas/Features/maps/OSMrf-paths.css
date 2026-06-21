@@ -1,11 +1,11 @@
 /* ==========================================================================
-   FieldOps Atlas RF path fan styles
+   FieldOps Atlas saved RF path styles
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.css
-   Version: 1.0.2-path-optimiser-overlay
+   Version: 1.0.3-ribbon-flow
    Purpose:
-   - Remove the large service/count badges from RF paths.
-   - Show one compact abbreviated route label for the selected path.
-   - Show the optional collision-optimisation progress overlay.
+   - Hide the large path badges.
+   - Show one compact route label for the selected path.
+   - Style the saved route underlay, highlight, and animated flow.
    ========================================================================== */
 
 .osmmaps-rf-path-label-icon {
@@ -39,101 +39,25 @@
   white-space: nowrap;
 }
 
-.osmmaps-rf-optimiser {
-  position: fixed;
-  z-index: 840;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 18px;
-  background: rgba(3, 18, 31, 0.20);
-}
-
-.osmmaps-rf-optimiser[hidden] {
-  display: none;
-}
-
-.osmmaps-rf-optimiser__card {
-  width: min(86vw, 290px);
-  min-height: 82px;
-  padding: 13px;
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  border: 1px solid rgba(255, 226, 158, 0.78);
-  border-radius: 16px;
-  background: rgba(7, 29, 48, 0.95);
-  color: #fff7df;
-  box-shadow:
-    0 0 0 1px rgba(3, 15, 26, 0.42),
-    0 16px 34px rgba(0, 8, 20, 0.34);
-}
-
-.osmmaps-rf-optimiser__spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255, 239, 191, 0.26);
-  border-top-color: #ffe4a2;
-  border-radius: 50%;
-  animation: osmmaps-rf-optimiser-spin 0.75s linear infinite;
-}
-
-.osmmaps-rf-optimiser__copy {
-  min-width: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.osmmaps-rf-optimiser__copy strong {
-  font: 900 12px/1.1 Georgia, "Times New Roman", serif;
-  letter-spacing: 0.01em;
-}
-
-.osmmaps-rf-optimiser__copy span {
-  color: rgba(240, 249, 255, 0.72);
-  font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.osmmaps-rf-optimiser button {
-  min-width: 48px;
-  min-height: 32px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 226, 158, 0.70);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff3cf;
-  font: 900 10px/1 ui-sans-serif, system-ui, sans-serif;
-}
-
-.osmmaps-rf-optimiser-note {
-  position: fixed;
-  z-index: 845;
-  left: 50%;
-  bottom: 92px;
-  max-width: min(82vw, 320px);
-  padding: 8px 11px;
-  border: 1px solid rgba(255, 226, 158, 0.68);
-  border-radius: 999px;
-  background: rgba(7, 29, 48, 0.94);
-  color: #fff3cf;
-  box-shadow: 0 8px 20px rgba(0, 8, 20, 0.28);
-  font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  text-align: center;
-  opacity: 0;
-  transform: translate(-50%, 8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+.osmmaps-rf-ribbon-under,
+.osmmaps-rf-ribbon-highlight,
+.osmmaps-rf-ribbon-flow {
   pointer-events: none;
 }
 
-.osmmaps-rf-optimiser-note.is-visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
+.osmmaps-rf-ribbon-flow {
+  animation: osmmaps-rf-ribbon-flow 1.35s linear infinite;
 }
 
-@keyframes osmmaps-rf-optimiser-spin {
+@keyframes osmmaps-rf-ribbon-flow {
   to {
-    transform: rotate(360deg);
+    stroke-dashoffset: -36;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osmmaps-rf-ribbon-flow {
+    animation: none;
   }
 }
 
