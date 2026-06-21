@@ -9,7 +9,7 @@
   <title id="title">Ground satellite dish</title>
 
   <desc id="desc">
-    Original ground satellite dish shape with black outer structure, gold dish interior fill, and a straight RX label in the clear lower-right space.
+    Original ground satellite dish shape with black outer structure, gold dish interior fill, and a large straight RX label moved farther into the clear lower-right area.
   </desc>
 
   <!-- Gold interior fill so the map does not show through the bowl -->
@@ -103,18 +103,18 @@
 
   </g>
 
-  <!-- RX label: placed straight in the clear lower-right space -->
+  <!-- RX label: twice the previous size, straight and moved farther from the dish/pedestal -->
   <text
-    x="282"
-    y="306"
+    x="300"
+    y="334"
     text-anchor="middle"
     font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-    font-size="28"
+    font-size="56"
     font-weight="800"
     letter-spacing="1"
     fill="#D6A43A"
     stroke="#111111"
-    stroke-width="2"
+    stroke-width="2.5"
     paint-order="stroke fill"
   >RX</text>
 
