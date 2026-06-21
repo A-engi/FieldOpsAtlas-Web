@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF path fan renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.0.2-bearing-split
+   Version: 1.0.3-wide-bearing-fan
    Purpose:
    - Keep RF path endpoints fixed.
    - Group paths by feeding endpoint.
-   - Calculate the centre bearing between the outermost receiving sites.
-   - Divide path departure bearings evenly across a symmetrical fan.
+   - Use receiver bearings to calculate only the fan centre and route order.
+   - Divide routes across a deliberately wider symmetrical departure fan.
+   - Hold each route on its guide bearing before curving back to its fixed endpoint.
    - Show one abbreviated FROM → TO label for the selected path only.
    - Read site abbreviations from region site records when available.
    ========================================================================== */
@@ -14,11 +15,13 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.0.2-bearing-split";
+  var VERSION = "1.0.3-wide-bearing-fan";
   var REFERENCE_ZOOM = 9;
-  var CURVE_SEGMENTS = 28;
-  var FAN_PADDING_DEGREES = 10;
-  var MAX_FAN_HALF_SPREAD = 64;
+  var CURVE_SEGMENTS = 30;
+  var FAN_PADDING_DEGREES = 18;
+  var MAX_FAN_HALF_SPREAD = 68;
+  var GUIDE_DISTANCE_RATIO = 0.72;
+  var MAX_GUIDE_DISTANCE = 260;
   var LAYOUT_DELAY_MS = 0;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
@@ -159,14 +162,18 @@
     }
 
     if (pathCount === 2) {
-      return 16;
+      return 28;
     }
 
-    if (pathCount <= 4) {
-      return 24;
+    if (pathCount === 3) {
+      return 38;
     }
 
-    return 30;
+    if (pathCount === 4) {
+      return 46;
+    }
+
+    return Math.min(64, 50 + (pathCount - 5) * 3);
   }
 
   function bearingFan(group) {
@@ -221,18 +228,16 @@
     );
   }
 
-  function cubicPoint(start, controlOne, controlTwo, end, position) {
+  function quadraticPoint(start, control, end, position) {
     var inverse = 1 - position;
 
     return window.L.point(
-      inverse * inverse * inverse * start.x +
-        3 * inverse * inverse * position * controlOne.x +
-        3 * inverse * position * position * controlTwo.x +
-        position * position * position * end.x,
-      inverse * inverse * inverse * start.y +
-        3 * inverse * inverse * position * controlOne.y +
-        3 * inverse * position * position * controlTwo.y +
-        position * position * position * end.y
+      inverse * inverse * start.x +
+        2 * inverse * position * control.x +
+        position * position * end.x,
+      inverse * inverse * start.y +
+        2 * inverse * position * control.y +
+        position * position * end.y
     );
   }
 
@@ -242,26 +247,21 @@
     var dx = end.x - start.x;
     var dy = end.y - start.y;
     var length = Math.sqrt(dx * dx + dy * dy) || 1;
-    var departureDistance = Math.min(
-      length * 0.46,
-      clamp(length * 0.40, 34, 190)
+    var minimumGuideDistance = Math.min(70, length * 0.55);
+    var maximumGuideDistance = Math.min(MAX_GUIDE_DISTANCE, length * 0.90);
+    var guideDistance = clamp(
+      length * GUIDE_DISTANCE_RATIO,
+      minimumGuideDistance,
+      maximumGuideDistance
     );
-    var approachDistance = Math.min(
-      length * 0.32,
-      clamp(length * 0.24, 24, 120)
-    );
-    var controlOne = pointAlongBearing(start, guideBearing, departureDistance);
-    var controlTwo = window.L.point(
-      end.x - (dx / length) * approachDistance,
-      end.y - (dy / length) * approachDistance
-    );
+    var control = pointAlongBearing(start, guideBearing, guideDistance);
     var points = [];
     var index;
 
     for (index = 0; index <= CURVE_SEGMENTS; index += 1) {
       points.push(
         map.unproject(
-          cubicPoint(start, controlOne, controlTwo, end, index / CURVE_SEGMENTS),
+          quadraticPoint(start, control, end, index / CURVE_SEGMENTS),
           REFERENCE_ZOOM
         )
       );
@@ -295,6 +295,7 @@
       entry.record.line.options.fieldOpsActualBearing = entry.bearing;
       entry.record.line.options.fieldOpsGuideBearing = guideBearing;
       entry.record.line.options.fieldOpsFanCentreBearing = fan.centreBearing;
+      entry.record.line.options.fieldOpsFanHalfSpread = fan.halfSpread;
       entry.record.line.options.fieldOpsCurveVersion = VERSION;
     });
   }
