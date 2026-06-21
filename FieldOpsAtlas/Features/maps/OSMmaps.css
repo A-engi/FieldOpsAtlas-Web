@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.8-white-border-service-ring
+   Version: 1.0.9-node-border-sat-arrow
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -346,6 +346,32 @@ body {
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+}
+
+.osmmaps-rf-input-direction {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.osmmaps-rf-input-direction::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: -7px;
+  width: 10px;
+  height: 14px;
+  background:
+    url("../../../data/icons/path-pane-chevron-gold.svg?v=1.0.1")
+    center / contain
+    no-repeat;
+  filter: drop-shadow(0.7px 0.7px 0 rgba(0, 0, 0, 0.88));
+  opacity: 0.96;
 }
 
 .osmmaps-rf-input-node img {
