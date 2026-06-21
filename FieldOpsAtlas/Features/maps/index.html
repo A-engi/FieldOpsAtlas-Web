@@ -1,283 +1,526 @@
-<!doctype html>
-<html lang="en">
-<head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.69-sat-chevron-hold-glow</title>
- <link rel="stylesheet" href="../../../shell.css">
- <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
- <link rel="stylesheet" href="./OSMmaps.css?v=1.0.14-sat-chevron-hold-glow">
- <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
- <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
- <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.14-subtle-path-glow">
- <style>
- .maps-load-toast {
-  position: fixed;
-  z-index: 9999;
-  left: 14px;
-  right: auto;
-  bottom: 92px;
-  width: auto;
-  max-width: min(86vw, 380px);
-  padding: 7px 9px;
-  border: 1px solid rgba(255, 221, 142, 0.66);
-  border-radius: 13px;
-  background: rgba(10, 23, 36, 0.88);
-  color: #ffe7b8;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
-  font: 700 10px/1.18 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  white-space: pre-wrap;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+/* ==========================================================================
+   FieldOps Atlas OSM map and RF overlay
+   File: FieldOpsAtlas/Features/maps/OSMmaps.css
+   Version: 1.0.15-soft-sat-glass
+   Purpose:
+   - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
+   ========================================================================== */
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  background: #ffffff;
+  color: #f3fbff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.fieldops-shell-root {
+  position: relative;
+  z-index: 40;
   pointer-events: none;
- }
+}
 
- .maps-load-toast.is-visible {
-  opacity: 0.9;
-  transform: translateY(0);
- }
- </style>
-</head>
-<body>
- <div class="fieldops-shell-root" data-page="map"></div>
+.fieldops-shell-root * {
+  pointer-events: auto;
+}
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.69-sat-chevron-hold-glow">
-  <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
+.osmmaps-page {
+  position: relative;
+  min-height: 100dvh;
+}
 
-  <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
-   <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
+.osmmaps-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(3, 12, 24, 0.94);
+}
 
-   <article class="osmmaps-filter-card" aria-label="Map region filter">
-    <header class="osmmaps-filter-header">
-     <div>
-      <p class="osmmaps-kicker">Filter</p>
-      <h1>Choose region</h1>
-     </div>
+.osmmaps-page[data-theme="dark"] .leaflet-tile-pane {
+  filter: invert(0.88) hue-rotate(178deg) saturate(0.86) brightness(0.78) contrast(1.08);
+}
 
-     <button class="osmmaps-small-button" type="button" data-region-overlay-close>Close</button>
-    </header>
+.osmmaps-region-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+}
 
-    <p class="osmmaps-filter-note">
-     Only the selected region's walks are loaded.
-    </p>
+.osmmaps-region-overlay[hidden] {
+  display: none;
+}
 
-    <div class="osmmaps-region-list" data-region-list></div>
-   </article>
-  </section>
+.osmmaps-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(2, 9, 20, 0.24);
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+}
 
-  <section class="osmpanes-details" data-selected-panel hidden aria-live="polite"></section>
- </main>
+.osmmaps-filter-card {
+  position: absolute;
+  top: calc(96px + env(safe-area-inset-top));
+  right: max(12px, calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 12px));
+  width: min(360px, calc(100vw - 24px));
+  max-height: calc(100dvh - 190px);
+  overflow: hidden auto;
+  padding: 14px;
+  border: 1px solid rgba(184, 226, 255, 0.20);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(9, 34, 63, 0.84), rgba(5, 18, 36, 0.72)),
+    rgba(7, 22, 42, 0.74);
+  box-shadow: 0 24px 54px rgba(0, 12, 28, 0.32);
+  pointer-events: auto;
+  backdrop-filter: blur(20px) saturate(135%);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+}
 
- <section class="map-quick-tools" data-map-quick-tools aria-label="Map quick tools">
-  <div class="map-quick-tools__rail" id="mapQuickToolsRail">
-   <button
-    class="map-quick-tool is-dtt"
-    type="button"
-    data-map-service="dtt"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show DTT sites and choose cluster"
-   >
-    <img src="../../../data/icons/dtt.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>DTT</span>
-   </button>
+.osmmaps-filter-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
 
-   <button
-    class="map-quick-tool is-dab"
-    type="button"
-    data-map-service="dab"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show DAB sites and choose cluster"
-   >
-    <img src="../../../data/icons/dab.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>DAB</span>
-   </button>
+.osmmaps-filter-header h1 {
+  margin: 0;
+  color: rgba(246, 252, 255, 0.98);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
 
-   <button
-    class="map-quick-tool is-fm"
-    type="button"
-    data-map-service="fm"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show FM sites and choose cluster"
-   >
-    <img src="../../../data/icons/fm.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>FM</span>
-   </button>
+.osmmaps-kicker {
+  margin: 0 0 5px;
+  color: rgba(205, 234, 255, 0.72);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 
-   <button
-    class="map-quick-tool is-weather"
-    type="button"
-    data-weather-panel-open
-    aria-expanded="false"
-    aria-label="Open Preseli weather forecast"
-   >
-    <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
-   </button>
-  </div>
+.osmmaps-filter-note {
+  margin: 0 0 12px;
+  color: rgba(205, 234, 255, 0.74);
+  font-size: 13px;
+  line-height: 1.35;
+}
 
-  <section
-   class="map-service-picker"
-   id="mapServicePicker"
-   data-map-service-picker
-   aria-label="Choose map service cluster"
-   hidden
-  >
-   <header class="map-service-picker__header">
-    <div>
-     <small data-map-service-kicker>DTT</small>
-     <strong data-map-service-title>Choose cluster</strong>
-    </div>
-    <button type="button" data-map-service-close aria-label="Close service cluster chooser">Close</button>
-   </header>
-   <div class="map-service-picker__options" data-map-service-options></div>
-   <p class="map-service-picker__status" data-map-service-status></p>
-  </section>
+.osmmaps-small-button,
+.osmmaps-region-button {
+  border: 1px solid rgba(184, 226, 255, 0.18);
+  color: rgba(239, 249, 255, 0.94);
+  background: linear-gradient(180deg, rgba(22, 68, 116, 0.62), rgba(6, 24, 48, 0.68));
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
 
-  <button
-   class="map-quick-tools__toggle"
-   type="button"
-   data-map-quick-toggle
-   aria-controls="mapQuickToolsRail"
-   aria-expanded="true"
-   aria-label="Collapse map quick tools"
-  >
-   <span class="map-quick-tools__toggle-mark" aria-hidden="true"></span>
-  </button>
- </section>
+.osmmaps-small-button {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+}
 
- <aside class="weather-api-panel" aria-label="Preseli weather forecast" hidden>
-  <header class="weather-api-panel-header">
-   <div>
-    <p class="weather-api-kicker">Weather</p>
-    <h1>Preseli forecast</h1>
-   </div>
-   <button class="weather-api-mini-button" type="button" data-weather-panel-close aria-label="Close Preseli weather forecast">Close</button>
-  </header>
+.osmmaps-region-list {
+  display: grid;
+  gap: 8px;
+}
 
-  <p class="weather-api-copy">
-   Preview only. Weather data is not requested until Activate is tapped.
-  </p>
+.osmmaps-region-button {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 18px;
+  text-align: left;
+}
 
-  <div class="weather-api-actions">
-   <button class="weather-api-activate" type="button" data-weather-activate>
-    Activate preview
-   </button>
-   <a class="weather-api-full-link" href="../Weather/index.html">Open full Weather</a>
-  </div>
+.osmmaps-region-button[aria-pressed="true"] {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: linear-gradient(180deg, rgba(58, 132, 204, 0.74), rgba(10, 49, 92, 0.78));
+}
 
-  <section class="weather-forecast-slider" aria-label="Preseli forecast slider">
-   <header class="weather-forecast-header">
-    <span>Preseli area</span>
-    <span data-weather-forecast-updated>Not loaded</span>
-   </header>
+.osmmaps-region-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--region-color, #7dd3fc);
+  box-shadow: 0 0 0 5px rgba(125, 211, 252, 0.16);
+}
 
-   <div class="weather-forecast-track" data-weather-forecast-track tabindex="0" role="list">
-    <article class="weather-forecast-card weather-forecast-card-placeholder" role="listitem">
-     Tap Activate.
-    </article>
-   </div>
-  </section>
+.osmmaps-region-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  <p class="weather-api-status" data-weather-output>v1.0.69-sat-chevron-hold-glow</p>
- </aside>
+.osmmaps-region-count {
+  color: rgba(205, 234, 255, 0.62);
+  font-size: 12px;
+}
 
- <div class="background-item" aria-hidden="true">
-  <div class="atlas-top-fade"></div>
-  <div class="atlas-top-fade atlas-bottom-fade"></div>
- </div>
+.leaflet-container {
+  font: inherit;
+  background: rgba(6, 20, 40, 0.92);
+}
 
- <script src="../../../shell.js?v=fade-restore-20260612g"></script>
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
- <script src="./OSMpath-generator.js?v=1.0.1-generate-once"></script>
- <script src="./OSMrf-paths.js?v=1.1.18-bright-path-mode"></script>
- <script src="./OSMweather-menu.js?v=1.0.26-weather-data-only"></script>
+.leaflet-control-attribution {
+  font-size: 10px;
+}
 
- <script src="./OSMmaps.js?v=1.1.18-sat-chevron-hold-glow"></script>
- <script>
- /* Maps load toast | Version: 1.0.69-sat-chevron-hold-glow */
- (() => {
-  "use strict";
+.osmmaps-pin {
+  width: 18px;
+  height: 18px;
+  display: block;
+  border: 2px solid rgba(255, 255, 255, 0.94);
+  border-radius: 999px;
+  background: var(--pin-color);
+  box-shadow:
+    0 0 0 3px color-mix(
+      in srgb,
+      var(--pin-path-color, transparent) 48%,
+      transparent
+    ),
+    0 4px 10px rgba(0, 10, 24, 0.34);
+}
 
-  const PAGE_VERSION = "1.0.69-sat-chevron-hold-glow";
-  const TOAST_ID = "mapsLoadToast";
+/* RF labels and endpoints -------------------------------------------------- */
 
-  function versionOf(globalName) {
-   const globalValue = window[globalName];
+.osmmaps-rf-site-label-icon,
+.osmmaps-rf-path-label-icon,
+.osmmaps-rf-input-icon {
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
 
-   if (!globalValue) {
-    return "missing";
-   }
+.osmmaps-rf-site-label {
+  width: 100%;
+  min-height: 36px;
+  padding: 5px 7px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  border: 1px solid rgba(255, 226, 160, 0.62);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(16, 38, 60, 0.94), rgba(5, 18, 34, 0.94));
+  color: #fff7df;
+  box-shadow: 0 7px 16px rgba(0, 9, 22, 0.28);
+  font: 800 9px/1.1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
 
-   return globalValue.VERSION || globalValue.version || "loaded";
-  }
+.osmmaps-rf-site-label-icon.is-selected .osmmaps-rf-site-label {
+  border-color: rgba(255, 239, 191, 0.96);
+  box-shadow: 0 0 0 2px rgba(243, 189, 78, 0.32), 0 8px 20px rgba(0, 9, 22, 0.32);
+}
 
-  function leafletVersion() {
-   return window.L && window.L.version ? window.L.version : versionOf("L");
-  }
+.osmmaps-rf-site-services {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
 
-  function showToast() {
-   const existingToast = document.getElementById(TOAST_ID);
+.osmmaps-rf-site-services > span {
+  min-width: 24px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #06111f;
+  text-align: center;
+}
 
-   if (existingToast) {
-    existingToast.remove();
-   }
+.osmmaps-rf-site-services .is-dtt {
+  background: #86efac;
+}
 
-   const toast = document.createElement("div");
+.osmmaps-rf-site-services .is-dab {
+  background: #7dd3fc;
+}
 
-   toast.id = TOAST_ID;
-   toast.className = "maps-load-toast";
-   toast.setAttribute("role", "status");
-   toast.setAttribute("aria-live", "polite");
+.osmmaps-rf-site-services .is-fm {
+  background: #e879f9;
+}
 
-   const lines = [
-    `index.html ${PAGE_VERSION}`,
-    "shell.css unversioned",
-    "background.css fade-restore-20260612g",
-    "leaflet.css 1.9.4",
-    "OSMmaps.css 1.0.14-sat-chevron-hold-glow",
-    "OSMpanes.css 1.0.4-map-controls",
-    "OSMweather-menu.css 1.0.24-weather-only",
-    "OSMrf-paths.css 1.0.14-subtle-path-glow",
-    `shell.js ${versionOf("FieldOpsEditor")}`,
-    `leaflet.js ${leafletVersion()}`,
-    `OSMpath-generator.js ${versionOf("FieldOpsOSMPathGenerator")}`,
-    `OSMrf-paths.js ${versionOf("FieldOpsOSMRfPaths")}`,
-    `OSMpanes.js ${versionOf("FieldOpsOSMpanes")}`,
-    `OSMmaps.js ${versionOf("FieldOpsOSMmaps")}`,
-    `OSMweather-menu.js ${versionOf("FieldOpsOSMWeatherMenu")}`
-   ];
+.osmmaps-rf-site-label small {
+  overflow: hidden;
+  color: rgba(235, 245, 252, 0.80);
+  font: inherit;
+  font-size: 8px;
+  text-overflow: ellipsis;
+}
 
-   toast.textContent = lines.join("\n");
-   document.body.appendChild(toast);
+.osmmaps-rf-path-label {
+  width: 100%;
+  height: 100%;
+  padding: 4px 5px;
+  display: grid;
+  place-content: center;
+  gap: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 9px;
+  background: #15803d;
+  color: #f0fdf4;
+  box-shadow: 0 5px 12px rgba(0, 9, 22, 0.30);
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
 
-   requestAnimationFrame(() => {
-    toast.classList.add("is-visible");
-   });
+.osmmaps-rf-path-label strong,
+.osmmaps-rf-path-label small,
+.osmmaps-rf-path-label > span {
+  display: block;
+  line-height: 1;
+}
 
-   window.setTimeout(() => {
-    toast.classList.remove("is-visible");
-   }, 6500);
+.osmmaps-rf-path-label strong {
+  font-size: 9px;
+}
 
-   window.setTimeout(() => {
-    toast.remove();
-   }, 7000);
-  }
+.osmmaps-rf-path-label > span {
+  font-size: 12px;
+  font-weight: 950;
+}
 
-  if (document.readyState === "loading") {
-   document.addEventListener("DOMContentLoaded", () => {
-    window.setTimeout(showToast, 450);
-   }, { once: true });
-  } else {
-   window.setTimeout(showToast, 450);
-  }
- })();
- </script>
-</body>
-</html>
-<!-- Destination: FieldOpsAtlas/Features/maps/index.html -->
-<!-- End of file: FieldOpsAtlas/Features/maps/index.html | bottom/end of file -->
+.osmmaps-rf-path-label small {
+  font-size: 7px;
+}
+
+.osmmaps-rf-path-label-icon.is-dab .osmmaps-rf-path-label {
+  background: #0369a1;
+  color: #f0f9ff;
+}
+
+.osmmaps-rf-path-label-icon.is-fm .osmmaps-rf-path-label {
+  background: #86198f;
+  color: #fdf4ff;
+}
+
+.osmmaps-rf-path-label-icon.is-backup .osmmaps-rf-path-label {
+  border-style: dashed;
+}
+
+.osmmaps-rf-path-label-icon.is-selected .osmmaps-rf-path-label {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.34), 0 7px 17px rgba(0, 9, 22, 0.36);
+}
+
+.osmmaps-rf-input-node {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: visible;
+  border: 1px solid rgba(21, 128, 61, 0.58);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.10));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 0 0 2px rgba(22, 163, 74, 0.10),
+    0 4px 10px rgba(0, 9, 22, 0.22);
+  backdrop-filter: blur(5px) saturate(125%);
+  -webkit-backdrop-filter: blur(5px) saturate(125%);
+}
+
+
+.osmmaps-rf-input-icon.is-satellite .osmmaps-rf-input-node {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.osmmaps-rf-input-arrow-icon {
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.osmmaps-rf-input-arrowhead {
+  width: 10px;
+  height: 10px;
+  display: block;
+  background: #111111;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
+  transform-origin: center;
+}
+
+.osmmaps-rf-satellite-feed,
+.osmmaps-rf-satellite-glow {
+  shape-rendering: geometricPrecision;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.osmmaps-rf-satellite-feed {
+  filter: drop-shadow(0 -0.35px 0 rgba(255, 255, 255, 0.20));
+}
+
+.osmmaps-rf-satellite-moving-icon {
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.osmmaps-rf-satellite-moving-chevron {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  display: block;
+  transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
+  transform-origin: center;
+}
+
+.osmmaps-rf-satellite-moving-chevron::before,
+.osmmaps-rf-satellite-moving-chevron::after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  width: 8px;
+  height: 2.4px;
+  border-radius: 999px;
+  background: #d6a43a;
+  box-shadow: 0 0.8px 0 rgba(0, 0, 0, 0.72);
+  transform-origin: right center;
+}
+
+.osmmaps-rf-satellite-moving-chevron::before {
+  top: 5px;
+  transform: rotate(42deg);
+}
+
+.osmmaps-rf-satellite-moving-chevron::after {
+  bottom: 5px;
+  transform: rotate(-42deg);
+}
+
+.osmmaps-rf-input-node img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+
+.osmmaps-rf-input-rx {
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  color: #d6a43a;
+  font: 900 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.4px;
+  text-shadow:
+    -1px -1px 0 #111111,
+    1px -1px 0 #111111,
+    -1px 1px 0 #111111,
+    1px 1px 0 #111111;
+  white-space: nowrap;
+}
+
+.osmmaps-rf-input-icon.is-fibre .osmmaps-rf-input-node {
+  border-radius: 10px;
+}
+
+.osmmaps-rf-input-icon.is-fibre .osmmaps-rf-input-node img {
+  width: 24px;
+  height: 24px;
+}
+
+.osmmaps-rf-input-icon.is-dab .osmmaps-rf-input-node {
+  border-color: #0369a1;
+}
+
+.osmmaps-rf-input-icon.is-fm .osmmaps-rf-input-node {
+  border-color: #86198f;
+}
+
+.osmmaps-rf-path-popup .leaflet-popup-content-wrapper,
+.osmmaps-rf-path-popup .leaflet-popup-tip {
+  border: 1px solid rgba(255, 226, 160, 0.42);
+  background: rgba(6, 20, 36, 0.97);
+  color: #eef8ff;
+}
+
+.osmmaps-rf-path-card {
+  width: min(300px, calc(100vw - 70px));
+  max-height: 330px;
+  overflow: auto;
+}
+
+.osmmaps-rf-path-card header {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 9px;
+}
+
+.osmmaps-rf-path-card header small {
+  color: #f3bd4e;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.osmmaps-rf-path-card header strong {
+  color: #fff7df;
+  font-size: 13px;
+}
+
+.osmmaps-rf-path-card dl {
+  margin: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.osmmaps-rf-path-card dl > div {
+  padding: 5px 0;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 8px;
+  border-top: 1px solid rgba(188, 221, 241, 0.10);
+}
+
+.osmmaps-rf-path-card dt {
+  color: rgba(204, 226, 240, 0.62);
+  font-size: 9px;
+}
+
+.osmmaps-rf-path-card dd,
+.osmmaps-rf-path-card p {
+  margin: 0;
+  color: rgba(241, 249, 255, 0.94);
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.osmmaps-rf-path-card.is-loading {
+  min-height: 54px;
+  display: grid;
+  align-content: center;
+}
+
+/* Destination: FieldOpsAtlas/Features/maps/OSMmaps.css */
+/* End of file: FieldOpsAtlas/Features/maps/OSMmaps.css | bottom/end of file */
