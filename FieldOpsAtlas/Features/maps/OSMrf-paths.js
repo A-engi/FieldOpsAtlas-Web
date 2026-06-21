@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.6-gold-chevron-flow
+   Version: 1.1.7-subtle-linear-chevrons
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,16 +13,16 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.6-gold-chevron-flow";
+  var VERSION = "1.1.7-subtle-linear-chevrons";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
   var LAYOUT_DELAY_MS = 0;
   var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.0.1";
   var CHEVRON_COUNT = 3;
-  var CHEVRON_DURATION_SECONDS = 3.9;
-  var CHEVRON_WIDTH = 12;
-  var CHEVRON_HEIGHT = 20;
+  var CHEVRON_DURATION_SECONDS = 6.6;
+  var CHEVRON_WIDTH = 8;
+  var CHEVRON_HEIGHT = 8;
   var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
   var pathRecords = [];
@@ -184,6 +184,10 @@
     var namespace;
     var pathId;
     var chevrons = [];
+    var totalLength;
+    var chevronCount;
+    var duration;
+    var stagger;
     var index;
 
     if (!mainPath || reducedMotionEnabled()) {
@@ -197,16 +201,23 @@
       return chevrons;
     }
 
+    totalLength = typeof mainPath.getTotalLength === "function"
+      ? Number(mainPath.getTotalLength()) || 0
+      : 0;
+    chevronCount = clamp(Math.round(totalLength / 180) || CHEVRON_COUNT, 2, 4);
+    duration = clamp(totalLength / 70, CHEVRON_DURATION_SECONDS, 8.8);
+    stagger = duration / chevronCount;
+
     ribbonSequence += 1;
     pathId = "fieldops-rf-chevron-route-" + String(ribbonSequence);
     mainPath.setAttribute("id", pathId);
 
-    for (index = 0; index < CHEVRON_COUNT; index += 1) {
+    for (index = 0; index < chevronCount; index += 1) {
       var group = document.createElementNS(namespace, "g");
       var image = document.createElementNS(namespace, "image");
       var motion = document.createElementNS(namespace, "animateMotion");
       var motionPath = document.createElementNS(namespace, "mpath");
-      var stagger = CHEVRON_DURATION_SECONDS / CHEVRON_COUNT;
+      var opacity = document.createElementNS(namespace, "animate");
 
       group.setAttribute("class", "osmmaps-rf-ribbon-chevron");
       group.setAttribute("aria-hidden", "true");
@@ -220,7 +231,7 @@
       image.setAttribute("transform", "rotate(180)");
       setLinkedHref(image, CHEVRON_ICON_URL);
 
-      motion.setAttribute("dur", String(CHEVRON_DURATION_SECONDS) + "s");
+      motion.setAttribute("dur", String(duration) + "s");
       motion.setAttribute("begin", String(-(index * stagger)) + "s");
       motion.setAttribute("repeatCount", "indefinite");
       motion.setAttribute("rotate", "auto");
@@ -228,8 +239,18 @@
 
       setLinkedHref(motionPath, "#" + pathId);
       motion.appendChild(motionPath);
+
+      opacity.setAttribute("attributeName", "opacity");
+      opacity.setAttribute("dur", String(duration) + "s");
+      opacity.setAttribute("begin", String(-(index * stagger)) + "s");
+      opacity.setAttribute("repeatCount", "indefinite");
+      opacity.setAttribute("calcMode", "linear");
+      opacity.setAttribute("values", "0.12;0.42;0.68;0.42;0.12");
+      opacity.setAttribute("keyTimes", "0;0.18;0.5;0.82;1");
+
       group.appendChild(image);
       group.appendChild(motion);
+      group.appendChild(opacity);
       parent.appendChild(group);
       chevrons.push(group);
     }
