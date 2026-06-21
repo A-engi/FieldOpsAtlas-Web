@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.1.8-hide-ribbon-during-zoom
+   Version: 1.1.9-smooth-zoom-chevrons
    Purpose:
    - Ask OSMpath-generator.js for a route only when no saved route exists.
    - Render saved geographic path points without rerouting on pan or zoom.
@@ -13,7 +13,7 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.1.8-hide-ribbon-during-zoom";
+  var VERSION = "1.1.9-smooth-zoom-chevrons";
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
   var REGIONS_URL = "../../../data/regions.json";
@@ -21,8 +21,8 @@
   var CHEVRON_ICON_URL = "../../../data/icons/path-pane-chevron-gold.svg?v=1.0.1";
   var CHEVRON_COUNT = 3;
   var CHEVRON_DURATION_SECONDS = 6.6;
-  var CHEVRON_WIDTH = 8;
-  var CHEVRON_HEIGHT = 8;
+  var CHEVRON_WIDTH = 10;
+  var CHEVRON_HEIGHT = 14;
   var XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
   var originalPolyline = window.L && window.L.polyline;
   var pathRecords = [];
@@ -108,33 +108,37 @@
     return pane;
   }
 
-  function setRibbonPaneVisible(map, visible) {
-    var pane = map && map.getPane
-      ? map.getPane("fieldopsRfRibbon")
-      : null;
+  function setRibbonAnimationPaused(paused) {
+    var root = ribbonRenderer && ribbonRenderer._container;
 
-    if (pane) {
-      pane.style.visibility = visible ? "visible" : "hidden";
-    }
-  }
-
-  function bindRibbonZoomVisibility(map) {
-    if (!map || map.__fieldOpsRfRibbonZoomVisibilityBound) {
+    if (!root) {
       return;
     }
 
-    map.__fieldOpsRfRibbonZoomVisibilityBound = true;
+    if (paused && typeof root.pauseAnimations === "function") {
+      root.pauseAnimations();
+    } else if (!paused && typeof root.unpauseAnimations === "function") {
+      root.unpauseAnimations();
+    }
+  }
 
-    map.on("zoomstart", function hideRibbonDuringZoom() {
-      setRibbonPaneVisible(map, false);
+  function bindRibbonZoomAnimation(map) {
+    if (!map || map.__fieldOpsRfRibbonZoomAnimationBound) {
+      return;
+    }
+
+    map.__fieldOpsRfRibbonZoomAnimationBound = true;
+
+    map.on("zoomstart", function pauseRibbonDuringZoom() {
+      setRibbonAnimationPaused(true);
     });
 
     map.on("zoomend", function restoreRibbonAfterZoom() {
       window.requestAnimationFrame(function redrawAtFinalZoom() {
         layoutPaths(false);
 
-        window.requestAnimationFrame(function revealRedrawnRibbon() {
-          setRibbonPaneVisible(map, true);
+        window.requestAnimationFrame(function resumeChevronMotion() {
+          setRibbonAnimationPaused(false);
         });
       });
     });
@@ -142,18 +146,17 @@
 
   function ensureRibbonRenderers(map) {
     if (ribbonMap === map && ribbonRenderer) {
-      bindRibbonZoomVisibility(map);
+      bindRibbonZoomAnimation(map);
       return;
     }
 
     ribbonMap = map;
     ensurePane(map, "fieldopsRfRibbon", 435);
-    setRibbonPaneVisible(map, true);
     ribbonRenderer = window.L.svg({
       pane: "fieldopsRfRibbon",
       padding: 0.5
     });
-    bindRibbonZoomVisibility(map);
+    bindRibbonZoomAnimation(map);
   }
 
   function ribbonDefinitions(record) {
@@ -280,7 +283,7 @@
       opacity.setAttribute("begin", String(-(index * stagger)) + "s");
       opacity.setAttribute("repeatCount", "indefinite");
       opacity.setAttribute("calcMode", "linear");
-      opacity.setAttribute("values", "0.12;0.42;0.68;0.42;0.12");
+      opacity.setAttribute("values", "0.18;0.58;0.82;0.58;0.18");
       opacity.setAttribute("keyTimes", "0;0.18;0.5;0.82;1");
 
       group.appendChild(image);
