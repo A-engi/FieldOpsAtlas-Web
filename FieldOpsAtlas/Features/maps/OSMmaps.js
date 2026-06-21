@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.21-sat-download-progress
+   Version: 1.1.22-active-path-filter
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.21-sat-download-progress";
+  var VERSION = "1.1.22-active-path-filter";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -472,9 +472,18 @@
 
   function setRfPathMode(active) {
     var page = qs("[data-osmmaps-page]");
+    var enabled = Boolean(active);
 
-    if (page) {
-      page.classList.toggle("has-visible-rf-paths", Boolean(active));
+    if (!page) {
+      return;
+    }
+
+    page.classList.toggle("has-visible-rf-paths", enabled);
+
+    if (enabled) {
+      page.setAttribute("data-rf-path-active", "true");
+    } else {
+      page.removeAttribute("data-rf-path-active");
     }
   }
 
@@ -1742,7 +1751,6 @@
     state.rf.siteDetails = lightweightSiteDetails(cluster, walks, activePaths);
     state.rf.serviceId = serviceId;
     state.rf.regionId = state.selectedRegionId;
-    setRfPathMode(activePaths.length > 0);
 
     activePaths.forEach(function addPathLine(path) {
       var fromWalk = pathEndpoint(path, "feeding", walksById);
@@ -1895,6 +1903,7 @@
       }
     });
 
+    setRfPathMode(state.rf.pathLines.size > 0);
     layoutRfAttachedInputs();
     startSatelliteDownloadAnimation();
     scheduleRfLabelLayoutStaged();
