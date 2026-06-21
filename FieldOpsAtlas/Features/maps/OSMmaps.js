@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.4-attached-sat-input
+   Version: 1.1.6-sat-rx-farther-right
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,14 +14,14 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.4-attached-sat-input";
+  var VERSION = "1.1.6-sat-rx-farther-right";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var ATTACHED_INPUT_OFFSET_PX = 30;
   var INPUT_ICON_URLS = {
-    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.5-rx-outside-straight",
+    satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
   var DATA_FILES = {
