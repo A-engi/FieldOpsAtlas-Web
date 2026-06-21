@@ -3,13 +3,14 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.26-curved-rf-paths</title>
+ <title>Maps v1.0.27-rf-path-module</title>
  <link rel="stylesheet" href="../../../shell.css">
  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
  <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.23-input-svg-assets">
+ <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.1-selected-route-label">
  <style>
  .maps-load-toast {
   position: fixed;
@@ -37,17 +38,12 @@
   opacity: 0.9;
   transform: translateY(0);
  }
-
- /* Demo path cleanup: remove the large DTT/DAB/FM count badges. */
- .osmmaps-rf-path-label-icon {
-  display: none !important;
- }
  </style>
 </head>
 <body>
  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.26-curved-rf-paths">
+ <main class="osmmaps-page" data-osmmaps-page data-version="1.0.27-rf-path-module">
   <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
   <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -186,7 +182,7 @@
    </div>
   </section>
 
-  <p class="weather-api-status" data-weather-output>v1.0.26-curved-rf-paths</p>
+  <p class="weather-api-status" data-weather-output>v1.0.27-rf-path-module</p>
  </aside>
 
  <div class="background-item" aria-hidden="true">
@@ -197,151 +193,16 @@
  <script src="../../../shell.js?v=fade-restore-20260612g"></script>
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
+ <script src="./OSMrf-paths.js?v=1.0.1-symmetrical-fan"></script>
  <script src="./OSMweather-menu.js?v=1.0.25-input-svg-assets"></script>
-
- <script>
- /* RF curved path demo | Version: 1.0.26-curved-rf-paths */
- (() => {
-  "use strict";
-
-  const VERSION = "1.0.26-curved-rf-paths";
-  const REFERENCE_ZOOM = 9;
-  const LANE_SPACING = 10;
-  const MAX_OFFSET = 90;
-  const CURVE_SEGMENTS = 18;
-  const BATCH_RESET_MS = 250;
-
-  if (!window.L || typeof window.L.polyline !== "function") {
-   return;
-  }
-
-  const originalPolyline = window.L.polyline;
-  const sourceLaneCounts = new Map();
-  let lastRfPathCreatedAt = 0;
-
-  function sourceKey(latlng) {
-   return Number(latlng.lat).toFixed(5) + "," + Number(latlng.lng).toFixed(5);
-  }
-
-  function nextLaneIndex(fromLatLng) {
-   const now = Date.now();
-
-   if (now - lastRfPathCreatedAt > BATCH_RESET_MS) {
-    sourceLaneCounts.clear();
-   }
-
-   lastRfPathCreatedAt = now;
-
-   const key = sourceKey(fromLatLng);
-   const count = sourceLaneCounts.get(key) || 0;
-   sourceLaneCounts.set(key, count + 1);
-
-   if (count === 0) {
-    return 0;
-   }
-
-   const step = Math.ceil(count / 2);
-   return count % 2 === 1 ? step : -step;
-  }
-
-  function curvedLatLngs(map, fromLatLng, toLatLng, laneIndex) {
-   const fromPoint = map.project(fromLatLng, REFERENCE_ZOOM);
-   const toPoint = map.project(toLatLng, REFERENCE_ZOOM);
-   const dx = toPoint.x - fromPoint.x;
-   const dy = toPoint.y - fromPoint.y;
-   const length = Math.sqrt(dx * dx + dy * dy) || 1;
-   const perpendicularX = -dy / length;
-   const perpendicularY = dx / length;
-   const offset = Math.max(
-    -MAX_OFFSET,
-    Math.min(MAX_OFFSET, laneIndex * LANE_SPACING)
-   );
-   const controlPoint = window.L.point(
-    (fromPoint.x + toPoint.x) / 2 + perpendicularX * offset,
-    (fromPoint.y + toPoint.y) / 2 + perpendicularY * offset
-   );
-   const points = [];
-
-   for (let index = 0; index <= CURVE_SEGMENTS; index += 1) {
-    const t = index / CURVE_SEGMENTS;
-    const inverse = 1 - t;
-    const point = window.L.point(
-     inverse * inverse * fromPoint.x +
-      2 * inverse * t * controlPoint.x +
-      t * t * toPoint.x,
-     inverse * inverse * fromPoint.y +
-      2 * inverse * t * controlPoint.y +
-      t * t * toPoint.y
-    );
-
-    points.push(map.unproject(point, REFERENCE_ZOOM));
-   }
-
-   points[0] = fromLatLng;
-   points[points.length - 1] = toLatLng;
-   return points;
-  }
-
-  function tidyPathStyle(style) {
-   const nextStyle = Object.assign({}, style || {});
-   const weight = Number(nextStyle.weight);
-
-   if (weight === 5) {
-    nextStyle.weight = 3.5;
-   } else if (weight >= 8) {
-    nextStyle.weight = 7;
-   }
-
-   return nextStyle;
-  }
-
-  window.L.polyline = function fieldOpsCurvedPolyline(latlngs, options) {
-   const isRfPath =
-    options &&
-    options.pane === "fieldopsRfPaths" &&
-    Array.isArray(latlngs) &&
-    latlngs.length === 2;
-
-   if (!isRfPath) {
-    return originalPolyline.call(this, latlngs, options);
-   }
-
-   const map = window.FieldOpsAtlasLeafletMap;
-   const fromLatLng = window.L.latLng(latlngs[0]);
-   const toLatLng = window.L.latLng(latlngs[1]);
-
-   if (!map || typeof map.project !== "function" || typeof map.unproject !== "function") {
-    return originalPolyline.call(this, latlngs, tidyPathStyle(options));
-   }
-
-   const laneIndex = nextLaneIndex(fromLatLng);
-   const line = originalPolyline.call(
-    this,
-    curvedLatLngs(map, fromLatLng, toLatLng, laneIndex),
-    tidyPathStyle(options)
-   );
-   const originalSetStyle = line.setStyle;
-
-   line.setStyle = function setCurvedPathStyle(style) {
-    return originalSetStyle.call(this, tidyPathStyle(style));
-   };
-
-   line.options.fieldOpsCurveLane = laneIndex;
-   line.options.fieldOpsCurveVersion = VERSION;
-   return line;
-  };
-
-  window.L.polyline.__fieldOpsCurveVersion = VERSION;
- })();
- </script>
 
  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
  <script>
- /* Maps load toast | Version: 1.0.26-curved-rf-paths */
+ /* Maps load toast | Version: 1.0.27-rf-path-module */
  (() => {
   "use strict";
 
-  const PAGE_VERSION = "1.0.26-curved-rf-paths";
+  const PAGE_VERSION = "1.0.27-rf-path-module";
   const TOAST_ID = "mapsLoadToast";
 
   function versionOf(globalName) {
@@ -380,9 +241,10 @@
     "OSMmaps.css fade-restore-20260612g",
     "OSMpanes.css fade-restore-20260612g",
     "OSMweather-menu.css 1.0.23-input-svg-assets",
+    "OSMrf-paths.css 1.0.1-selected-route-label",
     `shell.js ${versionOf("FieldOpsEditor")}`,
     `leaflet.js ${leafletVersion()}`,
-    `rf-curves ${window.L.polyline.__fieldOpsCurveVersion || "missing"}`,
+    `OSMrf-paths.js ${versionOf("FieldOpsOSMRfPaths")}`,
     `OSMpanes.js ${versionOf("FieldOpsOSMpanes")}`,
     `OSMmaps.js ${versionOf("FieldOpsOSMmaps")}`,
     `OSMweather-menu.js ${versionOf("FieldOpsOSMWeatherMenu")}`
