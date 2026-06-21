@@ -1,13 +1,14 @@
 /* ==========================================================================
    FieldOps Atlas RF path fan renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.0.3-wide-bearing-fan
+   Version: 1.0.4-nested-clearance
    Purpose:
    - Keep RF path endpoints fixed.
    - Group paths by feeding endpoint.
-   - Use receiver bearings to calculate only the fan centre and route order.
+   - Use receiver bearings to calculate the fan centre and route order.
    - Divide routes across a deliberately wider symmetrical departure fan.
-   - Hold each route on its guide bearing before curving back to its fixed endpoint.
+   - Detect shorter near-inline routes inside each outer route.
+   - Hold longer outer routes outside until they clear those inner routes.
    - Show one abbreviated FROM → TO label for the selected path only.
    - Read site abbreviations from region site records when available.
    ========================================================================== */
@@ -15,13 +16,15 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.0.3-wide-bearing-fan";
+  var VERSION = "1.0.4-nested-clearance";
   var REFERENCE_ZOOM = 9;
-  var CURVE_SEGMENTS = 30;
+  var CURVE_SEGMENTS = 34;
   var FAN_PADDING_DEGREES = 18;
   var MAX_FAN_HALF_SPREAD = 68;
-  var GUIDE_DISTANCE_RATIO = 0.72;
-  var MAX_GUIDE_DISTANCE = 260;
+  var BASE_GUIDE_DISTANCE_RATIO = 0.58;
+  var MAX_GUIDE_DISTANCE = 420;
+  var INLINE_BEARING_WINDOW = 36;
+  var CLEARANCE_MARGIN = 42;
   var LAYOUT_DELAY_MS = 0;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
@@ -228,40 +231,132 @@
     );
   }
 
-  function quadraticPoint(start, control, end, position) {
+  function cubicPoint(start, controlOne, controlTwo, end, position) {
     var inverse = 1 - position;
 
     return window.L.point(
-      inverse * inverse * start.x +
-        2 * inverse * position * control.x +
-        position * position * end.x,
-      inverse * inverse * start.y +
-        2 * inverse * position * control.y +
-        position * position * end.y
+      inverse * inverse * inverse * start.x +
+        3 * inverse * inverse * position * controlOne.x +
+        3 * inverse * position * position * controlTwo.x +
+        position * position * position * end.x,
+      inverse * inverse * inverse * start.y +
+        3 * inverse * inverse * position * controlOne.y +
+        3 * inverse * position * position * controlTwo.y +
+        position * position * position * end.y
     );
   }
 
-  function curvedLatLngs(map, record, guideBearing) {
+  function projectedLength(map, record) {
     var start = map.project(record.from, REFERENCE_ZOOM);
     var end = map.project(record.to, REFERENCE_ZOOM);
     var dx = end.x - start.x;
     var dy = end.y - start.y;
-    var length = Math.sqrt(dx * dx + dy * dy) || 1;
-    var minimumGuideDistance = Math.min(70, length * 0.55);
-    var maximumGuideDistance = Math.min(MAX_GUIDE_DISTANCE, length * 0.90);
-    var guideDistance = clamp(
-      length * GUIDE_DISTANCE_RATIO,
-      minimumGuideDistance,
-      maximumGuideDistance
+
+    return Math.sqrt(dx * dx + dy * dy) || 1;
+  }
+
+  function fanSide(value) {
+    if (Math.abs(value) < 0.001) {
+      return 0;
+    }
+
+    return value < 0 ? -1 : 1;
+  }
+
+  function baseGuideDistance(routeLength) {
+    var minimumDistance = Math.min(72, routeLength * 0.48);
+    var maximumDistance = Math.min(MAX_GUIDE_DISTANCE, routeLength * 0.86);
+
+    return clamp(
+      routeLength * BASE_GUIDE_DISTANCE_RATIO,
+      minimumDistance,
+      maximumDistance
     );
-    var control = pointAlongBearing(start, guideBearing, guideDistance);
+  }
+
+  function clearanceGuideDistance(entry, entries) {
+    var guideDifference = signedBearingDifference(
+      entry.guideBearing,
+      entry.fanCentreBearing
+    );
+    var side = fanSide(guideDifference);
+    var outwardDistance = Math.abs(guideDifference);
+    var requiredDistance = baseGuideDistance(entry.routeLength);
+
+    if (!side) {
+      return requiredDistance;
+    }
+
+    entries.forEach(function inspectInnerRoute(other) {
+      var otherGuideDifference;
+      var otherSide;
+      var bearingGap;
+
+      if (other === entry || other.routeLength >= entry.routeLength) {
+        return;
+      }
+
+      otherGuideDifference = signedBearingDifference(
+        other.guideBearing,
+        other.fanCentreBearing
+      );
+      otherSide = fanSide(otherGuideDifference);
+
+      if (otherSide !== 0 && otherSide !== side) {
+        return;
+      }
+
+      if (Math.abs(otherGuideDifference) >= outwardDistance) {
+        return;
+      }
+
+      bearingGap = Math.abs(
+        signedBearingDifference(other.bearing, entry.bearing)
+      );
+
+      if (bearingGap > INLINE_BEARING_WINDOW) {
+        return;
+      }
+
+      requiredDistance = Math.max(
+        requiredDistance,
+        other.routeLength + CLEARANCE_MARGIN
+      );
+    });
+
+    return clamp(
+      requiredDistance,
+      Math.min(72, entry.routeLength * 0.48),
+      Math.min(MAX_GUIDE_DISTANCE, entry.routeLength * 0.88)
+    );
+  }
+
+  function curvedLatLngs(map, record, guideBearing, guideDistance) {
+    var start = map.project(record.from, REFERENCE_ZOOM);
+    var end = map.project(record.to, REFERENCE_ZOOM);
+    var controlOne = pointAlongBearing(
+      start,
+      guideBearing,
+      guideDistance * 0.38
+    );
+    var controlTwo = pointAlongBearing(
+      start,
+      guideBearing,
+      guideDistance
+    );
     var points = [];
     var index;
 
     for (index = 0; index <= CURVE_SEGMENTS; index += 1) {
       points.push(
         map.unproject(
-          quadraticPoint(start, control, end, index / CURVE_SEGMENTS),
+          cubicPoint(
+            start,
+            controlOne,
+            controlTwo,
+            end,
+            index / CURVE_SEGMENTS
+          ),
           REFERENCE_ZOOM
         )
       );
@@ -280,22 +375,36 @@
     var fan = bearingFan(group);
     var lastIndex = fan.entries.length - 1;
 
-    fan.entries.forEach(function layoutRecord(entry, index) {
+    fan.entries.forEach(function prepareRoute(entry, index) {
       var ratio = lastIndex > 0 ? index / lastIndex : 0.5;
-      var guideBearing = normaliseBearing(
+
+      entry.guideBearing = normaliseBearing(
         fan.centreBearing - fan.halfSpread + ratio * fan.halfSpread * 2
       );
+      entry.fanCentreBearing = fan.centreBearing;
+      entry.routeLength = projectedLength(map, entry.record);
+    });
+
+    fan.entries.forEach(function layoutRecord(entry) {
+      var guideDistance = clearanceGuideDistance(entry, fan.entries);
 
       entry.record.actualBearing = entry.bearing;
-      entry.record.guideBearing = guideBearing;
+      entry.record.guideBearing = entry.guideBearing;
       entry.record.fanCentreBearing = fan.centreBearing;
+      entry.record.guideDistance = guideDistance;
       entry.record.line.setLatLngs(
-        curvedLatLngs(map, entry.record, guideBearing)
+        curvedLatLngs(
+          map,
+          entry.record,
+          entry.guideBearing,
+          guideDistance
+        )
       );
       entry.record.line.options.fieldOpsActualBearing = entry.bearing;
-      entry.record.line.options.fieldOpsGuideBearing = guideBearing;
+      entry.record.line.options.fieldOpsGuideBearing = entry.guideBearing;
       entry.record.line.options.fieldOpsFanCentreBearing = fan.centreBearing;
       entry.record.line.options.fieldOpsFanHalfSpread = fan.halfSpread;
+      entry.record.line.options.fieldOpsGuideDistance = guideDistance;
       entry.record.line.options.fieldOpsCurveVersion = VERSION;
     });
   }
@@ -592,7 +701,8 @@
         to: to,
         actualBearing: 0,
         guideBearing: 0,
-        fanCentreBearing: 0
+        fanCentreBearing: 0,
+        guideDistance: 0
       };
 
       pathRecords.push(record);
