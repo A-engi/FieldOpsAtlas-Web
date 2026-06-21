@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.5-region-node-service-ring
+   Version: 1.0.4-region-node-service-ring
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -193,7 +193,7 @@ body {
   display: block;
   border: 2px solid rgba(255, 255, 255, 0.94);
   border-radius: 999px;
-  background: var(--pin-color);
+  background: var(--pin-color, #164e63);
   box-shadow:
     0 0 0 4px var(--pin-path-color, transparent),
     0 4px 10px rgba(0, 10, 24, 0.34);
