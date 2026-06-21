@@ -1,12 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas RF path fan renderer
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.js
-   Version: 1.0.1-symmetrical-fan
+   Version: 1.0.2-bearing-split
    Purpose:
    - Keep RF path endpoints fixed.
    - Group paths by feeding endpoint.
-   - Sort receiving endpoints across the visible fan.
-   - Apply symmetrical outward curves to reduce overlap.
+   - Calculate the centre bearing between the outermost receiving sites.
+   - Divide path departure bearings evenly across a symmetrical fan.
    - Show one abbreviated FROM → TO label for the selected path only.
    - Read site abbreviations from region site records when available.
    ========================================================================== */
@@ -14,11 +14,11 @@
 (function fieldOpsOSMRfPaths() {
   "use strict";
 
-  var VERSION = "1.0.1-symmetrical-fan";
+  var VERSION = "1.0.2-bearing-split";
   var REFERENCE_ZOOM = 9;
-  var CURVE_SEGMENTS = 24;
-  var LANE_SPACING = 11;
-  var MAX_CURVE_OFFSET = 92;
+  var CURVE_SEGMENTS = 28;
+  var FAN_PADDING_DEGREES = 10;
+  var MAX_FAN_HALF_SPREAD = 64;
   var LAYOUT_DELAY_MS = 0;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var REGION_SITES_URL = "../../../data/regions/";
@@ -109,51 +109,116 @@
     return Array.from(groups.values());
   }
 
-  function projectedGeometry(map, group) {
-    var sourcePoint = map.project(group[0].from, REFERENCE_ZOOM);
-    var endpointPoints = group.map(function projectDestination(record) {
-      return map.project(record.to, REFERENCE_ZOOM);
-    });
-    var directionX = 0;
-    var directionY = 0;
+  function toRadians(value) {
+    return Number(value) * Math.PI / 180;
+  }
 
-    endpointPoints.forEach(function addDirection(point) {
-      var dx = point.x - sourcePoint.x;
-      var dy = point.y - sourcePoint.y;
-      var length = Math.sqrt(dx * dx + dy * dy) || 1;
+  function toDegrees(value) {
+    return Number(value) * 180 / Math.PI;
+  }
 
-      directionX += dx / length;
-      directionY += dy / length;
+  function normaliseBearing(value) {
+    return (Number(value) % 360 + 360) % 360;
+  }
+
+  function signedBearingDifference(bearing, centreBearing) {
+    return ((Number(bearing) - Number(centreBearing) + 540) % 360) - 180;
+  }
+
+  function bearingBetween(from, to) {
+    var latitudeOne = toRadians(from.lat);
+    var latitudeTwo = toRadians(to.lat);
+    var deltaLongitude = toRadians(to.lng - from.lng);
+    var y = Math.sin(deltaLongitude) * Math.cos(latitudeTwo);
+    var x = Math.cos(latitudeOne) * Math.sin(latitudeTwo) -
+      Math.sin(latitudeOne) * Math.cos(latitudeTwo) * Math.cos(deltaLongitude);
+
+    return normaliseBearing(toDegrees(Math.atan2(y, x)));
+  }
+
+  function circularMeanBearing(bearings) {
+    var x = 0;
+    var y = 0;
+
+    bearings.forEach(function addBearing(bearing) {
+      var radians = toRadians(bearing);
+      x += Math.sin(radians);
+      y += Math.cos(radians);
     });
 
-    var directionLength = Math.sqrt(directionX * directionX + directionY * directionY) || 1;
-    var axisX = directionX / directionLength;
-    var axisY = directionY / directionLength;
-    var perpendicularX = -axisY;
-    var perpendicularY = axisX;
-    var xValues = endpointPoints.map(function xValue(point) {
-      return point.x;
-    });
-    var yValues = endpointPoints.map(function yValue(point) {
-      return point.y;
-    });
-    var xRange = Math.max.apply(Math, xValues) - Math.min.apply(Math, xValues);
-    var yRange = Math.max.apply(Math, yValues) - Math.min.apply(Math, yValues);
-    var sortByX = xRange >= yRange;
-    var orientation = sortByX ? perpendicularX : perpendicularY;
-
-    if (orientation < 0) {
-      perpendicularX *= -1;
-      perpendicularY *= -1;
+    if (Math.abs(x) < 0.000001 && Math.abs(y) < 0.000001) {
+      return Number(bearings[0] || 0);
     }
 
+    return normaliseBearing(toDegrees(Math.atan2(x, y)));
+  }
+
+  function minimumFanHalfSpread(pathCount) {
+    if (pathCount <= 1) {
+      return 0;
+    }
+
+    if (pathCount === 2) {
+      return 16;
+    }
+
+    if (pathCount <= 4) {
+      return 24;
+    }
+
+    return 30;
+  }
+
+  function bearingFan(group) {
+    var bearings = group.map(function pathBearing(record) {
+      return bearingBetween(record.from, record.to);
+    });
+    var anchorBearing = circularMeanBearing(bearings);
+    var anchoredDifferences = bearings.map(function anchoredDifference(bearing) {
+      return signedBearingDifference(bearing, anchorBearing);
+    });
+    var minimumDifference = Math.min.apply(Math, anchoredDifferences);
+    var maximumDifference = Math.max.apply(Math, anchoredDifferences);
+    var centreBearing = normaliseBearing(
+      anchorBearing + (minimumDifference + maximumDifference) / 2
+    );
+    var entries = group.map(function fanEntry(record, index) {
+      var bearing = bearings[index];
+
+      return {
+        record: record,
+        bearing: bearing,
+        difference: signedBearingDifference(bearing, centreBearing)
+      };
+    }).sort(function sortByBearing(left, right) {
+      return left.difference - right.difference;
+    });
+    var actualHalfSpread = entries.reduce(function largestDifference(largest, entry) {
+      return Math.max(largest, Math.abs(entry.difference));
+    }, 0);
+    var minimumHalfSpread = minimumFanHalfSpread(entries.length);
+    var visualHalfSpread = entries.length <= 1
+      ? 0
+      : clamp(
+          Math.max(actualHalfSpread + FAN_PADDING_DEGREES, minimumHalfSpread),
+          minimumHalfSpread,
+          MAX_FAN_HALF_SPREAD
+        );
+
     return {
-      sourcePoint: sourcePoint,
-      endpointPoints: endpointPoints,
-      perpendicularX: perpendicularX,
-      perpendicularY: perpendicularY,
-      sortByX: sortByX
+      centreBearing: centreBearing,
+      halfSpread: visualHalfSpread,
+      entries: entries
     };
+  }
+
+  function pointAlongBearing(startPoint, bearing, distance) {
+    var radians = toRadians(bearing);
+
+    return window.L.point(
+      startPoint.x + Math.sin(radians) * distance,
+      startPoint.y - Math.cos(radians) * distance
+    );
   }
 
   function cubicPoint(start, controlOne, controlTwo, end, position) {
@@ -171,21 +236,24 @@
     );
   }
 
-  function curvedLatLngs(map, record, fan, lanePosition) {
-    var start = fan.sourcePoint;
+  function curvedLatLngs(map, record, guideBearing) {
+    var start = map.project(record.from, REFERENCE_ZOOM);
     var end = map.project(record.to, REFERENCE_ZOOM);
     var dx = end.x - start.x;
     var dy = end.y - start.y;
     var length = Math.sqrt(dx * dx + dy * dy) || 1;
-    var maximumForLength = Math.min(MAX_CURVE_OFFSET, length * 0.28);
-    var offset = clamp(lanePosition * LANE_SPACING, -maximumForLength, maximumForLength);
-    var controlOne = window.L.point(
-      start.x + dx * 0.34 + fan.perpendicularX * offset,
-      start.y + dy * 0.34 + fan.perpendicularY * offset
+    var departureDistance = Math.min(
+      length * 0.46,
+      clamp(length * 0.40, 34, 190)
     );
+    var approachDistance = Math.min(
+      length * 0.32,
+      clamp(length * 0.24, 24, 120)
+    );
+    var controlOne = pointAlongBearing(start, guideBearing, departureDistance);
     var controlTwo = window.L.point(
-      start.x + dx * 0.68 + fan.perpendicularX * offset,
-      start.y + dy * 0.68 + fan.perpendicularY * offset
+      end.x - (dx / length) * approachDistance,
+      end.y - (dy / length) * approachDistance
     );
     var points = [];
     var index;
@@ -209,27 +277,25 @@
       return;
     }
 
-    var fan = projectedGeometry(map, group);
-    var ordered = group.slice().sort(function sortRoutes(left, right) {
-      var leftPoint = map.project(left.to, REFERENCE_ZOOM);
-      var rightPoint = map.project(right.to, REFERENCE_ZOOM);
-      var primaryDifference = fan.sortByX
-        ? leftPoint.x - rightPoint.x
-        : leftPoint.y - rightPoint.y;
+    var fan = bearingFan(group);
+    var lastIndex = fan.entries.length - 1;
 
-      if (Math.abs(primaryDifference) > 0.01) {
-        return primaryDifference;
-      }
+    fan.entries.forEach(function layoutRecord(entry, index) {
+      var ratio = lastIndex > 0 ? index / lastIndex : 0.5;
+      var guideBearing = normaliseBearing(
+        fan.centreBearing - fan.halfSpread + ratio * fan.halfSpread * 2
+      );
 
-      return leftPoint.x - rightPoint.x || leftPoint.y - rightPoint.y;
-    });
-    var centre = (ordered.length - 1) / 2;
-
-    ordered.forEach(function layoutRecord(record, index) {
-      record.lanePosition = index - centre;
-      record.line.setLatLngs(curvedLatLngs(map, record, fan, record.lanePosition));
-      record.line.options.fieldOpsCurveLane = record.lanePosition;
-      record.line.options.fieldOpsCurveVersion = VERSION;
+      entry.record.actualBearing = entry.bearing;
+      entry.record.guideBearing = guideBearing;
+      entry.record.fanCentreBearing = fan.centreBearing;
+      entry.record.line.setLatLngs(
+        curvedLatLngs(map, entry.record, guideBearing)
+      );
+      entry.record.line.options.fieldOpsActualBearing = entry.bearing;
+      entry.record.line.options.fieldOpsGuideBearing = guideBearing;
+      entry.record.line.options.fieldOpsFanCentreBearing = fan.centreBearing;
+      entry.record.line.options.fieldOpsCurveVersion = VERSION;
     });
   }
 
@@ -523,7 +589,9 @@
         line: line,
         from: from,
         to: to,
-        lanePosition: 0
+        actualBearing: 0,
+        guideBearing: 0,
+        fanCentreBearing: 0
       };
 
       pathRecords.push(record);
