@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas saved RF path styles
    File: FieldOpsAtlas/Features/maps/OSMrf-paths.css
-   Version: 1.0.5-aligned-four-layer-flow
+   Version: 1.0.6-centre-line-hard-remove
    Purpose:
    - Hide the large path badges.
    - Show one compact route label for the selected path.
@@ -52,6 +52,13 @@
 .osmmaps-rf-ribbon-flow {
   pointer-events: none;
   shape-rendering: geometricPrecision;
+}
+
+.osmmaps-rf-ribbon-highlight {
+  display: none !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  opacity: 0 !important;
 }
 
 .osmmaps-rf-ribbon-flow {
