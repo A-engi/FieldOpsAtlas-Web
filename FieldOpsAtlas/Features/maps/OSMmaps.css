@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.12-no-white-node-rim
+   Version: 1.0.12-translucent-ring-gold-sat-glow
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -195,12 +195,12 @@ body {
   border-radius: 999px;
   background: var(--pin-color);
   box-shadow:
-    0 0 0 3px var(--pin-path-color, transparent),
+    0 0 0 3px color-mix(
+      in srgb,
+      var(--pin-path-color, transparent) 48%,
+      transparent
+    ),
     0 4px 10px rgba(0, 10, 24, 0.34);
-}
-
-.osmmaps-page.has-visible-rf-paths .osmmaps-pin {
-  border-color: transparent;
 }
 
 /* RF labels and endpoints -------------------------------------------------- */
@@ -359,14 +359,19 @@ body {
 }
 
 .osmmaps-rf-input-arrowhead {
-  width: 0;
-  height: 0;
+  width: 10px;
+  height: 10px;
   display: block;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  border-left: 7px solid #111111;
+  background: #111111;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
   transform: rotate(var(--osmmaps-rf-sat-arrow-angle, 0deg));
-  transform-origin: 50% 50%;
+  transform-origin: center;
+}
+
+.osmmaps-rf-satellite-feed {
+  filter:
+    drop-shadow(0 0 0.8px rgba(214, 164, 58, 0.88))
+    drop-shadow(0 0 1.5px rgba(214, 164, 58, 0.44));
 }
 
 .osmmaps-rf-input-node img {
