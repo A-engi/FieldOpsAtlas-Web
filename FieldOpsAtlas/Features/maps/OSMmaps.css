@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM map and RF overlay
    File: FieldOpsAtlas/Features/maps/OSMmaps.css
-   Version: 1.0.19-active-path-filter
+   Version: 1.0.20-path-only-muted-map
    Purpose:
    - Style the map canvas, region chooser, site markers, RF labels, endpoints, and path popups.
    ========================================================================== */
@@ -43,26 +43,16 @@ body {
   background: rgba(3, 12, 24, 0.94);
 }
 
-.osmmaps-page[data-theme="dark"] .leaflet-tile-pane {
-  filter: invert(0.88) hue-rotate(178deg) saturate(0.86) brightness(0.78) contrast(1.08);
+.osmmaps-page .leaflet-tile-pane {
+  transition: filter 180ms ease;
 }
 
-.osmmaps-page[data-rf-path-active="true"]:not([data-theme="dark"]) .leaflet-tile-pane {
+.osmmaps-page[data-rf-path-active="true"] .leaflet-tile-pane {
   filter:
     saturate(0.38)
     brightness(0.70)
     contrast(0.92)
     grayscale(0.10);
-}
-
-.osmmaps-page[data-theme="dark"][data-rf-path-active="true"] .leaflet-tile-pane {
-  filter:
-    invert(0.88)
-    hue-rotate(178deg)
-    saturate(0.34)
-    brightness(0.62)
-    contrast(0.96)
-    grayscale(0.08);
 }
 
 .osmmaps-region-overlay {
