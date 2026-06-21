@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.1-tight-visible-fit
+   Version: 1.1.2-exact-viewport-fit
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.1-tight-visible-fit";
+  var VERSION = "1.1.2-exact-viewport-fit";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -77,6 +77,7 @@
     markerRefs: new Map(),
     theme: "dark",
     paneHideTimer: 0,
+    fitSettleTimer: 0,
     panesBound: false,
     rf: {
       lineLayer: null,
@@ -500,11 +501,11 @@
       rect.height > 0;
   }
 
-  function fitPadding() {
+  function fitInsets() {
     var mapRect = state.map.getContainer().getBoundingClientRect();
-    var side = 16;
-    var top = 20;
-    var bottom = 20;
+    var side = 12;
+    var top = 18;
+    var bottom = 18;
 
     qsa(".top-shell, [data-map-quick-tools]").forEach(function topElement(element) {
       if (!elementVisible(element)) {
@@ -514,7 +515,7 @@
       var rect = element.getBoundingClientRect();
 
       if (rect.bottom > mapRect.top && rect.top < mapRect.bottom) {
-        top = Math.max(top, rect.bottom - mapRect.top + 10);
+        top = Math.max(top, rect.bottom - mapRect.top + 8);
       }
     });
 
@@ -526,27 +527,54 @@
       var rect = element.getBoundingClientRect();
 
       if (rect.bottom > mapRect.top && rect.top < mapRect.bottom) {
-        bottom = Math.max(bottom, mapRect.bottom - rect.top + 10);
+        bottom = Math.max(bottom, mapRect.bottom - rect.top + 8);
       }
     });
 
-    /*
-     * Equalise the structural UI insets so the fitted sites remain visually
-     * centred, then reserve a small extra lower inset to lift the site group.
-     * Horizontal padding stays deliberately tight.
-     */
-    var balanced = Math.max(top, bottom);
-
     return {
-      topLeft: window.L.point(
-        side,
-        Math.min(balanced, mapRect.height * 0.28)
-      ),
-      bottomRight: window.L.point(
-        side,
-        Math.min(balanced + 34, mapRect.height * 0.34)
-      )
+      side: side,
+      top: Math.min(top, mapRect.height * 0.30),
+      bottom: Math.min(bottom, mapRect.height * 0.30)
     };
+  }
+
+  function exactFitZoom(bounds, insets, maxZoom) {
+    var size = state.map.getSize();
+    var northWest = state.map.project(bounds.getNorthWest(), 0);
+    var southEast = state.map.project(bounds.getSouthEast(), 0);
+    var spanX = Math.max(1 / 256, Math.abs(southEast.x - northWest.x));
+    var spanY = Math.max(1 / 256, Math.abs(southEast.y - northWest.y));
+    var usableWidth = Math.max(80, size.x - insets.side * 2);
+    var usableHeight = Math.max(80, size.y - insets.top - insets.bottom);
+    var widthZoom = Math.log(usableWidth / spanX) / Math.LN2;
+    var heightZoom = Math.log(usableHeight / spanY) / Math.LN2;
+    var target = Math.min(
+      widthZoom,
+      heightZoom,
+      Number(maxZoom || 12),
+      state.map.getMaxZoom()
+    );
+
+    target = Math.max(state.map.getMinZoom(), target);
+
+    /*
+     * Round down to a twentieth of a zoom level so the outermost sites remain
+     * fully inside the viewport without the large gaps caused by whole levels.
+     */
+    return Math.floor(target * 20) / 20;
+  }
+
+  function exactFitCenter(bounds, zoom, insets) {
+    var size = state.map.getSize();
+    var usableHeight = Math.max(80, size.y - insets.top - insets.bottom);
+    var desiredScreenY = insets.top + usableHeight / 2 - 18;
+    var boundsCenterPoint = state.map.project(bounds.getCenter(), zoom);
+    var mapCenterPoint = boundsCenterPoint.add(window.L.point(
+      0,
+      size.y / 2 - desiredScreenY
+    ));
+
+    return state.map.unproject(mapCenterPoint, zoom);
   }
 
   function fitPoints(points, maxZoom, animate) {
@@ -564,31 +592,45 @@
       return;
     }
 
-    var padding = fitPadding();
-    var bounds = window.L.latLngBounds(validPoints.map(function pointLatLng(point) {
-      return [Number(point.lat), Number(point.lng)];
-    }));
+    var applyFit = function applyFit() {
+      var insets = fitInsets();
+      var bounds = window.L.latLngBounds(validPoints.map(function pointLatLng(point) {
+        return [Number(point.lat), Number(point.lng)];
+      }));
+      var targetZoom = validPoints.length === 1
+        ? Number(maxZoom || 12)
+        : exactFitZoom(bounds, insets, maxZoom);
+      var targetCenter = exactFitCenter(bounds, targetZoom, insets);
 
-    state.map.stop();
-    state.map.invalidateSize({
-      pan: false,
-      debounceMoveend: true
-    });
+      state.map.stop();
+      state.map.invalidateSize({
+        pan: false,
+        debounceMoveend: true
+      });
+      state.map.setView(targetCenter, targetZoom, {
+        animate: Boolean(animate)
+      });
+    };
+
+    applyFit();
 
     /*
-     * Use the exact visible-site bounds. Leaflet's fractional zoom snapping
-     * below avoids the large empty side margins produced by whole zoom levels.
+     * Run once more after the shell and mobile safe-area layout has settled.
+     * This prevents the marker group sitting low when the top/bottom shell
+     * finishes sizing after Leaflet's first render.
      */
-    state.map.fitBounds(bounds, {
-      animate: Boolean(animate),
-      maxZoom: Number(maxZoom || 12),
-      paddingTopLeft: padding.topLeft,
-      paddingBottomRight: padding.bottomRight
-    });
+    if (state.fitSettleTimer) {
+      window.clearTimeout(state.fitSettleTimer);
+    }
+
+    state.fitSettleTimer = window.setTimeout(function settledFit() {
+      state.fitSettleTimer = 0;
+      applyFit();
+    }, 180);
   }
 
   function fitVisible() {
-    fitPoints(visibleWalks(), 11, true);
+    fitPoints(visibleWalks(), 12, true);
   }
 
   function renderRegions() {
@@ -1636,8 +1678,8 @@
     renderRfLines(serviceId, combined, visible);
 
     /*
-     * Fit only the visible physical sites. Virtual RF inputs and decorative
-     * endpoints must not enlarge the geographic bounds.
+     * Fit only the visible physical sites. Satellite/fibre virtual inputs and
+     * decorative RF endpoints must never expand the geographic bounds.
      */
     fitPoints(visible, 12, false);
 
@@ -2019,7 +2061,7 @@
       maxBounds: UK_BOUNDS,
       maxBoundsViscosity: 0.9,
       zoomControl: false,
-      zoomSnap: 0.25,
+      zoomSnap: 0.05,
       zoomDelta: 0.5,
       attributionControl: true,
       preferCanvas: true,
