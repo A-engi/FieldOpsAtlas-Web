@@ -1,19 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.101-round-jagged-mountains
+   Version: 1.1.102-identical-360-mountains
 
    Purpose:
    - Render a genuine WebGL 3D mountain-and-transmitter scene.
    - Orbit the camera through a continuous 360 degrees using drag or touch.
    - Centre the orbit between the two transmitter sites.
-   - Build both mountains as smooth 360-degree radar-grid terrain surfaces.
+   - Build two rotationally symmetric mountains that keep the same profile through 360 degrees.
    - Preserve the existing [data-rf-graph] mount contract.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.101-round-jagged-mountains";
+  const VERSION = "1.1.102-identical-360-mountains";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -98,65 +98,58 @@
   }
 
   function terrainHeight(x, z) {
-    function ruggedPeak(cx, cz, radius, height, ridgeAngle, plateau = 0.07) {
-      const dx = (x - cx) / radius;
-      const dz = (z - cz) / radius;
-      const radialDistance = Math.sqrt(dx * dx + dz * dz);
-      if (radialDistance >= 1) return 0;
+    function identicalMountain(cx, cz, radius, height) {
+      const dx = x - cx;
+      const dz = z - cz;
+      const radialDistance = Math.sqrt(dx * dx + dz * dz) / radius;
 
+      if (radialDistance >= 1) {
+        return 0;
+      }
+
+      const plateau = 0.055;
       const t = clamp((radialDistance - plateau) / (1 - plateau), 0, 1);
       const smooth = t * t * (3 - 2 * t);
-      const profile = 1 - smooth;
-      const angle = Math.atan2(dz, dx);
-      const slopeWeight = Math.sin(Math.PI * clamp(t, 0, 1));
+      const mainProfile = Math.pow(1 - smooth, 1.16);
+      const slopeWeight = Math.sin(Math.PI * t);
 
-      const majorRidges =
-        0.18 * Math.sin(angle * 5 + ridgeAngle) +
-        0.10 * Math.sin(angle * 9 - radialDistance * 9 + ridgeAngle * 0.8);
+      /*
+       * All detail depends only on radial distance.
+       * This keeps the mountain silhouette identical from every azimuth.
+       */
+      const broadBreaks =
+        0.105 * Math.sin(radialDistance * 22.0) +
+        0.060 * Math.sin(radialDistance * 41.0 + 0.8);
 
-      const brokenFaces =
-        0.065 * Math.sin(angle * 17 + radialDistance * 24 + ridgeAngle * 1.7) +
-        0.045 * Math.cos((dx - dz) * 18 - ridgeAngle) +
-        0.030 * Math.sin((dx + dz) * 31 + ridgeAngle * 2.3);
+      const fineBreaks =
+        0.032 * Math.sin(radialDistance * 73.0 + 1.7) +
+        0.020 * Math.sin(radialDistance * 119.0 + 0.3);
 
-      const radialCuts =
-        0.060 * Math.sin(radialDistance * 30 + angle * 3.0 + ridgeAngle) +
-        0.035 * Math.sin(radialDistance * 47 - angle * 4.0);
+      const steppedRock =
+        0.045 * (Math.abs(Math.sin(radialDistance * 31.0)) - 0.5);
 
       const jaggedScale = clamp(
-        1 + (majorRidges + brokenFaces + radialCuts) * slopeWeight,
-        0.70,
-        1.34
+        1 + (broadBreaks + fineBreaks + steppedRock) * slopeWeight,
+        0.78,
+        1.24
       );
 
-      return height * profile * jaggedScale;
+      return height * mainProfile * jaggedScale;
     }
 
-    const leftPeak = ruggedPeak(-4.0, 0.8, 4.55, 5.95, 0.38, 0.065);
-    const rightPeak = ruggedPeak(6.0, -1.4, 4.95, 6.55, 1.18, 0.060);
+    /*
+     * Same geometry for both mountains.
+     * The right mountain is only scaled slightly larger, preserving the same shape.
+     */
+    const leftPeak = identicalMountain(-4.0, 0.8, 4.75, 6.05);
+    const rightPeak = identicalMountain(6.0, -1.4, 5.15, 6.55);
 
-    const leftShoulderA = ruggedPeak(-6.65, 2.55, 2.85, 1.55, 0.82, 0.04);
-    const leftShoulderB = ruggedPeak(-5.95, -1.65, 2.45, 1.30, 1.72, 0.04);
-    const rightShoulderA = ruggedPeak(8.95, -0.25, 3.00, 1.80, 1.92, 0.04);
-    const rightShoulderB = ruggedPeak(7.55, -4.00, 2.45, 1.35, 2.48, 0.04);
-
-    const saddle = 0.62 * Math.exp(-((((x - 1.0) / 5.2) ** 2) + (((z + 0.2) / 3.0) ** 2)));
     const valleyPath = 0.42 * Math.sin((x - 0.3) * 0.45) - 0.18;
-    const valley = -0.98 * Math.exp(-((z - valleyPath) ** 2) / 0.46) * Math.exp(-((x - 1.0) ** 2) / 43);
-    const broadFloor = -0.030 * Math.sqrt(x * x + z * z);
+    const valley = -0.88 * Math.exp(-((z - valleyPath) ** 2) / 0.50) * Math.exp(-((x - 1.0) ** 2) / 44);
+    const connectingFloor = 0.32 * Math.exp(-((((x - 1.0) / 5.6) ** 2) + (((z + 0.2) / 3.4) ** 2)));
+    const broadFloor = -0.028 * Math.sqrt(x * x + z * z);
 
-    return (
-      leftPeak +
-      rightPeak +
-      leftShoulderA +
-      leftShoulderB +
-      rightShoulderA +
-      rightShoulderB +
-      saddle +
-      valley +
-      broadFloor -
-      0.84
-    );
+    return leftPeak + rightPeak + connectingFloor + valley + broadFloor - 0.84;
   }
 
   function createTerrain() {
@@ -164,8 +157,8 @@
     const xMax = 13.2;
     const zMin = -7.5;
     const zMax = 7.1;
-    const columns = 80;
-    const rows = 58;
+    const columns = 88;
+    const rows = 64;
     const baseY = -1.35;
     const vertices = [];
     const vertexColors = [];
@@ -721,11 +714,11 @@
 
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "webgl-round-jagged-mountains";
+    mount.dataset.rfGraphMode = "webgl-identical-360-mountains";
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
         bubbles: true,
-        detail: { version: VERSION, selectedPathId: SELECTED_PATH_ID, mode: "webgl-round-jagged-mountains" }
+        detail: { version: VERSION, selectedPathId: SELECTED_PATH_ID, mode: "webgl-identical-360-mountains" }
       })
     );
 
