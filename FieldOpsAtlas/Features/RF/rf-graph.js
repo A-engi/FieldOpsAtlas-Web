@@ -1,17 +1,18 @@
 /* ==========================================================================
-   FieldOps Atlas RF 3D orbit renderer
+   FieldOps Atlas RF 3D front-face renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.106-upward-radar-platform
+   Version: 1.1.107-front-face-only
 
    Purpose:
    - Match the supplied twin-peak reference composition at the front view.
    - Keep all terrain, towers, radar arrays, and path geometry inside WebGL.
-   - Preserve drag/touch 360-degree orbit and the existing mount contract.
+   - Lock this first pass to one front face; orbit work follows in the next version.
+   - Preserve the existing [data-rf-graph] mount contract.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.106-upward-radar-platform";
+  const VERSION = "1.1.107-front-face-only";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -20,13 +21,6 @@
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
-  const INTRO = Object.freeze({
-    from: FRONT_AZIMUTH,
-    to: FRONT_AZIMUTH + 360,
-    delay: 900,
-    duration: 14000
-  });
-
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -748,7 +742,6 @@
       "background-color:#010a12",
       "background-image:linear-gradient(rgba(29,145,165,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(29,145,165,.055) 1px,transparent 1px),radial-gradient(ellipse at 50% 73%,rgba(0,190,211,.16),transparent 52%)",
       "background-size:56px 56px,56px 56px,100% 100%",
-      "touch-action:none",
       "user-select:none"
     ].join(";");
 
@@ -757,41 +750,21 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF twin-peak mountain scene with integrated radar arrays. Drag left or right to orbit 360 degrees."
+      "Front-facing 3D RF twin-peak mountain scene with integrated upward radar platforms."
     );
-    canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
-      "display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline:none";
+      "display:block;width:100%;height:100%;outline:none;pointer-events:none";
 
-    const hint = document.createElement("div");
-    hint.className = "rf-webgl-orbit-hint";
-    hint.textContent = "Drag to rotate 360°";
-    hint.style.cssText = [
-      "position:absolute",
-      "left:50%",
-      "bottom:10px",
-      "transform:translateX(-50%)",
-      "padding:5px 9px",
-      "border:1px solid rgba(116,228,244,.35)",
-      "border-radius:999px",
-      "background:rgba(2,16,31,.72)",
-      "color:rgba(218,249,255,.9)",
-      "font:700 9px/1.1 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
-      "letter-spacing:.04em",
-      "pointer-events:none",
-      "transition:opacity .35s ease"
-    ].join(";");
-
-    frame.append(canvas, hint);
+    frame.append(canvas);
     mount.replaceChildren(frame);
 
-    return { frame, canvas, hint };
+    return { frame, canvas };
   }
 
   function initialiseWebGL(mount) {
     removeLegacyKey(mount);
 
-    const { frame, canvas, hint } = buildFrame(mount);
+    const { frame, canvas } = buildFrame(mount);
     const gl = canvas.getContext("webgl", {
       alpha: true,
       antialias: true,
@@ -801,8 +774,11 @@
     });
 
     if (!gl) {
-      hint.textContent = "3D view is not supported on this device";
-      hint.style.opacity = "1";
+      const fallback = document.createElement("div");
+      fallback.textContent = "3D view is not supported on this device";
+      fallback.style.cssText =
+        "display:grid;place-items:center;width:100%;height:100%;padding:16px;color:#dffbff;background:#031329;font:700 12px/1.4 system-ui;text-align:center";
+      mount.replaceChildren(fallback);
       mount.dataset.rfGraphLoaded = "false";
       mount.dataset.rfGraphVersion = VERSION;
       return null;
@@ -849,16 +825,7 @@
     const projection = new Float32Array(16);
     const view = new Float32Array(16);
     const target = [0.10, 4.25, -0.95];
-
     const state = {
-      azimuth: FRONT_AZIMUTH,
-      velocity: 0,
-      dragging: false,
-      pointerId: null,
-      lastX: 0,
-      lastTime: 0,
-      introStartedAt: null,
-      introCancelled: true,
       destroyed: false,
       width: 0,
       height: 0
@@ -870,13 +837,14 @@
       const width = Math.max(1, Math.round(rect.width * pixelRatio));
       const height = Math.max(1, Math.round(rect.height * pixelRatio));
 
-      if (width === state.width && height === state.height) return;
+      if (width === state.width && height === state.height) return false;
 
       state.width = width;
       state.height = height;
       canvas.width = width;
       canvas.height = height;
       gl.viewport(0, 0, width, height);
+      return true;
     }
 
     function bindAndDraw(buffer) {
@@ -917,31 +885,12 @@
       gl.drawArrays(buffer.mode, 0, buffer.count);
     }
 
-    function render(now) {
+    function render() {
       if (state.destroyed) return;
 
       resize();
 
-      if (!state.introCancelled) {
-        if (state.introStartedAt === null) {
-          state.introStartedAt = now + INTRO.delay;
-        }
-
-        if (now >= state.introStartedAt) {
-          const progress = (now - state.introStartedAt) / INTRO.duration;
-          state.azimuth =
-            INTRO.from + (INTRO.to - INTRO.from) * smoothstep(progress);
-
-          if (progress >= 1) {
-            state.introCancelled = true;
-          }
-        }
-      } else if (!state.dragging && Math.abs(state.velocity) > 0.001) {
-        state.azimuth += state.velocity;
-        state.velocity *= 0.92;
-      }
-
-      const angle = (state.azimuth % 360) * DEG;
+      const angle = FRONT_AZIMUTH * DEG;
       const aspect = state.width / state.height;
       const portraitBoost = clamp((1.05 - aspect) * 2.8, 0, 1.4);
       const distance = 22.7 + portraitBoost;
@@ -964,103 +913,22 @@
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
       drawBuffers.forEach(bindAndDraw);
-      window.requestAnimationFrame(render);
     }
 
-    function cancelIntro() {
-      state.introCancelled = true;
-      hint.style.opacity = "0";
-    }
-
-    function onPointerDown(event) {
-      cancelIntro();
-      state.dragging = true;
-      state.pointerId = event.pointerId;
-      state.lastX = event.clientX;
-      state.lastTime = performance.now();
-      state.velocity = 0;
-      canvas.setPointerCapture(event.pointerId);
-      canvas.style.cursor = "grabbing";
-      event.preventDefault();
-    }
-
-    function onPointerMove(event) {
-      if (!state.dragging || event.pointerId !== state.pointerId) return;
-
-      const now = performance.now();
-      const deltaX = event.clientX - state.lastX;
-      const deltaTime = Math.max(8, now - state.lastTime);
-      const deltaAngle = -deltaX * 0.22;
-
-      state.azimuth += deltaAngle;
-      state.velocity = (deltaAngle * 16) / deltaTime;
-      state.lastX = event.clientX;
-      state.lastTime = now;
-      event.preventDefault();
-    }
-
-    function onPointerUp(event) {
-      if (event.pointerId !== state.pointerId) return;
-
-      state.dragging = false;
-      state.pointerId = null;
-      canvas.style.cursor = "grab";
-
-      if (canvas.hasPointerCapture(event.pointerId)) {
-        canvas.releasePointerCapture(event.pointerId);
-      }
-    }
-
-    function onKeyDown(event) {
-      if (
-        event.key !== "ArrowLeft" &&
-        event.key !== "ArrowRight" &&
-        event.key !== "Home"
-      ) {
-        return;
-      }
-
-      cancelIntro();
-
-      if (event.key === "Home") {
-        state.azimuth = FRONT_AZIMUTH;
-        state.velocity = 0;
-      } else {
-        state.azimuth += event.key === "ArrowLeft" ? -8 : 8;
-      }
-
-      event.preventDefault();
-    }
-
-    canvas.addEventListener("pointerdown", onPointerDown);
-    canvas.addEventListener("pointermove", onPointerMove);
-    canvas.addEventListener("pointerup", onPointerUp);
-    canvas.addEventListener("pointercancel", onPointerUp);
-    canvas.addEventListener("keydown", onKeyDown);
-    canvas.addEventListener("dblclick", () => {
-      cancelIntro();
-      state.azimuth = FRONT_AZIMUTH;
-      state.velocity = 0;
-    });
-
-    const resizeObserver = new ResizeObserver(resize);
+    const resizeObserver = new ResizeObserver(() => render());
     resizeObserver.observe(frame);
     window.requestAnimationFrame(render);
 
-    window.setTimeout(() => {
-      hint.style.opacity = "0";
-    }, 2200);
-
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "webgl-upward-radar-platform";
+    mount.dataset.rfGraphMode = "webgl-front-face-only";
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
         bubbles: true,
         detail: {
           version: VERSION,
           selectedPathId: SELECTED_PATH_ID,
-          mode: "webgl-upward-radar-platform"
+          mode: "webgl-front-face-only"
         }
       })
     );
@@ -1069,11 +937,6 @@
       destroy() {
         state.destroyed = true;
         resizeObserver.disconnect();
-        canvas.removeEventListener("pointerdown", onPointerDown);
-        canvas.removeEventListener("pointermove", onPointerMove);
-        canvas.removeEventListener("pointerup", onPointerUp);
-        canvas.removeEventListener("pointercancel", onPointerUp);
-        canvas.removeEventListener("keydown", onKeyDown);
 
         drawBuffers.forEach((buffer) => {
           gl.deleteBuffer(buffer.positionBuffer);
