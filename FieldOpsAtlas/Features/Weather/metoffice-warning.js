@@ -1,18 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas Met Office warnings
    File: FieldOpsAtlas/Features/Weather/metoffice-warning.js
-   Version: 1.0.1-selected-region-uk-warning
+   Version: 1.0.2-map-warning-alerts
    Purpose:
    - Load official Met Office UK or regional severe-weather RSS warnings.
    - Link the warning feed to the currently selected Atlas map region.
    - Render warning summaries in the maps weather panel with Met Office links.
+   - Show active warnings as a compact map badge and Weather-button badge.
+   - Add the selected-region warning to the existing site Details > Alerts section.
    - Fall back to the UK feed when the selected region has no explicit mapping.
    ========================================================================== */
 
 (function fieldOpsMetOfficeWarning() {
   "use strict";
 
-  var VERSION = "1.0.1-selected-region-uk-warning";
+  var VERSION = "1.0.2-map-warning-alerts";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var WARNING_PAGE_URL =
@@ -20,6 +22,10 @@
   var FEED_BASE =
     "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/";
   var cache = new Map();
+  var lastContext = null;
+  var lastItems = [];
+  var detailsObserver = null;
+  var detailsRendering = false;
 
   var FEEDS = {
     UK: { code: "UK", label: "United Kingdom" },
@@ -278,6 +284,231 @@
     });
   }
 
+  function severityRank(severity) {
+    return {
+      general: 0,
+      yellow: 1,
+      amber: 2,
+      red: 3
+    }[String(severity || "general")] || 0;
+  }
+
+  function highestSeverity(items) {
+    return (items || []).reduce(function chooseHighest(current, item) {
+      var candidate = String(item && item.severity || "general");
+      return severityRank(candidate) > severityRank(current)
+        ? candidate
+        : current;
+    }, "general");
+  }
+
+  function severityLabel(severity) {
+    var value = String(severity || "general");
+    return value === "general"
+      ? "Weather"
+      : value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  function applySeverityClass(element, severity) {
+    if (!element) {
+      return;
+    }
+
+    element.classList.remove(
+      "is-general",
+      "is-yellow",
+      "is-amber",
+      "is-red"
+    );
+    element.classList.add("is-" + String(severity || "general"));
+  }
+
+  function setElementHidden(element, hidden) {
+    if (!element) {
+      return;
+    }
+
+    element.hidden = Boolean(hidden);
+  }
+
+  function updateMapAndButtonWarnings(context, items) {
+    var activeItems = Array.isArray(items) ? items : [];
+    var active = activeItems.length > 0;
+    var severity = highestSeverity(activeItems);
+    var severityText = severityLabel(severity);
+    var mapBadge = qs("[data-metoffice-warning-map]");
+    var buttonBadge = qs("[data-metoffice-warning-button]");
+    var weatherButton = qs(".map-quick-tool.is-weather");
+    var mapLabel = qs("[data-metoffice-warning-map-label]");
+    var description = active
+      ? activeItems.length +
+        " active " +
+        severityText.toLowerCase() +
+        " Met Office warning" +
+        (activeItems.length === 1 ? "" : "s") +
+        " for " +
+        context.atlasName
+      : "No active Met Office warning for " + context.atlasName;
+
+    if (mapBadge) {
+      applySeverityClass(mapBadge, severity);
+      setElementHidden(mapBadge, !active);
+      mapBadge.setAttribute("aria-label", description + ". Open Weather.");
+      mapBadge.title = description;
+    }
+
+    if (mapLabel) {
+      mapLabel.textContent = severityText + " warning";
+    }
+
+    if (buttonBadge) {
+      applySeverityClass(buttonBadge, severity);
+      setElementHidden(buttonBadge, !active);
+      buttonBadge.textContent = "⚠";
+      buttonBadge.title = description;
+    }
+
+    if (weatherButton) {
+      weatherButton.setAttribute(
+        "aria-label",
+        active
+          ? "Open selected region weather forecast. " + description + "."
+          : "Open selected region weather forecast"
+      );
+    }
+  }
+
+  function detailsAlertsSection() {
+    return qsa("[data-selected-panel] .osmpanes-section").find(
+      function findAlertsSection(section) {
+        var title = qs(".osmpanes-section-title", section);
+        return title && String(title.textContent || "").trim() === "Alerts";
+      }
+    ) || null;
+  }
+
+  function removeDetailsWarning() {
+    qsa("[data-metoffice-details-alert]").forEach(function remove(element) {
+      element.remove();
+    });
+  }
+
+  function createDetailsWarning(context, item, count) {
+    var container = document.createElement("div");
+    var iconWrap = document.createElement("span");
+    var weatherIcon = document.createElement("img");
+    var warningIcon = document.createElement("span");
+    var content = document.createElement("span");
+    var heading = document.createElement("strong");
+    var link = document.createElement("a");
+    var severity = String(item && item.severity || "general");
+    var severityText = severityLabel(severity);
+
+    container.className =
+      "metoffice-details-alert is-" + severity;
+    container.setAttribute("data-metoffice-details-alert", "");
+
+    iconWrap.className = "metoffice-details-alert__icons";
+
+    weatherIcon.src = "../../../data/icons/weather.svg?v=1.1.1";
+    weatherIcon.alt = "";
+    weatherIcon.setAttribute("aria-hidden", "true");
+
+    warningIcon.className = "metoffice-details-alert__warning-icon";
+    warningIcon.setAttribute("aria-hidden", "true");
+    warningIcon.textContent = "⚠";
+
+    iconWrap.appendChild(weatherIcon);
+    iconWrap.appendChild(warningIcon);
+
+    content.className = "metoffice-details-alert__content";
+
+    heading.textContent =
+      severityText +
+      " weather warning" +
+      (count > 1 ? " · " + count + " active" : "");
+
+    link.href = item.link || WARNING_PAGE_URL;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent =
+      String(item.title || "Open Met Office warning") +
+      " · " +
+      context.atlasName;
+
+    content.appendChild(heading);
+    content.appendChild(link);
+
+    container.appendChild(iconWrap);
+    container.appendChild(content);
+
+    return container;
+  }
+
+  function renderDetailsWarning(context, items) {
+    var section;
+    var title;
+    var activeItems = Array.isArray(items) ? items : [];
+
+    if (detailsRendering) {
+      return;
+    }
+
+    detailsRendering = true;
+
+    try {
+      removeDetailsWarning();
+
+      if (!activeItems.length) {
+        return;
+      }
+
+      section = detailsAlertsSection();
+
+      if (!section) {
+        return;
+      }
+
+      title = qs(".osmpanes-section-title", section);
+      section.insertBefore(
+        createDetailsWarning(context, activeItems[0], activeItems.length),
+        title ? title.nextSibling : section.firstChild
+      );
+    } finally {
+      detailsRendering = false;
+    }
+  }
+
+  function renderSurfaceWarnings(context, items) {
+    lastContext = context;
+    lastItems = Array.isArray(items) ? items.slice() : [];
+    updateMapAndButtonWarnings(context, lastItems);
+    renderDetailsWarning(context, lastItems);
+  }
+
+  function observeDetailsPanel() {
+    var panel = qs("[data-selected-panel]");
+
+    if (!panel || detailsObserver) {
+      return;
+    }
+
+    detailsObserver = new MutationObserver(function handleDetailsMutation() {
+      if (detailsRendering || !lastContext) {
+        return;
+      }
+
+      window.requestAnimationFrame(function rerenderDetailsWarning() {
+        renderDetailsWarning(lastContext, lastItems);
+      });
+    });
+
+    detailsObserver.observe(panel, {
+      childList: true,
+      subtree: true
+    });
+  }
+
   function createWarningItem(item) {
     var article = document.createElement("article");
     var title = document.createElement("strong");
@@ -311,6 +542,7 @@
       context.atlasName + " · " + context.label
     );
     setOfficialLink(context.warningPageUrl);
+    renderSurfaceWarnings(context, items);
 
     if (!items.length) {
       setText(
@@ -339,6 +571,7 @@
 
   function renderUnavailable(context) {
     clearWarnings();
+    renderSurfaceWarnings(context, []);
     setText(
       "[data-metoffice-warning-region]",
       context.atlasName + " · " + context.label
@@ -365,6 +598,7 @@
       "Checking Met Office warnings for " + context.label + "…"
     );
     setOfficialLink(context.warningPageUrl);
+    renderSurfaceWarnings(context, []);
 
     if (!force && cached && Date.now() - cached.time < CACHE_MS) {
       renderWarnings(context, cached.items);
@@ -387,11 +621,6 @@
       });
   }
 
-  function weatherPanelIsOpen() {
-    var panel = qs(".weather-api-panel");
-    return Boolean(panel && !panel.hidden);
-  }
-
   function wireControls() {
     document.addEventListener("click", function handleClick(event) {
       if (event.target.closest("[data-weather-panel-open]")) {
@@ -408,16 +637,8 @@
 
       if (event.target.closest("[data-region-id]")) {
         window.setTimeout(function reloadAfterRegionSelection() {
-          if (weatherPanelIsOpen()) {
-            loadSelectedRegionWarnings(false);
-          } else {
-            var context = selectedWarningRegion();
-            setText(
-              "[data-metoffice-warning-region]",
-              context.atlasName + " · " + context.label
-            );
-          }
-        }, 150);
+          loadSelectedRegionWarnings(false);
+        }, 200);
       }
     });
   }
@@ -426,11 +647,17 @@
     var context = selectedWarningRegion();
 
     wireControls();
+    observeDetailsPanel();
     setText(
       "[data-metoffice-warning-region]",
       context.atlasName + " · " + context.label
     );
     setOfficialLink(context.warningPageUrl);
+    renderSurfaceWarnings(context, []);
+
+    window.setTimeout(function initialWarningLoad() {
+      loadSelectedRegionWarnings(false);
+    }, 250);
 
     window.FieldOpsMetOfficeWarning = {
       VERSION: VERSION,
