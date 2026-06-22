@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.24-marker-signal-restore
+   Version: 1.1.25-site-input-arrow-restore
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.24-marker-signal-restore";
+  var VERSION = "1.1.25-site-input-arrow-restore";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -777,6 +777,7 @@
       state.map.setView(marker.getLatLng(), Math.max(state.map.getZoom(), 10), {
         animate: true
       });
+
       if (openPopup) {
         marker.openPopup();
       }
@@ -1098,6 +1099,12 @@
     setRfPathMode(false);
     stopSatelliteDownloadAnimation();
 
+    state.rf.attachedInputs.forEach(
+      function clearSatelliteDownload(record) {
+        removeSatelliteDownloadChevron(record);
+      }
+    );
+
     [
       state.rf.lineLayer,
       state.rf.endpointLayer,
@@ -1192,54 +1199,102 @@
     };
   }
 
-  function satelliteMovingChevronIcon(angleDegrees) {
-    return window.L.divIcon({
-      className: "osmmaps-rf-satellite-moving-icon",
-      html: [
-        '<span class="osmmaps-rf-satellite-moving-chevron" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
-        escapeHtml(angleDegrees),
-        'deg"></span>'
-      ].join(""),
-      iconSize: [12, 12],
-      iconAnchor: [6, 6]
-    });
+  function removeSatelliteDownloadChevron(record) {
+    if (
+      record &&
+      record.downloadChevron &&
+      record.downloadChevron.parentNode
+    ) {
+      record.downloadChevron.parentNode.removeChild(
+        record.downloadChevron
+      );
+    }
+
+    if (record) {
+      record.downloadChevron = null;
+      record.downloadChevronPath = null;
+    }
   }
 
-  function ensureSatelliteMovingChevron(record, angleDegrees) {
-    var endpoints;
+  function ensureSatelliteDownloadChevron(record) {
+    var linePath;
+    var parent;
+    var namespace;
+    var group;
+    var shadow;
+    var chevron;
 
     if (
       !record ||
+      !record.line ||
       virtualInputKind(record.virtualEndpoint, record.path) !== "satellite"
     ) {
       return null;
     }
 
-    endpoints = satelliteDownloadEndpoints(record);
+    linePath = record.line._path;
 
-    if (!endpoints) {
+    if (!linePath || !linePath.parentNode || !linePath.namespaceURI) {
       return null;
     }
 
-    if (!record.movingChevron) {
-      record.movingChevron = window.L.marker(endpoints.start, {
-        pane: "fieldopsRfEndpoints",
-        icon: satelliteMovingChevronIcon(angleDegrees),
-        interactive: false,
-        keyboard: false
-      }).addTo(state.rf.virtualLayer);
-      record.movingChevronAngle = angleDegrees;
-      return record.movingChevron;
+    if (
+      record.downloadChevron &&
+      record.downloadChevron.parentNode &&
+      record.downloadChevronPath === linePath
+    ) {
+      return record.downloadChevron;
     }
 
-    if (record.movingChevronAngle !== angleDegrees) {
-      record.movingChevron.setIcon(
-        satelliteMovingChevronIcon(angleDegrees)
-      );
-      record.movingChevronAngle = angleDegrees;
-    }
+    removeSatelliteDownloadChevron(record);
 
-    return record.movingChevron;
+    parent = linePath.parentNode;
+    namespace = linePath.namespaceURI;
+    group = document.createElementNS(namespace, "g");
+    shadow = document.createElementNS(namespace, "path");
+    chevron = document.createElementNS(namespace, "path");
+
+    group.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron"
+    );
+    group.setAttribute("aria-hidden", "true");
+    group.setAttribute("visibility", "hidden");
+
+    shadow.setAttribute("d", "M -5 -5 L 0 0 L -5 5");
+    shadow.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron-shadow"
+    );
+
+    chevron.setAttribute("d", "M -5 -5 L 0 0 L -5 5");
+    chevron.setAttribute(
+      "class",
+      "osmmaps-rf-satellite-download-chevron-main"
+    );
+
+    group.appendChild(shadow);
+    group.appendChild(chevron);
+    parent.appendChild(group);
+
+    record.downloadChevron = group;
+    record.downloadChevronPath = linePath;
+    return group;
+  }
+
+  function satelliteDownloadAngle(path, distance, length) {
+    var sample = Math.min(2, Math.max(0.5, length / 80));
+    var before = path.getPointAtLength(
+      Math.max(0, distance - sample)
+    );
+    var after = path.getPointAtLength(
+      Math.min(length, distance + sample)
+    );
+
+    return Math.atan2(
+      after.y - before.y,
+      after.x - before.x
+    ) * 180 / Math.PI;
   }
 
   function stopSatelliteDownloadAnimation() {
@@ -1333,7 +1388,11 @@
         var endPoint;
         var currentPoint;
         var currentLatLng;
-        var marker;
+        var path;
+        var length;
+        var distance;
+        var angle;
+        var group;
 
         if (
           virtualInputKind(record.virtualEndpoint, record.path) !==
@@ -1361,13 +1420,43 @@
           currentLatLng
         ]);
 
-        marker = ensureSatelliteMovingChevron(
-          record,
-          record.satelliteChevronAngle
-        );
+        path = record.line._path;
+        group = ensureSatelliteDownloadChevron(record);
 
-        if (marker) {
-          marker.setLatLng(currentLatLng);
+        if (
+          path &&
+          group &&
+          typeof path.getTotalLength === "function"
+        ) {
+          length = Number(path.getTotalLength()) || 0;
+
+          if (length > 0) {
+            distance = record.virtualSide === "feeding"
+              ? progress * length
+              : (1 - progress) * length;
+            angle = satelliteDownloadAngle(
+              path,
+              distance,
+              length
+            );
+
+            if (record.virtualSide !== "feeding") {
+              angle += 180;
+            }
+
+            currentPoint = path.getPointAtLength(distance);
+            group.setAttribute(
+              "transform",
+              "translate(" +
+                currentPoint.x +
+                " " +
+                currentPoint.y +
+                ") rotate(" +
+                angle +
+                ")"
+            );
+            group.setAttribute("visibility", "visible");
+          }
         }
 
         activeCount += 1;
@@ -1393,6 +1482,41 @@
 
     state.rf.satelliteDownloadFrame =
       window.requestAnimationFrame(renderSatelliteDownload);
+  }
+
+  function satelliteLineArrowIcon(angleDegrees) {
+    return window.L.divIcon({
+      className: "osmmaps-rf-input-arrow-icon",
+      html: [
+        '<span class="osmmaps-rf-input-arrowhead" aria-hidden="true" style="--osmmaps-rf-sat-arrow-angle:',
+        escapeHtml(angleDegrees),
+        'deg"></span>'
+      ].join(""),
+      iconSize: [10, 10],
+      iconAnchor: [5, 5]
+    });
+  }
+
+  function updateSatelliteLineArrow(record, layout) {
+    if (
+      virtualInputKind(record.virtualEndpoint, record.path) !== "satellite"
+    ) {
+      return;
+    }
+
+    if (!record.arrow) {
+      record.arrow = window.L.marker(layout.arrowLatLng, {
+        pane: "fieldopsRfEndpoints",
+        icon: satelliteLineArrowIcon(layout.arrowAngleDegrees + 180),
+        interactive: false,
+        keyboard: false
+      }).addTo(state.rf.virtualLayer);
+      return;
+    }
+
+    record.arrow
+      .setLatLng(layout.arrowLatLng)
+      .setIcon(satelliteLineArrowIcon(layout.arrowAngleDegrees + 180));
   }
 
   function attachedInputForPath(path, fromWalk, toWalk) {
@@ -1577,6 +1701,8 @@
       record.marker.setLatLng(layout.markerLatLng);
     }
 
+    updateSatelliteLineArrow(record, layout);
+
     if (record.line) {
       var fromLatLng = record.virtualSide === "feeding"
         ? layout.lineEndLatLng
@@ -1603,12 +1729,7 @@
         }
       }
 
-      record.satelliteChevronAngle =
-        layout.arrowAngleDegrees + 180;
-      ensureSatelliteMovingChevron(
-        record,
-        record.satelliteChevronAngle
-      );
+      ensureSatelliteDownloadChevron(record);
     }
   }
 
@@ -1802,12 +1923,7 @@
           }
         }
 
-        attached.satelliteChevronAngle =
-          attachedLayout.arrowAngleDegrees + 180;
-        ensureSatelliteMovingChevron(
-          attached,
-          attached.satelliteChevronAngle
-        );
+        ensureSatelliteDownloadChevron(attached);
       }
     });
 
