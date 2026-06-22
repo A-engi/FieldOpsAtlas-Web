@@ -1,22 +1,22 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.86-turntable-scene
+   Version: 1.1.92-mountain-turntable
 
    Purpose:
    - Keep the existing RF graph mount contract used by rf-interface.js.
-   - Replace the dynamic node/link graph with the approved RF turntable SVG scene.
-   - Keep the RF page structure unchanged and only swap the foreground map content.
+   - Replace the dynamic node/link graph with the interactive mountain TX SVG.
+   - Keep the RF page structure unchanged and only swap the graph content.
    - Remove the old graph key when the turntable scene is mounted.
-========================================================================== */
+   ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.86-turntable-scene";
+  const VERSION = "1.1.92-mountain-turntable";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
-  const SVG_FILE = "./rf-turntable-scene.svg?v=1.1.1-rf-turntable-scene";
+  const SVG_FILE = "./mountain-w-tx-turnable.svg?v=1.1.1-mountain-turntable";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
 
@@ -40,7 +40,7 @@
     object.className = "rf-turntable-scene-object";
     object.setAttribute(
       "aria-label",
-      mount.getAttribute("aria-label") || "RF turntable scene"
+      mount.getAttribute("aria-label") || "RF mountain transmitter turntable"
     );
     object.setAttribute("tabindex", "-1");
     object.style.display = "block";
@@ -55,7 +55,7 @@
   function buildFallbackImage(mount) {
     const image = document.createElement("img");
     image.src = SVG_FILE;
-    image.alt = mount.getAttribute("aria-label") || "RF turntable scene";
+    image.alt = mount.getAttribute("aria-label") || "RF mountain transmitter turntable";
     image.className = "rf-turntable-scene-image";
     image.decoding = "async";
     image.loading = "eager";
@@ -93,7 +93,7 @@
     mount.replaceChildren(frame);
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "turntable-scene";
+    mount.dataset.rfGraphMode = "mountain-turntable";
 
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
@@ -101,7 +101,7 @@
         detail: {
           version: VERSION,
           selectedPathId: SELECTED_PATH_ID,
-          mode: "turntable-scene"
+          mode: "mountain-turntable"
         }
       })
     );
@@ -132,4 +132,6 @@
     initAll();
   }
 })();
-/* End of FieldOpsAtlas/Features/RF/rf-graph.js | bottom/end of file */
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-graph.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-graph.js */
