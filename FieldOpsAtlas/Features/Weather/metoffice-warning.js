@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas Met Office warnings
    File: FieldOpsAtlas/Features/Weather/metoffice-warning.js
-   Version: 1.0.2-map-warning-alerts
+   Version: 1.0.3-warning-visibility-toast
    Purpose:
    - Load official Met Office UK or regional severe-weather RSS warnings.
    - Link the warning feed to the currently selected Atlas map region.
    - Render warning summaries in the maps weather panel with Met Office links.
    - Show active warnings as a compact map badge and Weather-button badge.
+   - Reveal warning surfaces explicitly and preserve them during refresh.
    - Add the selected-region warning to the existing site Details > Alerts section.
    - Fall back to the UK feed when the selected region has no explicit mapping.
    ========================================================================== */
@@ -14,7 +15,7 @@
 (function fieldOpsMetOfficeWarning() {
   "use strict";
 
-  var VERSION = "1.0.2-map-warning-alerts";
+  var VERSION = "1.0.3-warning-visibility-toast";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var WARNING_PAGE_URL =
@@ -328,7 +329,14 @@
       return;
     }
 
-    element.hidden = Boolean(hidden);
+    element.classList.toggle("is-inactive", Boolean(hidden));
+    element.setAttribute("aria-hidden", String(Boolean(hidden)));
+
+    if (hidden) {
+      element.setAttribute("hidden", "");
+    } else {
+      element.removeAttribute("hidden");
+    }
   }
 
   function updateMapAndButtonWarnings(context, items) {
@@ -448,30 +456,60 @@
   function renderDetailsWarning(context, items) {
     var section;
     var title;
+    var existing;
+    var warningKey;
+    var nextAlert;
     var activeItems = Array.isArray(items) ? items : [];
 
     if (detailsRendering) {
       return;
     }
 
+    section = detailsAlertsSection();
+
+    if (!section) {
+      return;
+    }
+
+    existing = qs("[data-metoffice-details-alert]", section);
+
+    if (!activeItems.length) {
+      if (existing) {
+        existing.remove();
+      }
+      return;
+    }
+
+    warningKey = [
+      String(context && context.atlasId || ""),
+      String(activeItems[0] && activeItems[0].title || ""),
+      String(activeItems.length)
+    ].join("|");
+
+    if (
+      existing &&
+      existing.getAttribute("data-warning-key") === warningKey
+    ) {
+      return;
+    }
+
     detailsRendering = true;
 
     try {
-      removeDetailsWarning();
-
-      if (!activeItems.length) {
-        return;
+      if (existing) {
+        existing.remove();
       }
 
-      section = detailsAlertsSection();
-
-      if (!section) {
-        return;
-      }
+      nextAlert = createDetailsWarning(
+        context,
+        activeItems[0],
+        activeItems.length
+      );
+      nextAlert.setAttribute("data-warning-key", warningKey);
 
       title = qs(".osmpanes-section-title", section);
       section.insertBefore(
-        createDetailsWarning(context, activeItems[0], activeItems.length),
+        nextAlert,
         title ? title.nextSibling : section.firstChild
       );
     } finally {
@@ -598,7 +636,6 @@
       "Checking Met Office warnings for " + context.label + "…"
     );
     setOfficialLink(context.warningPageUrl);
-    renderSurfaceWarnings(context, []);
 
     if (!force && cached && Date.now() - cached.time < CACHE_MS) {
       renderWarnings(context, cached.items);
