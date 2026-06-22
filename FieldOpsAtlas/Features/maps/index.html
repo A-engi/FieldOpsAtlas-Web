@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.35-buttons-only</title>
+  <title>Maps v1.0.36-details-warning-reason</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
@@ -269,17 +269,21 @@
 
     .metoffice-details-alert__warning-icon {
       position: absolute;
-      right: -2px;
-      bottom: -2px;
-      width: 14px;
-      height: 14px;
+      right: -4px;
+      bottom: -4px;
+      width: 18px;
+      height: 18px;
       display: grid;
       place-items: center;
-      border-radius: 999px;
-      background: #ffdd30;
-      color: #211900;
-      font-size: 9px;
-      font-weight: 900;
+      border: 2px solid #ff5964;
+      border-radius: 5px;
+      color: #ffe568;
+      background: rgba(78, 5, 14, 0.96);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 224, 110, 0.13),
+        0 0 7px rgba(255, 73, 88, 0.62);
+      font-size: 11px;
+      font-weight: 950;
       line-height: 1;
     }
 
@@ -303,18 +307,23 @@
     .metoffice-details-alert__content strong {
       color: rgba(255, 248, 226, 0.98);
       font-size: 11px;
-      line-height: 1.2;
+      line-height: 1.25;
+    }
+
+    .metoffice-details-alert__reason {
+      color: rgba(255, 244, 214, 0.82);
+      font-size: 10px;
+      line-height: 1.35;
     }
 
     .metoffice-details-alert__content a {
-      overflow: hidden;
       color: rgba(255, 224, 146, 0.98);
       font-size: 10px;
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.3;
       text-decoration: underline;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      overflow-wrap: anywhere;
+      white-space: normal;
     }
   </style>
 </head>
@@ -324,7 +333,7 @@
   <main
     class="osmmaps-page"
     data-osmmaps-page
-    data-version="1.0.35-buttons-only"
+    data-version="1.0.36-details-warning-reason"
   >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
@@ -593,7 +602,7 @@
   <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
   <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
   <script src="./OSMweather-menu.js?v=1.0.27-selected-region-weather"></script>
-  <script src="../Weather/metoffice-warning.js?v=1.0.5-weather-active-collapse"></script>
+  <script src="../Weather/metoffice-warning.js?v=1.0.6-details-warning-reason"></script>
 </body>
 </html>
 
