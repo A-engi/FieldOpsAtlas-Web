@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps</title>
+  <title>Maps v1.0.28-quick-tools-restored</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
-  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
+  <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
   <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
 </head>
 <body>
   <div class="fieldops-shell-root" data-page="map"></div>
 
-  <main class="osmmaps-page" data-osmmaps-page>
+  <main
+    class="osmmaps-page"
+    data-osmmaps-page
+    data-version="1.0.28-quick-tools-restored"
+  >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
     <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
@@ -54,20 +58,90 @@
     ></section>
   </main>
 
-  <section class="weather-map-icon-strip" aria-label="Weather controls">
-    <button
-      class="weather-map-icon-button"
-      type="button"
-      data-weather-panel-open
-      aria-expanded="false"
-      aria-label="Open selected region weather forecast"
-    >
-      <img
-        class="weather-map-icon-image"
-        src="./icons/weather.svg?v=maps-preseli-forecast-20260616"
-        alt=""
-        aria-hidden="true"
+  <section class="map-quick-tools" data-map-quick-tools aria-label="Map quick tools">
+    <div class="map-quick-tools__rail" id="mapQuickToolsRail">
+      <button
+        class="map-quick-tool is-dtt"
+        type="button"
+        data-map-service="dtt"
+        aria-controls="mapServicePicker"
+        aria-expanded="false"
+        aria-label="Show DTT sites and choose cluster"
       >
+        <img src="../../../data/icons/dtt.svg?v=1.1.1" alt="" aria-hidden="true">
+        <span>DTT</span>
+      </button>
+
+      <button
+        class="map-quick-tool is-dab"
+        type="button"
+        data-map-service="dab"
+        aria-controls="mapServicePicker"
+        aria-expanded="false"
+        aria-label="Show DAB sites and choose cluster"
+      >
+        <img src="../../../data/icons/dab.svg?v=1.1.1" alt="" aria-hidden="true">
+        <span>DAB</span>
+      </button>
+
+      <button
+        class="map-quick-tool is-fm"
+        type="button"
+        data-map-service="fm"
+        aria-controls="mapServicePicker"
+        aria-expanded="false"
+        aria-label="Show FM sites and choose cluster"
+      >
+        <img src="../../../data/icons/fm.svg?v=1.1.1" alt="" aria-hidden="true">
+        <span>FM</span>
+      </button>
+
+      <button
+        class="map-quick-tool is-weather"
+        type="button"
+        data-weather-panel-open
+        aria-expanded="false"
+        aria-label="Open selected region weather forecast"
+      >
+        <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
+      </button>
+    </div>
+
+    <section
+      class="map-service-picker"
+      id="mapServicePicker"
+      data-map-service-picker
+      aria-label="Choose map service cluster"
+      hidden
+    >
+      <header class="map-service-picker__header">
+        <div>
+          <small data-map-service-kicker>DTT</small>
+          <strong data-map-service-title>Choose cluster</strong>
+        </div>
+
+        <button
+          type="button"
+          data-map-service-close
+          aria-label="Close service cluster chooser"
+        >
+          Close
+        </button>
+      </header>
+
+      <div class="map-service-picker__options" data-map-service-options></div>
+      <p class="map-service-picker__status" data-map-service-status></p>
+    </section>
+
+    <button
+      class="map-quick-tools__toggle"
+      type="button"
+      data-map-quick-toggle
+      aria-controls="mapQuickToolsRail"
+      aria-expanded="true"
+      aria-label="Collapse map quick tools"
+    >
+      <span class="map-quick-tools__toggle-mark" aria-hidden="true"></span>
     </button>
   </section>
 
