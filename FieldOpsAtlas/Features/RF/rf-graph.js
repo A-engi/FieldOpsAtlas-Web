@@ -1,19 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.96-360-between-transmitters
+   Version: 1.1.97-original-look
 
    Purpose:
    - Render a genuine WebGL 3D mountain-and-transmitter scene.
    - Orbit the camera through a continuous 360 degrees using drag or touch.
    - Centre the orbit between the two transmitter sites.
-   - Keep both transmitter geometries visible throughout the turn.
+   - Shape the mountains and lattice transmitters to match the original artwork more closely.
    - Preserve the existing [data-rf-graph] mount contract.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.96-360-between-transmitters";
+  const VERSION = "1.1.97-original-look";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -21,7 +21,7 @@
   const SELECTED_PATH_ID = "site-1-to-site-2";
 
   const DEG = Math.PI / 180;
-  const INTRO = Object.freeze({ from: -10, to: 350, delay: 650, duration: 11000 });
+  const INTRO = Object.freeze({ from: 6, to: 366, delay: 650, duration: 12000 });
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -98,31 +98,33 @@
   }
 
   function terrainHeight(x, z) {
-    const nearDx = (x + 3.25) / 3.0;
-    const nearDz = (z - 0.55) / 2.45;
-    const farDx = (x - 6.0) / 4.45;
-    const farDz = (z + 1.85) / 3.65;
+    const leftDx = (x + 3.7) / 2.55;
+    const leftDz = (z - 0.58) / 2.08;
+    const rightDx = (x - 6.2) / 2.95;
+    const rightDz = (z + 1.55) / 2.45;
 
-    const nearPeak = 3.25 * Math.exp(-(nearDx * nearDx + nearDz * nearDz) * 1.18);
-    const farPeak = 6.25 * Math.exp(-(farDx * farDx + farDz * farDz) * 1.03);
-    const shoulder = 0.76 * Math.exp(-(((x - 1.3) / 5.8) ** 2 + ((z + 0.2) / 3.8) ** 2));
+    const leftPeak = 4.45 * Math.exp(-(leftDx * leftDx * 1.42 + leftDz * leftDz * 1.10));
+    const rightPeak = 4.85 * Math.exp(-(rightDx * rightDx * 1.08 + rightDz * rightDz * 1.00));
+    const leftShoulder = 0.96 * Math.exp(-((((x + 5.8) / 2.9) ** 2) + (((z - 1.7) / 2.7) ** 2)));
+    const rightShoulder = 1.10 * Math.exp(-((((x - 8.3) / 3.7) ** 2) + (((z + 1.3) / 2.5) ** 2)));
+    const saddle = 0.70 * Math.exp(-((((x - 1.1) / 5.0) ** 2) + (((z + 0.2) / 2.8) ** 2)));
     const ridges =
-      0.22 * Math.sin(x * 1.15 + z * 0.48) * Math.exp(-Math.abs(z) * 0.08) +
-      0.12 * Math.sin(z * 2.35 - x * 0.28);
-    const valleyPath = 0.35 * Math.sin(x * 0.38) - 0.3;
-    const valley = -0.52 * Math.exp(-((z - valleyPath) ** 2) / 0.42) * Math.exp(-((x - 1.5) ** 2) / 78);
-    const edgeFalloff = -0.018 * (x * x + z * z);
+      0.22 * Math.sin(x * 1.10 + z * 0.52) * Math.exp(-Math.abs(z) * 0.08) +
+      0.11 * Math.sin(z * 2.20 - x * 0.30);
+    const valleyPath = 0.46 * Math.sin((x - 0.8) * 0.42) - 0.25;
+    const valley = -1.08 * Math.exp(-((z - valleyPath) ** 2) / 0.52) * Math.exp(-((x - 1.0) ** 2) / 36);
+    const edgeFalloff = -0.020 * (x * x + z * z);
 
-    return nearPeak + farPeak + shoulder + ridges + valley + edgeFalloff - 0.55;
+    return leftPeak + rightPeak + leftShoulder + rightShoulder + saddle + ridges + valley + edgeFalloff - 0.72;
   }
 
   function createTerrain() {
-    const xMin = -8.4;
-    const xMax = 12.0;
-    const zMin = -7.8;
-    const zMax = 7.5;
-    const columns = 49;
-    const rows = 39;
+    const xMin = -9.4;
+    const xMax = 12.8;
+    const zMin = -7.0;
+    const zMax = 6.8;
+    const columns = 57;
+    const rows = 43;
     const vertices = [];
     const vertexColors = [];
     const points = [];
@@ -195,7 +197,7 @@
     const colors = [];
     const points = [];
     const pointColors = [];
-    const levels = 9;
+    const levels = 12;
     const gold = [1.0, 0.61, 0.08, 0.98];
     const glowGold = [1.0, 0.37, 0.02, 0.45];
 
@@ -243,35 +245,35 @@
     }
     pushNode(top);
 
-    const antennaLevels = [0.43, 0.61, 0.76];
+    const antennaLevels = [0.34, 0.48, 0.62, 0.76];
     antennaLevels.forEach((fraction, index) => {
       const y = origin[1] + height * fraction;
-      const reach = baseRadius * (1.45 - index * 0.13) * detailScale;
-      const panelHeight = height * 0.12;
+      const reach = baseRadius * (1.00 - index * 0.06) * detailScale;
+      const panelHeight = height * 0.105;
       for (let side = 0; side < 2; side += 1) {
         const direction = side === 0 ? -1 : 1;
         const x = origin[0] + direction * reach;
-        const z = origin[2] + (index % 2 === 0 ? 0.1 : -0.1) * detailScale;
+        const z = origin[2] + (index % 2 === 0 ? 0.05 : -0.05) * detailScale;
         const bottom = [x, y - panelHeight * 0.5, z];
         const topPanel = [x, y + panelHeight * 0.5, z];
         pushSegment(bottom, topPanel);
         pushSegment([origin[0], y, origin[2]], [x, y, z], [1.0, 0.43, 0.02, 0.82]);
         pushSegment(
-          [x - 0.09 * detailScale, y - panelHeight * 0.5, z],
-          [x - 0.09 * detailScale, y + panelHeight * 0.5, z]
+          [x - 0.055 * detailScale, y - panelHeight * 0.5, z],
+          [x - 0.055 * detailScale, y + panelHeight * 0.5, z]
         );
         pushSegment(
-          [x + 0.09 * detailScale, y - panelHeight * 0.5, z],
-          [x + 0.09 * detailScale, y + panelHeight * 0.5, z]
+          [x + 0.055 * detailScale, y - panelHeight * 0.5, z],
+          [x + 0.055 * detailScale, y + panelHeight * 0.5, z]
         );
       }
     });
 
-    const dishY = origin[1] + height * 0.55;
-    const dishRadius = 0.24 * detailScale;
-    const dishCenter = [origin[0], dishY, origin[2] + baseRadius * 1.22];
+    const dishY = origin[1] + height * 0.46;
+    const dishRadius = 0.11 * detailScale;
+    const dishCenter = [origin[0], dishY, origin[2] + baseRadius * 0.82];
     let previous = null;
-    const dishSegments = 18;
+    const dishSegments = 12;
     for (let index = 0; index <= dishSegments; index += 1) {
       const angle = (index / dishSegments) * Math.PI * 2;
       const point = [
@@ -489,10 +491,10 @@
     const pointsLocation = gl.getUniformLocation(program, "u_points");
 
     const terrain = createTerrain();
-    const nearTowerOrigin = [-3.25, terrainHeight(-3.25, 0.55) + 0.03, 0.55];
-    const farTowerOrigin = [6.0, terrainHeight(6.0, -1.85) + 0.03, -1.85];
-    const nearTower = createTower(nearTowerOrigin, 3.85, 0.62, 1.0);
-    const farTower = createTower(farTowerOrigin, 2.55, 0.46, 0.72);
+    const nearTowerOrigin = [-3.7, terrainHeight(-3.7, 0.58) + 0.03, 0.58];
+    const farTowerOrigin = [6.2, terrainHeight(6.2, -1.55) + 0.03, -1.55];
+    const nearTower = createTower(nearTowerOrigin, 4.15, 0.52, 1.0);
+    const farTower = createTower(farTowerOrigin, 3.00, 0.40, 0.78);
     const path = createValleyPath();
 
     const drawBuffers = [
@@ -511,8 +513,8 @@
     const view = new Float32Array(16);
     const target = [
       (nearTowerOrigin[0] + farTowerOrigin[0]) * 0.5,
-      (nearTowerOrigin[1] + farTowerOrigin[1]) * 0.5 + 1.45,
-      (nearTowerOrigin[2] + farTowerOrigin[2]) * 0.5
+      (nearTowerOrigin[1] + farTowerOrigin[1]) * 0.5 + 1.05,
+      (nearTowerOrigin[2] + farTowerOrigin[2]) * 0.5 - 0.05
     ];
     const state = {
       azimuth: INTRO.from,
@@ -579,10 +581,10 @@
       }
 
       const angle = (state.azimuth % 360) * DEG;
-      const distance = 22.5;
+      const distance = 24.2;
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + 3.8,
+        target[1] + 3.2,
         target[2] + Math.cos(angle) * distance
       ];
 
@@ -668,11 +670,11 @@
 
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "webgl-360-between-transmitters";
+    mount.dataset.rfGraphMode = "webgl-original-look";
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
         bubbles: true,
-        detail: { version: VERSION, selectedPathId: SELECTED_PATH_ID, mode: "webgl-360-between-transmitters" }
+        detail: { version: VERSION, selectedPathId: SELECTED_PATH_ID, mode: "webgl-original-look" }
       })
     );
 
