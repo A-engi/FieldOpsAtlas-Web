@@ -1,303 +1,307 @@
-/* ===========================================================================
-   FieldOps Atlas RF path builder
-   File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.1.124-endpoint-icons
+/* ==========================================================================
+   FieldOps Atlas RF graph visuals
+   File: FieldOpsAtlas/Features/RF/rf-graph.css
+   Version: 1.1.85-network-topology
 
-   Purpose:
-   - Own the RF demo-safe topology model used by the RF graph renderer.
-   - Keep graph drawing in rf-graph.js.
-   - Keep the collapsible pane focused on one selected path, not a list of
-     generic site cards.
-   - Keep service/equipment/frequency detail in the selected path pane only.
-   - Do not use private operational records or real internal data.
+   Ownership:
+   - RF topology SVG nodes, links, labels, route badges, and graph legends.
+   - RF page layout and path pane styling remain in rf-interface.css.
    ========================================================================== */
 
-(() => {
-  "use strict";
+.rf-graph-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
 
-  const VERSION = "1.1.124-endpoint-icons";
-  const SLOT_SELECTOR = "[data-rf-path-details]";
-  const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
-  const RENDERED_EVENT = "fieldops:rf-path-details-rendered";
+.rf-route,
+.rf-route-soft,
+.rf-node-disc,
+.rf-node-halo circle,
+.rf-node-tower path {
+  vector-effect: non-scaling-stroke;
+}
 
-  const SITES = [
-    { id: "glasgow-core", name: "Glasgow", role: "Core", status: "Online", nodeType: "core", x: 0.16, y: 0.16 },
-    { id: "edinburgh-core", name: "Edinburgh", role: "Core", status: "Online", nodeType: "core", x: 0.70, y: 0.16 },
-    { id: "manchester-core", name: "Manchester", role: "Core", status: "Online", nodeType: "core", x: 0.44, y: 0.40, size: "large" },
-    { id: "birmingham-core", name: "Birmingham", role: "Core", status: "Online", nodeType: "core", x: 0.44, y: 0.58 },
-    { id: "london-core", name: "London", role: "Core site", status: "Online", nodeType: "core", x: 0.47, y: 0.78, size: "large" },
-    { id: "valley-remote", name: "Valley", role: "Remote", status: "Online", nodeType: "remote", x: 0.14, y: 0.70 },
-    { id: "pinewood-remote", name: "Pinewood", role: "Remote", status: "Online", nodeType: "remote", x: 0.46, y: 0.94 },
-    { id: "hilltop-relay", name: "Hilltop", role: "Relay", status: "Active", nodeType: "relay", x: 0.78, y: 0.45, size: "large" },
-    { id: "ridgeway-relay", name: "Ridgeway", role: "Relay", status: "Watch", nodeType: "relay", x: 0.83, y: 0.62 }
-  ];
+.rf-route,
+.rf-route-soft {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-  const LINKS = [
-    { id: "glasgow-manchester", from: "glasgow-core", to: "manchester-core", type: "main" },
-    { id: "edinburgh-manchester", from: "edinburgh-core", to: "manchester-core", type: "main" },
-    { id: "manchester-birmingham", from: "manchester-core", to: "birmingham-core", type: "main" },
-    { id: "birmingham-london", from: "birmingham-core", to: "london-core", type: "main" },
-    { id: "london-hilltop", from: "london-core", to: "hilltop-relay", type: "alert" },
-    { id: "hilltop-ridgeway", from: "hilltop-relay", to: "ridgeway-relay", type: "alert" },
-    { id: "london-ridgeway", from: "london-core", to: "ridgeway-relay", type: "main" },
-    { id: "london-valley", from: "london-core", to: "valley-remote", type: "backup" },
-    { id: "london-pinewood", from: "london-core", to: "pinewood-remote", type: "backup" },
-    { id: "glasgow-edinburgh", from: "glasgow-core", to: "edinburgh-core", type: "backup" }
-  ];
+.rf-route-soft {
+  opacity: 0.20;
+  stroke-width: 9;
+}
 
-  const SELECTED_PATH = {
-    id: "london-hilltop",
-    status: "Active",
-    from: {
-      siteId: "london-core",
-      name: "London",
-      role: "Core Site",
-      input: "Fibre Input"
-    },
-    to: {
-      siteId: "hilltop-relay",
-      name: "Hilltop",
-      role: "Relay Site",
-      input: "Off-air Antenna"
-    },
-    frequency: "234.928 MHz",
-    channel: "DTT CH 39",
-    bandwidth: "8 MHz",
-    serviceCount: "6 links",
-    services: [
-      { type: "DTT", name: "BBC R1" },
-      { type: "DTT", name: "BBC R2" },
-      { type: "DTT", name: "BBC R3" },
-      { type: "DTT", name: "BBC R4" },
-      { type: "DTT", name: "BBC WS" },
-      { type: "DAB", name: "BBC Radio Cymru" }
-    ],
-    metrics: [
-      { label: "Path length", value: "37.6 km" },
-      { label: "Azimuth", value: "123.4°" },
-      { label: "Elevation", value: "1,245 m" },
-      { label: "RX power", value: "-58.2 dBm" },
-      { label: "Fade margin", value: "18.6 dB" },
-      { label: "Availability", value: "99.98%" }
-    ]
-  };
+.rf-route-soft.is-main {
+  stroke: #176f35;
+}
 
-  function cleanText(value) {
-    return String(value ?? "").replace(/\s+/g, " ").trim();
-  }
+.rf-route-soft.is-alert {
+  stroke: #c5291e;
+}
 
-  function escapeHTML(value) {
-    return cleanText(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
-  }
+.rf-route-soft.is-fm,
+.rf-route-soft.is-backup {
+  stroke: #2566a0;
+}
 
-  function siteById(id) {
-    return SITES.find((site) => site.id === id) || null;
-  }
+.rf-route-soft.is-standby {
+  stroke: #8f969c;
+}
 
-  function graphNodeFromSite(site) {
-    const labelSide = site.x > 0.72 ? -1 : 1;
-    const label = {
-      dx: labelSide < 0 ? -24 : 24,
-      dy: -16,
-      anchor: labelSide < 0 ? "end" : "start"
-    };
+.rf-route {
+  stroke-width: 3.2;
+}
 
-    return {
-      id: site.id,
-      name: site.name,
-      type: site.nodeType || "relay",
-      size: site.size || (site.nodeType === "core" ? "large" : ""),
-      x: site.x,
-      y: site.y,
-      label,
-      labelTight: {
-        dx: label.dx,
-        dy: -13,
-        anchor: label.anchor
-      }
-    };
-  }
+.rf-route.is-main {
+  stroke: #176f35;
+}
 
-  function buildSites() {
-    return SITES.map((site) => ({ ...site }));
-  }
+.rf-route.is-alert {
+  stroke: #c5291e;
+}
 
-  function buildGraph() {
-    if (
-      window.ATLAS_RF_GRAPH &&
-      Array.isArray(window.ATLAS_RF_GRAPH.nodes) &&
-      window.ATLAS_RF_GRAPH.nodes.length > 0 &&
-      Array.isArray(window.ATLAS_RF_GRAPH.links)
-    ) {
-      return {
-        ...window.ATLAS_RF_GRAPH,
-        meta: {
-          ...(window.ATLAS_RF_GRAPH.meta || {}),
-          source: "window.ATLAS_RF_GRAPH",
-          builderVersion: VERSION,
-          mode: "external-model"
-        }
-      };
-    }
+.rf-route.is-fm,
+.rf-route.is-backup {
+  stroke: #2566a0;
+  stroke-dasharray: 8 8;
+}
 
-    return {
-      id: "rf-demo-network-map",
-      selectedPathId: SELECTED_PATH.id,
-      meta: {
-        source: "FieldOpsRFPathBuilder",
-        builderVersion: VERSION,
-        mode: "demo-safe-rf-network",
-        note: "Prototype-safe RF network map. Replace with real path records when available."
-      },
-      nodes: SITES.map(graphNodeFromSite),
-      links: LINKS.map((link) => ({ ...link }))
-    };
-  }
+.rf-route.is-standby {
+  stroke: #8f969c;
+  stroke-width: 2.5;
+  stroke-dasharray: 9 9;
+}
 
-  function endpointIconHTML(direction) {
-    const tone = direction === "from" ? "tx" : "rx";
+.rf-route.is-selected {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 220, 126, 0.44))
+    drop-shadow(0 0 10px rgba(23, 111, 53, 0.22));
+}
 
-    return `
-      <span class="rf-endpoint-icon is-${tone}" aria-hidden="true">
-        <svg viewBox="0 0 48 48" focusable="false">
-          <circle class="rf-endpoint-icon-bg" cx="24" cy="24" r="20"></circle>
-          <circle class="rf-endpoint-icon-ring" cx="24" cy="24" r="23"></circle>
-          <path class="rf-endpoint-icon-mast" d="M24 14L17 34H31Z"></path>
-          <path class="rf-endpoint-icon-line" d="M24 18V34M20.5 27H27.5"></path>
-          <path class="rf-endpoint-icon-wave" d="M14.2 17.8C10.8 21.2 10.8 26.8 14.2 30.2M33.8 17.8C37.2 21.2 37.2 26.8 33.8 30.2"></path>
-        </svg>
-      </span>
-    `;
-  }
+.rf-route-badge circle {
+  fill: #187744;
+  stroke: rgba(255, 244, 202, 0.84);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgba(23, 111, 53, 0.28));
+}
 
-  function endpointHTML(endpoint, direction) {
-    return `
-      <section class="rf-selected-endpoint is-${escapeHTML(direction)}">
-        <small>${direction === "from" ? "From" : "To"}</small>
-        ${endpointIconHTML(direction)}
-        <b>${escapeHTML(endpoint.name)}</b>
-        <span>${escapeHTML(endpoint.role)}</span>
-        <em>${escapeHTML(endpoint.input)}</em>
-      </section>
-    `;
-  }
+.rf-route-badge text {
+  fill: #fff8df;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
 
-  function serviceHTML(service) {
-    return `
-      <li>
-        <b>${escapeHTML(service.type)}</b>
-        <span>${escapeHTML(service.name)}</span>
-      </li>
-    `;
-  }
+.rf-node-halo {
+  fill: none;
+  pointer-events: none;
+}
 
-  function metricHTML(metric) {
-    return `
-      <div class="rf-path-metric">
-        <dt>${escapeHTML(metric.label)}</dt>
-        <dd>${escapeHTML(metric.value)}</dd>
-      </div>
-    `;
-  }
+.rf-node-halo circle {
+  fill: rgba(255, 253, 241, 0.34);
+  stroke: rgba(237, 191, 99, 0.22);
+  stroke-width: 2;
+}
 
-  function buildSitePack() {
-    const fromSite = siteById(SELECTED_PATH.from.siteId);
-    const toSite = siteById(SELECTED_PATH.to.siteId);
+.rf-node-halo circle + circle {
+  fill: none;
+  stroke: rgba(20, 112, 55, 0.18);
+  stroke-width: 2;
+}
 
-    return {
-      id: SELECTED_PATH.id,
-      from: fromSite,
-      to: toSite,
-      selectedPath: SELECTED_PATH,
-      siteCount: SITES.length,
-      linkCount: LINKS.length
-    };
-  }
+.rf-node.is-relay .rf-node-halo circle + circle {
+  stroke: rgba(197, 41, 30, 0.20);
+}
 
-  function renderPathDetails(pack) {
-    const path = pack.selectedPath;
+.rf-node.is-remote .rf-node-halo circle + circle {
+  stroke: rgba(37, 102, 160, 0.20);
+}
 
-    return `
-      <article class="rf-path-pack rf-selected-path-pack" data-rf-path-builder-body data-rf-path-id="${escapeHTML(pack.id)}">
-        <section class="rf-path-selected-head">
-          <small>Selected path</small>
-          <span class="rf-path-active-dot" aria-hidden="true"></span>
-          <b>${escapeHTML(path.status)}</b>
-        </section>
+.rf-node-halo.is-selected circle {
+  stroke: rgba(237, 191, 99, 0.44);
+  filter: drop-shadow(0 0 8px rgba(237, 191, 99, 0.28));
+}
 
-        ${endpointHTML(path.from, "from")}
+.rf-node-halo.is-selected circle.is-outer {
+  fill: none;
+  stroke: rgba(197, 41, 30, 0.18);
+  stroke-dasharray: 4 4;
+}
 
-        <section class="rf-path-frequency-card">
-          <small>Frequency</small>
-          <b>${escapeHTML(path.frequency)}</b>
-          <span>${escapeHTML(path.channel)} <i aria-hidden="true">|</i> ${escapeHTML(path.bandwidth)}</span>
-        </section>
+.rf-node-disc {
+  stroke: #fff7de;
+  stroke-width: 3;
+}
 
-        <section class="rf-service-bundle">
-          <header>
-            <small>Service bundle</small>
-            <b>${escapeHTML(path.serviceCount)}</b>
-          </header>
-          <ul>
-            ${path.services.map(serviceHTML).join("")}
-          </ul>
-        </section>
+.rf-node.is-core .rf-node-disc {
+  fill: #13733a;
+}
 
-        ${endpointHTML(path.to, "to")}
+.rf-node.is-relay .rf-node-disc {
+  fill: #b82a21;
+}
 
-        <dl class="rf-path-metrics">
-          ${path.metrics.map(metricHTML).join("")}
-        </dl>
-      </article>
-    `;
-  }
+.rf-node.is-remote .rf-node-disc {
+  fill: #2566a0;
+}
 
-  function render(root = document) {
-    const slot = root.querySelector(SLOT_SELECTOR);
-    if (!slot) return false;
+.rf-node.is-selected .rf-node-disc {
+  filter:
+    drop-shadow(0 0 6px rgba(255, 218, 123, 0.44))
+    drop-shadow(0 0 14px rgba(255, 255, 255, 0.18));
+}
 
-    const pack = buildSitePack(root);
-    slot.replaceChildren();
-    slot.insertAdjacentHTML("beforeend", renderPathDetails(pack));
-    slot.dataset.rfPathBuilderLoaded = "true";
-    slot.dataset.rfPathBuilderVersion = VERSION;
+.rf-node-tower {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.96);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-    document.dispatchEvent(new CustomEvent(RENDERED_EVENT, {
-      detail: {
-        version: VERSION,
-        pathId: pack.id,
-        source: "selected-path-pane",
-        graph: buildGraph(root)
-      }
-    }));
+.rf-node-label {
+  fill: #071c32;
+  paint-order: stroke;
+  stroke: rgba(255, 250, 236, 0.92);
+  stroke-width: 8px;
+  stroke-linejoin: round;
+}
 
-    return true;
-  }
+.rf-node-label-name {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 27px;
+  font-weight: 950;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
 
-  function init() {
-    if (render()) return;
-    document.addEventListener(PANE_READY_EVENT, () => { render(); }, { once: true });
-  }
+.rf-node-label-type {
+  fill: #1b7444;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 19px;
+  font-weight: 850;
+  stroke-width: 6px;
+}
 
-  window.FieldOpsRFPathBuilder = {
-    VERSION,
-    buildSites,
-    buildSitePack,
-    buildGraph,
-    render
-  };
+.rf-node-label.is-relay .rf-node-label-type {
+  fill: #173052;
+}
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
-})();
+.rf-node-label.is-remote .rf-node-label-type {
+  fill: #2566a0;
+}
 
-/* Destination: FieldOpsAtlas/Features/RF/rf-path-builder.js */
-/* End of file: FieldOpsAtlas/Features/RF/rf-path-builder.js */
+.rf-graph-legends {
+  position: absolute;
+  z-index: 5;
+  right: calc(var(--path-pane-width) - var(--path-handle-width) + 8px);
+  bottom: 8px;
+  left: 8px;
+  min-width: 0;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+  transition: right 180ms ease;
+}
+
+.rf-map-paper.is-path-pane-collapsed .rf-graph-legends {
+  right: calc(var(--path-handle-width) + 8px);
+}
+
+.rf-graph-legend-card {
+  min-width: 0;
+  padding: 6px 7px;
+  color: rgba(7, 31, 56, 0.78);
+  border: 1px solid rgba(130, 91, 22, 0.14);
+  border-radius: 10px;
+  background: rgba(255, 250, 238, 0.78);
+  box-shadow: 0 5px 14px rgba(28, 18, 6, 0.06);
+}
+
+.rf-graph-legend-card.is-inputs {
+  width: min(44%, 112px);
+}
+
+.rf-graph-legend-card.is-links {
+  width: min(44%, 108px);
+}
+
+.rf-graph-legend-card h3 {
+  margin: 0 0 4px;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.rf-graph-legend-card ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+  list-style: none;
+}
+
+.rf-graph-legend-card li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+  font-size: 5.2px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-input-symbol {
+  height: 11px;
+  display: grid;
+  place-items: center;
+  color: #173052;
+  border: 1px solid rgba(23, 48, 82, 0.18);
+  border-radius: 4px;
+  font-size: 4.4px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.rf-link-swatch {
+  width: 16px;
+  height: 0;
+  display: block;
+  border-top: 2px solid #176f35;
+}
+
+.rf-link-swatch.is-dab {
+  border-top-style: dashed;
+  border-top-color: #176f35;
+}
+
+.rf-link-swatch.is-fm {
+  border-top-style: dashed;
+  border-top-color: #2566a0;
+}
+
+.rf-link-swatch.is-ip {
+  border-top-color: #7d5a9e;
+}
+
+.rf-link-swatch.is-standby {
+  border-top-style: dashed;
+  border-top-color: #8f969c;
+}
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-graph.css */
+/* End of file: FieldOpsAtlas/Features/RF/rf-graph.css */
