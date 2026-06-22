@@ -1,283 +1,150 @@
 <!doctype html>
 <html lang="en">
 <head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
- <title>Maps v1.0.76-green-neon-download</title>
- <link rel="stylesheet" href="../../../shell.css">
- <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
- <link rel="stylesheet" href="./OSMmaps.css?v=1.0.21-green-neon-download">
- <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
- <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
- <link rel="stylesheet" href="./OSMrf-paths.css?v=1.0.14-subtle-path-glow">
- <style>
- .maps-load-toast {
-  position: fixed;
-  z-index: 9999;
-  left: 14px;
-  right: auto;
-  bottom: 92px;
-  width: auto;
-  max-width: min(86vw, 380px);
-  padding: 7px 9px;
-  border: 1px solid rgba(255, 221, 142, 0.66);
-  border-radius: 13px;
-  background: rgba(10, 23, 36, 0.88);
-  color: #ffe7b8;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
-  font: 700 10px/1.18 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  white-space: pre-wrap;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
- }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Maps</title>
 
- .maps-load-toast.is-visible {
-  opacity: 0.9;
-  transform: translateY(0);
- }
- </style>
+  <link rel="stylesheet" href="../../../shell.css">
+  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
+  <link rel="stylesheet" href="./OSMpanes.css?v=fade-restore-20260612g">
+  <link rel="stylesheet" href="./OSMweather-menu.css?v=weather-lab-menu-20260616">
+  <link rel="stylesheet" href="../Weather/weather-api-panel.css?v=maps-preseli-forecast-20260616">
 </head>
 <body>
- <div class="fieldops-shell-root" data-page="map"></div>
+  <div class="fieldops-shell-root" data-page="map"></div>
 
- <main class="osmmaps-page" data-osmmaps-page data-version="1.0.76-green-neon-download">
-  <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
+  <main class="osmmaps-page" data-osmmaps-page>
+    <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
-  <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
-   <button class="osmmaps-overlay-backdrop" type="button" data-region-overlay-close aria-label="Close region chooser"></button>
+    <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
+      <button
+        class="osmmaps-overlay-backdrop"
+        type="button"
+        data-region-overlay-close
+        aria-label="Close region chooser"
+      ></button>
 
-   <article class="osmmaps-filter-card" aria-label="Map region filter">
-    <header class="osmmaps-filter-header">
-     <div>
-      <p class="osmmaps-kicker">Filter</p>
-      <h1>Choose region</h1>
-     </div>
+      <article class="osmmaps-filter-card" aria-label="Map region filter">
+        <header class="osmmaps-filter-header">
+          <div>
+            <p class="osmmaps-kicker">Filter</p>
+            <h1>Choose region</h1>
+          </div>
 
-     <button class="osmmaps-small-button" type="button" data-region-overlay-close>Close</button>
+          <button class="osmmaps-small-button" type="button" data-region-overlay-close>
+            Close
+          </button>
+        </header>
+
+        <p class="osmmaps-filter-note">
+          Only the selected region's walks are loaded.
+        </p>
+
+        <div class="osmmaps-region-list" data-region-list></div>
+      </article>
+    </section>
+
+    <section
+      class="osmpanes-details"
+      data-selected-panel
+      hidden
+      aria-live="polite"
+    ></section>
+  </main>
+
+  <section class="weather-map-icon-strip" aria-label="Weather controls">
+    <button
+      class="weather-map-icon-button"
+      type="button"
+      data-weather-panel-open
+      aria-expanded="false"
+      aria-label="Open selected region weather forecast"
+    >
+      <img
+        class="weather-map-icon-image"
+        src="./icons/weather.svg?v=maps-preseli-forecast-20260616"
+        alt=""
+        aria-hidden="true"
+      >
+    </button>
+  </section>
+
+  <aside
+    class="weather-api-panel"
+    aria-label="Selected region weather forecast"
+    hidden
+  >
+    <header class="weather-api-panel-header">
+      <div>
+        <p class="weather-api-kicker">Weather</p>
+        <h1>Selected region forecast</h1>
+      </div>
+
+      <button
+        class="weather-api-mini-button"
+        type="button"
+        data-weather-panel-close
+        aria-label="Close selected region weather forecast"
+      >
+        Close
+      </button>
     </header>
 
-    <p class="osmmaps-filter-note">
-     Only the selected region's walks are loaded.
+    <p class="weather-api-copy">
+      Uses the currently selected Atlas map region. No provider-owned maps or
+      weather-map previews are rendered.
     </p>
 
-    <div class="osmmaps-region-list" data-region-list></div>
-   </article>
-  </section>
+    <button class="weather-api-activate" type="button" data-weather-activate>
+      Activate
+    </button>
 
-  <section class="osmpanes-details" data-selected-panel hidden aria-live="polite"></section>
- </main>
+    <section
+      class="weather-forecast-slider"
+      aria-label="Selected region forecast slider"
+    >
+      <header class="weather-forecast-header">
+        <span>Selected region</span>
+        <span data-weather-forecast-updated>Not loaded</span>
+      </header>
 
- <section class="map-quick-tools" data-map-quick-tools aria-label="Map quick tools">
-  <div class="map-quick-tools__rail" id="mapQuickToolsRail">
-   <button
-    class="map-quick-tool is-dtt"
-    type="button"
-    data-map-service="dtt"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show DTT sites and choose cluster"
-   >
-    <img src="../../../data/icons/dtt.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>DTT</span>
-   </button>
+      <div
+        class="weather-forecast-track"
+        data-weather-forecast-track
+        tabindex="0"
+        role="list"
+      >
+        <article
+          class="weather-forecast-card weather-forecast-card-placeholder"
+          role="listitem"
+        >
+          Opening panel loads forecast.
+        </article>
+      </div>
+    </section>
 
-   <button
-    class="map-quick-tool is-dab"
-    type="button"
-    data-map-service="dab"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show DAB sites and choose cluster"
-   >
-    <img src="../../../data/icons/dab.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>DAB</span>
-   </button>
+    <p class="weather-api-status" data-weather-output>
+      v1.0.5-selected-region-forecast
+    </p>
+  </aside>
 
-   <button
-    class="map-quick-tool is-fm"
-    type="button"
-    data-map-service="fm"
-    aria-controls="mapServicePicker"
-    aria-expanded="false"
-    aria-label="Show FM sites and choose cluster"
-   >
-    <img src="../../../data/icons/fm.svg?v=1.1.1" alt="" aria-hidden="true">
-    <span>FM</span>
-   </button>
-
-   <button
-    class="map-quick-tool is-weather"
-    type="button"
-    data-weather-panel-open
-    aria-expanded="false"
-    aria-label="Open Preseli weather forecast"
-   >
-    <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
-   </button>
+  <div class="background-item" aria-hidden="true">
+    <div class="atlas-top-fade"></div>
+    <div class="atlas-top-fade atlas-bottom-fade"></div>
   </div>
 
-  <section
-   class="map-service-picker"
-   id="mapServicePicker"
-   data-map-service-picker
-   aria-label="Choose map service cluster"
-   hidden
-  >
-   <header class="map-service-picker__header">
-    <div>
-     <small data-map-service-kicker>DTT</small>
-     <strong data-map-service-title>Choose cluster</strong>
-    </div>
-    <button type="button" data-map-service-close aria-label="Close service cluster chooser">Close</button>
-   </header>
-   <div class="map-service-picker__options" data-map-service-options></div>
-   <p class="map-service-picker__status" data-map-service-status></p>
-  </section>
-
-  <button
-   class="map-quick-tools__toggle"
-   type="button"
-   data-map-quick-toggle
-   aria-controls="mapQuickToolsRail"
-   aria-expanded="true"
-   aria-label="Collapse map quick tools"
-  >
-   <span class="map-quick-tools__toggle-mark" aria-hidden="true"></span>
-  </button>
- </section>
-
- <aside class="weather-api-panel" aria-label="Preseli weather forecast" hidden>
-  <header class="weather-api-panel-header">
-   <div>
-    <p class="weather-api-kicker">Weather</p>
-    <h1>Preseli forecast</h1>
-   </div>
-   <button class="weather-api-mini-button" type="button" data-weather-panel-close aria-label="Close Preseli weather forecast">Close</button>
-  </header>
-
-  <p class="weather-api-copy">
-   Preview only. Weather data is not requested until Activate is tapped.
-  </p>
-
-  <div class="weather-api-actions">
-   <button class="weather-api-activate" type="button" data-weather-activate>
-    Activate preview
-   </button>
-   <a class="weather-api-full-link" href="../Weather/index.html">Open full Weather</a>
-  </div>
-
-  <section class="weather-forecast-slider" aria-label="Preseli forecast slider">
-   <header class="weather-forecast-header">
-    <span>Preseli area</span>
-    <span data-weather-forecast-updated>Not loaded</span>
-   </header>
-
-   <div class="weather-forecast-track" data-weather-forecast-track tabindex="0" role="list">
-    <article class="weather-forecast-card weather-forecast-card-placeholder" role="listitem">
-     Tap Activate.
-    </article>
-   </div>
-  </section>
-
-  <p class="weather-api-status" data-weather-output>v1.0.76-green-neon-download</p>
- </aside>
-
- <div class="background-item" aria-hidden="true">
-  <div class="atlas-top-fade"></div>
-  <div class="atlas-top-fade atlas-bottom-fade"></div>
- </div>
-
- <script src="../../../shell.js?v=fade-restore-20260612g"></script>
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
- <script src="./OSMpath-generator.js?v=1.0.1-generate-once"></script>
- <script src="./OSMrf-paths.js?v=1.1.18-bright-path-mode"></script>
- <script src="./OSMweather-menu.js?v=1.0.26-weather-data-only"></script>
-
- <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
- <script>
- /* Maps load toast | Version: 1.0.76-green-neon-download */
- (() => {
-  "use strict";
-
-  const PAGE_VERSION = "1.0.76-green-neon-download";
-  const TOAST_ID = "mapsLoadToast";
-
-  function versionOf(globalName) {
-   const globalValue = window[globalName];
-
-   if (!globalValue) {
-    return "missing";
-   }
-
-   return globalValue.VERSION || globalValue.version || "loaded";
-  }
-
-  function leafletVersion() {
-   return window.L && window.L.version ? window.L.version : versionOf("L");
-  }
-
-  function showToast() {
-   const existingToast = document.getElementById(TOAST_ID);
-
-   if (existingToast) {
-    existingToast.remove();
-   }
-
-   const toast = document.createElement("div");
-
-   toast.id = TOAST_ID;
-   toast.className = "maps-load-toast";
-   toast.setAttribute("role", "status");
-   toast.setAttribute("aria-live", "polite");
-
-   const lines = [
-    `index.html ${PAGE_VERSION}`,
-    "shell.css unversioned",
-    "background.css fade-restore-20260612g",
-    "leaflet.css 1.9.4",
-    "OSMmaps.css 1.0.21-green-neon-download",
-    "OSMpanes.css 1.0.4-map-controls",
-    "OSMweather-menu.css 1.0.24-weather-only",
-    "OSMrf-paths.css 1.0.14-subtle-path-glow",
-    `shell.js ${versionOf("FieldOpsEditor")}`,
-    `leaflet.js ${leafletVersion()}`,
-    `OSMpath-generator.js ${versionOf("FieldOpsOSMPathGenerator")}`,
-    `OSMrf-paths.js ${versionOf("FieldOpsOSMRfPaths")}`,
-    `OSMpanes.js ${versionOf("FieldOpsOSMpanes")}`,
-    `OSMmaps.js ${versionOf("FieldOpsOSMmaps")}`,
-    `OSMweather-menu.js ${versionOf("FieldOpsOSMWeatherMenu")}`
-   ];
-
-   toast.textContent = lines.join("\n");
-   document.body.appendChild(toast);
-
-   requestAnimationFrame(() => {
-    toast.classList.add("is-visible");
-   });
-
-   window.setTimeout(() => {
-    toast.classList.remove("is-visible");
-   }, 6500);
-
-   window.setTimeout(() => {
-    toast.remove();
-   }, 7000);
-  }
-
-  if (document.readyState === "loading") {
-   document.addEventListener("DOMContentLoaded", () => {
-    window.setTimeout(showToast, 450);
-   }, { once: true });
-  } else {
-   window.setTimeout(showToast, 450);
-  }
- })();
- </script>
+  <script src="../../../shell.js?v=fade-restore-20260612g"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./OSMpanes.js?v=fade-restore-20260612g"></script>
+  <script src="./OSMmaps.js?v=fade-restore-20260612g"></script>
+  <script src="./OSMweather-menu.js?v=weather-lab-menu-20260616"></script>
+  <script
+    src="../Weather/weather-api-panel.js?v=maps-selected-region-forecast-20260621"
+  ></script>
 </body>
 </html>
-<!-- Destination: FieldOpsAtlas/Features/maps/index.html -->
+
 <!-- End of file: FieldOpsAtlas/Features/maps/index.html | bottom/end of file -->
