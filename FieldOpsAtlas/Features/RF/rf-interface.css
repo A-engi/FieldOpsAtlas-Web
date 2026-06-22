@@ -1,605 +1,835 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.32-warning-visibility-toast</title>
-
-  <link rel="stylesheet" href="../../../shell.css">
-  <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="./OSMmaps.css?v=fade-restore-20260612g">
-  <link rel="stylesheet" href="./OSMpanes.css?v=1.0.4-map-controls">
-  <link rel="stylesheet" href="./OSMweather-menu.css?v=1.0.24-weather-only">
-
-  <style>
-    .map-quick-tools__rail {
-      background: rgba(5, 20, 39, 0.16);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.06),
-        0 6px 16px rgba(0, 0, 0, 0.14);
-      backdrop-filter: blur(6px) saturate(115%);
-      -webkit-backdrop-filter: blur(6px) saturate(115%);
-    }
-
-    .metoffice-warning-card {
-      margin: 0 0 12px;
-      padding: 11px;
-      border: 1px solid rgba(255, 206, 92, 0.44);
-      border-radius: 16px;
-      background: rgba(68, 48, 5, 0.34);
-    }
-
-    .metoffice-warning-card__header {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .metoffice-warning-card__icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .metoffice-warning-card__heading {
-      min-width: 0;
-      display: grid;
-      gap: 2px;
-    }
-
-    .metoffice-warning-card__heading small {
-      color: rgba(255, 230, 174, 0.76);
-      font-size: 9px;
-      font-weight: 850;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .metoffice-warning-card__heading strong {
-      overflow: hidden;
-      color: rgba(255, 247, 226, 0.98);
-      font-size: 13px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .metoffice-warning-refresh {
-      min-height: 30px;
-      padding: 0 9px;
-      border: 1px solid rgba(255, 225, 158, 0.36);
-      border-radius: 999px;
-      color: rgba(255, 245, 218, 0.96);
-      background: rgba(81, 55, 8, 0.42);
-      font: inherit;
-      font-size: 10px;
-      font-weight: 850;
-      cursor: pointer;
-    }
-
-    .metoffice-warning-status {
-      margin: 9px 0 0;
-      color: rgba(255, 238, 198, 0.82);
-      font-size: 11px;
-      line-height: 1.35;
-    }
-
-    .metoffice-warning-list {
-      display: grid;
-      gap: 7px;
-      margin-top: 8px;
-    }
-
-    .metoffice-warning-item {
-      padding: 9px;
-      border: 1px solid rgba(255, 225, 158, 0.26);
-      border-radius: 12px;
-      background: rgba(44, 30, 5, 0.32);
-    }
-
-    .metoffice-warning-item.is-yellow {
-      border-color: rgba(255, 221, 77, 0.56);
-    }
-
-    .metoffice-warning-item.is-amber {
-      border-color: rgba(255, 159, 43, 0.66);
-      background: rgba(98, 47, 4, 0.34);
-    }
-
-    .metoffice-warning-item.is-red {
-      border-color: rgba(255, 88, 88, 0.72);
-      background: rgba(101, 9, 20, 0.38);
-    }
-
-    .metoffice-warning-item strong {
-      display: block;
-      color: rgba(255, 249, 234, 0.98);
-      font-size: 11px;
-      line-height: 1.3;
-    }
-
-    .metoffice-warning-item p {
-      margin: 5px 0 0;
-      color: rgba(255, 239, 205, 0.78);
-      font-size: 10px;
-      line-height: 1.35;
-    }
-
-    .metoffice-warning-item a,
-    .metoffice-warning-official-link {
-      display: inline-block;
-      margin-top: 7px;
-      color: rgba(255, 224, 146, 0.98);
-      font-size: 10px;
-      font-weight: 850;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-
-    .map-weather-warning {
-      position: fixed;
-      z-index: 62;
-      top: calc(var(--safe-top) + var(--top-height) + 58px);
-      left: max(
-        10px,
-        calc((100vw - min(100vw, var(--page-width, 430px))) / 2 + 10px)
-      );
-      max-width: min(190px, calc(100vw - 20px));
-      min-height: 30px;
-      padding: 5px 9px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 224, 64, 0.82);
-      border-radius: 999px;
-      color: #231b00;
-      background: rgba(255, 221, 48, 0.94);
-      box-shadow: 0 7px 18px rgba(0, 0, 0, 0.24);
-      font: inherit;
-      font-size: 11px;
-      font-weight: 900;
-      line-height: 1;
-      cursor: pointer;
-      pointer-events: auto;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-
-    .map-weather-warning[hidden],
-    .map-weather-warning-button-badge[hidden],
-    .map-weather-warning.is-inactive,
-    .map-weather-warning-button-badge.is-inactive {
-      display: none !important;
-    }
-
-    .osmpanes-details[data-pane-mode="toast"] {
-      z-index: 72;
-    }
-
-    .map-weather-warning.is-amber {
-      border-color: rgba(255, 167, 38, 0.94);
-      color: #2b1300;
-      background: rgba(255, 159, 28, 0.95);
-    }
-
-    .map-weather-warning.is-red {
-      border-color: rgba(255, 110, 110, 0.96);
-      color: #fff;
-      background: rgba(198, 24, 44, 0.95);
-    }
-
-    .map-weather-warning__icon {
-      flex: 0 0 auto;
-      font-size: 15px;
-      line-height: 1;
-    }
-
-    .map-weather-warning__label {
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .map-quick-tool.is-weather {
-      position: relative;
-      overflow: visible;
-    }
-
-    .map-weather-warning-button-badge {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      z-index: 2;
-      width: 17px;
-      height: 17px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255, 246, 174, 0.94);
-      border-radius: 999px;
-      color: #211900;
-      background: #ffdd30;
-      box-shadow: 0 3px 9px rgba(0, 0, 0, 0.32);
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .map-weather-warning-button-badge.is-amber {
-      color: #2b1300;
-      background: #ff9f1c;
-    }
-
-    .map-weather-warning-button-badge.is-red {
-      color: #fff;
-      background: #c6182c;
-    }
-
-    .metoffice-details-alert {
-      margin: 0 0 9px;
-      padding: 8px 9px;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255, 221, 77, 0.56);
-      border-radius: 12px;
-      background: rgba(92, 68, 6, 0.34);
-    }
-
-    .metoffice-details-alert.is-amber {
-      border-color: rgba(255, 159, 43, 0.68);
-      background: rgba(98, 47, 4, 0.34);
-    }
-
-    .metoffice-details-alert.is-red {
-      border-color: rgba(255, 88, 88, 0.74);
-      background: rgba(101, 9, 20, 0.38);
-    }
-
-    .metoffice-details-alert__icons {
-      position: relative;
-      width: 28px;
-      height: 28px;
-      display: block;
-    }
-
-    .metoffice-details-alert__icons img {
-      width: 25px;
-      height: 25px;
-      display: block;
-      object-fit: contain;
-    }
-
-    .metoffice-details-alert__warning-icon {
-      position: absolute;
-      right: -2px;
-      bottom: -2px;
-      width: 14px;
-      height: 14px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: #ffdd30;
-      color: #211900;
-      font-size: 9px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .metoffice-details-alert.is-amber
-      .metoffice-details-alert__warning-icon {
-      background: #ff9f1c;
-    }
-
-    .metoffice-details-alert.is-red
-      .metoffice-details-alert__warning-icon {
-      color: #fff;
-      background: #c6182c;
-    }
-
-    .metoffice-details-alert__content {
-      min-width: 0;
-      display: grid;
-      gap: 3px;
-    }
-
-    .metoffice-details-alert__content strong {
-      color: rgba(255, 248, 226, 0.98);
-      font-size: 11px;
-      line-height: 1.2;
-    }
-
-    .metoffice-details-alert__content a {
-      overflow: hidden;
-      color: rgba(255, 224, 146, 0.98);
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1.25;
-      text-decoration: underline;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  </style>
-</head>
-<body>
-  <div class="fieldops-shell-root" data-page="map"></div>
-
-  <main
-    class="osmmaps-page"
-    data-osmmaps-page
-    data-version="1.0.32-warning-visibility-toast"
-  >
-    <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
-
-    <section class="osmmaps-region-overlay" data-region-overlay hidden aria-label="Choose map region">
-      <button
-        class="osmmaps-overlay-backdrop"
-        type="button"
-        data-region-overlay-close
-        aria-label="Close region chooser"
-      ></button>
-
-      <article class="osmmaps-filter-card" aria-label="Map region filter">
-        <header class="osmmaps-filter-header">
-          <div>
-            <p class="osmmaps-kicker">Filter</p>
-            <h1>Choose region</h1>
-          </div>
-
-          <button class="osmmaps-small-button" type="button" data-region-overlay-close>
-            Close
-          </button>
-        </header>
-
-        <p class="osmmaps-filter-note">
-          Only the selected region's walks are loaded.
-        </p>
-
-        <div class="osmmaps-region-list" data-region-list></div>
-      </article>
-    </section>
-
-    <section
-      class="osmpanes-details"
-      data-selected-panel
-      hidden
-      aria-live="polite"
-    ></section>
-  </main>
-
-  <button
-    class="map-weather-warning is-yellow is-inactive"
-    type="button"
-    data-weather-panel-open
-    data-metoffice-warning-map
-    aria-label="Open selected region weather warning"
-    hidden
-  >
-    <span class="map-weather-warning__icon" aria-hidden="true">⚠️</span>
-    <span
-      class="map-weather-warning__label"
-      data-metoffice-warning-map-label
-    >
-      Yellow warning
-    </span>
-  </button>
-
-  <section class="map-quick-tools" data-map-quick-tools aria-label="Map quick tools">
-    <div class="map-quick-tools__rail" id="mapQuickToolsRail">
-      <button
-        class="map-quick-tool is-dtt"
-        type="button"
-        data-map-service="dtt"
-        aria-controls="mapServicePicker"
-        aria-expanded="false"
-        aria-label="Show DTT sites and choose cluster"
-      >
-        <img src="../../../data/icons/dtt.svg?v=1.1.1" alt="" aria-hidden="true">
-        <span>DTT</span>
-      </button>
-
-      <button
-        class="map-quick-tool is-dab"
-        type="button"
-        data-map-service="dab"
-        aria-controls="mapServicePicker"
-        aria-expanded="false"
-        aria-label="Show DAB sites and choose cluster"
-      >
-        <img src="../../../data/icons/dab.svg?v=1.1.1" alt="" aria-hidden="true">
-        <span>DAB</span>
-      </button>
-
-      <button
-        class="map-quick-tool is-fm"
-        type="button"
-        data-map-service="fm"
-        aria-controls="mapServicePicker"
-        aria-expanded="false"
-        aria-label="Show FM sites and choose cluster"
-      >
-        <img src="../../../data/icons/fm.svg?v=1.1.1" alt="" aria-hidden="true">
-        <span>FM</span>
-      </button>
-
-      <button
-        class="map-quick-tool is-weather"
-        type="button"
-        data-weather-panel-open
-        aria-expanded="false"
-        aria-label="Open selected region weather forecast"
-      >
-        <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
-        <span
-          class="map-weather-warning-button-badge is-yellow is-inactive"
-          data-metoffice-warning-button
-          aria-hidden="true"
-          hidden
-        >
-          ⚠
-        </span>
-      </button>
-    </div>
-
-    <section
-      class="map-service-picker"
-      id="mapServicePicker"
-      data-map-service-picker
-      aria-label="Choose map service cluster"
-      hidden
-    >
-      <header class="map-service-picker__header">
-        <div>
-          <small data-map-service-kicker>DTT</small>
-          <strong data-map-service-title>Choose cluster</strong>
-        </div>
-
-        <button
-          type="button"
-          data-map-service-close
-          aria-label="Close service cluster chooser"
-        >
-          Close
-        </button>
-      </header>
-
-      <div class="map-service-picker__options" data-map-service-options></div>
-      <p class="map-service-picker__status" data-map-service-status></p>
-    </section>
-
-    <button
-      class="map-quick-tools__toggle"
-      type="button"
-      data-map-quick-toggle
-      aria-controls="mapQuickToolsRail"
-      aria-expanded="true"
-      aria-label="Collapse map quick tools"
-    >
-      <span class="map-quick-tools__toggle-mark" aria-hidden="true"></span>
-    </button>
-  </section>
-
-  <aside
-    class="weather-api-panel"
-    aria-label="Selected region weather forecast"
-    hidden
-  >
-    <header class="weather-api-panel-header">
-      <div>
-        <p class="weather-api-kicker">Weather</p>
-        <h1>Selected region forecast</h1>
-      </div>
-
-      <button
-        class="weather-api-mini-button"
-        type="button"
-        data-weather-panel-close
-        aria-label="Close selected region weather forecast"
-      >
-        Close
-      </button>
-    </header>
-
-    <section
-      class="metoffice-warning-card"
-      data-metoffice-warning-card
-      aria-label="Met Office severe weather warning"
-    >
-      <header class="metoffice-warning-card__header">
-        <span class="metoffice-warning-card__icon" aria-hidden="true">⚠️</span>
-
-        <span class="metoffice-warning-card__heading">
-          <small>Met Office UK warnings</small>
-          <strong data-metoffice-warning-region>Selected region</strong>
-        </span>
-
-        <button
-          class="metoffice-warning-refresh"
-          type="button"
-          data-metoffice-warning-refresh
-        >
-          Refresh
-        </button>
-      </header>
-
-      <p
-        class="metoffice-warning-status"
-        data-metoffice-warning-status
-        aria-live="polite"
-      >
-        Open Weather to check warnings for the selected map region.
-      </p>
-
-      <div
-        class="metoffice-warning-list"
-        data-metoffice-warning-list
-      ></div>
-
-      <a
-        class="metoffice-warning-official-link"
-        data-metoffice-warning-link
-        href="https://weather.metoffice.gov.uk/warnings-and-advice/uk-warnings"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open official Met Office warnings
-      </a>
-    </section>
-
-    <p class="weather-api-copy">
-      Uses the currently selected Atlas map region. No provider-owned maps or
-      weather-map previews are rendered.
-    </p>
-
-    <button class="weather-api-activate" type="button" data-weather-activate>
-      Activate
-    </button>
-
-    <section
-      class="weather-forecast-slider"
-      aria-label="Selected region forecast slider"
-    >
-      <header class="weather-forecast-header">
-        <span>Selected region</span>
-        <span data-weather-forecast-updated>Not loaded</span>
-      </header>
-
-      <div
-        class="weather-forecast-track"
-        data-weather-forecast-track
-        tabindex="0"
-        role="list"
-      >
-        <article
-          class="weather-forecast-card weather-forecast-card-placeholder"
-          role="listitem"
-        >
-          Tap Activate to load the selected region forecast.
-        </article>
-      </div>
-    </section>
-
-    <p class="weather-api-status" data-weather-output>
-      v1.0.27-selected-region-weather
-    </p>
-  </aside>
-
-  <div class="background-item" aria-hidden="true">
-    <div class="atlas-top-fade"></div>
-    <div class="atlas-top-fade atlas-bottom-fade"></div>
-  </div>
-
-  <script src="../../../shell.js?v=fade-restore-20260612g"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
-  <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
-  <script src="./OSMweather-menu.js?v=1.0.27-selected-region-weather"></script>
-  <script src="../Weather/metoffice-warning.js?v=1.0.3-warning-visibility-toast"></script>
-</body>
-</html>
-
-<!-- Destination: FieldOpsAtlas/Features/maps/index.html -->
-<!-- End of file: FieldOpsAtlas/Features/maps/index.html | bottom/end of file -->
+/* ===========================================================================
+   FieldOps Atlas RF interface
+   File: FieldOpsAtlas/Features/RF/rf-interface.css
+   Version: 1.1.120-pane-fit
+
+   Purpose:
+   - Own RF interface layout, panels, cards, controls, and path pane shell styling.
+   - Keep the collapsible signal/zigzag rail inside the RF path pane.
+   - Keep selected-path detail layout compact enough for the pane.
+   - Leave topology/graph drawing and map colours to rf-graph.css/js.
+   ========================================================================== */
+
+.rf-home,
+.rf-home * {
+  box-sizing: border-box;
+}
+
+.rf-network {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 24px minmax(0, 1fr) 124px;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.rf-network-head {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.rf-title,
+.rf-panel-title,
+.rf-recent-title {
+  margin: 0;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.rf-title {
+  font-size: 13px;
+}
+
+.rf-tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.rf-tab {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 34px;
+  height: 22px;
+  padding: 0 8px;
+  display: grid;
+  place-items: center;
+  color: rgba(7, 31, 56, 0.78);
+  border: 1px solid rgba(130, 91, 22, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 248, 232, 0.20)),
+    rgba(255, 248, 232, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.50),
+    0 4px 10px rgba(28, 18, 6, 0.08);
+  cursor: pointer;
+  font-size: 7.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.rf-tab.is-active {
+  color: rgba(7, 31, 56, 0.88);
+  border-color: rgba(15, 111, 120, 0.38);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 248, 232, 0.22)),
+    rgba(221, 190, 132, 0.34);
+}
+
+.rf-map-recent {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 74px;
+  gap: 0;
+  overflow: hidden;
+}
+
+.rf-map-paper {
+  --path-pane-width: clamp(140px, 32%, 150px);
+  --path-handle-width: 30px;
+
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(130, 91, 22, 0.14);
+  border-bottom: 0;
+  border-radius: 13px 13px 0 0;
+  background: #f8ecd2;
+}
+
+.rf-map-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rf-map-stage {
+  position: absolute;
+  top: 0;
+  right: calc(var(--path-pane-width) - var(--path-handle-width));
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 12px 0 0 0;
+  transition: right 180ms ease;
+}
+
+.rf-map-paper.is-path-pane-collapsed .rf-map-stage {
+  right: var(--path-handle-width);
+}
+
+.rf-map-stage svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.rf-path-pane {
+  --path-handle-width: 30px;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  width: var(--path-pane-width);
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid rgba(237, 191, 99, 0.70);
+  border-radius: 0 12px 0 0;
+  background:
+    radial-gradient(circle at 48% 0%, rgba(255, 215, 115, 0.10), transparent 34%),
+    linear-gradient(180deg, #061f38 0%, #011532 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    -6px 0 14px rgba(3, 10, 20, 0.20);
+  transform: translateX(0);
+  transition: transform 180ms ease;
+}
+
+.rf-map-paper.is-path-pane-collapsed .rf-path-pane {
+  transform: translateX(calc(100% - var(--path-handle-width)));
+}
+
+.rf-path-handle {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 3;
+  width: var(--path-handle-width);
+  padding: 7px 0;
+  display: grid;
+  place-items: center;
+  color: #ffdda0;
+  cursor: pointer;
+  border: 0;
+  border-right: 1px solid rgba(237, 191, 99, 0.32);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)),
+    rgba(4, 16, 30, 0.78);
+}
+
+.rf-path-handle-icon {
+  width: 28px;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  transition: transform 180ms ease;
+}
+
+.rf-map-paper.is-path-pane-collapsed .rf-path-handle-icon {
+  transform: rotate(180deg);
+}
+
+.rf-path-blank {
+  position: absolute;
+  inset: 0 0 0 var(--path-handle-width);
+  min-width: 0;
+  min-height: 0;
+  padding: 7px 6px 7px 7px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.rf-path-blank-title {
+  margin: 0;
+  padding-bottom: 4px;
+  color: #f8d892;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(6.8px, 1.65vw, 8.2px);
+  font-weight: 950;
+  letter-spacing: 0.035em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.rf-path-details {
+  min-width: 0;
+  min-height: 0;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.rf-path-details::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.rf-path-pack {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  color: rgba(239, 247, 255, 0.82);
+}
+
+.rf-path-selected-head {
+  min-width: 0;
+  padding-bottom: 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6px auto;
+  align-items: center;
+  gap: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.rf-path-selected-head small,
+.rf-selected-endpoint small,
+.rf-path-frequency-card small,
+.rf-service-bundle small,
+.rf-path-metric dt {
+  overflow: hidden;
+  color: rgba(225, 239, 255, 0.68);
+  font-size: 5.2px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-path-selected-head b {
+  color: #79e85e;
+  font-size: 5.9px;
+  font-weight: 950;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-path-active-dot {
+  width: 6px;
+  height: 6px;
+  display: block;
+  border-radius: 50%;
+  background: #79e85e;
+  box-shadow: 0 0 8px rgba(121, 232, 94, 0.64);
+}
+
+.rf-selected-endpoint {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-areas:
+    "label label"
+    "icon name"
+    "icon role"
+    "icon input";
+  align-items: start;
+  column-gap: 5px;
+  row-gap: 1px;
+}
+
+.rf-selected-endpoint small {
+  grid-area: label;
+}
+
+.rf-endpoint-icon {
+  grid-area: icon;
+  width: 21px;
+  height: 21px;
+  margin-top: 0;
+  display: block;
+  filter: drop-shadow(0 0 7px rgba(255, 218, 120, 0.22));
+}
+
+.rf-endpoint-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.rf-endpoint-icon-bg {
+  fill: #19813b;
+}
+
+.rf-endpoint-icon.is-rx .rf-endpoint-icon-bg {
+  fill: #b82a21;
+}
+
+.rf-endpoint-icon-ring {
+  fill: none;
+  stroke: rgba(255, 242, 194, 0.70);
+  stroke-width: 2;
+}
+
+.rf-endpoint-icon-mast,
+.rf-endpoint-icon-line,
+.rf-endpoint-icon-wave {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rf-endpoint-icon-mast {
+  stroke-width: 2.1;
+}
+
+.rf-endpoint-icon-line,
+.rf-endpoint-icon-wave {
+  stroke-width: 1.8;
+}
+
+.rf-selected-endpoint b,
+.rf-path-frequency-card b {
+  overflow: hidden;
+  color: #ffe2a3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 8.5px;
+  font-weight: 950;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-selected-endpoint b {
+  grid-area: name;
+  align-self: center;
+}
+
+.rf-selected-endpoint > span:not(.rf-endpoint-icon) {
+  grid-area: role;
+  overflow: hidden;
+  color: rgba(230, 241, 255, 0.84);
+  font-size: 5.8px;
+  font-weight: 820;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-selected-endpoint em {
+  grid-area: input;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 1px;
+  overflow: hidden;
+  padding: 1.5px 4px;
+  color: rgba(239, 247, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.055);
+  font-size: 5.3px;
+  font-style: normal;
+  font-weight: 820;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-path-frequency-card {
+  min-width: 0;
+  padding: 2px 0;
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.rf-path-frequency-card b {
+  font-size: 9.5px;
+  text-align: center;
+}
+
+.rf-path-frequency-card span {
+  color: rgba(230, 241, 255, 0.78);
+  font-size: 5.5px;
+  font-weight: 820;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rf-path-frequency-card i {
+  color: rgba(248, 216, 146, 0.72);
+  font-style: normal;
+}
+
+.rf-service-bundle {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.rf-service-bundle header {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px;
+  align-items: center;
+}
+
+.rf-service-bundle header b {
+  padding: 2px 5px;
+  color: #eaffdc;
+  border-radius: 999px;
+  background: rgba(28, 149, 112, 0.78);
+  font-size: 5.2px;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-service-bundle ul {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  list-style: none;
+}
+
+.rf-service-bundle li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.rf-service-bundle li b {
+  padding: 2px 0;
+  color: #eaffdc;
+  border-radius: 4px;
+  background: rgba(28, 149, 112, 0.72);
+  font-size: 5.1px;
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
+}
+
+.rf-service-bundle li span {
+  overflow: hidden;
+  color: rgba(239, 247, 255, 0.84);
+  font-size: 5.4px;
+  font-weight: 800;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-path-metrics {
+  min-width: 0;
+  margin: 0;
+  padding-top: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.rf-path-metric {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.rf-path-metric dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: rgba(239, 247, 255, 0.92);
+  font-size: 6.1px;
+  font-weight: 900;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-recent {
+  min-height: 0;
+  padding: 5px 8px;
+  display: grid;
+  grid-template-rows: 17px minmax(0, 1fr);
+  gap: 4px;
+  border: 1px solid rgba(130, 91, 22, 0.13);
+  border-top: 0;
+  border-radius: 0 0 13px 13px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.42), transparent 48%),
+    linear-gradient(180deg, rgba(255, 252, 242, 0.84), rgba(248, 236, 211, 0.70));
+}
+
+.rf-recent-head {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rf-recent-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+
+.rf-clock {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border: 2px solid #071c32;
+  border-radius: 50%;
+  position: relative;
+}
+
+.rf-clock::before,
+.rf-clock::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  border-radius: 99px;
+  background: #071c32;
+  transform-origin: bottom center;
+}
+
+.rf-clock::before {
+  height: 5px;
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.rf-clock::after {
+  height: 4px;
+  transform: translateX(-50%) rotate(120deg);
+}
+
+.rf-viewall {
+  color: #071c32;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.rf-recent-grid {
+  min-width: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.rf-recent-card {
+  min-width: 0;
+  min-height: 38px;
+  padding: 4px 5px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+  color: #071c32;
+  border: 1px solid rgba(239, 198, 120, 0.66);
+  border-radius: 11px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(255, 246, 224, 0.24));
+  text-decoration: none;
+}
+
+.rf-recent-card img {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+
+.rf-recent-name {
+  display: block;
+  overflow: hidden;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6.8px;
+  font-weight: 950;
+  line-height: 0.94;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.rf-status {
+  margin-top: 2px;
+  display: block;
+  color: #1c9570;
+  font-size: 5.8px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.rf-interface-panels {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+  gap: 8px;
+  overflow: hidden;
+}
+
+.rf-panel {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 8px 9px;
+  border: 1px solid rgba(130, 91, 22, 0.16);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.56), transparent 58%),
+    linear-gradient(180deg, rgba(255, 252, 243, 0.78), rgba(247, 236, 211, 0.64));
+}
+
+.rf-panel-title {
+  margin-bottom: 7px;
+  font-size: 10px;
+}
+
+.rf-services-table {
+  min-width: 0;
+  display: grid;
+  gap: 0;
+}
+
+.rf-services-table-head,
+.rf-service-row {
+  min-width: 0;
+  min-height: 17px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(36px, 0.5fr) minmax(44px, 0.5fr);
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid rgba(130, 91, 22, 0.18);
+}
+
+.rf-services-table-head span {
+  color: rgba(7, 31, 56, 0.52);
+  font-size: 5.8px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rf-service-row {
+  color: #071c32;
+  text-decoration: none;
+}
+
+.rf-service-row span,
+.rf-service-row b {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 6.4px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-service-row span:first-child {
+  color: #1b4883;
+  text-decoration: underline;
+}
+
+.rf-service-row b {
+  color: #071c32;
+  font-weight: 900;
+}
+
+.rf-equipment-grid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.rf-equipment-card {
+  min-width: 0;
+  min-height: 54px;
+  padding: 7px 4px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  color: #071c32;
+  border: 1px solid rgba(239, 198, 120, 0.58);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.62), transparent 52%),
+    linear-gradient(180deg, rgba(255, 248, 232, 0.82), rgba(239, 228, 200, 0.70));
+  text-align: center;
+  text-decoration: none;
+}
+
+.rf-equipment-card strong {
+  color: #173052;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1;
+  text-decoration: underline;
+}
+
+.rf-equipment-card span {
+  color: #1b4883;
+  font-size: 6.2px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .content-canvas {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--safe-top, 0px) + var(--top-height, 54px) + 8px);
+  right: 7px;
+  bottom: calc(var(--safe-bottom, 0px) + var(--nav-height, 38px) + var(--bottom-lift, 8px) + 7px);
+  left: 7px;
+  min-height: 0;
+  overflow: hidden;
+  border: 2px solid var(--gold-border, rgba(237, 191, 99, 0.78));
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.82), transparent 39%),
+    linear-gradient(180deg, rgba(255, 253, 246, 0.95) 0%, rgba(251, 242, 223, 0.93) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    inset 0 0 0 1px rgba(255, 231, 168, 0.26),
+    0 -2px 0 rgba(255, 226, 160, 0.20),
+    0 0 0 1px rgba(85, 55, 10, 0.14),
+    0 14px 30px rgba(2, 9, 20, 0.26);
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-content {
+  height: 100%;
+  min-height: 0;
+  padding: 12px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: #071c32;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-head,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section {
+  padding: 12px;
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-title,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section-title {
+  margin: 0;
+  color: #071c32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-title {
+  font-size: 18px;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-section-title {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-list,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-grid {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-card,
+.phone[data-nav="rf"]:not([data-page="rf"]) .page-row {
+  min-width: 0;
+  padding: 9px;
+  color: #071c32;
+  border: 1px solid rgba(130, 91, 22, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.40);
+  text-decoration: none;
+}
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-interface.css */
+/* End of file: FieldOpsAtlas/Features/RF/rf-interface.css */
