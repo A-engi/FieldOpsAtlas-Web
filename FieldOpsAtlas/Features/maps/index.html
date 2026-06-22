@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.31-map-warning-alerts</title>
+  <title>Maps v1.0.32-warning-visibility-toast</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
@@ -114,7 +114,7 @@
     .metoffice-warning-item strong {
       display: block;
       color: rgba(255, 249, 234, 0.98);
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.3;
     }
 
@@ -139,7 +139,7 @@
 
     .map-weather-warning {
       position: fixed;
-      z-index: 57;
+      z-index: 62;
       top: calc(var(--safe-top) + var(--top-height) + 58px);
       left: max(
         10px,
@@ -168,8 +168,14 @@
     }
 
     .map-weather-warning[hidden],
-    .map-weather-warning-button-badge[hidden] {
-      display: none;
+    .map-weather-warning-button-badge[hidden],
+    .map-weather-warning.is-inactive,
+    .map-weather-warning-button-badge.is-inactive {
+      display: none !important;
+    }
+
+    .osmpanes-details[data-pane-mode="toast"] {
+      z-index: 72;
     }
 
     .map-weather-warning.is-amber {
@@ -204,11 +210,11 @@
 
     .map-weather-warning-button-badge {
       position: absolute;
-      top: -6px;
-      right: -5px;
+      top: 2px;
+      right: 2px;
       z-index: 2;
-      width: 19px;
-      height: 19px;
+      width: 17px;
+      height: 17px;
       display: grid;
       place-items: center;
       border: 1px solid rgba(255, 246, 174, 0.94);
@@ -324,7 +330,7 @@
   <main
     class="osmmaps-page"
     data-osmmaps-page
-    data-version="1.0.31-map-warning-alerts"
+    data-version="1.0.32-warning-visibility-toast"
   >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
@@ -365,7 +371,7 @@
   </main>
 
   <button
-    class="map-weather-warning is-yellow"
+    class="map-weather-warning is-yellow is-inactive"
     type="button"
     data-weather-panel-open
     data-metoffice-warning-map
@@ -428,7 +434,7 @@
       >
         <img src="../../../data/icons/weather.svg?v=1.1.1" alt="" aria-hidden="true">
         <span
-          class="map-weather-warning-button-badge is-yellow"
+          class="map-weather-warning-button-badge is-yellow is-inactive"
           data-metoffice-warning-button
           aria-hidden="true"
           hidden
@@ -591,7 +597,7 @@
   <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
   <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
   <script src="./OSMweather-menu.js?v=1.0.27-selected-region-weather"></script>
-  <script src="../Weather/metoffice-warning.js?v=1.0.2-map-warning-alerts"></script>
+  <script src="../Weather/metoffice-warning.js?v=1.0.3-warning-visibility-toast"></script>
 </body>
 </html>
 
