@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.29-transparent-quick-tools</title>
+  <title>Maps v1.0.30-met-office-region-warning</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
@@ -21,6 +21,120 @@
       backdrop-filter: blur(6px) saturate(115%);
       -webkit-backdrop-filter: blur(6px) saturate(115%);
     }
+
+    .metoffice-warning-card {
+      margin: 0 0 12px;
+      padding: 11px;
+      border: 1px solid rgba(255, 206, 92, 0.44);
+      border-radius: 16px;
+      background: rgba(68, 48, 5, 0.34);
+    }
+
+    .metoffice-warning-card__header {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .metoffice-warning-card__icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .metoffice-warning-card__heading {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .metoffice-warning-card__heading small {
+      color: rgba(255, 230, 174, 0.76);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .metoffice-warning-card__heading strong {
+      overflow: hidden;
+      color: rgba(255, 247, 226, 0.98);
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metoffice-warning-refresh {
+      min-height: 30px;
+      padding: 0 9px;
+      border: 1px solid rgba(255, 225, 158, 0.36);
+      border-radius: 999px;
+      color: rgba(255, 245, 218, 0.96);
+      background: rgba(81, 55, 8, 0.42);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .metoffice-warning-status {
+      margin: 9px 0 0;
+      color: rgba(255, 238, 198, 0.82);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .metoffice-warning-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .metoffice-warning-item {
+      padding: 9px;
+      border: 1px solid rgba(255, 225, 158, 0.26);
+      border-radius: 12px;
+      background: rgba(44, 30, 5, 0.32);
+    }
+
+    .metoffice-warning-item.is-yellow {
+      border-color: rgba(255, 221, 77, 0.56);
+    }
+
+    .metoffice-warning-item.is-amber {
+      border-color: rgba(255, 159, 43, 0.66);
+      background: rgba(98, 47, 4, 0.34);
+    }
+
+    .metoffice-warning-item.is-red {
+      border-color: rgba(255, 88, 88, 0.72);
+      background: rgba(101, 9, 20, 0.38);
+    }
+
+    .metoffice-warning-item strong {
+      display: block;
+      color: rgba(255, 249, 234, 0.98);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .metoffice-warning-item p {
+      margin: 5px 0 0;
+      color: rgba(255, 239, 205, 0.78);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .metoffice-warning-item a,
+    .metoffice-warning-official-link {
+      display: inline-block;
+      margin-top: 7px;
+      color: rgba(255, 224, 146, 0.98);
+      font-size: 10px;
+      font-weight: 850;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
   </style>
 </head>
 <body>
@@ -29,7 +143,7 @@
   <main
     class="osmmaps-page"
     data-osmmaps-page
-    data-version="1.0.29-transparent-quick-tools"
+    data-version="1.0.30-met-office-region-warning"
   >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
@@ -177,6 +291,52 @@
       </button>
     </header>
 
+    <section
+      class="metoffice-warning-card"
+      data-metoffice-warning-card
+      aria-label="Met Office severe weather warning"
+    >
+      <header class="metoffice-warning-card__header">
+        <span class="metoffice-warning-card__icon" aria-hidden="true">⚠️</span>
+
+        <span class="metoffice-warning-card__heading">
+          <small>Met Office UK warnings</small>
+          <strong data-metoffice-warning-region>Selected region</strong>
+        </span>
+
+        <button
+          class="metoffice-warning-refresh"
+          type="button"
+          data-metoffice-warning-refresh
+        >
+          Refresh
+        </button>
+      </header>
+
+      <p
+        class="metoffice-warning-status"
+        data-metoffice-warning-status
+        aria-live="polite"
+      >
+        Open Weather to check warnings for the selected map region.
+      </p>
+
+      <div
+        class="metoffice-warning-list"
+        data-metoffice-warning-list
+      ></div>
+
+      <a
+        class="metoffice-warning-official-link"
+        data-metoffice-warning-link
+        href="https://weather.metoffice.gov.uk/warnings-and-advice/uk-warnings"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open official Met Office warnings
+      </a>
+    </section>
+
     <p class="weather-api-copy">
       Uses the currently selected Atlas map region. No provider-owned maps or
       weather-map previews are rendered.
@@ -225,6 +385,7 @@
   <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
   <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
   <script src="./OSMweather-menu.js?v=1.0.27-selected-region-weather"></script>
+  <script src="../Weather/metoffice-warning.js?v=1.0.1-selected-region-uk-warning"></script>
 </body>
 </html>
 
