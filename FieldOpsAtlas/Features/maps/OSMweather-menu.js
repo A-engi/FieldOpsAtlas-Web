@@ -1,9 +1,10 @@
 /* ==========================================================================
    FieldOps Atlas weather data
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.26-weather-data-only
+   Version: 1.0.27-selected-region-weather
    Purpose:
    - Own Open-Meteo requests, response parsing, and short-lived weather caches.
+   - Resolve the selected Atlas region from the loaded map region and its walks.
    - Return weather data to OSMpanes.js and OSMmaps.js.
    - Contain no map, cluster, RF path, toolbar, button, or panel logic.
    ========================================================================== */
@@ -11,15 +12,11 @@
 (function fieldOpsOSMWeatherData() {
   "use strict";
 
-  var VERSION = "1.0.26-weather-data-only";
+  var VERSION = "1.0.27-selected-region-weather";
   var CACHE_MS = 10 * 60 * 1000;
-  var PRESELI = {
-    name: "Preseli area",
-    lat: 51.921,
-    lng: -4.742
-  };
+  var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var siteCache = new Map();
-  var previewCache = null;
+  var forecastCache = new Map();
 
   function weatherCodeText(code) {
     var labels = {
@@ -51,6 +48,7 @@
 
   function fetchJson(url, label) {
     return fetch(url, {
+      cache: "no-store",
       headers: {
         Accept: "application/json"
       }
@@ -75,10 +73,90 @@
     return "https://api.open-meteo.com/v1/forecast?" + params.toString();
   }
 
-  function previewUrl() {
-    var params = new URLSearchParams({
-      latitude: PRESELI.lat.toFixed(4),
-      longitude: PRESELI.lng.toFixed(4),
+  function selectedRegionId() {
+    var selectedButton = document.querySelector(
+      '[data-region-id][aria-pressed="true"]'
+    );
+
+    if (selectedButton) {
+      return String(selectedButton.getAttribute("data-region-id") || "").trim();
+    }
+
+    try {
+      return String(window.localStorage.getItem(REGION_STORAGE_KEY) || "").trim();
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function selectedRegionTarget() {
+    var maps = window.FieldOpsOSMmaps;
+    var regionId = selectedRegionId();
+    var regions;
+    var region;
+    var walks;
+    var validWalks;
+    var total;
+
+    if (
+      !maps ||
+      typeof maps.getRegions !== "function" ||
+      typeof maps.getWalks !== "function"
+    ) {
+      throw new Error("Map region data is not ready.");
+    }
+
+    regions = maps.getRegions();
+    walks = maps.getWalks();
+
+    region = regions.find(function findRegion(item) {
+      return String(item && item.id || "") === regionId;
+    });
+
+    validWalks = walks.filter(function validCoordinates(walk) {
+      return walk &&
+        Number.isFinite(Number(walk.lat)) &&
+        Number.isFinite(Number(walk.lng));
+    });
+
+    if (!regionId || !region) {
+      throw new Error("Select a map region first.");
+    }
+
+    if (!validWalks.length) {
+      throw new Error("The selected region has no forecast coordinates.");
+    }
+
+    total = validWalks.reduce(function addCoordinates(result, walk) {
+      result.latitude += Number(walk.lat);
+      result.longitude += Number(walk.lng);
+      return result;
+    }, {
+      latitude: 0,
+      longitude: 0
+    });
+
+    return {
+      id: regionId,
+      name: String(region.name || regionId),
+      latitude: total.latitude / validWalks.length,
+      longitude: total.longitude / validWalks.length,
+      siteCount: validWalks.length
+    };
+  }
+
+  function regionForecastUrl(target) {
+    var latitude = Number(target && target.latitude);
+    var longitude = Number(target && target.longitude);
+    var params;
+
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      throw new Error("The selected region has no forecast coordinates.");
+    }
+
+    params = new URLSearchParams({
+      latitude: latitude.toFixed(5),
+      longitude: longitude.toFixed(5),
       daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
       timezone: "Europe/London",
       forecast_days: "5"
@@ -123,7 +201,7 @@
       });
   }
 
-  function normalisePreview(payload) {
+  function normaliseRegionForecast(payload, target) {
     var daily = payload && payload.daily;
 
     if (!daily || !Array.isArray(daily.time)) {
@@ -131,7 +209,11 @@
     }
 
     return {
-      location: PRESELI.name,
+      regionId: target.id,
+      location: target.name,
+      latitude: target.latitude,
+      longitude: target.longitude,
+      siteCount: target.siteCount,
       updatedAt: new Date().toISOString(),
       days: daily.time.map(function mapDay(dateText, index) {
         return {
@@ -147,28 +229,67 @@
     };
   }
 
-  function loadPreseliForecast() {
-    if (previewCache && Date.now() - previewCache.time < CACHE_MS) {
-      return Promise.resolve(previewCache.data);
-    }
+  function forecastCacheKey(target) {
+    return [
+      String(target.id || ""),
+      Number(target.latitude).toFixed(3),
+      Number(target.longitude).toFixed(3)
+    ].join(":");
+  }
 
-    return fetchJson(previewUrl(), "Preseli forecast")
-      .then(function parsePreview(payload) {
-        var data = normalisePreview(payload);
+  function loadRegionForecast(target, force) {
+    var key;
+    var cached;
 
-        previewCache = {
+    try {
+      key = forecastCacheKey(target);
+      cached = forecastCache.get(key);
+
+      if (!force && cached && Date.now() - cached.time < CACHE_MS) {
+        return Promise.resolve(cached.data);
+      }
+
+      return fetchJson(
+        regionForecastUrl(target),
+        String(target.name || "Selected region") + " forecast"
+      ).then(function parseForecast(payload) {
+        var data = normaliseRegionForecast(payload, target);
+
+        forecastCache.set(key, {
           time: Date.now(),
           data: data
-        };
+        });
 
         return data;
       });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  function loadSelectedRegionForecast(force) {
+    try {
+      return loadRegionForecast(selectedRegionTarget(), Boolean(force));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /*
+   * Compatibility bridge for OSMpanes.js.
+   * The historical function name is retained, but it now resolves the currently
+   * selected map region instead of using fixed Preseli coordinates.
+   */
+  function loadPreseliForecast(force) {
+    return loadSelectedRegionForecast(force);
   }
 
   window.FieldOpsOSMWeatherMenu = {
     VERSION: VERSION,
     version: VERSION,
     loadSiteWeather: loadSiteWeather,
+    loadRegionForecast: loadRegionForecast,
+    loadSelectedRegionForecast: loadSelectedRegionForecast,
     loadPreseliForecast: loadPreseliForecast,
     weatherCodeText: weatherCodeText
   };
