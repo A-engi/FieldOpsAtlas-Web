@@ -1,12 +1,12 @@
 /* ==========================================================================
    FieldOps Atlas Met Office warnings
    File: FieldOpsAtlas/Features/Weather/metoffice-warning.js
-   Version: 1.0.4-permanent-map-warning
+   Version: 1.0.5-weather-active-collapse
    Purpose:
    - Load official Met Office UK or regional severe-weather RSS warnings.
    - Link the warning feed to the currently selected Atlas map region.
    - Render warning summaries in the maps weather panel with Met Office links.
-   - Keep a compact yellow warning control visible on the map and Weather button.
+   - Keep ACTIVE warning controls visible on the Weather button when expanded or collapsed.
    - Add a Met Office warning entry to the existing site Details > Alerts section.
    - Fall back to the UK feed when the selected region has no explicit mapping.
    ========================================================================== */
@@ -14,7 +14,7 @@
 (function fieldOpsMetOfficeWarning() {
   "use strict";
 
-  var VERSION = "1.0.4-permanent-map-warning";
+  var VERSION = "1.0.5-weather-active-collapse";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var WARNING_PAGE_URL =
@@ -330,15 +330,10 @@
     element.hidden = Boolean(hidden);
   }
 
-  function updateMapAndButtonWarnings(context, items) {
+  function updateWeatherButtonWarnings(context, items) {
     var activeItems = Array.isArray(items) ? items : [];
     var active = activeItems.length > 0;
     var severity = active ? highestSeverity(activeItems) : "yellow";
-    var severityText = active ? severityLabel(severity) : "Weather";
-    var mapBadge = qs("[data-metoffice-warning-map]");
-    var buttonBadge = qs("[data-metoffice-warning-button]");
-    var weatherButton = qs(".map-quick-tool.is-weather");
-    var mapLabel = qs("[data-metoffice-warning-map-label]");
     var description = active
       ? activeItems.length +
         " active " +
@@ -349,30 +344,22 @@
         context.atlasName
       : "Open Met Office weather warnings for " + context.atlasName;
 
-    if (mapBadge) {
-      applySeverityClass(mapBadge, severity);
-      setElementHidden(mapBadge, false);
-      mapBadge.setAttribute("aria-label", description);
-      mapBadge.title = description;
-    }
+    qsa("[data-metoffice-warning-button]").forEach(
+      function updateWarningTriangle(buttonBadge) {
+        applySeverityClass(buttonBadge, severity);
+        setElementHidden(buttonBadge, false);
+        buttonBadge.textContent = "⚠";
+        buttonBadge.title = description;
+      }
+    );
 
-    if (mapLabel) {
-      mapLabel.textContent = severityText + " warning";
-    }
-
-    if (buttonBadge) {
-      applySeverityClass(buttonBadge, severity);
-      setElementHidden(buttonBadge, false);
-      buttonBadge.textContent = "⚠";
-      buttonBadge.title = description;
-    }
-
-    if (weatherButton) {
-      weatherButton.setAttribute(
+    qsa("[data-weather-panel-open]").forEach(function updateWeatherButton(button) {
+      button.setAttribute(
         "aria-label",
         "Open selected region weather forecast. " + description + "."
       );
-    }
+      button.title = description;
+    });
   }
 
   function detailsAlertsSection() {
@@ -480,7 +467,7 @@
   function renderSurfaceWarnings(context, items) {
     lastContext = context;
     lastItems = Array.isArray(items) ? items.slice() : [];
-    updateMapAndButtonWarnings(context, lastItems);
+    updateWeatherButtonWarnings(context, lastItems);
     renderDetailsWarning(context, lastItems);
   }
 
