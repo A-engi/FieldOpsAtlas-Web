@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.36-details-warning-reason</title>
+  <title>Maps v1.0.37-satellite-svg-renderer</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
@@ -333,7 +333,7 @@
   <main
     class="osmmaps-page"
     data-osmmaps-page
-    data-version="1.0.36-details-warning-reason"
+    data-version="1.0.37-satellite-svg-renderer"
   >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
@@ -599,6 +599,47 @@
 
   <script src="../../../shell.js?v=fade-restore-20260612g"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    /* Satellite SVG renderer bridge | Version: 1.0.37-satellite-svg-renderer */
+    (function fieldOpsSatelliteSvgRenderer() {
+      "use strict";
+
+      if (!window.L || !window.L.Map || !window.L.svg) {
+        return;
+      }
+
+      var originalGetRenderer = window.L.Map.prototype.getRenderer;
+      var satelliteRenderers = new WeakMap();
+
+      window.L.Map.prototype.getRenderer = function getFieldOpsRenderer(layer) {
+        var className = String(
+          layer && layer.options && layer.options.className || ""
+        );
+
+        if (
+          className.indexOf("osmmaps-rf-satellite-feed") !== -1 ||
+          className.indexOf("osmmaps-rf-satellite-progress") !== -1
+        ) {
+          var renderer = satelliteRenderers.get(this);
+
+          if (!renderer) {
+            renderer = window.L.svg({
+              pane: layer.options.pane || "overlayPane"
+            });
+            satelliteRenderers.set(this, renderer);
+          }
+
+          if (!this.hasLayer(renderer)) {
+            this.addLayer(renderer);
+          }
+
+          return renderer;
+        }
+
+        return originalGetRenderer.call(this, layer);
+      };
+    }());
+  </script>
   <script src="./OSMpanes.js?v=1.0.4-map-controls"></script>
   <script src="./OSMmaps.js?v=1.1.23-green-neon-download"></script>
   <script src="./OSMweather-menu.js?v=1.0.27-selected-region-weather"></script>
