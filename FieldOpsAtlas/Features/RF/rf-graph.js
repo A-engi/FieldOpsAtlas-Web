@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF graph renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.92-mountain-turntable
+   Version: 1.1.93-mountain-turntable-3d
 
    Purpose:
    - Keep the existing RF graph mount contract used by rf-interface.js.
@@ -12,11 +12,11 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.92-mountain-turntable";
+  const VERSION = "1.1.93-mountain-turntable-3d";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
-  const SVG_FILE = "./mountain-w-tx-turnable.svg?v=1.1.1-mountain-turntable";
+  const SVG_FILE = "./mountain-w-tx-turnable.svg?v=1.1.2-mountain-turntable-3d";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
 
@@ -93,7 +93,7 @@
     mount.replaceChildren(frame);
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "mountain-turntable";
+    mount.dataset.rfGraphMode = "mountain-turntable-3d";
 
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
@@ -101,7 +101,7 @@
         detail: {
           version: VERSION,
           selectedPathId: SELECTED_PATH_ID,
-          mode: "mountain-turntable"
+          mode: "mountain-turntable-3d"
         }
       })
     );
