@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.105-reference-front
+   Version: 1.1.106-upward-radar-platform
 
    Purpose:
    - Match the supplied twin-peak reference composition at the front view.
@@ -11,7 +11,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.105-reference-front";
+  const VERSION = "1.1.106-upward-radar-platform";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -427,12 +427,70 @@
 
     function addSideRadar() {
       const side = radarSide < 0 ? -1 : 1;
-      const centre = [
-        origin[0] + side * baseRadius * 0.82,
-        origin[1] + height * 0.78,
+      const platformY = origin[1] + height * 0.76;
+      const platformInset = baseRadius * 0.18;
+      const platformReach = baseRadius * 1.48;
+      const platformHalfWidth = 0.18 * detailScale;
+
+      const platformInner = [
+        origin[0] + side * platformInset,
+        platformY,
+        origin[2]
+      ];
+      const platformOuter = [
+        origin[0] + side * platformReach,
+        platformY,
         origin[2] + 0.02
       ];
-      const normal = [side * 0.90, 0.10, 0.42];
+      const innerFront = [
+        platformInner[0],
+        platformInner[1],
+        platformInner[2] + platformHalfWidth
+      ];
+      const innerRear = [
+        platformInner[0],
+        platformInner[1],
+        platformInner[2] - platformHalfWidth
+      ];
+      const outerFront = [
+        platformOuter[0],
+        platformOuter[1],
+        platformOuter[2] + platformHalfWidth
+      ];
+      const outerRear = [
+        platformOuter[0],
+        platformOuter[1],
+        platformOuter[2] - platformHalfWidth
+      ];
+      const braceBase = [
+        origin[0] + side * baseRadius * 0.10,
+        platformY - 0.46 * detailScale,
+        origin[2]
+      ];
+      const pedestal = [
+        platformOuter[0],
+        platformY + 0.18 * detailScale,
+        platformOuter[2]
+      ];
+      const centre = [
+        platformOuter[0],
+        platformY + 0.43 * detailScale,
+        platformOuter[2]
+      ];
+
+      pushSegment(innerFront, outerFront, warmGold);
+      pushSegment(innerRear, outerRear, warmGold);
+      pushSegment(innerFront, innerRear, gold);
+      pushSegment(outerFront, outerRear, gold);
+      pushSegment(platformInner, platformOuter, warmGold);
+      pushSegment(braceBase, outerFront, warmGold);
+      pushSegment(braceBase, outerRear, warmGold);
+      pushSegment(platformOuter, pedestal, gold);
+      pushSegment(outerFront, pedestal, warmGold);
+      pushSegment(outerRear, pedestal, warmGold);
+      pushSegment(pedestal, centre, gold);
+
+      const normal = [side * 0.30, 0.90, 0.31];
       vec3Normalize(normal, normal);
       const right = [0, 0, 0];
       vec3Cross(right, [0, 1, 0], normal);
@@ -441,8 +499,8 @@
       vec3Cross(up, normal, right);
       vec3Normalize(up, up);
 
-      const radius = 0.34 * detailScale;
-      const depth = 0.13 * detailScale;
+      const radius = 0.36 * detailScale;
+      const depth = 0.14 * detailScale;
       const ringCount = 3;
       const segmentCount = 16;
 
@@ -458,13 +516,6 @@
           centre[2] + right[2] * cos * radial + up[2] * sin * radial - normal[2] * bowl
         ];
       };
-
-      const support = [
-        origin[0],
-        origin[1] + height * 0.74,
-        origin[2]
-      ];
-      pushSegment(support, centre, warmGold);
 
       for (let ring = 1; ring <= ringCount; ring += 1) {
         const fraction = ring / ringCount;
@@ -1002,14 +1053,14 @@
 
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "webgl-reference-front";
+    mount.dataset.rfGraphMode = "webgl-upward-radar-platform";
     mount.dispatchEvent(
       new CustomEvent(RENDERED_EVENT, {
         bubbles: true,
         detail: {
           version: VERSION,
           selectedPathId: SELECTED_PATH_ID,
-          mode: "webgl-reference-front"
+          mode: "webgl-upward-radar-platform"
         }
       })
     );
