@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.112-svg-proportioned
+   Version: 1.1.113-svg-jagged-range
 
    Purpose:
    - Preserve the current twin-peak terrain layout, TX positions, valley path,
@@ -13,13 +13,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.112-svg-proportioned";
+  const VERSION = "1.1.113-svg-jagged-range";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "webgl-360-svg-proportioned";
+  const MODE = "webgl-360-svg-jagged-range";
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -123,7 +123,12 @@
   }
 
   function valleyCentreX(z) {
-    return 0.35 + 0.42 * Math.sin((z + 1.8) * 0.50) + 0.10 * Math.sin(z * 1.55);
+    return (
+      0.10 +
+      0.52 * Math.sin((z + 2.1) * 0.34) +
+      0.22 * Math.sin(z * 0.91) -
+      0.10 * Math.cos((z - 1.6) * 0.47)
+    );
   }
 
   function terrainHeight(x, z) {
@@ -135,7 +140,7 @@
       height,
       rotation,
       ridgePhase,
-      plateau = 0.045
+      plateau = 0.012
     ) {
       const cos = Math.cos(rotation);
       const sin = Math.sin(rotation);
@@ -145,87 +150,132 @@
       const v = (-dx * sin + dz * cos) / radiusZ;
       const radial = Math.sqrt(u * u + v * v);
 
-      if (radial >= 1.18) return 0;
+      if (radial >= 1.20) return 0;
 
-      const inside = clamp((1.18 - radial) / 1.18, 0, 1);
+      const inside = clamp((1.20 - radial) / 1.20, 0, 1);
       const coreT = clamp((radial - plateau) / (1 - plateau), 0, 1);
-      const core = radial < 1 ? Math.pow(1 - smoothstep(coreT), 0.83) : 0;
-      const apron = Math.pow(inside, 2.25) * 0.20;
+      const core = radial < 1 ? Math.pow(1 - smoothstep(coreT), 0.98) : 0;
+      const apron = Math.pow(inside, 2.5) * 0.18;
       const angle = Math.atan2(v, u);
       const slope = Math.sin(Math.PI * clamp(radial, 0, 1));
 
       const ridges =
-        0.19 * Math.sin(angle * 5 + ridgePhase + radial * 5.2) +
-        0.11 * Math.sin(angle * 9 - radial * 11.0 + ridgePhase * 1.4) +
-        0.065 * Math.cos(angle * 14 + radial * 23.0 - ridgePhase);
+        0.24 * Math.sin(angle * 4.0 + ridgePhase + radial * 5.7) +
+        0.14 * Math.sin(angle * 9.0 - radial * 12.6 + ridgePhase * 1.3) +
+        0.07 * Math.cos(angle * 15.0 + radial * 24.0 - ridgePhase) +
+        0.05 * Math.sin((u - v) * 21.0 + ridgePhase * 0.8);
 
-      const brokenFaces =
-        0.050 * Math.sin((u - v) * 23.0 + ridgePhase) +
-        0.043 * Math.cos((u + v) * 31.0 - ridgePhase * 0.8) +
-        0.026 * Math.sin(u * 47.0 + v * 37.0);
+      const fractured =
+        0.07 * Math.sin(u * 17.0 + v * 11.0 + ridgePhase) +
+        0.05 * Math.cos(u * 31.0 - v * 27.0 - ridgePhase * 0.7) +
+        0.03 * Math.sin((u + v) * 49.0);
 
       const cuts =
-        -0.075 *
+        -0.11 *
         Math.max(0, Math.sin(angle * 7.0 + radial * 19.0 + ridgePhase)) *
-        Math.pow(slope, 1.4);
+        Math.pow(slope, 1.45);
 
       const shape = clamp(
-        1 + (ridges + brokenFaces) * slope + cuts,
-        0.60,
-        1.42
+        1 + (ridges + fractured) * slope + cuts,
+        0.50,
+        1.58
       );
 
       return height * (core * shape + apron);
     }
 
-    const leftMain = mountain(-7.25, 0.00, 7.05, 7.10, 4.45, -0.10, 0.35);
-    const rightMain = mountain(6.05, -1.95, 6.90, 7.05, 4.12, 0.12, 1.42);
+    function ridgeSpur(cx, cz, length, width, height, rotation, phase) {
+      const cos = Math.cos(rotation);
+      const sin = Math.sin(rotation);
+      const dx = x - cx;
+      const dz = z - cz;
+      const u = (dx * cos + dz * sin) / length;
+      const v = (-dx * sin + dz * cos) / width;
+      const along = clamp(1 - Math.max(0, u), 0, 1);
+      const cross = clamp(1 - Math.abs(v), 0, 1);
+      const taper = Math.pow(along, 1.18);
+      const body = Math.pow(cross, 1.45) * taper;
+      const rag =
+        0.20 * Math.sin((u + v) * 8.0 + phase) +
+        0.09 * Math.cos(u * 17.0 - v * 5.0 + phase * 1.3);
+      return height * Math.max(0, body * (0.88 + rag));
+    }
 
-    const leftFront = mountain(-9.65, 2.80, 5.20, 5.35, 1.50, -0.28, 0.92, 0.02);
-    const leftOuter = mountain(-11.85, 0.10, 4.95, 5.40, 1.12, 0.14, 2.10, 0.02);
-    const leftInner = mountain(-4.10, 0.00, 4.05, 4.75, 0.88, 0.22, 1.65, 0.02);
+    function summitSpike(cx, cz, radiusX, radiusZ, height, rotation, phase) {
+      return mountain(cx, cz, radiusX, radiusZ, height, rotation, phase, 0.0);
+    }
 
-    const rightFront = mountain(8.20, 2.55, 5.10, 5.20, 1.42, 0.28, 2.30, 0.02);
-    const rightOuter = mountain(10.60, -1.70, 4.85, 5.25, 1.06, -0.16, 0.55, 0.02);
-    const rightInner = mountain(3.55, -1.85, 4.00, 4.70, 0.84, -0.20, 1.12, 0.02);
+    const leftBase = mountain(-7.35, 0.85, 8.25, 10.20, 3.40, -0.16, 0.32, 0.010);
+    const leftOuterMass = mountain(-11.45, 2.10, 5.55, 7.85, 1.58, 0.24, 1.36, 0.010);
+    const leftInnerMass = mountain(-4.75, 1.05, 4.65, 6.90, 1.06, -0.62, 0.92, 0.010);
+    const leftSummit = summitSpike(-7.22, -0.10, 1.24, 1.48, 1.42, -0.08, 1.02);
+    const leftNeedle = summitSpike(-7.52, 0.55, 0.78, 1.02, 0.70, 0.22, 1.78);
+    const leftOuterRidge = ridgeSpur(-7.45, 0.22, 8.8, 2.35, 1.28, 0.88, 0.65);
+    const leftInnerRidge = ridgeSpur(-7.10, -0.05, 7.2, 1.75, 1.12, -0.68, 2.00);
+    const leftForegroundSpur = ridgeSpur(-8.95, 6.10, 10.4, 2.85, 1.30, 1.22, 0.82);
 
-    const backLeft = mountain(-2.95, -5.85, 4.55, 2.75, 0.92, 0.16, 2.42, 0.02);
-    const backRight = mountain(2.95, -6.00, 4.45, 2.70, 0.86, -0.14, 0.72, 0.02);
+    const rightBase = mountain(6.65, -0.95, 7.80, 9.40, 3.15, 0.14, 1.42, 0.010);
+    const rightOuterMass = mountain(10.85, 1.55, 5.20, 7.30, 1.42, -0.18, 0.76, 0.010);
+    const rightInnerMass = mountain(3.35, 0.55, 4.55, 6.40, 1.18, 0.60, 1.92, 0.010);
+    const rightSummit = summitSpike(6.62, -1.12, 1.40, 1.58, 1.16, 0.10, 2.10);
+    const rightNeedle = summitSpike(6.10, -0.45, 0.92, 1.08, 0.48, -0.28, 0.94);
+    const rightOuterRidge = ridgeSpur(6.95, -1.05, 8.4, 2.50, 1.05, -0.92, 1.26);
+    const rightInnerRidge = ridgeSpur(6.48, -0.90, 7.1, 1.95, 1.14, 0.74, 0.46);
+    const rightForegroundSpur = ridgeSpur(8.55, 5.30, 9.8, 2.80, 1.12, -1.08, 1.64);
 
-    const distantRidge =
-      0.80 *
-      Math.exp(-(((x - 0.3) / 7.4) ** 2 + ((z + 5.6) / 2.45) ** 2));
+    const rearLeft = ridgeSpur(-2.9, -5.6, 8.3, 2.25, 0.92, 0.18, 2.42);
+    const rearRight = ridgeSpur(2.95, -5.85, 8.0, 2.20, 0.84, -0.14, 0.72);
+    const rearBasin = 0.62 * Math.exp(-(((x - 0.1) / 7.0) ** 2 + ((z + 4.9) / 2.0) ** 2));
 
     const valleyX = valleyCentreX(z);
+    const valleyWidth = 0.64 + smoothstep(clamp((z + 6.2) / 24.0, 0, 1)) * 1.9;
     const valleyCut =
-      -1.04 *
-      Math.exp(-((x - valleyX) ** 2) / 1.20) *
-      Math.exp(-((z - 0.8) ** 2) / 70);
+      -1.78 *
+      Math.exp(-((x - valleyX) ** 2) / valleyWidth) *
+      Math.exp(-((z - 0.7) ** 2) / 118);
+    const rearPinch =
+      -0.94 *
+      Math.exp(-((x - valleyX) ** 2) / 0.72) *
+      Math.exp(-((z + 2.9) ** 2) / 18);
 
-    const frontRise =
-      0.26 *
-      Math.exp(-((z - 6.8) ** 2) / 12) *
-      (0.45 + 0.55 * Math.min(1, Math.abs(x) / 8));
+    const frontBasin =
+      0.42 *
+      Math.exp(-((z - 11.5) ** 2) / 44) *
+      (0.55 + 0.45 * Math.min(1, Math.abs(x) / 10));
+
+    const foregroundUndulation =
+      0.22 * Math.exp(-((z - 15.4) ** 2) / 36) * Math.sin(x * 0.42 + z * 0.18) +
+      0.16 * Math.exp(-((z - 17.1) ** 2) / 18) * Math.cos(x * 0.55 - z * 0.16);
 
     const baseUndulation =
-      -0.50 +
-      0.10 * Math.sin(x * 0.62 + z * 0.24) +
-      0.07 * Math.cos(z * 0.78 - x * 0.18);
+      -0.40 +
+      0.08 * Math.sin(x * 0.56 + z * 0.20) +
+      0.08 * Math.cos(z * 0.74 - x * 0.20);
 
     return (
-      leftMain +
-      rightMain +
-      leftFront +
-      leftOuter +
-      leftInner +
-      rightFront +
-      rightOuter +
-      rightInner +
-      backLeft +
-      backRight +
-      distantRidge +
+      leftBase +
+      leftOuterMass +
+      leftInnerMass +
+      leftSummit +
+      leftNeedle +
+      leftOuterRidge +
+      leftInnerRidge +
+      leftForegroundSpur +
+      rightBase +
+      rightOuterMass +
+      rightInnerMass +
+      rightSummit +
+      rightNeedle +
+      rightOuterRidge +
+      rightInnerRidge +
+      rightForegroundSpur +
+      rearLeft +
+      rearRight +
+      rearBasin +
       valleyCut +
-      frontRise +
+      rearPinch +
+      frontBasin +
+      foregroundUndulation +
       baseUndulation
     );
   }
@@ -276,12 +326,12 @@
   }
 
   function createTerrain() {
-    const xMin = -15.2;
-    const xMax = 15.2;
-    const zMin = -8.3;
-    const zMax = 13.0;
-    const columns = 112;
-    const rows = 88;
+    const xMin = -17.4;
+    const xMax = 17.6;
+    const zMin = -8.8;
+    const zMax = 19.2;
+    const columns = 126;
+    const rows = 108;
     const triangles = emptyGeometry();
     const lines = emptyGeometry();
     const points = emptyGeometry();
@@ -299,8 +349,8 @@
           row === rows ||
           column === 0 ||
           column === columns;
-        const jitterX = edge ? 0 : (seededNoise(column, row) - 0.5) * 0.12;
-        const jitterZ = edge ? 0 : (seededNoise(row + 41, column + 17) - 0.5) * 0.12;
+        const jitterX = edge ? 0 : (seededNoise(column, row) - 0.5) * 0.15;
+        const jitterZ = edge ? 0 : (seededNoise(row + 41, column + 17) - 0.5) * 0.15;
         const x = rawX + jitterX;
         const z = rawZ + jitterZ;
         const y = terrainHeight(x, z);
@@ -308,7 +358,7 @@
 
         grid[row][column] = point;
 
-        if (row % 3 === 0 && column % 3 === 0 && y > -0.35) {
+        if (row % 3 === 0 && column % 3 === 0 && y > -0.55) {
           const altitude = clamp((y + 0.55) / 7.5, 0, 1);
           pushVertex(
             points,
@@ -358,8 +408,8 @@
           addTriangle(b, c, d);
         }
 
-        if (row % 3 === 0) addMeshLine(a, b, 0.18);
-        if (column % 4 === 0) addMeshLine(a, c, 0.15);
+        if (row % 3 === 0) addMeshLine(a, b, 0.17);
+        if (column % 4 === 0) addMeshLine(a, c, 0.14);
       }
     }
 
@@ -393,23 +443,50 @@
     }
 
     addRidgePath([
-      [-11.8, 3.8],
-      [-10.0, 2.3],
-      [-8.1, 0.5],
-      [-6.25, -1.10],
-      [-4.9, 0.25],
-      [-3.7, 2.2],
-      [-2.7, 4.9]
+      [-14.6, 5.5],
+      [-12.8, 4.1],
+      [-10.9, 2.6],
+      [-9.2, 1.0],
+      [-7.25, -0.10],
+      [-5.9, 0.6],
+      [-4.4, 2.5],
+      [-2.6, 5.2]
     ]);
 
     addRidgePath([
-      [2.8, 4.8],
-      [3.9, 2.2],
-      [5.15, 0.1],
-      [6.55, -1.55],
-      [8.2, 0.2],
-      [10.0, 2.2],
-      [11.8, 3.9]
+      [-10.8, 9.6],
+      [-9.9, 7.8],
+      [-9.1, 6.2],
+      [-8.4, 4.7],
+      [-7.8, 3.0],
+      [-7.25, -0.10]
+    ]);
+
+    addRidgePath([
+      [2.2, 5.6],
+      [3.6, 3.2],
+      [4.8, 1.0],
+      [5.8, -0.35],
+      [6.62, -1.12],
+      [7.8, -0.2],
+      [9.4, 1.8],
+      [11.8, 4.5]
+    ]);
+
+    addRidgePath([
+      [8.9, 8.8],
+      [8.4, 7.1],
+      [7.8, 5.7],
+      [7.2, 4.3],
+      [6.9, 2.8],
+      [6.62, -1.12]
+    ]);
+
+    addRidgePath([
+      [-1.8, 7.8],
+      [-0.4, 5.6],
+      [0.7, 3.9],
+      [1.6, 2.2]
     ]);
 
     return { triangles, lines, points, ridges };
@@ -628,17 +705,18 @@
     const ribbon = emptyGeometry();
     const lines = emptyGeometry();
     const points = emptyGeometry();
-    const steps = 110;
+    const steps = 132;
     const path = [];
 
     for (let index = 0; index < steps; index += 1) {
       const t = index / (steps - 1);
-      const z = 12.45 - t * 17.75;
+      const z = 18.05 - t * 24.45;
       const x =
         valleyCentreX(z) +
-        Math.sin(t * Math.PI * 6.0) * (0.52 - t * 0.24) +
-        Math.sin(t * Math.PI * 2.4) * 0.18;
-      const y = terrainHeight(x, z) + 0.080;
+        Math.sin(t * Math.PI * 5.5) * (0.44 - t * 0.14) +
+        Math.sin(t * Math.PI * 2.2 + 0.8) * 0.16 +
+        Math.cos(t * Math.PI * 9.0) * 0.04;
+      const y = terrainHeight(x, z) + 0.082;
       path.push([x, y, z]);
     }
 
@@ -662,8 +740,8 @@
       const dx = b[0] - a[0];
       const dz = b[2] - a[2];
       const length = Math.hypot(dx, dz) || 1;
-      const widthA = 0.17 - (index / (path.length - 1)) * 0.085;
-      const widthB = 0.17 - ((index + 1) / (path.length - 1)) * 0.085;
+      const widthA = 0.21 - (index / (path.length - 1)) * 0.11;
+      const widthB = 0.21 - ((index + 1) / (path.length - 1)) * 0.11;
       const nx = -dz / length;
       const nz = dx / length;
       const aLeft = [a[0] + nx * widthA, a[1] - 0.015, a[2] + nz * widthA];
@@ -896,15 +974,15 @@
           </linearGradient>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M18 555 L110 474 L205 414 L298 320 L382 318 L470 334 L565 444 L635 514 L660 555 Z" fill="url(#rfFallbackLeft)"/>
-        <path d="M520 555 L610 476 L700 414 L780 340 L850 336 L916 356 L980 448 L995 555 Z" fill="url(#rfFallbackRight)"/>
-        <path d="M298 320 L382 318 L470 334 L565 444 L635 514 L468 510 L365 430 L314 360 Z" fill="#02141f" opacity=".72"/>
-        <path d="M780 340 L850 336 L916 356 L980 448 L995 555 L842 520 L750 446 L720 390 Z" fill="#02131d" opacity=".72"/>
+        <path d="M-10 560 L72 534 L136 505 L192 462 L252 430 L296 385 L336 324 L366 318 L412 326 L476 352 L552 402 L626 468 L690 528 L720 560 Z" fill="url(#rfFallbackLeft)"/>
+        <path d="M470 560 L560 522 L626 486 L686 446 L742 382 L796 340 L842 334 L900 346 L954 372 L1016 430 L1060 492 L1085 560 Z" fill="url(#rfFallbackRight)"/>
+        <path d="M336 324 L412 326 L476 352 L552 402 L626 468 L690 528 L528 514 L418 452 L362 386 Z" fill="#02141f" opacity=".72"/>
+        <path d="M796 340 L842 334 L900 346 L954 372 L1016 430 L1060 492 L1085 560 L932 526 L824 450 L756 392 Z" fill="#02131d" opacity=".72"/>
         <g fill="none" stroke="#ffc45b" stroke-width="5" stroke-linecap="round">
-          <path d="M340 310 L320 405 M340 310 L360 405 M320 405 L360 405 M326 378 L354 378 M330 350 L350 350 M340 310 L340 252"/>
-          <path d="M805 328 L787 416 M805 328 L823 416 M787 416 L823 416 M792 391 L818 391 M795 365 L815 365 M805 328 L805 274"/>
+          <path d="M360 308 L339 414 M360 308 L381 414 M339 414 L381 414 M345 383 L375 383 M349 353 L371 353 M360 308 L360 246"/>
+          <path d="M854 324 L836 418 M854 324 L872 418 M836 418 L872 418 M841 391 L867 391 M844 364 L864 364 M854 324 L854 270"/>
         </g>
-        <path d="M500 546 C472 498 520 454 492 378" fill="none" stroke="#75effa" stroke-width="5"/>
+        <path d="M510 558 C468 520 532 474 492 420 C458 376 522 330 490 286" fill="none" stroke="#75effa" stroke-width="5"/>
       </svg>
     `;
     mount.replaceChildren(fallback);
@@ -995,20 +1073,20 @@
 
     const terrain = createTerrain();
     const leftOrigin = [
-      -7.25,
-      terrainHeight(-7.25, 0.00) + 0.025,
-      0.00
+      -7.22,
+      terrainHeight(-7.22, -0.10) + 0.025,
+      -0.10
     ];
     const rightOrigin = [
-      6.05,
-      terrainHeight(6.05, -1.95) + 0.025,
-      -1.95
+      6.62,
+      terrainHeight(6.62, -1.12) + 0.025,
+      -1.12
     ];
-    const leftTower = createTower(leftOrigin, 3.42, 0.54, 1.0, 1);
-    const rightTower = createTower(rightOrigin, 3.12, 0.49, 0.93, -1);
+    const leftTower = createTower(leftOrigin, 3.52, 0.54, 1.0, 1);
+    const rightTower = createTower(rightOrigin, 3.14, 0.49, 0.93, -1);
     const path = createValleyPath();
-    const leftShadow = createContactShadow(leftOrigin, 0.96, 0.42);
-    const rightShadow = createContactShadow(rightOrigin, 0.90, 0.40);
+    const leftShadow = createContactShadow(leftOrigin, 0.88, 0.34);
+    const rightShadow = createContactShadow(rightOrigin, 0.84, 0.34);
 
     const drawBuffers = [
       createDrawBuffer(gl, program, terrain.triangles, gl.TRIANGLES, {
@@ -1081,7 +1159,7 @@
 
     const projection = new Float32Array(16);
     const view = new Float32Array(16);
-    const target = [-0.05, 3.20, -0.80];
+    const target = [0.05, 2.95, 0.35];
     const state = {
       azimuth: FRONT_AZIMUTH,
       velocity: 0,
@@ -1177,13 +1255,13 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / state.height;
       const portraitBoost = clamp((1.05 - aspect) * 2.8, 0, 1.4);
-      const distance = 25.4 + portraitBoost;
+      const distance = 28.2 + portraitBoost;
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + 1.08,
+        target[1] + 0.92,
         target[2] + Math.cos(angle) * distance
       ];
-      const fov = aspect < 0.82 ? 51 : aspect < 1.12 ? 47 : 44;
+      const fov = aspect < 0.82 ? 50 : aspect < 1.12 ? 46 : 43;
 
       mat4Perspective(projection, fov * DEG, aspect, 0.1, 90);
       mat4LookAt(view, eye, target, [0, 1, 0]);
