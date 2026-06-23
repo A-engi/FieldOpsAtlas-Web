@@ -1,25 +1,24 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.114-traced-front-side
+   Version: 1.1.115-svg-front-edge
 
    Purpose:
-   - Build the terrain only from an explicit front X/Y silhouette and two
-     explicit side Z/Y depth traces.
-   - Remove the previous stacked procedural mountain construction and towers.
+   - Use the SVG front-edge path as the authoritative X/Y mountain silhouette.
+   - Map that silhouette through explicit Z depth profiles without transmitters.
    - Preserve 360-degree drag, mount selector, and rendered-event contract.
-   - Allow the traced terrain to extend beyond the visible graph frame.
+   - Let the terrain extend beyond the visible graph frame instead of scaling it down.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.114-traced-front-side";
+  const VERSION = "1.1.115-svg-front-edge";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "webgl-360-traced-front-side";
+  const MODE = "webgl-360-svg-front-edge";
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -119,35 +118,63 @@
   }
 
 
-  const LEFT_FRONT_TRACE = Object.freeze([
-    [-22.0, 0.00], [-19.0, 0.35], [-17.2, 0.75], [-15.8, 1.15],
-    [-14.4, 1.70], [-13.1, 2.20], [-11.8, 2.90], [-10.7, 3.60],
-    [-9.7, 4.20], [-8.9, 4.70], [-8.1, 5.15], [-7.4, 5.45],
-    [-6.8, 5.18], [-6.1, 4.80], [-5.2, 4.20], [-4.2, 3.45],
-    [-3.2, 2.70], [-2.2, 2.00], [-1.3, 1.40], [-0.5, 0.90],
-    [0.2, 0.65], [1.0, 0.45], [2.0, 0.00]
+  /*
+   * Source silhouette from mountain-w-tx-turnable.svg frontClip/front-edge.
+   * The transmitter spike at SVG x=332, y=112 is intentionally removed.
+   * Heights are measured against the SVG ground edge from (0,555) to (840,630).
+   */
+  const SVG_FRONT_EDGE = Object.freeze([
+    [0, 555], [45, 510], [95, 468], [140, 404], [190, 352],
+    [250, 321], [290, 318], [332, 317.5], [372, 317], [425, 329],
+    [490, 386], [560, 447], [645, 500], [725, 548], [805, 596],
+    [840, 630]
   ]);
 
-  const RIGHT_FRONT_TRACE = Object.freeze([
-    [-2.0, 0.00], [-1.2, 0.35], [-0.4, 0.70], [0.6, 1.00],
-    [1.8, 1.45], [3.0, 2.00], [4.1, 2.70], [5.2, 3.45],
-    [6.1, 4.00], [6.9, 4.45], [7.6, 4.20], [8.4, 3.95],
-    [9.3, 3.55], [10.4, 3.05], [11.8, 2.45], [13.2, 1.85],
-    [15.0, 1.30], [17.0, 0.85], [19.0, 0.45], [22.0, 0.00]
-  ]);
+  function svgEdgeToWorld(svgPoints, options = {}) {
+    const xScale = options.xScale || 60;
+    const yScale = options.yScale || 60;
+    const xOffset = options.xOffset || 0;
+    const yFactor = options.yFactor || 1;
+    const mirror = Boolean(options.mirror);
+    const sourceWidth = 840;
+    const centre = sourceWidth * 0.5;
+
+    return Object.freeze(svgPoints.map(([sourceX, sourceY]) => {
+      const groundY = 555 + (75 * sourceX) / sourceWidth;
+      const centredX = (sourceX - centre) / xScale;
+      const worldX = xOffset + (mirror ? -centredX : centredX);
+      const worldY = ((groundY - sourceY) / yScale) * yFactor;
+      return [worldX, worldY];
+    }).sort((a, b) => a[0] - b[0]));
+  }
+
+  const LEFT_FRONT_TRACE = svgEdgeToWorld(SVG_FRONT_EDGE, {
+    xOffset: -7.5,
+    xScale: 60,
+    yScale: 60,
+    yFactor: 1
+  });
+
+  const RIGHT_FRONT_TRACE = svgEdgeToWorld(SVG_FRONT_EDGE, {
+    xOffset: 7.5,
+    xScale: 60,
+    yScale: 60,
+    yFactor: 0.88,
+    mirror: true
+  });
 
   const LEFT_DEPTH_TRACE = Object.freeze([
-    [-16.0, 0.00], [-13.0, 0.18], [-10.0, 0.36], [-7.0, 0.60],
-    [-4.0, 0.82], [-1.0, 0.95], [2.0, 1.00], [4.5, 0.92],
-    [7.0, 0.78], [10.0, 0.62], [14.0, 0.43], [18.0, 0.27],
-    [22.0, 0.12], [26.0, 0.00]
+    [-20.0, 0.08], [-16.0, 0.24], [-12.0, 0.48], [-8.0, 0.72],
+    [-4.0, 0.91], [0.0, 1.00], [4.0, 0.96], [8.0, 0.82],
+    [12.0, 0.66], [16.0, 0.50], [20.0, 0.34], [24.0, 0.20],
+    [28.0, 0.08], [32.0, 0.00]
   ]);
 
   const RIGHT_DEPTH_TRACE = Object.freeze([
-    [-18.0, 0.00], [-15.0, 0.15], [-12.0, 0.40], [-9.0, 0.72],
-    [-6.0, 1.00], [-3.0, 0.90], [0.0, 0.76], [4.0, 0.58],
-    [8.0, 0.42], [12.0, 0.28], [16.0, 0.17], [21.0, 0.07],
-    [25.0, 0.00]
+    [-22.0, 0.10], [-18.0, 0.34], [-14.0, 0.68], [-10.0, 0.94],
+    [-7.0, 1.00], [-4.0, 0.91], [0.0, 0.72], [4.0, 0.54],
+    [8.0, 0.38], [12.0, 0.25], [17.0, 0.14], [22.0, 0.06],
+    [28.0, 0.00]
   ]);
 
   function sampleTrace(trace, value) {
@@ -168,8 +195,8 @@
   }
 
   function valleyCentreX(z) {
-    const t = clamp((z + 18) / 44, 0, 1);
-    return -0.15 + 0.65 * Math.sin(t * Math.PI * 2.25) + 0.22 * Math.sin(t * Math.PI * 5.0);
+    const t = clamp((z + 22) / 54, 0, 1);
+    return -0.08 + 0.58 * Math.sin(t * Math.PI * 2.15) + 0.17 * Math.sin(t * Math.PI * 5.2);
   }
 
   function terrainHeight(x, z) {
@@ -183,13 +210,16 @@
     const tracedSurface = Math.max(leftMountain, rightMountain);
 
     const valleyX = valleyCentreX(z);
-    const valleyWidth = 0.72 + clamp((z + 4) / 30, 0, 1) * 1.45;
+    const valleyWidth = 0.50 + clamp((z + 8) / 38, 0, 1) * 1.30;
     const valleyCut =
-      0.42 *
+      0.34 *
       Math.exp(-((x - valleyX) ** 2) / valleyWidth) *
       Math.max(leftDepth, rightDepth);
 
-    return -0.38 + Math.max(0, tracedSurface - valleyCut);
+    const ground = -0.26 - 0.012 * Math.abs(x) - 0.004 * Math.max(0, z - 18);
+    return tracedSurface > 0.015
+      ? Math.max(ground, tracedSurface - valleyCut)
+      : ground;
   }
 
   function emptyGeometry() {
@@ -215,7 +245,7 @@
   function terrainBaseColour(a, b, c) {
     const averageY = (a[1] + b[1] + c[1]) / 3;
     const averageZ = (a[2] + b[2] + c[2]) / 3;
-    const altitude = clamp((averageY + 0.38) / 5.8, 0, 1);
+    const altitude = clamp((averageY + 0.28) / 5.0, 0, 1);
     const rear = clamp((-averageZ - 2) / 18, 0, 1);
     const separation = 1 - rear * 0.22;
 
@@ -228,12 +258,12 @@
   }
 
   function createTerrain() {
-    const xMin = -22.0;
-    const xMax = 22.0;
-    const zMin = -18.0;
-    const zMax = 26.0;
-    const columns = 132;
-    const rows = 132;
+    const xMin = -20.0;
+    const xMax = 20.0;
+    const zMin = -22.0;
+    const zMax = 32.0;
+    const columns = 144;
+    const rows = 156;
     const triangles = emptyGeometry();
     const lines = emptyGeometry();
     const traces = emptyGeometry();
@@ -259,7 +289,7 @@
 
     function addMeshLine(a, b, alpha) {
       const averageY = (a[1] + b[1]) * 0.5;
-      const altitude = clamp((averageY + 0.38) / 5.8, 0, 1);
+      const altitude = clamp((averageY + 0.28) / 5.0, 0, 1);
       const colour = [0.02, 0.70 + altitude * 0.22, 0.80 + altitude * 0.18, alpha];
 
       pushLine(
@@ -296,30 +326,35 @@
       }
     }
 
-    const frontCrest = [];
-    const crestSteps = 176;
+    const leftFrontSliceZ = 0.0;
+    const rightFrontSliceZ = -7.0;
 
-    for (let index = 0; index <= crestSteps; index += 1) {
-      const x = xMin + ((xMax - xMin) * index) / crestSteps;
-      const blend = smoothstep(clamp((x + 1.2) / 2.4, 0, 1));
-      const z = 2.0 + (-6.0 - 2.0) * blend;
-      frontCrest.push([x, terrainHeight(x, z) + 0.055, z]);
-    }
-
-    addTrace(frontCrest, [0.48, 1.0, 0.94, 0.76]);
-
-    const leftSideTrace = LEFT_DEPTH_TRACE.map(([z]) => [
-      -7.4,
-      terrainHeight(-7.4, z) + 0.055,
-      z
+    const leftFrontOutline = LEFT_FRONT_TRACE.map(([x, y]) => [
+      x,
+      y + 0.050,
+      leftFrontSliceZ
     ]);
-    const rightSideTrace = RIGHT_DEPTH_TRACE.map(([z]) => [
-      6.9,
-      terrainHeight(6.9, z) + 0.055,
-      z
+    const rightFrontOutline = RIGHT_FRONT_TRACE.map(([x, y]) => [
+      x,
+      y + 0.050,
+      rightFrontSliceZ
     ]);
 
-    addTrace(leftSideTrace, [0.34, 0.93, 0.94, 0.64]);
+    addTrace(leftFrontOutline, [0.54, 1.0, 0.94, 0.82]);
+    addTrace(rightFrontOutline, [0.54, 1.0, 0.94, 0.78]);
+
+    const leftSideTrace = LEFT_DEPTH_TRACE.map(([z, scale]) => [
+      -8.97,
+      sampleTrace(LEFT_FRONT_TRACE, -8.97) * scale + 0.050,
+      z
+    ]);
+    const rightSideTrace = RIGHT_DEPTH_TRACE.map(([z, scale]) => [
+      8.97,
+      sampleTrace(RIGHT_FRONT_TRACE, 8.97) * scale + 0.050,
+      z
+    ]);
+
+    addTrace(leftSideTrace, [0.34, 0.93, 0.94, 0.68]);
     addTrace(rightSideTrace, [0.34, 0.93, 0.94, 0.64]);
 
     return { triangles, lines, traces };
@@ -333,7 +368,7 @@
 
     for (let index = 0; index < steps; index += 1) {
       const t = index / (steps - 1);
-      const z = 25.0 - t * 41.0;
+      const z = 31.0 - t * 51.0;
       const x = valleyCentreX(z);
       const y = terrainHeight(x, z) + 0.065;
       path.push([x, y, z]);
@@ -536,7 +571,7 @@
     fallback.setAttribute("role", "img");
     fallback.setAttribute(
       "aria-label",
-      "Static traced twin-mountain terrain fallback without transmitters."
+      "Static SVG-front-edge twin-mountain terrain fallback without transmitters."
     );
     fallback.style.cssText =
       "display:grid;place-items:center;width:100%;height:100%;min-height:300px;background:#010a12;overflow:hidden";
@@ -553,17 +588,17 @@
           </linearGradient>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M-70 520 L40 496 L118 454 L190 386 L248 310 L306 236 L350 188 L380 214 L424 278 L478 350 L532 416 L574 466 L604 500 L630 520 Z" fill="url(#rfTraceLeft)"/>
-        <path d="M448 520 L500 488 L552 446 L610 388 L662 320 L710 260 L750 224 L790 252 L840 316 L894 378 L952 434 L1018 480 L1080 520 Z" fill="url(#rfTraceRight)"/>
-        <path d="M-70 520 L40 496 L118 454 L190 386 L248 310 L306 236 L350 188 L380 214 L424 278 L478 350 L532 416 L574 466 L604 500" fill="none" stroke="#79f8f2" stroke-width="3"/>
-        <path d="M448 520 L500 488 L552 446 L610 388 L662 320 L710 260 L750 224 L790 252 L840 316 L894 378 L952 434 L1018 480 L1080 520" fill="none" stroke="#79f8f2" stroke-width="3"/>
-        <path d="M502 548 C470 510 530 472 495 430 C460 388 520 346 492 304" fill="none" stroke="#75effa" stroke-width="4"/>
+        <path d="M-70 520 L20 520 L65 475 L115 433 L160 369 L210 317 L270 286 L310 283 L352 282 L392 282 L445 294 L510 351 L580 412 L665 465 L745 513 L825 561 L860 595 L860 620 L-70 620 Z" fill="url(#rfTraceLeft)"/>
+        <path d="M140 620 L140 595 L175 561 L255 513 L335 465 L420 412 L490 351 L555 294 L608 282 L648 282 L690 283 L730 286 L790 317 L840 369 L885 433 L935 475 L980 520 L1070 520 L1070 620 Z" fill="url(#rfTraceRight)" opacity=".88"/>
+        <path d="M20 520 L65 475 L115 433 L160 369 L210 317 L270 286 L310 283 L352 282 L392 282 L445 294 L510 351 L580 412 L665 465 L745 513 L825 561 L860 595" fill="none" stroke="#79f8f2" stroke-width="3"/>
+        <path d="M140 595 L175 561 L255 513 L335 465 L420 412 L490 351 L555 294 L608 282 L648 282 L690 283 L730 286 L790 317 L840 369 L885 433 L935 475 L980 520" fill="none" stroke="#79f8f2" stroke-width="3" opacity=".88"/>
+        <path d="M500 602 C466 558 528 520 494 474 C462 430 520 388 492 342" fill="none" stroke="#75effa" stroke-width="4"/>
       </svg>
     `;
     mount.replaceChildren(fallback);
     mount.dataset.rfGraphLoaded = "fallback";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "static-traced-front-side-fallback";
+    mount.dataset.rfGraphMode = "static-svg-front-edge-fallback";
     return fallback;
   }
 
@@ -587,7 +622,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive traced twin-mountain terrain without transmitters. Drag left or right to compare the front silhouette and side depth profiles."
+      "Interactive SVG-front-edge twin-mountain terrain without transmitters. Drag left or right to compare the exact front outline and mapped side depth."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -678,7 +713,7 @@
 
     const projection = new Float32Array(16);
     const view = new Float32Array(16);
-    const target = [0.0, 2.20, 1.30];
+    const target = [0.0, 2.35, 0.10];
     const state = {
       azimuth: FRONT_AZIMUTH,
       velocity: 0,
@@ -774,13 +809,13 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / state.height;
       const portraitBoost = clamp((1.05 - aspect) * 1.4, 0, 0.7);
-      const distance = 27.0 + portraitBoost;
+      const distance = 23.8 + portraitBoost;
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + 0.82,
+        target[1] + 0.68,
         target[2] + Math.cos(angle) * distance
       ];
-      const fov = aspect < 0.82 ? 49 : aspect < 1.12 ? 45 : 42;
+      const fov = aspect < 0.82 ? 50 : aspect < 1.12 ? 46 : 43;
 
       mat4Perspective(projection, fov * DEG, aspect, 0.1, 90);
       mat4LookAt(view, eye, target, [0, 1, 0]);
