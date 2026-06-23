@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.111-depth-shaded
+   Version: 1.1.112-svg-proportioned
 
    Purpose:
    - Preserve the current twin-peak terrain layout, TX positions, valley path,
@@ -13,13 +13,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.111-depth-shaded";
+  const VERSION = "1.1.112-svg-proportioned";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "webgl-360-depth-shaded";
+  const MODE = "webgl-360-svg-proportioned";
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -178,37 +178,37 @@
       return height * (core * shape + apron);
     }
 
-    const leftMain = mountain(-6.25, -1.10, 5.65, 5.80, 7.05, -0.10, 0.35);
-    const rightMain = mountain(6.55, -1.55, 5.60, 5.95, 6.38, 0.12, 1.42);
+    const leftMain = mountain(-7.25, 0.00, 7.05, 7.10, 4.45, -0.10, 0.35);
+    const rightMain = mountain(6.05, -1.95, 6.90, 7.05, 4.12, 0.12, 1.42);
 
-    const leftFront = mountain(-8.25, 3.55, 4.65, 4.55, 2.30, -0.34, 0.92, 0.02);
-    const leftOuter = mountain(-10.25, -0.30, 3.85, 4.60, 1.82, 0.18, 2.10, 0.02);
-    const leftInner = mountain(-3.15, -1.10, 2.95, 3.75, 1.28, 0.28, 1.65, 0.02);
+    const leftFront = mountain(-9.65, 2.80, 5.20, 5.35, 1.50, -0.28, 0.92, 0.02);
+    const leftOuter = mountain(-11.85, 0.10, 4.95, 5.40, 1.12, 0.14, 2.10, 0.02);
+    const leftInner = mountain(-4.10, 0.00, 4.05, 4.75, 0.88, 0.22, 1.65, 0.02);
 
-    const rightFront = mountain(8.45, 3.35, 4.75, 4.60, 2.35, 0.32, 2.30, 0.02);
-    const rightOuter = mountain(10.35, -1.45, 3.95, 4.55, 1.88, -0.18, 0.55, 0.02);
-    const rightInner = mountain(3.45, -1.30, 2.90, 3.70, 1.22, -0.24, 1.12, 0.02);
+    const rightFront = mountain(8.20, 2.55, 5.10, 5.20, 1.42, 0.28, 2.30, 0.02);
+    const rightOuter = mountain(10.60, -1.70, 4.85, 5.25, 1.06, -0.16, 0.55, 0.02);
+    const rightInner = mountain(3.55, -1.85, 4.00, 4.70, 0.84, -0.20, 1.12, 0.02);
 
-    const backLeft = mountain(-2.45, -5.55, 4.25, 2.65, 1.12, 0.18, 2.42, 0.02);
-    const backRight = mountain(2.70, -5.75, 4.10, 2.60, 1.02, -0.16, 0.72, 0.02);
+    const backLeft = mountain(-2.95, -5.85, 4.55, 2.75, 0.92, 0.16, 2.42, 0.02);
+    const backRight = mountain(2.95, -6.00, 4.45, 2.70, 0.86, -0.14, 0.72, 0.02);
 
     const distantRidge =
-      0.92 *
+      0.80 *
       Math.exp(-(((x - 0.3) / 7.4) ** 2 + ((z + 5.6) / 2.45) ** 2));
 
     const valleyX = valleyCentreX(z);
     const valleyCut =
-      -1.18 *
+      -1.04 *
       Math.exp(-((x - valleyX) ** 2) / 1.20) *
       Math.exp(-((z - 0.8) ** 2) / 70);
 
     const frontRise =
-      0.34 *
+      0.26 *
       Math.exp(-((z - 6.8) ** 2) / 12) *
       (0.45 + 0.55 * Math.min(1, Math.abs(x) / 8));
 
     const baseUndulation =
-      -0.54 +
+      -0.50 +
       0.10 * Math.sin(x * 0.62 + z * 0.24) +
       0.07 * Math.cos(z * 0.78 - x * 0.18);
 
@@ -896,21 +896,21 @@
           </linearGradient>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M30 550 L120 470 L205 420 L300 260 L380 390 L490 550 Z" fill="url(#rfFallbackLeft)"/>
-        <path d="M490 550 L585 455 L700 280 L790 395 L965 550 Z" fill="url(#rfFallbackRight)"/>
-        <path d="M300 260 L380 390 L490 550 L350 505 L250 405 Z" fill="#02141f" opacity=".72"/>
-        <path d="M700 280 L790 395 L965 550 L820 512 L660 390 Z" fill="#02131d" opacity=".72"/>
+        <path d="M18 555 L110 474 L205 414 L298 320 L382 318 L470 334 L565 444 L635 514 L660 555 Z" fill="url(#rfFallbackLeft)"/>
+        <path d="M520 555 L610 476 L700 414 L780 340 L850 336 L916 356 L980 448 L995 555 Z" fill="url(#rfFallbackRight)"/>
+        <path d="M298 320 L382 318 L470 334 L565 444 L635 514 L468 510 L365 430 L314 360 Z" fill="#02141f" opacity=".72"/>
+        <path d="M780 340 L850 336 L916 356 L980 448 L995 555 L842 520 L750 446 L720 390 Z" fill="#02131d" opacity=".72"/>
         <g fill="none" stroke="#ffc45b" stroke-width="5" stroke-linecap="round">
-          <path d="M300 250 L280 360 M300 250 L320 360 M280 360 L320 360 M286 330 L314 330 M290 305 L310 305 M300 250 L300 210"/>
-          <path d="M700 270 L682 370 M700 270 L718 370 M682 370 L718 370 M688 340 L712 340 M691 318 L709 318 M700 270 L700 230"/>
+          <path d="M340 310 L320 405 M340 310 L360 405 M320 405 L360 405 M326 378 L354 378 M330 350 L350 350 M340 310 L340 252"/>
+          <path d="M805 328 L787 416 M805 328 L823 416 M787 416 L823 416 M792 391 L818 391 M795 365 L815 365 M805 328 L805 274"/>
         </g>
-        <path d="M500 545 C480 490 510 440 490 370" fill="none" stroke="#75effa" stroke-width="5"/>
+        <path d="M500 546 C472 498 520 454 492 378" fill="none" stroke="#75effa" stroke-width="5"/>
       </svg>
     `;
     mount.replaceChildren(fallback);
     mount.dataset.rfGraphLoaded = "fallback";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "static-depth-fallback";
+    mount.dataset.rfGraphMode = "static-svg-proportioned-fallback";
     return fallback;
   }
 
@@ -995,20 +995,20 @@
 
     const terrain = createTerrain();
     const leftOrigin = [
-      -6.25,
-      terrainHeight(-6.25, -1.10) + 0.025,
-      -1.10
+      -7.25,
+      terrainHeight(-7.25, 0.00) + 0.025,
+      0.00
     ];
     const rightOrigin = [
-      6.55,
-      terrainHeight(6.55, -1.55) + 0.025,
-      -1.55
+      6.05,
+      terrainHeight(6.05, -1.95) + 0.025,
+      -1.95
     ];
-    const leftTower = createTower(leftOrigin, 3.72, 0.54, 1.0, 1);
-    const rightTower = createTower(rightOrigin, 3.28, 0.50, 0.93, -1);
+    const leftTower = createTower(leftOrigin, 3.42, 0.54, 1.0, 1);
+    const rightTower = createTower(rightOrigin, 3.12, 0.49, 0.93, -1);
     const path = createValleyPath();
-    const leftShadow = createContactShadow(leftOrigin, 0.88, 0.46);
-    const rightShadow = createContactShadow(rightOrigin, 0.82, 0.43);
+    const leftShadow = createContactShadow(leftOrigin, 0.96, 0.42);
+    const rightShadow = createContactShadow(rightOrigin, 0.90, 0.40);
 
     const drawBuffers = [
       createDrawBuffer(gl, program, terrain.triangles, gl.TRIANGLES, {
@@ -1081,7 +1081,7 @@
 
     const projection = new Float32Array(16);
     const view = new Float32Array(16);
-    const target = [0.10, 4.25, -0.95];
+    const target = [-0.05, 3.20, -0.80];
     const state = {
       azimuth: FRONT_AZIMUTH,
       velocity: 0,
@@ -1177,13 +1177,13 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / state.height;
       const portraitBoost = clamp((1.05 - aspect) * 2.8, 0, 1.4);
-      const distance = 22.7 + portraitBoost;
+      const distance = 25.4 + portraitBoost;
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + 1.30,
+        target[1] + 1.08,
         target[2] + Math.cos(angle) * distance
       ];
-      const fov = aspect < 0.82 ? 53 : aspect < 1.12 ? 49 : 46;
+      const fov = aspect < 0.82 ? 51 : aspect < 1.12 ? 47 : 44;
 
       mat4Perspective(projection, fov * DEG, aspect, 0.1, 90);
       mat4LookAt(view, eye, target, [0, 1, 0]);
