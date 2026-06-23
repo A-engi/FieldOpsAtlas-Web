@@ -1,25 +1,25 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.117-controlled-depth
+   Version: 1.1.118-visible-length-no-tx
 
    Purpose:
-   - Preserve the reverted twin-peak terrain, TX positions, valley path,
-     360-degree drag behaviour, mount selector, and rendered-event contract.
-   - Add only a controlled amount of Z depth to the existing mountain masses and
-     foreground ridge spurs without changing summit heights or camera framing.
+   - Preserve the jagged twin-mountain terrain, valley path, 360-degree drag
+     behaviour, mount selector, and rendered-event contract.
+   - Remove the transmitter geometry and the narrow artificial summit spikes.
+   - Add visible mountain length through broader base masses and framing only.
    - Keep the complete renderer self-contained with no external libraries.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.117-controlled-depth";
+  const VERSION = "1.1.118-visible-length-no-tx";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "webgl-360-controlled-depth";
+  const MODE = "webgl-360-visible-length-no-tx";
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -201,27 +201,20 @@
       return height * Math.max(0, body * (0.88 + rag));
     }
 
-    function summitSpike(cx, cz, radiusX, radiusZ, height, rotation, phase) {
-      return mountain(cx, cz, radiusX, radiusZ, height, rotation, phase, 0.0);
-    }
 
-    const leftBase = mountain(-7.35, 0.85, 8.25, 11.20, 3.40, -0.16, 0.32, 0.010);
-    const leftOuterMass = mountain(-11.45, 2.10, 5.55, 8.50, 1.58, 0.24, 1.36, 0.010);
-    const leftInnerMass = mountain(-4.75, 1.05, 4.65, 7.35, 1.06, -0.62, 0.92, 0.010);
-    const leftSummit = summitSpike(-7.22, -0.10, 1.24, 1.48, 1.42, -0.08, 1.02);
-    const leftNeedle = summitSpike(-7.52, 0.55, 0.78, 1.02, 0.70, 0.22, 1.78);
-    const leftOuterRidge = ridgeSpur(-7.45, 0.22, 8.8, 2.35, 1.28, 0.88, 0.65);
-    const leftInnerRidge = ridgeSpur(-7.10, -0.05, 7.2, 1.75, 1.12, -0.68, 2.00);
-    const leftForegroundSpur = ridgeSpur(-8.95, 6.75, 11.6, 2.85, 1.30, 1.22, 0.82);
+    const leftBase = mountain(-7.55, 1.05, 9.55, 12.45, 3.48, -0.16, 0.32, 0.010);
+    const leftOuterMass = mountain(-12.15, 2.45, 6.45, 9.35, 1.50, 0.24, 1.36, 0.010);
+    const leftInnerMass = mountain(-4.55, 1.20, 5.35, 8.10, 1.08, -0.62, 0.92, 0.010);
+    const leftOuterRidge = ridgeSpur(-7.55, 0.35, 10.15, 2.55, 1.24, 0.88, 0.65);
+    const leftInnerRidge = ridgeSpur(-7.20, 0.05, 8.25, 1.90, 1.08, -0.68, 2.00);
+    const leftForegroundSpur = ridgeSpur(-9.25, 7.60, 13.35, 3.10, 1.28, 1.22, 0.82);
 
-    const rightBase = mountain(6.65, -0.95, 7.80, 10.30, 3.15, 0.14, 1.42, 0.010);
-    const rightOuterMass = mountain(10.85, 1.55, 5.20, 7.95, 1.42, -0.18, 0.76, 0.010);
-    const rightInnerMass = mountain(3.35, 0.55, 4.55, 6.85, 1.18, 0.60, 1.92, 0.010);
-    const rightSummit = summitSpike(6.62, -1.12, 1.40, 1.58, 1.16, 0.10, 2.10);
-    const rightNeedle = summitSpike(6.10, -0.45, 0.92, 1.08, 0.48, -0.28, 0.94);
-    const rightOuterRidge = ridgeSpur(6.95, -1.05, 8.4, 2.50, 1.05, -0.92, 1.26);
-    const rightInnerRidge = ridgeSpur(6.48, -0.90, 7.1, 1.95, 1.14, 0.74, 0.46);
-    const rightForegroundSpur = ridgeSpur(8.55, 5.95, 10.9, 2.80, 1.12, -1.08, 1.64);
+    const rightBase = mountain(6.85, -0.75, 9.05, 11.55, 3.25, 0.14, 1.42, 0.010);
+    const rightOuterMass = mountain(11.65, 1.85, 6.10, 8.80, 1.36, -0.18, 0.76, 0.010);
+    const rightInnerMass = mountain(3.55, 0.70, 5.10, 7.55, 1.16, 0.60, 1.92, 0.010);
+    const rightOuterRidge = ridgeSpur(7.05, -0.85, 9.75, 2.70, 1.02, -0.92, 1.26);
+    const rightInnerRidge = ridgeSpur(6.55, -0.75, 8.15, 2.05, 1.10, 0.74, 0.46);
+    const rightForegroundSpur = ridgeSpur(8.85, 6.85, 12.65, 3.05, 1.10, -1.08, 1.64);
 
     const rearLeft = ridgeSpur(-2.9, -5.6, 8.3, 2.25, 0.92, 0.18, 2.42);
     const rearRight = ridgeSpur(2.95, -5.85, 8.0, 2.20, 0.84, -0.14, 0.72);
@@ -256,16 +249,12 @@
       leftBase +
       leftOuterMass +
       leftInnerMass +
-      leftSummit +
-      leftNeedle +
       leftOuterRidge +
       leftInnerRidge +
       leftForegroundSpur +
       rightBase +
       rightOuterMass +
       rightInnerMass +
-      rightSummit +
-      rightNeedle +
       rightOuterRidge +
       rightInnerRidge +
       rightForegroundSpur +
@@ -326,11 +315,11 @@
   }
 
   function createTerrain() {
-    const xMin = -17.4;
-    const xMax = 17.6;
+    const xMin = -20.0;
+    const xMax = 20.2;
     const zMin = -8.8;
-    const zMax = 21.0;
-    const columns = 126;
+    const zMax = 23.5;
+    const columns = 134;
     const rows = 114;
     const triangles = emptyGeometry();
     const lines = emptyGeometry();
@@ -710,7 +699,7 @@
 
     for (let index = 0; index < steps; index += 1) {
       const t = index / (steps - 1);
-      const z = 19.70 - t * 26.10;
+      const z = 22.10 - t * 28.50;
       const x =
         valleyCentreX(z) +
         Math.sin(t * Math.PI * 5.5) * (0.44 - t * 0.14) +
@@ -957,7 +946,7 @@
     fallback.setAttribute("role", "img");
     fallback.setAttribute(
       "aria-label",
-      "Static twin-peak RF mountain fallback with two transmitter towers."
+      "Static wide twin-mountain RF terrain fallback."
     );
     fallback.style.cssText =
       "display:grid;place-items:center;width:100%;height:100%;min-height:300px;background:#010a12;overflow:hidden";
@@ -974,21 +963,17 @@
           </linearGradient>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M-10 560 L72 534 L136 505 L192 462 L252 430 L296 385 L336 324 L366 318 L412 326 L476 352 L552 402 L626 468 L690 528 L720 560 Z" fill="url(#rfFallbackLeft)"/>
-        <path d="M470 560 L560 522 L626 486 L686 446 L742 382 L796 340 L842 334 L900 346 L954 372 L1016 430 L1060 492 L1085 560 Z" fill="url(#rfFallbackRight)"/>
+        <path d="M-80 560 L18 540 L104 510 L176 470 L246 420 L310 374 L372 348 L438 360 L516 398 L600 452 L688 518 L760 560 Z" fill="url(#rfFallbackLeft)"/>
+        <path d="M420 560 L510 522 L596 474 L668 424 L734 378 L798 354 L866 360 L936 390 L1010 442 L1088 510 L1140 560 Z" fill="url(#rfFallbackRight)"/>
         <path d="M336 324 L412 326 L476 352 L552 402 L626 468 L690 528 L528 514 L418 452 L362 386 Z" fill="#02141f" opacity=".72"/>
         <path d="M796 340 L842 334 L900 346 L954 372 L1016 430 L1060 492 L1085 560 L932 526 L824 450 L756 392 Z" fill="#02131d" opacity=".72"/>
-        <g fill="none" stroke="#ffc45b" stroke-width="5" stroke-linecap="round">
-          <path d="M360 308 L339 414 M360 308 L381 414 M339 414 L381 414 M345 383 L375 383 M349 353 L371 353 M360 308 L360 246"/>
-          <path d="M854 324 L836 418 M854 324 L872 418 M836 418 L872 418 M841 391 L867 391 M844 364 L864 364 M854 324 L854 270"/>
-        </g>
         <path d="M510 558 C468 520 532 474 492 420 C458 376 522 330 490 286" fill="none" stroke="#75effa" stroke-width="5"/>
       </svg>
     `;
     mount.replaceChildren(fallback);
     mount.dataset.rfGraphLoaded = "fallback";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "static-controlled-depth-fallback";
+    mount.dataset.rfGraphMode = "static-visible-length-no-tx-fallback";
     return fallback;
   }
 
@@ -1012,7 +997,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive shaded 3D RF twin-peak mountain scene with two transmitter towers. Drag left or right to orbit 360 degrees."
+      "Interactive shaded 3D twin-mountain RF terrain. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -1072,34 +1057,12 @@
     const emissionLocation = gl.getUniformLocation(program, "u_emission");
 
     const terrain = createTerrain();
-    const leftOrigin = [
-      -7.22,
-      terrainHeight(-7.22, -0.10) + 0.025,
-      -0.10
-    ];
-    const rightOrigin = [
-      6.62,
-      terrainHeight(6.62, -1.12) + 0.025,
-      -1.12
-    ];
-    const leftTower = createTower(leftOrigin, 3.52, 0.54, 1.0, 1);
-    const rightTower = createTower(rightOrigin, 3.14, 0.49, 0.93, -1);
     const path = createValleyPath();
-    const leftShadow = createContactShadow(leftOrigin, 0.88, 0.34);
-    const rightShadow = createContactShadow(rightOrigin, 0.84, 0.34);
 
     const drawBuffers = [
       createDrawBuffer(gl, program, terrain.triangles, gl.TRIANGLES, {
         lit: true,
         depthWrite: true
-      }),
-      createDrawBuffer(gl, program, leftShadow, gl.TRIANGLES, {
-        lit: false,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, rightShadow, gl.TRIANGLES, {
-        lit: false,
-        depthWrite: false
       }),
       createDrawBuffer(gl, program, terrain.lines, gl.LINES, {
         additive: true,
@@ -1132,34 +1095,12 @@
         additive: true,
         emission: 0.50,
         depthWrite: false
-      }),
-      createDrawBuffer(gl, program, leftTower.lines, gl.LINES, {
-        additive: true,
-        emission: 0.84,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, leftTower.points, gl.POINTS, {
-        pointScale: 92,
-        additive: true,
-        emission: 0.90,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, rightTower.lines, gl.LINES, {
-        additive: true,
-        emission: 0.84,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, rightTower.points, gl.POINTS, {
-        pointScale: 86,
-        additive: true,
-        emission: 0.90,
-        depthWrite: false
       })
     ];
 
     const projection = new Float32Array(16);
     const view = new Float32Array(16);
-    const target = [0.05, 2.95, 0.35];
+    const target = [0.05, 2.62, 1.15];
     const state = {
       azimuth: FRONT_AZIMUTH,
       velocity: 0,
@@ -1255,13 +1196,13 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / state.height;
       const portraitBoost = clamp((1.05 - aspect) * 2.8, 0, 1.4);
-      const distance = 28.2 + portraitBoost;
+      const distance = 30.4 + portraitBoost;
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + 0.92,
+        target[1] + 0.86,
         target[2] + Math.cos(angle) * distance
       ];
-      const fov = aspect < 0.82 ? 50 : aspect < 1.12 ? 46 : 43;
+      const fov = aspect < 0.82 ? 52 : aspect < 1.12 ? 48 : 45;
 
       mat4Perspective(projection, fov * DEG, aspect, 0.1, 90);
       mat4LookAt(view, eye, target, [0, 1, 0]);
