@@ -1,892 +1,39 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.121-two-faceted-mountains
+   Version: 1.1.158-gltf-mountain
 
    Purpose:
-   - Preserve the jagged twin-mountain terrain, valley path, 360-degree drag
-     behaviour, mount selector, and rendered-event contract.
-   - Remove the transmitter geometry and the narrow artificial summit spikes.
-   - Add visible mountain length through broader base masses and framing only.
-   - Keep the complete renderer self-contained with no external libraries.
+   - Replace the procedural curved terrain with the uploaded ready-made glTF
+     mountain asset.
+   - Preserve the RF graph mount selector, 360-degree drag orbit, fallback,
+     and rendered-event contract.
+   - Add dark terrain shading, cyan wire overlay, a glowing valley route, and
+     two gold RF tower markers.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.121-two-faceted-mountains";
+  const VERSION = "1.1.158-gltf-mountain";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "webgl-360-two-faceted-mountains";
+  const MODE = "three-gltf-mountain-orbit";
+  const MODEL_URL = "./assets/mountain-terrain/scene.gltf";
+  const THREE_MODULE_URL =
+    "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
+  const GLTF_LOADER_URL =
+    "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/GLTFLoader.js";
 
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
 
+  let dependencyPromise = null;
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
-  }
-
-  function smoothstep(value) {
-    const t = clamp(value, 0, 1);
-    return t * t * (3 - 2 * t);
-  }
-
-  function seededNoise(x, z) {
-    const value = Math.sin(x * 127.1 + z * 311.7) * 43758.5453123;
-    return value - Math.floor(value);
-  }
-
-  function vec3Normalize(out, vector) {
-    const length = Math.hypot(vector[0], vector[1], vector[2]) || 1;
-    out[0] = vector[0] / length;
-    out[1] = vector[1] / length;
-    out[2] = vector[2] / length;
-    return out;
-  }
-
-  function vec3Cross(out, a, b) {
-    out[0] = a[1] * b[2] - a[2] * b[1];
-    out[1] = a[2] * b[0] - a[0] * b[2];
-    out[2] = a[0] * b[1] - a[1] * b[0];
-    return out;
-  }
-
-  function triangleNormal(a, b, c) {
-    const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
-    const ac = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
-    const normal = [0, 0, 0];
-    vec3Cross(normal, ab, ac);
-    vec3Normalize(normal, normal);
-
-    if (normal[1] < 0) {
-      normal[0] *= -1;
-      normal[1] *= -1;
-      normal[2] *= -1;
-    }
-
-    return normal;
-  }
-
-  function mat4Perspective(out, fovy, aspect, near, far) {
-    const f = 1 / Math.tan(fovy / 2);
-    const nf = 1 / (near - far);
-
-    out[0] = f / aspect;
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = f;
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = 0;
-    out[10] = (far + near) * nf;
-    out[11] = -1;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 2 * far * near * nf;
-    out[15] = 0;
-    return out;
-  }
-
-  function mat4LookAt(out, eye, target, up) {
-    const z = [eye[0] - target[0], eye[1] - target[1], eye[2] - target[2]];
-    vec3Normalize(z, z);
-
-    const x = [0, 0, 0];
-    vec3Cross(x, up, z);
-    vec3Normalize(x, x);
-
-    const y = [0, 0, 0];
-    vec3Cross(y, z, x);
-
-    out[0] = x[0];
-    out[1] = y[0];
-    out[2] = z[0];
-    out[3] = 0;
-    out[4] = x[1];
-    out[5] = y[1];
-    out[6] = z[1];
-    out[7] = 0;
-    out[8] = x[2];
-    out[9] = y[2];
-    out[10] = z[2];
-    out[11] = 0;
-    out[12] = -(x[0] * eye[0] + x[1] * eye[1] + x[2] * eye[2]);
-    out[13] = -(y[0] * eye[0] + y[1] * eye[1] + y[2] * eye[2]);
-    out[14] = -(z[0] * eye[0] + z[1] * eye[1] + z[2] * eye[2]);
-    out[15] = 1;
-    return out;
-  }
-
-  function valleyCentreX(z) {
-    return (
-      0.10 +
-      0.52 * Math.sin((z + 2.1) * 0.34) +
-      0.22 * Math.sin(z * 0.91) -
-      0.10 * Math.cos((z - 1.6) * 0.47)
-    );
-  }
-
-  function terrainHeight(x, z) {
-    function radialSupport(cx, cz, radiusX, radiusZ, height, rotation = 0) {
-      const cos = Math.cos(rotation);
-      const sin = Math.sin(rotation);
-      const dx = x - cx;
-      const dz = z - cz;
-      const u = (dx * cos + dz * sin) / radiusX;
-      const v = (-dx * sin + dz * cos) / radiusZ;
-      const radial = Math.sqrt(u * u + v * v);
-      if (radial >= 1.08) return 0;
-      const falloff = 1 - smoothstep(radial);
-      return height * Math.pow(falloff, 1.45);
-    }
-
-    function barycentricXZ(px, pz, a, b, c) {
-      const denominator =
-        (b[2] - c[2]) * (a[0] - c[0]) +
-        (c[0] - b[0]) * (a[2] - c[2]);
-      if (Math.abs(denominator) < 0.000001) return null;
-
-      const w1 =
-        ((b[2] - c[2]) * (px - c[0]) +
-          (c[0] - b[0]) * (pz - c[2])) /
-        denominator;
-      const w2 =
-        ((c[2] - a[2]) * (px - c[0]) +
-          (a[0] - c[0]) * (pz - c[2])) /
-        denominator;
-      const w3 = 1 - w1 - w2;
-      return [w1, w2, w3];
-    }
-
-    function faceHeight(a, b, c, soften = 0.0) {
-      const bary = barycentricXZ(x, z, a, b, c);
-      if (!bary) return -Infinity;
-      const [w1, w2, w3] = bary;
-      const minWeight = Math.min(w1, w2, w3);
-      if (minWeight < -soften) return -Infinity;
-      const edgeFade = soften > 0 ? clamp((minWeight + soften) / soften, 0, 1) : 1;
-      return (w1 * a[1] + w2 * b[1] + w3 * c[1]) * edgeFade;
-    }
-
-    function facetedMountain(faces) {
-      let height = -Infinity;
-      for (const face of faces) {
-        height = Math.max(height, faceHeight(face[0], face[1], face[2], 0.035));
-      }
-      return height === -Infinity ? 0 : height;
-    }
-
-    const leftSummit = [-7.35, 4.58, -0.10];
-    const leftShoulderA = [-10.00, 3.00, 4.75];
-    const leftShoulderB = [-4.90, 2.72, 5.55];
-
-    const rightSummit = [7.10, 4.18, -0.85];
-    const rightShoulderA = [10.30, 2.86, 5.70];
-    const rightShoulderB = [3.85, 2.36, 4.75];
-
-    const leftFaces = [
-      [[-18.8, 0.02, 7.8], [-12.8, 0.92, -2.6], leftSummit],
-      [[-14.6, 0.06, 13.9], [-2.6, 0.10, 16.8], leftSummit],
-      [[-1.9, 0.14, 6.0], [-0.2, 0.08, -1.8], leftSummit],
-      [[-13.4, 0.10, -4.8], [-3.4, 0.10, -5.8], leftSummit],
-      [[-18.0, 0.04, 11.5], [-10.2, 0.30, 15.5], leftShoulderA],
-      [[-14.2, 0.16, 8.6], [-6.2, 0.28, 16.6], leftShoulderA],
-      [[-8.8, 0.22, 8.0], [0.6, 0.08, 14.4], leftShoulderB],
-      [[-6.0, 0.18, 1.8], [1.4, 0.08, 9.2], leftShoulderB]
-    ];
-
-    const rightFaces = [
-      [[12.8, 0.82, -2.0], [19.4, 0.02, 7.5], rightSummit],
-      [[3.2, 0.10, 16.2], [15.5, 0.10, 12.8], rightSummit],
-      [[1.8, 0.12, 4.7], [1.0, 0.06, -1.4], rightSummit],
-      [[4.2, 0.10, -5.8], [14.0, 0.10, -4.0], rightSummit],
-      [[11.0, 0.24, 8.8], [18.6, 0.06, 12.6], rightShoulderA],
-      [[7.8, 0.24, 8.4], [15.0, 0.10, 15.2], rightShoulderA],
-      [[1.0, 0.18, 9.8], [9.4, 0.10, 15.3], rightShoulderB],
-      [[0.8, 0.16, 1.6], [8.2, 0.08, 9.2], rightShoulderB]
-    ];
-
-    const leftMountain =
-      radialSupport(-7.7, 3.0, 13.4, 17.2, 0.92, -0.12) +
-      facetedMountain(leftFaces);
-
-    const rightMountain =
-      radialSupport(7.5, 2.4, 12.7, 16.0, 0.84, 0.10) +
-      facetedMountain(rightFaces);
-
-    const valleyX = valleyCentreX(z);
-    const valleyCut =
-      -1.22 *
-      Math.exp(-((x - valleyX) ** 2) / (0.95 + smoothstep(clamp((z + 5.0) / 22.0, 0, 1)) * 1.5)) *
-      Math.exp(-((z - 1.0) ** 2) / 120);
-
-    const rearPinch =
-      -0.58 *
-      Math.exp(-((x - valleyX) ** 2) / 0.85) *
-      Math.exp(-((z + 3.0) ** 2) / 24);
-
-    const frontBasin =
-      0.32 * Math.exp(-((z - 15.0) ** 2) / 60) * (0.55 + 0.45 * Math.min(1, Math.abs(x) / 11));
-
-    const minorRunoff =
-      0.10 * Math.exp(-((z - 18.5) ** 2) / 28) * Math.sin(x * 0.28 + z * 0.14) +
-      0.07 * Math.exp(-((z - 20.8) ** 2) / 16) * Math.cos(x * 0.33 - z * 0.10);
-
-    const baseUndulation =
-      -0.42 +
-      0.05 * Math.sin(x * 0.28 + z * 0.10) +
-      0.04 * Math.cos(z * 0.30 - x * 0.12);
-
-    return leftMountain + rightMountain + valleyCut + rearPinch + frontBasin + minorRunoff + baseUndulation;
-  }
-
-  function emptyGeometry() {
-    return {
-      positions: [],
-      normals: [],
-      colors: []
-    };
-  }
-
-  function pushVertex(geometry, point, normal, colour) {
-    geometry.positions.push(point[0], point[1], point[2]);
-    geometry.normals.push(normal[0], normal[1], normal[2]);
-    geometry.colors.push(colour[0], colour[1], colour[2], colour[3]);
-  }
-
-  function pushLine(geometry, a, b, colourA, colourB = colourA) {
-    const normal = [0, 1, 0];
-    pushVertex(geometry, a, normal, colourA);
-    pushVertex(geometry, b, normal, colourB);
-  }
-
-  function terrainBaseColour(a, b, c) {
-    const averageY = (a[1] + b[1] + c[1]) / 3;
-    const averageZ = (a[2] + b[2] + c[2]) / 3;
-    const averageX = (a[0] + b[0] + c[0]) / 3;
-    const altitude = clamp((averageY + 0.70) / 7.9, 0, 1);
-    const rear = smoothstep(clamp((-averageZ - 1.1) / 6.0, 0, 1));
-    const valleyDistance = Math.abs(averageX - valleyCentreX(averageZ));
-    const valley =
-      Math.exp(-(valleyDistance * valleyDistance) / 1.6) *
-      Math.exp(-((averageZ - 0.8) ** 2) / 65);
-    const noise = seededNoise(
-      Math.floor((averageX + 24) * 4),
-      Math.floor((averageZ + 24) * 4)
-    );
-    const facet = noise > 0.60 ? (noise - 0.60) * 0.11 : 0;
-    const separation = 1 - rear * 0.30 - valley * 0.18;
-
-    return [
-      0.008,
-      (0.22 + altitude * 0.18 + facet) * separation,
-      (0.31 + altitude * 0.25 + facet * 1.25) * separation,
-      0.98
-    ];
-  }
-
-  function createTerrain() {
-    const xMin = -20.0;
-    const xMax = 20.2;
-    const zMin = -8.8;
-    const zMax = 23.5;
-    const columns = 134;
-    const rows = 114;
-    const triangles = emptyGeometry();
-    const lines = emptyGeometry();
-    const points = emptyGeometry();
-    const ridges = emptyGeometry();
-    const grid = [];
-
-    for (let row = 0; row <= rows; row += 1) {
-      grid[row] = [];
-      const rawZ = zMin + ((zMax - zMin) * row) / rows;
-
-      for (let column = 0; column <= columns; column += 1) {
-        const rawX = xMin + ((xMax - xMin) * column) / columns;
-        const edge =
-          row === 0 ||
-          row === rows ||
-          column === 0 ||
-          column === columns;
-        const jitterX = edge ? 0 : (seededNoise(column, row) - 0.5) * 0.15;
-        const jitterZ = edge ? 0 : (seededNoise(row + 41, column + 17) - 0.5) * 0.15;
-        const x = rawX + jitterX;
-        const z = rawZ + jitterZ;
-        const y = terrainHeight(x, z);
-        const point = [x, y, z];
-
-        grid[row][column] = point;
-
-        if (row % 3 === 0 && column % 3 === 0 && y > -0.55) {
-          const altitude = clamp((y + 0.55) / 7.5, 0, 1);
-          pushVertex(
-            points,
-            [x, y + 0.035, z],
-            [0, 1, 0],
-            [0.05, 0.65 + altitude * 0.28, 0.75 + altitude * 0.22, 0.24 + altitude * 0.28]
-          );
-        }
-      }
-    }
-
-    function addTriangle(a, b, c) {
-      const normal = triangleNormal(a, b, c);
-      const colour = terrainBaseColour(a, b, c);
-      pushVertex(triangles, a, normal, colour);
-      pushVertex(triangles, b, normal, colour);
-      pushVertex(triangles, c, normal, colour);
-    }
-
-    function addMeshLine(a, b, alpha) {
-      const averageY = (a[1] + b[1]) * 0.5;
-      const altitude = clamp((averageY + 0.55) / 7.5, 0, 1);
-      const effectiveAlpha = alpha * (0.30 + altitude * 0.70);
-      const colour = [0.03, 0.77 + altitude * 0.20, 0.84 + altitude * 0.16, effectiveAlpha];
-      pushLine(
-        lines,
-        [a[0], a[1] + 0.025, a[2]],
-        [b[0], b[1] + 0.025, b[2]],
-        colour
-      );
-    }
-
-    for (let row = 0; row < rows; row += 1) {
-      for (let column = 0; column < columns; column += 1) {
-        const a = grid[row][column];
-        const b = grid[row][column + 1];
-        const c = grid[row + 1][column];
-        const d = grid[row + 1][column + 1];
-
-        const diagonal = seededNoise(column + 13, row + 29) > 0.5;
-
-        if (diagonal) {
-          addTriangle(a, c, d);
-          addTriangle(a, d, b);
-        } else {
-          addTriangle(a, c, b);
-          addTriangle(b, c, d);
-        }
-
-        if (row % 3 === 0) addMeshLine(a, b, 0.17);
-        if (column % 4 === 0) addMeshLine(a, c, 0.14);
-      }
-    }
-
-    function addRidgePath(controlPoints) {
-      const sampled = [];
-
-      for (let index = 0; index < controlPoints.length - 1; index += 1) {
-        const start = controlPoints[index];
-        const end = controlPoints[index + 1];
-        const steps = 8;
-
-        for (let step = 0; step < steps; step += 1) {
-          const t = step / steps;
-          const x = start[0] + (end[0] - start[0]) * t;
-          const z = start[1] + (end[1] - start[1]) * t;
-          sampled.push([x, terrainHeight(x, z) + 0.075, z]);
-        }
-      }
-
-      const last = controlPoints[controlPoints.length - 1];
-      sampled.push([last[0], terrainHeight(last[0], last[1]) + 0.075, last[1]]);
-
-      for (let index = 1; index < sampled.length; index += 1) {
-        pushLine(
-          ridges,
-          sampled[index - 1],
-          sampled[index],
-          [0.54, 1.0, 0.92, 0.68]
-        );
-      }
-    }
-
-    addRidgePath([
-      [-13.6, 1.6],
-      [-10.9, 0.6],
-      [-7.35, -0.10],
-      [-4.8, 1.0],
-      [-2.2, 3.5]
-    ]);
-
-    addRidgePath([
-      [-11.0, 8.2],
-      [-8.9, 6.0],
-      [-6.9, 3.8],
-      [-5.4, 2.2]
-    ]);
-
-    addRidgePath([
-      [2.8, 4.2],
-      [5.2, 1.5],
-      [7.10, -0.85],
-      [9.5, 0.9],
-      [12.8, 3.5]
-    ]);
-
-    addRidgePath([
-      [10.8, 8.6],
-      [9.2, 6.2],
-      [7.7, 4.0],
-      [6.0, 2.1]
-    ]);
-
-    return { triangles, lines, points, ridges };
-  }
-
-  function createTower(origin, height, baseRadius, detailScale = 1, radarSide = 1) {
-    const lines = emptyGeometry();
-    const points = emptyGeometry();
-    const levels = 14;
-    const gold = [1.0, 0.68, 0.12, 0.99];
-    const warmGold = [1.0, 0.46, 0.02, 0.90];
-    const glowGold = [1.0, 0.36, 0.01, 0.56];
-
-    function addSegment(a, b, colour = gold) {
-      pushLine(lines, a, b, colour);
-    }
-
-    function addNode(point, colour = glowGold) {
-      pushVertex(points, point, [0, 1, 0], colour);
-    }
-
-    function legPoint(leg, level) {
-      const t = level / levels;
-      const radius = baseRadius * (1 - t * 0.81);
-      const angle = leg * Math.PI * 0.5 + Math.PI * 0.25;
-
-      return [
-        origin[0] + Math.cos(angle) * radius,
-        origin[1] + t * height,
-        origin[2] + Math.sin(angle) * radius
-      ];
-    }
-
-    for (let level = 0; level < levels; level += 1) {
-      for (let leg = 0; leg < 4; leg += 1) {
-        const a = legPoint(leg, level);
-        const b = legPoint(leg, level + 1);
-        const c = legPoint((leg + 1) % 4, level);
-        const d = legPoint((leg + 1) % 4, level + 1);
-
-        addSegment(a, b);
-        addSegment(a, c, warmGold);
-        addSegment(a, d);
-        addSegment(b, c, warmGold);
-        addNode(a);
-      }
-    }
-
-    const top = [
-      origin[0],
-      origin[1] + height + 0.38 * detailScale,
-      origin[2]
-    ];
-
-    for (let leg = 0; leg < 4; leg += 1) {
-      addSegment(legPoint(leg, levels), top);
-    }
-
-    const mastTip = [
-      top[0],
-      top[1] + 0.72 * detailScale,
-      top[2]
-    ];
-
-    addSegment(top, mastTip);
-    addNode(mastTip, [1.0, 0.70, 0.12, 0.78]);
-
-    const panelLevels = [0.42, 0.58, 0.72, 0.84];
-
-    panelLevels.forEach((fraction, index) => {
-      const y = origin[1] + height * fraction;
-      const reach = baseRadius * (1.25 - index * 0.09) * detailScale;
-      const panelHeight = height * 0.095;
-
-      for (let side = -1; side <= 1; side += 2) {
-        const x = origin[0] + side * reach;
-        const z = origin[2];
-        const bottomLeft = [x - 0.060 * detailScale, y - panelHeight * 0.5, z];
-        const topLeft = [x - 0.060 * detailScale, y + panelHeight * 0.5, z];
-        const bottomRight = [x + 0.060 * detailScale, y - panelHeight * 0.5, z];
-        const topRight = [x + 0.060 * detailScale, y + panelHeight * 0.5, z];
-
-        addSegment(bottomLeft, topLeft);
-        addSegment(topLeft, topRight, warmGold);
-        addSegment(topRight, bottomRight);
-        addSegment(bottomRight, bottomLeft, warmGold);
-        addSegment([origin[0], y, origin[2]], [x, y, z], warmGold);
-      }
-    });
-
-    function addSideRadar() {
-      const side = radarSide < 0 ? -1 : 1;
-      const platformY = origin[1] + height * 0.76;
-      const platformInset = baseRadius * 0.18;
-      const platformReach = baseRadius * 1.48;
-      const platformHalfWidth = 0.18 * detailScale;
-      const platformInner = [
-        origin[0] + side * platformInset,
-        platformY,
-        origin[2]
-      ];
-      const platformOuter = [
-        origin[0] + side * platformReach,
-        platformY,
-        origin[2] + 0.02
-      ];
-      const innerFront = [
-        platformInner[0],
-        platformInner[1],
-        platformInner[2] + platformHalfWidth
-      ];
-      const innerRear = [
-        platformInner[0],
-        platformInner[1],
-        platformInner[2] - platformHalfWidth
-      ];
-      const outerFront = [
-        platformOuter[0],
-        platformOuter[1],
-        platformOuter[2] + platformHalfWidth
-      ];
-      const outerRear = [
-        platformOuter[0],
-        platformOuter[1],
-        platformOuter[2] - platformHalfWidth
-      ];
-      const braceBase = [
-        origin[0] + side * baseRadius * 0.10,
-        platformY - 0.46 * detailScale,
-        origin[2]
-      ];
-      const pedestal = [
-        platformOuter[0],
-        platformY + 0.18 * detailScale,
-        platformOuter[2]
-      ];
-      const centre = [
-        platformOuter[0],
-        platformY + 0.43 * detailScale,
-        platformOuter[2]
-      ];
-
-      addSegment(innerFront, outerFront, warmGold);
-      addSegment(innerRear, outerRear, warmGold);
-      addSegment(innerFront, innerRear, gold);
-      addSegment(outerFront, outerRear, gold);
-      addSegment(platformInner, platformOuter, warmGold);
-      addSegment(braceBase, outerFront, warmGold);
-      addSegment(braceBase, outerRear, warmGold);
-      addSegment(platformOuter, pedestal, gold);
-      addSegment(outerFront, pedestal, warmGold);
-      addSegment(outerRear, pedestal, warmGold);
-      addSegment(pedestal, centre, gold);
-
-      const normal = [side * 0.30, 0.90, 0.31];
-      vec3Normalize(normal, normal);
-
-      const right = [0, 0, 0];
-      vec3Cross(right, [0, 1, 0], normal);
-      vec3Normalize(right, right);
-
-      const up = [0, 0, 0];
-      vec3Cross(up, normal, right);
-      vec3Normalize(up, up);
-
-      const radius = 0.36 * detailScale;
-      const depth = 0.14 * detailScale;
-      const ringCount = 3;
-      const segmentCount = 16;
-
-      function dishPoint(fraction, angle) {
-        const radial = radius * fraction;
-        const bowl = depth * fraction * fraction;
-        const cos = Math.cos(angle);
-        const sin = Math.sin(angle);
-
-        return [
-          centre[0] + right[0] * cos * radial + up[0] * sin * radial - normal[0] * bowl,
-          centre[1] + right[1] * cos * radial + up[1] * sin * radial - normal[1] * bowl,
-          centre[2] + right[2] * cos * radial + up[2] * sin * radial - normal[2] * bowl
-        ];
-      }
-
-      for (let ring = 1; ring <= ringCount; ring += 1) {
-        const fraction = ring / ringCount;
-        let previous = dishPoint(fraction, 0);
-
-        for (let segment = 1; segment <= segmentCount; segment += 1) {
-          const angle = (segment / segmentCount) * Math.PI * 2;
-          const current = dishPoint(fraction, angle);
-          addSegment(previous, current, ring === ringCount ? gold : warmGold);
-          previous = current;
-        }
-      }
-
-      for (let segment = 0; segment < segmentCount; segment += 4) {
-        const angle = (segment / segmentCount) * Math.PI * 2;
-        addSegment(centre, dishPoint(1, angle), warmGold);
-      }
-
-      const feed = [
-        centre[0] + normal[0] * radius * 0.42,
-        centre[1] + normal[1] * radius * 0.42,
-        centre[2] + normal[2] * radius * 0.42
-      ];
-
-      addSegment(centre, feed);
-      addNode(feed, [1.0, 0.62, 0.05, 0.70]);
-    }
-
-    addSideRadar();
-    return { lines, points };
-  }
-
-  function createValleyPath() {
-    const ribbon = emptyGeometry();
-    const lines = emptyGeometry();
-    const points = emptyGeometry();
-    const steps = 132;
-    const path = [];
-
-    for (let index = 0; index < steps; index += 1) {
-      const t = index / (steps - 1);
-      const z = 22.10 - t * 28.50;
-      const x =
-        valleyCentreX(z) +
-        Math.sin(t * Math.PI * 5.5) * (0.44 - t * 0.14) +
-        Math.sin(t * Math.PI * 2.2 + 0.8) * 0.16 +
-        Math.cos(t * Math.PI * 9.0) * 0.04;
-      const y = terrainHeight(x, z) + 0.082;
-      path.push([x, y, z]);
-    }
-
-    for (let index = 0; index < path.length; index += 1) {
-      const point = path[index];
-      pushVertex(points, point, [0, 1, 0], [0.0, 0.91, 0.98, 0.60]);
-
-      if (index > 0) {
-        pushLine(
-          lines,
-          path[index - 1],
-          point,
-          [0.0, 0.91, 0.98, 0.86]
-        );
-      }
-    }
-
-    for (let index = 0; index < path.length - 1; index += 1) {
-      const a = path[index];
-      const b = path[index + 1];
-      const dx = b[0] - a[0];
-      const dz = b[2] - a[2];
-      const length = Math.hypot(dx, dz) || 1;
-      const widthA = 0.21 - (index / (path.length - 1)) * 0.11;
-      const widthB = 0.21 - ((index + 1) / (path.length - 1)) * 0.11;
-      const nx = -dz / length;
-      const nz = dx / length;
-      const aLeft = [a[0] + nx * widthA, a[1] - 0.015, a[2] + nz * widthA];
-      const aRight = [a[0] - nx * widthA, a[1] - 0.015, a[2] - nz * widthA];
-      const bLeft = [b[0] + nx * widthB, b[1] - 0.015, b[2] + nz * widthB];
-      const bRight = [b[0] - nx * widthB, b[1] - 0.015, b[2] - nz * widthB];
-      const normal = [0, 1, 0];
-      const colour = [0.0, 0.56, 0.68, 0.18];
-
-      pushVertex(ribbon, aLeft, normal, colour);
-      pushVertex(ribbon, bLeft, normal, colour);
-      pushVertex(ribbon, aRight, normal, colour);
-      pushVertex(ribbon, aRight, normal, colour);
-      pushVertex(ribbon, bLeft, normal, colour);
-      pushVertex(ribbon, bRight, normal, colour);
-    }
-
-    return { ribbon, lines, points };
-  }
-
-  function createContactShadow(origin, radiusX, radiusZ) {
-    const triangles = emptyGeometry();
-    const centre = [origin[0], origin[1] + 0.018, origin[2]];
-    const normal = [0, 1, 0];
-    const segments = 28;
-
-    for (let index = 0; index < segments; index += 1) {
-      const angleA = (index / segments) * Math.PI * 2;
-      const angleB = ((index + 1) / segments) * Math.PI * 2;
-      const a = [
-        centre[0] + Math.cos(angleA) * radiusX,
-        centre[1],
-        centre[2] + Math.sin(angleA) * radiusZ
-      ];
-      const b = [
-        centre[0] + Math.cos(angleB) * radiusX,
-        centre[1],
-        centre[2] + Math.sin(angleB) * radiusZ
-      ];
-      const colour = [0.0, 0.015, 0.022, 0.42];
-
-      pushVertex(triangles, centre, normal, colour);
-      pushVertex(triangles, a, normal, colour);
-      pushVertex(triangles, b, normal, colour);
-    }
-
-    return triangles;
-  }
-
-  function createShader(gl, type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      const error = gl.getShaderInfoLog(shader) || "Unknown shader error";
-      gl.deleteShader(shader);
-      throw new Error(error);
-    }
-
-    return shader;
-  }
-
-  function createProgram(gl) {
-    const vertexSource = `
-      attribute vec3 a_position;
-      attribute vec3 a_normal;
-      attribute vec4 a_color;
-      uniform mat4 u_projection;
-      uniform mat4 u_view;
-      uniform float u_pointScale;
-      varying vec3 v_normal;
-      varying vec4 v_color;
-      varying float v_depth;
-
-      void main() {
-        vec4 viewPosition = u_view * vec4(a_position, 1.0);
-        gl_Position = u_projection * viewPosition;
-        gl_PointSize = clamp(
-          u_pointScale / max(1.0, -viewPosition.z),
-          1.0,
-          18.0
-        );
-        v_normal = a_normal;
-        v_color = a_color;
-        v_depth = -viewPosition.z;
-      }
-    `;
-
-    const fragmentSource = `
-      precision mediump float;
-      uniform float u_points;
-      uniform float u_lit;
-      uniform float u_emission;
-      varying vec3 v_normal;
-      varying vec4 v_color;
-      varying float v_depth;
-
-      void main() {
-        float alpha = v_color.a;
-
-        if (u_points > 0.5) {
-          vec2 centred = gl_PointCoord - vec2(0.5);
-          float distanceFromCentre = length(centred);
-          if (distanceFromCentre > 0.5) discard;
-          alpha *= smoothstep(0.5, 0.05, distanceFromCentre);
-        }
-
-        vec3 colour = v_color.rgb;
-
-        if (u_lit > 0.5) {
-          vec3 normal = normalize(v_normal);
-          vec3 keyLight = normalize(vec3(-0.72, 0.88, 0.38));
-          vec3 coolBounce = normalize(vec3(0.58, 0.20, -0.62));
-          float diffuse = max(dot(normal, keyLight), 0.0);
-          float bounce = max(dot(normal, coolBounce), 0.0);
-          float sidePlane = 1.0 - abs(normal.y);
-          float shade = 0.22 + diffuse * 0.78 + bounce * 0.12;
-          float edgeContrast = 1.0 + sidePlane * 0.08;
-          colour *= shade * edgeContrast;
-          colour += vec3(0.0, 0.025, 0.038) * (0.35 + normal.y * 0.65);
-        }
-
-        colour += v_color.rgb * u_emission;
-
-        float fog = clamp((v_depth - 11.0) / 34.0, 0.0, 0.62);
-        vec3 fogColour = vec3(0.003, 0.018, 0.035);
-        colour = mix(colour, fogColour, fog);
-        gl_FragColor = vec4(colour, alpha * (1.0 - fog * 0.44));
-      }
-    `;
-
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSource);
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
-    const program = gl.createProgram();
-
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    gl.deleteShader(vertexShader);
-    gl.deleteShader(fragmentShader);
-
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      const error = gl.getProgramInfoLog(program) || "Unknown program link error";
-      gl.deleteProgram(program);
-      throw new Error(error);
-    }
-
-    return program;
-  }
-
-  function createDrawBuffer(
-    gl,
-    program,
-    geometry,
-    mode,
-    options = {}
-  ) {
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(geometry.positions),
-      gl.STATIC_DRAW
-    );
-
-    const normalBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(geometry.normals),
-      gl.STATIC_DRAW
-    );
-
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(geometry.colors),
-      gl.STATIC_DRAW
-    );
-
-    return {
-      mode,
-      count: geometry.positions.length / 3,
-      pointScale: options.pointScale || 1,
-      additive: Boolean(options.additive),
-      lit: Boolean(options.lit),
-      emission: options.emission || 0,
-      depthWrite: options.depthWrite !== false,
-      positionBuffer,
-      normalBuffer,
-      colorBuffer,
-      positionLocation: gl.getAttribLocation(program, "a_position"),
-      normalLocation: gl.getAttribLocation(program, "a_normal"),
-      colorLocation: gl.getAttribLocation(program, "a_color")
-    };
   }
 
   function removeLegacyKey(mount) {
@@ -905,7 +52,7 @@
     fallback.setAttribute("role", "img");
     fallback.setAttribute(
       "aria-label",
-      "Static wide twin-mountain RF terrain fallback."
+      "Static RF mountain fallback graphic."
     );
     fallback.style.cssText =
       "display:grid;place-items:center;width:100%;height:100%;min-height:300px;background:#010a12;overflow:hidden";
@@ -922,17 +69,15 @@
           </linearGradient>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M-80 560 L18 540 L104 510 L176 470 L246 420 L310 374 L372 348 L438 360 L516 398 L600 452 L688 518 L760 560 Z" fill="url(#rfFallbackLeft)"/>
-        <path d="M420 560 L510 522 L596 474 L668 424 L734 378 L798 354 L866 360 L936 390 L1010 442 L1088 510 L1140 560 Z" fill="url(#rfFallbackRight)"/>
-        <path d="M336 324 L412 326 L476 352 L552 402 L626 468 L690 528 L528 514 L418 452 L362 386 Z" fill="#02141f" opacity=".72"/>
-        <path d="M796 340 L842 334 L900 346 L954 372 L1016 430 L1060 492 L1085 560 L932 526 L824 450 L756 392 Z" fill="#02131d" opacity=".72"/>
-        <path d="M510 558 C468 520 532 474 492 420 C458 376 522 330 490 286" fill="none" stroke="#75effa" stroke-width="5"/>
+        <path d="M-60 560 L42 530 L132 496 L220 444 L300 385 L364 332 L438 316 L508 352 L584 412 L670 486 L754 560 Z" fill="url(#rfFallbackLeft)"/>
+        <path d="M394 560 L496 520 L586 472 L678 406 L748 344 L816 314 L892 334 L954 388 L1010 446 L1084 560 Z" fill="url(#rfFallbackRight)"/>
+        <path d="M502 556 C450 512 548 466 500 416 C456 368 532 324 486 276" fill="none" stroke="#75effa" stroke-width="5"/>
       </svg>
     `;
     mount.replaceChildren(fallback);
     mount.dataset.rfGraphLoaded = "fallback";
     mount.dataset.rfGraphVersion = VERSION;
-    mount.dataset.rfGraphMode = "static-visible-length-no-tx-fallback";
+    mount.dataset.rfGraphMode = "fallback";
     return fallback;
   }
 
@@ -956,7 +101,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive shaded 3D twin-mountain RF terrain. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -981,85 +126,465 @@
       "transition:opacity .35s ease"
     ].join(";");
 
-    frame.append(canvas, hint);
+    const badge = document.createElement("div");
+    badge.className = "rf-webgl-orbit-badge";
+    badge.textContent = "Loading 3D terrain…";
+    badge.style.cssText = [
+      "position:absolute",
+      "top:10px",
+      "left:10px",
+      "max-width:min(70%, 210px)",
+      "padding:5px 8px",
+      "border:1px solid rgba(116,228,244,.24)",
+      "border-radius:999px",
+      "background:rgba(2,16,31,.70)",
+      "color:rgba(218,249,255,.88)",
+      "font:700 9px/1.1 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
+      "letter-spacing:.03em",
+      "pointer-events:none",
+      "transition:opacity .25s ease"
+    ].join(";");
+
+    frame.append(canvas, badge, hint);
     mount.replaceChildren(frame);
-    return { frame, canvas, hint };
+    return { frame, canvas, hint, badge };
   }
 
-  function initialiseWebGL(mount) {
-    removeLegacyKey(mount);
+  function hideHint(hint) {
+    hint.style.opacity = "0";
+  }
 
-    const { frame, canvas, hint } = buildFrame(mount);
-    const gl = canvas.getContext("webgl", {
-      alpha: true,
-      antialias: true,
-      depth: true,
-      premultipliedAlpha: false,
-      powerPreference: "high-performance"
+  function setBadge(badge, text, dim = false) {
+    badge.textContent = text;
+    badge.style.opacity = dim ? "0.42" : "1";
+  }
+
+  async function loadDependencies() {
+    if (!dependencyPromise) {
+      dependencyPromise = Promise.all([
+        import(THREE_MODULE_URL),
+        import(GLTF_LOADER_URL)
+      ]).then(([THREE, loaders]) => ({
+        THREE,
+        GLTFLoader: loaders.GLTFLoader
+      }));
+    }
+
+    return dependencyPromise;
+  }
+
+  function createLineSegments(THREE, segments, colour, opacity = 1) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(segments, 3)
+    );
+
+    const material = new THREE.LineBasicMaterial({
+      color: colour,
+      transparent: opacity < 1,
+      opacity,
+      depthWrite: false
     });
 
-    if (!gl) {
-      buildFallback(mount);
+    return new THREE.LineSegments(geometry, material);
+  }
+
+  function createPointCloud(THREE, points, colour, size, opacity = 1) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(points, 3)
+    );
+
+    const material = new THREE.PointsMaterial({
+      color: colour,
+      size,
+      transparent: opacity < 1,
+      opacity,
+      sizeAttenuation: true,
+      depthWrite: false
+    });
+
+    return new THREE.Points(geometry, material);
+  }
+
+  function createTowerGroup(THREE, origin, height, baseRadius, radarSide = 1) {
+    const group = new THREE.Group();
+    const lineSegments = [];
+    const pointPositions = [];
+
+    function addSegment(a, b) {
+      lineSegments.push(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+
+    function addPoint(point) {
+      pointPositions.push(point.x, point.y, point.z);
+    }
+
+    function legPoint(leg, level, levels) {
+      const t = level / levels;
+      const radius = baseRadius * (1 - t * 0.78);
+      const angle = Math.PI * 0.25 + leg * Math.PI * 0.5;
+      return new THREE.Vector3(
+        origin.x + Math.cos(angle) * radius,
+        origin.y + t * height,
+        origin.z + Math.sin(angle) * radius
+      );
+    }
+
+    const levels = 14;
+    for (let level = 0; level < levels; level += 1) {
+      for (let leg = 0; leg < 4; leg += 1) {
+        const a = legPoint(leg, level, levels);
+        const b = legPoint(leg, level + 1, levels);
+        const c = legPoint((leg + 1) % 4, level, levels);
+        const d = legPoint((leg + 1) % 4, level + 1, levels);
+        addSegment(a, b);
+        addSegment(a, c);
+        addSegment(a, d);
+        addSegment(b, c);
+        addPoint(a);
+      }
+    }
+
+    const top = new THREE.Vector3(origin.x, origin.y + height, origin.z);
+    const mast = new THREE.Vector3(origin.x, origin.y + height + height * 0.18, origin.z);
+    for (let leg = 0; leg < 4; leg += 1) {
+      addSegment(legPoint(leg, levels, levels), top);
+    }
+    addSegment(top, mast);
+    addPoint(mast);
+
+    const panelBands = [0.38, 0.54, 0.69, 0.82];
+    panelBands.forEach((fraction, index) => {
+      const y = origin.y + height * fraction;
+      const reach = baseRadius * (1.28 - index * 0.09);
+      const halfHeight = height * 0.05;
+      const halfWidth = baseRadius * 0.12;
+      for (let side = -1; side <= 1; side += 2) {
+        const cx = origin.x + side * reach;
+        const p1 = new THREE.Vector3(cx - halfWidth, y - halfHeight, origin.z);
+        const p2 = new THREE.Vector3(cx - halfWidth, y + halfHeight, origin.z);
+        const p3 = new THREE.Vector3(cx + halfWidth, y + halfHeight, origin.z);
+        const p4 = new THREE.Vector3(cx + halfWidth, y - halfHeight, origin.z);
+        addSegment(p1, p2);
+        addSegment(p2, p3);
+        addSegment(p3, p4);
+        addSegment(p4, p1);
+        addSegment(new THREE.Vector3(origin.x, y, origin.z), new THREE.Vector3(cx, y, origin.z));
+      }
+    });
+
+    const side = radarSide < 0 ? -1 : 1;
+    const dishAnchor = new THREE.Vector3(
+      origin.x + side * baseRadius * 1.4,
+      origin.y + height * 0.76,
+      origin.z
+    );
+    const dishRadius = baseRadius * 0.55;
+    const dishDepth = baseRadius * 0.22;
+    const ringCount = 3;
+    const segmentCount = 16;
+    for (let ring = 1; ring <= ringCount; ring += 1) {
+      const fraction = ring / ringCount;
+      let previous = null;
+      for (let segment = 0; segment <= segmentCount; segment += 1) {
+        const angle = (segment / segmentCount) * Math.PI * 2;
+        const radial = dishRadius * fraction;
+        const point = new THREE.Vector3(
+          dishAnchor.x - side * dishDepth * fraction * fraction,
+          dishAnchor.y + Math.sin(angle) * radial,
+          dishAnchor.z + Math.cos(angle) * radial
+        );
+        if (previous) addSegment(previous, point);
+        previous = point;
+      }
+    }
+    addSegment(new THREE.Vector3(origin.x + side * baseRadius * 0.4, origin.y + height * 0.74, origin.z), dishAnchor);
+    addPoint(dishAnchor);
+
+    const lines = createLineSegments(THREE, lineSegments, 0xffbf4d, 0.96);
+    const glow = createPointCloud(THREE, pointPositions, 0xff8c1a, baseRadius * 0.55, 0.82);
+    group.add(lines, glow);
+    return group;
+  }
+
+  function buildTerrainDecorations(THREE, terrainRoot) {
+    const box = new THREE.Box3().setFromObject(terrainRoot);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const topY = box.max.y;
+    const baseY = box.min.y;
+    const target = new THREE.Vector3(center.x, baseY + size.y * 0.28, center.z);
+
+    const peakState = {
+      left: null,
+      right: null
+    };
+    const terrainMeshes = [];
+
+    terrainRoot.updateMatrixWorld(true);
+
+    terrainRoot.traverse((node) => {
+      if (!node.isMesh || !node.geometry || !node.geometry.attributes.position) return;
+
+      terrainMeshes.push(node);
+      node.geometry.computeVertexNormals();
+      const geometry = node.geometry;
+      const position = geometry.attributes.position;
+      const step = Math.max(1, Math.floor(position.count / 3000));
+      const probe = new THREE.Vector3();
+
+      for (let index = 0; index < position.count; index += step) {
+        probe.fromBufferAttribute(position, index).applyMatrix4(node.matrixWorld);
+        const side = probe.x < center.x ? "left" : "right";
+        if (!peakState[side] || probe.y > peakState[side].y) {
+          peakState[side] = probe.clone();
+        }
+      }
+
+      const wire = new THREE.LineSegments(
+        new THREE.WireframeGeometry(geometry),
+        new THREE.LineBasicMaterial({
+          color: 0x74effa,
+          transparent: true,
+          opacity: 0.15,
+          depthWrite: false
+        })
+      );
+      wire.renderOrder = 2;
+      node.add(wire);
+    });
+
+    const leftPeak = peakState.left || new THREE.Vector3(center.x - size.x * 0.2, topY, center.z + size.z * 0.08);
+    const rightPeak = peakState.right || new THREE.Vector3(center.x + size.x * 0.2, topY * 0.96, center.z - size.z * 0.08);
+
+    const leftTower = createTowerGroup(
+      THREE,
+      new THREE.Vector3(leftPeak.x, leftPeak.y + 0.06, leftPeak.z),
+      Math.max(size.y * 0.28, 2.8),
+      Math.max(size.x * 0.018, 0.28),
+      1
+    );
+
+    const rightTower = createTowerGroup(
+      THREE,
+      new THREE.Vector3(rightPeak.x, rightPeak.y + 0.06, rightPeak.z),
+      Math.max(size.y * 0.19, 2.0),
+      Math.max(size.x * 0.014, 0.22),
+      -1
+    );
+
+    const raycaster = new THREE.Raycaster();
+    const castOrigin = new THREE.Vector3();
+    const direction = new THREE.Vector3(0, -1, 0);
+    const pathSamples = [];
+    const steps = 84;
+    const zStart = box.max.z - size.z * 0.06;
+    const zEnd = box.min.z + size.z * 0.12;
+    const searchRadius = size.x * 0.17;
+
+    for (let index = 0; index < steps; index += 1) {
+      const t = index / (steps - 1);
+      const z = zStart + (zEnd - zStart) * t;
+      let bestHit = null;
+
+      for (let probeIndex = 0; probeIndex < 15; probeIndex += 1) {
+        const offsetUnit = probeIndex / 14 - 0.5;
+        const x =
+          center.x +
+          offsetUnit * searchRadius * 2 +
+          Math.sin(t * Math.PI * 2.7) * size.x * 0.015;
+        castOrigin.set(x, topY + size.y * 1.8, z);
+        raycaster.set(castOrigin, direction);
+        const hits = raycaster.intersectObjects(terrainMeshes, false);
+        if (!hits.length) continue;
+        const hit = hits[0].point.clone();
+        if (!bestHit || hit.y < bestHit.y) bestHit = hit;
+      }
+
+      if (bestHit) {
+        bestHit.y += size.y * 0.012;
+        pathSamples.push(bestHit);
+      }
+    }
+
+    if (pathSamples.length >= 2) {
+      const curve = new THREE.CatmullRomCurve3(pathSamples);
+      const ribbon = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, Math.max(48, pathSamples.length * 2), Math.max(size.x * 0.0034, 0.10), 8, false),
+        new THREE.MeshBasicMaterial({
+          color: 0x2aeffc,
+          transparent: true,
+          opacity: 0.28,
+          depthWrite: false
+        })
+      );
+
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints(pathSamples);
+      const line = new THREE.Line(
+        lineGeometry,
+        new THREE.LineBasicMaterial({
+          color: 0x84f7ff,
+          transparent: true,
+          opacity: 0.98,
+          depthWrite: false
+        })
+      );
+
+      const markerPositions = [];
+      const markerStep = Math.max(1, Math.floor(pathSamples.length / 18));
+      for (let index = 0; index < pathSamples.length; index += markerStep) {
+        const point = pathSamples[index];
+        markerPositions.push(point.x, point.y, point.z);
+      }
+      const markers = createPointCloud(
+        THREE,
+        markerPositions,
+        0xb2fdff,
+        Math.max(size.x * 0.012, 0.14),
+        0.88
+      );
+
+      terrainRoot.add(ribbon, line, markers);
+    }
+
+    terrainRoot.add(leftTower, rightTower);
+
+    return {
+      box,
+      size,
+      target,
+      topY,
+      baseY,
+      center
+    };
+  }
+
+  function normaliseTerrainModel(THREE, model) {
+    const rawBox = new THREE.Box3().setFromObject(model);
+    const rawSize = rawBox.getSize(new THREE.Vector3());
+    const rawCenter = rawBox.getCenter(new THREE.Vector3());
+    const targetSpan = 35;
+    const scaleFactor = targetSpan / Math.max(rawSize.x || 1, rawSize.z || 1);
+
+    model.position.sub(rawCenter);
+    model.scale.setScalar(scaleFactor);
+    model.updateMatrixWorld(true);
+
+    const scaledBox = new THREE.Box3().setFromObject(model);
+    model.position.y -= scaledBox.min.y;
+    model.updateMatrixWorld(true);
+
+    return model;
+  }
+
+  async function loadModel(GLTFLoader) {
+    const loader = new GLTFLoader();
+    return new Promise((resolve, reject) => {
+      loader.load(
+        MODEL_URL,
+        (gltf) => resolve(gltf),
+        undefined,
+        (error) => reject(error)
+      );
+    });
+  }
+
+  async function initialiseThreeViewer(mount, elements, token) {
+    const { frame, canvas, hint, badge } = elements;
+    const { THREE, GLTFLoader } = await loadDependencies();
+
+    if (token.destroyed) {
       return {
         destroy() {}
       };
     }
 
-    const program = createProgram(gl);
-    gl.useProgram(program);
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    const projectionLocation = gl.getUniformLocation(program, "u_projection");
-    const viewLocation = gl.getUniformLocation(program, "u_view");
-    const pointScaleLocation = gl.getUniformLocation(program, "u_pointScale");
-    const pointsLocation = gl.getUniformLocation(program, "u_points");
-    const litLocation = gl.getUniformLocation(program, "u_lit");
-    const emissionLocation = gl.getUniformLocation(program, "u_emission");
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x021221, 18, 48);
 
-    const terrain = createTerrain();
-    const path = createValleyPath();
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
 
-    const drawBuffers = [
-      createDrawBuffer(gl, program, terrain.triangles, gl.TRIANGLES, {
-        lit: true,
-        depthWrite: true
-      }),
-      createDrawBuffer(gl, program, terrain.lines, gl.LINES, {
-        additive: true,
-        emission: 0.24,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, terrain.ridges, gl.LINES, {
-        additive: true,
-        emission: 0.66,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, terrain.points, gl.POINTS, {
-        pointScale: 46,
-        additive: true,
-        emission: 0.44,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, path.ribbon, gl.TRIANGLES, {
-        additive: true,
-        emission: 0.24,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, path.lines, gl.LINES, {
-        additive: true,
-        emission: 0.78,
-        depthWrite: false
-      }),
-      createDrawBuffer(gl, program, path.points, gl.POINTS, {
-        pointScale: 42,
-        additive: true,
-        emission: 0.50,
+    const ambient = new THREE.HemisphereLight(0x94eaf2, 0x03111d, 1.15);
+    scene.add(ambient);
+
+    const key = new THREE.DirectionalLight(0xb3ffff, 1.7);
+    key.position.set(-18, 20, 10);
+    scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0x3ec7e0, 0.55);
+    fill.position.set(12, 8, -16);
+    scene.add(fill);
+
+    const terrainRoot = new THREE.Group();
+    scene.add(terrainRoot);
+
+    const groundGlow = new THREE.Mesh(
+      new THREE.CircleGeometry(18, 60),
+      new THREE.MeshBasicMaterial({
+        color: 0x0d4e62,
+        transparent: true,
+        opacity: 0.14,
         depthWrite: false
       })
-    ];
+    );
+    groundGlow.rotation.x = -Math.PI * 0.5;
+    groundGlow.position.y = -0.02;
+    scene.add(groundGlow);
 
-    const projection = new Float32Array(16);
-    const view = new Float32Array(16);
-    const target = [0.05, 2.62, 1.15];
+    setBadge(badge, "Loading 3D terrain…");
+
+    const gltf = await loadModel(GLTFLoader);
+    if (token.destroyed) {
+      renderer.dispose();
+      return {
+        destroy() {}
+      };
+    }
+
+    const model = gltf.scene || gltf.scenes?.[0];
+    if (!model) {
+      throw new Error("The uploaded glTF scene is empty.");
+    }
+
+    model.traverse((node) => {
+      if (!node.isMesh) return;
+      node.castShadow = false;
+      node.receiveShadow = false;
+      if (node.geometry) node.geometry.computeVertexNormals();
+      node.material = new THREE.MeshStandardMaterial({
+        color: 0x0d3f52,
+        emissive: 0x041c2e,
+        emissiveIntensity: 0.48,
+        roughness: 0.94,
+        metalness: 0.04,
+        transparent: true,
+        opacity: 0.97,
+        side: THREE.DoubleSide
+      });
+    });
+
+    normaliseTerrainModel(THREE, model);
+    terrainRoot.add(model);
+
+    const decor = buildTerrainDecorations(THREE, terrainRoot);
+    const target = decor.target;
+    const size = decor.size;
+    const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
+    const targetLift = size.y * 0.30;
+
     const state = {
       azimuth: FRONT_AZIMUTH,
       velocity: 0,
@@ -1079,67 +604,14 @@
       const width = Math.max(1, Math.round(rect.width * pixelRatio));
       const height = Math.max(1, Math.round(rect.height * pixelRatio));
 
-      if (width === state.width && height === state.height) return;
+      if (state.width === width && state.height === height) return;
 
       state.width = width;
       state.height = height;
-      canvas.width = width;
-      canvas.height = height;
-      gl.viewport(0, 0, width, height);
-    }
-
-    function bindAndDraw(buffer) {
-      if (!buffer.count) return;
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer.positionBuffer);
-      gl.enableVertexAttribArray(buffer.positionLocation);
-      gl.vertexAttribPointer(
-        buffer.positionLocation,
-        3,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer.normalBuffer);
-      gl.enableVertexAttribArray(buffer.normalLocation);
-      gl.vertexAttribPointer(
-        buffer.normalLocation,
-        3,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colorBuffer);
-      gl.enableVertexAttribArray(buffer.colorLocation);
-      gl.vertexAttribPointer(
-        buffer.colorLocation,
-        4,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
-
-      gl.uniform1f(
-        pointScaleLocation,
-        buffer.pointScale * Math.min(window.devicePixelRatio || 1, 2)
-      );
-      gl.uniform1f(pointsLocation, buffer.mode === gl.POINTS ? 1 : 0);
-      gl.uniform1f(litLocation, buffer.lit ? 1 : 0);
-      gl.uniform1f(emissionLocation, buffer.emission);
-      gl.depthMask(buffer.depthWrite);
-
-      if (buffer.additive) {
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-      } else {
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-      }
-
-      gl.drawArrays(buffer.mode, 0, buffer.count);
+      renderer.setSize(rect.width, rect.height, false);
+      renderer.setPixelRatio(pixelRatio);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
     }
 
     function render() {
@@ -1153,39 +625,24 @@
       }
 
       const angle = (state.azimuth % 360) * DEG;
-      const aspect = state.width / state.height;
-      const portraitBoost = clamp((1.05 - aspect) * 2.8, 0, 1.4);
-      const distance = 30.4 + portraitBoost;
-      const eye = [
-        target[0] + Math.sin(angle) * distance,
-        target[1] + 0.86,
-        target[2] + Math.cos(angle) * distance
-      ];
-      const fov = aspect < 0.82 ? 52 : aspect < 1.12 ? 48 : 45;
+      const aspect = state.width / Math.max(1, state.height);
+      const portraitBoost = clamp((1.05 - aspect) * 2.5, 0, 1.6);
+      const orbitRadius = orbitRadiusBase + portraitBoost * 3.4;
+      camera.fov = aspect < 0.82 ? 52 : aspect < 1.12 ? 48 : 45;
+      camera.updateProjectionMatrix();
+      camera.position.set(
+        target.x + Math.sin(angle) * orbitRadius,
+        target.y + targetLift,
+        target.z + Math.cos(angle) * orbitRadius
+      );
+      camera.lookAt(target);
 
-      mat4Perspective(projection, fov * DEG, aspect, 0.1, 90);
-      mat4LookAt(view, eye, target, [0, 1, 0]);
-      gl.uniformMatrix4fv(projectionLocation, false, projection);
-      gl.uniformMatrix4fv(viewLocation, false, view);
-
-      gl.enable(gl.DEPTH_TEST);
-      gl.depthFunc(gl.LEQUAL);
-      gl.enable(gl.BLEND);
-      gl.clearColor(0, 0, 0, 0);
-      gl.depthMask(true);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-      drawBuffers.forEach(bindAndDraw);
-      gl.depthMask(true);
+      renderer.render(scene, camera);
       state.animationFrame = window.requestAnimationFrame(render);
     }
 
-    function hideHint() {
-      hint.style.opacity = "0";
-    }
-
     function onPointerDown(event) {
-      hideHint();
+      hideHint(hint);
       state.dragging = true;
       state.pointerId = event.pointerId;
       state.lastX = event.clientX;
@@ -1198,12 +655,10 @@
 
     function onPointerMove(event) {
       if (!state.dragging || event.pointerId !== state.pointerId) return;
-
       const now = performance.now();
       const deltaX = event.clientX - state.lastX;
       const deltaTime = Math.max(1, now - state.lastTime);
-      const deltaAngle = deltaX * 0.31;
-
+      const deltaAngle = deltaX * 0.30;
       state.azimuth += deltaAngle;
       state.velocity = (deltaAngle / deltaTime) * 16;
       state.lastX = event.clientX;
@@ -1213,11 +668,9 @@
 
     function onPointerUp(event) {
       if (event.pointerId !== state.pointerId) return;
-
       state.dragging = false;
       state.pointerId = null;
       canvas.style.cursor = "grab";
-
       if (canvas.hasPointerCapture(event.pointerId)) {
         canvas.releasePointerCapture(event.pointerId);
       }
@@ -1225,16 +678,13 @@
 
     function onKeyDown(event) {
       if (!["ArrowLeft", "ArrowRight", "Home"].includes(event.key)) return;
-
-      hideHint();
-
+      hideHint(hint);
       if (event.key === "Home") {
         state.azimuth = FRONT_AZIMUTH;
         state.velocity = 0;
       } else {
         state.azimuth += event.key === "ArrowLeft" ? -8 : 8;
       }
-
       event.preventDefault();
     }
 
@@ -1244,16 +694,21 @@
     canvas.addEventListener("pointercancel", onPointerUp);
     canvas.addEventListener("keydown", onKeyDown);
     canvas.addEventListener("dblclick", () => {
-      hideHint();
+      hideHint(hint);
       state.azimuth = FRONT_AZIMUTH;
       state.velocity = 0;
     });
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
-    state.animationFrame = window.requestAnimationFrame(render);
 
-    window.setTimeout(hideHint, 2400);
+    setBadge(badge, "3D terrain loaded", true);
+    window.setTimeout(() => {
+      badge.style.opacity = "0";
+    }, 1800);
+    window.setTimeout(() => {
+      hideHint(hint);
+    }, 2600);
 
     mount.dataset.rfGraphLoaded = "true";
     mount.dataset.rfGraphVersion = VERSION;
@@ -1269,9 +724,12 @@
       })
     );
 
+    state.animationFrame = window.requestAnimationFrame(render);
+
     return {
       destroy() {
         state.destroyed = true;
+        token.destroyed = true;
         window.cancelAnimationFrame(state.animationFrame);
         resizeObserver.disconnect();
         canvas.removeEventListener("pointerdown", onPointerDown);
@@ -1279,19 +737,28 @@
         canvas.removeEventListener("pointerup", onPointerUp);
         canvas.removeEventListener("pointercancel", onPointerUp);
         canvas.removeEventListener("keydown", onKeyDown);
-
-        drawBuffers.forEach((buffer) => {
-          gl.deleteBuffer(buffer.positionBuffer);
-          gl.deleteBuffer(buffer.normalBuffer);
-          gl.deleteBuffer(buffer.colorBuffer);
+        renderer.dispose();
+        scene.traverse((node) => {
+          if (node.geometry && typeof node.geometry.dispose === "function") {
+            node.geometry.dispose();
+          }
+          if (node.material) {
+            if (Array.isArray(node.material)) {
+              node.material.forEach((material) => {
+                if (material && typeof material.dispose === "function") {
+                  material.dispose();
+                }
+              });
+            } else if (typeof node.material.dispose === "function") {
+              node.material.dispose();
+            }
+          }
         });
-
-        gl.deleteProgram(program);
       }
     };
   }
 
-  function initMount(mount) {
+  async function initialiseMount(mount) {
     if (!mount || mount.dataset.rfGraphInit === VERSION) return;
 
     if (
@@ -1302,22 +769,28 @@
     }
 
     mount.dataset.rfGraphInit = VERSION;
+    removeLegacyKey(mount);
+
+    const token = { destroyed: false };
+    const elements = buildFrame(mount);
 
     try {
-      mount._rfGraphViewer = initialiseWebGL(mount);
+      mount._rfGraphViewer = await initialiseThreeViewer(mount, elements, token);
     } catch (error) {
-      console.error("FieldOps RF shaded 3D viewer failed:", error);
+      console.error("FieldOps RF glTF viewer failed:", error);
       buildFallback(mount);
     }
   }
 
   function initAll(root = document) {
-    root.querySelectorAll(MOUNT_SELECTOR).forEach(initMount);
+    root.querySelectorAll(MOUNT_SELECTOR).forEach((mount) => {
+      initialiseMount(mount);
+    });
   }
 
   window.FieldOpsRFGraph = {
     VERSION,
-    init: initMount,
+    init: initialiseMount,
     initAll
   };
 
