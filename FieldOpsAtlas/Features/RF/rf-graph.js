@@ -1,25 +1,24 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.189-embedded-exact-rollback-fix
+   Version: 1.1.190-embedded-exact-clean
 
    Purpose:
    - Rebuild the original terrain from its exact embedded vertex and index data.
-   - Preserve the v1.1.179 moonlit dot, connected-chevron, route-marker,
-     camera-framing, drag-orbit, fallback, mount-selector, and rendered-event
-     behaviour.
+   - Keep only the moonlit dot field, connected chevrons, dark terrain shell,
+     responsive camera, orbit interaction, mount lifecycle, and rendered event.
    - Load no external terrain model or model loader.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.189-embedded-exact-rollback-fix";
+  const VERSION = "1.1.190-embedded-exact-clean";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-embedded-exact-broken-connected-wireframe";
+  const MODE = "three-embedded-exact-dot-chevron-clean";
   const THREE_MODULE_URL = "three";
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -15005,36 +15004,20 @@
 
   function buildFallback(mount) {
     const fallback = document.createElement("div");
-    fallback.setAttribute("role", "img");
-    fallback.setAttribute(
-      "aria-label",
-      "Static RF mountain fallback graphic with contour lines."
-    );
-    fallback.style.cssText =
-      "display:grid;place-items:center;width:100%;height:100%;min-height:300px;background:#010a12;overflow:hidden";
-    fallback.innerHTML = `
-      <svg viewBox="0 0 1000 620" width="100%" height="100%" aria-hidden="true">
-        <defs>
-          <linearGradient id="rfFallbackMountain" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#0b5366"/>
-            <stop offset="1" stop-color="#021521"/>
-          </linearGradient>
-          <filter id="rfContourGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="2.4" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M-70 570 L72 522 L176 470 L266 380 L350 246 L430 342 L520 432 L624 520 L760 570 Z" fill="url(#rfFallbackMountain)"/>
-        <g fill="none" stroke="#45e8ff" stroke-width="3" opacity=".72" filter="url(#rfContourGlow)">
-          <path d="M72 522 C196 482 270 452 350 412 C420 378 490 400 572 470"/>
-          <path d="M120 486 C216 442 282 406 350 360 C418 326 478 354 534 414"/>
-          <path d="M190 438 C256 396 312 350 350 306 C398 294 440 320 478 362"/>
-          <path d="M270 372 C314 334 340 294 350 252 C376 280 400 308 424 336"/>
-          <path d="M214 476 L306 384 M286 438 L356 344 M390 402 L452 448"/>
-        </g>
-      </svg>
-    `;
+    fallback.setAttribute("role", "status");
+    fallback.setAttribute("aria-live", "polite");
+    fallback.textContent = "3D terrain unavailable";
+    fallback.style.cssText = [
+      "display:grid",
+      "place-items:center",
+      "width:100%",
+      "height:100%",
+      "min-height:300px",
+      "background:#010a12",
+      "color:rgba(201,251,255,.72)",
+      "font:700 11px/1.2 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
+      "letter-spacing:.04em"
+    ].join(";");
     mount.replaceChildren(fallback);
     mount.dataset.rfGraphLoaded = "fallback";
     mount.dataset.rfGraphVersion = VERSION;
@@ -15087,61 +15070,15 @@
       "transition:opacity .35s ease"
     ].join(";");
 
-    const badge = document.createElement("div");
-    badge.className = "rf-webgl-orbit-badge";
-    badge.textContent = "Loading 3D terrain…";
-    badge.style.cssText = [
-      "position:absolute",
-      "top:10px",
-      "left:10px",
-      "max-width:min(70%, 210px)",
-      "padding:5px 8px",
-      "border:1px solid rgba(116,228,244,.24)",
-      "border-radius:999px",
-      "background:rgba(2,16,31,.70)",
-      "color:rgba(218,249,255,.88)",
-      "font:700 9px/1.1 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
-      "letter-spacing:.03em",
-      "pointer-events:none",
-      "transition:opacity .25s ease"
-    ].join(";");
-
-    frame.append(canvas, badge, hint);
+    frame.append(canvas, hint);
     mount.replaceChildren(frame);
-    return { frame, canvas, hint, badge };
+    return { frame, canvas, hint };
   }
 
   function hideHint(hint) {
     hint.style.opacity = "0";
   }
 
-  function setBadge(badge, text, dim = false) {
-    badge.textContent = text;
-    badge.style.opacity = dim ? "0.42" : "1";
-  }
-
-
-  function createPointCloud(THREE, points, colour, size, opacity = 1) {
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(points, 3)
-    );
-
-    const material = new THREE.PointsMaterial({
-      color: colour,
-      size,
-      transparent: true,
-      opacity,
-      sizeAttenuation: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-
-    const cloud = new THREE.Points(geometry, material);
-    cloud.renderOrder = 4;
-    return cloud;
-  }
 
   async function loadDependencies() {
     if (!dependencyPromise) {
@@ -15353,112 +15290,8 @@
     return group;
   }
 
-  function buildSurfaceRoute(THREE, terrainRoot, box, size, center) {
-    const raycaster = new THREE.Raycaster();
-    const down = new THREE.Vector3(0, -1, 0);
-    const origin = new THREE.Vector3();
-    const pathSamples = [];
-    const pathSteps = 38;
-    const zStart = box.max.z - size.z * 0.07;
-    const zEnd = box.min.z + size.z * 0.16;
-    const offset = Math.max(size.y * 0.012, 0.035);
-
-    for (let index = 0; index < pathSteps; index += 1) {
-      const t = index / (pathSteps - 1);
-      const x =
-        center.x +
-        Math.sin(t * Math.PI * 2.55) * size.x * 0.034 +
-        Math.sin(t * Math.PI * 5.1) * size.x * 0.008;
-      const z = zStart + (zEnd - zStart) * t;
-      origin.set(x, box.max.y + size.y * 0.40, z);
-      raycaster.set(origin, down);
-      const hit = raycaster.intersectObject(terrainRoot, true).find((entry) => {
-        return entry.object?.isMesh && !entry.object.userData.rfDecoration;
-      });
-
-      if (hit) {
-        pathSamples.push(
-          hit.point
-            .clone()
-            .addScaledVector(
-              hit.face?.normal || new THREE.Vector3(0, 1, 0),
-              offset
-            )
-        );
-      } else {
-        pathSamples.push(
-          new THREE.Vector3(
-            x,
-            box.min.y + size.y * (0.08 + Math.sin(t * Math.PI) * 0.04),
-            z
-          )
-        );
-      }
-    }
-
-    const curve = new THREE.CatmullRomCurve3(
-      pathSamples,
-      false,
-      "centripetal"
-    );
-    const ribbonMaterial = new THREE.MeshBasicMaterial({
-      color: 0x22ddeb,
-      transparent: true,
-      opacity: 0.012,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x9afaff,
-      transparent: true,
-      opacity: 0.25,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-
-    const ribbon = new THREE.Mesh(
-      new THREE.TubeGeometry(
-        curve,
-        64,
-        Math.max(size.x * 0.0022, 0.055),
-        6,
-        false
-      ),
-      ribbonMaterial
-    );
-    ribbon.userData.rfDecoration = true;
-    ribbon.renderOrder = 5;
-
-    const line = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(curve.getPoints(96)),
-      lineMaterial
-    );
-    line.userData.rfDecoration = true;
-    line.renderOrder = 6;
-
-    const markerPositions = [];
-    pathSamples.forEach((point, index) => {
-      if (index % 4 === 0) {
-        markerPositions.push(point.x, point.y, point.z);
-      }
-    });
-    const markers = createPointCloud(
-      THREE,
-      markerPositions,
-      0xc4fdff,
-      Math.max(size.x * 0.0048, 0.055),
-      0.11
-    );
-    markers.userData.rfDecoration = true;
-
-    return {
-      objects: [ribbon, line, markers],
-      pulseMaterials: [ribbonMaterial, lineMaterial, markers.material]
-    };
-  }
-
   async function initialiseThreeViewer(mount, elements, token) {
-    const { frame, canvas, hint, badge } = elements;
+    const { frame, canvas, hint } = elements;
     const THREE = await loadDependencies();
 
     if (token.destroyed) {
@@ -15484,21 +15317,10 @@
     scene.fog = new THREE.Fog(0x021221, 18, 50);
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
 
-    const ambient = new THREE.HemisphereLight(0x5d8791, 0x01060a, 0.24);
-    scene.add(ambient);
-
-    const key = new THREE.DirectionalLight(0x9adce7, 1.45);
-    key.position.set(-20, 24, 14);
-    scene.add(key);
-
-    const fill = new THREE.DirectionalLight(0x244f5c, 0.055);
-    fill.position.set(12, 6, -18);
-    scene.add(fill);
 
     const terrainRoot = new THREE.Group();
     scene.add(terrainRoot);
 
-    setBadge(badge, "Loading 3D terrain…");
 
     const terrain = buildTerrainMesh(THREE);
     terrainRoot.add(terrain);
@@ -15509,25 +15331,16 @@
     const center = box.getCenter(new THREE.Vector3());
     const target = new THREE.Vector3(
       center.x,
-      box.min.y + size.y * 0.31,
+      box.min.y + size.y * 0.36,
       center.z
     );
 
     const moonSurface = buildMoonSurface(THREE, compactViewport);
     terrainRoot.add(moonSurface);
 
-    const route = buildSurfaceRoute(
-      THREE,
-      terrainRoot,
-      box,
-      size,
-      center
-    );
-    route.objects.forEach((object) => terrainRoot.add(object));
-    const pulseMaterials = [...route.pulseMaterials];
 
-    const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
-    const targetLift = size.y * 0.31;
+    const orbitRadiusBase = Math.max(size.x, size.z) * 0.73;
+    const targetLift = size.y * 0.29;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -15561,7 +15374,7 @@
       camera.updateProjectionMatrix();
     }
 
-    function render(time = 0) {
+    function render() {
       if (state.destroyed) return;
 
       resize();
@@ -15571,21 +15384,12 @@
         state.velocity *= 0.92;
       }
 
-      const pulse = 0.5 + Math.sin(time * 0.00135) * 0.5;
-      pulseMaterials.forEach((material, index) => {
-        const base = material.userData.rfBaseOpacity ?? material.opacity;
-        if (material.userData.rfBaseOpacity === undefined) {
-          material.userData.rfBaseOpacity = base;
-        }
-        const amount = index % 3 === 0 ? 0.018 : 0.010;
-        material.opacity = clamp(base + pulse * amount, 0, 1);
-      });
 
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
-      const portraitBoost = clamp((1.05 - aspect) * 2.5, 0, 1.6);
-      const orbitRadius = orbitRadiusBase + portraitBoost * 3.4;
-      camera.fov = aspect < 0.82 ? 52 : aspect < 1.12 ? 48 : 45;
+      const portraitBoost = clamp((1.02 - aspect) * 2.2, 0, 1.2);
+      const orbitRadius = orbitRadiusBase + portraitBoost * 2.0;
+      camera.fov = aspect < 0.82 ? 47 : aspect < 1.12 ? 45 : 44;
       camera.updateProjectionMatrix();
       camera.position.set(
         target.x + Math.sin(angle) * orbitRadius,
@@ -15659,10 +15463,6 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Moon dot-and-chevron terrain loaded", true);
-    window.setTimeout(() => {
-      badge.style.opacity = "0";
-    }, 1800);
     window.setTimeout(() => {
       hideHint(hint);
     }, 2600);
@@ -15736,7 +15536,7 @@
         token
       );
     } catch (error) {
-      console.error("FieldOps RF embedded rollback viewer failed:", error);
+      console.error("FieldOps RF embedded terrain viewer failed:", error);
       buildFallback(mount);
     }
   }
