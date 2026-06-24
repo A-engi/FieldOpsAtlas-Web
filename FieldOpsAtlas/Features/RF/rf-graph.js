@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.163-text-gltf
+   Version: 1.1.164-top-outline
 
    Purpose:
    - Replace the procedural curved terrain with the uploaded ready-made glTF
@@ -14,7 +14,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.163-text-gltf";
+  const VERSION = "1.1.164-top-outline";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -316,11 +316,8 @@
     const baseY = box.min.y;
     const target = new THREE.Vector3(center.x, baseY + size.y * 0.28, center.z);
 
-    const peakState = {
-      left: null,
-      right: null
-    };
-    const pointPositions = [];
+    const outlineBins = new Map();
+    const outlineBinCount = 72;
 
     terrainRoot.updateMatrixWorld(true);
 
@@ -328,58 +325,60 @@
       if (!node.isMesh || !node.geometry || !node.geometry.attributes.position) return;
 
       const position = node.geometry.attributes.position;
-      const sampleStep = Math.max(1, Math.ceil(position.count / 1800));
+      const sampleStep = Math.max(1, Math.ceil(position.count / 2200));
       const probe = new THREE.Vector3();
 
       for (let index = 0; index < position.count; index += sampleStep) {
         probe.fromBufferAttribute(position, index).applyMatrix4(node.matrixWorld);
-        pointPositions.push(probe.x, probe.y + size.y * 0.002, probe.z);
+        const normalisedX = (probe.x - box.min.x) / Math.max(size.x, 0.0001);
+        const bin = clamp(Math.floor(normalisedX * outlineBinCount), 0, outlineBinCount - 1);
+        const current = outlineBins.get(bin);
 
-        const side = probe.x < center.x ? "left" : "right";
-        if (!peakState[side] || probe.y > peakState[side].y) {
-          peakState[side] = probe.clone();
+        if (!current || probe.y > current.y) {
+          outlineBins.set(bin, probe.clone());
         }
       }
     });
 
-    if (pointPositions.length) {
-      const terrainPoints = createPointCloud(
-        THREE,
-        pointPositions,
-        0x6beaf5,
-        Math.max(size.x * 0.0032, 0.045),
-        0.42
+    const outlinePoints = Array.from(outlineBins.entries())
+      .sort((a, b) => a[0] - b[0])
+      .map(([, point]) => new THREE.Vector3(
+        point.x,
+        point.y + size.y * 0.015,
+        point.z + size.z * 0.01
+      ));
+
+    if (outlinePoints.length >= 3) {
+      const outlineCurve = new THREE.CatmullRomCurve3(outlinePoints, false, "centripetal");
+      const smoothedOutline = outlineCurve.getPoints(Math.max(80, outlinePoints.length * 3));
+      const outlineGeometry = new THREE.BufferGeometry().setFromPoints(smoothedOutline);
+
+      const outlineLine = new THREE.Line(
+        outlineGeometry,
+        new THREE.LineBasicMaterial({
+          color: 0x79efff,
+          transparent: true,
+          opacity: 0.98,
+          depthWrite: false
+        })
       );
-      terrainPoints.renderOrder = 2;
-      terrainRoot.add(terrainPoints);
+      outlineLine.renderOrder = 3;
+
+      const glowPositions = [];
+      for (const point of smoothedOutline) {
+        glowPositions.push(point.x, point.y, point.z);
+      }
+      const outlineGlow = createPointCloud(
+        THREE,
+        glowPositions,
+        0x5fe9ff,
+        Math.max(size.x * 0.0044, 0.075),
+        0.50
+      );
+      outlineGlow.renderOrder = 3;
+
+      terrainRoot.add(outlineLine, outlineGlow);
     }
-
-    const leftPeak = peakState.left || new THREE.Vector3(
-      center.x - size.x * 0.2,
-      topY,
-      center.z + size.z * 0.08
-    );
-    const rightPeak = peakState.right || new THREE.Vector3(
-      center.x + size.x * 0.2,
-      topY * 0.96,
-      center.z - size.z * 0.08
-    );
-
-    const leftTower = createTowerGroup(
-      THREE,
-      new THREE.Vector3(leftPeak.x, leftPeak.y + 0.06, leftPeak.z),
-      Math.max(size.y * 0.28, 2.8),
-      Math.max(size.x * 0.018, 0.28),
-      1
-    );
-
-    const rightTower = createTowerGroup(
-      THREE,
-      new THREE.Vector3(rightPeak.x, rightPeak.y + 0.06, rightPeak.z),
-      Math.max(size.y * 0.19, 2.0),
-      Math.max(size.x * 0.014, 0.22),
-      -1
-    );
 
     const pathSamples = [];
     const pathSteps = 34;
@@ -438,7 +437,7 @@
       0.82
     );
 
-    terrainRoot.add(ribbon, line, markers, leftTower, rightTower);
+    terrainRoot.add(ribbon, line, markers);
 
     return {
       box,
