@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.179-moonlight-up
+   Version: 1.1.180-top-peak-lift
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.179-moonlight-up";
+  const VERSION = "1.1.180-top-peak-lift";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -920,13 +920,18 @@
         summitProximity * 0.75,
         ridgeProminence * 0.95
       ) * (0.38 + topFacing * 0.62);
+      const peakCap = Math.pow(
+        clamp((sample.heightRatio - 0.76) / 0.24, 0, 1),
+        1.35
+      );
       const heightLift = sample.heightRatio * 0.050;
       const brightness = clamp(
         0.115 +
           moonSpread * 0.60 * shadowTransmission +
-          summitBoost * 0.27 +
+          summitBoost * 0.29 +
           ridgeProminence * 0.08 +
-          heightLift,
+          heightLift +
+          peakCap * 0.08,
         0.10,
         1
       );
