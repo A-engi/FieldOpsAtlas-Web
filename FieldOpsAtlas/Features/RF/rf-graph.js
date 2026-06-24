@@ -1,12 +1,13 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.174-faded-summit-dots
+   Version: 1.1.175-moon-dot-field
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
-   - Use a single cold directional moon light, dark filled faces, subdued
-     mesh-derived contours, and view-angle rim light at grazing angles.
+   - Cover the uploaded mountain with one evenly spaced surface dot field.
+   - Light each dot with a broad overhead moon-disc approximation and soften
+     lower-slope dots using nearby higher terrain as a local shadow estimate.
    - Remove the pre-load RF background image before WebGL initialises.
    - Preserve the RF graph mount selector, error fallback, orbit interaction,
      and rendered-event contract.
@@ -14,13 +15,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.174-faded-summit-dots";
+  const VERSION = "1.1.175-moon-dot-field";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-faded-summit-dots";
+  const MODE = "three-gltf-moon-dot-field";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -113,7 +114,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model with doubled summit dots, radar-like triangle facets, and view-angle edge glow. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain made from evenly spaced dots with broad overhead moon lighting and soft terrain shadowing. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -256,7 +257,7 @@
       const triangleCount = index
         ? Math.floor(index.count / 3)
         : Math.floor(position.count / 3);
-      const step = Math.max(1, Math.ceil(triangleCount / 9000));
+      const step = 1;
 
       for (let triangle = 0; triangle < triangleCount; triangle += step) {
         const offset = triangle * 3;
@@ -724,6 +725,244 @@
     return mesh;
   }
 
+  function buildMoonDotField(THREE, meshes, box, size, compactViewport) {
+    const samples = [];
+    const occupied = new Set();
+    const edgeAB = new THREE.Vector3();
+    const edgeAC = new THREE.Vector3();
+    const normal = new THREE.Vector3();
+    const point = new THREE.Vector3();
+    const lifted = new THREE.Vector3();
+    const spacing = Math.max(size.x / 98, 0.25);
+    const cellSize = spacing * 0.82;
+    const targetArea = spacing * spacing * 0.86;
+    const epsilon = Math.max(size.y * 0.0028, 0.010);
+    const maxPoints = compactViewport ? 7200 : 9800;
+
+    function hash01(value) {
+      const raw = Math.sin(value * 12.9898 + 78.233) * 43758.5453;
+      return raw - Math.floor(raw);
+    }
+
+    function cellKey(position) {
+      return [
+        Math.round(position.x / cellSize),
+        Math.round(position.y / cellSize),
+        Math.round(position.z / cellSize)
+      ].join(":");
+    }
+
+    forEachWorldTriangle(THREE, meshes, (a, b, c, triangle) => {
+      edgeAB.subVectors(b, a);
+      edgeAC.subVectors(c, a);
+      normal.crossVectors(edgeAB, edgeAC);
+      const doubleArea = normal.length();
+      if (doubleArea < 0.000001) return;
+      normal.multiplyScalar(1 / doubleArea);
+      if (normal.y < 0) normal.multiplyScalar(-1);
+
+      const area = doubleArea * 0.5;
+      const expected = area / targetArea;
+      let count = Math.floor(expected);
+      const seed =
+        triangle * 0.731 +
+        (a.x + b.x + c.x) * 0.173 +
+        (a.z + b.z + c.z) * 0.219;
+
+      if (hash01(seed + 1.7) < expected - count) {
+        count += 1;
+      }
+      count = Math.min(7, count);
+      if (count === 0) return;
+
+      for (let sample = 0; sample < count; sample += 1) {
+          const u = hash01(seed + sample * 2.417 + 0.31);
+        const v = hash01(seed + sample * 3.193 + 1.17);
+        const rootU = Math.sqrt(u);
+        const weightA = 1 - rootU;
+        const weightB = rootU * (1 - v);
+        const weightC = rootU * v;
+
+        point.set(
+          a.x * weightA + b.x * weightB + c.x * weightC,
+          a.y * weightA + b.y * weightB + c.y * weightC,
+          a.z * weightA + b.z * weightB + c.z * weightC
+        );
+        lifted.copy(point).addScaledVector(normal, epsilon);
+
+        const key = cellKey(lifted);
+        if (occupied.has(key)) continue;
+        occupied.add(key);
+
+        samples.push({
+          position: lifted.clone(),
+          normal: normal.clone(),
+          heightRatio: clamp(
+            (point.y - box.min.y) / Math.max(size.y, 0.0001),
+            0,
+            1
+          )
+        });
+      }
+    });
+
+    if (!samples.length) return null;
+
+    if (samples.length > maxPoints) {
+      const thinned = [];
+      const stride = samples.length / maxPoints;
+      for (let index = 0; index < maxPoints; index += 1) {
+        thinned.push(samples[Math.floor(index * stride)]);
+      }
+      samples.length = 0;
+      samples.push(...thinned);
+    }
+
+    const gridSize = 56;
+    const heightGrid = new Float32Array(gridSize * gridSize);
+    heightGrid.fill(-Infinity);
+
+    function gridCoordinate(position) {
+      const gx = clamp(
+        Math.floor(((position.x - box.min.x) / Math.max(size.x, 0.0001)) * gridSize),
+        0,
+        gridSize - 1
+      );
+      const gz = clamp(
+        Math.floor(((position.z - box.min.z) / Math.max(size.z, 0.0001)) * gridSize),
+        0,
+        gridSize - 1
+      );
+      return [gx, gz];
+    }
+
+    samples.forEach((sample) => {
+      const [gx, gz] = gridCoordinate(sample.position);
+      const index = gz * gridSize + gx;
+      heightGrid[index] = Math.max(heightGrid[index], sample.position.y);
+    });
+
+    const moonDirections = [
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0.24, 0.97, 0).normalize(),
+      new THREE.Vector3(-0.24, 0.97, 0).normalize(),
+      new THREE.Vector3(0, 0.97, 0.24).normalize(),
+      new THREE.Vector3(0, 0.97, -0.24).normalize(),
+      new THREE.Vector3(0.17, 0.97, 0.17).normalize(),
+      new THREE.Vector3(-0.17, 0.97, 0.17).normalize(),
+      new THREE.Vector3(0.17, 0.97, -0.17).normalize(),
+      new THREE.Vector3(-0.17, 0.97, -0.17).normalize()
+    ];
+
+    const positions = [];
+    const brightnessValues = [];
+    const shadowRange = Math.max(size.y * 0.20, 0.001);
+
+    samples.forEach((sample) => {
+      const [gx, gz] = gridCoordinate(sample.position);
+      let nearbyMaximum = sample.position.y;
+
+      for (let dz = -3; dz <= 3; dz += 1) {
+        for (let dx = -3; dx <= 3; dx += 1) {
+          if (dx === 0 && dz === 0) continue;
+          const nx = gx + dx;
+          const nz = gz + dz;
+          if (nx < 0 || nx >= gridSize || nz < 0 || nz >= gridSize) continue;
+          const candidate = heightGrid[nz * gridSize + nx];
+          if (Number.isFinite(candidate)) {
+            nearbyMaximum = Math.max(nearbyMaximum, candidate);
+          }
+        }
+      }
+
+      let broadMoon = 0;
+      moonDirections.forEach((direction) => {
+        broadMoon += Math.max(sample.normal.dot(direction), 0);
+      });
+      broadMoon /= moonDirections.length;
+      broadMoon = Math.pow(clamp(broadMoon, 0, 1), 0.72);
+
+      const localShadow = clamp(
+        (nearbyMaximum - sample.position.y) / shadowRange,
+        0,
+        1
+      );
+      const shadowTransmission = 1 - localShadow * 0.42;
+      const heightLift = sample.heightRatio * 0.055;
+      const brightness = clamp(
+        0.13 + broadMoon * 0.76 * shadowTransmission + heightLift,
+        0.13,
+        1
+      );
+
+      positions.push(
+        sample.position.x,
+        sample.position.y,
+        sample.position.z
+      );
+      brightnessValues.push(brightness);
+    });
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+    geometry.setAttribute(
+      "aBrightness",
+      new THREE.Float32BufferAttribute(brightnessValues, 1)
+    );
+    geometry.computeBoundingSphere();
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uPointSize: { value: compactViewport ? 2.45 : 2.70 },
+        uDarkColour: { value: new THREE.Color(0x16414c) },
+        uBrightColour: { value: new THREE.Color(0xc9fbff) }
+      },
+      vertexShader: `
+        attribute float aBrightness;
+        varying float vBrightness;
+        uniform float uPointSize;
+
+        void main() {
+          vBrightness = aBrightness;
+          vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * viewPosition;
+          gl_PointSize = uPointSize * (0.92 + aBrightness * 0.16);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uDarkColour;
+        uniform vec3 uBrightColour;
+        varying float vBrightness;
+
+        void main() {
+          float distanceFromCentre = length(gl_PointCoord - vec2(0.5));
+          if (distanceFromCentre > 0.5) discard;
+
+          float core = smoothstep(0.50, 0.12, distanceFromCentre);
+          float halo = smoothstep(0.50, 0.28, distanceFromCentre);
+          float lightLevel = pow(clamp(vBrightness, 0.0, 1.0), 1.18);
+          vec3 colour = mix(uDarkColour, uBrightColour, lightLevel);
+          float alpha = (0.20 + lightLevel * 0.78) * (core * 0.78 + halo * 0.22);
+          gl_FragColor = vec4(colour, alpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      depthTest: true,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false
+    });
+
+    const points = new THREE.Points(geometry, material);
+    points.userData.rfDecoration = true;
+    points.renderOrder = 5;
+    points.frustumCulled = true;
+    return points;
+  }
+
   function buildSurfaceRoute(THREE, terrainRoot, box, size, center) {
     const raycaster = new THREE.Raycaster();
     const down = new THREE.Vector3(0, -1, 0);
@@ -764,14 +1003,14 @@
     const ribbonMaterial = new THREE.MeshBasicMaterial({
       color: 0x22ddeb,
       transparent: true,
-      opacity: 0.035,
+      opacity: 0.012,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x9afaff,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.25,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
@@ -807,7 +1046,7 @@
       markerPositions,
       0xc4fdff,
       Math.max(size.x * 0.0048, 0.055),
-      0.20
+      0.11
     );
     markers.userData.rfDecoration = true;
 
@@ -817,7 +1056,7 @@
     };
   }
 
-  function buildTerrainDecorations(THREE, terrainRoot) {
+  function buildTerrainDecorations(THREE, terrainRoot, compactViewport) {
     terrainRoot.updateMatrixWorld(true);
 
     const box = new THREE.Box3().setFromObject(terrainRoot);
@@ -833,61 +1072,15 @@
     });
     const pulseMaterials = [];
 
-    const contourSegments = createElevationContours(
+    const moonDots = buildMoonDotField(
       THREE,
       meshes,
       box,
-      size
+      size,
+      compactViewport
     );
-    if (contourSegments.length) {
-      const contours = createLineSegments(
-        THREE,
-        contourSegments,
-        0x4ab9c8,
-        0.060
-      );
-      contours.userData.rfDecoration = true;
-      terrainRoot.add(contours);
-      contours.material.userData.rfBaseOpacity = contours.material.opacity;
-    }
-
-    const runoffSegments = createRunoffSegments(
-      THREE,
-      meshes,
-      box,
-      size
-    );
-    if (runoffSegments.length) {
-      const runoffGlow = createLineSegments(
-        THREE,
-        runoffSegments,
-        0x2f8fa0,
-        0.020
-      );
-      const runoffLines = createLineSegments(
-        THREE,
-        runoffSegments,
-        0x79d8e4,
-        0.065
-      );
-      runoffGlow.userData.rfDecoration = true;
-      runoffLines.userData.rfDecoration = true;
-      runoffGlow.renderOrder = 4;
-      runoffLines.renderOrder = 5;
-      terrainRoot.add(runoffGlow, runoffLines);
-      runoffGlow.material.userData.rfBaseOpacity = runoffGlow.material.opacity;
-      runoffLines.material.userData.rfBaseOpacity = runoffLines.material.opacity;
-    }
-
-    addFacetEdges(THREE, meshes, terrainRoot);
-    addRimGlow(THREE, terrainRoot, terrainRoot);
-
-    const peakDots = buildPeakDots(THREE, meshes, box, size);
-    peakDots.forEach((object) => terrainRoot.add(object));
-
-    const radarTriangles = buildRadarTriangles(THREE, meshes, box, size);
-    if (radarTriangles) {
-      terrainRoot.add(radarTriangles);
+    if (moonDots) {
+      terrainRoot.add(moonDots);
     }
 
     const route = buildSurfaceRoute(
@@ -961,7 +1154,7 @@
     );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.70;
+    renderer.toneMappingExposure = 0.62;
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x021221, 18, 50);
@@ -996,16 +1189,13 @@
       throw new Error("The uploaded glTF scene is empty.");
     }
 
-    const terrainMaterial = new THREE.MeshStandardMaterial({
-      color: 0x071a23,
-      emissive: 0x01070a,
-      emissiveIntensity: 0.065,
-      roughness: 0.97,
-      metalness: 0.0,
-      transparent: true,
+    const terrainMaterial = new THREE.MeshBasicMaterial({
+      color: 0x02090f,
+      transparent: false,
       opacity: 1,
       side: THREE.DoubleSide,
-      flatShading: true
+      depthWrite: true,
+      depthTest: true
     });
 
     model.traverse((node) => {
@@ -1020,7 +1210,7 @@
     terrainRoot.add(model);
     terrainRoot.updateMatrixWorld(true);
 
-    const decor = buildTerrainDecorations(THREE, terrainRoot);
+    const decor = buildTerrainDecorations(THREE, terrainRoot, compactViewport);
     const target = decor.target;
     const size = decor.size;
     const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
@@ -1077,7 +1267,6 @@
         const amount = index % 3 === 0 ? 0.018 : 0.010;
         material.opacity = clamp(base + pulse * amount, 0, 1);
       });
-      terrainMaterial.emissiveIntensity = 0.060 + pulse * 0.008;
 
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
