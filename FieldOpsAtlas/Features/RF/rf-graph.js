@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.178-birdeye-moon-peaks
+   Version: 1.1.179-moonlight-up
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.178-birdeye-moon-peaks";
+  const VERSION = "1.1.179-moonlight-up";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -905,7 +905,7 @@
       const localShadow = clamp(localDrop / shadowRange, 0, 1);
       const shadowTransmission = 1 - localShadow * 0.24;
       const topFacing = clamp(sample.normal.y, 0, 1);
-      const moonSpread = clamp(0.22 + broadMoon * 0.78, 0, 1);
+      const moonSpread = clamp(0.24 + broadMoon * 0.82, 0, 1);
       const summitProximity = clamp(
         1 - localDrop / Math.max(shadowRange * 0.28, 0.001),
         0,
@@ -920,14 +920,14 @@
         summitProximity * 0.75,
         ridgeProminence * 0.95
       ) * (0.38 + topFacing * 0.62);
-      const heightLift = sample.heightRatio * 0.045;
+      const heightLift = sample.heightRatio * 0.050;
       const brightness = clamp(
-        0.10 +
-          moonSpread * 0.54 * shadowTransmission +
-          summitBoost * 0.24 +
-          ridgeProminence * 0.07 +
+        0.115 +
+          moonSpread * 0.60 * shadowTransmission +
+          summitBoost * 0.27 +
+          ridgeProminence * 0.08 +
           heightLift,
-        0.09,
+        0.10,
         1
       );
 
@@ -1170,7 +1170,7 @@
           float halo = smoothstep(0.50, 0.28, distanceFromCentre);
           float lightLevel = pow(clamp(vBrightness, 0.0, 1.0), 1.18);
           vec3 colour = mix(uDarkColour, uBrightColour, lightLevel);
-          float alpha = (0.20 + lightLevel * 0.78) * (core * 0.78 + halo * 0.22);
+          float alpha = (0.23 + lightLevel * 0.80) * (core * 0.78 + halo * 0.22);
           gl_FragColor = vec4(colour, alpha);
         }
       `,
@@ -1225,7 +1225,7 @@
           void main() {
             float lightLevel = pow(clamp(vBrightness, 0.0, 1.0), 1.10);
             vec3 colour = mix(uDarkColour, uBrightColour, lightLevel);
-            float alpha = 0.090 + lightLevel * 0.42;
+            float alpha = 0.100 + lightLevel * 0.45;
             gl_FragColor = vec4(colour, alpha);
           }
         `,
@@ -1281,7 +1281,7 @@
           void main() {
             float lightLevel = pow(clamp(vBrightness, 0.0, 1.0), 1.08);
             vec3 colour = mix(uDarkColour, uBrightColour, lightLevel);
-            float alpha = 0.055 + lightLevel * 0.31;
+            float alpha = 0.062 + lightLevel * 0.34;
             gl_FragColor = vec4(colour, alpha);
           }
         `,
