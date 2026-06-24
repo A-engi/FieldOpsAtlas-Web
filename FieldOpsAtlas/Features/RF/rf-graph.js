@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.171-summit-dots-radar-triangles
+   Version: 1.1.172-double-summit-dots
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -14,13 +14,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.171-summit-dots-radar-triangles";
+  const VERSION = "1.1.172-double-summit-dots";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-summit-dots-radar-triangles";
+  const MODE = "three-gltf-double-summit-dots";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -113,7 +113,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model with summit dots, radar-like triangle facets, and view-angle edge glow. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model with doubled summit dots, radar-like triangle facets, and view-angle edge glow. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -570,8 +570,14 @@
       lifted.copy(centroid).addScaledVector(normal, Math.max(size.y * 0.0035, 0.014));
       summitGlowPositions.push(lifted.x, lifted.y, lifted.z);
 
+      const spread = Math.max(size.x * 0.0014, 0.018);
+      const tangent = edgeAB.clone().normalize();
+      const secondary = lifted.clone().addScaledVector(tangent, spread * (0.55 + selector * 0.45));
+      summitGlowPositions.push(secondary.x, secondary.y, secondary.z);
+
       if (heightRatio > 0.80 && selector > 0.88) {
         summitCorePositions.push(lifted.x, lifted.y, lifted.z);
+        summitCorePositions.push(secondary.x, secondary.y, secondary.z);
       }
     });
 
@@ -1119,7 +1125,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Summit-dot terrain loaded", true);
+    setBadge(badge, "Double summit-dot terrain loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
