@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.181-valley-river-twin-mountains
+   Version: 1.1.182-fit-valley-grid
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.181-valley-river-twin-mountains";
+  const VERSION = "1.1.182-fit-valley-grid";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -116,7 +116,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF terrain reusing the current mountain as a front-left peak, adding a turned twin mountain on the right, a central valley, and a glowing river path. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF terrain reusing the current mountains, widened to fill the frame with a lower composition, a flat foreground radar grid, and a diagonal glowing river path through the valley. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -1315,17 +1315,19 @@
     const down = new THREE.Vector3(0, -1, 0);
     const origin = new THREE.Vector3();
     const pathSamples = [];
-    const pathSteps = 46;
-    const zStart = box.max.z - size.z * 0.05;
+    const pathSteps = 48;
+    const zStart = box.max.z - size.z * 0.03;
     const zEnd = box.min.z + size.z * 0.18;
-    const offset = Math.max(size.y * 0.0045, 0.020);
+    const xStart = center.x - size.x * 0.12;
+    const xEnd = center.x + size.x * 0.015;
+    const offset = Math.max(size.y * 0.0042, 0.020);
 
     for (let index = 0; index < pathSteps; index += 1) {
       const t = index / (pathSteps - 1);
       const x =
-        center.x +
-        Math.sin(t * Math.PI * 2.20) * size.x * 0.018 +
-        Math.sin(t * Math.PI * 4.60 + 0.7) * size.x * 0.004;
+        xStart + (xEnd - xStart) * t +
+        Math.sin(t * Math.PI * 2.10 + 0.25) * size.x * 0.012 +
+        Math.sin(t * Math.PI * 4.40 + 0.65) * size.x * 0.0035;
       const z = zStart + (zEnd - zStart) * t;
       origin.set(x, box.max.y + size.y * 0.34, z);
       raycaster.set(origin, down);
@@ -1344,7 +1346,7 @@
         pathSamples.push(
           new THREE.Vector3(
             x,
-            box.min.y + size.y * (0.055 + Math.sin(t * Math.PI) * 0.025),
+            box.min.y + size.y * (0.050 + Math.sin(t * Math.PI) * 0.020),
             z
           )
         );
@@ -1355,14 +1357,14 @@
     const ribbonMaterial = new THREE.MeshBasicMaterial({
       color: 0x22ddeb,
       transparent: true,
-      opacity: 0.026,
+      opacity: 0.020,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x9afaff,
       transparent: true,
-      opacity: 0.40,
+      opacity: 0.32,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
@@ -1371,7 +1373,7 @@
       new THREE.TubeGeometry(
         curve,
         88,
-        Math.max(size.x * 0.0034, 0.090),
+        Math.max(size.x * 0.0030, 0.078),
         8,
         false
       ),
@@ -1393,6 +1395,67 @@
     };
   }
 
+  function buildForegroundGrid(THREE, box, size) {
+    const positions = [];
+    const pointPositions = [];
+    const xMin = box.min.x - size.x * 0.08;
+    const xMax = box.max.x + size.x * 0.08;
+    const zFront = box.max.z + size.z * 0.01;
+    const zBack = box.max.z - size.z * 0.36;
+    const y = box.min.y + size.y * 0.006;
+    const columns = 16;
+    const rows = 8;
+
+    for (let c = 0; c <= columns; c += 1) {
+      const x = xMin + ((xMax - xMin) * c) / columns;
+      positions.push(x, y, zFront, x, y, zBack);
+    }
+
+    for (let r = 0; r <= rows; r += 1) {
+      const z = zFront + ((zBack - zFront) * r) / rows;
+      positions.push(xMin, y, z, xMax, y, z);
+    }
+
+    for (let c = 0; c <= columns; c += 1) {
+      const x = xMin + ((xMax - xMin) * c) / columns;
+      for (let r = 0; r <= rows; r += 1) {
+        const z = zFront + ((zBack - zFront) * r) / rows;
+        pointPositions.push(x, y, z);
+      }
+    }
+
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: 0x5db9d0,
+      transparent: true,
+      opacity: 0.18,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    lines.userData.rfDecoration = true;
+    lines.renderOrder = 3;
+
+    const points = createPointCloud(
+      THREE,
+      pointPositions,
+      0x8fefff,
+      Math.max(size.x * 0.0024, 0.038),
+      0.055
+    );
+    points.userData.rfDecoration = true;
+    points.renderOrder = 4;
+
+    return {
+      objects: [lines, points],
+      pulseMaterials: [lineMaterial, points.material]
+    };
+  }
+
   function buildTerrainDecorations(THREE, terrainRoot, compactViewport) {
     terrainRoot.updateMatrixWorld(true);
 
@@ -1401,7 +1464,7 @@
     const center = box.getCenter(new THREE.Vector3());
     const target = new THREE.Vector3(
       center.x,
-      box.min.y + size.y * 0.26,
+      box.min.y + size.y * 0.18,
       center.z
     );
     const meshes = collectTerrainMeshes(terrainRoot).filter((mesh) => {
@@ -1419,6 +1482,10 @@
     if (moonSurface) {
       terrainRoot.add(moonSurface);
     }
+
+    const foregroundGrid = buildForegroundGrid(THREE, box, size);
+    foregroundGrid.objects.forEach((object) => terrainRoot.add(object));
+    pulseMaterials.push(...foregroundGrid.pulseMaterials);
 
     const route = buildSurfaceRoute(
       THREE,
@@ -1550,8 +1617,8 @@
     const sourceSize = sourceBox.getSize(new THREE.Vector3());
 
     const primaryModel = model;
-    primaryModel.position.x -= sourceSize.x * 0.44;
-    primaryModel.position.z += sourceSize.z * 0.03;
+    primaryModel.position.x -= sourceSize.x * 0.60;
+    primaryModel.position.z += sourceSize.z * 0.06;
     primaryModel.rotation.y = 0;
     primaryModel.updateMatrixWorld(true);
     terrainRoot.add(primaryModel);
@@ -1566,9 +1633,9 @@
     });
     secondaryModel.scale.multiplyScalar(0.92);
     secondaryModel.position.set(
-      sourceSize.x * 0.42,
+      sourceSize.x * 0.58,
       0,
-      -sourceSize.z * 0.09
+      -sourceSize.z * 0.06
     );
     secondaryModel.rotation.y = Math.PI;
     secondaryModel.updateMatrixWorld(true);
@@ -1578,8 +1645,8 @@
     const decor = buildTerrainDecorations(THREE, terrainRoot, compactViewport);
     const target = decor.target;
     const size = decor.size;
-    const orbitRadiusBase = Math.max(size.x, size.z) * 0.88;
-    const targetLift = size.y * 0.23;
+    const orbitRadiusBase = Math.max(size.x, size.z) * 1.04;
+    const targetLift = size.y * 0.17;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -1636,8 +1703,8 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
       const portraitBoost = clamp((1.05 - aspect) * 2.5, 0, 1.6);
-      const orbitRadius = orbitRadiusBase + portraitBoost * 4.2;
-      camera.fov = aspect < 0.82 ? 55 : aspect < 1.12 ? 51 : 47;
+      const orbitRadius = orbitRadiusBase + portraitBoost * 4.8;
+      camera.fov = aspect < 0.82 ? 58 : aspect < 1.12 ? 54 : 50;
       camera.updateProjectionMatrix();
       camera.position.set(
         target.x + Math.sin(angle) * orbitRadius,
