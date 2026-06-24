@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.170-peak-dots
+   Version: 1.1.171-summit-dots-radar-triangles
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -14,13 +14,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.170-peak-dots";
+  const VERSION = "1.1.171-summit-dots-radar-triangles";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-peak-dots";
+  const MODE = "three-gltf-summit-dots-radar-triangles";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -113,7 +113,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model with dark moonlit faces, major-peak dots, and view-angle edge glow. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model with summit dots, radar-like triangle facets, and view-angle edge glow. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -443,7 +443,7 @@
       const secondaryMaterial = new THREE.LineBasicMaterial({
         color: 0x1c8797,
         transparent: true,
-        opacity: 0.028,
+        opacity: 0.018,
         depthWrite: false,
         depthTest: true,
         blending: THREE.NormalBlending
@@ -451,7 +451,7 @@
       const majorMaterial = new THREE.LineBasicMaterial({
         color: 0x61d9e8,
         transparent: true,
-        opacity: 0.13,
+        opacity: 0.095,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending
@@ -536,8 +536,8 @@
   }
 
   function buildPeakDots(THREE, meshes, box, size) {
-    const glowPositions = [];
-    const corePositions = [];
+    const summitGlowPositions = [];
+    const summitCorePositions = [];
     const centroid = new THREE.Vector3();
     const normal = new THREE.Vector3();
     const edgeAB = new THREE.Vector3();
@@ -553,49 +553,50 @@
 
       const slope = 1 - clamp(normal.y, 0, 1);
       const heightRatio = (centroid.y - box.min.y) / Math.max(size.y, 0.0001);
-      if (heightRatio < 0.30 || slope < 0.16) return;
+      if (heightRatio < 0.66 || slope < 0.12) return;
 
       const selector = Math.abs(
         Math.sin(
-          centroid.x * 10.971 +
-          centroid.y * 6.713 +
-          centroid.z * 4.217 +
-          triangle * 0.153
+          centroid.x * 9.613 +
+          centroid.y * 5.841 +
+          centroid.z * 3.917 +
+          triangle * 0.173
         )
       );
-      const highThreshold = heightRatio > 0.76 ? 0.52 : heightRatio > 0.58 ? 0.76 : 0.91;
-      if (selector < highThreshold) return;
 
-      lifted.copy(centroid).addScaledVector(normal, Math.max(size.y * 0.0032, 0.012));
-      glowPositions.push(lifted.x, lifted.y, lifted.z);
+      const summitThreshold = heightRatio > 0.86 ? 0.52 : heightRatio > 0.78 ? 0.70 : 0.86;
+      if (selector < summitThreshold) return;
 
-      if (heightRatio > 0.58 && selector > 0.92) {
-        corePositions.push(lifted.x, lifted.y, lifted.z);
+      lifted.copy(centroid).addScaledVector(normal, Math.max(size.y * 0.0035, 0.014));
+      summitGlowPositions.push(lifted.x, lifted.y, lifted.z);
+
+      if (heightRatio > 0.80 && selector > 0.88) {
+        summitCorePositions.push(lifted.x, lifted.y, lifted.z);
       }
     });
 
     const objects = [];
 
-    if (glowPositions.length) {
+    if (summitGlowPositions.length) {
       const glowDots = createPointCloud(
         THREE,
-        glowPositions,
-        0x67deef,
-        Math.max(size.x * 0.0026, 0.034),
-        0.18
+        summitGlowPositions,
+        0x72ddec,
+        Math.max(size.x * 0.0024, 0.032),
+        0.16
       );
       glowDots.userData.rfDecoration = true;
       glowDots.renderOrder = 5;
       objects.push(glowDots);
     }
 
-    if (corePositions.length) {
+    if (summitCorePositions.length) {
       const coreDots = createPointCloud(
         THREE,
-        corePositions,
-        0xd3fdff,
-        Math.max(size.x * 0.00155, 0.022),
-        0.42
+        summitCorePositions,
+        0xe2feff,
+        Math.max(size.x * 0.0016, 0.022),
+        0.52
       );
       coreDots.userData.rfDecoration = true;
       coreDots.renderOrder = 6;
@@ -603,6 +604,86 @@
     }
 
     return objects;
+  }
+
+  function buildRadarTriangles(THREE, meshes, box, size) {
+    const positions = [];
+    const up = new THREE.Vector3(0, 1, 0);
+    const centroid = new THREE.Vector3();
+    const normal = new THREE.Vector3();
+    const edgeAB = new THREE.Vector3();
+    const edgeAC = new THREE.Vector3();
+    const tangent = new THREE.Vector3();
+    const bitangent = new THREE.Vector3();
+    const centre = new THREE.Vector3();
+    const p1 = new THREE.Vector3();
+    const p2 = new THREE.Vector3();
+    const p3 = new THREE.Vector3();
+
+    forEachWorldTriangle(THREE, meshes, (a, b, c, triangle) => {
+      centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+      edgeAB.subVectors(b, a);
+      edgeAC.subVectors(c, a);
+      normal.crossVectors(edgeAB, edgeAC).normalize();
+      if (normal.y < 0) normal.multiplyScalar(-1);
+
+      const slope = 1 - clamp(normal.y, 0, 1);
+      const heightRatio = (centroid.y - box.min.y) / Math.max(size.y, 0.0001);
+      if (heightRatio < 0.18 || heightRatio > 0.74 || slope < 0.14) return;
+
+      const selector = Math.abs(
+        Math.sin(
+          centroid.x * 11.121 +
+          centroid.y * 6.173 +
+          centroid.z * 3.417 +
+          triangle * 0.191
+        )
+      );
+      if (selector < 0.76) return;
+
+      tangent.crossVectors(Math.abs(normal.y) > 0.9 ? new THREE.Vector3(1, 0, 0) : up, normal).normalize();
+      bitangent.crossVectors(normal, tangent).normalize();
+
+      const angle = selector * Math.PI * 2.0 + triangle * 0.13;
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      const dirA = tangent.clone().multiplyScalar(cos).add(bitangent.clone().multiplyScalar(sin)).normalize();
+      const dirB = tangent.clone().multiplyScalar(Math.cos(angle + Math.PI * 2 / 3)).add(bitangent.clone().multiplyScalar(Math.sin(angle + Math.PI * 2 / 3))).normalize();
+      const dirC = tangent.clone().multiplyScalar(Math.cos(angle + Math.PI * 4 / 3)).add(bitangent.clone().multiplyScalar(Math.sin(angle + Math.PI * 4 / 3))).normalize();
+
+      const radius = Math.max(size.x * (0.0018 + selector * 0.0018), 0.020) * (0.78 + heightRatio * 0.55);
+      centre.copy(centroid).addScaledVector(normal, Math.max(size.y * 0.0026, 0.010));
+      p1.copy(centre).addScaledVector(dirA, radius);
+      p2.copy(centre).addScaledVector(dirB, radius);
+      p3.copy(centre).addScaledVector(dirC, radius);
+
+      positions.push(
+        p1.x, p1.y, p1.z,
+        p2.x, p2.y, p2.z,
+        p3.x, p3.y, p3.z
+      );
+    });
+
+    if (!positions.length) return null;
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.computeVertexNormals();
+
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x56b9c9,
+      transparent: true,
+      opacity: 0.095,
+      depthWrite: false,
+      depthTest: true,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.userData.rfDecoration = true;
+    mesh.renderOrder = 4;
+    return mesh;
   }
 
   function buildSurfaceRoute(THREE, terrainRoot, box, size, center) {
@@ -725,7 +806,7 @@
         THREE,
         contourSegments,
         0x4ab9c8,
-        0.085
+        0.060
       );
       contours.userData.rfDecoration = true;
       terrainRoot.add(contours);
@@ -743,13 +824,13 @@
         THREE,
         runoffSegments,
         0x2f8fa0,
-        0.032
+        0.020
       );
       const runoffLines = createLineSegments(
         THREE,
         runoffSegments,
         0x79d8e4,
-        0.10
+        0.065
       );
       runoffGlow.userData.rfDecoration = true;
       runoffLines.userData.rfDecoration = true;
@@ -765,6 +846,11 @@
 
     const peakDots = buildPeakDots(THREE, meshes, box, size);
     peakDots.forEach((object) => terrainRoot.add(object));
+
+    const radarTriangles = buildRadarTriangles(THREE, meshes, box, size);
+    if (radarTriangles) {
+      terrainRoot.add(radarTriangles);
+    }
 
     const route = buildSurfaceRoute(
       THREE,
@@ -1033,7 +1119,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Peak-dot terrain loaded", true);
+    setBadge(badge, "Summit-dot terrain loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
