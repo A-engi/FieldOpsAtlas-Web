@@ -1,26 +1,25 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.165-contour-fill-glow
+   Version: 1.1.166-live-contours
 
    Purpose:
-   - Replace the procedural curved terrain with the uploaded ready-made glTF
-     mountain asset.
-   - Preserve the RF graph mount selector, 360-degree drag orbit, fallback,
-     and rendered-event contract.
-   - Add dark terrain shading, cyan wire overlay, a glowing valley route, and
-     two gold RF tower markers.
+   - Keep the uploaded ready-made glTF mountain geometry unchanged.
+   - Derive contour bands, facet edges, and short downhill runoff strokes from
+     the mountain mesh itself so the linework stays attached through 360 orbit.
+   - Preserve the RF graph mount selector, fallback, orbit interaction, and
+     rendered-event contract.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.165-contour-fill-glow";
+  const VERSION = "1.1.166-live-contours";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-mountain-orbit";
+  const MODE = "three-gltf-live-contours";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -50,26 +49,31 @@
     fallback.setAttribute("role", "img");
     fallback.setAttribute(
       "aria-label",
-      "Static RF mountain fallback graphic."
+      "Static RF mountain fallback graphic with contour lines."
     );
     fallback.style.cssText =
       "display:grid;place-items:center;width:100%;height:100%;min-height:300px;background:#010a12;overflow:hidden";
     fallback.innerHTML = `
       <svg viewBox="0 0 1000 620" width="100%" height="100%" aria-hidden="true">
         <defs>
-          <linearGradient id="rfFallbackLeft" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#0d7e88"/>
-            <stop offset="1" stop-color="#031724"/>
+          <linearGradient id="rfFallbackMountain" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0b5366"/>
+            <stop offset="1" stop-color="#021521"/>
           </linearGradient>
-          <linearGradient id="rfFallbackRight" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#0a6975"/>
-            <stop offset="1" stop-color="#02131e"/>
-          </linearGradient>
+          <filter id="rfContourGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="2.4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
         </defs>
         <rect width="1000" height="620" fill="#010a12"/>
-        <path d="M-60 560 L42 530 L132 496 L220 444 L300 385 L364 332 L438 316 L508 352 L584 412 L670 486 L754 560 Z" fill="url(#rfFallbackLeft)"/>
-        <path d="M394 560 L496 520 L586 472 L678 406 L748 344 L816 314 L892 334 L954 388 L1010 446 L1084 560 Z" fill="url(#rfFallbackRight)"/>
-        <path d="M502 556 C450 512 548 466 500 416 C456 368 532 324 486 276" fill="none" stroke="#75effa" stroke-width="5"/>
+        <path d="M-70 570 L72 522 L176 470 L266 380 L350 246 L430 342 L520 432 L624 520 L760 570 Z" fill="url(#rfFallbackMountain)"/>
+        <g fill="none" stroke="#45e8ff" stroke-width="3" opacity=".72" filter="url(#rfContourGlow)">
+          <path d="M72 522 C196 482 270 452 350 412 C420 378 490 400 572 470"/>
+          <path d="M120 486 C216 442 282 406 350 360 C418 326 478 354 534 414"/>
+          <path d="M190 438 C256 396 312 350 350 306 C398 294 440 320 478 362"/>
+          <path d="M270 372 C314 334 340 294 350 252 C376 280 400 308 424 336"/>
+          <path d="M214 476 L306 384 M286 438 L356 344 M390 402 L452 448"/>
+        </g>
       </svg>
     `;
     mount.replaceChildren(fallback);
@@ -99,7 +103,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model with live contour lines. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -180,12 +184,16 @@
 
     const material = new THREE.LineBasicMaterial({
       color: colour,
-      transparent: opacity < 1,
+      transparent: true,
       opacity,
-      depthWrite: false
+      depthWrite: false,
+      depthTest: true,
+      blending: THREE.AdditiveBlending
     });
 
-    return new THREE.LineSegments(geometry, material);
+    const lines = new THREE.LineSegments(geometry, material);
+    lines.renderOrder = 4;
+    return lines;
   }
 
   function createPointCloud(THREE, points, colour, size, opacity = 1) {
@@ -198,150 +206,418 @@
     const material = new THREE.PointsMaterial({
       color: colour,
       size,
-      transparent: opacity < 1,
+      transparent: true,
       opacity,
       sizeAttenuation: true,
-      depthWrite: false
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
     });
 
-    return new THREE.Points(geometry, material);
+    const cloud = new THREE.Points(geometry, material);
+    cloud.renderOrder = 4;
+    return cloud;
   }
 
-  function createTowerGroup(THREE, origin, height, baseRadius, radarSide = 1) {
-    const group = new THREE.Group();
-    const lineSegments = [];
-    const pointPositions = [];
+  function collectTerrainMeshes(root) {
+    const meshes = [];
+    root.updateMatrixWorld(true);
+    root.traverse((node) => {
+      if (node.isMesh && node.geometry?.attributes?.position) {
+        meshes.push(node);
+      }
+    });
+    return meshes;
+  }
 
-    function addSegment(a, b) {
-      lineSegments.push(a.x, a.y, a.z, b.x, b.y, b.z);
-    }
+  function readWorldVertex(THREE, mesh, attribute, index, target) {
+    target.fromBufferAttribute(attribute, index).applyMatrix4(mesh.matrixWorld);
+    return target;
+  }
 
-    function addPoint(point) {
-      pointPositions.push(point.x, point.y, point.z);
-    }
+  function forEachWorldTriangle(THREE, meshes, callback) {
+    const a = new THREE.Vector3();
+    const b = new THREE.Vector3();
+    const c = new THREE.Vector3();
 
-    function legPoint(leg, level, levels) {
-      const t = level / levels;
-      const radius = baseRadius * (1 - t * 0.78);
-      const angle = Math.PI * 0.25 + leg * Math.PI * 0.5;
-      return new THREE.Vector3(
-        origin.x + Math.cos(angle) * radius,
-        origin.y + t * height,
-        origin.z + Math.sin(angle) * radius
+    meshes.forEach((mesh) => {
+      const geometry = mesh.geometry;
+      const position = geometry.attributes.position;
+      const index = geometry.index;
+      const triangleCount = index
+        ? Math.floor(index.count / 3)
+        : Math.floor(position.count / 3);
+      const step = Math.max(1, Math.ceil(triangleCount / 9000));
+
+      for (let triangle = 0; triangle < triangleCount; triangle += step) {
+        const offset = triangle * 3;
+        const ia = index ? index.getX(offset) : offset;
+        const ib = index ? index.getX(offset + 1) : offset + 1;
+        const ic = index ? index.getX(offset + 2) : offset + 2;
+
+        readWorldVertex(THREE, mesh, position, ia, a);
+        readWorldVertex(THREE, mesh, position, ib, b);
+        readWorldVertex(THREE, mesh, position, ic, c);
+        callback(a, b, c, triangle, mesh);
+      }
+    });
+  }
+
+  function intersectTriangleAtHeight(THREE, a, b, c, level, epsilon) {
+    const intersections = [];
+
+    function intersectEdge(start, end) {
+      const startDelta = start.y - level;
+      const endDelta = end.y - level;
+
+      if (Math.abs(startDelta) < 0.000001 && Math.abs(endDelta) < 0.000001) {
+        return;
+      }
+
+      if ((startDelta > 0 && endDelta > 0) || (startDelta < 0 && endDelta < 0)) {
+        return;
+      }
+
+      const denominator = end.y - start.y;
+      if (Math.abs(denominator) < 0.000001) return;
+      const t = clamp((level - start.y) / denominator, 0, 1);
+      intersections.push(
+        new THREE.Vector3(
+          start.x + (end.x - start.x) * t,
+          level + epsilon,
+          start.z + (end.z - start.z) * t
+        )
       );
     }
 
-    const levels = 14;
-    for (let level = 0; level < levels; level += 1) {
-      for (let leg = 0; leg < 4; leg += 1) {
-        const a = legPoint(leg, level, levels);
-        const b = legPoint(leg, level + 1, levels);
-        const c = legPoint((leg + 1) % 4, level, levels);
-        const d = legPoint((leg + 1) % 4, level + 1, levels);
-        addSegment(a, b);
-        addSegment(a, c);
-        addSegment(a, d);
-        addSegment(b, c);
-        addPoint(a);
+    intersectEdge(a, b);
+    intersectEdge(b, c);
+    intersectEdge(c, a);
+
+    if (intersections.length < 2) return null;
+
+    let bestA = intersections[0];
+    let bestB = intersections[1];
+    let bestDistance = bestA.distanceToSquared(bestB);
+
+    for (let i = 0; i < intersections.length; i += 1) {
+      for (let j = i + 1; j < intersections.length; j += 1) {
+        const distance = intersections[i].distanceToSquared(intersections[j]);
+        if (distance > bestDistance) {
+          bestDistance = distance;
+          bestA = intersections[i];
+          bestB = intersections[j];
+        }
       }
     }
 
-    const top = new THREE.Vector3(origin.x, origin.y + height, origin.z);
-    const mast = new THREE.Vector3(origin.x, origin.y + height + height * 0.18, origin.z);
-    for (let leg = 0; leg < 4; leg += 1) {
-      addSegment(legPoint(leg, levels, levels), top);
-    }
-    addSegment(top, mast);
-    addPoint(mast);
+    return bestDistance > 0.000001 ? [bestA, bestB] : null;
+  }
 
-    const panelBands = [0.38, 0.54, 0.69, 0.82];
-    panelBands.forEach((fraction, index) => {
-      const y = origin.y + height * fraction;
-      const reach = baseRadius * (1.28 - index * 0.09);
-      const halfHeight = height * 0.05;
-      const halfWidth = baseRadius * 0.12;
-      for (let side = -1; side <= 1; side += 2) {
-        const cx = origin.x + side * reach;
-        const p1 = new THREE.Vector3(cx - halfWidth, y - halfHeight, origin.z);
-        const p2 = new THREE.Vector3(cx - halfWidth, y + halfHeight, origin.z);
-        const p3 = new THREE.Vector3(cx + halfWidth, y + halfHeight, origin.z);
-        const p4 = new THREE.Vector3(cx + halfWidth, y - halfHeight, origin.z);
-        addSegment(p1, p2);
-        addSegment(p2, p3);
-        addSegment(p3, p4);
-        addSegment(p4, p1);
-        addSegment(new THREE.Vector3(origin.x, y, origin.z), new THREE.Vector3(cx, y, origin.z));
-      }
+  function createElevationContours(THREE, meshes, box, size) {
+    const segments = [];
+    const levelCount = 11;
+    const epsilon = Math.max(size.y * 0.0045, 0.018);
+    const levels = [];
+
+    for (let index = 0; index < levelCount; index += 1) {
+      const t = index / (levelCount - 1);
+      levels.push(box.min.y + size.y * (0.13 + t * 0.76));
+    }
+
+    forEachWorldTriangle(THREE, meshes, (a, b, c) => {
+      const minY = Math.min(a.y, b.y, c.y);
+      const maxY = Math.max(a.y, b.y, c.y);
+
+      levels.forEach((level) => {
+        if (level <= minY || level >= maxY) return;
+        const segment = intersectTriangleAtHeight(
+          THREE,
+          a,
+          b,
+          c,
+          level,
+          epsilon
+        );
+        if (!segment) return;
+        segments.push(
+          segment[0].x,
+          segment[0].y,
+          segment[0].z,
+          segment[1].x,
+          segment[1].y,
+          segment[1].z
+        );
+      });
     });
 
-    const side = radarSide < 0 ? -1 : 1;
-    const dishAnchor = new THREE.Vector3(
-      origin.x + side * baseRadius * 1.4,
-      origin.y + height * 0.76,
-      origin.z
-    );
-    const dishRadius = baseRadius * 0.55;
-    const dishDepth = baseRadius * 0.22;
-    const ringCount = 3;
-    const segmentCount = 16;
-    for (let ring = 1; ring <= ringCount; ring += 1) {
-      const fraction = ring / ringCount;
-      let previous = null;
-      for (let segment = 0; segment <= segmentCount; segment += 1) {
-        const angle = (segment / segmentCount) * Math.PI * 2;
-        const radial = dishRadius * fraction;
-        const point = new THREE.Vector3(
-          dishAnchor.x - side * dishDepth * fraction * fraction,
-          dishAnchor.y + Math.sin(angle) * radial,
-          dishAnchor.z + Math.cos(angle) * radial
+    return segments;
+  }
+
+  function createRunoffSegments(THREE, meshes, box, size) {
+    const segments = [];
+    const normal = new THREE.Vector3();
+    const edgeAB = new THREE.Vector3();
+    const edgeAC = new THREE.Vector3();
+    const centroid = new THREE.Vector3();
+    const downhill = new THREE.Vector3();
+    const down = new THREE.Vector3(0, -1, 0);
+    const maxSegments = 260;
+    const epsilon = Math.max(size.y * 0.006, 0.022);
+
+    forEachWorldTriangle(THREE, meshes, (a, b, c, triangle) => {
+      if (segments.length / 6 >= maxSegments) return;
+
+      edgeAB.subVectors(b, a);
+      edgeAC.subVectors(c, a);
+      normal.crossVectors(edgeAB, edgeAC).normalize();
+      if (normal.y < 0) normal.multiplyScalar(-1);
+
+      const slope = 1 - clamp(normal.y, 0, 1);
+      centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+      const heightRatio = (centroid.y - box.min.y) / Math.max(size.y, 0.0001);
+
+      const selector = Math.abs(
+        Math.sin(
+          centroid.x * 12.9898 +
+          centroid.z * 78.233 +
+          triangle * 0.173
+        )
+      );
+
+      if (
+        heightRatio < 0.16 ||
+        heightRatio > 0.94 ||
+        slope < 0.30 ||
+        selector < 0.965
+      ) {
+        return;
+      }
+
+      downhill.copy(down).addScaledVector(normal, normal.y).normalize();
+      if (!Number.isFinite(downhill.x) || downhill.lengthSq() < 0.01) return;
+
+      const length = size.x * (0.012 + slope * 0.022) * (0.72 + selector * 0.30);
+      const start = centroid
+        .clone()
+        .addScaledVector(downhill, -length * 0.24)
+        .addScaledVector(normal, epsilon);
+      const end = centroid
+        .clone()
+        .addScaledVector(downhill, length * 0.76)
+        .addScaledVector(normal, epsilon);
+
+      segments.push(start.x, start.y, start.z, end.x, end.y, end.z);
+    });
+
+    return segments;
+  }
+
+  function addFacetEdges(THREE, meshes, terrainRoot) {
+    const materials = [];
+
+    meshes.forEach((mesh) => {
+      const softMaterial = new THREE.LineBasicMaterial({
+        color: 0x1ecce5,
+        transparent: true,
+        opacity: 0.14,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      const hardMaterial = new THREE.LineBasicMaterial({
+        color: 0x67efff,
+        transparent: true,
+        opacity: 0.46,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+
+      const softEdges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(mesh.geometry, 15),
+        softMaterial
+      );
+      const hardEdges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(mesh.geometry, 34),
+        hardMaterial
+      );
+
+      softEdges.renderOrder = 3;
+      hardEdges.renderOrder = 4;
+      softEdges.scale.setScalar(1.0012);
+      hardEdges.scale.setScalar(1.0018);
+      mesh.add(softEdges, hardEdges);
+      materials.push(softMaterial, hardMaterial);
+    });
+
+    terrainRoot.updateMatrixWorld(true);
+    return materials;
+  }
+
+  function buildSurfaceRoute(THREE, terrainRoot, box, size, center) {
+    const raycaster = new THREE.Raycaster();
+    const down = new THREE.Vector3(0, -1, 0);
+    const origin = new THREE.Vector3();
+    const pathSamples = [];
+    const pathSteps = 38;
+    const zStart = box.max.z - size.z * 0.07;
+    const zEnd = box.min.z + size.z * 0.16;
+    const offset = Math.max(size.y * 0.012, 0.035);
+
+    for (let index = 0; index < pathSteps; index += 1) {
+      const t = index / (pathSteps - 1);
+      const x =
+        center.x +
+        Math.sin(t * Math.PI * 2.55) * size.x * 0.034 +
+        Math.sin(t * Math.PI * 5.1) * size.x * 0.008;
+      const z = zStart + (zEnd - zStart) * t;
+      origin.set(x, box.max.y + size.y * 0.40, z);
+      raycaster.set(origin, down);
+      const hit = raycaster.intersectObject(terrainRoot, true).find((entry) => {
+        return entry.object?.isMesh && !entry.object.userData.rfDecoration;
+      });
+
+      if (hit) {
+        pathSamples.push(hit.point.clone().addScaledVector(hit.face?.normal || new THREE.Vector3(0, 1, 0), offset));
+      } else {
+        pathSamples.push(
+          new THREE.Vector3(
+            x,
+            box.min.y + size.y * (0.08 + Math.sin(t * Math.PI) * 0.04),
+            z
+          )
         );
-        if (previous) addSegment(previous, point);
-        previous = point;
       }
     }
-    addSegment(new THREE.Vector3(origin.x + side * baseRadius * 0.4, origin.y + height * 0.74, origin.z), dishAnchor);
-    addPoint(dishAnchor);
 
-    const lines = createLineSegments(THREE, lineSegments, 0xffbf4d, 0.96);
-    const glow = createPointCloud(THREE, pointPositions, 0xff8c1a, baseRadius * 0.55, 0.82);
-    group.add(lines, glow);
-    return group;
+    const curve = new THREE.CatmullRomCurve3(pathSamples, false, "centripetal");
+    const ribbonMaterial = new THREE.MeshBasicMaterial({
+      color: 0x22ddeb,
+      transparent: true,
+      opacity: 0.17,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: 0x9afaff,
+      transparent: true,
+      opacity: 0.88,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    const ribbon = new THREE.Mesh(
+      new THREE.TubeGeometry(
+        curve,
+        64,
+        Math.max(size.x * 0.0022, 0.055),
+        6,
+        false
+      ),
+      ribbonMaterial
+    );
+    ribbon.userData.rfDecoration = true;
+    ribbon.renderOrder = 5;
+
+    const line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(curve.getPoints(96)),
+      lineMaterial
+    );
+    line.userData.rfDecoration = true;
+    line.renderOrder = 6;
+
+    const markerPositions = [];
+    pathSamples.forEach((point, index) => {
+      if (index % 4 === 0) {
+        markerPositions.push(point.x, point.y, point.z);
+      }
+    });
+    const markers = createPointCloud(
+      THREE,
+      markerPositions,
+      0xc4fdff,
+      Math.max(size.x * 0.0065, 0.075),
+      0.70
+    );
+    markers.userData.rfDecoration = true;
+
+    return {
+      objects: [ribbon, line, markers],
+      pulseMaterials: [ribbonMaterial, lineMaterial, markers.material]
+    };
   }
 
   function buildTerrainDecorations(THREE, terrainRoot) {
+    terrainRoot.updateMatrixWorld(true);
+
     const box = new THREE.Box3().setFromObject(terrainRoot);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
-    const topY = box.max.y;
-    const baseY = box.min.y;
-    const target = new THREE.Vector3(center.x, baseY + size.y * 0.28, center.z);
+    const target = new THREE.Vector3(
+      center.x,
+      box.min.y + size.y * 0.31,
+      center.z
+    );
+    const meshes = collectTerrainMeshes(terrainRoot).filter((mesh) => {
+      return !mesh.userData.rfDecoration;
+    });
+    const pulseMaterials = [];
 
-    const outlineBins = new Map();
-    const outlineBinCount = 72;
-    const interiorGlowPositions = [];
+    const contourSegments = createElevationContours(
+      THREE,
+      meshes,
+      box,
+      size
+    );
+    if (contourSegments.length) {
+      const contours = createLineSegments(
+        THREE,
+        contourSegments,
+        0x39e6ff,
+        0.48
+      );
+      contours.userData.rfDecoration = true;
+      terrainRoot.add(contours);
+      pulseMaterials.push(contours.material);
+    }
 
-    terrainRoot.updateMatrixWorld(true);
+    const runoffSegments = createRunoffSegments(
+      THREE,
+      meshes,
+      box,
+      size
+    );
+    if (runoffSegments.length) {
+      const runoffGlow = createLineSegments(
+        THREE,
+        runoffSegments,
+        0x1fd4f2,
+        0.26
+      );
+      const runoffLines = createLineSegments(
+        THREE,
+        runoffSegments,
+        0x8af7ff,
+        0.66
+      );
+      runoffGlow.userData.rfDecoration = true;
+      runoffLines.userData.rfDecoration = true;
+      runoffGlow.renderOrder = 4;
+      runoffLines.renderOrder = 5;
+      terrainRoot.add(runoffGlow, runoffLines);
+      pulseMaterials.push(runoffGlow.material, runoffLines.material);
+    }
 
-    terrainRoot.traverse((node) => {
-      if (!node.isMesh || !node.geometry || !node.geometry.attributes.position) return;
+    pulseMaterials.push(...addFacetEdges(THREE, meshes, terrainRoot));
 
-      const position = node.geometry.attributes.position;
-      const sampleStep = Math.max(1, Math.ceil(position.count / 1800));
-      const probe = new THREE.Vector3();
-
+    const pointPositions = [];
+    const probe = new THREE.Vector3();
+    meshes.forEach((mesh) => {
+      const position = mesh.geometry.attributes.position;
+      const sampleStep = Math.max(1, Math.ceil(position.count / 700));
       for (let index = 0; index < position.count; index += sampleStep) {
-        probe.fromBufferAttribute(position, index).applyMatrix4(node.matrixWorld);
-
-        const normalisedX = (probe.x - box.min.x) / Math.max(size.x, 0.0001);
-        const bin = clamp(Math.floor(normalisedX * outlineBinCount), 0, outlineBinCount - 1);
-        const current = outlineBins.get(bin);
-        if (!current || probe.y > current.y) {
-          outlineBins.set(bin, probe.clone());
-        }
-
-        const heightRatio = (probe.y - baseY) / Math.max(size.y, 0.0001);
-        if (heightRatio > 0.16 && ((index / sampleStep) % 2 === 0)) {
-          interiorGlowPositions.push(
+        probe.fromBufferAttribute(position, index).applyMatrix4(mesh.matrixWorld);
+        const heightRatio = (probe.y - box.min.y) / Math.max(size.y, 0.0001);
+        if (heightRatio > 0.18) {
+          pointPositions.push(
             probe.x,
             probe.y + size.y * 0.004,
             probe.z
@@ -350,124 +626,35 @@
       }
     });
 
-    if (interiorGlowPositions.length) {
-      const contourGlow = createPointCloud(
+    if (pointPositions.length) {
+      const points = createPointCloud(
         THREE,
-        interiorGlowPositions,
-        0x44dfff,
-        Math.max(size.x * 0.0035, 0.06),
-        0.24
+        pointPositions,
+        0x5eeaff,
+        Math.max(size.x * 0.0028, 0.045),
+        0.16
       );
-      contourGlow.renderOrder = 2;
-      terrainRoot.add(contourGlow);
+      points.userData.rfDecoration = true;
+      terrainRoot.add(points);
+      pulseMaterials.push(points.material);
     }
 
-    const outlinePoints = Array.from(outlineBins.entries())
-      .sort((a, b) => a[0] - b[0])
-      .map(([, point]) => new THREE.Vector3(
-        point.x,
-        point.y + size.y * 0.015,
-        point.z + size.z * 0.01
-      ));
-
-    if (outlinePoints.length >= 3) {
-      const outlineCurve = new THREE.CatmullRomCurve3(outlinePoints, false, "centripetal");
-      const smoothedOutline = outlineCurve.getPoints(Math.max(80, outlinePoints.length * 3));
-      const outlineGeometry = new THREE.BufferGeometry().setFromPoints(smoothedOutline);
-
-      const outlineLine = new THREE.Line(
-        outlineGeometry,
-        new THREE.LineBasicMaterial({
-          color: 0x79efff,
-          transparent: true,
-          opacity: 0.98,
-          depthWrite: false
-        })
-      );
-      outlineLine.renderOrder = 3;
-
-      const glowPositions = [];
-      for (const point of smoothedOutline) {
-        glowPositions.push(point.x, point.y, point.z);
-      }
-      const outlineGlow = createPointCloud(
-        THREE,
-        glowPositions,
-        0x5fe9ff,
-        Math.max(size.x * 0.0044, 0.075),
-        0.54
-      );
-      outlineGlow.renderOrder = 3;
-
-      terrainRoot.add(outlineLine, outlineGlow);
-    }
-
-    const pathSamples = [];
-    const pathSteps = 34;
-    const zStart = box.max.z - size.z * 0.08;
-    const zEnd = box.min.z + size.z * 0.14;
-
-    for (let index = 0; index < pathSteps; index += 1) {
-      const t = index / (pathSteps - 1);
-      pathSamples.push(
-        new THREE.Vector3(
-          center.x + Math.sin(t * Math.PI * 2.4) * size.x * 0.035,
-          baseY + size.y * (0.10 + Math.sin(t * Math.PI) * 0.05),
-          zStart + (zEnd - zStart) * t
-        )
-      );
-    }
-
-    const curve = new THREE.CatmullRomCurve3(pathSamples);
-    const ribbon = new THREE.Mesh(
-      new THREE.TubeGeometry(
-        curve,
-        54,
-        Math.max(size.x * 0.0025, 0.07),
-        6,
-        false
-      ),
-      new THREE.MeshBasicMaterial({
-        color: 0x2aeffc,
-        transparent: true,
-        opacity: 0.24,
-        depthWrite: false
-      })
-    );
-
-    const line = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(pathSamples),
-      new THREE.LineBasicMaterial({
-        color: 0x84f7ff,
-        transparent: true,
-        opacity: 0.94,
-        depthWrite: false
-      })
-    );
-
-    const markerPositions = [];
-    for (let index = 0; index < pathSamples.length; index += 3) {
-      const point = pathSamples[index];
-      markerPositions.push(point.x, point.y, point.z);
-    }
-
-    const markers = createPointCloud(
+    const route = buildSurfaceRoute(
       THREE,
-      markerPositions,
-      0xb2fdff,
-      Math.max(size.x * 0.009, 0.11),
-      0.82
+      terrainRoot,
+      box,
+      size,
+      center
     );
-
-    terrainRoot.add(ribbon, line, markers);
+    route.objects.forEach((object) => terrainRoot.add(object));
+    pulseMaterials.push(...route.pulseMaterials);
 
     return {
       box,
       size,
+      center,
       target,
-      topY,
-      baseY,
-      center
+      pulseMaterials
     };
   }
 
@@ -507,9 +694,7 @@
     const { THREE, GLTFLoader } = await loadDependencies();
 
     if (token.destroyed) {
-      return {
-        destroy() {}
-      };
+      return { destroy() {} };
     }
 
     const compactViewport = window.matchMedia("(max-width: 760px)").matches;
@@ -526,18 +711,18 @@
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x021221, 18, 48);
+    scene.fog = new THREE.Fog(0x021221, 18, 50);
 
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
 
-    const ambient = new THREE.HemisphereLight(0x94eaf2, 0x03111d, 1.15);
+    const ambient = new THREE.HemisphereLight(0x94eaf2, 0x03111d, 1.08);
     scene.add(ambient);
 
-    const key = new THREE.DirectionalLight(0xb3ffff, 1.7);
+    const key = new THREE.DirectionalLight(0xb3ffff, 1.55);
     key.position.set(-18, 20, 10);
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0x3ec7e0, 0.55);
+    const fill = new THREE.DirectionalLight(0x3ec7e0, 0.48);
     fill.position.set(12, 8, -16);
     scene.add(fill);
 
@@ -549,8 +734,9 @@
       new THREE.MeshBasicMaterial({
         color: 0x0d4e62,
         transparent: true,
-        opacity: 0.14,
-        depthWrite: false
+        opacity: 0.12,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
       })
     );
     groundGlow.rotation.x = -Math.PI * 0.5;
@@ -562,9 +748,7 @@
     const gltf = await loadModel(GLTFLoader);
     if (token.destroyed) {
       renderer.dispose();
-      return {
-        destroy() {}
-      };
+      return { destroy() {} };
     }
 
     const model = gltf.scene || gltf.scenes?.[0];
@@ -573,14 +757,15 @@
     }
 
     const terrainMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0d3f52,
-      emissive: 0x041c2e,
-      emissiveIntensity: 0.68,
-      roughness: 0.94,
-      metalness: 0.04,
+      color: 0x0b3546,
+      emissive: 0x031929,
+      emissiveIntensity: 0.58,
+      roughness: 0.96,
+      metalness: 0.02,
       transparent: true,
-      opacity: 0.99,
-      side: THREE.DoubleSide
+      opacity: 0.995,
+      side: THREE.DoubleSide,
+      flatShading: true
     });
 
     model.traverse((node) => {
@@ -588,16 +773,18 @@
       node.castShadow = false;
       node.receiveShadow = false;
       node.material = terrainMaterial;
+      node.userData.rfDecoration = false;
     });
 
     normaliseTerrainModel(THREE, model);
     terrainRoot.add(model);
+    terrainRoot.updateMatrixWorld(true);
 
     const decor = buildTerrainDecorations(THREE, terrainRoot);
     const target = decor.target;
     const size = decor.size;
     const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
-    const targetLift = size.y * 0.30;
+    const targetLift = size.y * 0.31;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -614,7 +801,10 @@
 
     function resize() {
       const rect = frame.getBoundingClientRect();
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      const pixelRatio = Math.min(
+        window.devicePixelRatio || 1,
+        compactViewport ? 1.25 : 1.75
+      );
       const width = Math.max(1, Math.round(rect.width * pixelRatio));
       const height = Math.max(1, Math.round(rect.height * pixelRatio));
 
@@ -628,7 +818,7 @@
       camera.updateProjectionMatrix();
     }
 
-    function render() {
+    function render(time = 0) {
       if (state.destroyed) return;
 
       resize();
@@ -637,6 +827,17 @@
         state.azimuth += state.velocity;
         state.velocity *= 0.92;
       }
+
+      const pulse = 0.5 + Math.sin(time * 0.00135) * 0.5;
+      decor.pulseMaterials.forEach((material, index) => {
+        const base = material.userData.rfBaseOpacity ?? material.opacity;
+        if (material.userData.rfBaseOpacity === undefined) {
+          material.userData.rfBaseOpacity = base;
+        }
+        const amount = index % 3 === 0 ? 0.09 : 0.045;
+        material.opacity = clamp(base + pulse * amount, 0, 1);
+      });
+      terrainMaterial.emissiveIntensity = 0.55 + pulse * 0.08;
 
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
@@ -716,7 +917,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "3D terrain loaded", true);
+    setBadge(badge, "Live contours loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
@@ -789,7 +990,11 @@
     const elements = buildFrame(mount);
 
     try {
-      mount._rfGraphViewer = await initialiseThreeViewer(mount, elements, token);
+      mount._rfGraphViewer = await initialiseThreeViewer(
+        mount,
+        elements,
+        token
+      );
     } catch (error) {
       console.error("FieldOps RF glTF viewer failed:", error);
       buildFallback(mount);
