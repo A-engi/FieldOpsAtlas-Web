@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.183-lower-fill-no-gap
+   Version: 1.1.184-bottom-anchored
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.183-lower-fill-no-gap";
+  const VERSION = "1.1.184-bottom-anchored";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1401,8 +1401,8 @@
     const xMin = box.min.x - size.x * 0.08;
     const xMax = box.max.x + size.x * 0.08;
     const zFront = box.max.z + size.z * 0.015;
-    const zBack = box.max.z - size.z * 0.26;
-    const y = box.min.y + size.y * 0.008;
+    const zBack = box.max.z - size.z * 0.22;
+    const y = box.min.y + size.y * 0.010;
     const columns = 16;
     const rows = 9;
 
@@ -1464,7 +1464,7 @@
     const center = box.getCenter(new THREE.Vector3());
     const target = new THREE.Vector3(
       center.x,
-      box.min.y + size.y * 0.10,
+      box.min.y + size.y * 0.02,
       center.z
     );
     const meshes = collectTerrainMeshes(terrainRoot).filter((mesh) => {
@@ -1617,8 +1617,8 @@
     const sourceSize = sourceBox.getSize(new THREE.Vector3());
 
     const primaryModel = model;
-    primaryModel.scale.multiplyScalar(1.14);
-    primaryModel.position.x -= sourceSize.x * 0.50;
+    primaryModel.scale.multiplyScalar(1.22);
+    primaryModel.position.x -= sourceSize.x * 0.54;
     primaryModel.position.z += sourceSize.z * 0.06;
     primaryModel.rotation.y = 0;
     primaryModel.updateMatrixWorld(true);
@@ -1632,9 +1632,9 @@
       node.material = terrainMaterial;
       node.userData.rfDecoration = false;
     });
-    secondaryModel.scale.multiplyScalar(1.02);
+    secondaryModel.scale.multiplyScalar(1.08);
     secondaryModel.position.set(
-      sourceSize.x * 0.48,
+      sourceSize.x * 0.52,
       0,
       -sourceSize.z * 0.04
     );
@@ -1646,8 +1646,8 @@
     const decor = buildTerrainDecorations(THREE, terrainRoot, compactViewport);
     const target = decor.target;
     const size = decor.size;
-    const orbitRadiusBase = Math.max(size.x, size.z) * 0.84;
-    const targetLift = size.y * 0.10;
+    const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
+    const targetLift = size.y * 0.03;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -1704,8 +1704,8 @@
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
       const portraitBoost = clamp((1.05 - aspect) * 2.5, 0, 1.6);
-      const orbitRadius = orbitRadiusBase + portraitBoost * 3.2;
-      camera.fov = aspect < 0.82 ? 52 : aspect < 1.12 ? 49 : 46;
+      const orbitRadius = orbitRadiusBase + portraitBoost * 2.4;
+      camera.fov = aspect < 0.82 ? 47 : aspect < 1.12 ? 45 : 43;
       camera.updateProjectionMatrix();
       camera.position.set(
         target.x + Math.sin(angle) * orbitRadius,
