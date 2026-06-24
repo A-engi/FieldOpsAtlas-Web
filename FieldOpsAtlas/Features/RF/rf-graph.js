@@ -1,18 +1,19 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.187-embedded-exact-terrain
+   Version: 1.1.188-embedded-exact-rollback
 
    Purpose:
    - Rebuild the original terrain from its exact embedded vertex and index data.
-   - Retain the detailed moonlit dot, broken-chevron, route, foreground-grid,
-     drag-orbit, fallback, mount-selector, and rendered-event behaviour.
+   - Preserve the v1.1.179 moonlit dot, connected-chevron, route-marker,
+     camera-framing, drag-orbit, fallback, mount-selector, and rendered-event
+     behaviour.
    - Load no external terrain model or model loader.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.187-embedded-exact-terrain";
+  const VERSION = "1.1.188-embedded-exact-rollback";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -14943,15 +14944,6 @@
       "LDDuPiww7j45cwE/EroQPxAmBT8QJgU/EroQP5fUGD+gmgw/oJoMP5fUGD9DaxI/mrQGP5q0Bj9DaxI/jCwUP/JRCD/yUQg/jCwUPy1iOT+GjSo/ho0qPy1i",
       "OT9p8TI/qaAkP6mgJD9p8TI/lT4wPxklIj8ZJSI/lT4wPzglJD+FAxc/hQMXPzglJD/rOCg/ucMaP7nDGj/rOCg/"
     ].join(""),
-    routePositions: [
-      "27OAwEMG7D2amYNBgcl1wKPbJD6IyX1BaupqwG4IMj7dX3RBwfJgwNcDTz4y9mpBgPtXwL6moz6HjGFBLw1QwI8n/z7cIlhBFCBJwIYJaD8xuU5Brh1DwCkF",
-      "rT+GT0VBRuM9wCJG0T/b5TtBbEU5wC5/6T8wfDJBChQ1wIFDCkCFEilBqx4xwFTvGUDaqB9BoDgtwP1RLEAvPxZBpzwpwNKAQUCE1QxBwA8lwLBwT0DZawNB",
-      "+aIgwPnyZkBcBPRABfQbwF0yiEAFMeFAnQwXwBWAnkCvXc5AuAASwK+/t0BZirtAx+sMwLIhykADt6hANO0HwNZ320Ct45VAeiQDwKpo5UBXEINAcFr9v35X",
-      "50ACemBAGTf1v8nG7UBW0zpAOPLtv9Yw50CqLBVAD4bnv/g97UD8C98/CdLhvzq790CjvpM/X5vcvy2hA0GW4hA/MpDXv1AfC0FFA7e840zSv6gxEkHLUhy/",
-      "NGPMv9GoE0G+dpm/nWLFv/OXCUEWxOS/L+G8v0S0AEG3CBjAN4Syv5wC6kBjrz3A7gemv+sVzUAPVmPAi0WXv4VmrEBefoTAMTeGv4WZmEC0UZfAvfJlv4iv",
-      "iEAKJarAdZM7v1H2YkBg+LzArAYOv7JhSEC2y8/AmWK8vpwtOUAMn+LA1l00viZlGEBicvXA1K2GPNle9z/cIgTBp6VSPqJz3z+HjA3BJKDGPjDprT8y9hbB",
-      "g1wPP1MZoT/dXyDB8jU4P5oaiT+IySnB5H9dP6aTWj8zMzPB"
-    ].join("")
   });
 
   function clamp(value, min, max) {
@@ -15070,7 +15062,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive exact embedded RF terrain with moonlit dots and broken connected chevrons. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain made from evenly spaced dots and broken connected chevrons with bird's-eye moon lighting mapped back onto the sideways terrain. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -15097,12 +15089,12 @@
 
     const badge = document.createElement("div");
     badge.className = "rf-webgl-orbit-badge";
-    badge.textContent = "Building exact terrain…";
+    badge.textContent = "Loading 3D terrain…";
     badge.style.cssText = [
       "position:absolute",
       "top:10px",
       "left:10px",
-      "max-width:min(70%, 220px)",
+      "max-width:min(70%, 210px)",
       "padding:5px 8px",
       "border:1px solid rgba(116,228,244,.24)",
       "border-radius:999px",
@@ -15181,9 +15173,9 @@
 
     const dotMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        uDarkColour: { value: new THREE.Color(0x0b313d) },
+        uDarkColour: { value: new THREE.Color(0x16414c) },
         uBrightColour: { value: new THREE.Color(0xc9fbff) },
-        uPointSize: { value: compactViewport ? 1.85 : 2.25 }
+        uPointSize: { value: compactViewport ? 2.45 : 2.70 }
       },
       vertexShader: `
         attribute float aBrightness;
@@ -15335,48 +15327,78 @@
     continuations.renderOrder = 3;
     group.add(continuations);
 
-    return {
-      group,
-      pulseMaterials: [dotMaterial, chevronMaterial, continuationMaterial]
-    };
+    return group;
   }
 
-  function buildSurfaceRoute(THREE, size) {
-    const values = decodeFloat32(EMBEDDED.routePositions);
-    const points = [];
+  function buildSurfaceRoute(THREE, terrainRoot, box, size, center) {
+    const raycaster = new THREE.Raycaster();
+    const down = new THREE.Vector3(0, -1, 0);
+    const origin = new THREE.Vector3();
+    const pathSamples = [];
+    const pathSteps = 38;
+    const zStart = box.max.z - size.z * 0.07;
+    const zEnd = box.min.z + size.z * 0.16;
+    const offset = Math.max(size.y * 0.012, 0.035);
 
-    for (let index = 0; index < values.length; index += 3) {
-      points.push(new THREE.Vector3(
-        values[index],
-        values[index + 1],
-        values[index + 2]
-      ));
+    for (let index = 0; index < pathSteps; index += 1) {
+      const t = index / (pathSteps - 1);
+      const x =
+        center.x +
+        Math.sin(t * Math.PI * 2.55) * size.x * 0.034 +
+        Math.sin(t * Math.PI * 5.1) * size.x * 0.008;
+      const z = zStart + (zEnd - zStart) * t;
+      origin.set(x, box.max.y + size.y * 0.40, z);
+      raycaster.set(origin, down);
+      const hit = raycaster.intersectObject(terrainRoot, true).find((entry) => {
+        return entry.object?.isMesh && !entry.object.userData.rfDecoration;
+      });
+
+      if (hit) {
+        pathSamples.push(
+          hit.point
+            .clone()
+            .addScaledVector(
+              hit.face?.normal || new THREE.Vector3(0, 1, 0),
+              offset
+            )
+        );
+      } else {
+        pathSamples.push(
+          new THREE.Vector3(
+            x,
+            box.min.y + size.y * (0.08 + Math.sin(t * Math.PI) * 0.04),
+            z
+          )
+        );
+      }
     }
 
-    const curve = new THREE.CatmullRomCurve3(points, false, "centripetal");
+    const curve = new THREE.CatmullRomCurve3(
+      pathSamples,
+      false,
+      "centripetal"
+    );
     const ribbonMaterial = new THREE.MeshBasicMaterial({
       color: 0x22ddeb,
       transparent: true,
-      opacity: 0.028,
+      opacity: 0.012,
       depthWrite: false,
-      depthTest: true,
       blending: THREE.AdditiveBlending
     });
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x9afaff,
       transparent: true,
-      opacity: 0.30,
+      opacity: 0.25,
       depthWrite: false,
-      depthTest: true,
       blending: THREE.AdditiveBlending
     });
 
     const ribbon = new THREE.Mesh(
       new THREE.TubeGeometry(
         curve,
-        88,
-        Math.max(size.x * 0.0030, 0.078),
-        8,
+        64,
+        Math.max(size.x * 0.0022, 0.055),
+        6,
         false
       ),
       ribbonMaterial
@@ -15385,84 +15407,30 @@
     ribbon.renderOrder = 5;
 
     const line = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(curve.getPoints(132)),
+      new THREE.BufferGeometry().setFromPoints(curve.getPoints(96)),
       lineMaterial
     );
     line.userData.rfDecoration = true;
     line.renderOrder = 6;
 
-    return {
-      objects: [ribbon, line],
-      pulseMaterials: [ribbonMaterial, lineMaterial]
-    };
-  }
-
-  function buildForegroundGrid(THREE, box, size) {
-    const positions = [];
-    const pointPositions = [];
-    const xMin = box.min.x - size.x * 0.08;
-    const xMax = box.max.x + size.x * 0.08;
-    const zFront = box.max.z + size.z * 0.015;
-    const zBack = box.max.z - size.z * 0.22;
-    const y = box.min.y + size.y * 0.010;
-    const columns = 16;
-    const rows = 9;
-
-    for (let column = 0; column <= columns; column += 1) {
-      const x = xMin + ((xMax - xMin) * column) / columns;
-      positions.push(x, y, zFront, x, y, zBack);
-    }
-
-    for (let row = 0; row <= rows; row += 1) {
-      const z = zFront + ((zBack - zFront) * row) / rows;
-      positions.push(xMin, y, z, xMax, y, z);
-    }
-
-    for (let column = 0; column <= columns; column += 1) {
-      const x = xMin + ((xMax - xMin) * column) / columns;
-      for (let row = 0; row <= rows; row += 1) {
-        const z = zFront + ((zBack - zFront) * row) / rows;
-        pointPositions.push(x, y, z);
+    const markerPositions = [];
+    pathSamples.forEach((point, index) => {
+      if (index % 4 === 0) {
+        markerPositions.push(point.x, point.y, point.z);
       }
-    }
-
-    const lineGeometry = new THREE.BufferGeometry();
-    lineGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(positions, 3)
-    );
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x5db9d0,
-      transparent: true,
-      opacity: 0.18,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
     });
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    lines.userData.rfDecoration = true;
-    lines.renderOrder = 3;
-
-    const pointGeometry = new THREE.BufferGeometry();
-    pointGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(pointPositions, 3)
+    const markers = createPointCloud(
+      THREE,
+      markerPositions,
+      0xc4fdff,
+      Math.max(size.x * 0.0048, 0.055),
+      0.11
     );
-    const pointMaterial = new THREE.PointsMaterial({
-      color: 0x8fefff,
-      size: Math.max(size.x * 0.0024, 0.038),
-      transparent: true,
-      opacity: 0.055,
-      sizeAttenuation: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-    const points = new THREE.Points(pointGeometry, pointMaterial);
-    points.userData.rfDecoration = true;
-    points.renderOrder = 4;
+    markers.userData.rfDecoration = true;
 
     return {
-      objects: [lines, points],
-      pulseMaterials: [lineMaterial, pointMaterial]
+      objects: [ribbon, line, markers],
+      pulseMaterials: [ribbonMaterial, lineMaterial, markers.material]
     };
   }
 
@@ -15507,7 +15475,7 @@
     const terrainRoot = new THREE.Group();
     scene.add(terrainRoot);
 
-    setBadge(badge, "Building exact embedded terrain…");
+    setBadge(badge, "Loading 3D terrain…");
 
     const terrain = buildTerrainMesh(THREE);
     terrainRoot.add(terrain);
@@ -15518,24 +15486,22 @@
     const center = box.getCenter(new THREE.Vector3());
     const target = new THREE.Vector3(
       center.x,
-      box.min.y + size.y * 0.02,
+      box.min.y + size.y * 0.31,
       center.z
     );
 
     const moonSurface = buildMoonSurface(THREE, compactViewport);
-    terrainRoot.add(moonSurface.group);
+    terrainRoot.add(moonSurface);
 
-    const foregroundGrid = buildForegroundGrid(THREE, box, size);
-    foregroundGrid.objects.forEach((object) => terrainRoot.add(object));
-
-    const route = buildSurfaceRoute(THREE, size);
+    const route = buildSurfaceRoute(
+      THREE,
+      terrainRoot,
+      box,
+      size,
+      center
+    );
     route.objects.forEach((object) => terrainRoot.add(object));
-
-    const pulseMaterials = [
-      ...moonSurface.pulseMaterials,
-      ...foregroundGrid.pulseMaterials,
-      ...route.pulseMaterials
-    ];
+    const pulseMaterials = [...route.pulseMaterials];
 
     const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
     const targetLift = size.y * 0.31;
@@ -15584,7 +15550,6 @@
 
       const pulse = 0.5 + Math.sin(time * 0.00135) * 0.5;
       pulseMaterials.forEach((material, index) => {
-        if (!("opacity" in material)) return;
         const base = material.userData.rfBaseOpacity ?? material.opacity;
         if (material.userData.rfBaseOpacity === undefined) {
           material.userData.rfBaseOpacity = base;
@@ -15671,7 +15636,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Exact embedded moon terrain loaded", true);
+    setBadge(badge, "Moon dot-and-chevron terrain loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
@@ -15748,7 +15713,7 @@
         token
       );
     } catch (error) {
-      console.error("FieldOps RF embedded terrain viewer failed:", error);
+      console.error("FieldOps RF embedded rollback viewer failed:", error);
       buildFallback(mount);
     }
   }
