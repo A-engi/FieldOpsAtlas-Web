@@ -1,25 +1,26 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.167-aim-rim-glow
+   Version: 1.1.168-moonlit-facets
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
-   - Derive contour bands, facet edges, and short downhill runoff strokes from
-     the mountain mesh itself so the linework stays attached through 360 orbit.
-   - Preserve the RF graph mount selector, fallback, orbit interaction, and
-     rendered-event contract.
+   - Use a single cold directional moon light, dark filled faces, subdued
+     mesh-derived contours, and view-angle rim light at grazing angles.
+   - Remove the pre-load RF background image before WebGL initialises.
+   - Preserve the RF graph mount selector, error fallback, orbit interaction,
+     and rendered-event contract.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.167-aim-rim-glow";
+  const VERSION = "1.1.168-moonlit-facets";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-aim-rim-glow";
+  const MODE = "three-gltf-moonlit-facets";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -31,6 +32,15 @@
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
+  }
+
+  function removePreloadBackground(mount) {
+    const mapPaper = mount.closest(MAP_PAPER_SELECTOR);
+    if (!mapPaper) return;
+
+    mapPaper
+      .querySelectorAll(":scope > .rf-map-background")
+      .forEach((node) => node.remove());
   }
 
   function removeLegacyKey(mount) {
@@ -92,8 +102,8 @@
       "height:100%",
       "overflow:hidden",
       "background-color:#010a12",
-      "background-image:linear-gradient(rgba(29,145,165,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(29,145,165,.055) 1px,transparent 1px),radial-gradient(ellipse at 50% 73%,rgba(0,190,211,.16),transparent 52%)",
-      "background-size:56px 56px,56px 56px,100% 100%",
+      "background-image:linear-gradient(rgba(29,145,165,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(29,145,165,.045) 1px,transparent 1px)",
+      "background-size:56px 56px,56px 56px",
       "touch-action:none",
       "user-select:none"
     ].join(";");
@@ -103,7 +113,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model with dark filled faces, live contour lines, and edge glow. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model with dark moonlit faces and view-angle edge glow. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -315,7 +325,7 @@
 
   function createElevationContours(THREE, meshes, box, size) {
     const segments = [];
-    const levelCount = 14;
+    const levelCount = 10;
     const epsilon = Math.max(size.y * 0.0042, 0.016);
     const levels = [];
     const centroid = new THREE.Vector3();
@@ -325,7 +335,7 @@
 
     for (let index = 0; index < levelCount; index += 1) {
       const t = index / (levelCount - 1);
-      levels.push(box.min.y + size.y * (0.18 + t * 0.68));
+      levels.push(box.min.y + size.y * (0.22 + t * 0.60));
     }
 
     forEachWorldTriangle(THREE, meshes, (a, b, c) => {
@@ -375,7 +385,7 @@
     const centroid = new THREE.Vector3();
     const downhill = new THREE.Vector3();
     const down = new THREE.Vector3(0, -1, 0);
-    const maxSegments = 220;
+    const maxSegments = 145;
     const epsilon = Math.max(size.y * 0.006, 0.022);
 
     forEachWorldTriangle(THREE, meshes, (a, b, c, triangle) => {
@@ -402,7 +412,7 @@
         heightRatio < 0.22 ||
         heightRatio > 0.92 ||
         slope < 0.36 ||
-        selector < 0.953
+        selector < 0.972
       ) {
         return;
       }
@@ -410,7 +420,7 @@
       downhill.copy(down).addScaledVector(normal, normal.y).normalize();
       if (!Number.isFinite(downhill.x) || downhill.lengthSq() < 0.01) return;
 
-      const length = size.x * (0.010 + slope * 0.018) * (0.68 + selector * 0.24);
+      const length = size.x * (0.008 + slope * 0.014) * (0.64 + selector * 0.20);
       const start = centroid
         .clone()
         .addScaledVector(downhill, -length * 0.24)
@@ -430,36 +440,40 @@
     const materials = [];
 
     meshes.forEach((mesh) => {
-      const softMaterial = new THREE.LineBasicMaterial({
-        color: 0x1ecce5,
+      const secondaryMaterial = new THREE.LineBasicMaterial({
+        color: 0x1c8797,
         transparent: true,
-        opacity: 0.20,
+        opacity: 0.035,
         depthWrite: false,
-        blending: THREE.AdditiveBlending
+        depthTest: true,
+        blending: THREE.NormalBlending
       });
-      const hardMaterial = new THREE.LineBasicMaterial({
-        color: 0x67efff,
+      const majorMaterial = new THREE.LineBasicMaterial({
+        color: 0x61d9e8,
         transparent: true,
-        opacity: 0.68,
+        opacity: 0.15,
         depthWrite: false,
+        depthTest: true,
         blending: THREE.AdditiveBlending
       });
 
-      const softEdges = new THREE.LineSegments(
-        new THREE.EdgesGeometry(mesh.geometry, 10),
-        softMaterial
+      const secondaryEdges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(mesh.geometry, 18),
+        secondaryMaterial
       );
-      const hardEdges = new THREE.LineSegments(
-        new THREE.EdgesGeometry(mesh.geometry, 24),
-        hardMaterial
+      const majorEdges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(mesh.geometry, 38),
+        majorMaterial
       );
 
-      softEdges.renderOrder = 3;
-      hardEdges.renderOrder = 4;
-      softEdges.scale.setScalar(1.0015);
-      hardEdges.scale.setScalar(1.0022);
-      mesh.add(softEdges, hardEdges);
-      materials.push(softMaterial, hardMaterial);
+      secondaryEdges.userData.rfDecoration = true;
+      majorEdges.userData.rfDecoration = true;
+      secondaryEdges.renderOrder = 3;
+      majorEdges.renderOrder = 4;
+      secondaryEdges.scale.setScalar(1.0009);
+      majorEdges.scale.setScalar(1.0014);
+      mesh.add(secondaryEdges, majorEdges);
+      materials.push(secondaryMaterial, majorMaterial);
     });
 
     terrainRoot.updateMatrixWorld(true);
@@ -472,19 +486,47 @@
     model.traverse((node) => {
       if (!node.isMesh || node.userData.rfDecoration) return;
 
-      const rimMaterial = new THREE.MeshBasicMaterial({
-        color: 0x67efff,
+      const rimMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          uColour: { value: new THREE.Color(0x78e7f3) },
+          uOpacity: { value: 0.30 }
+        },
+        vertexShader: `
+          varying vec3 vNormalView;
+          varying vec3 vViewDirection;
+
+          void main() {
+            vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+            vNormalView = normalize(normalMatrix * normal);
+            vViewDirection = normalize(-viewPosition.xyz);
+            gl_Position = projectionMatrix * viewPosition;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 uColour;
+          uniform float uOpacity;
+          varying vec3 vNormalView;
+          varying vec3 vViewDirection;
+
+          void main() {
+            float facing = max(dot(normalize(vNormalView), normalize(vViewDirection)), 0.0);
+            float rim = pow(1.0 - facing, 3.4);
+            float alpha = smoothstep(0.26, 0.92, rim) * uOpacity;
+            if (alpha < 0.006) discard;
+            gl_FragColor = vec4(uColour, alpha);
+          }
+        `,
         transparent: true,
-        opacity: 0.09,
-        side: THREE.BackSide,
         depthWrite: false,
+        depthTest: true,
+        side: THREE.FrontSide,
         blending: THREE.AdditiveBlending
       });
 
       const rim = new THREE.Mesh(node.geometry, rimMaterial);
       rim.userData.rfDecoration = true;
-      rim.renderOrder = 2;
-      rim.scale.setScalar(1.01);
+      rim.renderOrder = 3;
+      rim.scale.setScalar(1.0018);
       node.add(rim);
       materials.push(rimMaterial);
     });
@@ -533,14 +575,14 @@
     const ribbonMaterial = new THREE.MeshBasicMaterial({
       color: 0x22ddeb,
       transparent: true,
-      opacity: 0.09,
+      opacity: 0.035,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x9afaff,
       transparent: true,
-      opacity: 0.76,
+      opacity: 0.38,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
@@ -575,8 +617,8 @@
       THREE,
       markerPositions,
       0xc4fdff,
-      Math.max(size.x * 0.0065, 0.075),
-      0.70
+      Math.max(size.x * 0.0048, 0.055),
+      0.20
     );
     markers.userData.rfDecoration = true;
 
@@ -612,12 +654,12 @@
       const contours = createLineSegments(
         THREE,
         contourSegments,
-        0x6cefff,
-        0.34
+        0x4ab9c8,
+        0.085
       );
       contours.userData.rfDecoration = true;
       terrainRoot.add(contours);
-      pulseMaterials.push(contours.material);
+      contours.material.userData.rfBaseOpacity = contours.material.opacity;
     }
 
     const runoffSegments = createRunoffSegments(
@@ -630,25 +672,26 @@
       const runoffGlow = createLineSegments(
         THREE,
         runoffSegments,
-        0x24d4ef,
-        0.14
+        0x2f8fa0,
+        0.045
       );
       const runoffLines = createLineSegments(
         THREE,
         runoffSegments,
-        0xb8fbff,
-        0.46
+        0x79d8e4,
+        0.14
       );
       runoffGlow.userData.rfDecoration = true;
       runoffLines.userData.rfDecoration = true;
       runoffGlow.renderOrder = 4;
       runoffLines.renderOrder = 5;
       terrainRoot.add(runoffGlow, runoffLines);
-      pulseMaterials.push(runoffGlow.material, runoffLines.material);
+      runoffGlow.material.userData.rfBaseOpacity = runoffGlow.material.opacity;
+      runoffLines.material.userData.rfBaseOpacity = runoffLines.material.opacity;
     }
 
-    pulseMaterials.push(...addFacetEdges(THREE, meshes, terrainRoot));
-    pulseMaterials.push(...addRimGlow(THREE, terrainRoot, terrainRoot));
+    addFacetEdges(THREE, meshes, terrainRoot);
+    addRimGlow(THREE, terrainRoot, terrainRoot);
 
     const route = buildSurfaceRoute(
       THREE,
@@ -720,21 +763,23 @@
       Math.min(window.devicePixelRatio || 1, compactViewport ? 1.25 : 1.75)
     );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.70;
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x021221, 18, 50);
 
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
 
-    const ambient = new THREE.HemisphereLight(0x94eaf2, 0x03111d, 1.08);
+    const ambient = new THREE.HemisphereLight(0x5d8791, 0x01060a, 0.24);
     scene.add(ambient);
 
-    const key = new THREE.DirectionalLight(0xb3ffff, 1.55);
-    key.position.set(-18, 20, 10);
+    const key = new THREE.DirectionalLight(0x9adce7, 1.45);
+    key.position.set(-20, 24, 14);
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0x3ec7e0, 0.48);
-    fill.position.set(12, 8, -16);
+    const fill = new THREE.DirectionalLight(0x244f5c, 0.055);
+    fill.position.set(12, 6, -18);
     scene.add(fill);
 
     const terrainRoot = new THREE.Group();
@@ -755,11 +800,11 @@
     }
 
     const terrainMaterial = new THREE.MeshStandardMaterial({
-      color: 0x133e50,
-      emissive: 0x041a27,
-      emissiveIntensity: 0.34,
-      roughness: 0.93,
-      metalness: 0.02,
+      color: 0x071a23,
+      emissive: 0x01070a,
+      emissiveIntensity: 0.065,
+      roughness: 0.97,
+      metalness: 0.0,
       transparent: true,
       opacity: 1,
       side: THREE.DoubleSide,
@@ -832,10 +877,10 @@
         if (material.userData.rfBaseOpacity === undefined) {
           material.userData.rfBaseOpacity = base;
         }
-        const amount = index % 3 === 0 ? 0.09 : 0.045;
+        const amount = index % 3 === 0 ? 0.018 : 0.010;
         material.opacity = clamp(base + pulse * amount, 0, 1);
       });
-      terrainMaterial.emissiveIntensity = 0.30 + pulse * 0.05;
+      terrainMaterial.emissiveIntensity = 0.060 + pulse * 0.008;
 
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
@@ -915,7 +960,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Aim-style contours loaded", true);
+    setBadge(badge, "Moonlit terrain loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
@@ -982,6 +1027,7 @@
     }
 
     mount.dataset.rfGraphInit = VERSION;
+    removePreloadBackground(mount);
     removeLegacyKey(mount);
 
     const token = { destroyed: false };
