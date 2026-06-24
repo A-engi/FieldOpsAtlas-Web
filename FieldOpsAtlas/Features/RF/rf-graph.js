@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.166-live-contours
+   Version: 1.1.167-aim-rim-glow
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -13,13 +13,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.166-live-contours";
+  const VERSION = "1.1.167-aim-rim-glow";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-live-contours";
+  const MODE = "three-gltf-aim-rim-glow";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -103,7 +103,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain model with live contour lines. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain model with dark filled faces, live contour lines, and edge glow. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -315,16 +315,30 @@
 
   function createElevationContours(THREE, meshes, box, size) {
     const segments = [];
-    const levelCount = 11;
-    const epsilon = Math.max(size.y * 0.0045, 0.018);
+    const levelCount = 14;
+    const epsilon = Math.max(size.y * 0.0042, 0.016);
     const levels = [];
+    const centroid = new THREE.Vector3();
+    const normal = new THREE.Vector3();
+    const edgeAB = new THREE.Vector3();
+    const edgeAC = new THREE.Vector3();
 
     for (let index = 0; index < levelCount; index += 1) {
       const t = index / (levelCount - 1);
-      levels.push(box.min.y + size.y * (0.13 + t * 0.76));
+      levels.push(box.min.y + size.y * (0.18 + t * 0.68));
     }
 
     forEachWorldTriangle(THREE, meshes, (a, b, c) => {
+      centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+      const heightRatio = (centroid.y - box.min.y) / Math.max(size.y, 0.0001);
+      edgeAB.subVectors(b, a);
+      edgeAC.subVectors(c, a);
+      normal.crossVectors(edgeAB, edgeAC).normalize();
+      if (normal.y < 0) normal.multiplyScalar(-1);
+      const slope = 1 - clamp(normal.y, 0, 1);
+
+      if (heightRatio < 0.18 || slope < 0.10) return;
+
       const minY = Math.min(a.y, b.y, c.y);
       const maxY = Math.max(a.y, b.y, c.y);
 
@@ -361,7 +375,7 @@
     const centroid = new THREE.Vector3();
     const downhill = new THREE.Vector3();
     const down = new THREE.Vector3(0, -1, 0);
-    const maxSegments = 260;
+    const maxSegments = 220;
     const epsilon = Math.max(size.y * 0.006, 0.022);
 
     forEachWorldTriangle(THREE, meshes, (a, b, c, triangle) => {
@@ -385,10 +399,10 @@
       );
 
       if (
-        heightRatio < 0.16 ||
-        heightRatio > 0.94 ||
-        slope < 0.30 ||
-        selector < 0.965
+        heightRatio < 0.22 ||
+        heightRatio > 0.92 ||
+        slope < 0.36 ||
+        selector < 0.953
       ) {
         return;
       }
@@ -396,7 +410,7 @@
       downhill.copy(down).addScaledVector(normal, normal.y).normalize();
       if (!Number.isFinite(downhill.x) || downhill.lengthSq() < 0.01) return;
 
-      const length = size.x * (0.012 + slope * 0.022) * (0.72 + selector * 0.30);
+      const length = size.x * (0.010 + slope * 0.018) * (0.68 + selector * 0.24);
       const start = centroid
         .clone()
         .addScaledVector(downhill, -length * 0.24)
@@ -419,33 +433,60 @@
       const softMaterial = new THREE.LineBasicMaterial({
         color: 0x1ecce5,
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.20,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
       const hardMaterial = new THREE.LineBasicMaterial({
         color: 0x67efff,
         transparent: true,
-        opacity: 0.46,
+        opacity: 0.68,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
 
       const softEdges = new THREE.LineSegments(
-        new THREE.EdgesGeometry(mesh.geometry, 15),
+        new THREE.EdgesGeometry(mesh.geometry, 10),
         softMaterial
       );
       const hardEdges = new THREE.LineSegments(
-        new THREE.EdgesGeometry(mesh.geometry, 34),
+        new THREE.EdgesGeometry(mesh.geometry, 24),
         hardMaterial
       );
 
       softEdges.renderOrder = 3;
       hardEdges.renderOrder = 4;
-      softEdges.scale.setScalar(1.0012);
-      hardEdges.scale.setScalar(1.0018);
+      softEdges.scale.setScalar(1.0015);
+      hardEdges.scale.setScalar(1.0022);
       mesh.add(softEdges, hardEdges);
       materials.push(softMaterial, hardMaterial);
+    });
+
+    terrainRoot.updateMatrixWorld(true);
+    return materials;
+  }
+
+  function addRimGlow(THREE, model, terrainRoot) {
+    const materials = [];
+
+    model.traverse((node) => {
+      if (!node.isMesh || node.userData.rfDecoration) return;
+
+      const rimMaterial = new THREE.MeshBasicMaterial({
+        color: 0x67efff,
+        transparent: true,
+        opacity: 0.09,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+
+      const rim = new THREE.Mesh(node.geometry, rimMaterial);
+      rim.userData.rfDecoration = true;
+      rim.renderOrder = 2;
+      rim.scale.setScalar(1.01);
+      node.add(rim);
+      materials.push(rimMaterial);
     });
 
     terrainRoot.updateMatrixWorld(true);
@@ -492,14 +533,14 @@
     const ribbonMaterial = new THREE.MeshBasicMaterial({
       color: 0x22ddeb,
       transparent: true,
-      opacity: 0.17,
+      opacity: 0.09,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x9afaff,
       transparent: true,
-      opacity: 0.88,
+      opacity: 0.76,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
@@ -571,8 +612,8 @@
       const contours = createLineSegments(
         THREE,
         contourSegments,
-        0x39e6ff,
-        0.48
+        0x6cefff,
+        0.34
       );
       contours.userData.rfDecoration = true;
       terrainRoot.add(contours);
@@ -589,14 +630,14 @@
       const runoffGlow = createLineSegments(
         THREE,
         runoffSegments,
-        0x1fd4f2,
-        0.26
+        0x24d4ef,
+        0.14
       );
       const runoffLines = createLineSegments(
         THREE,
         runoffSegments,
-        0x8af7ff,
-        0.66
+        0xb8fbff,
+        0.46
       );
       runoffGlow.userData.rfDecoration = true;
       runoffLines.userData.rfDecoration = true;
@@ -607,37 +648,7 @@
     }
 
     pulseMaterials.push(...addFacetEdges(THREE, meshes, terrainRoot));
-
-    const pointPositions = [];
-    const probe = new THREE.Vector3();
-    meshes.forEach((mesh) => {
-      const position = mesh.geometry.attributes.position;
-      const sampleStep = Math.max(1, Math.ceil(position.count / 700));
-      for (let index = 0; index < position.count; index += sampleStep) {
-        probe.fromBufferAttribute(position, index).applyMatrix4(mesh.matrixWorld);
-        const heightRatio = (probe.y - box.min.y) / Math.max(size.y, 0.0001);
-        if (heightRatio > 0.18) {
-          pointPositions.push(
-            probe.x,
-            probe.y + size.y * 0.004,
-            probe.z
-          );
-        }
-      }
-    });
-
-    if (pointPositions.length) {
-      const points = createPointCloud(
-        THREE,
-        pointPositions,
-        0x5eeaff,
-        Math.max(size.x * 0.0028, 0.045),
-        0.16
-      );
-      points.userData.rfDecoration = true;
-      terrainRoot.add(points);
-      pulseMaterials.push(points.material);
-    }
+    pulseMaterials.push(...addRimGlow(THREE, terrainRoot, terrainRoot));
 
     const route = buildSurfaceRoute(
       THREE,
@@ -729,19 +740,6 @@
     const terrainRoot = new THREE.Group();
     scene.add(terrainRoot);
 
-    const groundGlow = new THREE.Mesh(
-      new THREE.CircleGeometry(18, 60),
-      new THREE.MeshBasicMaterial({
-        color: 0x0d4e62,
-        transparent: true,
-        opacity: 0.12,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
-    );
-    groundGlow.rotation.x = -Math.PI * 0.5;
-    groundGlow.position.y = -0.02;
-    scene.add(groundGlow);
 
     setBadge(badge, "Loading 3D terrain…");
 
@@ -757,13 +755,13 @@
     }
 
     const terrainMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0b3546,
-      emissive: 0x031929,
-      emissiveIntensity: 0.58,
-      roughness: 0.96,
+      color: 0x133e50,
+      emissive: 0x041a27,
+      emissiveIntensity: 0.34,
+      roughness: 0.93,
       metalness: 0.02,
       transparent: true,
-      opacity: 0.995,
+      opacity: 1,
       side: THREE.DoubleSide,
       flatShading: true
     });
@@ -837,7 +835,7 @@
         const amount = index % 3 === 0 ? 0.09 : 0.045;
         material.opacity = clamp(base + pulse * amount, 0, 1);
       });
-      terrainMaterial.emissiveIntensity = 0.55 + pulse * 0.08;
+      terrainMaterial.emissiveIntensity = 0.30 + pulse * 0.05;
 
       const angle = (state.azimuth % 360) * DEG;
       const aspect = state.width / Math.max(1, state.height);
@@ -917,7 +915,7 @@
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(frame);
 
-    setBadge(badge, "Live contours loaded", true);
+    setBadge(badge, "Aim-style contours loaded", true);
     window.setTimeout(() => {
       badge.style.opacity = "0";
     }, 1800);
