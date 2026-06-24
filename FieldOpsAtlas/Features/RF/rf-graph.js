@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.160-import-map
+   Version: 1.1.163-text-gltf
 
    Purpose:
    - Replace the procedural curved terrain with the uploaded ready-made glTF
@@ -14,15 +14,14 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.160-import-map";
+  const VERSION = "1.1.163-text-gltf";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
   const MODE = "three-gltf-mountain-orbit";
-  const MODEL_URL = "../../Feature/RF/scene.gltf";
-  const BINARY_URL = "../../Feature/RF/FieldOpsAtlas_RF_scene.bin";
+  const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
 
@@ -321,43 +320,50 @@
       left: null,
       right: null
     };
-    const terrainMeshes = [];
+    const pointPositions = [];
 
     terrainRoot.updateMatrixWorld(true);
 
     terrainRoot.traverse((node) => {
       if (!node.isMesh || !node.geometry || !node.geometry.attributes.position) return;
 
-      terrainMeshes.push(node);
-      node.geometry.computeVertexNormals();
-      const geometry = node.geometry;
-      const position = geometry.attributes.position;
-      const step = Math.max(1, Math.floor(position.count / 3000));
+      const position = node.geometry.attributes.position;
+      const sampleStep = Math.max(1, Math.ceil(position.count / 1800));
       const probe = new THREE.Vector3();
 
-      for (let index = 0; index < position.count; index += step) {
+      for (let index = 0; index < position.count; index += sampleStep) {
         probe.fromBufferAttribute(position, index).applyMatrix4(node.matrixWorld);
+        pointPositions.push(probe.x, probe.y + size.y * 0.002, probe.z);
+
         const side = probe.x < center.x ? "left" : "right";
         if (!peakState[side] || probe.y > peakState[side].y) {
           peakState[side] = probe.clone();
         }
       }
-
-      const wire = new THREE.LineSegments(
-        new THREE.WireframeGeometry(geometry),
-        new THREE.LineBasicMaterial({
-          color: 0x74effa,
-          transparent: true,
-          opacity: 0.15,
-          depthWrite: false
-        })
-      );
-      wire.renderOrder = 2;
-      node.add(wire);
     });
 
-    const leftPeak = peakState.left || new THREE.Vector3(center.x - size.x * 0.2, topY, center.z + size.z * 0.08);
-    const rightPeak = peakState.right || new THREE.Vector3(center.x + size.x * 0.2, topY * 0.96, center.z - size.z * 0.08);
+    if (pointPositions.length) {
+      const terrainPoints = createPointCloud(
+        THREE,
+        pointPositions,
+        0x6beaf5,
+        Math.max(size.x * 0.0032, 0.045),
+        0.42
+      );
+      terrainPoints.renderOrder = 2;
+      terrainRoot.add(terrainPoints);
+    }
+
+    const leftPeak = peakState.left || new THREE.Vector3(
+      center.x - size.x * 0.2,
+      topY,
+      center.z + size.z * 0.08
+    );
+    const rightPeak = peakState.right || new THREE.Vector3(
+      center.x + size.x * 0.2,
+      topY * 0.96,
+      center.z - size.z * 0.08
+    );
 
     const leftTower = createTowerGroup(
       THREE,
@@ -375,81 +381,64 @@
       -1
     );
 
-    const raycaster = new THREE.Raycaster();
-    const castOrigin = new THREE.Vector3();
-    const direction = new THREE.Vector3(0, -1, 0);
     const pathSamples = [];
-    const steps = 84;
-    const zStart = box.max.z - size.z * 0.06;
-    const zEnd = box.min.z + size.z * 0.12;
-    const searchRadius = size.x * 0.17;
+    const pathSteps = 34;
+    const zStart = box.max.z - size.z * 0.08;
+    const zEnd = box.min.z + size.z * 0.14;
 
-    for (let index = 0; index < steps; index += 1) {
-      const t = index / (steps - 1);
-      const z = zStart + (zEnd - zStart) * t;
-      let bestHit = null;
-
-      for (let probeIndex = 0; probeIndex < 15; probeIndex += 1) {
-        const offsetUnit = probeIndex / 14 - 0.5;
-        const x =
-          center.x +
-          offsetUnit * searchRadius * 2 +
-          Math.sin(t * Math.PI * 2.7) * size.x * 0.015;
-        castOrigin.set(x, topY + size.y * 1.8, z);
-        raycaster.set(castOrigin, direction);
-        const hits = raycaster.intersectObjects(terrainMeshes, false);
-        if (!hits.length) continue;
-        const hit = hits[0].point.clone();
-        if (!bestHit || hit.y < bestHit.y) bestHit = hit;
-      }
-
-      if (bestHit) {
-        bestHit.y += size.y * 0.012;
-        pathSamples.push(bestHit);
-      }
+    for (let index = 0; index < pathSteps; index += 1) {
+      const t = index / (pathSteps - 1);
+      pathSamples.push(
+        new THREE.Vector3(
+          center.x + Math.sin(t * Math.PI * 2.4) * size.x * 0.035,
+          baseY + size.y * (0.10 + Math.sin(t * Math.PI) * 0.05),
+          zStart + (zEnd - zStart) * t
+        )
+      );
     }
 
-    if (pathSamples.length >= 2) {
-      const curve = new THREE.CatmullRomCurve3(pathSamples);
-      const ribbon = new THREE.Mesh(
-        new THREE.TubeGeometry(curve, Math.max(48, pathSamples.length * 2), Math.max(size.x * 0.0034, 0.10), 8, false),
-        new THREE.MeshBasicMaterial({
-          color: 0x2aeffc,
-          transparent: true,
-          opacity: 0.28,
-          depthWrite: false
-        })
-      );
+    const curve = new THREE.CatmullRomCurve3(pathSamples);
+    const ribbon = new THREE.Mesh(
+      new THREE.TubeGeometry(
+        curve,
+        54,
+        Math.max(size.x * 0.0025, 0.07),
+        6,
+        false
+      ),
+      new THREE.MeshBasicMaterial({
+        color: 0x2aeffc,
+        transparent: true,
+        opacity: 0.24,
+        depthWrite: false
+      })
+    );
 
-      const lineGeometry = new THREE.BufferGeometry().setFromPoints(pathSamples);
-      const line = new THREE.Line(
-        lineGeometry,
-        new THREE.LineBasicMaterial({
-          color: 0x84f7ff,
-          transparent: true,
-          opacity: 0.98,
-          depthWrite: false
-        })
-      );
+    const line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(pathSamples),
+      new THREE.LineBasicMaterial({
+        color: 0x84f7ff,
+        transparent: true,
+        opacity: 0.94,
+        depthWrite: false
+      })
+    );
 
-      const markerPositions = [];
-      const markerStep = Math.max(1, Math.floor(pathSamples.length / 18));
-      for (let index = 0; index < pathSamples.length; index += markerStep) {
-        const point = pathSamples[index];
-        markerPositions.push(point.x, point.y, point.z);
-      }
-      const markers = createPointCloud(
-        THREE,
-        markerPositions,
-        0xb2fdff,
-        Math.max(size.x * 0.012, 0.14),
-        0.88
-      );
-
-      terrainRoot.add(ribbon, line, markers);
+    const markerPositions = [];
+    for (let index = 0; index < pathSamples.length; index += 3) {
+      const point = pathSamples[index];
+      markerPositions.push(point.x, point.y, point.z);
     }
 
-    terrainRoot.add(leftTower, rightTower);
+    const markers = createPointCloud(
+      THREE,
+      markerPositions,
+      0xb2fdff,
+      Math.max(size.x * 0.009, 0.11),
+      0.82
+    );
+
+    terrainRoot.add(ribbon, line, markers, leftTower, rightTower);
 
     return {
       box,
@@ -479,18 +468,8 @@
     return model;
   }
 
-  async function loadModel(THREE, GLTFLoader) {
-    const manager = new THREE.LoadingManager();
-
-    manager.setURLModifier((url) => {
-      if (url.endsWith("scene.bin")) {
-        return BINARY_URL;
-      }
-
-      return url;
-    });
-
-    const loader = new GLTFLoader(manager);
+  async function loadModel(GLTFLoader) {
+    const loader = new GLTFLoader();
 
     return new Promise((resolve, reject) => {
       loader.load(
@@ -512,14 +491,17 @@
       };
     }
 
+    const compactViewport = window.matchMedia("(max-width: 760px)").matches;
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true,
+      antialias: !compactViewport,
       powerPreference: "high-performance"
     });
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, compactViewport ? 1.25 : 1.75)
+    );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
@@ -556,7 +538,7 @@
 
     setBadge(badge, "Loading 3D terrain…");
 
-    const gltf = await loadModel(THREE, GLTFLoader);
+    const gltf = await loadModel(GLTFLoader);
     if (token.destroyed) {
       renderer.dispose();
       return {
@@ -569,21 +551,22 @@
       throw new Error("The uploaded glTF scene is empty.");
     }
 
+    const terrainMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0d3f52,
+      emissive: 0x041c2e,
+      emissiveIntensity: 0.42,
+      roughness: 0.94,
+      metalness: 0.04,
+      transparent: true,
+      opacity: 0.97,
+      side: THREE.DoubleSide
+    });
+
     model.traverse((node) => {
       if (!node.isMesh) return;
       node.castShadow = false;
       node.receiveShadow = false;
-      if (node.geometry) node.geometry.computeVertexNormals();
-      node.material = new THREE.MeshStandardMaterial({
-        color: 0x0d3f52,
-        emissive: 0x041c2e,
-        emissiveIntensity: 0.48,
-        roughness: 0.94,
-        metalness: 0.04,
-        transparent: true,
-        opacity: 0.97,
-        side: THREE.DoubleSide
-      });
+      node.material = terrainMaterial;
     });
 
     normaliseTerrainModel(THREE, model);
