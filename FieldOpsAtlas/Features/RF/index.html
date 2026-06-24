@@ -3,41 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF v1.1.186</title>
+  <title>FieldOps Atlas RF v1.1.190</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
   <link rel="stylesheet" href="./rf-graph.css?v=1.1.85-network-topology">
   <link rel="stylesheet" href="./rf-interface.css?v=1.1.120-pane-fit">
 
-  <style>
-    .rf-load-toast {
-      position: fixed;
-      z-index: 9999;
-      left: 14px;
-      right: auto;
-      bottom: 92px;
-      width: auto;
-      max-width: min(86vw, 380px);
-      padding: 7px 9px;
-      border: 1px solid rgba(255, 221, 142, 0.66);
-      border-radius: 13px;
-      background: rgba(10, 23, 36, 0.88);
-      color: #ffe7b8;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
-      font: 700 10px/1.18 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      pointer-events: none;
-    }
-
-    .rf-load-toast.is-visible {
-      opacity: 0.9;
-      transform: translateY(0);
-    }
-  </style>
 </head>
 
 <body>
@@ -147,76 +119,8 @@
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.122-pane-fit" defer></script>
   <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
-  <script src="./rf-graph.js?v=1.1.189-embedded-exact-rollback-fix" defer></script>
+  <script src="./rf-graph.js?v=1.1.190-embedded-exact-clean" defer></script>
 
-  <script>
-    /* RF load toast | Version: 1.1.189-embedded-exact-rollback-fix */
-    (() => {
-      "use strict";
-
-      const PAGE_VERSION = "1.1.189-embedded-exact-rollback-fix";
-      const TOAST_ID = "rfLoadToast";
-
-      function versionOf(globalName) {
-        const globalValue = window[globalName];
-
-        if (!globalValue) {
-          return "missing";
-        }
-
-        return globalValue.VERSION || globalValue.version || "loaded";
-      }
-
-      function showToast() {
-        const existingToast = document.getElementById(TOAST_ID);
-
-        if (existingToast) {
-          existingToast.remove();
-        }
-
-        const toast = document.createElement("div");
-        toast.id = TOAST_ID;
-        toast.className = "rf-load-toast";
-        toast.setAttribute("role", "status");
-        toast.setAttribute("aria-live", "polite");
-
-        const lines = [
-          `index.html ${PAGE_VERSION}`,
-          "shell.css 1.1.21-shell-smoke-controls",
-          "background.css 1.1.76-graph-label",
-          "rf-graph.css 1.1.85-network-topology",
-          "rf-interface.css 1.1.120-pane-fit",
-          `shell.js ${versionOf("FieldOpsEditor")}`,
-          `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
-          `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
-          `rf-graph.js ${versionOf("FieldOpsRFGraph")}`
-        ];
-
-        toast.textContent = lines.join("\n");
-        document.body.appendChild(toast);
-
-        requestAnimationFrame(() => {
-          toast.classList.add("is-visible");
-        });
-
-        window.setTimeout(() => {
-          toast.classList.remove("is-visible");
-        }, 6500);
-
-        window.setTimeout(() => {
-          toast.remove();
-        }, 7000);
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", () => {
-          window.setTimeout(showToast, 450);
-        }, { once: true });
-      } else {
-        window.setTimeout(showToast, 450);
-      }
-    })();
-  </script>
 </body>
 </html>
 <!-- Destination: FieldOpsAtlas/Features/RF/index.html -->
