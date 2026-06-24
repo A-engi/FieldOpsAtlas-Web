@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.184-bottom-anchored
+   Version: 1.1.185-bake-export
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.184-bottom-anchored";
+  const VERSION = "1.1.185-bake-export";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1537,6 +1537,328 @@
     });
   }
 
+  function encodeTypedArrayBase64(array) {
+    const bytes = new Uint8Array(
+      array.buffer,
+      array.byteOffset,
+      array.byteLength
+    );
+    const chunks = [];
+    const chunkSize = 0x8000;
+
+    for (let index = 0; index < bytes.length; index += chunkSize) {
+      chunks.push(
+        String.fromCharCode(...bytes.subarray(index, index + chunkSize))
+      );
+    }
+
+    return window.btoa(chunks.join(""));
+  }
+
+  function bakeWorldPositions(THREE, object) {
+    const source = object.geometry?.getAttribute("position");
+    if (!source) return null;
+
+    object.updateWorldMatrix(true, false);
+    const result = new Float32Array(source.count * 3);
+    const point = new THREE.Vector3();
+
+    for (let index = 0; index < source.count; index += 1) {
+      point.fromBufferAttribute(source, index).applyMatrix4(object.matrixWorld);
+      const offset = index * 3;
+      result[offset] = point.x;
+      result[offset + 1] = point.y;
+      result[offset + 2] = point.z;
+    }
+
+    return result;
+  }
+
+  function bakeAttributeFloat32(geometry, name) {
+    const source = geometry?.getAttribute(name);
+    if (!source) return null;
+
+    const result = new Float32Array(source.count * source.itemSize);
+    for (let index = 0; index < result.length; index += 1) {
+      result[index] = source.array[index];
+    }
+    return result;
+  }
+
+  function bakeIndices(geometry, vertexCount) {
+    if (geometry?.index) {
+      const source = geometry.index.array;
+      const result = new Uint32Array(source.length);
+      for (let index = 0; index < source.length; index += 1) {
+        result[index] = source[index];
+      }
+      return result;
+    }
+
+    const result = new Uint32Array(vertexCount);
+    for (let index = 0; index < vertexCount; index += 1) {
+      result[index] = index;
+    }
+    return result;
+  }
+
+  function mergeTerrainMeshes(THREE, meshes) {
+    let vertexTotal = 0;
+    let indexTotal = 0;
+    const parts = [];
+
+    meshes.forEach((mesh) => {
+      const positions = bakeWorldPositions(THREE, mesh);
+      if (!positions) return;
+      const vertexCount = positions.length / 3;
+      const indices = bakeIndices(mesh.geometry, vertexCount);
+      parts.push({ positions, indices, vertexOffset: vertexTotal });
+      vertexTotal += vertexCount;
+      indexTotal += indices.length;
+    });
+
+    const positions = new Float32Array(vertexTotal * 3);
+    const indices = new Uint32Array(indexTotal);
+    let positionOffset = 0;
+    let indexOffset = 0;
+
+    parts.forEach((part) => {
+      positions.set(part.positions, positionOffset);
+      for (let index = 0; index < part.indices.length; index += 1) {
+        indices[indexOffset + index] =
+          part.indices[index] + part.vertexOffset;
+      }
+      positionOffset += part.positions.length;
+      indexOffset += part.indices.length;
+    });
+
+    return { positions, indices };
+  }
+
+  function serialiseBakedPart(part) {
+    if (!part?.positions?.length) return null;
+
+    const output = {
+      positions: encodeTypedArrayBase64(part.positions),
+      positionCount: part.positions.length / 3
+    };
+
+    if (part.indices?.length) {
+      output.indices = encodeTypedArrayBase64(part.indices);
+      output.indexCount = part.indices.length;
+    }
+
+    if (part.brightness?.length) {
+      output.brightness = encodeTypedArrayBase64(part.brightness);
+      output.brightnessCount = part.brightness.length;
+    }
+
+    if (part.material) output.material = part.material;
+    return output;
+  }
+
+  function buildBakedScenePayload(
+    THREE,
+    terrainRoot,
+    target,
+    orbitRadiusBase,
+    targetLift
+  ) {
+    terrainRoot.updateMatrixWorld(true);
+
+    const terrainMeshes = [];
+    const sceneParts = {
+      dots: null,
+      chevrons: null,
+      continuations: null,
+      riverMesh: null,
+      riverLine: null,
+      gridLines: null,
+      gridPoints: null
+    };
+
+    terrainRoot.traverse((object) => {
+      if (!object.visible || !object.geometry?.getAttribute("position")) return;
+
+      if (object.isMesh && !object.userData.rfDecoration) {
+        terrainMeshes.push(object);
+        return;
+      }
+
+      const positions = bakeWorldPositions(THREE, object);
+      if (!positions) return;
+      const brightness = bakeAttributeFloat32(object.geometry, "aBrightness");
+
+      if (object.isPoints && brightness) {
+        sceneParts.dots = { positions, brightness };
+        return;
+      }
+
+      if (object.isLineSegments && brightness) {
+        const targetPart = object.renderOrder >= 4
+          ? "chevrons"
+          : "continuations";
+        sceneParts[targetPart] = { positions, brightness };
+        return;
+      }
+
+      if (object.isMesh) {
+        sceneParts.riverMesh = {
+          positions,
+          indices: bakeIndices(object.geometry, positions.length / 3),
+          material: {
+            color: object.material?.color?.getHex?.() ?? 0x22ddeb,
+            opacity: object.material?.opacity ?? 0.02
+          }
+        };
+        return;
+      }
+
+      if (object.isLine && !object.isLineSegments) {
+        sceneParts.riverLine = {
+          positions,
+          material: {
+            color: object.material?.color?.getHex?.() ?? 0x9afaff,
+            opacity: object.material?.opacity ?? 0.32
+          }
+        };
+        return;
+      }
+
+      if (object.isLineSegments) {
+        sceneParts.gridLines = {
+          positions,
+          material: {
+            color: object.material?.color?.getHex?.() ?? 0x5db9d0,
+            opacity: object.material?.opacity ?? 0.18
+          }
+        };
+        return;
+      }
+
+      if (object.isPoints) {
+        sceneParts.gridPoints = {
+          positions,
+          material: {
+            color: object.material?.color?.getHex?.() ?? 0x8fefff,
+            opacity: object.material?.opacity ?? 0.055,
+            size: object.material?.size ?? 0.038
+          }
+        };
+      }
+    });
+
+    const terrain = mergeTerrainMeshes(THREE, terrainMeshes);
+    const box = new THREE.Box3().setFromObject(terrainRoot);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+
+    return {
+      format: "fieldops-rf-baked-scene-v1",
+      sourceVersion: VERSION,
+      generatedAt: new Date().toISOString(),
+      bounds: {
+        min: [box.min.x, box.min.y, box.min.z],
+        max: [box.max.x, box.max.y, box.max.z],
+        size: [size.x, size.y, size.z],
+        center: [center.x, center.y, center.z]
+      },
+      camera: {
+        target: [target.x, target.y, target.z],
+        orbitRadiusBase,
+        targetLift,
+        frontAzimuth: FRONT_AZIMUTH
+      },
+      terrain: serialiseBakedPart(terrain),
+      dots: serialiseBakedPart(sceneParts.dots),
+      chevrons: serialiseBakedPart(sceneParts.chevrons),
+      continuations: serialiseBakedPart(sceneParts.continuations),
+      riverMesh: serialiseBakedPart(sceneParts.riverMesh),
+      riverLine: serialiseBakedPart(sceneParts.riverLine),
+      gridLines: serialiseBakedPart(sceneParts.gridLines),
+      gridPoints: serialiseBakedPart(sceneParts.gridPoints)
+    };
+  }
+
+  function installBakeExporter(
+    THREE,
+    frame,
+    terrainRoot,
+    target,
+    orbitRadiusBase,
+    targetLift,
+    badge
+  ) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Export baked JS";
+    button.setAttribute("aria-label", "Export exact baked RF scene geometry");
+    button.style.cssText = [
+      "position:absolute",
+      "top:10px",
+      "right:10px",
+      "z-index:8",
+      "padding:7px 10px",
+      "border:1px solid rgba(122,239,250,.5)",
+      "border-radius:999px",
+      "background:rgba(2,16,31,.88)",
+      "color:#d9fbff",
+      "font:700 10px/1 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
+      "letter-spacing:.03em",
+      "cursor:pointer"
+    ].join(";");
+
+    const exportScene = () => {
+      button.disabled = true;
+      button.textContent = "Baking…";
+      setBadge(badge, "Baking exact scene geometry…");
+
+      window.setTimeout(() => {
+        try {
+          const payload = buildBakedScenePayload(
+            THREE,
+            terrainRoot,
+            target,
+            orbitRadiusBase,
+            targetLift
+          );
+          const fileText = [
+            "/* FieldOps Atlas RF exact baked scene */",
+            `/* Source: ${VERSION} */`,
+            "window.FIELDOPS_RF_BAKED_SCENE = ",
+            JSON.stringify(payload),
+            ";",
+            "",
+            "/* Destination: FieldOpsAtlas/Features/RF/rf-baked-scene.js */",
+            "/* End of file: FieldOpsAtlas/Features/RF/rf-baked-scene.js */"
+          ].join("\n");
+          const blob = new Blob([fileText], {
+            type: "text/javascript;charset=utf-8"
+          });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "rf-baked-scene-v1.1.185-exact.js";
+          document.body.append(link);
+          link.click();
+          link.remove();
+          window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+          button.textContent = "Exported";
+          setBadge(badge, "Exact baked scene exported", true);
+        } catch (error) {
+          console.error("FieldOps RF bake export failed", error);
+          button.disabled = false;
+          button.textContent = "Export baked JS";
+          setBadge(badge, "Bake export failed");
+        }
+      }, 50);
+    };
+
+    button.addEventListener("click", exportScene);
+    frame.append(button);
+    window.__FIELDOPS_EXPORT_RF_BAKED_SCENE__ = exportScene;
+  }
+
   async function initialiseThreeViewer(mount, elements, token) {
     const { frame, canvas, hint, badge } = elements;
     const { THREE, GLTFLoader } = await loadDependencies();
@@ -1648,6 +1970,16 @@
     const size = decor.size;
     const orbitRadiusBase = Math.max(size.x, size.z) * 0.72;
     const targetLift = size.y * 0.03;
+
+    installBakeExporter(
+      THREE,
+      frame,
+      terrainRoot,
+      target,
+      orbitRadiusBase,
+      targetLift,
+      badge
+    );
 
     const state = {
       azimuth: FRONT_AZIMUTH,
