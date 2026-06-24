@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.172-double-summit-dots
+   Version: 1.1.173-quad-summit-dots
 
    Purpose:
    - Keep the uploaded ready-made glTF mountain geometry unchanged.
@@ -14,13 +14,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.172-double-summit-dots";
+  const VERSION = "1.1.173-quad-summit-dots";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-gltf-double-summit-dots";
+  const MODE = "three-gltf-quad-summit-dots";
   const MODEL_URL = "../../Feature/RF/scene-mobile-v1.1.163.gltf";
   const THREE_MODULE_URL = "three";
   const GLTF_LOADER_URL = "three/addons/loaders/GLTFLoader.js";
@@ -572,12 +572,42 @@
 
       const spread = Math.max(size.x * 0.0014, 0.018);
       const tangent = edgeAB.clone().normalize();
-      const secondary = lifted.clone().addScaledVector(tangent, spread * (0.55 + selector * 0.45));
-      summitGlowPositions.push(secondary.x, secondary.y, secondary.z);
+      const bitangent = normal.clone().cross(tangent).normalize();
+      const spreadAmount = spread * (0.55 + selector * 0.45);
+      const secondary = lifted.clone().addScaledVector(tangent, spreadAmount);
+      const tertiary = lifted.clone().addScaledVector(bitangent, spreadAmount * 0.82);
+      const quaternary = lifted
+        .clone()
+        .addScaledVector(tangent, -spreadAmount * 0.72)
+        .addScaledVector(bitangent, -spreadAmount * 0.58);
+
+      summitGlowPositions.push(
+        secondary.x,
+        secondary.y,
+        secondary.z,
+        tertiary.x,
+        tertiary.y,
+        tertiary.z,
+        quaternary.x,
+        quaternary.y,
+        quaternary.z
+      );
 
       if (heightRatio > 0.80 && selector > 0.88) {
-        summitCorePositions.push(lifted.x, lifted.y, lifted.z);
-        summitCorePositions.push(secondary.x, secondary.y, secondary.z);
+        summitCorePositions.push(
+          lifted.x,
+          lifted.y,
+          lifted.z,
+          secondary.x,
+          secondary.y,
+          secondary.z,
+          tertiary.x,
+          tertiary.y,
+          tertiary.z,
+          quaternary.x,
+          quaternary.y,
+          quaternary.z
+        );
       }
     });
 
