@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.164-top-outline
+   Version: 1.1.165-contour-fill-glow
 
    Purpose:
    - Replace the procedural curved terrain with the uploaded ready-made glTF
@@ -14,7 +14,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.164-top-outline";
+  const VERSION = "1.1.165-contour-fill-glow";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -318,6 +318,7 @@
 
     const outlineBins = new Map();
     const outlineBinCount = 72;
+    const interiorGlowPositions = [];
 
     terrainRoot.updateMatrixWorld(true);
 
@@ -325,20 +326,41 @@
       if (!node.isMesh || !node.geometry || !node.geometry.attributes.position) return;
 
       const position = node.geometry.attributes.position;
-      const sampleStep = Math.max(1, Math.ceil(position.count / 2200));
+      const sampleStep = Math.max(1, Math.ceil(position.count / 1800));
       const probe = new THREE.Vector3();
 
       for (let index = 0; index < position.count; index += sampleStep) {
         probe.fromBufferAttribute(position, index).applyMatrix4(node.matrixWorld);
+
         const normalisedX = (probe.x - box.min.x) / Math.max(size.x, 0.0001);
         const bin = clamp(Math.floor(normalisedX * outlineBinCount), 0, outlineBinCount - 1);
         const current = outlineBins.get(bin);
-
         if (!current || probe.y > current.y) {
           outlineBins.set(bin, probe.clone());
         }
+
+        const heightRatio = (probe.y - baseY) / Math.max(size.y, 0.0001);
+        if (heightRatio > 0.16 && ((index / sampleStep) % 2 === 0)) {
+          interiorGlowPositions.push(
+            probe.x,
+            probe.y + size.y * 0.004,
+            probe.z
+          );
+        }
       }
     });
+
+    if (interiorGlowPositions.length) {
+      const contourGlow = createPointCloud(
+        THREE,
+        interiorGlowPositions,
+        0x44dfff,
+        Math.max(size.x * 0.0035, 0.06),
+        0.24
+      );
+      contourGlow.renderOrder = 2;
+      terrainRoot.add(contourGlow);
+    }
 
     const outlinePoints = Array.from(outlineBins.entries())
       .sort((a, b) => a[0] - b[0])
@@ -373,7 +395,7 @@
         glowPositions,
         0x5fe9ff,
         Math.max(size.x * 0.0044, 0.075),
-        0.50
+        0.54
       );
       outlineGlow.renderOrder = 3;
 
@@ -553,11 +575,11 @@
     const terrainMaterial = new THREE.MeshStandardMaterial({
       color: 0x0d3f52,
       emissive: 0x041c2e,
-      emissiveIntensity: 0.42,
+      emissiveIntensity: 0.68,
       roughness: 0.94,
       metalness: 0.04,
       transparent: true,
-      opacity: 0.97,
+      opacity: 0.99,
       side: THREE.DoubleSide
     });
 
