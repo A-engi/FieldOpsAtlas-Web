@@ -1,11 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.193-long-ridge-lines
+   Version: 1.1.194-major-ridge-tubes
 
    Purpose:
    - Rebuild the terrain from embedded vertex and index data.
-   - Keep only the moonlit dot field, connected chevrons, seven long ridge lines, dark terrain shell,
+   - Keep only the moonlit dot field, connected chevrons, a major ridge network, dark terrain shell,
      responsive camera, orbit interaction, mount lifecycle, and rendered event.
    - Remove only disconnected components below 0.08 units extent and
      0.0035 square units area; preserve the full terrain bounds and peaks.
@@ -14,13 +14,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.193-long-ridge-lines";
+  const VERSION = "1.1.194-major-ridge-tubes";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-embedded-long-ridge-lines";
+  const MODE = "three-embedded-major-ridge-tubes";
   const THREE_MODULE_URL = "three";
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -13508,83 +13508,45 @@
       "7j45cwE/EroQPxAmBT8QJgU/EroQP5fUGD+gmgw/oJoMP5fUGD9DaxI/mrQGP5q0Bj9DaxI/jCwUP/JRCD/yUQg/jCwUPy1iOT+GjSo/ho0qPy1iOT9p8TI/",
       "qaAkP6mgJD9p8TI/lT4wPxklIj8ZJSI/lT4wPzglJD+FAxc/hQMXPzglJD/rOCg/ucMaP7nDGj/rOCg/"
     ].join(""),
-    ridgePositions: [
-      "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",
-      "9VJXwSrM0T8HagdB"
+    ridgePathPositions: [
+      "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",
+      "w+0MP1OjAUAALCZBR0vgPjgx2z8gHi1B"
     ].join(""),
-    ridgeBrightness: [
-      "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",
-      "CEi7Pg=="
+    ridgePathOffsets: [
+      "AAAAABQAAAAhAAAALwAAADwAAABIAAAAUQAAAF0AAAB0AAAAfAAAAIYAAACWAAAAnwAAAKsAAAC8AAAAyAAAANMAAADtAAAAAQEAAA=="
     ].join("")
   });
 
@@ -13688,7 +13650,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain with evenly spaced dots, broken connected chevrons, and long illuminated ridge lines. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain with evenly spaced dots, broken connected chevrons, and thick illuminated lines following the major ridge network. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
@@ -13934,93 +13896,109 @@
   }
 
 
+
   function buildRidgeLines(THREE) {
-    const geometry = new THREE.BufferGeometry();
-
-    geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(
-        decodeFloat32(EMBEDDED.ridgePositions),
-        3
-      )
+    const positions = decodeFloat32(
+      EMBEDDED.ridgePathPositions
     );
 
-    geometry.setAttribute(
-      "aBrightness",
-      new THREE.BufferAttribute(
-        decodeFloat32(EMBEDDED.ridgeBrightness),
-        1
-      )
+    const offsets = decodeUint32(
+      EMBEDDED.ridgePathOffsets
     );
 
-    geometry.computeBoundingSphere();
+    const group = new THREE.Group();
+    group.userData.rfDecoration = true;
 
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uDarkColour: {
-          value: new THREE.Color(0x14505d)
-        },
-        uBrightColour: {
-          value: new THREE.Color(0xb8fbff)
-        }
-      },
-      vertexShader: `
-        attribute float aBrightness;
-        varying float vBrightness;
-
-        void main() {
-          vBrightness = aBrightness;
-          gl_Position =
-            projectionMatrix
-            * modelViewMatrix
-            * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 uDarkColour;
-        uniform vec3 uBrightColour;
-        varying float vBrightness;
-
-        void main() {
-          float lightLevel = pow(
-            clamp(vBrightness, 0.0, 1.0),
-            1.08
-          );
-
-          vec3 colour = mix(
-            uDarkColour,
-            uBrightColour,
-            lightLevel
-          );
-
-          float alpha =
-            0.16
-            + lightLevel * 0.42;
-
-          gl_FragColor = vec4(
-            colour,
-            alpha
-          );
-        }
-      `,
+    const glowMaterial = new THREE.MeshBasicMaterial({
+      color: 0x2e9faf,
       transparent: true,
+      opacity: 0.16,
       depthWrite: false,
       depthTest: true,
       blending: THREE.AdditiveBlending,
-      toneMapped: false
+      toneMapped: false,
+      side: THREE.DoubleSide
     });
 
-    const ridges = new THREE.LineSegments(
-      geometry,
-      material
-    );
+    const coreMaterial = new THREE.MeshBasicMaterial({
+      color: 0xc5fdff,
+      transparent: true,
+      opacity: 0.62,
+      depthWrite: false,
+      depthTest: true,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+      side: THREE.DoubleSide
+    });
 
-    ridges.userData.rfDecoration = true;
-    ridges.renderOrder = 6;
-    ridges.frustumCulled = true;
+    for (let pathIndex = 0; pathIndex < offsets.length - 1; pathIndex += 1) {
+      const start = offsets[pathIndex];
+      const end = offsets[pathIndex + 1];
+      const points = [];
 
-    return ridges;
+      for (let pointIndex = start; pointIndex < end; pointIndex += 1) {
+        const offset = pointIndex * 3;
+
+        points.push(
+          new THREE.Vector3(
+            positions[offset],
+            positions[offset + 1],
+            positions[offset + 2]
+          )
+        );
+      }
+
+      if (points.length < 2) {
+        continue;
+      }
+
+      const curve = new THREE.CatmullRomCurve3(
+        points,
+        false,
+        "centripetal"
+      );
+
+      const tubularSegments = Math.max(
+        16,
+        points.length * 2
+      );
+
+      const glow = new THREE.Mesh(
+        new THREE.TubeGeometry(
+          curve,
+          tubularSegments,
+          0.095,
+          5,
+          false
+        ),
+        glowMaterial
+      );
+
+      glow.userData.rfDecoration = true;
+      glow.renderOrder = 6;
+      glow.frustumCulled = true;
+      group.add(glow);
+
+      const core = new THREE.Mesh(
+        new THREE.TubeGeometry(
+          curve,
+          tubularSegments,
+          0.042,
+          5,
+          false
+        ),
+        coreMaterial
+      );
+
+      core.userData.rfDecoration = true;
+      core.renderOrder = 7;
+      core.frustumCulled = true;
+      group.add(core);
+    }
+
+    return group;
   }
+
 
   async function initialiseThreeViewer(mount, elements, token) {
     const { frame, canvas, hint } = elements;
