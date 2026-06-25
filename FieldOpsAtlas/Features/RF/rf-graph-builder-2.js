@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.202-builder-2-moon-birdseye
+   Version: 1.1.203-builder-2-moon-normal-view
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Remove ridge tubes and cover the mountain base with large moonlit dots in a bird's-eye view.
+   - Remove ridge tubes and cover the mountain base with large moonlit dots, while restoring the normal orbit view.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.202-builder-2-moon-birdseye";
-  const MODE = "three-ridge-web-builder-2-moon-birdseye";
+  const VERSION = "1.1.203-builder-2-moon-normal-view";
+  const MODE = "three-ridge-web-builder-2-moon-normal-view";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1688,10 +1688,10 @@
       );
 
     const orbitRadiusBase =
-      Math.max(size.x, size.z) * 0.22;
+      Math.max(size.x, size.z) * 0.73;
 
     const targetLift =
-      size.y * 1.68;
+      size.y * 0.29;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -1785,10 +1785,10 @@
 
       camera.fov =
         aspect < 0.82
-          ? 36
+          ? 47
           : aspect < 1.12
-            ? 34
-            : 33;
+            ? 45
+            : 44;
 
       camera.updateProjectionMatrix();
 
