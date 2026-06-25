@@ -1,19 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.205-dramatic-edge-shading
+   Version: 1.1.207-ridge-dots-edge-shading
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Render the existing mountain mesh with dramatic cyan edge shading only.
+   - Preserve the blue/teal mountain body with dramatic cyan edge shading.
+   - Light a restrained dot field tightly along the ridge lines only.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.205-dramatic-edge-shading";
+  const VERSION = "1.1.207-ridge-dots-edge-shading";
   const MODE = "three-ridge-web-builder-2-dramatic-edge-shading";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
@@ -1373,7 +1374,7 @@
 
       const ridgeCore = Math.exp(
         -Math.pow(
-          ridgeMetrics.distance / 0.42,
+          ridgeMetrics.distance / 0.25,
           2
         )
       );
@@ -1407,16 +1408,20 @@
         1
       );
 
+      if (
+        ridgeCore < 0.085
+        && convergence < 0.34
+      ) {
+        continue;
+      }
+
       const densityWeight =
         area
         * (
-          0.55
-          + ridgeCore * 7.0
-          + shoulderBand * 13.5
-          + convergence * 7.5
-          + heightNorm * 0.85
+          ridgeCore * 5.6
+          + convergence * 1.8
         )
-        * 0.75;
+        * 0.58;
 
       const random =
         createSeededRandom(
@@ -1478,11 +1483,10 @@
           );
 
         const brightness = clamp(
-          0.14
-          + ridgeCore * 0.66
-          + shoulderBand * 0.72
-          + convergence * 0.38
-          + sampleHeightNorm * 0.18,
+          0.16
+          + ridgeCore * 0.76
+          + convergence * 0.28
+          + sampleHeightNorm * 0.08,
           0.12,
           1
         );
@@ -1526,9 +1530,9 @@
         );
 
         glowColors.push(
-          0.08 + glowStrength * 0.20,
-          0.38 + glowStrength * 0.30,
-          0.46 + glowStrength * 0.34
+          0.10 + glowStrength * 0.22,
+          0.52 + glowStrength * 0.34,
+          0.62 + glowStrength * 0.34
         );
 
         corePositions.push(
@@ -1538,9 +1542,9 @@
         );
 
         coreColors.push(
-          0.34 + coreStrength * 0.50,
-          0.70 + coreStrength * 0.18,
-          0.74 + coreStrength * 0.18
+          0.44 + coreStrength * 0.48,
+          0.78 + coreStrength * 0.18,
+          0.84 + coreStrength * 0.16
         );
       }
     }
@@ -1570,9 +1574,9 @@
 
     const glowMaterial =
       new THREE.PointsMaterial({
-        size: 0.225,
+        size: 0.180,
         transparent: true,
-        opacity: 0.16,
+        opacity: 0.30,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -1612,9 +1616,9 @@
 
     const coreMaterial =
       new THREE.PointsMaterial({
-        size: 0.078,
+        size: 0.056,
         transparent: true,
-        opacity: 0.94,
+        opacity: 1.0,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -1665,10 +1669,10 @@
 
     const material =
       new THREE.MeshStandardMaterial({
-        color: 0x00070b,
-        emissive: 0x000204,
-        emissiveIntensity: 0.10,
-        roughness: 1.0,
+        color: 0x052c3a,
+        emissive: 0x031821,
+        emissiveIntensity: 0.28,
+        roughness: 0.90,
         metalness: 0.0,
         flatShading: false,
         side: THREE.DoubleSide,
@@ -1677,7 +1681,7 @@
       });
 
     const edgeColor =
-      new THREE.Color(0x38dff5);
+      new THREE.Color(0x6cefff);
 
     const edgeDirection =
       new THREE.Vector3(
@@ -1696,7 +1700,7 @@
       };
 
       shader.uniforms.rfEdgeStrength = {
-        value: 1.90
+        value: 1.30
       };
 
       shader.vertexShader =
@@ -1737,26 +1741,26 @@
               "",
               "float rfViewEdge = pow(",
               "  1.0 - abs(dot(rfViewNormal, rfViewDirection)),",
-              "  2.45",
+              "  2.05",
               ");",
               "",
               "float rfDirectionalEdge = pow(",
               "  1.0 - abs(dot(rfWorldNormal, normalize(rfEdgeDirection))),",
-              "  8.0",
+              "  5.0",
               ");",
               "",
               "float rfEdge = max(",
               "  rfViewEdge,",
-              "  rfDirectionalEdge * 0.68",
+              "  rfDirectionalEdge * 0.72",
               ");",
               "",
               "rfEdge = smoothstep(",
-              "  0.16,",
-              "  0.92,",
+              "  0.10,",
+              "  0.78,",
               "  rfEdge",
               ");",
               "",
-              "outgoingLight *= 0.20;",
+              "outgoingLight *= 0.82;",
               "outgoingLight += rfEdgeColor * rfEdge * rfEdgeStrength;",
               "",
               "#include <output_fragment>"
@@ -1934,7 +1938,7 @@
     renderer.toneMapping =
       THREE.ACESFilmicToneMapping;
 
-    renderer.toneMappingExposure = 0.76;
+    renderer.toneMappingExposure = 1.02;
 
     const scene = new THREE.Scene();
 
@@ -1954,17 +1958,17 @@
 
     const hemisphere =
       new THREE.HemisphereLight(
-        0x29444c,
-        0x000204,
-        0.12
+        0x4c8fa0,
+        0x01080d,
+        0.42
       );
 
     scene.add(hemisphere);
 
     const keyLight =
       new THREE.DirectionalLight(
-        0x65e8f7,
-        0.52
+        0x7feeff,
+        1.08
       );
 
     keyLight.position.set(
@@ -1977,8 +1981,8 @@
 
     const fillLight =
       new THREE.DirectionalLight(
-        0x0b222a,
-        0.05
+        0x15536a,
+        0.24
       );
 
     fillLight.position.set(
@@ -1998,6 +2002,14 @@
       buildMountainMesh(THREE);
 
     terrainRoot.add(mountain);
+
+    const ridgeDots =
+      buildPeakDotField(
+        THREE,
+        mountain
+      );
+
+    terrainRoot.add(ridgeDots);
 
     terrainRoot.updateMatrixWorld(true);
 
