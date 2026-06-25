@@ -1,11 +1,11 @@
 /* ==========================================================================
    FieldOps Atlas RF 3D orbit renderer
    File: FieldOpsAtlas/Features/RF/rf-graph.js
-   Version: 1.1.196-connected-ridge-network
+   Version: 1.1.197-continuous-ridge-web
 
    Purpose:
    - Rebuild the terrain from embedded vertex and index data.
-   - Keep only the moonlit dot field, connected chevrons, an interconnected ridge network with downhill branches following the actual surface ridges, dark terrain shell,
+   - Keep only the moonlit dot field, connected chevrons, the current ridge network connected by the minimum set of surface-following links required to read as one continuous web, dark terrain shell,
      responsive camera, orbit interaction, mount lifecycle, and rendered event.
    - Remove only disconnected components below 0.08 units extent and
      0.0035 square units area; preserve the full terrain bounds and peaks.
@@ -14,13 +14,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.196-connected-ridge-network";
+  const VERSION = "1.1.197-continuous-ridge-web";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
   const SELECTED_PATH_ID = "site-1-to-site-2";
-  const MODE = "three-embedded-connected-ridge-network";
+  const MODE = "three-embedded-continuous-ridge-web";
   const THREE_MODULE_URL = "three";
   const DEG = Math.PI / 180;
   const FRONT_AZIMUTH = 0;
@@ -13605,12 +13605,38 @@
       "AECIDzrBGY63wHKq9T9ixD3BADm0wGq45z+DVkHBXISuwHJ1xz/lXkbBu5uswPXPyj89q0fBbyEwwT4BM0DmyRvBlnkzwZGHIEBRHBrB31U0we3IIUBXXBjB",
       "hXM6wa03E0AOoRfBlRk+weDQCUDFwBbB3HtCwVAB/D/28hbBhvRFwUJY+j965hXBa91JwdHH2z/AyBXBBI5NwekFwD+OThXB1mhRwej9pT8LbRXBYlQcwalf",
       "eUDbUhFBJSIhwf+nb0BSfxJBMYAlwWzCcEA8HBJBmyYowfncbEAhmxFBGOorwdkeakDB6BJB5zwywd03XkAhFhJBNbI0wcePVkCq2RNBmvI4wfGVSUDfRhNB",
-      "AQw+weuIOUDsMRVBPHlAwSsbMkCnvRVB"
+      "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",
+      "e0B8N3k/ZAnxPw9ec0AwuTk/"
     ].join(""),
     ridgePathOffsets: [
       "AAAAABUAAAAfAAAALwAAAEQAAABUAAAAYQAAAGwAAAB+AAAAkAAAAKMAAACzAAAAvwAAAMwAAADUAAAA4AAAAPQAAAD9AAAABwEAABABAAAgAQAALAEAADYB",
       "AABGAQAAVQEAAHEBAAB+AQAAiAEAAJIBAACiAQAArAEAALsBAADCAQAA0gEAAN0BAADtAQAA9wEAABQCAAAgAgAALgIAADkCAABHAgAAXQIAAGYCAABuAgAA",
-      "fgIAAIoCAACYAgAApgIAALQCAAC+AgAAyAIAANICAAA="
+      "fgIAAIoCAACYAgAApgIAALQCAAC+AgAAyAIAANICAADVAgAA2AIAANsCAADeAgAA4QIAAOQCAADnAgAA6gIAAO4CAADyAgAA9gIAAPoCAAD+AgAAAwMAAAcD",
+      "AAAMAwAAEgMAABgDAAAfAwAAJgMAAC0DAAA0AwAAPAMAAEQDAABMAwAAUwMAAFsDAABmAwAAbwMAAHgDAACBAwAAjQMAAA=="
     ].join("")
   });
 
@@ -13714,7 +13740,7 @@
     canvas.setAttribute("role", "img");
     canvas.setAttribute(
       "aria-label",
-      "Interactive 3D RF mountain with evenly spaced dots, broken connected chevrons, and thick illuminated lines following the connected major and secondary ridge network down the mountain shoulders. Drag left or right to orbit 360 degrees."
+      "Interactive 3D RF mountain with evenly spaced dots, broken connected chevrons, and thick illuminated lines following the current major and secondary ridges, with short terrain-following links closing the remaining visible junction gaps. Drag left or right to orbit 360 degrees."
     );
     canvas.setAttribute("tabindex", "0");
     canvas.style.cssText =
