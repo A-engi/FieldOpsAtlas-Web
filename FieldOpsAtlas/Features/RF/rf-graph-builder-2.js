@@ -1,19 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.198-builder-2-lite
+   Version: 1.1.199-builder-2-peak-dots
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
+   - Add a dense peak-and-shoulder dot field with brightness falling off downhill.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.198-builder-2-lite";
-  const MODE = "three-ridge-web-builder-2-lite";
+  const VERSION = "1.1.199-builder-2-peak-dots";
+  const MODE = "three-ridge-web-builder-2-peak-dots";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1037,6 +1038,424 @@
     return dependencyPromise;
   }
 
+
+  function createSeededRandom(seed) {
+    let state = seed >>> 0;
+
+    return () => {
+      state = (
+        (state * 1664525)
+        + 1013904223
+      ) >>> 0;
+
+      return state / 4294967296;
+    };
+  }
+
+  function buildPeakDotField(
+    THREE,
+    mountain
+  ) {
+    const geometry = mountain.geometry;
+    const positions =
+      geometry.getAttribute("position");
+    const index =
+      geometry.getIndex();
+
+    const group =
+      new THREE.Group();
+
+    group.userData.rfDecoration = true;
+
+    if (!positions || !index) {
+      return group;
+    }
+
+    geometry.computeBoundingBox();
+
+    const bounds =
+      geometry.boundingBox;
+
+    const minimumY = bounds.min.y;
+    const heightRange = Math.max(
+      0.001,
+      bounds.max.y - bounds.min.y
+    );
+
+    const glowPositions = [];
+    const glowColors = [];
+    const corePositions = [];
+    const coreColors = [];
+
+    const vertexA =
+      new THREE.Vector3();
+
+    const vertexB =
+      new THREE.Vector3();
+
+    const vertexC =
+      new THREE.Vector3();
+
+    const edgeAB =
+      new THREE.Vector3();
+
+    const edgeAC =
+      new THREE.Vector3();
+
+    const centroid =
+      new THREE.Vector3();
+
+    const triangleNormal =
+      new THREE.Vector3();
+
+    for (
+      let triangleIndex = 0;
+      triangleIndex < index.count;
+      triangleIndex += 3
+    ) {
+      const vertexIndexA =
+        index.getX(triangleIndex);
+
+      const vertexIndexB =
+        index.getX(triangleIndex + 1);
+
+      const vertexIndexC =
+        index.getX(triangleIndex + 2);
+
+      vertexA.fromBufferAttribute(
+        positions,
+        vertexIndexA
+      );
+
+      vertexB.fromBufferAttribute(
+        positions,
+        vertexIndexB
+      );
+
+      vertexC.fromBufferAttribute(
+        positions,
+        vertexIndexC
+      );
+
+      edgeAB.subVectors(
+        vertexB,
+        vertexA
+      );
+
+      edgeAC.subVectors(
+        vertexC,
+        vertexA
+      );
+
+      triangleNormal.crossVectors(
+        edgeAB,
+        edgeAC
+      );
+
+      const doubleArea =
+        triangleNormal.length();
+
+      if (doubleArea <= 1e-6) {
+        continue;
+      }
+
+      triangleNormal.normalize();
+
+      if (triangleNormal.y < 0) {
+        triangleNormal.multiplyScalar(-1);
+      }
+
+      const area = doubleArea * 0.5;
+
+      centroid
+        .copy(vertexA)
+        .add(vertexB)
+        .add(vertexC)
+        .multiplyScalar(1 / 3);
+
+      const heightNorm = clamp(
+        (centroid.y - minimumY)
+        / heightRange,
+        0,
+        1
+      );
+
+      const slopeFactor = clamp(
+        1 - Math.abs(triangleNormal.y),
+        0,
+        1
+      );
+
+      const shoulderFactor = clamp(
+        Math.exp(
+          -Math.pow(
+            (heightNorm - 0.72) / 0.18,
+            2
+          )
+        )
+        * clamp(
+          (slopeFactor - 0.10)
+          / 0.55,
+          0,
+          1
+        ),
+        0,
+        1
+      );
+
+      const peakFactor = Math.pow(
+        clamp(
+          (heightNorm - 0.56) / 0.44,
+          0,
+          1
+        ),
+        1.35
+      );
+
+      const densityWeight =
+        area * (
+          2.8
+          + peakFactor * 12.0
+          + shoulderFactor * 16.0
+        );
+
+      const random =
+        createSeededRandom(
+          triangleIndex + 1
+        );
+
+      let sampleCount = Math.floor(
+        densityWeight
+      );
+
+      if (
+        random() <
+        densityWeight - sampleCount
+      ) {
+        sampleCount += 1;
+      }
+
+      for (
+        let sampleIndex = 0;
+        sampleIndex < sampleCount;
+        sampleIndex += 1
+      ) {
+        const rootR1 = Math.sqrt(
+          random()
+        );
+
+        const r2 = random();
+
+        const baryA =
+          1 - rootR1;
+
+        const baryB =
+          rootR1 * (1 - r2);
+
+        const baryC =
+          rootR1 * r2;
+
+        const sampleX =
+          vertexA.x * baryA
+          + vertexB.x * baryB
+          + vertexC.x * baryC;
+
+        const sampleY =
+          vertexA.y * baryA
+          + vertexB.y * baryB
+          + vertexC.y * baryC;
+
+        const sampleZ =
+          vertexA.z * baryA
+          + vertexB.z * baryB
+          + vertexC.z * baryC;
+
+        const sampleHeightNorm = clamp(
+          (sampleY - minimumY)
+          / heightRange,
+          0,
+          1
+        );
+
+        const shoulderBrightness = clamp(
+          Math.exp(
+            -Math.pow(
+              (sampleHeightNorm - 0.74) / 0.17,
+              2
+            )
+          )
+          * clamp(
+            (slopeFactor - 0.08)
+            / 0.62,
+            0,
+            1
+          ),
+          0,
+          1
+        );
+
+        const peakBrightness = Math.pow(
+          sampleHeightNorm,
+          2.1
+        );
+
+        const brightness = clamp(
+          0.12
+          + peakBrightness * 0.72
+          + shoulderBrightness * 0.58,
+          0.12,
+          1
+        );
+
+        const offsetDistance =
+          0.018 + brightness * 0.020;
+
+        const offsetX =
+          sampleX
+          + triangleNormal.x
+            * offsetDistance;
+
+        const offsetY =
+          sampleY
+          + triangleNormal.y
+            * offsetDistance;
+
+        const offsetZ =
+          sampleZ
+          + triangleNormal.z
+            * offsetDistance;
+
+        const glowStrength = clamp(
+          0.22
+          + brightness * 0.62,
+          0,
+          1
+        );
+
+        const coreStrength = clamp(
+          0.32
+          + brightness * 0.68,
+          0,
+          1
+        );
+
+        glowPositions.push(
+          offsetX,
+          offsetY,
+          offsetZ
+        );
+
+        glowColors.push(
+          0.08 + glowStrength * 0.20,
+          0.38 + glowStrength * 0.30,
+          0.46 + glowStrength * 0.34
+        );
+
+        corePositions.push(
+          offsetX,
+          offsetY,
+          offsetZ
+        );
+
+        coreColors.push(
+          0.34 + coreStrength * 0.50,
+          0.70 + coreStrength * 0.18,
+          0.74 + coreStrength * 0.18
+        );
+      }
+    }
+
+    if (corePositions.length === 0) {
+      return group;
+    }
+
+    const glowGeometry =
+      new THREE.BufferGeometry();
+
+    glowGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        glowPositions,
+        3
+      )
+    );
+
+    glowGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        glowColors,
+        3
+      )
+    );
+
+    const glowMaterial =
+      new THREE.PointsMaterial({
+        size: 0.16,
+        transparent: true,
+        opacity: 0.16,
+        depthWrite: false,
+        depthTest: true,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+        vertexColors: true,
+        sizeAttenuation: true
+      });
+
+    const glowPoints =
+      new THREE.Points(
+        glowGeometry,
+        glowMaterial
+      );
+
+    glowPoints.userData.rfDecoration = true;
+    glowPoints.renderOrder = 4;
+    group.add(glowPoints);
+
+    const coreGeometry =
+      new THREE.BufferGeometry();
+
+    coreGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        corePositions,
+        3
+      )
+    );
+
+    coreGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        coreColors,
+        3
+      )
+    );
+
+    const coreMaterial =
+      new THREE.PointsMaterial({
+        size: 0.056,
+        transparent: true,
+        opacity: 0.94,
+        depthWrite: false,
+        depthTest: true,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+        vertexColors: true,
+        sizeAttenuation: true
+      });
+
+    const corePoints =
+      new THREE.Points(
+        coreGeometry,
+        coreMaterial
+      );
+
+    corePoints.userData.rfDecoration = true;
+    corePoints.renderOrder = 5;
+    group.add(corePoints);
+
+    return group;
+  }
+
   function buildMountainMesh(THREE) {
     const geometry =
       new THREE.BufferGeometry();
@@ -1308,6 +1727,14 @@
       buildMountainMesh(THREE);
 
     terrainRoot.add(mountain);
+
+    const peakDots =
+      buildPeakDotField(
+        THREE,
+        mountain
+      );
+
+    terrainRoot.add(peakDots);
 
     const ridgeWeb =
       buildRidgeWeb(THREE);
