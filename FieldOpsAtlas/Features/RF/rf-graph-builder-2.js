@@ -1,21 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.209-convex-peak-facets
+   Version: 1.1.210-diamond-ridge-facets
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Preserve the mountain body while styling the protruding ridge facets with a cyan polygon-network glow.
-   - Light restrained ridge dots and genuine convex crease edges on protruding ridge sections only.
+   - Preserve the mountain body while styling genuine ridge crests with small cyan diamond-cut facets.
+   - Reject grooves and concave channels; light only crest edges where both neighbouring faces fall away.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.209-convex-peak-facets";
-  const MODE = "three-ridge-web-builder-2-dramatic-edge-shading";
+  const VERSION = "1.1.210-diamond-ridge-facets";
+  const MODE = "three-ridge-web-builder-2-diamond-ridge-facets";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1995,6 +1995,8 @@
       );
     }
 
+    const fillPositions = [];
+    const fillColors = [];
     const glowLinePositions = [];
     const glowLineColors = [];
     const coreLinePositions = [];
@@ -2021,9 +2023,6 @@
     const midpoint =
       new THREE.Vector3();
 
-    const horizontalEdge =
-      new THREE.Vector2();
-
     const averageNormal =
       new THREE.Vector3();
 
@@ -2032,6 +2031,38 @@
 
     const displayEnd =
       new THREE.Vector3();
+
+    const segmentStart =
+      new THREE.Vector3();
+
+    const segmentEnd =
+      new THREE.Vector3();
+
+    const segmentMidpoint =
+      new THREE.Vector3();
+
+    const sidePointA =
+      new THREE.Vector3();
+
+    const sidePointB =
+      new THREE.Vector3();
+
+    function variationOf(
+      startIndex,
+      endIndex,
+      segmentIndex,
+      salt = 0
+    ) {
+      const value =
+        (
+          startIndex * 17
+          + endIndex * 31
+          + segmentIndex * 43
+          + salt * 59
+        ) % 101;
+
+      return value / 100;
+    }
 
     function rememberNode(
       vertexIndex,
@@ -2055,6 +2086,127 @@
           strength
         }
       );
+    }
+
+    function pushTriangle(
+      pointA,
+      pointB,
+      pointC,
+      strength,
+      shadeVariation
+    ) {
+      const shade =
+        0.58
+        + shadeVariation * 0.42;
+
+      const fillR =
+        (0.025 + strength * 0.080)
+        * shade;
+
+      const fillG =
+        (0.20 + strength * 0.28)
+        * shade;
+
+      const fillB =
+        (0.26 + strength * 0.34)
+        * shade;
+
+      fillPositions.push(
+        pointA.x,
+        pointA.y,
+        pointA.z,
+        pointB.x,
+        pointB.y,
+        pointB.z,
+        pointC.x,
+        pointC.y,
+        pointC.z
+      );
+
+      fillColors.push(
+        fillR,
+        fillG,
+        fillB,
+        fillR * 0.92,
+        fillG * 0.96,
+        fillB,
+        fillR * 1.08,
+        fillG,
+        fillB * 1.04
+      );
+
+      const glowR =
+        0.06 + strength * 0.13;
+
+      const glowG =
+        0.40 + strength * 0.28;
+
+      const glowB =
+        0.49 + strength * 0.29;
+
+      const coreR =
+        0.22 + strength * 0.34;
+
+      const coreG =
+        0.70 + strength * 0.22;
+
+      const coreB =
+        0.78 + strength * 0.18;
+
+      const trianglePoints = [
+        pointA,
+        pointB,
+        pointC,
+        pointA
+      ];
+
+      for (
+        let pointIndex = 0;
+        pointIndex < 3;
+        pointIndex += 1
+      ) {
+        const lineStart =
+          trianglePoints[pointIndex];
+
+        const lineEnd =
+          trianglePoints[pointIndex + 1];
+
+        glowLinePositions.push(
+          lineStart.x,
+          lineStart.y,
+          lineStart.z,
+          lineEnd.x,
+          lineEnd.y,
+          lineEnd.z
+        );
+
+        glowLineColors.push(
+          glowR,
+          glowG,
+          glowB,
+          glowR,
+          glowG,
+          glowB
+        );
+
+        coreLinePositions.push(
+          lineStart.x,
+          lineStart.y,
+          lineStart.z,
+          lineEnd.x,
+          lineEnd.y,
+          lineEnd.z
+        );
+
+        coreLineColors.push(
+          coreR,
+          coreG,
+          coreB,
+          coreR,
+          coreG,
+          coreB
+        );
+      }
     }
 
     edges.forEach((edge) => {
@@ -2103,15 +2255,19 @@
         .add(endPoint)
         .multiplyScalar(0.5);
 
-      horizontalEdge.set(
-        endPoint.x - startPoint.x,
-        endPoint.z - startPoint.z
-      );
+      const horizontalDx =
+        endPoint.x - startPoint.x;
+
+      const horizontalDz =
+        endPoint.z - startPoint.z;
 
       const horizontalLength =
-        horizontalEdge.length();
+        Math.sqrt(
+          horizontalDx * horizontalDx
+          + horizontalDz * horizontalDz
+        );
 
-      if (horizontalLength <= 1e-5) {
+      if (horizontalLength <= 0.08) {
         return;
       }
 
@@ -2126,25 +2282,47 @@
       const dihedralAngle =
         Math.acos(normalDot);
 
-      if (dihedralAngle < 0.24) {
+      if (dihedralAngle < 0.12) {
         return;
       }
 
-      const oppositeAverageY =
-        (
-          oppositeA.y
-          + oppositeB.y
-        ) * 0.5;
+      const crossLiftA =
+        midpoint.y - oppositeA.y;
 
-      const crestLift =
-        midpoint.y
-        - oppositeAverageY;
+      const crossLiftB =
+        midpoint.y - oppositeB.y;
 
-      const liftRatio =
-        crestLift
+      const minimumCrossLift =
+        Math.min(
+          crossLiftA,
+          crossLiftB
+        );
+
+      const minimumFaceLift =
+        Math.min(
+          midpoint.y
+          - firstFace.centroid.y,
+          midpoint.y
+          - secondFace.centroid.y
+        );
+
+      /*
+       * A true ridge crest must sit above both neighbouring
+       * faces. If either side rises above the edge, the edge
+       * belongs to a groove/channel and is rejected.
+       */
+      if (
+        minimumCrossLift <= 0.012
+        || minimumFaceLift <= 0.003
+      ) {
+        return;
+      }
+
+      const crestRatio =
+        minimumCrossLift
         / horizontalLength;
 
-      if (liftRatio < 0.032) {
+      if (crestRatio < 0.025) {
         return;
       }
 
@@ -2155,7 +2333,7 @@
         1
       );
 
-      if (heightNorm < 0.16) {
+      if (heightNorm < 0.13) {
         return;
       }
 
@@ -2167,46 +2345,59 @@
           pathDistances
         );
 
+      const belowRidge =
+        ridgeMetrics.ridgeY
+        - midpoint.y;
+
+      /*
+       * Reject geometry that is horizontally close to a ridge
+       * path but vertically below it. This is the groove case
+       * visible in the marked screenshot.
+       */
+      if (belowRidge > 0.16) {
+        return;
+      }
+
       const ridgeCore = Math.exp(
         -Math.pow(
-          ridgeMetrics.distance / 0.46,
+          ridgeMetrics.distance / 0.50,
           2
         )
       );
 
       const angleStrength = clamp(
         (
-          dihedralAngle - 0.24
-        ) / 0.62,
+          dihedralAngle - 0.12
+        ) / 0.58,
         0,
         1
       );
 
       const convexStrength = clamp(
         (
-          liftRatio - 0.032
+          crestRatio - 0.025
         ) / 0.105,
         0,
         1
       );
 
       if (
-        ridgeCore < 0.08
-        && convexStrength < 0.64
+        ridgeCore < 0.06
+        && convexStrength < 0.60
       ) {
         return;
       }
 
       const prominence = clamp(
-        convexStrength * 0.62
-        + angleStrength * 0.25
-        + ridgeCore * 0.09
+        convexStrength * 0.58
+        + angleStrength * 0.24
+        + ridgeCore * 0.14
         + heightNorm * 0.04,
         0,
         1
       );
 
-      if (prominence < 0.24) {
+      if (prominence < 0.20) {
         return;
       }
 
@@ -2229,7 +2420,7 @@
 
       const offsetDistance =
         0.018
-        + prominence * 0.024;
+        + prominence * 0.022;
 
       displayStart
         .copy(startPoint)
@@ -2245,59 +2436,127 @@
           offsetDistance
         );
 
-      const glowR =
-        0.08 + prominence * 0.14;
-
-      const glowG =
-        0.46 + prominence * 0.24;
-
-      const glowB =
-        0.54 + prominence * 0.24;
-
-      const coreR =
-        0.28 + prominence * 0.28;
-
-      const coreG =
-        0.76 + prominence * 0.18;
-
-      const coreB =
-        0.82 + prominence * 0.14;
-
-      glowLinePositions.push(
-        displayStart.x,
-        displayStart.y,
-        displayStart.z,
-        displayEnd.x,
-        displayEnd.y,
-        displayEnd.z
+      const segmentCount = Math.max(
+        1,
+        Math.min(
+          4,
+          Math.round(
+            horizontalLength / 0.34
+          )
+        )
       );
 
-      glowLineColors.push(
-        glowR,
-        glowG,
-        glowB,
-        glowR,
-        glowG,
-        glowB
-      );
+      for (
+        let segmentIndex = 0;
+        segmentIndex < segmentCount;
+        segmentIndex += 1
+      ) {
+        const t0 =
+          segmentIndex
+          / segmentCount;
 
-      coreLinePositions.push(
-        displayStart.x,
-        displayStart.y,
-        displayStart.z,
-        displayEnd.x,
-        displayEnd.y,
-        displayEnd.z
-      );
+        const t1 =
+          (segmentIndex + 1)
+          / segmentCount;
 
-      coreLineColors.push(
-        coreR,
-        coreG,
-        coreB,
-        coreR,
-        coreG,
-        coreB
-      );
+        segmentStart.lerpVectors(
+          displayStart,
+          displayEnd,
+          t0
+        );
+
+        segmentEnd.lerpVectors(
+          displayStart,
+          displayEnd,
+          t1
+        );
+
+        segmentMidpoint
+          .copy(segmentStart)
+          .add(segmentEnd)
+          .multiplyScalar(0.5);
+
+        const widthScale =
+          0.20
+          + variationOf(
+            edge.startIndex,
+            edge.endIndex,
+            segmentIndex,
+            1
+          ) * 0.16;
+
+        sidePointA
+          .lerpVectors(
+            segmentMidpoint,
+            oppositeA,
+            widthScale
+          )
+          .addScaledVector(
+            averageNormal,
+            offsetDistance
+          );
+
+        sidePointB
+          .lerpVectors(
+            segmentMidpoint,
+            oppositeB,
+            widthScale
+          )
+          .addScaledVector(
+            averageNormal,
+            offsetDistance
+          );
+
+        const directionVariation =
+          variationOf(
+            edge.startIndex,
+            edge.endIndex,
+            segmentIndex,
+            2
+          );
+
+        const shadeA =
+          variationOf(
+            edge.startIndex,
+            edge.endIndex,
+            segmentIndex,
+            3
+          );
+
+        const shadeB =
+          variationOf(
+            edge.startIndex,
+            edge.endIndex,
+            segmentIndex,
+            4
+          );
+
+        if (
+          directionVariation < 0.72
+          || segmentIndex % 2 === 0
+        ) {
+          pushTriangle(
+            segmentStart,
+            segmentEnd,
+            sidePointA,
+            prominence,
+            shadeA
+          );
+        }
+
+        if (
+          directionVariation > 0.28
+          || segmentIndex % 2 === 1
+        ) {
+          pushTriangle(
+            segmentEnd,
+            segmentStart,
+            sidePointB,
+            prominence * 0.94,
+            shadeB
+          );
+        }
+      }
 
       rememberNode(
         edge.startIndex,
@@ -2323,9 +2582,9 @@
       );
 
       glowNodeColors.push(
-        0.12 + strength * 0.14,
-        0.52 + strength * 0.24,
-        0.60 + strength * 0.24
+        0.10 + strength * 0.15,
+        0.48 + strength * 0.25,
+        0.57 + strength * 0.25
       );
 
       coreNodePositions.push(
@@ -2335,15 +2594,56 @@
       );
 
       coreNodeColors.push(
-        0.44 + strength * 0.32,
-        0.80 + strength * 0.16,
-        0.86 + strength * 0.12
+        0.40 + strength * 0.36,
+        0.78 + strength * 0.18,
+        0.85 + strength * 0.13
       );
     });
 
     if (coreLinePositions.length === 0) {
       return group;
     }
+
+    const fillGeometry =
+      new THREE.BufferGeometry();
+
+    fillGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        fillPositions,
+        3
+      )
+    );
+
+    fillGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        fillColors,
+        3
+      )
+    );
+
+    const fillMaterial =
+      new THREE.MeshBasicMaterial({
+        transparent: true,
+        opacity: 0.18,
+        depthWrite: false,
+        depthTest: true,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+        vertexColors: true,
+        side: THREE.DoubleSide
+      });
+
+    const fillMesh =
+      new THREE.Mesh(
+        fillGeometry,
+        fillMaterial
+      );
+
+    fillMesh.userData.rfDecoration = true;
+    fillMesh.renderOrder = 5;
+    group.add(fillMesh);
 
     const glowLineGeometry =
       new THREE.BufferGeometry();
@@ -2367,7 +2667,7 @@
     const glowLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.14,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2407,7 +2707,7 @@
     const coreLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.56,
+        opacity: 0.52,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2446,9 +2746,9 @@
 
     const glowNodeMaterial =
       new THREE.PointsMaterial({
-        size: 0.15,
+        size: 0.13,
         transparent: true,
-        opacity: 0.24,
+        opacity: 0.22,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2488,7 +2788,7 @@
 
     const coreNodeMaterial =
       new THREE.PointsMaterial({
-        size: 0.050,
+        size: 0.046,
         transparent: true,
         opacity: 1.0,
         depthWrite: false,
