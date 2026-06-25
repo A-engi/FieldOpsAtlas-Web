@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.203-builder-2-moon-normal-view
+   Version: 1.1.204-moon-normal-view-top-fade
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Remove ridge tubes and cover the mountain base with large moonlit dots, while restoring the normal orbit view.
+   - Remove ridge tubes and cover the mountain base with large moonlit dots, using a stronger summit-to-base fade on both sides in the normal orbit view.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.203-builder-2-moon-normal-view";
-  const MODE = "three-ridge-web-builder-2-moon-normal-view";
+  const VERSION = "1.1.204-moon-normal-view-top-fade";
+  const MODE = "three-ridge-web-builder-2-moon-normal-view-top-fade";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1071,6 +1071,17 @@
       return group;
     }
 
+    geometry.computeBoundingBox();
+
+    const bounds =
+      geometry.boundingBox;
+
+    const minimumY = bounds.min.y;
+    const heightRange = Math.max(
+      0.001,
+      bounds.max.y - bounds.min.y
+    );
+
     const glowPositions = [];
     const glowColors = [];
     const corePositions = [];
@@ -1169,10 +1180,6 @@
         1
       );
 
-      if (moonLight < 0.24) {
-        continue;
-      }
-
       const area = doubleArea * 0.5;
 
       centroid
@@ -1181,11 +1188,35 @@
         .add(vertexC)
         .multiplyScalar(1 / 3);
 
+      const heightNorm = clamp(
+        (centroid.y - minimumY)
+        / heightRange,
+        0,
+        1
+      );
+
+      const summitFade = Math.pow(
+        heightNorm,
+        1.55
+      );
+
+      const litWeight = clamp(
+        moonLight * 1.08
+        + summitFade * 0.36,
+        0,
+        1
+      );
+
+      if (litWeight < 0.16) {
+        continue;
+      }
+
       const densityWeight =
         area
         * (
-          9.2
-          + moonLight * 13.5
+          1.8
+          + summitFade * 14.6
+          + litWeight * 9.8
         );
 
       const random =
@@ -1239,9 +1270,22 @@
           + vertexB.z * baryB
           + vertexC.z * baryC;
 
+        const sampleHeightNorm = clamp(
+          (sampleY - minimumY)
+          / heightRange,
+          0,
+          1
+        );
+
+        const sampleFade = Math.pow(
+          sampleHeightNorm,
+          1.5
+        );
+
         const offsetDistance =
           0.020
-          + moonLight * 0.024;
+          + litWeight * 0.016
+          + sampleFade * 0.010;
 
         const offsetX =
           sampleX
@@ -1259,11 +1303,16 @@
             * offsetDistance;
 
         const brightness = clamp(
-          0.28
-          + moonLight * 0.72,
+          0.12
+          + sampleFade * 0.58
+          + moonLight * 0.34,
           0,
           1
         );
+
+        if (brightness < 0.20) {
+          continue;
+        }
 
         glowPositions.push(
           offsetX,
