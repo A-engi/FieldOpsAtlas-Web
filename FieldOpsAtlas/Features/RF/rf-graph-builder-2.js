@@ -1,20 +1,20 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.204-moon-normal-view-top-fade
+   Version: 1.1.205-dramatic-edge-shading
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Remove ridge tubes and cover the mountain base with large moonlit dots, using a stronger summit-to-base fade on both sides in the normal orbit view.
+   - Render the existing mountain mesh with dramatic cyan edge shading only.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.204-moon-normal-view-top-fade";
-  const MODE = "three-ridge-web-builder-2-moon-normal-view-top-fade";
+  const VERSION = "1.1.205-dramatic-edge-shading";
+  const MODE = "three-ridge-web-builder-2-dramatic-edge-shading";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1052,6 +1052,162 @@
     };
   }
 
+  function buildRidgeSegments(
+    ridgePositions,
+    ridgeOffsets
+  ) {
+    const segments = [];
+
+    for (
+      let pathIndex = 0;
+      pathIndex < ridgeOffsets.length - 1;
+      pathIndex += 1
+    ) {
+      const start = ridgeOffsets[pathIndex];
+      const end = ridgeOffsets[pathIndex + 1];
+
+      for (
+        let pointIndex = start;
+        pointIndex < end - 1;
+        pointIndex += 1
+      ) {
+        const offsetA = pointIndex * 3;
+        const offsetB = (
+          pointIndex + 1
+        ) * 3;
+
+        const ax = ridgePositions[offsetA];
+        const ay =
+          ridgePositions[offsetA + 1];
+        const az =
+          ridgePositions[offsetA + 2];
+
+        const bx = ridgePositions[offsetB];
+        const by =
+          ridgePositions[offsetB + 1];
+        const bz =
+          ridgePositions[offsetB + 2];
+
+        const dx = bx - ax;
+        const dz = bz - az;
+
+        segments.push({
+          pathIndex,
+          ax,
+          ay,
+          az,
+          dx,
+          dy: by - ay,
+          dz,
+          lengthSquared:
+            dx * dx + dz * dz
+        });
+      }
+    }
+
+    return segments;
+  }
+
+  function findRidgeMetrics(
+    x,
+    z,
+    segments,
+    pathDistances
+  ) {
+    pathDistances.fill(Infinity);
+
+    let nearestDistanceSquared =
+      Infinity;
+
+    let nearestRidgeY = 0;
+
+    for (
+      let segmentIndex = 0;
+      segmentIndex < segments.length;
+      segmentIndex += 1
+    ) {
+      const segment =
+        segments[segmentIndex];
+
+      const pointDx = x - segment.ax;
+      const pointDz = z - segment.az;
+
+      const t = clamp(
+        (
+          pointDx * segment.dx
+          + pointDz * segment.dz
+        ) / Math.max(
+          segment.lengthSquared,
+          1e-8
+        ),
+        0,
+        1
+      );
+
+      const nearestX =
+        segment.ax + segment.dx * t;
+
+      const nearestZ =
+        segment.az + segment.dz * t;
+
+      const distanceX = x - nearestX;
+      const distanceZ = z - nearestZ;
+
+      const distanceSquared =
+        distanceX * distanceX
+        + distanceZ * distanceZ;
+
+      if (
+        distanceSquared
+        < pathDistances[
+          segment.pathIndex
+        ]
+      ) {
+        pathDistances[
+          segment.pathIndex
+        ] = distanceSquared;
+      }
+
+      if (
+        distanceSquared
+        < nearestDistanceSquared
+      ) {
+        nearestDistanceSquared =
+          distanceSquared;
+
+        nearestRidgeY =
+          segment.ay
+          + segment.dy * t;
+      }
+    }
+
+    let nearbyPathCount = 0;
+
+    const convergenceRadiusSquared =
+      1.0;
+
+    for (
+      let pathIndex = 0;
+      pathIndex < pathDistances.length;
+      pathIndex += 1
+    ) {
+      if (
+        pathDistances[pathIndex]
+        <= convergenceRadiusSquared
+      ) {
+        nearbyPathCount += 1;
+      }
+    }
+
+    return {
+      distance: Math.sqrt(
+        nearestDistanceSquared
+      ),
+      ridgeY: nearestRidgeY,
+      nearbyPathCount
+    };
+  }
+
   function buildPeakDotField(
     THREE,
     mountain
@@ -1082,6 +1238,27 @@
       bounds.max.y - bounds.min.y
     );
 
+    const ridgePositions =
+      decodeFloat32(
+        EMBEDDED.ridgePositions
+      );
+
+    const ridgeOffsets =
+      decodeUint32(
+        EMBEDDED.ridgeOffsets
+      );
+
+    const ridgeSegments =
+      buildRidgeSegments(
+        ridgePositions,
+        ridgeOffsets
+      );
+
+    const pathDistances =
+      new Float32Array(
+        ridgeOffsets.length - 1
+      );
+
     const glowPositions = [];
     const glowColors = [];
     const corePositions = [];
@@ -1107,13 +1284,6 @@
 
     const triangleNormal =
       new THREE.Vector3();
-
-    const moonDirection =
-      new THREE.Vector3(
-        -0.52,
-        0.82,
-        0.24
-      ).normalize();
 
     for (
       let triangleIndex = 0;
@@ -1172,14 +1342,6 @@
         triangleNormal.multiplyScalar(-1);
       }
 
-      const moonLight = clamp(
-        triangleNormal.dot(
-          moonDirection
-        ),
-        0,
-        1
-      );
-
       const area = doubleArea * 0.5;
 
       centroid
@@ -1188,6 +1350,14 @@
         .add(vertexC)
         .multiplyScalar(1 / 3);
 
+      const ridgeMetrics =
+        findRidgeMetrics(
+          centroid.x,
+          centroid.z,
+          ridgeSegments,
+          pathDistances
+        );
+
       const heightNorm = clamp(
         (centroid.y - minimumY)
         / heightRange,
@@ -1195,33 +1365,62 @@
         1
       );
 
-      const summitFade = Math.pow(
-        heightNorm,
-        1.55
+      const verticalDrop = Math.max(
+        0,
+        ridgeMetrics.ridgeY
+        - centroid.y
       );
 
-      const litWeight = clamp(
-        moonLight * 1.08
-        + summitFade * 0.36,
+      const ridgeCore = Math.exp(
+        -Math.pow(
+          ridgeMetrics.distance / 0.42,
+          2
+        )
+      );
+
+      const shoulderBand =
+        Math.exp(
+          -Math.pow(
+            (
+              ridgeMetrics.distance
+              - 0.72
+            ) / 0.58,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (
+              verticalDrop
+              - 0.50
+            ) / 1.35,
+            2
+          )
+        );
+
+      const convergence = clamp(
+        (
+          ridgeMetrics.nearbyPathCount
+          - 1
+        ) / 3,
         0,
         1
       );
 
-      if (litWeight < 0.16) {
-        continue;
-      }
-
       const densityWeight =
         area
         * (
-          1.8
-          + summitFade * 14.6
-          + litWeight * 9.8
-        );
+          0.55
+          + ridgeCore * 7.0
+          + shoulderBand * 13.5
+          + convergence * 7.5
+          + heightNorm * 0.85
+        )
+        * 0.75;
 
       const random =
         createSeededRandom(
-          triangleIndex * 5 + 23
+          triangleIndex * 7 + 17
         );
 
       let sampleCount = Math.floor(
@@ -1270,22 +1469,26 @@
           + vertexB.z * baryB
           + vertexC.z * baryC;
 
-        const sampleHeightNorm = clamp(
-          (sampleY - minimumY)
-          / heightRange,
-          0,
+        const sampleHeightNorm =
+          clamp(
+            (sampleY - minimumY)
+            / heightRange,
+            0,
+            1
+          );
+
+        const brightness = clamp(
+          0.14
+          + ridgeCore * 0.66
+          + shoulderBand * 0.72
+          + convergence * 0.38
+          + sampleHeightNorm * 0.18,
+          0.12,
           1
         );
 
-        const sampleFade = Math.pow(
-          sampleHeightNorm,
-          1.5
-        );
-
         const offsetDistance =
-          0.020
-          + litWeight * 0.016
-          + sampleFade * 0.010;
+          0.018 + brightness * 0.020;
 
         const offsetX =
           sampleX
@@ -1302,17 +1505,19 @@
           + triangleNormal.z
             * offsetDistance;
 
-        const brightness = clamp(
-          0.12
-          + sampleFade * 0.58
-          + moonLight * 0.34,
+        const glowStrength = clamp(
+          0.18
+          + brightness * 0.70,
           0,
           1
         );
 
-        if (brightness < 0.20) {
-          continue;
-        }
+        const coreStrength = clamp(
+          0.30
+          + brightness * 0.70,
+          0,
+          1
+        );
 
         glowPositions.push(
           offsetX,
@@ -1321,9 +1526,9 @@
         );
 
         glowColors.push(
-          0.10 + brightness * 0.24,
-          0.42 + brightness * 0.26,
-          0.50 + brightness * 0.30
+          0.08 + glowStrength * 0.20,
+          0.38 + glowStrength * 0.30,
+          0.46 + glowStrength * 0.34
         );
 
         corePositions.push(
@@ -1333,9 +1538,9 @@
         );
 
         coreColors.push(
-          0.48 + brightness * 0.42,
-          0.76 + brightness * 0.16,
-          0.80 + brightness * 0.15
+          0.34 + coreStrength * 0.50,
+          0.70 + coreStrength * 0.18,
+          0.74 + coreStrength * 0.18
         );
       }
     }
@@ -1365,9 +1570,9 @@
 
     const glowMaterial =
       new THREE.PointsMaterial({
-        size: 0.45,
+        size: 0.225,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.16,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -1407,9 +1612,9 @@
 
     const coreMaterial =
       new THREE.PointsMaterial({
-        size: 0.156,
+        size: 0.078,
         transparent: true,
-        opacity: 0.96,
+        opacity: 0.94,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -1460,16 +1665,107 @@
 
     const material =
       new THREE.MeshStandardMaterial({
-        color: 0x031019,
-        emissive: 0x01070b,
-        emissiveIntensity: 0.44,
-        roughness: 0.92,
-        metalness: 0.02,
+        color: 0x00070b,
+        emissive: 0x000204,
+        emissiveIntensity: 0.10,
+        roughness: 1.0,
+        metalness: 0.0,
         flatShading: false,
         side: THREE.DoubleSide,
         depthWrite: true,
         depthTest: true
       });
+
+    const edgeColor =
+      new THREE.Color(0x38dff5);
+
+    const edgeDirection =
+      new THREE.Vector3(
+        -0.58,
+        0.72,
+        0.38
+      ).normalize();
+
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.rfEdgeColor = {
+        value: edgeColor
+      };
+
+      shader.uniforms.rfEdgeDirection = {
+        value: edgeDirection
+      };
+
+      shader.uniforms.rfEdgeStrength = {
+        value: 1.90
+      };
+
+      shader.vertexShader =
+        shader.vertexShader
+          .replace(
+            "#include <common>",
+            [
+              "#include <common>",
+              "varying vec3 vRfWorldNormal;"
+            ].join("\n")
+          )
+          .replace(
+            "#include <defaultnormal_vertex>",
+            [
+              "#include <defaultnormal_vertex>",
+              "vRfWorldNormal = normalize(mat3(modelMatrix) * objectNormal);"
+            ].join("\n")
+          );
+
+      shader.fragmentShader =
+        shader.fragmentShader
+          .replace(
+            "#include <common>",
+            [
+              "#include <common>",
+              "varying vec3 vRfWorldNormal;",
+              "uniform vec3 rfEdgeColor;",
+              "uniform vec3 rfEdgeDirection;",
+              "uniform float rfEdgeStrength;"
+            ].join("\n")
+          )
+          .replace(
+            "#include <output_fragment>",
+            [
+              "vec3 rfViewNormal = normalize(normal);",
+              "vec3 rfViewDirection = normalize(vViewPosition);",
+              "vec3 rfWorldNormal = normalize(vRfWorldNormal);",
+              "",
+              "float rfViewEdge = pow(",
+              "  1.0 - abs(dot(rfViewNormal, rfViewDirection)),",
+              "  2.45",
+              ");",
+              "",
+              "float rfDirectionalEdge = pow(",
+              "  1.0 - abs(dot(rfWorldNormal, normalize(rfEdgeDirection))),",
+              "  8.0",
+              ");",
+              "",
+              "float rfEdge = max(",
+              "  rfViewEdge,",
+              "  rfDirectionalEdge * 0.68",
+              ");",
+              "",
+              "rfEdge = smoothstep(",
+              "  0.16,",
+              "  0.92,",
+              "  rfEdge",
+              ");",
+              "",
+              "outgoingLight *= 0.20;",
+              "outgoingLight += rfEdgeColor * rfEdge * rfEdgeStrength;",
+              "",
+              "#include <output_fragment>"
+            ].join("\n")
+          );
+    };
+
+    material.customProgramCacheKey = () =>
+      VERSION;
 
     const mesh = new THREE.Mesh(
       geometry,
@@ -1638,7 +1934,7 @@
     renderer.toneMapping =
       THREE.ACESFilmicToneMapping;
 
-    renderer.toneMappingExposure = 0.70;
+    renderer.toneMappingExposure = 0.76;
 
     const scene = new THREE.Scene();
 
@@ -1658,17 +1954,17 @@
 
     const hemisphere =
       new THREE.HemisphereLight(
-        0x557c88,
-        0x010408,
-        0.74
+        0x29444c,
+        0x000204,
+        0.12
       );
 
     scene.add(hemisphere);
 
     const keyLight =
       new THREE.DirectionalLight(
-        0x9feaf2,
-        1.34
+        0x65e8f7,
+        0.52
       );
 
     keyLight.position.set(
@@ -1681,8 +1977,8 @@
 
     const fillLight =
       new THREE.DirectionalLight(
-        0x143946,
-        0.34
+        0x0b222a,
+        0.05
       );
 
     fillLight.position.set(
@@ -1702,15 +1998,6 @@
       buildMountainMesh(THREE);
 
     terrainRoot.add(mountain);
-
-    const peakDots =
-      buildPeakDotField(
-        THREE,
-        mountain
-      );
-
-    terrainRoot.add(peakDots);
-
 
     terrainRoot.updateMatrixWorld(true);
 
