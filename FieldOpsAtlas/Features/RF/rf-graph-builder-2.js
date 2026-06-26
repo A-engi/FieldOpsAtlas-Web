@@ -1,21 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.215-cyan-blue-shelter-shading
+   Version: 1.1.216-ridge-band-fade
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Cover the full mountain surface with solid subdivided triangle scales using cyan-blue shelter shading.
-   - Keep ridge highlights flowing smoothly while making sheltered lower bowls, grooves, and channels very dark cyan-blue.
+   - Cover the full mountain surface with solid subdivided triangle scales using cyan-blue ridge-band shading.
+   - Spread brighter cyan-blue gently along the upper ridge bands of each hump while keeping sheltered lower channels very dark.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.215-cyan-blue-shelter-shading";
-  const MODE = "three-ridge-web-builder-2-cyan-blue-shelter-shading";
+  const VERSION = "1.1.216-ridge-band-fade";
+  const MODE = "three-ridge-web-builder-2-ridge-band-fade";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1875,16 +1875,16 @@
 
     const lightDirection =
       new THREE.Vector3(
-        -0.58,
-        0.76,
-        0.29
+        -0.18,
+        0.86,
+        0.46
       ).normalize();
 
     const fillDirection =
       new THREE.Vector3(
-        0.44,
-        0.34,
-        -0.78
+        0.62,
+        0.30,
+        -0.56
       ).normalize();
 
     function variationOf(
@@ -2017,37 +2017,37 @@
       const shadowWeight =
         Math.pow(
           brightness,
-          1.85
+          1.95
         );
 
       const highlightWeight =
         Math.pow(
           brightness,
-          2.25
+          2.05
         );
 
       const red =
         0.001
-        + shadowWeight * 0.018
+        + shadowWeight * 0.014
         + highlightWeight * (
-          0.045
-          + cyanShift * 0.014
+          0.050
+          + cyanShift * 0.012
         );
 
       const green =
-        0.006
-        + shadowWeight * 0.090
+        0.005
+        + shadowWeight * 0.080
         + highlightWeight * (
-          0.360
-          + cyanShift * 0.050
+          0.385
+          + cyanShift * 0.045
         );
 
       const blue =
         0.016
-        + shadowWeight * 0.180
+        + shadowWeight * 0.170
         + highlightWeight * (
-          0.580
-          + cyanShift * 0.040
+          0.610
+          + cyanShift * 0.036
         );
 
       fillPositions.push(
@@ -2199,13 +2199,13 @@
       );
 
       /*
-       * Cyan-blue shelter shading:
-       * - exposed higher crests stay lighter
-       * - lower protected bowls/grooves go dark
-       * - brightness flows smoothly across the terrain
+       * Cyan-blue ridge-band shading:
+       * - each hump gets its own upper ridge highlight
+       * - the highlight fades in gently around ridge bands
+       * - sheltered bowls/grooves remain dark
        */
       const grooveShadow = clamp(
-        grooveDepth / 0.92,
+        grooveDepth / 0.96,
         0,
         1
       );
@@ -2235,15 +2235,64 @@
       const sheltered =
         Math.pow(
           1 - keyResponse,
-          1.85
+          1.70
         );
+
+      const verticalDrop =
+        Math.max(
+          0,
+          ridgeMetrics.ridgeY
+          - faceCentroid.y
+        );
+
+      const upperRidgeBand =
+        Math.exp(
+          -Math.pow(
+            ridgeMetrics.distance / 0.34,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            verticalDrop / 0.26,
+            2
+          )
+        );
+
+      const shoulderBand =
+        Math.exp(
+          -Math.pow(
+            (
+              ridgeMetrics.distance
+              - 0.48
+            ) / 0.52,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (
+              verticalDrop
+              - 0.16
+            ) / 0.34,
+            2
+          )
+        );
+
+      const ridgeBandHighlight = clamp(
+        upperRidgeBand * 0.82
+        + shoulderBand * 0.72,
+        0,
+        1
+      );
 
       const peakProtection = clamp(
         Math.pow(
           heightNorm,
-          1.18
-        ) * 0.88
-        + ridgeCore * 0.62,
+          1.05
+        ) * 0.44
+        + ridgeBandHighlight * 0.62
+        + ridgeCore * 0.24,
         0,
         1
       );
@@ -2251,48 +2300,54 @@
       const flowVariation = clamp(
         0.5
         + Math.sin(
-          faceCentroid.x * 0.78
-          + faceCentroid.y * 0.42
-        ) * 0.09
+          faceCentroid.x * 0.46
+          + faceCentroid.y * 0.18
+        ) * 0.045
         + Math.cos(
-          faceCentroid.z * 0.86
-          - faceCentroid.y * 0.36
-        ) * 0.08,
+          faceCentroid.z * 0.52
+          - faceCentroid.y * 0.16
+        ) * 0.040,
         0,
         1
       );
 
       const valleyBias = clamp(
-        (1 - heightNorm) * 0.58
-        + grooveShadow * 0.42,
+        (1 - heightNorm) * 0.52
+        + grooveShadow * 0.48,
         0,
         1
       );
 
+      const ridgeFade = Math.pow(
+        ridgeBandHighlight,
+        0.84
+      );
+
       const baseBrightness = clamp(
-        0.025
+        0.020
         + Math.pow(
           keyResponse,
-          1.02
-        ) * 0.34
-        + fillResponse * 0.08
+          0.96
+        ) * 0.24
+        + fillResponse * 0.06
         + Math.pow(
           heightNorm,
-          1.22
-        ) * 0.22
-        + ridgeCore * 0.10
-        + slopeStrength * 0.02
-        + flowVariation * 0.035
+          1.10
+        ) * 0.10
+        + ridgeCore * 0.04
+        + ridgeFade * 0.34
+        + slopeStrength * 0.015
+        + flowVariation * 0.022
         - grooveShadow * (
-          0.78
-          - peakProtection * 0.30
+          0.70
+          - peakProtection * 0.28
         )
         - sheltered * (
-          0.18
-          + valleyBias * 0.22
+          0.14
+          + valleyBias * 0.18
         ),
         0.02,
-        0.82
+        0.78
       );
 
       const offsetDistance =
@@ -2452,7 +2507,7 @@
     const glowLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.035,
+        opacity: 0.028,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2492,7 +2547,7 @@
     const coreLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.72,
+        opacity: 0.60,
         depthWrite: false,
         depthTest: true,
         blending: THREE.NormalBlending,
