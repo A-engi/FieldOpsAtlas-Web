@@ -1,23 +1,23 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.224-visible-side-blade
+   Version: 1.1.225-ridge-triangle-cover
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
    - Sharpen the existing 3D relief without changing its topology or surface complexity.
-   - Keep the central spire but sharpen one visible flank into a clearer blade-like ridge system.
-   - Bias the cyan triangle plates toward that visible side while preserving the dense line-work.
+   - Keep the central spire but reshape the visible flank into several harder ridge planes and valleys.
+   - Remove the bright skin layer and keep the mountain covered by triangulated line-work only.
    - Preserve the wider camera fit while keeping the mountain base anchored to the graph bottom.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.224-visible-side-blade";
-  const MODE = "three-ridge-web-builder-2-visible-side-blade";
+  const VERSION = "1.1.225-ridge-triangle-cover";
+  const MODE = "three-ridge-web-builder-2-ridge-triangle-cover";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1043,65 +1043,65 @@
       {
         x: -1.10,
         z: -0.60,
-        radius: 1.78,
+        radius: 1.74,
         lift: 2.95,
         spire: 1.00
       },
       {
-        x: 3.10,
-        z: -1.55,
-        radius: 1.58,
-        lift: 2.05,
-        spire: 0.86
+        x: 2.95,
+        z: -1.35,
+        radius: 1.30,
+        lift: 2.20,
+        spire: 0.92
+      },
+      {
+        x: 4.10,
+        z: -0.25,
+        radius: 1.05,
+        lift: 1.72,
+        spire: 0.82
+      },
+      {
+        x: 5.25,
+        z: 0.55,
+        radius: 0.94,
+        lift: 1.38,
+        spire: 0.74
+      },
+      {
+        x: 6.30,
+        z: 1.05,
+        radius: 0.88,
+        lift: 1.04,
+        spire: 0.66
       },
       {
         x: -7.65,
         z: 6.70,
-        radius: 2.12,
-        lift: 1.60,
-        spire: 0.58
+        radius: 2.05,
+        lift: 1.55,
+        spire: 0.54
       },
       {
         x: 4.90,
         z: 8.55,
-        radius: 1.92,
-        lift: 1.40,
-        spire: 0.54
+        radius: 1.88,
+        lift: 1.34,
+        spire: 0.48
       },
       {
         x: -4.15,
         z: 2.60,
-        radius: 1.34,
-        lift: 1.08,
-        spire: 0.64
+        radius: 1.28,
+        lift: 1.02,
+        spire: 0.58
       },
       {
-        x: 1.70,
-        z: 2.85,
-        radius: 1.22,
-        lift: 1.38,
-        spire: 0.82
-      },
-      {
-        x: 3.55,
-        z: 1.90,
-        radius: 1.08,
-        lift: 1.44,
-        spire: 0.96
-      },
-      {
-        x: 5.10,
-        z: 1.10,
-        radius: 0.98,
+        x: 1.55,
+        z: 2.65,
+        radius: 1.10,
         lift: 1.34,
-        spire: 0.88
-      },
-      {
-        x: 6.35,
-        z: 0.25,
-        radius: 0.92,
-        lift: 1.12,
-        spire: 0.78
+        spire: 0.76
       }
     ];
 
@@ -1125,7 +1125,7 @@
       const upperRelief =
         Math.pow(heightNorm, 1.02)
         * (
-          1 + heightNorm * 0.40
+          1 + heightNorm * 0.38
         );
 
       let localLift = 0;
@@ -1164,9 +1164,9 @@
           * Math.pow(heightNorm, 1.34);
 
         spireLift +=
-          Math.pow(influence, 1.72)
+          Math.pow(influence, 1.76)
           * anchor.spire
-          * Math.pow(heightNorm, 1.92)
+          * Math.pow(heightNorm, 1.94)
           * 0.82;
 
         if (
@@ -1182,13 +1182,13 @@
         strongestAnchor
           ? Math.pow(
               strongestInfluence,
-              1.18
+              1.20
             )
-            * Math.pow(heightNorm, 1.72)
-            * 0.185
+            * Math.pow(heightNorm, 1.74)
+            * 0.188
           : 0;
 
-      const mockupSpinePull =
+      const globalSpinePull =
         Math.pow(heightNorm, 1.46)
         * 0.050;
 
@@ -1201,7 +1201,7 @@
             : 0
         ) * anchorPull
         - originalX
-          * mockupSpinePull
+          * globalSpinePull
           * 0.15;
 
       const baseZ =
@@ -1213,7 +1213,7 @@
             : 0
         ) * anchorPull
         - originalZ
-          * mockupSpinePull
+          * globalSpinePull
           * 0.05;
 
       const localX =
@@ -1241,13 +1241,13 @@
       const visibleSideMask = clamp(
         Math.exp(
           -Math.pow(
-            (baseX - 2.40) / 3.10,
+            (baseX - 2.85) / 3.35,
             2
           )
         )
         * Math.exp(
           -Math.pow(
-            (baseZ - 0.60) / 5.80,
+            (baseZ - 0.25) / 5.90,
             2
           )
         ),
@@ -1255,33 +1255,90 @@
         1
       );
 
-      const bladeBandA = Math.exp(
+      const ridgeBladeA = Math.exp(
         -Math.pow(
-          (baseX - (0.85 - 0.34 * baseZ)) / 0.66,
+          (baseX - (0.45 - 0.22 * baseZ)) / 0.48,
           2
         )
       );
 
-      const bladeBandB = Math.exp(
+      const ridgeBladeB = Math.exp(
         -Math.pow(
-          (baseX - (2.15 - 0.42 * baseZ)) / 0.72,
+          (baseX - (1.95 - 0.34 * baseZ)) / 0.52,
           2
         )
       );
 
-      const bladeBandC = Math.exp(
+      const ridgeBladeC = Math.exp(
         -Math.pow(
-          (baseX - (3.70 - 0.48 * baseZ)) / 0.84,
+          (baseX - (3.30 - 0.46 * baseZ)) / 0.56,
           2
         )
       );
 
-      const visibleBlade = clamp(
+      const ridgeBladeD = Math.exp(
+        -Math.pow(
+          (baseX - (4.55 - 0.56 * baseZ)) / 0.62,
+          2
+        )
+      );
+
+      const ridgeBlade = clamp(
         visibleSideMask
         * Math.max(
-          bladeBandA,
-          bladeBandB,
-          bladeBandC
+          ridgeBladeA,
+          ridgeBladeB,
+          ridgeBladeC,
+          ridgeBladeD
+        ),
+        0,
+        1
+      );
+
+      const valleyBandA = Math.exp(
+        -Math.pow(
+          (baseX - (1.20 - 0.28 * baseZ)) / 0.40,
+          2
+        )
+      );
+
+      const valleyBandB = Math.exp(
+        -Math.pow(
+          (baseX - (2.65 - 0.40 * baseZ)) / 0.44,
+          2
+        )
+      );
+
+      const valleyBandC = Math.exp(
+        -Math.pow(
+          (baseX - (3.95 - 0.51 * baseZ)) / 0.48,
+          2
+        )
+      );
+
+      const valleyCarve = clamp(
+        visibleSideMask
+        * Math.max(
+          valleyBandA,
+          valleyBandB,
+          valleyBandC
+        ),
+        0,
+        1
+      );
+
+      const sidePeakMask = clamp(
+        Math.exp(
+          -Math.pow(
+            (baseX - 4.00) / 2.05,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (baseZ + 0.15) / 2.80,
+            2
+          )
         ),
         0,
         1
@@ -1290,10 +1347,10 @@
       const facetStrength =
         Math.pow(heightNorm, 1.12)
         * clamp(
-          0.54
-          + strongestInfluence * 0.78
-          + visibleSideMask * 0.10,
-          0.54,
+          0.52
+          + strongestInfluence * 0.74
+          + visibleSideMask * 0.14,
+          0.52,
           1.34
         );
 
@@ -1301,65 +1358,87 @@
         Math.pow(heightNorm, 1.02)
         * clamp(
           0.34
-          + strongestInfluence * 1.32
-          + visibleBlade * 0.30,
+          + strongestInfluence * 1.24
+          + ridgeBlade * 0.48,
           0.34,
-          1.60
+          1.74
         );
 
       const spikeLift =
         Math.max(
           0,
-          facetPattern - 0.16
+          facetPattern - 0.18
         )
         * facetStrength
-        * 0.48;
+        * 0.42;
 
       const ridgeLift =
-        Math.pow(ridgeFan, 1.35)
+        Math.pow(ridgeFan, 1.30)
         * ridgeStrength
-        * 0.88;
+        * 0.80;
 
       const bladeLift =
         Math.pow(
-          visibleBlade,
-          1.25
+          ridgeBlade,
+          1.20
         )
         * Math.pow(
           heightNorm,
-          1.12
+          1.10
         )
-        * 1.12;
+        * 1.18;
+
+      const sidePeakLift =
+        Math.pow(
+          sidePeakMask,
+          1.18
+        )
+        * Math.pow(
+          heightNorm,
+          1.06
+        )
+        * 0.82;
 
       const planeBreakLift =
         Math.pow(
           facetPattern,
-          1.45
+          1.40
         )
         * Math.pow(
           heightNorm,
-          1.36
+          1.34
         )
         * (
-          0.16 + visibleSideMask * 0.16
+          0.10 + visibleSideMask * 0.10
         );
+
+      const valleyDrop =
+        Math.pow(
+          valleyCarve,
+          1.12
+        )
+        * Math.pow(
+          heightNorm,
+          1.00
+        )
+        * 0.78;
 
       const shoulderLift =
         facetPattern
         * facetStrength
-        * 0.08;
+        * 0.06;
 
       let facetDirectionX =
         Math.sin(
-          baseX * 2.20
-          + baseZ * 1.10
-        ) * 0.35;
+          baseX * 2.14
+          + baseZ * 1.08
+        ) * 0.24;
 
       let facetDirectionZ =
         Math.cos(
-          baseZ * 2.00
-          - baseX * 1.20
-        ) * 0.35;
+          baseZ * 1.96
+          - baseX * 1.16
+        ) * 0.24;
 
       if (strongestAnchor) {
         facetDirectionX +=
@@ -1377,11 +1456,11 @@
       const lateralFacetPush =
         Math.max(
           0,
-          facetPattern - 0.20
+          facetPattern - 0.22
         )
         * facetStrength
         * (
-          0.10 + visibleSideMask * 0.06
+          0.08 + visibleSideMask * 0.04
         );
 
       const ridgeDirectionLength = Math.hypot(
@@ -1390,31 +1469,42 @@
       ) || 1;
 
       const ridgeLateralPull =
-        Math.pow(ridgeFan, 1.30)
+        Math.pow(ridgeFan, 1.26)
         * ridgeStrength
-        * 0.105;
+        * 0.078;
 
       const bladePushX =
         Math.pow(
-          visibleBlade,
+          ridgeBlade,
           1.18
         )
         * Math.pow(
           heightNorm,
-          1.05
+          1.02
         )
-        * 0.34;
+        * 0.30;
 
       const bladePushZ =
         Math.pow(
-          visibleBlade,
-          1.20
+          ridgeBlade,
+          1.18
         )
         * Math.pow(
           heightNorm,
-          1.05
+          1.02
         )
-        * -0.14;
+        * -0.12;
+
+      const valleyPushX =
+        Math.pow(
+          valleyCarve,
+          1.10
+        )
+        * Math.pow(
+          heightNorm,
+          1.00
+        )
+        * -0.12;
 
       positions[offset] =
         baseX
@@ -1424,7 +1514,8 @@
         - localX
           / ridgeDirectionLength
           * ridgeLateralPull
-        + bladePushX;
+        + bladePushX
+        + valleyPushX;
 
       positions[offset + 1] =
         bounds.minimumY
@@ -1434,8 +1525,10 @@
         + spikeLift
         + ridgeLift
         + bladeLift
+        + sidePeakLift
         + planeBreakLift
-        + shoulderLift;
+        + shoulderLift
+        - valleyDrop;
 
       positions[offset + 2] =
         baseZ
@@ -1445,13 +1538,12 @@
         - localZ
           / ridgeDirectionLength
           * ridgeLateralPull
-          * 0.48
+          * 0.46
         + bladePushZ;
     }
 
     return positions;
   }
-
   function decodeUint32(encoded) {
     return new Uint32Array(
       decodeBase64(encoded)
@@ -2406,8 +2498,6 @@
         ridgeOffsets.length - 1
       );
 
-    const platePositions = [];
-    const plateColors = [];
     const glowLinePositions = [];
     const glowLineColors = [];
     const coreLinePositions = [];
@@ -2651,57 +2741,8 @@
       );
     }
 
-    function pushPlate(
-      pointA,
-      pointB,
-      pointC,
-      strength
-    ) {
-      const shadow =
-        clamp(
-          strength,
-          0,
-          1
-        );
-
-      const red =
-        0.010
-        + shadow * 0.055;
-
-      const green =
-        0.100
-        + shadow * 0.620;
-
-      const blue =
-        0.145
-        + shadow * 0.820;
-
-      platePositions.push(
-        pointA.x,
-        pointA.y,
-        pointA.z,
-        pointB.x,
-        pointB.y,
-        pointB.z,
-        pointC.x,
-        pointC.y,
-        pointC.z
-      );
-
-      for (
-        let vertexIndex = 0;
-        vertexIndex < 3;
-        vertexIndex += 1
-      ) {
-        plateColors.push(
-          red,
-          green,
-          blue
-        );
-      }
-    }
-
     function midpointId(
+
       indexA,
       indexB
     ) {
@@ -3015,13 +3056,13 @@
       const visibleSideFocus = clamp(
         Math.exp(
           -Math.pow(
-            (centroid.x - 2.35) / 3.10,
+            (centroid.x - 2.85) / 3.10,
             2
           )
         )
         * Math.exp(
           -Math.pow(
-            (centroid.z - 0.55) / 5.40,
+            (centroid.z - 0.20) / 5.10,
             2
           )
         ),
@@ -3029,10 +3070,10 @@
         1
       );
 
-      const foregroundSuppression = clamp(
+      const lowerForegroundFade = clamp(
         Math.exp(
           -Math.pow(
-            (centroid.z - 8.30) / 2.70,
+            (centroid.z - 8.20) / 2.70,
             2
           )
         )
@@ -3041,42 +3082,35 @@
         1
       );
 
-      const plateDensity = clamp(
-        0.05
+      const ridgeTriangleStrength = clamp(
+        0.18
         + averageBrightness * 0.72
         + heightNorm * 0.24
-        + slopeStrength * 0.12
-        + clusterNoise * 0.05
-        + visibleSideFocus * 0.18
-        - foregroundSuppression * 0.16,
-        0.06,
-        0.56
+        + slopeStrength * 0.10
+        + visibleSideFocus * 0.28
+        - lowerForegroundFade * 0.12,
+        0,
+        1
       );
 
-      if (
-        selectionNoise
-        > plateDensity
-      ) {
+      if (ridgeTriangleStrength < 0.24) {
         continue;
       }
 
       const inset = clamp(
-        0.52
-        + clusterNoise * 0.28
-        - averageBrightness * 0.05
-        + visibleSideFocus * 0.05,
-        0.48,
-        0.86
+        0.56
+        + clusterNoise * 0.20
+        + visibleSideFocus * 0.04,
+        0.54,
+        0.82
       );
 
-      const plateLift =
-        0.022
-        + averageBrightness * 0.074
-        + heightNorm * 0.056
-        + liftNoise * 0.040
-        + visibleSideFocus * 0.030;
+      const lineLift =
+        0.010
+        + ridgeTriangleStrength * 0.018
+        + visibleSideFocus * 0.010;
 
-      const plateA =
+      const triangleA =
         centroid.clone()
           .lerp(
             vertexA,
@@ -3084,16 +3118,10 @@
           )
           .addScaledVector(
             faceNormal,
-            plateLift
-            * (
-              0.82
-              + seededUnit(
-                faceSeed + 3.11
-              ) * 0.42
-            )
+            lineLift
           );
 
-      const plateB =
+      const triangleB =
         centroid.clone()
           .lerp(
             vertexB,
@@ -3101,16 +3129,10 @@
           )
           .addScaledVector(
             faceNormal,
-            plateLift
-            * (
-              0.82
-              + seededUnit(
-                faceSeed + 7.73
-              ) * 0.42
-            )
+            lineLift
           );
 
-      const plateC =
+      const triangleC =
         centroid.clone()
           .lerp(
             vertexC,
@@ -3118,131 +3140,45 @@
           )
           .addScaledVector(
             faceNormal,
-            plateLift
-            * (
-              0.82
-              + seededUnit(
-                faceSeed + 11.39
-              ) * 0.42
-            )
+            lineLift
           );
 
-      const plateStrength = clamp(
-        0.30
-        + averageBrightness * 1.00
-        + heightNorm * 0.20
-        + slopeStrength * 0.12
-        + liftNoise * 0.12
-        + visibleSideFocus * 0.18,
+      const triangleStrength = clamp(
+        ridgeTriangleStrength
+        + liftNoise * 0.10,
         0,
         1
       );
 
-      pushPlate(
-        plateA,
-        plateB,
-        plateC,
-        plateStrength
-      );
-
-      const plateId =
-        `p${triangleOffset}`;
+      const triangleId =
+        `t${triangleOffset}`;
 
       pushLine(
-        `${plateId}a`,
-        `${plateId}b`,
-        plateA,
-        plateB,
-        plateStrength,
-        plateStrength
+        `${triangleId}a`,
+        `${triangleId}b`,
+        triangleA,
+        triangleB,
+        triangleStrength,
+        triangleStrength
       );
 
       pushLine(
-        `${plateId}b`,
-        `${plateId}c`,
-        plateB,
-        plateC,
-        plateStrength,
-        plateStrength
+        `${triangleId}b`,
+        `${triangleId}c`,
+        triangleB,
+        triangleC,
+        triangleStrength,
+        triangleStrength
       );
 
       pushLine(
-        `${plateId}c`,
-        `${plateId}a`,
-        plateC,
-        plateA,
-        plateStrength,
-        plateStrength
+        `${triangleId}c`,
+        `${triangleId}a`,
+        triangleC,
+        triangleA,
+        triangleStrength,
+        triangleStrength
       );
-    }
-
-    if (platePositions.length > 0) {
-      const plateGeometry =
-        new THREE.BufferGeometry();
-
-      plateGeometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(
-          platePositions,
-          3
-        )
-      );
-
-      plateGeometry.setAttribute(
-        "color",
-        new THREE.Float32BufferAttribute(
-          plateColors,
-          3
-        )
-      );
-
-      plateGeometry.computeVertexNormals();
-
-      const plateGlowMaterial =
-        new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.18,
-          depthWrite: false,
-          depthTest: true,
-          blending: THREE.AdditiveBlending,
-          toneMapped: false,
-          side: THREE.DoubleSide
-        });
-
-      const plateGlow =
-        new THREE.Mesh(
-          plateGeometry,
-          plateGlowMaterial
-        );
-
-      plateGlow.userData.rfDecoration = true;
-      plateGlow.renderOrder = 5;
-      group.add(plateGlow);
-
-      const plateCoreMaterial =
-        new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.88,
-          depthWrite: true,
-          depthTest: true,
-          blending: THREE.NormalBlending,
-          toneMapped: false,
-          side: THREE.DoubleSide
-        });
-
-      const plateCore =
-        new THREE.Mesh(
-          plateGeometry,
-          plateCoreMaterial
-        );
-
-      plateCore.userData.rfDecoration = true;
-      plateCore.renderOrder = 6;
-      group.add(plateCore);
     }
 
     const glowLineGeometry =
