@@ -1,21 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.218-smooth-ridge-flow-fit
+   Version: 1.1.219-true-zoom-out-bottom-anchor
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
    - Rebuild the full mountain scale layer with continuous cyan-blue ridge-flow shading.
-   - Fit the mountain farther back, anchor its base to the graph bottom, and keep all ridge fades continuous.
+   - Apply a true wider camera fit while keeping the mountain base anchored to the graph bottom.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.218-smooth-ridge-flow-fit";
-  const MODE = "three-ridge-web-builder-2-smooth-ridge-flow-fit";
+  const VERSION = "1.1.219-true-zoom-out-bottom-anchor";
+  const MODE = "three-ridge-web-builder-2-true-zoom-out-bottom-anchor";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -2795,18 +2795,23 @@
     const target =
       new THREE.Vector3(
         center.x,
-        box.min.y + size.y * 0.61,
+        box.min.y + size.y * 0.82,
         center.z
       );
 
+    /*
+     * Keep a real minimum camera distance. The previous
+     * 0.82 multiplier still allowed the terrain to fill and
+     * crop the stage instead of reading as zoomed out.
+     */
     const orbitRadiusFloor =
       Math.max(
         size.x,
         size.z
-      ) * 0.82;
+      ) * 1.18;
 
     const targetLift =
-      size.y * 0.20;
+      size.y * 0.16;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -2923,13 +2928,17 @@
           )
         );
 
+      /*
+       * Use the calculated fit radius as an actual fit.
+       * Multipliers below 1 were zooming back in.
+       */
       const orbitRadius =
         Math.max(
           orbitRadiusFloor,
           widthFitRadius * (
             aspect < 0.82
-              ? 0.64
-              : 0.70
+              ? 1.04
+              : 1.08
           )
         );
 
