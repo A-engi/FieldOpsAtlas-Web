@@ -1,23 +1,23 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.223-shard-plate-peaks
+   Version: 1.1.224-visible-side-blade
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
    - Sharpen the existing 3D relief without changing its topology or surface complexity.
-   - Reshape the terrain into a taller central spire with sharper supporting peaks and ridge blades.
-   - Add irregular raised cyan triangle plates over the dark mountain while preserving the dense line-work.
+   - Keep the central spire but sharpen one visible flank into a clearer blade-like ridge system.
+   - Bias the cyan triangle plates toward that visible side while preserving the dense line-work.
    - Preserve the wider camera fit while keeping the mountain base anchored to the graph bottom.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.223-shard-plate-peaks";
-  const MODE = "three-ridge-web-builder-2-shard-plate-peaks";
+  const VERSION = "1.1.224-visible-side-blade";
+  const MODE = "three-ridge-web-builder-2-visible-side-blade";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1048,46 +1048,60 @@
         spire: 1.00
       },
       {
-        x: 3.05,
-        z: -1.70,
-        radius: 1.78,
-        lift: 1.78,
-        spire: 0.72
+        x: 3.10,
+        z: -1.55,
+        radius: 1.58,
+        lift: 2.05,
+        spire: 0.86
       },
       {
         x: -7.65,
         z: 6.70,
         radius: 2.12,
-        lift: 1.72,
-        spire: 0.62
+        lift: 1.60,
+        spire: 0.58
       },
       {
         x: 4.90,
         z: 8.55,
         radius: 1.92,
-        lift: 1.52,
-        spire: 0.58
+        lift: 1.40,
+        spire: 0.54
       },
       {
         x: -4.15,
         z: 2.60,
         radius: 1.34,
-        lift: 1.20,
-        spire: 0.72
+        lift: 1.08,
+        spire: 0.64
       },
       {
         x: 1.70,
         z: 2.85,
-        radius: 1.28,
-        lift: 1.12,
-        spire: 0.68
+        radius: 1.22,
+        lift: 1.38,
+        spire: 0.82
       },
       {
-        x: 5.85,
-        z: 3.30,
-        radius: 1.40,
-        lift: 1.05,
-        spire: 0.60
+        x: 3.55,
+        z: 1.90,
+        radius: 1.08,
+        lift: 1.44,
+        spire: 0.96
+      },
+      {
+        x: 5.10,
+        z: 1.10,
+        radius: 0.98,
+        lift: 1.34,
+        spire: 0.88
+      },
+      {
+        x: 6.35,
+        z: 0.25,
+        radius: 0.92,
+        lift: 1.12,
+        spire: 0.78
       }
     ];
 
@@ -1224,22 +1238,73 @@
           localZ
         );
 
+      const visibleSideMask = clamp(
+        Math.exp(
+          -Math.pow(
+            (baseX - 2.40) / 3.10,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (baseZ - 0.60) / 5.80,
+            2
+          )
+        ),
+        0,
+        1
+      );
+
+      const bladeBandA = Math.exp(
+        -Math.pow(
+          (baseX - (0.85 - 0.34 * baseZ)) / 0.66,
+          2
+        )
+      );
+
+      const bladeBandB = Math.exp(
+        -Math.pow(
+          (baseX - (2.15 - 0.42 * baseZ)) / 0.72,
+          2
+        )
+      );
+
+      const bladeBandC = Math.exp(
+        -Math.pow(
+          (baseX - (3.70 - 0.48 * baseZ)) / 0.84,
+          2
+        )
+      );
+
+      const visibleBlade = clamp(
+        visibleSideMask
+        * Math.max(
+          bladeBandA,
+          bladeBandB,
+          bladeBandC
+        ),
+        0,
+        1
+      );
+
       const facetStrength =
         Math.pow(heightNorm, 1.12)
         * clamp(
           0.54
-          + strongestInfluence * 0.78,
+          + strongestInfluence * 0.78
+          + visibleSideMask * 0.10,
           0.54,
-          1.24
+          1.34
         );
 
       const ridgeStrength =
         Math.pow(heightNorm, 1.02)
         * clamp(
           0.34
-          + strongestInfluence * 1.32,
+          + strongestInfluence * 1.32
+          + visibleBlade * 0.30,
           0.34,
-          1.44
+          1.60
         );
 
       const spikeLift =
@@ -1255,6 +1320,17 @@
         * ridgeStrength
         * 0.88;
 
+      const bladeLift =
+        Math.pow(
+          visibleBlade,
+          1.25
+        )
+        * Math.pow(
+          heightNorm,
+          1.12
+        )
+        * 1.12;
+
       const planeBreakLift =
         Math.pow(
           facetPattern,
@@ -1264,7 +1340,9 @@
           heightNorm,
           1.36
         )
-        * 0.22;
+        * (
+          0.16 + visibleSideMask * 0.16
+        );
 
       const shoulderLift =
         facetPattern
@@ -1302,7 +1380,9 @@
           facetPattern - 0.20
         )
         * facetStrength
-        * 0.12;
+        * (
+          0.10 + visibleSideMask * 0.06
+        );
 
       const ridgeDirectionLength = Math.hypot(
         localX,
@@ -1314,6 +1394,28 @@
         * ridgeStrength
         * 0.105;
 
+      const bladePushX =
+        Math.pow(
+          visibleBlade,
+          1.18
+        )
+        * Math.pow(
+          heightNorm,
+          1.05
+        )
+        * 0.34;
+
+      const bladePushZ =
+        Math.pow(
+          visibleBlade,
+          1.20
+        )
+        * Math.pow(
+          heightNorm,
+          1.05
+        )
+        * -0.14;
+
       positions[offset] =
         baseX
         + facetDirectionX
@@ -1321,7 +1423,8 @@
           * lateralFacetPush
         - localX
           / ridgeDirectionLength
-          * ridgeLateralPull;
+          * ridgeLateralPull
+        + bladePushX;
 
       positions[offset + 1] =
         bounds.minimumY
@@ -1330,6 +1433,7 @@
         + spireLift
         + spikeLift
         + ridgeLift
+        + bladeLift
         + planeBreakLift
         + shoulderLift;
 
@@ -1341,7 +1445,8 @@
         - localZ
           / ridgeDirectionLength
           * ridgeLateralPull
-          * 0.48;
+          * 0.48
+        + bladePushZ;
     }
 
     return positions;
@@ -2907,14 +3012,45 @@
           faceSeed + 41.173
         );
 
+      const visibleSideFocus = clamp(
+        Math.exp(
+          -Math.pow(
+            (centroid.x - 2.35) / 3.10,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (centroid.z - 0.55) / 5.40,
+            2
+          )
+        ),
+        0,
+        1
+      );
+
+      const foregroundSuppression = clamp(
+        Math.exp(
+          -Math.pow(
+            (centroid.z - 8.30) / 2.70,
+            2
+          )
+        )
+        * (1 - heightNorm),
+        0,
+        1
+      );
+
       const plateDensity = clamp(
-        0.08
-        + averageBrightness * 0.78
-        + heightNorm * 0.20
+        0.05
+        + averageBrightness * 0.72
+        + heightNorm * 0.24
         + slopeStrength * 0.12
-        + clusterNoise * 0.06,
-        0.10,
-        0.52
+        + clusterNoise * 0.05
+        + visibleSideFocus * 0.18
+        - foregroundSuppression * 0.16,
+        0.06,
+        0.56
       );
 
       if (
@@ -2925,18 +3061,20 @@
       }
 
       const inset = clamp(
-        0.54
-        + clusterNoise * 0.30
-        - averageBrightness * 0.06,
-        0.50,
-        0.84
+        0.52
+        + clusterNoise * 0.28
+        - averageBrightness * 0.05
+        + visibleSideFocus * 0.05,
+        0.48,
+        0.86
       );
 
       const plateLift =
-        0.026
-        + averageBrightness * 0.080
-        + heightNorm * 0.050
-        + liftNoise * 0.045;
+        0.022
+        + averageBrightness * 0.074
+        + heightNorm * 0.056
+        + liftNoise * 0.040
+        + visibleSideFocus * 0.030;
 
       const plateA =
         centroid.clone()
@@ -2990,11 +3128,12 @@
           );
 
       const plateStrength = clamp(
-        0.34
-        + averageBrightness * 1.08
+        0.30
+        + averageBrightness * 1.00
         + heightNorm * 0.20
         + slopeStrength * 0.12
-        + liftNoise * 0.14,
+        + liftNoise * 0.12
+        + visibleSideFocus * 0.18,
         0,
         1
       );
