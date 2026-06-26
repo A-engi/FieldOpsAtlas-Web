@@ -1,21 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.214-smooth-shadow-flow
+   Version: 1.1.215-cyan-blue-shelter-shading
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Cover the full mountain surface with solid subdivided triangle scales using smooth terrain shadow flow.
-   - Keep ridge highlights flowing smoothly while making lower sheltered grooves and channels very dark.
+   - Cover the full mountain surface with solid subdivided triangle scales using cyan-blue shelter shading.
+   - Keep ridge highlights flowing smoothly while making sheltered lower bowls, grooves, and channels very dark cyan-blue.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.214-smooth-shadow-flow";
-  const MODE = "three-ridge-web-builder-2-smooth-shadow-flow";
+  const VERSION = "1.1.215-cyan-blue-shelter-shading";
+  const MODE = "three-ridge-web-builder-2-cyan-blue-shelter-shading";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1909,28 +1909,28 @@
       variation
     ) {
       const glowR =
-        0.004
-        + brightness * 0.040;
+        0.002
+        + brightness * 0.020;
 
       const glowG =
-        0.030
-        + brightness * 0.240;
+        0.016
+        + brightness * 0.140;
 
       const glowB =
-        0.060
-        + brightness * 0.360;
+        0.034
+        + brightness * 0.260;
 
       const coreR =
-        0.010
-        + brightness * 0.110;
+        0.006
+        + brightness * 0.060;
 
       const coreG =
-        0.080
-        + brightness * 0.470;
+        0.050
+        + brightness * 0.280;
 
       const coreB =
-        0.130
-        + brightness * 0.580;
+        0.090
+        + brightness * 0.420;
 
       const glowBiasA =
         0.82 + variation * 0.18;
@@ -2000,8 +2000,8 @@
       const brightness = clamp(
         baseBrightness
         * (
-          0.88
-          + shadeVariation * 0.22
+          0.97
+          + shadeVariation * 0.06
         ),
         0.02,
         1
@@ -2017,37 +2017,37 @@
       const shadowWeight =
         Math.pow(
           brightness,
-          1.55
+          1.85
         );
 
       const highlightWeight =
         Math.pow(
           brightness,
-          2.6
+          2.25
         );
 
       const red =
-        0.002
-        + shadowWeight * 0.040
+        0.001
+        + shadowWeight * 0.018
         + highlightWeight * (
-          0.090
-          + cyanShift * 0.030
+          0.045
+          + cyanShift * 0.014
         );
 
       const green =
-        0.010
-        + shadowWeight * 0.200
+        0.006
+        + shadowWeight * 0.090
         + highlightWeight * (
-          0.440
-          + cyanShift * 0.060
+          0.360
+          + cyanShift * 0.050
         );
 
       const blue =
-        0.018
-        + shadowWeight * 0.280
+        0.016
+        + shadowWeight * 0.180
         + highlightWeight * (
-          0.520
-          + cyanShift * 0.050
+          0.580
+          + cyanShift * 0.040
         );
 
       fillPositions.push(
@@ -2199,14 +2199,13 @@
       );
 
       /*
-       * Smooth terrain lighting:
-       * - peaks and exposed ridges stay bright
-       * - sheltered lower grooves become very dark
-       * - variation flows across the surface instead of
-       *   changing abruptly face to face
+       * Cyan-blue shelter shading:
+       * - exposed higher crests stay lighter
+       * - lower protected bowls/grooves go dark
+       * - brightness flows smoothly across the terrain
        */
       const grooveShadow = clamp(
-        grooveDepth / 1.15,
+        grooveDepth / 0.92,
         0,
         1
       );
@@ -2236,12 +2235,15 @@
       const sheltered =
         Math.pow(
           1 - keyResponse,
-          1.55
+          1.85
         );
 
       const peakProtection = clamp(
-        heightNorm * 0.80
-        + ridgeCore * 0.55,
+        Math.pow(
+          heightNorm,
+          1.18
+        ) * 0.88
+        + ridgeCore * 0.62,
         0,
         1
       );
@@ -2249,41 +2251,48 @@
       const flowVariation = clamp(
         0.5
         + Math.sin(
-          faceCentroid.x * 1.10
-          + faceCentroid.y * 0.85
-        ) * 0.18
+          faceCentroid.x * 0.78
+          + faceCentroid.y * 0.42
+        ) * 0.09
         + Math.cos(
-          faceCentroid.z * 1.30
-          - faceCentroid.y * 0.60
-        ) * 0.14,
+          faceCentroid.z * 0.86
+          - faceCentroid.y * 0.36
+        ) * 0.08,
+        0,
+        1
+      );
+
+      const valleyBias = clamp(
+        (1 - heightNorm) * 0.58
+        + grooveShadow * 0.42,
         0,
         1
       );
 
       const baseBrightness = clamp(
-        0.03
+        0.025
         + Math.pow(
           keyResponse,
-          1.12
-        ) * 0.42
-        + fillResponse * 0.10
+          1.02
+        ) * 0.34
+        + fillResponse * 0.08
         + Math.pow(
           heightNorm,
-          1.35
-        ) * 0.28
+          1.22
+        ) * 0.22
         + ridgeCore * 0.10
-        + slopeStrength * 0.03
-        + flowVariation * 0.06
+        + slopeStrength * 0.02
+        + flowVariation * 0.035
         - grooveShadow * (
-          0.55
-          - peakProtection * 0.25
+          0.78
+          - peakProtection * 0.30
         )
         - sheltered * (
-          0.16
-          + (1 - heightNorm) * 0.12
+          0.18
+          + valleyBias * 0.22
         ),
         0.02,
-        0.92
+        0.82
       );
 
       const offsetDistance =
@@ -2443,7 +2452,7 @@
     const glowLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.06,
+        opacity: 0.035,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2482,8 +2491,8 @@
 
     const coreLineMaterial =
       new THREE.LineBasicMaterial({
-        transparent: false,
-        opacity: 1,
+        transparent: true,
+        opacity: 0.72,
         depthWrite: false,
         depthTest: true,
         blending: THREE.NormalBlending,
