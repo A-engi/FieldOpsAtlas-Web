@@ -1,21 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.217-sleek-horizontal-glow
+   Version: 1.1.218-smooth-ridge-flow-fit
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
-   - Cover the full mountain surface with solid subdivided triangle scales using sleek cyan-blue horizontal ridge glow.
-   - Spread brighter cyan-blue in smooth, mostly horizontal bands beneath each ridge crest while keeping sheltered lower channels very dark.
+   - Rebuild the full mountain scale layer with continuous cyan-blue ridge-flow shading.
+   - Fit the mountain farther back, anchor its base to the graph bottom, and keep all ridge fades continuous.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.217-sleek-horizontal-glow";
-  const MODE = "three-ridge-web-builder-2-sleek-horizontal-glow";
+  const VERSION = "1.1.218-smooth-ridge-flow-fit";
+  const MODE = "three-ridge-web-builder-2-smooth-ridge-flow-fit";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -1843,6 +1843,8 @@
     const coreLinePositions = [];
     const coreLineColors = [];
 
+    const drawnEdges = new Set();
+
     const vertexA =
       new THREE.Vector3();
 
@@ -1870,73 +1872,184 @@
     const faceNormal =
       new THREE.Vector3();
 
-    const faceCentroid =
-      new THREE.Vector3();
-
-    const lightDirection =
-      new THREE.Vector3(
-        -0.08,
-        0.92,
-        0.38
-      ).normalize();
-
-    const fillDirection =
-      new THREE.Vector3(
-        0.50,
-        0.28,
-        -0.44
-      ).normalize();
-
-    function variationOf(
-      triangleIndex,
-      subTriangleIndex,
-      salt = 0
+    function gaussian(
+      value,
+      centre,
+      width
     ) {
-      const value =
-        (
-          triangleIndex * 37
-          + subTriangleIndex * 53
-          + salt * 71
-        ) % 101;
+      return Math.exp(
+        -Math.pow(
+          (value - centre)
+          / Math.max(width, 0.001),
+          2
+        )
+      );
+    }
 
-      return value / 100;
+    function brightnessAt(point) {
+      const ridgeMetrics =
+        findRidgeMetrics(
+          point.x,
+          point.z,
+          ridgeSegments,
+          pathDistances
+        );
+
+      const heightNorm = clamp(
+        (point.y - minimumY)
+        / heightRange,
+        0,
+        1
+      );
+
+      const verticalDrop =
+        Math.max(
+          0,
+          ridgeMetrics.ridgeY
+          - point.y
+        );
+
+      const ridgeDistance =
+        ridgeMetrics.distance;
+
+      /*
+       * All terms are continuous functions of world position.
+       * No per-face random lighting is used, so the cyan flow
+       * crosses triangle boundaries smoothly.
+       */
+      const crestRibbon =
+        gaussian(
+          verticalDrop,
+          0.08,
+          0.16
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          0.82
+        );
+
+      const upperRibbon =
+        gaussian(
+          verticalDrop,
+          0.28,
+          0.28
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          1.16
+        );
+
+      const lowerRibbon =
+        gaussian(
+          verticalDrop,
+          0.62,
+          0.48
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          1.52
+        );
+
+      const ridgeJunction = clamp(
+        (
+          ridgeMetrics.nearbyPathCount
+          - 1
+        ) / 3,
+        0,
+        1
+      );
+
+      const channelShadow =
+        clamp(
+          (
+            verticalDrop - 0.44
+          ) / 1.15,
+          0,
+          1
+        );
+
+      const farSlopeShadow =
+        clamp(
+          (
+            ridgeDistance - 1.15
+          ) / 1.85,
+          0,
+          1
+        );
+
+      return clamp(
+        0.022
+        + crestRibbon * 0.16
+        + upperRibbon * 0.34
+        + lowerRibbon * 0.15
+        + ridgeJunction * 0.035
+        + heightNorm * 0.025
+        - channelShadow * 0.17
+        - farSlopeShadow * 0.055,
+        0.018,
+        0.72
+      );
+    }
+
+    function colourAt(brightness) {
+      const shadowWeight =
+        Math.pow(
+          brightness,
+          1.55
+        );
+
+      const highlightWeight =
+        Math.pow(
+          brightness,
+          2.15
+        );
+
+      return [
+        0.001
+          + shadowWeight * 0.012
+          + highlightWeight * 0.042,
+        0.006
+          + shadowWeight * 0.135
+          + highlightWeight * 0.410,
+        0.016
+          + shadowWeight * 0.235
+          + highlightWeight * 0.610
+      ];
     }
 
     function pushLine(
+      idA,
+      idB,
       pointA,
       pointB,
-      brightness,
-      variation
+      brightnessA,
+      brightnessB
     ) {
-      const glowR =
-        0.002
-        + brightness * 0.020;
+      const key =
+        idA < idB
+          ? `${idA}|${idB}`
+          : `${idB}|${idA}`;
 
-      const glowG =
-        0.016
-        + brightness * 0.140;
+      if (drawnEdges.has(key)) {
+        return;
+      }
 
-      const glowB =
-        0.034
-        + brightness * 0.260;
+      drawnEdges.add(key);
 
-      const coreR =
-        0.006
-        + brightness * 0.060;
+      const lineBrightnessA =
+        Math.pow(
+          brightnessA,
+          0.82
+        );
 
-      const coreG =
-        0.050
-        + brightness * 0.280;
-
-      const coreB =
-        0.090
-        + brightness * 0.420;
-
-      const glowBiasA =
-        0.82 + variation * 0.18;
-
-      const glowBiasB =
-        0.88 + (1 - variation) * 0.12;
+      const lineBrightnessB =
+        Math.pow(
+          brightnessB,
+          0.82
+        );
 
       glowLinePositions.push(
         pointA.x,
@@ -1948,12 +2061,18 @@
       );
 
       glowLineColors.push(
-        glowR * glowBiasA,
-        glowG * glowBiasA,
-        glowB * glowBiasA,
-        glowR * glowBiasB,
-        glowG * glowBiasB,
-        glowB * glowBiasB
+        0.002
+          + lineBrightnessA * 0.020,
+        0.014
+          + lineBrightnessA * 0.145,
+        0.034
+          + lineBrightnessA * 0.245,
+        0.002
+          + lineBrightnessB * 0.020,
+        0.014
+          + lineBrightnessB * 0.145,
+        0.034
+          + lineBrightnessB * 0.245
       );
 
       coreLinePositions.push(
@@ -1966,89 +2085,40 @@
       );
 
       coreLineColors.push(
-        coreR,
-        coreG,
-        coreB,
-        coreR * 0.96,
-        coreG * 0.98,
-        coreB
+        0.005
+          + lineBrightnessA * 0.050,
+        0.040
+          + lineBrightnessA * 0.260,
+        0.080
+          + lineBrightnessA * 0.390,
+        0.005
+          + lineBrightnessB * 0.050,
+        0.040
+          + lineBrightnessB * 0.260,
+        0.080
+          + lineBrightnessB * 0.390
       );
     }
 
-    function pushScaleTriangle(
+    function pushTriangle(
       pointA,
       pointB,
       pointC,
-      triangleIndex,
-      subTriangleIndex,
-      baseBrightness
+      idA,
+      idB,
+      idC,
+      brightnessA,
+      brightnessB,
+      brightnessC
     ) {
-      const shadeVariation =
-        variationOf(
-          triangleIndex,
-          subTriangleIndex,
-          1
-        );
+      const colourA =
+        colourAt(brightnessA);
 
-      const edgeVariation =
-        variationOf(
-          triangleIndex,
-          subTriangleIndex,
-          2
-        );
+      const colourB =
+        colourAt(brightnessB);
 
-      const brightness = clamp(
-        baseBrightness
-        * (
-          0.992
-          + shadeVariation * 0.016
-        ),
-        0.02,
-        1
-      );
-
-      const cyanShift =
-        variationOf(
-          triangleIndex,
-          subTriangleIndex,
-          3
-        );
-
-      const shadowWeight =
-        Math.pow(
-          brightness,
-          2.05
-        );
-
-      const highlightWeight =
-        Math.pow(
-          brightness,
-          1.92
-        );
-
-      const red =
-        0.001
-        + shadowWeight * 0.010
-        + highlightWeight * (
-          0.040
-          + cyanShift * 0.008
-        );
-
-      const green =
-        0.004
-        + shadowWeight * 0.070
-        + highlightWeight * (
-          0.365
-          + cyanShift * 0.032
-        );
-
-      const blue =
-        0.014
-        + shadowWeight * 0.150
-        + highlightWeight * (
-          0.595
-          + cyanShift * 0.026
-        );
+      const colourC =
+        colourAt(brightnessC);
 
       fillPositions.push(
         pointA.x,
@@ -2062,42 +2132,53 @@
         pointC.z
       );
 
-      /*
-       * Uniform colour per small triangle preserves a clear
-       * faceted scale instead of blending across its surface.
-       */
       fillColors.push(
-        red,
-        green,
-        blue,
-        red,
-        green,
-        blue,
-        red,
-        green,
-        blue
+        colourA[0],
+        colourA[1],
+        colourA[2],
+        colourB[0],
+        colourB[1],
+        colourB[2],
+        colourC[0],
+        colourC[1],
+        colourC[2]
       );
 
       pushLine(
+        idA,
+        idB,
         pointA,
         pointB,
-        brightness,
-        edgeVariation
+        brightnessA,
+        brightnessB
       );
 
       pushLine(
+        idB,
+        idC,
         pointB,
         pointC,
-        brightness,
-        1 - edgeVariation
+        brightnessB,
+        brightnessC
       );
 
       pushLine(
+        idC,
+        idA,
         pointC,
         pointA,
-        brightness,
-        shadeVariation
+        brightnessC,
+        brightnessA
       );
+    }
+
+    function midpointId(
+      indexA,
+      indexB
+    ) {
+      return indexA < indexB
+        ? `m${indexA}-${indexB}`
+        : `m${indexB}-${indexA}`;
     }
 
     for (
@@ -2105,9 +2186,6 @@
       triangleOffset < index.count;
       triangleOffset += 3
     ) {
-      const triangleIndex =
-        triangleOffset / 3;
-
       const indexA =
         index.getX(triangleOffset);
 
@@ -2164,212 +2242,55 @@
         faceNormal.multiplyScalar(-1);
       }
 
-      faceCentroid
-        .copy(vertexA)
-        .add(vertexB)
-        .add(vertexC)
-        .multiplyScalar(1 / 3);
+      const brightnessA =
+        brightnessAt(vertexA);
 
-      const heightNorm = clamp(
-        (faceCentroid.y - minimumY)
-        / heightRange,
-        0,
-        1
-      );
+      const brightnessB =
+        brightnessAt(vertexB);
 
-      const ridgeMetrics =
-        findRidgeMetrics(
-          faceCentroid.x,
-          faceCentroid.z,
-          ridgeSegments,
-          pathDistances
+      const brightnessC =
+        brightnessAt(vertexC);
+
+      midpointAB
+        .lerpVectors(
+          vertexA,
+          vertexB,
+          0.5
         );
 
-      const ridgeCore = Math.exp(
-        -Math.pow(
-          ridgeMetrics.distance / 0.92,
-          2
-        )
-      );
-
-      const grooveDepth = Math.max(
-        0,
-        ridgeMetrics.ridgeY
-        - faceCentroid.y
-      );
-
-      /*
-       * Sleek horizontal glow:
-       * - bands are driven mainly by vertical drop below the
-       *   local ridge, so they read more horizontal/smooth
-       * - each hump receives its own band from the local ridge
-       * - lower channels stay dark and protected
-       */
-      const grooveShadow = clamp(
-        grooveDepth / 0.90,
-        0,
-        1
-      );
-
-      const slopeStrength = clamp(
-        1 - faceNormal.y,
-        0,
-        1
-      );
-
-      const keyResponse = clamp(
-        faceNormal.dot(
-          lightDirection
-        ),
-        0,
-        1
-      );
-
-      const fillResponse = clamp(
-        faceNormal.dot(
-          fillDirection
-        ),
-        0,
-        1
-      );
-
-      const sheltered =
-        Math.pow(
-          1 - keyResponse,
-          1.55
+      midpointBC
+        .lerpVectors(
+          vertexB,
+          vertexC,
+          0.5
         );
 
-      const verticalDrop =
-        Math.max(
-          0,
-          ridgeMetrics.ridgeY
-          - faceCentroid.y
+      midpointCA
+        .lerpVectors(
+          vertexC,
+          vertexA,
+          0.5
         );
 
-      const crestBand =
-        Math.exp(
-          -Math.pow(
-            (
-              verticalDrop - 0.10
-            ) / 0.11,
-            2
-          )
-        )
-        * Math.exp(
-          -Math.pow(
-            ridgeMetrics.distance / 0.78,
-            2
-          )
-        );
+      const brightnessAB =
+        brightnessAt(midpointAB);
 
-      const upperShoulderBand =
-        Math.exp(
-          -Math.pow(
-            (
-              verticalDrop - 0.24
-            ) / 0.14,
-            2
-          )
-        )
-        * Math.exp(
-          -Math.pow(
-            ridgeMetrics.distance / 0.88,
-            2
-          )
-        );
+      const brightnessBC =
+        brightnessAt(midpointBC);
 
-      const lowerShoulderBand =
-        Math.exp(
-          -Math.pow(
-            (
-              verticalDrop - 0.42
-            ) / 0.20,
-            2
-          )
-        )
-        * Math.exp(
-          -Math.pow(
-            (
-              ridgeMetrics.distance - 0.18
-            ) / 1.08,
-            2
-          )
-        );
+      const brightnessCA =
+        brightnessAt(midpointCA);
 
-      const ridgeBandHighlight = clamp(
-        crestBand * 0.34
-        + upperShoulderBand * 0.98
-        + lowerShoulderBand * 0.44,
-        0,
-        1
-      );
-
-      const peakProtection = clamp(
-        ridgeBandHighlight * 0.70
-        + Math.pow(
-          heightNorm,
-          1.06
-        ) * 0.26
-        + ridgeCore * 0.18,
-        0,
-        1
-      );
-
-      const flowVariation = clamp(
-        0.5
-        + Math.sin(
-          faceCentroid.x * 0.22
-          + faceCentroid.y * 0.10
-        ) * 0.018
-        + Math.cos(
-          faceCentroid.z * 0.25
-          - faceCentroid.y * 0.08
-        ) * 0.016,
-        0,
-        1
-      );
-
-      const valleyBias = clamp(
-        (1 - heightNorm) * 0.50
-        + grooveShadow * 0.50,
-        0,
-        1
-      );
-
-      const ridgeFade = Math.pow(
-        ridgeBandHighlight,
-        0.92
-      );
-
-      const baseBrightness = clamp(
-        0.016
-        + Math.pow(
-          keyResponse,
-          1.00
-        ) * 0.16
-        + fillResponse * 0.05
-        + Math.pow(
-          heightNorm,
-          1.08
-        ) * 0.06
-        + ridgeFade * 0.48
-        + slopeStrength * 0.012
-        + flowVariation * 0.010
-        - grooveShadow * (
-          0.62
-          - peakProtection * 0.18
-        )
-        - sheltered * (
-          0.12
-          + valleyBias * 0.14
-        ),
-        0.02,
-        0.72
-      );
+      const averageBrightness =
+        (
+          brightnessA
+          + brightnessB
+          + brightnessC
+        ) / 3;
 
       const offsetDistance =
-        0.016
-        + baseBrightness * 0.012;
+        0.014
+        + averageBrightness * 0.012;
 
       const displayA =
         vertexA.clone()
@@ -2392,65 +2313,95 @@
             offsetDistance
           );
 
-      midpointAB
-        .lerpVectors(
-          displayA,
-          displayB,
-          0.5
+      const displayAB =
+        midpointAB.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayBC =
+        midpointBC.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayCA =
+        midpointCA.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const idA = `v${indexA}`;
+      const idB = `v${indexB}`;
+      const idC = `v${indexC}`;
+
+      const idAB =
+        midpointId(
+          indexA,
+          indexB
         );
 
-      midpointBC
-        .lerpVectors(
-          displayB,
-          displayC,
-          0.5
+      const idBC =
+        midpointId(
+          indexB,
+          indexC
         );
 
-      midpointCA
-        .lerpVectors(
-          displayC,
-          displayA,
-          0.5
+      const idCA =
+        midpointId(
+          indexC,
+          indexA
         );
 
-      /*
-       * Four connected sub-triangles per native terrain face:
-       * smaller, dense scales that remain attached to the mesh.
-       */
-      pushScaleTriangle(
+      pushTriangle(
         displayA,
-        midpointAB,
-        midpointCA,
-        triangleIndex,
-        0,
-        baseBrightness
+        displayAB,
+        displayCA,
+        idA,
+        idAB,
+        idCA,
+        brightnessA,
+        brightnessAB,
+        brightnessCA
       );
 
-      pushScaleTriangle(
-        midpointAB,
+      pushTriangle(
+        displayAB,
         displayB,
-        midpointBC,
-        triangleIndex,
-        1,
-        baseBrightness
+        displayBC,
+        idAB,
+        idB,
+        idBC,
+        brightnessAB,
+        brightnessB,
+        brightnessBC
       );
 
-      pushScaleTriangle(
-        midpointCA,
-        midpointBC,
+      pushTriangle(
+        displayCA,
+        displayBC,
         displayC,
-        triangleIndex,
-        2,
-        baseBrightness
+        idCA,
+        idBC,
+        idC,
+        brightnessCA,
+        brightnessBC,
+        brightnessC
       );
 
-      pushScaleTriangle(
-        midpointAB,
-        midpointBC,
-        midpointCA,
-        triangleIndex,
-        3,
-        baseBrightness
+      pushTriangle(
+        displayAB,
+        displayBC,
+        displayCA,
+        idAB,
+        idBC,
+        idCA,
+        brightnessAB,
+        brightnessBC,
+        brightnessCA
       );
     }
 
@@ -2477,15 +2428,13 @@
       )
     );
 
-    fillGeometry.computeVertexNormals();
-
     const fillMaterial =
       new THREE.MeshBasicMaterial({
         color: 0xffffff,
         vertexColors: true,
         transparent: false,
         opacity: 1,
-        depthWrite: false,
+        depthWrite: true,
         depthTest: true,
         blending: THREE.NormalBlending,
         toneMapped: false,
@@ -2524,7 +2473,7 @@
     const glowLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.020,
+        opacity: 0.022,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2564,7 +2513,7 @@
     const coreLineMaterial =
       new THREE.LineBasicMaterial({
         transparent: true,
-        opacity: 0.48,
+        opacity: 0.34,
         depthWrite: false,
         depthTest: true,
         blending: THREE.NormalBlending,
@@ -2746,8 +2695,8 @@
 
     scene.fog = new THREE.Fog(
       0x021221,
-      18,
-      52
+      28,
+      88
     );
 
     const camera =
@@ -2755,7 +2704,7 @@
         46,
         1,
         0.1,
-        120
+        180
       );
 
     const hemisphere =
@@ -2838,18 +2787,26 @@
         new THREE.Vector3()
       );
 
+    /*
+     * The canvas already fills the graph-stage rim.
+     * Framing is therefore handled by the camera only:
+     * farther back, with the mountain base anchored low.
+     */
     const target =
       new THREE.Vector3(
         center.x,
-        box.min.y + size.y * 0.36,
+        box.min.y + size.y * 0.61,
         center.z
       );
 
-    const orbitRadiusBase =
-      Math.max(size.x, size.z) * 0.73;
+    const orbitRadiusFloor =
+      Math.max(
+        size.x,
+        size.z
+      ) * 0.82;
 
     const targetLift =
-      size.y * 0.29;
+      size.y * 0.20;
 
     const state = {
       azimuth: FRONT_AZIMUTH,
@@ -2931,22 +2888,50 @@
         state.width
         / Math.max(1, state.height);
 
-      const portraitBoost = clamp(
-        (1.02 - aspect) * 2.2,
-        0,
-        1.2
-      );
-
-      const orbitRadius =
-        orbitRadiusBase
-        + portraitBoost * 2.0;
-
       camera.fov =
         aspect < 0.82
           ? 47
           : aspect < 1.12
             ? 45
             : 44;
+
+      const verticalFov =
+        camera.fov * DEG;
+
+      const horizontalFov =
+        2 * Math.atan(
+          Math.tan(
+            verticalFov / 2
+          ) * Math.max(
+            aspect,
+            0.35
+          )
+        );
+
+      const widthFitRadius =
+        Math.max(
+          size.x,
+          size.z
+        )
+        / (
+          2
+          * Math.tan(
+            Math.max(
+              horizontalFov,
+              0.18
+            ) / 2
+          )
+        );
+
+      const orbitRadius =
+        Math.max(
+          orbitRadiusFloor,
+          widthFitRadius * (
+            aspect < 0.82
+              ? 0.64
+              : 0.70
+          )
+        );
 
       camera.updateProjectionMatrix();
 
