@@ -1,66 +1,78 @@
-/* ========================================================================== 
-   FieldOps Atlas RF Three.js solid-core adapter
+/* ==========================================================================
+   FieldOps Atlas RF Three.js solid-shell adapter
    File: FieldOpsAtlas/Features/RF/rf-three-solid-core.js
-   Version: 1.1.246-builder-3-bright-secondary-peaks-neutral-cap-13k
+   Version: 1.1.247-builder-3-opaque-shell-no-plane-bright-peaks-13k
 
    Purpose:
    - Preserve the current Builder 3 exterior geometry.
-   - Brighten only the four secondary peak colour regions.
    - Keep the approved central peak unchanged.
-   - Build an opaque horizontal cross-section above the removed internal
-     platform, latched to the live exterior mesh boundary.
-   - Render the internal cap as a neutral, colourless solid and keep it out of
-     both cyan wireframe passes.
+   - Brighten only the four secondary peaks.
+   - Keep the visible mountain shell fully opaque.
+   - Do not create any internal horizontal cap or replacement plane.
+   - Remove coloured vertex treatment from low, almost-horizontal skin faces.
+   - Prevent the transparent wireframe overlays from drawing back faces.
    ========================================================================== */
 
 import * as THREEBase from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 export * from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 
-const VERSION = "1.1.246-builder-3-bright-secondary-peaks-neutral-cap-13k";
-const CAP_HEIGHT_RATIO = 0.305;
-const WELD_TOLERANCE_RATIO = 0.00012;
-const MIN_LOOP_AREA_RATIO = 0.00008;
-const PLANE_EPSILON_RATIO = 0.00002;
-const NEUTRAL_CAP_COLOUR = 0x06131a;
-const SECONDARY_PEAK_TARGET_MAX = 0.88;
-const SECONDARY_PEAK_STRENGTH = 0.82;
+const VERSION = "1.1.247-builder-3-opaque-shell-no-plane-bright-peaks-13k";
+
+const SECONDARY_PEAK_TARGET_MAX = 1;
+const SECONDARY_PEAK_STRENGTH = 0.96;
+const LOW_HORIZONTAL_MAX_HEIGHT_RATIO = 0.36;
+const HORIZONTAL_NORMAL_Y_MIN = 0.92;
+const NEUTRAL_SKIN_COLOUR = new THREEBase.Color(0x06131a);
 
 /*
- * Builder 3 translates the source geometry before constructing the first Mesh.
- * These centres are therefore stored in the translated, centred geometry space.
+ * Builder 3 translates its source geometry by:
+ *   x -= META.center[0]
+ *   y -= META.boundsMin[1]
+ *   z -= META.center[2]
+ *
+ * The coordinates below are therefore in the live translated geometry space.
+ * Peak radii use the narrower source-identified regions rather than the broad
+ * Layer-2 fade radii, which previously overlapped and altered the main peak.
  */
+const MAIN_PEAK = Object.freeze({
+  x: 0.019635006830198476,
+  y: 0.9086992847261541,
+  z: 0.0007775044148700117,
+  outerRadius: 0.08054548592230482
+});
+
 const SECONDARY_PEAKS = Object.freeze([
   Object.freeze({
     x: -0.07001383516569858,
     y: 0.7510444305667527,
     z: -0.004246370265828303,
-    baseY: 0.385,
-    fullRadius: 0.08999494326786596,
-    outerRadius: 0.1551636952894241
+    baseY: 0.475,
+    fullRadius: 0.056353437349480166,
+    outerRadius: 0.11571943055781153
   }),
   Object.freeze({
     x: 0.09025027463754276,
     y: 0.7623728400520853,
     z: -0.0026913614360883904,
-    baseY: 0.385,
-    fullRadius: 0.09905304420443153,
-    outerRadius: 0.17078111069729576
+    baseY: 0.475,
+    fullRadius: 0.058657359157477496,
+    outerRadius: 0.12255162993026053
   }),
   Object.freeze({
     x: 0.002464694551057911,
     y: 0.7255312439657589,
     z: 0.09264264143335321,
-    baseY: 0.385,
-    fullRadius: 0.105,
-    outerRadius: 0.18372953148707472
+    baseY: 0.475,
+    fullRadius: 0.06643181712826672,
+    outerRadius: 0.12062755993172357
   }),
   Object.freeze({
     x: 0.019564250048828335,
     y: 0.7782908499531401,
     z: -0.06151854162578895,
-    baseY: 0.385,
-    fullRadius: 0.09927140704538673,
-    outerRadius: 0.17115759835411506
+    baseY: 0.475,
+    fullRadius: 0.06693372515836765,
+    outerRadius: 0.13159058221864872
   })
 ]);
 
@@ -71,9 +83,7 @@ function materialList(material) {
 }
 
 function isBuilderSurface(geometry, material) {
-  if (!geometry || geometry.userData?.rfInternalColourCapAttached) {
-    return false;
-  }
+  if (!geometry) return false;
 
   const position = geometry.getAttribute?.("position");
   const colour = geometry.getAttribute?.("color");
@@ -86,42 +96,73 @@ function isBuilderSurface(geometry, material) {
     materials.length === 1 &&
     materials[0] &&
     materials[0].vertexColors === true &&
-    materials[0].wireframe !== true &&
-    materials[0].transparent === false
+    materials[0].wireframe !== true
   );
+}
+
+function isWireframeMaterial(material) {
+  return materialList(material).some((entry) => entry?.wireframe === true);
 }
 
 function smoothstep(minimum, maximum, value) {
   if (maximum <= minimum) return value >= maximum ? 1 : 0;
+
   const t = THREEBase.MathUtils.clamp(
     (value - minimum) / (maximum - minimum),
     0,
     1
   );
+
   return t * t * (3 - 2 * t);
 }
 
-function secondaryPeakInfluence(x, y, z, peak) {
-  if (y <= peak.baseY) return 0;
+function radialDistance(x, z, peak) {
+  return Math.hypot(x - peak.x, z - peak.z);
+}
 
-  const radialDistance = Math.hypot(x - peak.x, z - peak.z);
-  if (radialDistance >= peak.outerRadius) return 0;
+function ownsPeakRegion(x, z, secondaryPeak) {
+  const secondaryScore =
+    radialDistance(x, z, secondaryPeak) / secondaryPeak.outerRadius;
+  const mainScore =
+    radialDistance(x, z, MAIN_PEAK) / MAIN_PEAK.outerRadius;
+
+  if (secondaryScore >= mainScore) return false;
+
+  return SECONDARY_PEAKS.every((candidate) => {
+    if (candidate === secondaryPeak) return true;
+
+    const candidateScore =
+      radialDistance(x, z, candidate) / candidate.outerRadius;
+
+    return secondaryScore <= candidateScore;
+  });
+}
+
+function secondaryPeakInfluence(x, y, z, peak) {
+  if (y <= peak.baseY || !ownsPeakRegion(x, z, peak)) return 0;
+
+  const distance = radialDistance(x, z, peak);
+  if (distance >= peak.outerRadius) return 0;
 
   const radialWeight = 1 - smoothstep(
     peak.fullRadius,
     peak.outerRadius,
-    radialDistance
+    distance
   );
+
   const heightWeight = smoothstep(peak.baseY, peak.y, y);
-  return radialWeight * heightWeight;
+  const visiblePeakWeight = 0.30 + heightWeight * 0.70;
+
+  return radialWeight * visiblePeakWeight;
 }
 
 function brightenSecondaryPeaks(geometry) {
-  if (geometry.userData?.rfSecondaryPeaksBrightened) return;
-
   const position = geometry.getAttribute("position");
   const colour = geometry.getAttribute("color");
-  if (!position || !colour || position.count !== colour.count) return;
+
+  if (!position || !colour || position.count !== colour.count) {
+    return 0;
+  }
 
   let changedVertexCount = 0;
 
@@ -129,14 +170,15 @@ function brightenSecondaryPeaks(geometry) {
     const x = position.getX(vertexIndex);
     const y = position.getY(vertexIndex);
     const z = position.getZ(vertexIndex);
+
     let influence = 0;
 
-    SECONDARY_PEAKS.forEach((peak) => {
+    for (const peak of SECONDARY_PEAKS) {
       influence = Math.max(
         influence,
         secondaryPeakInfluence(x, y, z, peak)
       );
-    });
+    }
 
     if (influence <= 0.001) continue;
 
@@ -144,408 +186,169 @@ function brightenSecondaryPeaks(geometry) {
     const green = colour.getY(vertexIndex);
     const blue = colour.getZ(vertexIndex);
     const maximumChannel = Math.max(red, green, blue, 1 / 255);
-    const targetScale = SECONDARY_PEAK_TARGET_MAX / maximumChannel;
-    const scale = 1 + Math.max(0, targetScale - 1)
-      * influence
-      * SECONDARY_PEAK_STRENGTH;
+    const gain = SECONDARY_PEAK_TARGET_MAX / maximumChannel;
+    const amount = influence * SECONDARY_PEAK_STRENGTH;
 
     colour.setXYZ(
       vertexIndex,
-      Math.min(1, red * scale),
-      Math.min(1, green * scale),
-      Math.min(1, blue * scale)
+      THREEBase.MathUtils.lerp(red, Math.min(1, red * gain), amount),
+      THREEBase.MathUtils.lerp(green, Math.min(1, green * gain), amount),
+      THREEBase.MathUtils.lerp(blue, Math.min(1, blue * gain), amount)
     );
+
     changedVertexCount += 1;
   }
 
   colour.needsUpdate = true;
-  geometry.userData.rfSecondaryPeaksBrightened = true;
-  geometry.userData.rfSecondaryPeaksBrightenedVersion = VERSION;
-  geometry.userData.rfSecondaryPeaksBrightenedVertexCount = changedVertexCount;
+  return changedVertexCount;
 }
 
-function readVertex(position, index) {
-  return new THREEBase.Vector3(
-    position.getX(index),
-    position.getY(index),
-    position.getZ(index)
-  );
+function triangleNormalY(position, first, second, third) {
+  const ax = position.getX(first);
+  const ay = position.getY(first);
+  const az = position.getZ(first);
+
+  const abx = position.getX(second) - ax;
+  const aby = position.getY(second) - ay;
+  const abz = position.getZ(second) - az;
+
+  const acx = position.getX(third) - ax;
+  const acy = position.getY(third) - ay;
+  const acz = position.getZ(third) - az;
+
+  const crossX = aby * acz - abz * acy;
+  const crossY = abz * acx - abx * acz;
+  const crossZ = abx * acy - aby * acx;
+  const length = Math.hypot(crossX, crossY, crossZ);
+
+  return length > 1e-12 ? Math.abs(crossY) / length : 0;
 }
 
-function readColour(colour, index) {
-  return new THREEBase.Color(
-    colour.getX(index),
-    colour.getY(index),
-    colour.getZ(index)
-  );
-}
-
-function edgeIntersection(position, colour, firstIndex, secondIndex, planeY, epsilon) {
-  const first = readVertex(position, firstIndex);
-  const second = readVertex(position, secondIndex);
-  const firstDistance = first.y - planeY;
-  const secondDistance = second.y - planeY;
-
-  if (Math.abs(firstDistance) <= epsilon && Math.abs(secondDistance) <= epsilon) {
-    return null;
-  }
-
-  if (
-    (firstDistance > epsilon && secondDistance > epsilon) ||
-    (firstDistance < -epsilon && secondDistance < -epsilon)
-  ) {
-    return null;
-  }
-
-  const denominator = second.y - first.y;
-  const t = Math.abs(denominator) <= epsilon
-    ? 0
-    : THREEBase.MathUtils.clamp((planeY - first.y) / denominator, 0, 1);
-  const point = first.clone().lerp(second, t);
-  point.y = planeY;
-
-  const firstColour = readColour(colour, firstIndex);
-  const secondColour = readColour(colour, secondIndex);
-
-  return {
-    point,
-    colour: firstColour.lerp(secondColour, t)
-  };
-}
-
-function pointsMatch(first, second, epsilonSquared) {
-  const dx = first.point.x - second.point.x;
-  const dz = first.point.z - second.point.z;
-  return dx * dx + dz * dz <= epsilonSquared;
-}
-
-function uniqueIntersections(intersections, epsilonSquared) {
-  const unique = [];
-
-  intersections.forEach((candidate) => {
-    if (!candidate) return;
-    if (unique.some((entry) => pointsMatch(entry, candidate, epsilonSquared))) return;
-    unique.push(candidate);
-  });
-
-  return unique;
-}
-
-function farthestPair(points) {
-  let pair = null;
-  let greatestDistanceSquared = -1;
-
-  for (let first = 0; first < points.length; first += 1) {
-    for (let second = first + 1; second < points.length; second += 1) {
-      const dx = points[first].point.x - points[second].point.x;
-      const dz = points[first].point.z - points[second].point.z;
-      const distanceSquared = dx * dx + dz * dz;
-
-      if (distanceSquared > greatestDistanceSquared) {
-        greatestDistanceSquared = distanceSquared;
-        pair = [points[first], points[second]];
-      }
-    }
-  }
-
-  return pair;
-}
-
-function buildCrossSectionSegments(geometry, planeY, weldTolerance) {
+function neutraliseLowHorizontalSkin(geometry) {
   const position = geometry.getAttribute("position");
   const colour = geometry.getAttribute("color");
-  const index = geometry.index;
-  const epsilonSquared = weldTolerance * weldTolerance;
-  const segments = [];
 
-  for (let offset = 0; offset < index.count; offset += 3) {
-    const a = index.getX(offset);
-    const b = index.getX(offset + 1);
-    const c = index.getX(offset + 2);
-    const intersections = uniqueIntersections([
-      edgeIntersection(position, colour, a, b, planeY, weldTolerance),
-      edgeIntersection(position, colour, b, c, planeY, weldTolerance),
-      edgeIntersection(position, colour, c, a, planeY, weldTolerance)
-    ], epsilonSquared);
-
-    if (intersections.length < 2) continue;
-
-    const pair = intersections.length === 2
-      ? intersections
-      : farthestPair(intersections);
-
-    if (!pair || pointsMatch(pair[0], pair[1], epsilonSquared)) continue;
-    segments.push(pair);
+  if (!position || !colour || position.count !== colour.count) {
+    return 0;
   }
 
-  return segments;
-}
-
-function weldKey(entry, tolerance) {
-  return `${Math.round(entry.point.x / tolerance)}:${Math.round(entry.point.z / tolerance)}`;
-}
-
-function buildWeldedGraph(segments, tolerance) {
-  const nodes = [];
-  const nodeByKey = new Map();
-  const edges = [];
-  const edgeKeys = new Set();
-
-  function nodeFor(entry) {
-    const key = weldKey(entry, tolerance);
-    const existing = nodeByKey.get(key);
-
-    if (existing !== undefined) {
-      const node = nodes[existing];
-      node.point.add(entry.point);
-      node.colour.add(entry.colour);
-      node.samples += 1;
-      return existing;
-    }
-
-    const index = nodes.length;
-    nodes.push({
-      point: entry.point.clone(),
-      colour: entry.colour.clone(),
-      samples: 1,
-      neighbours: new Set()
-    });
-    nodeByKey.set(key, index);
-    return index;
-  }
-
-  segments.forEach(([firstEntry, secondEntry]) => {
-    const first = nodeFor(firstEntry);
-    const second = nodeFor(secondEntry);
-    if (first === second) return;
-
-    const key = first < second ? `${first}:${second}` : `${second}:${first}`;
-    if (edgeKeys.has(key)) return;
-    edgeKeys.add(key);
-
-    const edgeIndex = edges.length;
-    edges.push({ first, second, used: false });
-    nodes[first].neighbours.add(edgeIndex);
-    nodes[second].neighbours.add(edgeIndex);
-  });
-
-  nodes.forEach((node) => {
-    node.point.multiplyScalar(1 / node.samples);
-    node.colour.multiplyScalar(1 / node.samples);
-  });
-
-  return { nodes, edges };
-}
-
-function otherNode(edge, nodeIndex) {
-  return edge.first === nodeIndex ? edge.second : edge.first;
-}
-
-function chooseContinuation(graph, previousIndex, currentIndex, candidates) {
-  if (candidates.length <= 1 || previousIndex === null) {
-    return candidates[0] ?? null;
-  }
-
-  const previous = graph.nodes[previousIndex].point;
-  const current = graph.nodes[currentIndex].point;
-  const incomingX = current.x - previous.x;
-  const incomingZ = current.z - previous.z;
-  const incomingLength = Math.hypot(incomingX, incomingZ) || 1;
-
-  let best = candidates[0];
-  let bestScore = -Infinity;
-
-  candidates.forEach((edgeIndex) => {
-    const nextIndex = otherNode(graph.edges[edgeIndex], currentIndex);
-    const next = graph.nodes[nextIndex].point;
-    const outgoingX = next.x - current.x;
-    const outgoingZ = next.z - current.z;
-    const outgoingLength = Math.hypot(outgoingX, outgoingZ) || 1;
-    const score = (
-      incomingX * outgoingX + incomingZ * outgoingZ
-    ) / (incomingLength * outgoingLength);
-
-    if (score > bestScore) {
-      bestScore = score;
-      best = edgeIndex;
-    }
-  });
-
-  return best;
-}
-
-function traceLoops(graph) {
-  const loops = [];
-
-  graph.edges.forEach((seedEdge, seedEdgeIndex) => {
-    if (seedEdge.used) return;
-
-    const loop = [];
-    const startIndex = seedEdge.first;
-    let previousIndex = null;
-    let currentIndex = startIndex;
-    let edgeIndex = seedEdgeIndex;
-    let guard = 0;
-
-    while (edgeIndex !== null && guard <= graph.edges.length + 2) {
-      const edge = graph.edges[edgeIndex];
-      if (edge.used) break;
-      edge.used = true;
-
-      if (loop.length === 0) loop.push(currentIndex);
-      const nextIndex = otherNode(edge, currentIndex);
-      loop.push(nextIndex);
-
-      if (nextIndex === startIndex) break;
-
-      const candidateEdges = [...graph.nodes[nextIndex].neighbours]
-        .filter((candidateIndex) => !graph.edges[candidateIndex].used);
-
-      previousIndex = currentIndex;
-      currentIndex = nextIndex;
-      edgeIndex = chooseContinuation(graph, previousIndex, currentIndex, candidateEdges);
-      guard += 1;
-    }
-
-    if (loop.length >= 4 && loop[loop.length - 1] === startIndex) {
-      loop.pop();
-      loops.push(loop);
-    }
-  });
-
-  return loops;
-}
-
-function polygonArea(loop, nodes) {
-  let area = 0;
-
-  for (let index = 0; index < loop.length; index += 1) {
-    const current = nodes[loop[index]].point;
-    const next = nodes[loop[(index + 1) % loop.length]].point;
-    area += current.x * next.z - next.x * current.z;
-  }
-
-  return area * 0.5;
-}
-
-function createInternalCapGeometry(geometry) {
   geometry.computeBoundingBox();
   const bounds = geometry.boundingBox;
-  if (!bounds) return null;
 
-  const size = bounds.getSize(new THREEBase.Vector3());
-  const span = Math.max(size.x, size.z, 1e-6);
-  const height = Math.max(size.y, 1e-6);
-  const planeY = bounds.min.y + height * CAP_HEIGHT_RATIO;
-  const weldTolerance = span * WELD_TOLERANCE_RATIO;
-  const planeEpsilon = height * PLANE_EPSILON_RATIO;
-  const minimumLoopArea = size.x * size.z * MIN_LOOP_AREA_RATIO;
-  const segments = buildCrossSectionSegments(
-    geometry,
-    planeY + planeEpsilon,
-    weldTolerance
-  );
+  if (!bounds) return 0;
 
-  if (segments.length < 3) return null;
+  const height = Math.max(bounds.max.y - bounds.min.y, 1e-6);
+  const maximumFaceY =
+    bounds.min.y + height * LOW_HORIZONTAL_MAX_HEIGHT_RATIO;
 
-  const graph = buildWeldedGraph(segments, weldTolerance);
-  const loops = traceLoops(graph)
-    .filter((loop) => Math.abs(polygonArea(loop, graph.nodes)) >= minimumLoopArea);
+  let changedFaceCount = 0;
 
-  if (loops.length === 0) return null;
+  for (let first = 0; first + 2 < position.count; first += 3) {
+    const second = first + 1;
+    const third = first + 2;
 
-  const positions = [];
-  const colours = [];
-  const indices = [];
+    const faceMaximumY = Math.max(
+      position.getY(first),
+      position.getY(second),
+      position.getY(third)
+    );
 
-  loops.forEach((loop) => {
-    const contour = loop.map((nodeIndex) => {
-      const point = graph.nodes[nodeIndex].point;
-      return new THREEBase.Vector2(point.x, point.z);
-    });
-    const faces = THREEBase.ShapeUtils.triangulateShape(contour, []);
-    const vertexOffset = positions.length / 3;
+    if (faceMaximumY > maximumFaceY) continue;
 
-    loop.forEach((nodeIndex) => {
-      const node = graph.nodes[nodeIndex];
-      positions.push(node.point.x, planeY + planeEpsilon, node.point.z);
-      colours.push(node.colour.r, node.colour.g, node.colour.b);
-    });
+    const normalY = triangleNormalY(position, first, second, third);
+    if (normalY < HORIZONTAL_NORMAL_Y_MIN) continue;
 
-    faces.forEach((face) => {
-      indices.push(
-        vertexOffset + face[0],
-        vertexOffset + face[1],
-        vertexOffset + face[2]
+    for (const vertexIndex of [first, second, third]) {
+      colour.setXYZ(
+        vertexIndex,
+        NEUTRAL_SKIN_COLOUR.r,
+        NEUTRAL_SKIN_COLOUR.g,
+        NEUTRAL_SKIN_COLOUR.b
       );
-    });
-  });
+    }
 
-  if (indices.length === 0) return null;
+    changedFaceCount += 1;
+  }
 
-  const capGeometry = new THREEBase.BufferGeometry();
-  capGeometry.setAttribute(
-    "position",
-    new THREEBase.Float32BufferAttribute(positions, 3)
-  );
-  capGeometry.setAttribute(
-    "color",
-    new THREEBase.Float32BufferAttribute(colours, 3)
-  );
-  capGeometry.setIndex(indices);
-  capGeometry.computeVertexNormals();
-  capGeometry.computeBoundingBox();
-  capGeometry.computeBoundingSphere();
-  capGeometry.userData.rfInternalColourCap = true;
-  capGeometry.userData.rfInternalColourCapVersion = VERSION;
-  capGeometry.userData.rfInternalColourCapPlaneY = planeY + planeEpsilon;
-  capGeometry.userData.rfInternalColourCapLoopCount = loops.length;
-  return capGeometry;
+  colour.needsUpdate = true;
+  return changedFaceCount;
 }
 
-function attachInternalColourCap(surface, geometry) {
-  const capGeometry = createInternalCapGeometry(geometry);
-  if (!capGeometry) return;
+function prepareSurfaceGeometry(sourceGeometry) {
+  /*
+   * The source is indexed, so neighbouring triangles share colour vertices.
+   * Expanding only the visible surface lets low horizontal faces be neutralised
+   * without dragging that neutral colour up adjacent slopes.
+   */
+  const geometry = sourceGeometry.clone().toNonIndexed();
 
-  const capMaterial = new THREEBase.MeshBasicMaterial({
-    color: NEUTRAL_CAP_COLOUR,
-    vertexColors: false,
-    side: THREEBase.DoubleSide,
-    transparent: false,
-    opacity: 1,
-    depthWrite: true,
-    depthTest: true,
-    toneMapped: false,
-    dithering: true,
-    polygonOffset: true,
-    polygonOffsetFactor: 1,
-    polygonOffsetUnits: 1
+  const brightenedVertexCount = brightenSecondaryPeaks(geometry);
+  const neutralisedFaceCount = neutraliseLowHorizontalSkin(geometry);
+
+  geometry.userData = {
+    ...sourceGeometry.userData,
+    rfSolidShellVersion: VERSION,
+    rfInternalCapAttached: false,
+    rfSecondaryPeaksBrightened: true,
+    rfSecondaryPeaksBrightenedVertexCount: brightenedVertexCount,
+    rfLowHorizontalSkinNeutralised: true,
+    rfLowHorizontalSkinNeutralisedFaceCount: neutralisedFaceCount
+  };
+
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+
+  return geometry;
+}
+
+function configureOpaqueSurface(material) {
+  materialList(material).forEach((entry) => {
+    if (!entry) return;
+
+    entry.transparent = false;
+    entry.opacity = 1;
+    entry.depthWrite = true;
+    entry.depthTest = true;
+    entry.side = THREEBase.DoubleSide;
+    entry.blending = THREEBase.NormalBlending;
+    entry.needsUpdate = true;
   });
+}
 
-  const cap = new OriginalMesh(capGeometry, capMaterial);
-  cap.name = "rf-internal-neutral-cap";
-  cap.renderOrder = -1;
-  cap.frustumCulled = true;
-  cap.userData.rfInternalColourCap = true;
-  cap.userData.rfInternalColourCapVersion = VERSION;
-  cap.userData.rfInternalColourCapNeutral = true;
-  surface.add(cap);
+function configureVisibleWireframe(material) {
+  materialList(material).forEach((entry) => {
+    if (!entry?.wireframe) return;
 
-  geometry.userData.rfInternalColourCapAttached = true;
-  geometry.userData.rfInternalColourCapVersion = VERSION;
+    /*
+     * Front-side wireframe prevents the opposite side of the open source shell
+     * from reading as an X-ray through the mountain.
+     */
+    entry.side = THREEBase.FrontSide;
+    entry.depthTest = true;
+    entry.depthWrite = false;
+    entry.needsUpdate = true;
+  });
 }
 
 export class Mesh extends OriginalMesh {
   constructor(geometry, material) {
-    super(geometry, material);
+    const builderSurface = isBuilderSurface(geometry, material);
+    const renderGeometry = builderSurface
+      ? prepareSurfaceGeometry(geometry)
+      : geometry;
 
-    if (isBuilderSurface(geometry, material)) {
-      try {
-        brightenSecondaryPeaks(geometry);
-        attachInternalColourCap(this, geometry);
-      } catch (error) {
-        console.error("FieldOps RF solid-core processing failed:", error);
-      }
+    super(renderGeometry, material);
+
+    if (builderSurface) {
+      configureOpaqueSurface(material);
+      this.name = "rf-opaque-mountain-shell";
+      this.userData.rfSolidShellVersion = VERSION;
+      this.userData.rfInternalCapAttached = false;
+      return;
+    }
+
+    if (isWireframeMaterial(material)) {
+      configureVisibleWireframe(material);
     }
   }
 }
