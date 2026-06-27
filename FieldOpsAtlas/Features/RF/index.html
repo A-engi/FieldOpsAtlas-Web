@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF Builder 3 v1.1.249</title>
+  <title>FieldOps Atlas RF Builder 3 v1.1.250</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
@@ -14,34 +14,33 @@
     .rf-load-toast {
       position: fixed;
       z-index: 9999;
-      left: 50%;
+      left: 14px;
       bottom: 92px;
-      max-width: calc(100vw - 28px);
-      padding: 6px 10px;
+      max-width: min(calc(100vw - 28px), 430px);
+      padding: 8px 10px;
       border: 1px solid rgba(255, 221, 142, 0.58);
-      border-radius: 999px;
-      background: rgba(10, 23, 36, 0.88);
+      border-radius: 12px;
+      background: rgba(10, 23, 36, 0.9);
       color: #ffe7b8;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
-      font: 700 10px/1.1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font: 700 10px/1.25 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
       opacity: 0;
-      transform: translate(-50%, 7px);
+      transform: translateY(7px);
       transition: opacity 0.22s ease, transform 0.22s ease;
       pointer-events: none;
     }
 
     .rf-load-toast.is-visible {
       opacity: 0.92;
-      transform: translate(-50%, 0);
+      transform: translateY(0);
     }
   </style>
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.249">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.250-direct-assets-toast">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -150,25 +149,32 @@
   <script src="./rf-graph-builder-3.js?v=1.1.249-builder-3-single-opaque-mesh-13k" defer></script>
 
   <script>
-    /* RF mountain status | Version: 1.1.249-builder-3-single-opaque-mesh-13k */
+    /* Direct index dependencies only | Version: 1.1.250-direct-assets-toast */
     (() => {
       "use strict";
 
       const TOAST_ID = "rfLoadToast";
+      const DIRECT_INDEX_FILES = [
+        "shell.css 1.1.21-shell-smoke-controls",
+        "background.css 1.1.76-graph-label",
+        "rf-graph.css 1.1.85-network-topology",
+        "rf-interface.css 1.1.120-pane-fit",
+        "three.module.js 0.160.1",
+        "shell.js 1.1.20-web-repo-profile-link",
+        "rf-interface.js 1.1.122-pane-fit",
+        "rf-path-builder.js 1.1.125-network-topology",
+        "rf-graph-builder-3.js 1.1.249-builder-3-single-opaque-mesh-13k"
+      ];
 
-      function showMountainStatus() {
+      function showDirectIndexFiles() {
         document.getElementById(TOAST_ID)?.remove();
 
-        const graph = window.FieldOpsRFGraph;
         const toast = document.createElement("div");
-
         toast.id = TOAST_ID;
         toast.className = "rf-load-toast";
         toast.setAttribute("role", "status");
         toast.setAttribute("aria-live", "polite");
-        toast.textContent = graph
-          ? `RF mountain ${graph.VERSION} · ${graph.renderMeshes || 1} mesh`
-          : "RF mountain failed to load";
+        toast.textContent = DIRECT_INDEX_FILES.join("\n");
 
         document.body.appendChild(toast);
 
@@ -178,21 +184,21 @@
 
         window.setTimeout(() => {
           toast.classList.remove("is-visible");
-        }, 2600);
+        }, 5200);
 
         window.setTimeout(() => {
           toast.remove();
-        }, 2900);
+        }, 5500);
       }
 
       if (document.readyState === "loading") {
         document.addEventListener(
           "DOMContentLoaded",
-          () => window.setTimeout(showMountainStatus, 350),
+          () => window.setTimeout(showDirectIndexFiles, 350),
           { once: true }
         );
       } else {
-        window.setTimeout(showMountainStatus, 350);
+        window.setTimeout(showDirectIndexFiles, 350);
       }
     })();
   </script>
