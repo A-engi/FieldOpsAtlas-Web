@@ -1,23 +1,68 @@
 /* ========================================================================== 
    FieldOps Atlas RF Three.js solid-core adapter
    File: FieldOpsAtlas/Features/RF/rf-three-solid-core.js
-   Version: 1.1.242-builder-3-internal-colour-cap-13k
+   Version: 1.1.246-builder-3-bright-secondary-peaks-neutral-cap-13k
 
    Purpose:
-   - Preserve the current Builder 3 exterior geometry and baked vertex colours.
-   - Build an opaque horizontal cross-section just above the removed internal
+   - Preserve the current Builder 3 exterior geometry.
+   - Brighten only the four secondary peak colour regions.
+   - Keep the approved central peak unchanged.
+   - Build an opaque horizontal cross-section above the removed internal
      platform, latched to the live exterior mesh boundary.
-   - Keep the generated internal cap out of both cyan wireframe passes.
+   - Render the internal cap as a neutral, colourless solid and keep it out of
+     both cyan wireframe passes.
    ========================================================================== */
 
 import * as THREEBase from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 export * from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 
-const VERSION = "1.1.242-builder-3-internal-colour-cap-13k";
+const VERSION = "1.1.246-builder-3-bright-secondary-peaks-neutral-cap-13k";
 const CAP_HEIGHT_RATIO = 0.305;
 const WELD_TOLERANCE_RATIO = 0.00012;
 const MIN_LOOP_AREA_RATIO = 0.00008;
 const PLANE_EPSILON_RATIO = 0.00002;
+const NEUTRAL_CAP_COLOUR = 0x06131a;
+const SECONDARY_PEAK_TARGET_MAX = 0.88;
+const SECONDARY_PEAK_STRENGTH = 0.82;
+
+/*
+ * Builder 3 translates the source geometry before constructing the first Mesh.
+ * These centres are therefore stored in the translated, centred geometry space.
+ */
+const SECONDARY_PEAKS = Object.freeze([
+  Object.freeze({
+    x: -0.07001383516569858,
+    y: 0.7510444305667527,
+    z: -0.004246370265828303,
+    baseY: 0.385,
+    fullRadius: 0.08999494326786596,
+    outerRadius: 0.1551636952894241
+  }),
+  Object.freeze({
+    x: 0.09025027463754276,
+    y: 0.7623728400520853,
+    z: -0.0026913614360883904,
+    baseY: 0.385,
+    fullRadius: 0.09905304420443153,
+    outerRadius: 0.17078111069729576
+  }),
+  Object.freeze({
+    x: 0.002464694551057911,
+    y: 0.7255312439657589,
+    z: 0.09264264143335321,
+    baseY: 0.385,
+    fullRadius: 0.105,
+    outerRadius: 0.18372953148707472
+  }),
+  Object.freeze({
+    x: 0.019564250048828335,
+    y: 0.7782908499531401,
+    z: -0.06151854162578895,
+    baseY: 0.385,
+    fullRadius: 0.09927140704538673,
+    outerRadius: 0.17115759835411506
+  })
+]);
 
 const OriginalMesh = THREEBase.Mesh;
 
@@ -44,6 +89,79 @@ function isBuilderSurface(geometry, material) {
     materials[0].wireframe !== true &&
     materials[0].transparent === false
   );
+}
+
+function smoothstep(minimum, maximum, value) {
+  if (maximum <= minimum) return value >= maximum ? 1 : 0;
+  const t = THREEBase.MathUtils.clamp(
+    (value - minimum) / (maximum - minimum),
+    0,
+    1
+  );
+  return t * t * (3 - 2 * t);
+}
+
+function secondaryPeakInfluence(x, y, z, peak) {
+  if (y <= peak.baseY) return 0;
+
+  const radialDistance = Math.hypot(x - peak.x, z - peak.z);
+  if (radialDistance >= peak.outerRadius) return 0;
+
+  const radialWeight = 1 - smoothstep(
+    peak.fullRadius,
+    peak.outerRadius,
+    radialDistance
+  );
+  const heightWeight = smoothstep(peak.baseY, peak.y, y);
+  return radialWeight * heightWeight;
+}
+
+function brightenSecondaryPeaks(geometry) {
+  if (geometry.userData?.rfSecondaryPeaksBrightened) return;
+
+  const position = geometry.getAttribute("position");
+  const colour = geometry.getAttribute("color");
+  if (!position || !colour || position.count !== colour.count) return;
+
+  let changedVertexCount = 0;
+
+  for (let vertexIndex = 0; vertexIndex < position.count; vertexIndex += 1) {
+    const x = position.getX(vertexIndex);
+    const y = position.getY(vertexIndex);
+    const z = position.getZ(vertexIndex);
+    let influence = 0;
+
+    SECONDARY_PEAKS.forEach((peak) => {
+      influence = Math.max(
+        influence,
+        secondaryPeakInfluence(x, y, z, peak)
+      );
+    });
+
+    if (influence <= 0.001) continue;
+
+    const red = colour.getX(vertexIndex);
+    const green = colour.getY(vertexIndex);
+    const blue = colour.getZ(vertexIndex);
+    const maximumChannel = Math.max(red, green, blue, 1 / 255);
+    const targetScale = SECONDARY_PEAK_TARGET_MAX / maximumChannel;
+    const scale = 1 + Math.max(0, targetScale - 1)
+      * influence
+      * SECONDARY_PEAK_STRENGTH;
+
+    colour.setXYZ(
+      vertexIndex,
+      Math.min(1, red * scale),
+      Math.min(1, green * scale),
+      Math.min(1, blue * scale)
+    );
+    changedVertexCount += 1;
+  }
+
+  colour.needsUpdate = true;
+  geometry.userData.rfSecondaryPeaksBrightened = true;
+  geometry.userData.rfSecondaryPeaksBrightenedVersion = VERSION;
+  geometry.userData.rfSecondaryPeaksBrightenedVertexCount = changedVertexCount;
 }
 
 function readVertex(position, index) {
@@ -390,7 +508,8 @@ function attachInternalColourCap(surface, geometry) {
   if (!capGeometry) return;
 
   const capMaterial = new THREEBase.MeshBasicMaterial({
-    vertexColors: true,
+    color: NEUTRAL_CAP_COLOUR,
+    vertexColors: false,
     side: THREEBase.DoubleSide,
     transparent: false,
     opacity: 1,
@@ -404,11 +523,12 @@ function attachInternalColourCap(surface, geometry) {
   });
 
   const cap = new OriginalMesh(capGeometry, capMaterial);
-  cap.name = "rf-internal-colour-cap";
+  cap.name = "rf-internal-neutral-cap";
   cap.renderOrder = -1;
   cap.frustumCulled = true;
   cap.userData.rfInternalColourCap = true;
   cap.userData.rfInternalColourCapVersion = VERSION;
+  cap.userData.rfInternalColourCapNeutral = true;
   surface.add(cap);
 
   geometry.userData.rfInternalColourCapAttached = true;
@@ -421,9 +541,10 @@ export class Mesh extends OriginalMesh {
 
     if (isBuilderSurface(geometry, material)) {
       try {
+        brightenSecondaryPeaks(geometry);
         attachInternalColourCap(this, geometry);
       } catch (error) {
-        console.error("FieldOps RF internal colour cap failed:", error);
+        console.error("FieldOps RF solid-core processing failed:", error);
       }
     }
   }
