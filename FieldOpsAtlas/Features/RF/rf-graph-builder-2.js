@@ -1,23 +1,23 @@
 /* ==========================================================================
    FieldOps Atlas RF Builder 2
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-2.js
-   Version: 1.1.229-simple-connected-ridges
+   Version: 1.1.222-natural-ridge-flow
 
    Purpose:
    - Build a lightweight mountain from the connected ridge web only.
    - Infer one previously unassigned major ridge from the principal peak.
    - Form a low-resolution curved surface from ridge-height constraints.
    - Sharpen the existing 3D relief without changing its topology or surface complexity.
-   - Build one broad mountain from connected peaks and long ridge planes without serrated repetition.
-   - Preserve the original triangle count and subtle terrain detail while rendering only the mesh.
+   - Connect the major summits with broad ridge corridors so the peaks flow as one natural range.
+   - Keep the darker navy-cyan wireframe treatment with brighter ridge definition.
    - Preserve the wider camera fit while keeping the mountain base anchored to the graph bottom.
    - Preserve orbit interaction, mount lifecycle, fallback, and rendered event.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.229-simple-connected-ridges";
-  const MODE = "three-ridge-web-builder-2-simple-connected-ridges";
+  const VERSION = "1.1.222-natural-ridge-flow";
+  const MODE = "three-ridge-web-builder-2-natural-ridge-flow";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -921,695 +921,329 @@
     return terrainShapeBounds;
   }
 
-  function fract(value) {
-    return value - Math.floor(value);
-  }
+  function ridgeSegmentInfluence(
+    x,
+    z,
+    startX,
+    startZ,
+    endX,
+    endZ,
+    width
+  ) {
+    const segmentX = endX - startX;
+    const segmentZ = endZ - startZ;
+    const segmentLengthSquared =
+      segmentX * segmentX
+      + segmentZ * segmentZ;
 
-  function trianglePulse(value) {
-    return 1
-      - Math.abs(
-        fract(value) * 2 - 1
-      );
-  }
-
-  function computeScaleFacet(x, z) {
-    const facetScale = 1.52;
-    const skewX = x * facetScale;
-    const skewZ = z * facetScale;
-    const basisA = skewX + skewZ * 0.5;
-    const basisB = skewZ * 0.86602540378;
-    const basisC = basisA - basisB;
-
-    const edgeA = trianglePulse(basisA);
-    const edgeB = trianglePulse(basisB);
-    const edgeC = trianglePulse(basisC);
-
-    const cellCore = Math.pow(
-      Math.min(
-        edgeA,
-        edgeB,
-        edgeC
-      ),
-      1.22
-    );
-
-    const cellRidge = Math.pow(
-      Math.max(
-        edgeA * edgeB,
-        edgeB * edgeC,
-        edgeC * edgeA
-      ),
-      1.02
-    );
-
-    return clamp(
-      cellCore * 1.18
-      + cellRidge * 0.50,
+    const segmentT = clamp(
+      (
+        (x - startX) * segmentX
+        + (z - startZ) * segmentZ
+      ) / segmentLengthSquared,
       0,
-      1.38
+      1
     );
-  }
 
-  function computeRidgeFan(x, z) {
-    const lanes = [
-      {
-        dx: 0.00,
-        dz: 1.00,
-        offset: 0.00,
-        width: 0.56,
-        weight: 1.00
-      },
-      {
-        dx: 0.58,
-        dz: 0.82,
-        offset: 0.35,
-        width: 0.62,
-        weight: 0.92
-      },
-      {
-        dx: -0.64,
-        dz: 0.77,
-        offset: -0.28,
-        width: 0.68,
-        weight: 0.88
-      },
-      {
-        dx: 0.92,
-        dz: 0.24,
-        offset: 0.54,
-        width: 0.74,
-        weight: 0.72
-      },
-      {
-        dx: -0.90,
-        dz: 0.30,
-        offset: -0.48,
-        width: 0.76,
-        weight: 0.68
-      }
-    ];
+    const nearestX =
+      startX + segmentX * segmentT;
 
-    let ridge = 0;
+    const nearestZ =
+      startZ + segmentZ * segmentT;
 
-    for (
-      let index = 0;
-      index < lanes.length;
-      index += 1
-    ) {
-      const lane = lanes[index];
-      const along =
-        x * lane.dx
-        + z * lane.dz;
+    const deltaX = x - nearestX;
+    const deltaZ = z - nearestZ;
 
-      const pulse = trianglePulse(
-        along * lane.width + lane.offset
-      );
+    const centreWeight =
+      Math.pow(
+        Math.max(
+          0,
+          Math.sin(Math.PI * segmentT)
+        ),
+        0.7
+      ) * 0.65 + 0.35;
 
-      ridge = Math.max(
-        ridge,
-        Math.pow(pulse, 4.2)
-        * lane.weight
-      );
-    }
-
-    return ridge;
+    return Math.exp(
+      -(
+        deltaX * deltaX
+        + deltaZ * deltaZ
+      ) / (
+        2 * width * width
+      )
+    ) * centreWeight;
   }
 
   function shapeTerrainPositions(encoded) {
     const positions = decodeFloat32(encoded);
-    const vertexCount = positions.length / 3;
-    const originalY =
-      new Float32Array(vertexCount);
+    const bounds = getTerrainShapeBounds();
 
-    for (
-      let vertexIndex = 0;
-      vertexIndex < vertexCount;
-      vertexIndex += 1
-    ) {
-      originalY[vertexIndex] =
-        positions[
-          vertexIndex * 3 + 1
-        ];
-    }
-
-    function cone(
-      x,
-      z,
-      centreX,
-      centreZ,
-      radiusX,
-      radiusZ,
-      height,
-      exponent
-    ) {
-      const deltaX =
-        (x - centreX) / radiusX;
-
-      const deltaZ =
-        (z - centreZ) / radiusZ;
-
-      const distance = Math.sqrt(
-        deltaX * deltaX
-        + deltaZ * deltaZ
-      );
-
-      return height
-        * Math.pow(
-          Math.max(
-            0,
-            1 - distance
-          ),
-          exponent
-        );
-    }
-
-    function segmentRidge(
-      x,
-      z,
-      points,
-      startHeight,
-      endHeight,
-      width,
-      sharpness
-    ) {
-      let bestHeight = 0;
-      const segmentCount =
-        points.length - 1;
-
-      for (
-        let segmentIndex = 0;
-        segmentIndex < segmentCount;
-        segmentIndex += 1
-      ) {
-        const start =
-          points[segmentIndex];
-
-        const end =
-          points[segmentIndex + 1];
-
-        const segmentX =
-          end[0] - start[0];
-
-        const segmentZ =
-          end[1] - start[1];
-
-        const lengthSquared =
-          Math.max(
-            0.0001,
-            segmentX * segmentX
-            + segmentZ * segmentZ
-          );
-
-        const along = clamp(
-          (
-            (x - start[0]) * segmentX
-            + (z - start[1]) * segmentZ
-          ) / lengthSquared,
-          0,
-          1
-        );
-
-        const nearestX =
-          start[0]
-          + segmentX * along;
-
-        const nearestZ =
-          start[1]
-          + segmentZ * along;
-
-        const distance = Math.hypot(
-          x - nearestX,
-          z - nearestZ
-        );
-
-        const globalAlong =
-          (
-            segmentIndex + along
-          ) / segmentCount;
-
-        const crestHeight =
-          startHeight
-          + (
-            endHeight
-            - startHeight
-          ) * globalAlong;
-
-        const taper = Math.min(
-          1,
-          globalAlong / 0.05,
-          (
-            1 - globalAlong
-          ) / 0.05
-        );
-
-        const crossSection =
-          Math.pow(
-            Math.max(
-              0,
-              1 - distance / width
-            ),
-            sharpness
-          );
-
-        const ridgeHeight =
-          crestHeight
-          * crossSection
-          * Math.max(
-            0,
-            taper
-          );
-
-        if (
-          ridgeHeight
-          > bestHeight
-        ) {
-          bestHeight =
-            ridgeHeight;
-        }
-      }
-
-      return bestHeight;
-    }
-
-    function powerMaximum(
-      values,
-      power
-    ) {
-      let sum = 0;
-
-      for (
-        let valueIndex = 0;
-        valueIndex < values.length;
-        valueIndex += 1
-      ) {
-        sum += Math.pow(
-          Math.max(
-            0,
-            values[valueIndex]
-          ),
-          power
-        );
-      }
-
-      return Math.pow(
-        sum,
-        1 / power
-      );
-    }
-
-    /*
-     * Preserve subtle high-frequency relief from the original
-     * mesh without retaining its rounded overall silhouette.
-     */
-    const smoothedY =
-      new Float32Array(
-        originalY
-      );
-
-    const indices =
-      decodeUint32(
-        EMBEDDED.meshIndices
-      );
-
-    let canSmooth = true;
-
-    for (
-      let indexOffset = 0;
-      indexOffset < indices.length;
-      indexOffset += 1
-    ) {
-      if (
-        indices[indexOffset]
-        >= vertexCount
-      ) {
-        canSmooth = false;
-        break;
-      }
-    }
-
-    if (canSmooth) {
-      const neighbours =
-        Array.from(
-          {
-            length: vertexCount
-          },
-          () => new Set()
-        );
-
-      for (
-        let indexOffset = 0;
-        indexOffset < indices.length;
-        indexOffset += 3
-      ) {
-        const indexA =
-          indices[indexOffset];
-
-        const indexB =
-          indices[indexOffset + 1];
-
-        const indexC =
-          indices[indexOffset + 2];
-
-        neighbours[indexA].add(indexB);
-        neighbours[indexA].add(indexC);
-        neighbours[indexB].add(indexA);
-        neighbours[indexB].add(indexC);
-        neighbours[indexC].add(indexA);
-        neighbours[indexC].add(indexB);
-      }
-
-      let workingY =
-        new Float32Array(
-          originalY
-        );
-
-      for (
-        let round = 0;
-        round < 2;
-        round += 1
-      ) {
-        const nextY =
-          new Float32Array(
-            workingY
-          );
-
-        for (
-          let vertexIndex = 0;
-          vertexIndex < vertexCount;
-          vertexIndex += 1
-        ) {
-          const localNeighbours =
-            neighbours[vertexIndex];
-
-          if (
-            localNeighbours.size === 0
-          ) {
-            continue;
-          }
-
-          let neighbourTotal = 0;
-
-          localNeighbours.forEach(
-            (neighbourIndex) => {
-              neighbourTotal +=
-                workingY[
-                  neighbourIndex
-                ];
-            }
-          );
-
-          nextY[vertexIndex] =
-            (
-              workingY[vertexIndex]
-              + (
-                neighbourTotal
-                / localNeighbours.size
-              ) * 2
-            ) / 3;
-        }
-
-        workingY = nextY;
-      }
-
-      smoothedY.set(
-        workingY
-      );
-    }
-
-    const peakDefinitions = [
-      [-1.2, -0.8, 7.2, 8.2, 8.3, 0.95],
-      [-7.4,  3.3, 5.7, 6.2, 5.0, 1.00],
-      [-3.8,  5.8, 4.8, 5.4, 4.1, 1.00],
-      [ 0.5,  4.2, 5.0, 5.6, 5.7, 1.00],
-      [ 4.9,  1.7, 5.2, 5.9, 5.9, 1.00],
-      [ 8.0,  6.0, 4.9, 5.7, 3.8, 1.00],
-      [-1.0,  7.5, 6.8, 7.2, 2.7, 1.00],
-      [-1.0,  2.5, 19.0, 18.0, 1.9, 1.00]
-    ];
-
-    const ridgeDefinitions = [
+    const peakAnchors = [
       {
-        points: [
-          [-1.2, -0.8],
-          [-3.2,  0.5],
-          [-5.2,  2.0],
-          [-7.4,  3.3],
-          [-11.0, 6.0],
-          [-16.0, 9.0]
-        ],
-        startHeight: 8.3,
-        endHeight: 1.4,
-        width: 2.5,
-        sharpness: 1.25
+        x: -2.55,
+        z: -0.60,
+        radiusX: 2.90,
+        radiusZ: 3.20,
+        lift: 0.24,
+        apex: 0.14
       },
       {
-        points: [
-          [-1.2, -0.8],
-          [ 1.0,  0.2],
-          [ 3.0,  1.0],
-          [ 4.9,  1.7],
-          [ 8.0,  4.5],
-          [13.0,  8.0]
-        ],
-        startHeight: 8.3,
-        endHeight: 1.5,
-        width: 2.4,
-        sharpness: 1.28
+        x: -1.15,
+        z: -0.10,
+        radiusX: 2.75,
+        radiusZ: 3.05,
+        lift: 0.20,
+        apex: 0.10
       },
       {
-        points: [
-          [-1.2, -0.8],
-          [-0.2,  1.5],
-          [ 0.5,  4.2],
-          [ 0.1,  7.5],
-          [-1.0, 11.0]
-        ],
-        startHeight: 8.3,
-        endHeight: 1.3,
-        width: 2.2,
-        sharpness: 1.32
+        x: -5.65,
+        z: -4.95,
+        radiusX: 3.15,
+        radiusZ: 3.35,
+        lift: 1.08,
+        apex: 0.25
       },
       {
-        points: [
-          [-1.2, -0.8],
-          [-2.0,  1.5],
-          [-3.8,  5.8],
-          [-5.5,  9.0]
-        ],
-        startHeight: 8.3,
-        endHeight: 1.2,
-        width: 2.0,
-        sharpness: 1.32
+        x: 3.10,
+        z: -1.60,
+        radiusX: 2.95,
+        radiusZ: 2.75,
+        lift: 1.28,
+        apex: 0.30
       },
       {
-        points: [
-          [ 4.9,  1.7],
-          [ 5.8,  3.5],
-          [ 8.0,  6.0],
-          [11.0,  9.0]
-        ],
-        startHeight: 5.9,
-        endHeight: 1.0,
-        width: 1.7,
-        sharpness: 1.32
+        x: -8.20,
+        z: 7.15,
+        radiusX: 3.40,
+        radiusZ: 3.15,
+        lift: 1.32,
+        apex: 0.28
       },
       {
-        points: [
-          [0.5, 4.2],
-          [3.0, 6.0],
-          [6.0, 8.5]
-        ],
-        startHeight: 5.7,
-        endHeight: 0.9,
-        width: 1.6,
-        sharpness: 1.32
+        x: 4.95,
+        z: 8.90,
+        radiusX: 3.45,
+        radiusZ: 3.20,
+        lift: 1.20,
+        apex: 0.26
       }
     ];
 
-    const valleyDefinitions = [
+    const ridgeBridges = [
       {
-        points: [
-          [-0.4, -0.2],
-          [-1.2,  2.0],
-          [-2.8,  5.0],
-          [-5.0,  9.0]
-        ],
-        startDepth: 1.1,
-        endDepth: 0.2,
-        width: 1.6,
-        sharpness: 1.35
+        startX: -5.65,
+        startZ: -4.95,
+        endX: -2.00,
+        endZ: -0.35,
+        width: 2.10,
+        lift: 0.32
       },
       {
-        points: [
-          [0.8, -0.1],
-          [1.8,  2.2],
-          [2.5,  5.0],
-          [4.5,  9.0]
-        ],
-        startDepth: 1.05,
-        endDepth: 0.2,
-        width: 1.5,
-        sharpness: 1.35
+        startX: -2.00,
+        startZ: -0.35,
+        endX: 3.10,
+        endZ: -1.60,
+        width: 1.95,
+        lift: 0.36
       },
       {
-        points: [
-          [-4.0, 0.8],
-          [-4.5, 3.0],
-          [-5.5, 6.0]
-        ],
-        startDepth: 0.7,
-        endDepth: 0.1,
-        width: 1.3,
-        sharpness: 1.35
+        startX: -2.00,
+        startZ: -0.35,
+        endX: -8.20,
+        endZ: 7.15,
+        width: 2.30,
+        lift: 0.38
+      },
+      {
+        startX: -2.00,
+        startZ: -0.35,
+        endX: 4.95,
+        endZ: 8.90,
+        width: 2.35,
+        lift: 0.36
+      },
+      {
+        startX: -8.20,
+        startZ: 7.15,
+        endX: 4.95,
+        endZ: 8.90,
+        width: 2.75,
+        lift: 0.23
       }
     ];
 
     for (
-      let vertexIndex = 0;
-      vertexIndex < vertexCount;
-      vertexIndex += 1
+      let offset = 0;
+      offset < positions.length;
+      offset += 3
     ) {
-      const offset =
-        vertexIndex * 3;
+      const originalX = positions[offset];
+      const originalY = positions[offset + 1];
+      const originalZ = positions[offset + 2];
 
-      const x =
-        positions[offset];
-
-      const z =
-        positions[offset + 2];
-
-      const peakValues = [];
-
-      for (
-        let peakIndex = 0;
-        peakIndex < peakDefinitions.length;
-        peakIndex += 1
-      ) {
-        const peak =
-          peakDefinitions[peakIndex];
-
-        peakValues.push(
-          cone(
-            x,
-            z,
-            peak[0],
-            peak[1],
-            peak[2],
-            peak[3],
-            peak[4],
-            peak[5]
-          )
-        );
-      }
-
-      let height =
-        powerMaximum(
-          peakValues,
-          4.5
-        );
-
-      const ridgeValues = [
-        height
-      ];
-
-      for (
-        let ridgeIndex = 0;
-        ridgeIndex < ridgeDefinitions.length;
-        ridgeIndex += 1
-      ) {
-        const ridge =
-          ridgeDefinitions[ridgeIndex];
-
-        ridgeValues.push(
-          segmentRidge(
-            x,
-            z,
-            ridge.points,
-            ridge.startHeight,
-            ridge.endHeight,
-            ridge.width,
-            ridge.sharpness
-          )
-        );
-      }
-
-      height =
-        powerMaximum(
-          ridgeValues,
-          5
-        );
-
-      let valleyDepth = 0;
-
-      for (
-        let valleyIndex = 0;
-        valleyIndex < valleyDefinitions.length;
-        valleyIndex += 1
-      ) {
-        const valley =
-          valleyDefinitions[valleyIndex];
-
-        valleyDepth +=
-          segmentRidge(
-            x,
-            z,
-            valley.points,
-            valley.startDepth,
-            valley.endDepth,
-            valley.width,
-            valley.sharpness
-          );
-      }
-
-      const summitSpike =
-        cone(
-          x,
-          z,
-          -1.4,
-          -0.8,
-          2.3,
-          2.6,
-          1.2,
-          0.85
-        );
-
-      const detail =
-        originalY[vertexIndex]
-        - smoothedY[vertexIndex];
-
-      const edgeFade = Math.min(
-        clamp(
-          (
-            17.0 - Math.abs(x)
-          ) / 2.8,
-          0,
-          1
-        ),
-        clamp(
-          (
-            15.5 - Math.abs(z)
-          ) / 2.8,
-          0,
-          1
-        )
+      const heightNorm = clamp(
+        (
+          originalY - bounds.minimumY
+        ) / bounds.height,
+        0,
+        1
       );
 
-      height =
-        Math.max(
-          0,
-          height
-          + summitSpike
-          - valleyDepth * 0.55
-          + detail * 0.50
-          + originalY[vertexIndex] * 0.18
-        )
+      const upperRelief =
+        heightNorm
         * (
-          0.82
-          + edgeFade * 0.18
+          1
+          + heightNorm * 0.07
+          + heightNorm
+            * heightNorm
+            * 0.03
         );
+
+      let localLift = 0;
+      let apexLift = 0;
+
+      for (
+        let anchorIndex = 0;
+        anchorIndex < peakAnchors.length;
+        anchorIndex += 1
+      ) {
+        const anchor =
+          peakAnchors[anchorIndex];
+
+        const scaledX =
+          (
+            originalX - anchor.x
+          ) / anchor.radiusX;
+
+        const scaledZ =
+          (
+            originalZ - anchor.z
+          ) / anchor.radiusZ;
+
+        const influence = Math.exp(
+          -(
+            scaledX * scaledX
+            + scaledZ * scaledZ
+          ) / 2
+        );
+
+        localLift +=
+          influence
+          * anchor.lift
+          * Math.pow(heightNorm, 1.40);
+
+        apexLift +=
+          Math.pow(influence, 2.80)
+          * anchor.apex
+          * Math.pow(heightNorm, 2.25);
+      }
+
+      let ridgeLift = 0;
+
+      for (
+        let bridgeIndex = 0;
+        bridgeIndex < ridgeBridges.length;
+        bridgeIndex += 1
+      ) {
+        const bridge =
+          ridgeBridges[bridgeIndex];
+
+        ridgeLift +=
+          ridgeSegmentInfluence(
+            originalX,
+            originalZ,
+            bridge.startX,
+            bridge.startZ,
+            bridge.endX,
+            bridge.endZ,
+            bridge.width
+          )
+          * bridge.lift
+          * Math.pow(heightNorm, 1.52);
+      }
+
+      const saddleCut =
+        (
+          Math.exp(
+            -(
+              Math.pow(
+                (originalX + 3.75) / 2.45,
+                2
+              )
+              + Math.pow(
+                (originalZ + 2.75) / 2.25,
+                2
+              )
+            ) / 2
+          ) * 0.06
+          + Math.exp(
+            -(
+              Math.pow(
+                (originalX - 0.55) / 2.50,
+                2
+              )
+              + Math.pow(
+                (originalZ + 0.95) / 2.10,
+                2
+              )
+            ) / 2
+          ) * 0.08
+          + Math.exp(
+            -(
+              Math.pow(
+                (originalX + 4.85) / 2.85,
+                2
+              )
+              + Math.pow(
+                (originalZ - 3.45) / 2.70,
+                2
+              )
+            ) / 2
+          ) * 0.06
+        )
+        * Math.pow(heightNorm, 1.95);
+
+      const ridgeFold =
+        Math.sin(
+          originalX * 0.30
+          - originalZ * 0.22
+        )
+        * Math.sin(
+          originalX * 0.14
+          + originalZ * 0.34
+        )
+        * Math.pow(heightNorm, 2.05)
+        * 0.070;
+
+      const centralInfluence = Math.exp(
+        -(
+          Math.pow(
+            (originalX + 2.294) / 1.45,
+            2
+          )
+          + Math.pow(
+            (originalZ + 0.447) / 1.55,
+            2
+          )
+        ) / 2
+      );
+
+      const crestLift =
+        Math.pow(
+          centralInfluence,
+          3.10
+        )
+        * Math.pow(heightNorm, 2.65)
+        * 0.22;
 
       positions[offset + 1] =
-        height;
+        bounds.minimumY
+        + upperRelief * bounds.height
+        + localLift
+        + ridgeLift
+        + apexLift
+        + crestLift
+        - saddleCut
+        + ridgeFold;
     }
 
     return positions;
@@ -1698,8 +1332,8 @@
       "width:100%",
       "height:100%",
       "overflow:hidden",
-      "background-color:#010a12",
-      "background-image:linear-gradient(rgba(29,145,165,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(29,145,165,.045) 1px,transparent 1px)",
+      "background-color:#010d13",
+      "background-image:linear-gradient(rgba(18,177,181,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(18,177,181,.055) 1px,transparent 1px)",
       "background-size:56px 56px,56px 56px",
       "touch-action:none",
       "user-select:none"
@@ -1942,6 +1576,438 @@
     };
   }
 
+  function buildPeakDotField(
+    THREE,
+    mountain
+  ) {
+    const geometry = mountain.geometry;
+    const positions =
+      geometry.getAttribute("position");
+    const index =
+      geometry.getIndex();
+
+    const group =
+      new THREE.Group();
+
+    group.userData.rfDecoration = true;
+
+    if (!positions || !index) {
+      return group;
+    }
+
+    geometry.computeBoundingBox();
+
+    const bounds =
+      geometry.boundingBox;
+
+    const minimumY = bounds.min.y;
+    const heightRange = Math.max(
+      0.001,
+      bounds.max.y - bounds.min.y
+    );
+
+    const ridgePositions =
+      shapeTerrainPositions(
+        EMBEDDED.ridgePositions
+      );
+
+    const ridgeOffsets =
+      decodeUint32(
+        EMBEDDED.ridgeOffsets
+      );
+
+    const ridgeSegments =
+      buildRidgeSegments(
+        ridgePositions,
+        ridgeOffsets
+      );
+
+    const pathDistances =
+      new Float32Array(
+        ridgeOffsets.length - 1
+      );
+
+    const glowPositions = [];
+    const glowColors = [];
+    const corePositions = [];
+    const coreColors = [];
+
+    const vertexA =
+      new THREE.Vector3();
+
+    const vertexB =
+      new THREE.Vector3();
+
+    const vertexC =
+      new THREE.Vector3();
+
+    const edgeAB =
+      new THREE.Vector3();
+
+    const edgeAC =
+      new THREE.Vector3();
+
+    const centroid =
+      new THREE.Vector3();
+
+    const triangleNormal =
+      new THREE.Vector3();
+
+    for (
+      let triangleIndex = 0;
+      triangleIndex < index.count;
+      triangleIndex += 3
+    ) {
+      const vertexIndexA =
+        index.getX(triangleIndex);
+
+      const vertexIndexB =
+        index.getX(triangleIndex + 1);
+
+      const vertexIndexC =
+        index.getX(triangleIndex + 2);
+
+      vertexA.fromBufferAttribute(
+        positions,
+        vertexIndexA
+      );
+
+      vertexB.fromBufferAttribute(
+        positions,
+        vertexIndexB
+      );
+
+      vertexC.fromBufferAttribute(
+        positions,
+        vertexIndexC
+      );
+
+      edgeAB.subVectors(
+        vertexB,
+        vertexA
+      );
+
+      edgeAC.subVectors(
+        vertexC,
+        vertexA
+      );
+
+      triangleNormal.crossVectors(
+        edgeAB,
+        edgeAC
+      );
+
+      const doubleArea =
+        triangleNormal.length();
+
+      if (doubleArea <= 1e-6) {
+        continue;
+      }
+
+      triangleNormal.normalize();
+
+      if (triangleNormal.y < 0) {
+        triangleNormal.multiplyScalar(-1);
+      }
+
+      const area = doubleArea * 0.5;
+
+      centroid
+        .copy(vertexA)
+        .add(vertexB)
+        .add(vertexC)
+        .multiplyScalar(1 / 3);
+
+      const ridgeMetrics =
+        findRidgeMetrics(
+          centroid.x,
+          centroid.z,
+          ridgeSegments,
+          pathDistances
+        );
+
+      const heightNorm = clamp(
+        (centroid.y - minimumY)
+        / heightRange,
+        0,
+        1
+      );
+
+      const verticalDrop = Math.max(
+        0,
+        ridgeMetrics.ridgeY
+        - centroid.y
+      );
+
+      const ridgeCore = Math.exp(
+        -Math.pow(
+          ridgeMetrics.distance / 0.42,
+          2
+        )
+      );
+
+      const shoulderBand =
+        Math.exp(
+          -Math.pow(
+            (
+              ridgeMetrics.distance
+              - 0.72
+            ) / 0.58,
+            2
+          )
+        )
+        * Math.exp(
+          -Math.pow(
+            (
+              verticalDrop
+              - 0.50
+            ) / 1.35,
+            2
+          )
+        );
+
+      const convergence = clamp(
+        (
+          ridgeMetrics.nearbyPathCount
+          - 1
+        ) / 3,
+        0,
+        1
+      );
+
+      if (
+        ridgeCore < 0.10
+        && convergence < 0.36
+      ) {
+        continue;
+      }
+
+      const densityWeight =
+        area
+        * (
+          ridgeCore * 5.4
+          + convergence * 1.8
+          + heightNorm * 0.28
+        )
+        * 0.56;
+
+      const random =
+        createSeededRandom(
+          triangleIndex * 7 + 17
+        );
+
+      let sampleCount = Math.floor(
+        densityWeight
+      );
+
+      if (
+        random() <
+        densityWeight - sampleCount
+      ) {
+        sampleCount += 1;
+      }
+
+      for (
+        let sampleIndex = 0;
+        sampleIndex < sampleCount;
+        sampleIndex += 1
+      ) {
+        const rootR1 = Math.sqrt(
+          random()
+        );
+
+        const r2 = random();
+
+        const baryA =
+          1 - rootR1;
+
+        const baryB =
+          rootR1 * (1 - r2);
+
+        const baryC =
+          rootR1 * r2;
+
+        const sampleX =
+          vertexA.x * baryA
+          + vertexB.x * baryB
+          + vertexC.x * baryC;
+
+        const sampleY =
+          vertexA.y * baryA
+          + vertexB.y * baryB
+          + vertexC.y * baryC;
+
+        const sampleZ =
+          vertexA.z * baryA
+          + vertexB.z * baryB
+          + vertexC.z * baryC;
+
+        const sampleHeightNorm =
+          clamp(
+            (sampleY - minimumY)
+            / heightRange,
+            0,
+            1
+          );
+
+        const brightness = clamp(
+          0.22
+          + ridgeCore * 0.72
+          + convergence * 0.34
+          + sampleHeightNorm * 0.10,
+          0.18,
+          1
+        );
+
+        const offsetDistance =
+          0.018 + brightness * 0.020;
+
+        const offsetX =
+          sampleX
+          + triangleNormal.x
+            * offsetDistance;
+
+        const offsetY =
+          sampleY
+          + triangleNormal.y
+            * offsetDistance;
+
+        const offsetZ =
+          sampleZ
+          + triangleNormal.z
+            * offsetDistance;
+
+        const glowStrength = clamp(
+          0.18
+          + brightness * 0.70,
+          0,
+          1
+        );
+
+        const coreStrength = clamp(
+          0.30
+          + brightness * 0.70,
+          0,
+          1
+        );
+
+        glowPositions.push(
+          offsetX,
+          offsetY,
+          offsetZ
+        );
+
+        glowColors.push(
+          0.04 + glowStrength * 0.16,
+          0.50 + glowStrength * 0.34,
+          0.48 + glowStrength * 0.32
+        );
+
+        corePositions.push(
+          offsetX,
+          offsetY,
+          offsetZ
+        );
+
+        coreColors.push(
+          0.03 + coreStrength * 0.12,
+          0.62 + coreStrength * 0.36,
+          0.60 + coreStrength * 0.36
+        );
+      }
+    }
+
+    if (corePositions.length === 0) {
+      return group;
+    }
+
+    const glowGeometry =
+      new THREE.BufferGeometry();
+
+    glowGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        glowPositions,
+        3
+      )
+    );
+
+    glowGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        glowColors,
+        3
+      )
+    );
+
+    const glowMaterial =
+      new THREE.PointsMaterial({
+        size: 0.165,
+        transparent: true,
+        opacity: 0.24,
+        depthWrite: false,
+        depthTest: true,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+        vertexColors: true,
+        sizeAttenuation: true
+      });
+
+    const glowPoints =
+      new THREE.Points(
+        glowGeometry,
+        glowMaterial
+      );
+
+    glowPoints.userData.rfDecoration = true;
+    glowPoints.renderOrder = 4;
+    group.add(glowPoints);
+
+    const coreGeometry =
+      new THREE.BufferGeometry();
+
+    coreGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        corePositions,
+        3
+      )
+    );
+
+    coreGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        coreColors,
+        3
+      )
+    );
+
+    const coreMaterial =
+      new THREE.PointsMaterial({
+        size: 0.048,
+        transparent: true,
+        opacity: 1.0,
+        depthWrite: false,
+        depthTest: true,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+        vertexColors: true,
+        sizeAttenuation: true
+      });
+
+    const corePoints =
+      new THREE.Points(
+        coreGeometry,
+        coreMaterial
+      );
+
+    corePoints.userData.rfDecoration = true;
+    corePoints.renderOrder = 5;
+    group.add(corePoints);
+
+    return group;
+  }
+
   function buildMountainMesh(THREE) {
     const geometry =
       new THREE.BufferGeometry();
@@ -1971,22 +2037,115 @@
 
     const material =
       new THREE.MeshStandardMaterial({
-        color: 0x010a11,
-        emissive: 0x010a11,
-        emissiveIntensity: 0.10,
-        roughness: 0.98,
-        metalness: 0.00,
-        flatShading: true,
+        color: 0x01161a,
+        emissive: 0x001b20,
+        emissiveIntensity: 0.22,
+        roughness: 0.91,
+        metalness: 0.02,
+        flatShading: false,
         side: THREE.DoubleSide,
         depthWrite: true,
         depthTest: true
       });
 
-    const mesh =
-      new THREE.Mesh(
-        geometry,
-        material
-      );
+    const edgeColor =
+      new THREE.Color(0x18fff0);
+
+    const edgeDirection =
+      new THREE.Vector3(
+        -0.58,
+        0.72,
+        0.38
+      ).normalize();
+
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.rfEdgeColor = {
+        value: edgeColor
+      };
+
+      shader.uniforms.rfEdgeDirection = {
+        value: edgeDirection
+      };
+
+      shader.uniforms.rfEdgeStrength = {
+        value: 1.74
+      };
+
+      shader.vertexShader =
+        shader.vertexShader
+          .replace(
+            "#include <common>",
+            [
+              "#include <common>",
+              "varying vec3 vRfWorldNormal;"
+            ].join("\n")
+          )
+          .replace(
+            "#include <defaultnormal_vertex>",
+            [
+              "#include <defaultnormal_vertex>",
+              "vRfWorldNormal = normalize(mat3(modelMatrix) * objectNormal);"
+            ].join("\n")
+          );
+
+      shader.fragmentShader =
+        shader.fragmentShader
+          .replace(
+            "#include <common>",
+            [
+              "#include <common>",
+              "varying vec3 vRfWorldNormal;",
+              "uniform vec3 rfEdgeColor;",
+              "uniform vec3 rfEdgeDirection;",
+              "uniform float rfEdgeStrength;"
+            ].join("\n")
+          )
+          .replace(
+            "#include <output_fragment>",
+            [
+              "vec3 rfViewNormal = normalize(normal);",
+              "vec3 rfViewDirection = normalize(vViewPosition);",
+              "vec3 rfWorldNormal = normalize(vRfWorldNormal);",
+              "",
+              "float rfViewEdge = pow(",
+              "  1.0 - abs(dot(rfViewNormal, rfViewDirection)),",
+              "  2.05",
+              ");",
+              "",
+              "float rfDirectionalEdge = pow(",
+              "  1.0 - abs(dot(rfWorldNormal, normalize(rfEdgeDirection))),",
+              "  4.9",
+              ");",
+              "",
+              "float rfEdge = max(",
+              "  rfViewEdge,",
+              "  rfDirectionalEdge * 0.78",
+              ");",
+              "",
+              "rfEdge = smoothstep(",
+              "  0.10,",
+              "  0.78,",
+              "  rfEdge",
+              ");",
+              "",
+              "outgoingLight *= 0.52;",
+              "outgoingLight += vec3(0.001, 0.028, 0.030) * (",
+              "  0.28 + clamp(rfWorldNormal.y, 0.0, 1.0) * 0.42",
+              ");",
+              "outgoingLight += rfEdgeColor * rfEdge * rfEdgeStrength;",
+              "",
+              "#include <output_fragment>"
+            ].join("\n")
+          );
+    };
+
+    material.customProgramCacheKey = () =>
+      VERSION;
+
+    const mesh = new THREE.Mesh(
+      geometry,
+      material
+    );
 
     mesh.userData.rfDecoration = false;
     mesh.castShadow = false;
@@ -1995,59 +2154,749 @@
     return mesh;
   }
 
-  function buildMountainWireframe(
+  function buildPeakFacetAccent(
     THREE,
     mountain
   ) {
+    const geometry = mountain.geometry;
+    const positions =
+      geometry.getAttribute("position");
+    const index =
+      geometry.getIndex();
+
     const group = new THREE.Group();
     group.userData.rfDecoration = true;
 
-    const wireGeometry =
-      new THREE.WireframeGeometry(
-        mountain.geometry
+    if (!positions || !index) {
+      return group;
+    }
+
+    geometry.computeBoundingBox();
+
+    const bounds =
+      geometry.boundingBox;
+
+    const minimumY = bounds.min.y;
+    const heightRange = Math.max(
+      0.001,
+      bounds.max.y - bounds.min.y
+    );
+
+    const ridgePositions =
+      shapeTerrainPositions(
+        EMBEDDED.ridgePositions
       );
 
-    const glowMaterial =
+    const ridgeOffsets =
+      decodeUint32(
+        EMBEDDED.ridgeOffsets
+      );
+
+    const ridgeSegments =
+      buildRidgeSegments(
+        ridgePositions,
+        ridgeOffsets
+      );
+
+    const pathDistances =
+      new Float32Array(
+        ridgeOffsets.length - 1
+      );
+
+    const fillPositions = [];
+    const fillColors = [];
+    const glowLinePositions = [];
+    const glowLineColors = [];
+    const coreLinePositions = [];
+    const coreLineColors = [];
+
+    const drawnEdges = new Set();
+
+    const vertexA =
+      new THREE.Vector3();
+
+    const vertexB =
+      new THREE.Vector3();
+
+    const vertexC =
+      new THREE.Vector3();
+
+    const midpointAB =
+      new THREE.Vector3();
+
+    const midpointBC =
+      new THREE.Vector3();
+
+    const midpointCA =
+      new THREE.Vector3();
+
+    const edgeAB =
+      new THREE.Vector3();
+
+    const edgeAC =
+      new THREE.Vector3();
+
+    const faceNormal =
+      new THREE.Vector3();
+
+    function gaussian(
+      value,
+      centre,
+      width
+    ) {
+      return Math.exp(
+        -Math.pow(
+          (value - centre)
+          / Math.max(width, 0.001),
+          2
+        )
+      );
+    }
+
+    function brightnessAt(point) {
+      const ridgeMetrics =
+        findRidgeMetrics(
+          point.x,
+          point.z,
+          ridgeSegments,
+          pathDistances
+        );
+
+      const heightNorm = clamp(
+        (point.y - minimumY)
+        / heightRange,
+        0,
+        1
+      );
+
+      const verticalDrop =
+        Math.max(
+          0,
+          ridgeMetrics.ridgeY
+          - point.y
+        );
+
+      const ridgeDistance =
+        ridgeMetrics.distance;
+
+      /*
+       * All terms are continuous functions of world position.
+       * No per-face random lighting is used, so the cyan flow
+       * crosses triangle boundaries smoothly.
+       */
+      const crestRibbon =
+        gaussian(
+          verticalDrop,
+          0.08,
+          0.16
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          0.82
+        );
+
+      const upperRibbon =
+        gaussian(
+          verticalDrop,
+          0.28,
+          0.28
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          1.16
+        );
+
+      const lowerRibbon =
+        gaussian(
+          verticalDrop,
+          0.62,
+          0.48
+        )
+        * gaussian(
+          ridgeDistance,
+          0,
+          1.52
+        );
+
+      const ridgeJunction = clamp(
+        (
+          ridgeMetrics.nearbyPathCount
+          - 1
+        ) / 3,
+        0,
+        1
+      );
+
+      const channelShadow =
+        clamp(
+          (
+            verticalDrop - 0.44
+          ) / 1.15,
+          0,
+          1
+        );
+
+      const farSlopeShadow =
+        clamp(
+          (
+            ridgeDistance - 1.15
+          ) / 1.85,
+          0,
+          1
+        );
+
+      return clamp(
+        0.022
+        + crestRibbon * 0.16
+        + upperRibbon * 0.34
+        + lowerRibbon * 0.15
+        + ridgeJunction * 0.035
+        + heightNorm * 0.025
+        - channelShadow * 0.17
+        - farSlopeShadow * 0.055,
+        0.018,
+        0.72
+      );
+    }
+
+    function colourAt(brightness) {
+      const shadowWeight =
+        Math.pow(
+          brightness,
+          1.55
+        );
+
+      const highlightWeight =
+        Math.pow(
+          brightness,
+          2.15
+        );
+
+      return [
+        0.001
+          + shadowWeight * 0.008
+          + highlightWeight * 0.026,
+        0.006
+          + shadowWeight * 0.135
+          + highlightWeight * 0.390,
+        0.010
+          + shadowWeight * 0.145
+          + highlightWeight * 0.430
+      ];
+    }
+
+    function pushLine(
+      idA,
+      idB,
+      pointA,
+      pointB,
+      brightnessA,
+      brightnessB
+    ) {
+      const key =
+        idA < idB
+          ? `${idA}|${idB}`
+          : `${idB}|${idA}`;
+
+      if (drawnEdges.has(key)) {
+        return;
+      }
+
+      drawnEdges.add(key);
+
+      const lineBrightnessA =
+        Math.pow(
+          brightnessA,
+          0.60
+        );
+
+      const lineBrightnessB =
+        Math.pow(
+          brightnessB,
+          0.60
+        );
+
+      glowLinePositions.push(
+        pointA.x,
+        pointA.y,
+        pointA.z,
+        pointB.x,
+        pointB.y,
+        pointB.z
+      );
+
+      glowLineColors.push(
+        0.006
+          + lineBrightnessA * 0.055,
+        0.075
+          + lineBrightnessA * 0.480,
+        0.090
+          + lineBrightnessA * 0.500,
+        0.006
+          + lineBrightnessB * 0.055,
+        0.075
+          + lineBrightnessB * 0.480,
+        0.090
+          + lineBrightnessB * 0.500
+      );
+
+      coreLinePositions.push(
+        pointA.x,
+        pointA.y,
+        pointA.z,
+        pointB.x,
+        pointB.y,
+        pointB.z
+      );
+
+      coreLineColors.push(
+        0.012
+          + lineBrightnessA * 0.090,
+        0.120
+          + lineBrightnessA * 0.680,
+        0.140
+          + lineBrightnessA * 0.700,
+        0.012
+          + lineBrightnessB * 0.090,
+        0.120
+          + lineBrightnessB * 0.680,
+        0.140
+          + lineBrightnessB * 0.700
+      );
+    }
+
+    function pushTriangle(
+      pointA,
+      pointB,
+      pointC,
+      idA,
+      idB,
+      idC,
+      brightnessA,
+      brightnessB,
+      brightnessC
+    ) {
+      const colourA =
+        colourAt(brightnessA);
+
+      const colourB =
+        colourAt(brightnessB);
+
+      const colourC =
+        colourAt(brightnessC);
+
+      fillPositions.push(
+        pointA.x,
+        pointA.y,
+        pointA.z,
+        pointB.x,
+        pointB.y,
+        pointB.z,
+        pointC.x,
+        pointC.y,
+        pointC.z
+      );
+
+      fillColors.push(
+        colourA[0],
+        colourA[1],
+        colourA[2],
+        colourB[0],
+        colourB[1],
+        colourB[2],
+        colourC[0],
+        colourC[1],
+        colourC[2]
+      );
+
+      pushLine(
+        idA,
+        idB,
+        pointA,
+        pointB,
+        brightnessA,
+        brightnessB
+      );
+
+      pushLine(
+        idB,
+        idC,
+        pointB,
+        pointC,
+        brightnessB,
+        brightnessC
+      );
+
+      pushLine(
+        idC,
+        idA,
+        pointC,
+        pointA,
+        brightnessC,
+        brightnessA
+      );
+    }
+
+    function midpointId(
+      indexA,
+      indexB
+    ) {
+      return indexA < indexB
+        ? `m${indexA}-${indexB}`
+        : `m${indexB}-${indexA}`;
+    }
+
+    for (
+      let triangleOffset = 0;
+      triangleOffset < index.count;
+      triangleOffset += 3
+    ) {
+      const indexA =
+        index.getX(triangleOffset);
+
+      const indexB =
+        index.getX(
+          triangleOffset + 1
+        );
+
+      const indexC =
+        index.getX(
+          triangleOffset + 2
+        );
+
+      vertexA.fromBufferAttribute(
+        positions,
+        indexA
+      );
+
+      vertexB.fromBufferAttribute(
+        positions,
+        indexB
+      );
+
+      vertexC.fromBufferAttribute(
+        positions,
+        indexC
+      );
+
+      edgeAB.subVectors(
+        vertexB,
+        vertexA
+      );
+
+      edgeAC.subVectors(
+        vertexC,
+        vertexA
+      );
+
+      faceNormal.crossVectors(
+        edgeAB,
+        edgeAC
+      );
+
+      if (
+        faceNormal.lengthSq()
+        <= 1e-10
+      ) {
+        continue;
+      }
+
+      faceNormal.normalize();
+
+      if (faceNormal.y < 0) {
+        faceNormal.multiplyScalar(-1);
+      }
+
+      const brightnessA =
+        brightnessAt(vertexA);
+
+      const brightnessB =
+        brightnessAt(vertexB);
+
+      const brightnessC =
+        brightnessAt(vertexC);
+
+      midpointAB
+        .lerpVectors(
+          vertexA,
+          vertexB,
+          0.5
+        );
+
+      midpointBC
+        .lerpVectors(
+          vertexB,
+          vertexC,
+          0.5
+        );
+
+      midpointCA
+        .lerpVectors(
+          vertexC,
+          vertexA,
+          0.5
+        );
+
+      const brightnessAB =
+        brightnessAt(midpointAB);
+
+      const brightnessBC =
+        brightnessAt(midpointBC);
+
+      const brightnessCA =
+        brightnessAt(midpointCA);
+
+      const averageBrightness =
+        (
+          brightnessA
+          + brightnessB
+          + brightnessC
+        ) / 3;
+
+      const offsetDistance =
+        0.014
+        + averageBrightness * 0.012;
+
+      const displayA =
+        vertexA.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayB =
+        vertexB.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayC =
+        vertexC.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayAB =
+        midpointAB.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayBC =
+        midpointBC.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const displayCA =
+        midpointCA.clone()
+          .addScaledVector(
+            faceNormal,
+            offsetDistance
+          );
+
+      const idA = `v${indexA}`;
+      const idB = `v${indexB}`;
+      const idC = `v${indexC}`;
+
+      const idAB =
+        midpointId(
+          indexA,
+          indexB
+        );
+
+      const idBC =
+        midpointId(
+          indexB,
+          indexC
+        );
+
+      const idCA =
+        midpointId(
+          indexC,
+          indexA
+        );
+
+      pushTriangle(
+        displayA,
+        displayAB,
+        displayCA,
+        idA,
+        idAB,
+        idCA,
+        brightnessA,
+        brightnessAB,
+        brightnessCA
+      );
+
+      pushTriangle(
+        displayAB,
+        displayB,
+        displayBC,
+        idAB,
+        idB,
+        idBC,
+        brightnessAB,
+        brightnessB,
+        brightnessBC
+      );
+
+      pushTriangle(
+        displayCA,
+        displayBC,
+        displayC,
+        idCA,
+        idBC,
+        idC,
+        brightnessCA,
+        brightnessBC,
+        brightnessC
+      );
+
+      pushTriangle(
+        displayAB,
+        displayBC,
+        displayCA,
+        idAB,
+        idBC,
+        idCA,
+        brightnessAB,
+        brightnessBC,
+        brightnessCA
+      );
+    }
+
+    if (fillPositions.length === 0) {
+      return group;
+    }
+
+    const fillGeometry =
+      new THREE.BufferGeometry();
+
+    fillGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        fillPositions,
+        3
+      )
+    );
+
+    fillGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        fillColors,
+        3
+      )
+    );
+
+    const fillMaterial =
+      new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        vertexColors: true,
+        transparent: false,
+        opacity: 1,
+        depthWrite: true,
+        depthTest: true,
+        blending: THREE.NormalBlending,
+        toneMapped: false,
+        side: THREE.DoubleSide
+      });
+
+    const fillMesh =
+      new THREE.Mesh(
+        fillGeometry,
+        fillMaterial
+      );
+
+    fillMesh.userData.rfDecoration = true;
+    fillMesh.renderOrder = 5;
+    group.add(fillMesh);
+
+    const glowLineGeometry =
+      new THREE.BufferGeometry();
+
+    glowLineGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        glowLinePositions,
+        3
+      )
+    );
+
+    glowLineGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        glowLineColors,
+        3
+      )
+    );
+
+    const glowLineMaterial =
       new THREE.LineBasicMaterial({
-        color: 0x08d7e8,
         transparent: true,
-        opacity: 0.13,
+        opacity: 0.095,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
-        toneMapped: false
+        toneMapped: false,
+        vertexColors: true
       });
 
-    const glow =
+    const glowLines =
       new THREE.LineSegments(
-        wireGeometry,
-        glowMaterial
+        glowLineGeometry,
+        glowLineMaterial
       );
 
-    glow.userData.rfDecoration = true;
-    glow.renderOrder = 5;
-    group.add(glow);
+    glowLines.userData.rfDecoration = true;
+    glowLines.renderOrder = 6;
+    group.add(glowLines);
 
-    const coreMaterial =
+    const coreLineGeometry =
+      new THREE.BufferGeometry();
+
+    coreLineGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(
+        coreLinePositions,
+        3
+      )
+    );
+
+    coreLineGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(
+        coreLineColors,
+        3
+      )
+    );
+
+    const coreLineMaterial =
       new THREE.LineBasicMaterial({
-        color: 0x57f1ff,
         transparent: true,
-        opacity: 0.76,
+        opacity: 0.72,
         depthWrite: false,
         depthTest: true,
         blending: THREE.NormalBlending,
-        toneMapped: false
+        toneMapped: false,
+        vertexColors: true
       });
 
-    const core =
+    const coreLines =
       new THREE.LineSegments(
-        wireGeometry,
-        coreMaterial
+        coreLineGeometry,
+        coreLineMaterial
       );
 
-    core.userData.rfDecoration = true;
-    core.renderOrder = 6;
-    group.add(core);
+    coreLines.userData.rfDecoration = true;
+    coreLines.renderOrder = 7;
+    group.add(coreLines);
 
     return group;
   }
@@ -2066,9 +2915,9 @@
 
     const glowMaterial =
       new THREE.MeshBasicMaterial({
-        color: 0x08cadd,
+        color: 0x00d6c8,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.18,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2078,9 +2927,9 @@
 
     const coreMaterial =
       new THREE.MeshBasicMaterial({
-        color: 0x39f5ff,
+        color: 0x35fff0,
         transparent: true,
-        opacity: 0.72,
+        opacity: 0.80,
         depthWrite: false,
         depthTest: true,
         blending: THREE.AdditiveBlending,
@@ -2207,12 +3056,12 @@
     renderer.toneMapping =
       THREE.ACESFilmicToneMapping;
 
-    renderer.toneMappingExposure = 1.04;
+    renderer.toneMappingExposure = 1.08;
 
     const scene = new THREE.Scene();
 
     scene.fog = new THREE.Fog(
-      0x021221,
+      0x01131a,
       28,
       88
     );
@@ -2227,17 +3076,17 @@
 
     const hemisphere =
       new THREE.HemisphereLight(
-        0x317f8d,
+        0x258a84,
         0x010b11,
-        0.28
+        0.30
       );
 
     scene.add(hemisphere);
 
     const keyLight =
       new THREE.DirectionalLight(
-        0x55f6ff,
-        1.12
+        0x43fff0,
+        1.18
       );
 
     keyLight.position.set(
@@ -2272,15 +3121,21 @@
 
     terrainRoot.add(mountain);
 
-    const mountainWireframe =
-      buildMountainWireframe(
+    const ridgeDots =
+      buildPeakDotField(
         THREE,
         mountain
       );
 
-    terrainRoot.add(
-      mountainWireframe
-    );
+    terrainRoot.add(ridgeDots);
+
+    const peakFacetAccent =
+      buildPeakFacetAccent(
+        THREE,
+        mountain
+      );
+
+    terrainRoot.add(peakFacetAccent);
 
     terrainRoot.updateMatrixWorld(true);
 
@@ -2440,9 +3295,21 @@
           )
         );
 
+      const heightFitRadius =
+        size.y
+        / (
+          2
+          * Math.tan(
+            Math.max(
+              verticalFov,
+              0.18
+            ) / 2
+          )
+        );
+
       /*
-       * Use the calculated fit radius as an actual fit.
-       * Multipliers below 1 were zooming back in.
+       * Fit both width and the sharpened relief so the taller
+       * peaks retain a clear margin without lifting the base.
        */
       const orbitRadius =
         Math.max(
@@ -2451,7 +3318,8 @@
             aspect < 0.82
               ? 1.04
               : 1.08
-          )
+          ),
+          heightFitRadius * 1.10
         );
 
       camera.updateProjectionMatrix();
