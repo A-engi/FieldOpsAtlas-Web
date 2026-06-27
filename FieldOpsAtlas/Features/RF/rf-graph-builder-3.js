@@ -1,21 +1,22 @@
 /* ==========================================================================
-   FieldOps Atlas RF Builder 3 — two colour layers
+   FieldOps Atlas RF Builder 3 — single opaque mesh
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-3.js
-   Version: 1.1.245-builder-3-two-colour-layers-13k
+   Version: 1.1.249-builder-3-single-opaque-mesh-13k
 
    Geometry:
-   - 8,143 vertices
-   - 12,816 triangular faces
-   - Positions and indices byte-identical to v1.1.240
-   - Layer 1: approved main peak, unchanged
-   - Layer 2: four secondary peaks, each using the Layer-1 fade independently
-   - No runtime texture, texture layer, base, skin, cap, skirt, or filler
+   - One geometry build, one material, one rendered mountain mesh.
+   - Retains every referenced valid surface triangle.
+   - Drops only invalid, zero-area and therefore unused points.
+   - Keeps the approved centre peak unchanged.
+   - Brightens the four secondary peaks.
+   - Removes colour and cyan edge treatment from low near-horizontal faces.
+   - No adapter, cap, base, filler, skin or separate wireframe mesh.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.1.245-builder-3-two-colour-layers-13k";
-  const MODE = "three-neon-peak-two-colour-layers-builder-3";
+  const VERSION = "1.1.249-builder-3-single-opaque-mesh-13k";
+  const MODE = "three-neon-peak-single-opaque-mesh-builder-3";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -26,7 +27,7 @@
   const FRONT_AZIMUTH = 0;
   let dependencyPromise = null;
 
-  const META = Object.freeze({"name":"Neon Peak two colour layers 13k","version":"1.0.0","builderVersion":"1.1.245-builder-3-two-colour-layers-13k","source":"v1.1.244 with explicit Layer 1 main peak and Layer 2 four secondary peaks","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"Five independent peak-local fades using sampled authored colour; not a continuous mountain-wide gradient.","peakCount":5,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main peak; unchanged byte-for-byte.","layer2":"Four source-identified secondary peaks; each receives the Layer-1 colour ramp independently."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}]});
+  const META = Object.freeze({"name":"Neon Peak single opaque mesh 13k","version":"1.0.0","builderVersion":"1.1.249-builder-3-single-opaque-mesh-13k","source":"v1.1.245 baked colour source consolidated at runtime into one opaque mesh","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"Five independent peak-local fades using sampled authored colour; not a continuous mountain-wide gradient.","peakCount":5,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main peak; unchanged byte-for-byte.","layer2":"Four source-identified secondary peaks; each receives the Layer-1 colour ramp independently."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}]});
 
   const POSITIONS_BASE64 = [
     "SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
@@ -1827,87 +1828,410 @@
     return dependencyPromise;
   }
 
-  function createGeometry(THREE) {
+  const SECONDARY_PEAK_TARGET_MAX = 1;
+  const SECONDARY_PEAK_STRENGTH = 0.96;
+  const LOW_HORIZONTAL_MAX_HEIGHT_RATIO = 0.36;
+  const HORIZONTAL_NORMAL_Y_MIN = 0.92;
+  const MINIMUM_TRIANGLE_AREA_SQUARED = 1e-18;
+  const NEUTRAL_SKIN_RGB = Object.freeze([6 / 255, 19 / 255, 26 / 255]);
+
+  /*
+   * Coordinates below are in translated Builder 3 geometry space:
+   * x -= META.center[0], y -= META.boundsMin[1], z -= META.center[2].
+   */
+  const MAIN_PEAK = Object.freeze({
+    x: 0.019635006830198476,
+    y: 0.9086992847261541,
+    z: 0.0007775044148700117,
+    outerRadius: 0.08054548592230482
+  });
+
+  const SECONDARY_PEAKS = Object.freeze([
+    Object.freeze({
+      x: -0.07001383516569858,
+      y: 0.7510444305667527,
+      z: -0.004246370265828303,
+      baseY: 0.475,
+      fullRadius: 0.056353437349480166,
+      outerRadius: 0.11571943055781153
+    }),
+    Object.freeze({
+      x: 0.09025027463754276,
+      y: 0.7623728400520853,
+      z: -0.0026913614360883904,
+      baseY: 0.475,
+      fullRadius: 0.058657359157477496,
+      outerRadius: 0.12255162993026053
+    }),
+    Object.freeze({
+      x: 0.002464694551057911,
+      y: 0.7255312439657589,
+      z: 0.09264264143335321,
+      baseY: 0.475,
+      fullRadius: 0.06643181712826672,
+      outerRadius: 0.12062755993172357
+    }),
+    Object.freeze({
+      x: 0.019564250048828335,
+      y: 0.7782908499531401,
+      z: -0.06151854162578895,
+      baseY: 0.475,
+      fullRadius: 0.06693372515836765,
+      outerRadius: 0.13159058221864872
+    })
+  ]);
+
+  function smoothstep(minimum, maximum, value) {
+    if (maximum <= minimum) return value >= maximum ? 1 : 0;
+
+    const t = Math.min(
+      1,
+      Math.max(0, (value - minimum) / (maximum - minimum))
+    );
+
+    return t * t * (3 - 2 * t);
+  }
+
+  function radialDistance(x, z, peak) {
+    return Math.hypot(x - peak.x, z - peak.z);
+  }
+
+  function ownsSecondaryPeakRegion(x, z, peak) {
+    const secondaryScore = radialDistance(x, z, peak) / peak.outerRadius;
+    const mainScore = radialDistance(x, z, MAIN_PEAK) / MAIN_PEAK.outerRadius;
+
+    if (secondaryScore >= mainScore) return false;
+
+    return SECONDARY_PEAKS.every((candidate) => {
+      if (candidate === peak) return true;
+
+      return secondaryScore <= (
+        radialDistance(x, z, candidate) / candidate.outerRadius
+      );
+    });
+  }
+
+  function secondaryPeakInfluence(x, y, z, peak) {
+    if (y <= peak.baseY || !ownsSecondaryPeakRegion(x, z, peak)) {
+      return 0;
+    }
+
+    const distance = radialDistance(x, z, peak);
+    if (distance >= peak.outerRadius) return 0;
+
+    const radialWeight = 1 - smoothstep(
+      peak.fullRadius,
+      peak.outerRadius,
+      distance
+    );
+    const heightWeight = smoothstep(peak.baseY, peak.y, y);
+
+    return radialWeight * (0.30 + heightWeight * 0.70);
+  }
+
+  function brightenColour(red, green, blue, influence) {
+    if (influence <= 0.001) return [red, green, blue];
+
+    const maximumChannel = Math.max(red, green, blue, 1 / 255);
+    const gain = SECONDARY_PEAK_TARGET_MAX / maximumChannel;
+    const amount = influence * SECONDARY_PEAK_STRENGTH;
+
+    return [
+      red + (Math.min(1, red * gain) - red) * amount,
+      green + (Math.min(1, green * gain) - green) * amount,
+      blue + (Math.min(1, blue * gain) - blue) * amount
+    ];
+  }
+
+  function finiteVertex(position, vertexIndex) {
+    return Number.isFinite(position.getX(vertexIndex))
+      && Number.isFinite(position.getY(vertexIndex))
+      && Number.isFinite(position.getZ(vertexIndex));
+  }
+
+  function triangleNormalAndArea(position, first, second, third) {
+    const ax = position.getX(first);
+    const ay = position.getY(first);
+    const az = position.getZ(first);
+
+    const abx = position.getX(second) - ax;
+    const aby = position.getY(second) - ay;
+    const abz = position.getZ(second) - az;
+
+    const acx = position.getX(third) - ax;
+    const acy = position.getY(third) - ay;
+    const acz = position.getZ(third) - az;
+
+    const crossX = aby * acz - abz * acy;
+    const crossY = abz * acx - abx * acz;
+    const crossZ = abx * acy - aby * acx;
+    const areaSquared = (
+      crossX * crossX
+      + crossY * crossY
+      + crossZ * crossZ
+    );
+
+    return {
+      areaSquared,
+      normalY: areaSquared > MINIMUM_TRIANGLE_AREA_SQUARED
+        ? Math.abs(crossY) / Math.sqrt(areaSquared)
+        : 0
+    };
+  }
+
+  function createSourceGeometry(THREE) {
     const surface = getSurface();
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(surface.positions, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(surface.colours, 3, true));
+
+    geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(surface.positions, 3)
+    );
+    geometry.setAttribute(
+      "color",
+      new THREE.BufferAttribute(surface.colours, 3, true)
+    );
     geometry.setIndex(new THREE.BufferAttribute(surface.indices, 1));
-    geometry.computeVertexNormals();
     geometry.computeBoundingBox();
     geometry.computeBoundingSphere();
+
     return geometry;
   }
 
-  function createMountain(THREE) {
-    const geometry = createGeometry(THREE);
-    const center = META.center;
-    geometry.translate(-center[0], -META.boundsMin[1], -center[2]);
+  function buildSingleLayerGeometry(THREE, sourceGeometry) {
+    const position = sourceGeometry.getAttribute("position");
+    const colour = sourceGeometry.getAttribute("color");
+    const index = sourceGeometry.index;
 
-    const root = new THREE.Group();
+    sourceGeometry.computeBoundingBox();
+    const bounds = sourceGeometry.boundingBox;
 
-    /*
-     * This is the surviving mountain only. No base plane, skin, cap, skirt,
-     * or centre-connected replacement geometry is introduced.
-     */
-    const surfaceMaterial = new THREE.MeshBasicMaterial({
-      vertexColors: true,
-      side: THREE.DoubleSide,
+    if (!position || !colour || !index || !bounds) {
+      throw new Error("Builder 3 surface data is incomplete.");
+    }
+
+    const height = Math.max(bounds.max.y - bounds.min.y, 1e-6);
+    const horizontalMaximumY = (
+      bounds.min.y + height * LOW_HORIZONTAL_MAX_HEIGHT_RATIO
+    );
+
+    const positions = [];
+    const colours = [];
+    const barycentrics = [];
+    const colourMasks = [];
+
+    let retainedFaceCount = 0;
+    let removedInvalidFaceCount = 0;
+    let neutralisedHorizontalFaceCount = 0;
+    let brightenedPointCount = 0;
+
+    for (let offset = 0; offset < index.count; offset += 3) {
+      const first = index.getX(offset);
+      const second = index.getX(offset + 1);
+      const third = index.getX(offset + 2);
+
+      if (
+        first >= position.count
+        || second >= position.count
+        || third >= position.count
+        || !finiteVertex(position, first)
+        || !finiteVertex(position, second)
+        || !finiteVertex(position, third)
+      ) {
+        removedInvalidFaceCount += 1;
+        continue;
+      }
+
+      const triangle = triangleNormalAndArea(
+        position,
+        first,
+        second,
+        third
+      );
+
+      if (triangle.areaSquared <= MINIMUM_TRIANGLE_AREA_SQUARED) {
+        removedInvalidFaceCount += 1;
+        continue;
+      }
+
+      const faceMaximumY = Math.max(
+        position.getY(first),
+        position.getY(second),
+        position.getY(third)
+      );
+
+      const neutralHorizontalFace = (
+        faceMaximumY <= horizontalMaximumY
+        && triangle.normalY >= HORIZONTAL_NORMAL_Y_MIN
+      );
+
+      if (neutralHorizontalFace) {
+        neutralisedHorizontalFaceCount += 1;
+      }
+
+      const triangleIndices = [first, second, third];
+      const triangleBarycentrics = [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+      ];
+
+      triangleIndices.forEach((vertexIndex, triangleVertexIndex) => {
+        const x = position.getX(vertexIndex);
+        const y = position.getY(vertexIndex);
+        const z = position.getZ(vertexIndex);
+
+        positions.push(x, y, z);
+        barycentrics.push(...triangleBarycentrics[triangleVertexIndex]);
+        colourMasks.push(neutralHorizontalFace ? 0 : 1);
+
+        if (neutralHorizontalFace) {
+          colours.push(...NEUTRAL_SKIN_RGB);
+          return;
+        }
+
+        let influence = 0;
+
+        SECONDARY_PEAKS.forEach((peak) => {
+          influence = Math.max(
+            influence,
+            secondaryPeakInfluence(x, y, z, peak)
+          );
+        });
+
+        const brightened = brightenColour(
+          colour.getX(vertexIndex),
+          colour.getY(vertexIndex),
+          colour.getZ(vertexIndex),
+          influence
+        );
+
+        colours.push(...brightened);
+
+        if (influence > 0.001) {
+          brightenedPointCount += 1;
+        }
+      });
+
+      retainedFaceCount += 1;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+    geometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(colours, 3)
+    );
+    geometry.setAttribute(
+      "barycentric",
+      new THREE.Float32BufferAttribute(barycentrics, 3)
+    );
+    geometry.setAttribute(
+      "colourMask",
+      new THREE.Float32BufferAttribute(colourMasks, 1)
+    );
+
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+    geometry.userData.rfSingleOpaqueMesh = true;
+    geometry.userData.rfSingleOpaqueMeshVersion = VERSION;
+    geometry.userData.rfRetainedFaceCount = retainedFaceCount;
+    geometry.userData.rfRemovedInvalidFaceCount = removedInvalidFaceCount;
+    geometry.userData.rfNeutralisedHorizontalFaceCount = (
+      neutralisedHorizontalFaceCount
+    );
+    geometry.userData.rfBrightenedSecondaryPointCount = brightenedPointCount;
+
+    return geometry;
+  }
+
+  function createSingleLayerMaterial(THREE) {
+    const material = new THREE.ShaderMaterial({
       transparent: false,
-      opacity: 1,
       depthWrite: true,
       depthTest: true,
-      toneMapped: false,
-      dithering: true
-    });
-
-    const surface = new THREE.Mesh(geometry, surfaceMaterial);
-    surface.renderOrder = 0;
-    root.add(surface);
-
-    /*
-     * The surface writes depth first. These mesh overlays therefore describe
-     * visible triangles without turning the mountain into an X-ray wireframe.
-     */
-    const glowMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00d7d0,
-      wireframe: true,
       side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.07,
-      depthWrite: false,
-      depthTest: true,
-      blending: THREE.AdditiveBlending,
       toneMapped: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -2,
-      polygonOffsetUnits: -2
+      extensions: {
+        derivatives: true
+      },
+      vertexShader: `
+        attribute vec3 color;
+        attribute vec3 barycentric;
+        attribute float colourMask;
+
+        varying vec3 vColour;
+        varying vec3 vBarycentric;
+        varying float vColourMask;
+
+        void main() {
+          vColour = color;
+          vBarycentric = barycentric;
+          vColourMask = colourMask;
+
+          gl_Position = projectionMatrix
+            * modelViewMatrix
+            * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColour;
+        varying vec3 vBarycentric;
+        varying float vColourMask;
+
+        void main() {
+          vec3 derivatives = fwidth(vBarycentric);
+          vec3 smoothed = smoothstep(
+            vec3(0.0),
+            derivatives * 1.25,
+            vBarycentric
+          );
+
+          float edge = 1.0 - min(
+            min(smoothed.x, smoothed.y),
+            smoothed.z
+          );
+
+          vec3 cyan = vec3(0.47, 1.0, 0.97);
+          float visibleEdge = edge * 0.72 * vColourMask;
+          vec3 finalColour = mix(vColour, cyan, visibleEdge);
+
+          gl_FragColor = vec4(finalColour, 1.0);
+        }
+      `
     });
 
-    const glow = new THREE.Mesh(geometry, glowMaterial);
-    glow.renderOrder = 1;
-    root.add(glow);
+    material.name = "rf-single-opaque-mountain-material";
+    return material;
+  }
 
-    const coreMaterial = new THREE.MeshBasicMaterial({
-      color: 0x78fff7,
-      wireframe: true,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.34,
-      depthWrite: false,
-      depthTest: true,
-      blending: THREE.NormalBlending,
-      toneMapped: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -3,
-      polygonOffsetUnits: -3
-    });
+  function createMountain(THREE) {
+    const sourceGeometry = createSourceGeometry(THREE);
+    const center = META.center;
 
-    const core = new THREE.Mesh(geometry, coreMaterial);
-    core.renderOrder = 2;
-    root.add(core);
+    sourceGeometry.translate(
+      -center[0],
+      -META.boundsMin[1],
+      -center[2]
+    );
 
-    return root;
+    const geometry = buildSingleLayerGeometry(THREE, sourceGeometry);
+    sourceGeometry.dispose();
+
+    const material = createSingleLayerMaterial(THREE);
+    const mountain = new THREE.Mesh(geometry, material);
+
+    mountain.name = "rf-single-opaque-mountain-mesh";
+    mountain.renderOrder = 0;
+    mountain.userData.rfSingleOpaqueMesh = true;
+    mountain.userData.rfSingleOpaqueMeshVersion = VERSION;
+
+    return mountain;
   }
 
   async function initialiseThreeViewer(mount, elements, token) {
@@ -2063,7 +2387,7 @@
     root.querySelectorAll(MOUNT_SELECTOR).forEach((mount) => initialiseMount(mount));
   }
 
-  window.FieldOpsRFGraph = { VERSION, META, init: initialiseMount, initAll };
+  window.FieldOpsRFGraph = { VERSION, META, renderMeshes: 1, init: initialiseMount, initAll };
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => initAll(), { once: true });
   } else {
