@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF continuous connected surface</title>
+  <title>FieldOps Atlas RF five major peaks longer side veins</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
@@ -15,32 +15,33 @@
       position: fixed;
       z-index: 9999;
       left: 14px;
+      right: auto;
       bottom: 92px;
-      max-width: min(calc(100vw - 28px), 430px);
-      padding: 8px 10px;
-      border: 1px solid rgba(255, 221, 142, 0.58);
-      border-radius: 12px;
-      background: rgba(10, 23, 36, 0.9);
+      width: auto;
+      max-width: min(86vw, 380px);
+      padding: 7px 9px;
+      border: 1px solid rgba(255, 221, 142, 0.66);
+      border-radius: 13px;
+      background: rgba(10, 23, 36, 0.88);
       color: #ffe7b8;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
-      font: 700 10px/1.25 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
+      font: 700 10px/1.18 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       white-space: pre-wrap;
-      overflow-wrap: anywhere;
       opacity: 0;
-      transform: translateY(7px);
-      transition: opacity 0.22s ease, transform 0.22s ease;
+      transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
       pointer-events: none;
     }
 
     .rf-load-toast.is-visible {
-      opacity: 0.92;
+      opacity: 0.9;
       transform: translateY(0);
     }
   </style>
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.264-continuous-connected-surface">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.293">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -138,44 +139,61 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"
+        "three": "./rf-three-solid-core.js?v=1.1.247-builder-3-opaque-shell-no-plane-bright-peaks-13k"
       }
     }
   </script>
 
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.122-pane-fit" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.126-path-details-only" defer></script>
-  <script src="./rf-graph-builder-3.js?v=1.1.264-builder-3-continuous-connected-surface-13k" defer></script>
+  <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
+  <script src="./rf-graph-builder-3.js?v=1.1.293-builder-3-dark-filled-bright-outline-seven-peaks-13k" defer></script>
 
   <script>
-    /* Direct index dependencies only | Version: 1.1.264-continuous-connected-surface */
+    /* RF load toast | Version: 1.1.293-dark-filled-bright-outline-seven-peaks */
     (() => {
       "use strict";
 
+      const PAGE_VERSION = "1.1.293-dark-filled-bright-outline-seven-peaks";
       const TOAST_ID = "rfLoadToast";
-      const DIRECT_INDEX_FILES = [
-        "shell.css 1.1.21-shell-smoke-controls",
-        "background.css 1.1.76-graph-label",
-        "rf-graph.css 1.1.85-network-topology",
-        "rf-interface.css 1.1.120-pane-fit",
-        "three.module.js 0.160.1",
-        "shell.js 1.1.20-web-repo-profile-link",
-        "rf-interface.js 1.1.122-pane-fit",
-        "rf-path-builder.js 1.1.126-path-details-only",
-        "rf-graph-builder-3.js 1.1.264-builder-3-continuous-connected-surface-13k"
-      ];
 
-      function showDirectIndexFiles() {
-        document.getElementById(TOAST_ID)?.remove();
+      function versionOf(globalName) {
+        const globalValue = window[globalName];
+
+        if (!globalValue) {
+          return "missing";
+        }
+
+        return globalValue.VERSION || globalValue.version || "loaded";
+      }
+
+      function showToast() {
+        const existingToast = document.getElementById(TOAST_ID);
+
+        if (existingToast) {
+          existingToast.remove();
+        }
 
         const toast = document.createElement("div");
         toast.id = TOAST_ID;
         toast.className = "rf-load-toast";
         toast.setAttribute("role", "status");
         toast.setAttribute("aria-live", "polite");
-        toast.textContent = DIRECT_INDEX_FILES.join("\n");
 
+        const lines = [
+          `index.html ${PAGE_VERSION}`,
+          "shell.css 1.1.21-shell-smoke-controls",
+          "background.css 1.1.76-graph-label",
+          "rf-graph.css 1.1.85-network-topology",
+          "rf-interface.css 1.1.120-pane-fit",
+          `shell.js ${versionOf("FieldOpsEditor")}`,
+          `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
+          `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
+          `rf-three-solid-core.js ${versionOf("FieldOpsRFThreeSolidCore")}`,
+          `rf-graph-builder-3.js ${versionOf("FieldOpsRFGraph")}`
+        ];
+
+        toast.textContent = lines.join("\n");
         document.body.appendChild(toast);
 
         requestAnimationFrame(() => {
@@ -184,21 +202,19 @@
 
         window.setTimeout(() => {
           toast.classList.remove("is-visible");
-        }, 5200);
+        }, 6500);
 
         window.setTimeout(() => {
           toast.remove();
-        }, 5500);
+        }, 7000);
       }
 
       if (document.readyState === "loading") {
-        document.addEventListener(
-          "DOMContentLoaded",
-          () => window.setTimeout(showDirectIndexFiles, 350),
-          { once: true }
-        );
+        document.addEventListener("DOMContentLoaded", () => {
+          window.setTimeout(showToast, 450);
+        }, { once: true });
       } else {
-        window.setTimeout(showDirectIndexFiles, 350);
+        window.setTimeout(showToast, 450);
       }
     })();
   </script>
