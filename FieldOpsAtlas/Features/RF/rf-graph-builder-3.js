@@ -1,7 +1,7 @@
 /* ==========================================================================
-   FieldOps Atlas RF Builder 3 — five major peaks longer side veins
+   FieldOps Atlas RF Builder 3 — solid occluded availability fix
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-3.js
-   Version: 1.1.295-builder-3-solid-occluded-bright-outline-seven-peaks-13k
+   Version: 1.1.296-builder-3-solid-occluded-availability-fix-13k
 
    Geometry:
    - One geometry build, one material, one rendered mountain mesh.
@@ -15,8 +15,8 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.295-builder-3-solid-occluded-bright-outline-seven-peaks-13k";
-  const MODE = "three-neon-peak-solid-occluded-bright-outline-seven-peaks-builder-3";
+  const VERSION = "1.1.296-builder-3-solid-occluded-availability-fix-13k";
+  const MODE = "three-neon-peak-solid-occluded-availability-fix-builder-3";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -27,7 +27,7 @@
   const FRONT_AZIMUTH = 0;
   let dependencyPromise = null;
 
-  const META = Object.freeze({"name":"Neon Peak solid occluded bright outline seven peaks 13k","version":"1.0.0","builderVersion":"1.1.295-builder-3-solid-occluded-bright-outline-seven-peaks-13k","source":"v1.1.293 front appearance retained. A dark inward-scaled occlusion copy is appended into the same BufferGeometry and rendered by the same material, blocking visible gaps without a second mesh or transparent layer.","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"summit plus two upper shoulders plus four lower outer peak stacks","peakCount":7,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main peak; unchanged byte-for-byte.","layer2":"Four source-identified secondary peaks; each receives the Layer-1 colour ramp independently."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}],"transparent":false,"shadingMode":"dark filled rock with seven local peak fills and bright cyan rim outline","majorPeakCount":5,"majorPeaks":[{"name":"main","centreXZ":[0.0,-0.005],"baseY":0.06,"peakY":0.5086992847261541,"radiusCore":0.118,"radiusOuter":0.29,"strength":1.0},{"name":"upper-left-shoulder","centreXZ":[-0.16,0.03],"baseY":0.02,"peakY":0.315,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"upper-right-shoulder","centreXZ":[0.158,0.034],"baseY":0.02,"peakY":0.312,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"front-left","centreXZ":[-0.3020585,0.31471569],"baseY":-0.145,"peakY":0.03483344,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.9},{"name":"front-right","centreXZ":[0.30305349,0.30275408],"baseY":-0.145,"peakY":0.04347187,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.9},{"name":"rear-left","centreXZ":[-0.30005373,-0.30338836],"baseY":-0.145,"peakY":0.04146132,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.88},{"name":"rear-right","centreXZ":[0.29508156,-0.31178541],"baseY":-0.145,"peakY":0.04316682,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.88}],"sideVeins":"summit-driven fade with two upper shoulder peaks and four retained lower outer peaks","sideVeinLength":"main summit reaches into the upper shoulders; all four lower outer peaks are retained and keep local stacked bands","visibleLayers":1,"renderMeshes":1,"outlineMode":"single-material view-space rim; no outline mesh or extra render layer","opaqueInterior":true,"integratedOcclusionGeometry":true,"innerOcclusionXZScale":0.965,"innerOcclusionYScale":0.97,"renderMaterials":1});
+  const META = Object.freeze({"name":"Neon Peak solid occluded availability fix 13k","version":"1.0.0","builderVersion":"1.1.296-builder-3-solid-occluded-availability-fix-13k","source":"v1.1.295 appearance retained. Fixed the website runtime failure by restoring createSourceGeometry and moving the integrated inward occlusion shell into buildSingleLayerGeometry, where its source attributes and counters exist.","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"summit plus two upper shoulders plus four lower outer peak stacks","peakCount":7,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main peak; unchanged byte-for-byte.","layer2":"Four source-identified secondary peaks; each receives the Layer-1 colour ramp independently."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}],"transparent":false,"shadingMode":"dark filled rock with seven local peak fills and bright cyan rim outline","majorPeakCount":5,"majorPeaks":[{"name":"main","centreXZ":[0.0,-0.005],"baseY":0.06,"peakY":0.5086992847261541,"radiusCore":0.118,"radiusOuter":0.29,"strength":1.0},{"name":"upper-left-shoulder","centreXZ":[-0.16,0.03],"baseY":0.02,"peakY":0.315,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"upper-right-shoulder","centreXZ":[0.158,0.034],"baseY":0.02,"peakY":0.312,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"front-left","centreXZ":[-0.3020585,0.31471569],"baseY":-0.145,"peakY":0.03483344,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.9},{"name":"front-right","centreXZ":[0.30305349,0.30275408],"baseY":-0.145,"peakY":0.04347187,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.9},{"name":"rear-left","centreXZ":[-0.30005373,-0.30338836],"baseY":-0.145,"peakY":0.04146132,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.88},{"name":"rear-right","centreXZ":[0.29508156,-0.31178541],"baseY":-0.145,"peakY":0.04316682,"radiusCore":0.075,"radiusOuter":0.205,"strength":0.88}],"sideVeins":"summit-driven fade with two upper shoulder peaks and four retained lower outer peaks","sideVeinLength":"main summit reaches into the upper shoulders; all four lower outer peaks are retained and keep local stacked bands","visibleLayers":1,"renderMeshes":1,"outlineMode":"single-material view-space rim; no outline mesh or extra render layer","opaqueInterior":true,"integratedOcclusionGeometry":true,"innerOcclusionXZScale":0.965,"innerOcclusionYScale":0.97,"renderMaterials":1,"runtimeAvailabilityFix":true,"runtimeAvailabilityBug":"v1.1.295 referenced retainedFaceCount, index, position, bounds and output arrays before declaration inside createSourceGeometry."});
 
   const POSITIONS_BASE64 = [
     "SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
@@ -1984,58 +1984,6 @@
 
   function createSourceGeometry(THREE) {
     const surface = getSurface();
-    const occlusionFaceCount = retainedFaceCount;
-
-    /*
-     * Integrated occlusion shell:
-     * - appended to this same BufferGeometry
-     * - rendered by the same material and same Mesh
-     * - shifted inward so it only appears through openings in the source surface
-     * - carries interiorMask=1, so it is dark solid fill with no cyan outline
-     */
-    for (let offset = 0; offset < index.count; offset += 3) {
-      const first = index.getX(offset);
-      const second = index.getX(offset + 1);
-      const third = index.getX(offset + 2);
-
-      if (
-        first >= position.count
-        || second >= position.count
-        || third >= position.count
-        || !finiteVertex(position, first)
-        || !finiteVertex(position, second)
-        || !finiteVertex(position, third)
-      ) {
-        continue;
-      }
-
-      const triangle = triangleNormalAndArea(position, first, second, third);
-      if (triangle.areaSquared <= MINIMUM_TRIANGLE_AREA_SQUARED) {
-        continue;
-      }
-
-      const triangleIndices = [first, second, third];
-      const triangleBarycentrics = [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-      ];
-
-      triangleIndices.forEach((vertexIndex, triangleVertexIndex) => {
-        const x = position.getX(vertexIndex) * INNER_OCCLUSION_XZ_SCALE;
-        const y = bounds.min.y + (
-          position.getY(vertexIndex) - bounds.min.y
-        ) * INNER_OCCLUSION_Y_SCALE;
-        const z = position.getZ(vertexIndex) * INNER_OCCLUSION_XZ_SCALE;
-
-        positions.push(x, y, z);
-        colours.push(...INNER_OCCLUSION_RGB);
-        barycentrics.push(...triangleBarycentrics[triangleVertexIndex]);
-        colourMasks.push(0);
-        interiorMasks.push(1);
-      });
-    }
-
     const geometry = new THREE.BufferGeometry();
 
     geometry.setAttribute(
@@ -2080,6 +2028,7 @@
     let removedInvalidFaceCount = 0;
     let neutralisedHorizontalFaceCount = 0;
     let brightenedPointCount = 0;
+    let occlusionFaceCount = 0;
 
     for (let offset = 0; offset < index.count; offset += 3) {
       const first = index.getX(offset);
@@ -2171,6 +2120,64 @@
       });
 
       retainedFaceCount += 1;
+    }
+
+    /*
+     * Integrated occlusion shell:
+     * - appended to the same BufferGeometry
+     * - rendered by the same material and same Mesh
+     * - shifted inward so it appears only through openings in the source surface
+     * - carries interiorMask=1, so it renders as dark solid fill without the cyan rim
+     */
+    for (let offset = 0; offset < index.count; offset += 3) {
+      const first = index.getX(offset);
+      const second = index.getX(offset + 1);
+      const third = index.getX(offset + 2);
+
+      if (
+        first >= position.count
+        || second >= position.count
+        || third >= position.count
+        || !finiteVertex(position, first)
+        || !finiteVertex(position, second)
+        || !finiteVertex(position, third)
+      ) {
+        continue;
+      }
+
+      const triangle = triangleNormalAndArea(
+        position,
+        first,
+        second,
+        third
+      );
+
+      if (triangle.areaSquared <= MINIMUM_TRIANGLE_AREA_SQUARED) {
+        continue;
+      }
+
+      const triangleIndices = [first, second, third];
+      const triangleBarycentrics = [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+      ];
+
+      triangleIndices.forEach((vertexIndex, triangleVertexIndex) => {
+        const x = position.getX(vertexIndex) * INNER_OCCLUSION_XZ_SCALE;
+        const y = bounds.min.y + (
+          position.getY(vertexIndex) - bounds.min.y
+        ) * INNER_OCCLUSION_Y_SCALE;
+        const z = position.getZ(vertexIndex) * INNER_OCCLUSION_XZ_SCALE;
+
+        positions.push(x, y, z);
+        colours.push(...INNER_OCCLUSION_RGB);
+        barycentrics.push(...triangleBarycentrics[triangleVertexIndex]);
+        colourMasks.push(0);
+        interiorMasks.push(1);
+      });
+
+      occlusionFaceCount += 1;
     }
 
     const geometry = new THREE.BufferGeometry();
