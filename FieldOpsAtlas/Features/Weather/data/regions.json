@@ -1,234 +1,273 @@
 {
-  "version": "0.1.0",
-  "note": "Dummy/public-style test data only. Replace with your Atlas region files later. No internal access notes, contacts, links, ports, IPs, spares, configs, jobs or faults.",
+  "version": "0.2.0-atlas-west-wales-demo-sites",
+  "note": "Anonymised demo data derived exclusively from data/regions/West-Wales-sites.json. No separate named-location fixture is stored in Weather.",
+  "source": "../../../../data/regions/West-Wales-sites.json",
   "regions": [
     {
-      "id": "west-wales",
-      "name": "West Wales",
+      "id": "West-Wales",
+      "name": "West-Wales Demo",
       "bounds": [
         [
-          51.55,
-          -5.65
+          51.682979,
+          -5.105107
         ],
         [
-          52.55,
-          -3.65
+          52.537447,
+          -2.601047
         ]
       ],
       "sites": [
         {
-          "id": "WW-001",
-          "name": "West-Wales",
-          "lat": 51.946,
-          "lon": -4.735
+          "id": "lantern-cave",
+          "name": "Lantern Cave",
+          "lat": 51.949526,
+          "lon": -4.639953
         },
         {
-          "id": "WW-002",
-          "name": "Haverfordwest",
-          "lat": 51.801,
-          "lon": -4.969
+          "id": "mossbank-walk",
+          "name": "Mossbank Walk",
+          "lat": 51.780594,
+          "lon": -4.734337
         },
         {
-          "id": "WW-003",
-          "name": "Fishguard",
-          "lat": 52.004,
-          "lon": -4.982
+          "id": "otter-hollow-walk",
+          "name": "Otter Hollow Walk",
+          "lat": 51.682979,
+          "lon": -5.082322
         },
         {
-          "id": "WW-004",
-          "name": "Blaenplwyf",
-          "lat": 52.386,
-          "lon": -4.075
+          "id": "bluebell-ridge-walk",
+          "name": "Bluebell Ridge Walk",
+          "lat": 51.799477,
+          "lon": -4.880522
         },
         {
-          "id": "WW-005",
-          "name": "Carmarthen",
-          "lat": 51.857,
-          "lon": -4.312
-        }
-      ]
-    },
-    {
-      "id": "north-wales",
-      "name": "North Wales",
-      "bounds": [
-        [
-          52.55,
-          -4.95
-        ],
-        [
-          53.45,
-          -2.8
-        ]
-      ],
-      "sites": [
-        {
-          "id": "NW-001",
-          "name": "Llanddona",
-          "lat": 53.294,
-          "lon": -4.126
+          "id": "stone-lantern-walk",
+          "name": "Stone Lantern Walk",
+          "lat": 52.363781,
+          "lon": -4.107132
         },
         {
-          "id": "NW-002",
-          "name": "Moel-y-Parc",
-          "lat": 53.217,
-          "lon": -3.255
+          "id": "foxglove-cave",
+          "name": "Foxglove Cave",
+          "lat": 51.945633,
+          "lon": -4.175435
         },
         {
-          "id": "NW-003",
-          "name": "Bangor",
-          "lat": 53.227,
-          "lon": -4.129
+          "id": "raven-brook-walk",
+          "name": "Raven Brook Walk",
+          "lat": 51.947362,
+          "lon": -3.370822
         },
         {
-          "id": "NW-004",
-          "name": "Wrexham",
-          "lat": 53.046,
-          "lon": -2.993
+          "id": "low-meadow-walk",
+          "name": "Low Meadow Walk",
+          "lat": 51.962052,
+          "lon": -3.41698
         },
         {
-          "id": "NW-005",
-          "name": "Bala",
-          "lat": 52.912,
-          "lon": -3.598
-        }
-      ]
-    },
-    {
-      "id": "mid-wales",
-      "name": "Mid Wales",
-      "bounds": [
-        [
-          51.95,
-          -4.15
-        ],
-        [
-          52.75,
-          -2.75
-        ]
-      ],
-      "sites": [
-        {
-          "id": "MW-001",
-          "name": "Aberystwyth",
-          "lat": 52.416,
-          "lon": -4.082
+          "id": "whispering-cave",
+          "name": "Whispering Cave",
+          "lat": 51.779604,
+          "lon": -5.105107
         },
         {
-          "id": "MW-002",
-          "name": "Llandrindod Wells",
-          "lat": 52.242,
-          "lon": -3.378
+          "id": "silver-birch-walk",
+          "name": "Silver Birch Walk",
+          "lat": 52.48834,
+          "lon": -3.449575
         },
         {
-          "id": "MW-003",
-          "name": "Newtown",
-          "lat": 52.513,
-          "lon": -3.314
+          "id": "cinder-path-walk",
+          "name": "Cinder Path Walk",
+          "lat": 52.279863,
+          "lon": -3.954482
         },
         {
-          "id": "MW-004",
-          "name": "Brecon",
-          "lat": 51.947,
-          "lon": -3.391
+          "id": "moonpool-cave",
+          "name": "Moonpool Cave",
+          "lat": 51.886452,
+          "lon": -4.300806
         },
         {
-          "id": "MW-005",
-          "name": "Machynlleth",
-          "lat": 52.59,
-          "lon": -3.854
-        }
-      ]
-    },
-    {
-      "id": "south-wales",
-      "name": "South Wales",
-      "bounds": [
-        [
-          51.25,
-          -4.3
-        ],
-        [
-          51.95,
-          -2.55
-        ]
-      ],
-      "sites": [
-        {
-          "id": "SW-001",
-          "name": "Swansea",
-          "lat": 51.621,
-          "lon": -3.944
+          "id": "green-gate-walk",
+          "name": "Green Gate Walk",
+          "lat": 52.359859,
+          "lon": -2.94176
         },
         {
-          "id": "SW-002",
-          "name": "Wenvoe",
-          "lat": 51.456,
-          "lon": -3.284
+          "id": "hazel-tor-walk",
+          "name": "Hazel Tor Walk",
+          "lat": 52.165384,
+          "lon": -3.402127
         },
         {
-          "id": "SW-003",
-          "name": "Cardiff",
-          "lat": 51.481,
-          "lon": -3.179
+          "id": "copper-fern-walk",
+          "name": "Copper Fern Walk",
+          "lat": 51.700393,
+          "lon": -4.24939
         },
         {
-          "id": "SW-004",
-          "name": "Cwmbran",
-          "lat": 51.654,
-          "lon": -3.02
+          "id": "hidden-mill-walk",
+          "name": "Hidden Mill Walk",
+          "lat": 51.87408,
+          "lon": -4.305498
         },
         {
-          "id": "SW-005",
-          "name": "Abergavenny",
-          "lat": 51.825,
-          "lon": -3.018
-        }
-      ]
-    },
-    {
-      "id": "border-west",
-      "name": "Welsh Border",
-      "bounds": [
-        [
-          51.55,
-          -3.1
-        ],
-        [
-          52.75,
-          -2.0
-        ]
-      ],
-      "sites": [
-        {
-          "id": "BW-001",
-          "name": "Hereford",
-          "lat": 52.056,
-          "lon": -2.716
+          "id": "sparrow-rise-walk",
+          "name": "Sparrow Rise Walk",
+          "lat": 51.860575,
+          "lon": -4.310182
         },
         {
-          "id": "BW-002",
-          "name": "Shrewsbury",
-          "lat": 52.707,
-          "lon": -2.755
+          "id": "old-quarry-cave",
+          "name": "Old Quarry Cave",
+          "lat": 51.87148,
+          "lon": -4.309932
         },
         {
-          "id": "BW-003",
-          "name": "Monmouth",
-          "lat": 51.812,
-          "lon": -2.714
+          "id": "willow-bend-walk",
+          "name": "Willow Bend Walk",
+          "lat": 51.822066,
+          "lon": -4.065177
         },
         {
-          "id": "BW-004",
-          "name": "Ludlow",
-          "lat": 52.367,
-          "lon": -2.718
+          "id": "mist-vale-walk",
+          "name": "Mist Vale Walk",
+          "lat": 52.053178,
+          "lon": -3.779373
         },
         {
-          "id": "BW-005",
-          "name": "Hay-on-Wye",
-          "lat": 52.075,
-          "lon": -3.125
+          "id": "pine-hollow-walk",
+          "name": "Pine Hollow Walk",
+          "lat": 52.373345,
+          "lon": -2.601047
+        },
+        {
+          "id": "skylark-edge-walk",
+          "name": "Skylark Edge Walk",
+          "lat": 52.413781,
+          "lon": -3.005635
+        },
+        {
+          "id": "wrenstone-cave",
+          "name": "Wrenstone Cave",
+          "lat": 52.076225,
+          "lon": -3.156735
+        },
+        {
+          "id": "heather-drift-walk",
+          "name": "Heather Drift Walk",
+          "lat": 51.87683,
+          "lon": -3.141036
+        },
+        {
+          "id": "oak-ladder-walk",
+          "name": "Oak Ladder Walk",
+          "lat": 51.899713,
+          "lon": -2.975959
+        },
+        {
+          "id": "pebble-run-walk",
+          "name": "Pebble Run Walk",
+          "lat": 51.916748,
+          "lon": -4.355955
+        },
+        {
+          "id": "bracken-gate-walk",
+          "name": "Bracken Gate Walk",
+          "lat": 52.480347,
+          "lon": -4.01508
+        },
+        {
+          "id": "fernlight-cave",
+          "name": "Fernlight Cave",
+          "lat": 52.083587,
+          "lon": -3.334246
+        },
+        {
+          "id": "river-lantern-walk",
+          "name": "River Lantern Walk",
+          "lat": 51.934773,
+          "lon": -2.889805
+        },
+        {
+          "id": "cloudberry-walk",
+          "name": "Cloudberry Walk",
+          "lat": 51.766503,
+          "lon": -4.349898
+        },
+        {
+          "id": "slate-arch-walk",
+          "name": "Slate Arch Walk",
+          "lat": 52.33974,
+          "lon": -3.064206
+        },
+        {
+          "id": "cobalt-cave",
+          "name": "Cobalt Cave",
+          "lat": 52.348139,
+          "lon": -3.063174
+        },
+        {
+          "id": "hawthorn-loop",
+          "name": "Hawthorn Loop",
+          "lat": 51.89536,
+          "lon": -4.858772
+        },
+        {
+          "id": "amber-moss-walk",
+          "name": "Amber Moss Walk",
+          "lat": 52.537447,
+          "lon": -2.788294
+        },
+        {
+          "id": "quiet-tor-walk",
+          "name": "Quiet Tor Walk",
+          "lat": 52.022532,
+          "lon": -2.698327
+        },
+        {
+          "id": "meadowglass-walk",
+          "name": "Meadowglass Walk",
+          "lat": 52.165789,
+          "lon": -2.718278
+        },
+        {
+          "id": "kestrel-ridge-walk",
+          "name": "Kestrel Ridge Walk",
+          "lat": 52.512775,
+          "lon": -3.259274
+        },
+        {
+          "id": "dusk-hollow-cave",
+          "name": "Dusk Hollow Cave",
+          "lat": 52.191027,
+          "lon": -3.028657
+        },
+        {
+          "id": "brookstep-walk",
+          "name": "Brookstep Walk",
+          "lat": 51.835,
+          "lon": -4.632581
+        },
+        {
+          "id": "limekiln-walk",
+          "name": "Limekiln Walk",
+          "lat": 52.203022,
+          "lon": -3.649817
+        },
+        {
+          "id": "starling-path",
+          "name": "Starling Path",
+          "lat": 52.415855,
+          "lon": -3.71549
+        },
+        {
+          "id": "moorbell-cave",
+          "name": "Moorbell Cave",
+          "lat": 51.732352,
+          "lon": -4.014332
         }
       ]
     }
