@@ -28,4 +28,4 @@ jobs:
         run: npm run check
 
       - name: Validate workflows
-        run: npx actionlint@1.7.7
+        uses: docker://rhysd/actionlint:1.7.7

@@ -10,7 +10,7 @@ const CORE_FILES = [
   "./components.css",
   "./theme.css",
   "./settings.html",
-  "./data/icons/profile.svg",
+  "./data/icons/profile",
   "./FieldOpsAtlas/Features/Profile/index.html",
   "./FieldOpsAtlas/Features/RF/index.html",
   "./FieldOpsAtlas/Features/RF/background.css?v=1.1.76-graph-label",

@@ -12,7 +12,7 @@
   "use strict";
 
   var VERSION = "1.0.1-weather-root-menu";
-  var WEATHER_URL = "../Weather/index.html";
+  var WEATHER_URL = "../index.html";
 
   function enhanceWeatherButton(button) {
     var walkId = button.getAttribute("data-load-weather");
