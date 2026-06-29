@@ -3,8 +3,8 @@ name: Fetch Met Office map images
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 6,18 * * *"
-      timezone: "Europe/London"
+    - cron: "30 5 * * *"
+      timezone: "UTC"
 
 permissions:
   contents: write
@@ -17,7 +17,6 @@ jobs:
   fetch-metoffice-map-images:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -26,6 +25,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Validate configuration
+        env:
+          METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
+          METOFFICE_ORDER_ID: ${{ secrets.METOFFICE_ORDER_ID }}
+        run: |
+          missing=0
+          if [ -z "$METOFFICE_API_KEY" ]; then
+            echo "::error title=Missing configuration::METOFFICE_API_KEY is not configured."
+            missing=1
+          fi
+          if [ -z "$METOFFICE_ORDER_ID" ]; then
+            echo "::error title=Missing configuration::METOFFICE_ORDER_ID is not configured."
+            missing=1
+          fi
+          exit "$missing"
 
       - name: Fetch latest Met Office rainfall image
         env:

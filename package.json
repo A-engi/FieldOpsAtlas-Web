@@ -13,7 +13,8 @@
     "check:refs": "node scripts/check-repo.mjs --scope refs",
     "check:css": "node scripts/check-repo.mjs --scope css",
     "check:workflows": "node scripts/check-repo.mjs --scope workflows",
-    "check:secrets": "node scripts/check-repo.mjs --scope secrets"
+    "check:secrets": "node scripts/check-repo.mjs --scope secrets",
+    "test:metoffice": "node scripts/test-fetch-metoffice-map-images.mjs"
   },
   "engines": {
     "node": ">=20"
