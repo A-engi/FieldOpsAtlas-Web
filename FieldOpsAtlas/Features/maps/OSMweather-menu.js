@@ -1,22 +1,49 @@
 /* ==========================================================================
-   FieldOps Atlas weather data
+   FieldOps Atlas weather data and weather-panel behaviour
    File: FieldOpsAtlas/Features/maps/OSMweather-menu.js
-   Version: 1.0.27-selected-region-weather
+   Version: 1.0.28-weather-panel-routing
    Purpose:
-   - Own Open-Meteo requests, response parsing, and short-lived weather caches.
-   - Resolve the selected Atlas region from the loaded map region and its walks.
-   - Return weather data to OSMpanes.js and OSMmaps.js.
-   - Contain no map, cluster, RF path, toolbar, button, or panel logic.
+   - Load Open-Meteo site and selected-region forecasts.
+   - Load the selected-region forecast when the Weather panel opens.
+   - Route the panel Activate button to the full Weather HTML pages.
+   - Keep warning styling neutral unless an active Met Office warning exists.
    ========================================================================== */
 
 (function fieldOpsOSMWeatherData() {
   "use strict";
 
-  var VERSION = "1.0.27-selected-region-weather";
+  var VERSION = "1.0.28-weather-panel-routing";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
+  var WEATHER_PAGE_URL = "../Weather/index.html";
   var siteCache = new Map();
   var forecastCache = new Map();
+  var controlsBound = false;
+
+  function qs(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function qsa(selector, root) {
+    return Array.prototype.slice.call(
+      (root || document).querySelectorAll(selector)
+    );
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(
+      /[&<>"']/g,
+      function replaceCharacter(character) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[character];
+      }
+    );
+  }
 
   function weatherCodeText(code) {
     var labels = {
@@ -74,16 +101,18 @@
   }
 
   function selectedRegionId() {
-    var selectedButton = document.querySelector(
-      '[data-region-id][aria-pressed="true"]'
-    );
+    var selectedButton = qs('[data-region-id][aria-pressed="true"]');
 
     if (selectedButton) {
-      return String(selectedButton.getAttribute("data-region-id") || "").trim();
+      return String(
+        selectedButton.getAttribute("data-region-id") || ""
+      ).trim();
     }
 
     try {
-      return String(window.localStorage.getItem(REGION_STORAGE_KEY) || "").trim();
+      return String(
+        window.localStorage.getItem(REGION_STORAGE_KEY) || ""
+      ).trim();
     } catch (error) {
       return "";
     }
@@ -157,7 +186,9 @@
     params = new URLSearchParams({
       latitude: latitude.toFixed(5),
       longitude: longitude.toFixed(5),
-      daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max",
+      daily:
+        "weather_code,temperature_2m_max,temperature_2m_min," +
+        "precipitation_sum,wind_speed_10m_max",
       timezone: "Europe/London",
       forecast_days: "5"
     });
@@ -166,12 +197,24 @@
   }
 
   function loadSiteWeather(walk) {
-    if (!walk || !Number.isFinite(Number(walk.lat)) || !Number.isFinite(Number(walk.lng))) {
-      return Promise.reject(new Error("Site coordinates are unavailable."));
+    var cacheKey;
+    var cached;
+
+    if (
+      !walk ||
+      !Number.isFinite(Number(walk.lat)) ||
+      !Number.isFinite(Number(walk.lng))
+    ) {
+      return Promise.reject(
+        new Error("Site coordinates are unavailable.")
+      );
     }
 
-    var cacheKey = Number(walk.lat).toFixed(3) + "," + Number(walk.lng).toFixed(3);
-    var cached = siteCache.get(cacheKey);
+    cacheKey =
+      Number(walk.lat).toFixed(3) +
+      "," +
+      Number(walk.lng).toFixed(3);
+    cached = siteCache.get(cacheKey);
 
     if (cached && Date.now() - cached.time < CACHE_MS) {
       return Promise.resolve(cached.label);
@@ -180,16 +223,21 @@
     return fetchJson(siteWeatherUrl(walk), "Site weather")
       .then(function parseSiteWeather(payload) {
         var current = payload && payload.current;
+        var label;
 
         if (!current) {
           throw new Error("Site weather unavailable.");
         }
 
-        var label = [
+        label = [
           Math.round(Number(current.temperature_2m)) + "°C",
           weatherCodeText(current.weather_code),
-          "Wind " + Math.round(Number(current.wind_speed_10m)) + " km/h",
-          "Rain " + Number(current.precipitation || 0).toFixed(1) + " mm"
+          "Wind " +
+            Math.round(Number(current.wind_speed_10m)) +
+            " km/h",
+          "Rain " +
+            Number(current.precipitation || 0).toFixed(1) +
+            " mm"
         ].join(" · ");
 
         siteCache.set(cacheKey, {
@@ -220,10 +268,18 @@
           date: String(dateText || ""),
           weatherCode: Number(daily.weather_code[index]),
           summary: weatherCodeText(daily.weather_code[index]),
-          maximumC: Math.round(Number(daily.temperature_2m_max[index])),
-          minimumC: Math.round(Number(daily.temperature_2m_min[index])),
-          rainMm: Number(daily.precipitation_sum[index] || 0),
-          windKmh: Math.round(Number(daily.wind_speed_10m_max[index] || 0))
+          maximumC: Math.round(
+            Number(daily.temperature_2m_max[index])
+          ),
+          minimumC: Math.round(
+            Number(daily.temperature_2m_min[index])
+          ),
+          rainMm: Number(
+            daily.precipitation_sum[index] || 0
+          ),
+          windKmh: Math.round(
+            Number(daily.wind_speed_10m_max[index] || 0)
+          )
         };
       })
     };
@@ -245,7 +301,11 @@
       key = forecastCacheKey(target);
       cached = forecastCache.get(key);
 
-      if (!force && cached && Date.now() - cached.time < CACHE_MS) {
+      if (
+        !force &&
+        cached &&
+        Date.now() - cached.time < CACHE_MS
+      ) {
         return Promise.resolve(cached.data);
       }
 
@@ -269,19 +329,209 @@
 
   function loadSelectedRegionForecast(force) {
     try {
-      return loadRegionForecast(selectedRegionTarget(), Boolean(force));
+      return loadRegionForecast(
+        selectedRegionTarget(),
+        Boolean(force)
+      );
     } catch (error) {
       return Promise.reject(error);
     }
   }
 
-  /*
-   * Compatibility bridge for OSMpanes.js.
-   * The historical function name is retained, but it now resolves the currently
-   * selected map region instead of using fixed Preseli coordinates.
-   */
-  function loadPreseliForecast(force) {
-    return loadSelectedRegionForecast(force);
+  function setWeatherStatus(message) {
+    var output = qs("[data-weather-output]");
+
+    if (output) {
+      output.textContent = message || "";
+    }
+  }
+
+  function setWeatherUpdated(message) {
+    var output = qs("[data-weather-forecast-updated]");
+
+    if (output) {
+      output.textContent = message || "";
+    }
+  }
+
+  function renderForecastPlaceholder(message) {
+    var track = qs("[data-weather-forecast-track]");
+
+    if (!track) {
+      return;
+    }
+
+    track.innerHTML = [
+      '<article class="weather-forecast-card ',
+      'weather-forecast-card-placeholder" role="listitem">',
+      escapeHtml(message || "Loading forecast..."),
+      "</article>"
+    ].join("");
+  }
+
+  function formatDay(dateText) {
+    var date = new Date(String(dateText || "") + "T12:00:00");
+
+    if (Number.isNaN(date.getTime())) {
+      return String(dateText || "");
+    }
+
+    return date.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short"
+    });
+  }
+
+  function renderPanelForecast(data) {
+    var track = qs("[data-weather-forecast-track]");
+    var days = data && Array.isArray(data.days)
+      ? data.days
+      : [];
+
+    if (!track || !days.length) {
+      throw new Error("Forecast data is unavailable.");
+    }
+
+    track.innerHTML = days.map(function renderDay(day) {
+      return [
+        '<article class="weather-forecast-card" role="listitem">',
+        "<strong>", escapeHtml(formatDay(day.date)), "</strong>",
+        "<span>", escapeHtml(day.summary), "</span>",
+        "<span>",
+        escapeHtml(day.minimumC),
+        "–",
+        escapeHtml(day.maximumC),
+        "°C</span>",
+        "<span>Rain ",
+        escapeHtml(Number(day.rainMm || 0).toFixed(1)),
+        " mm</span>",
+        "<span>Wind ",
+        escapeHtml(day.windKmh),
+        " km/h</span>",
+        "</article>"
+      ].join("");
+    }).join("");
+
+    setWeatherUpdated("Updated now");
+    setWeatherStatus(
+      "Forecast loaded for " +
+      String(data.location || "selected region") +
+      "."
+    );
+  }
+
+  function loadWeatherPanelForecast(force) {
+    setWeatherUpdated("Loading");
+    setWeatherStatus("Loading selected region forecast...");
+    renderForecastPlaceholder("Loading forecast...");
+
+    return loadSelectedRegionForecast(Boolean(force))
+      .then(renderPanelForecast)
+      .catch(function forecastError(error) {
+        setWeatherUpdated("Not loaded");
+        setWeatherStatus(
+          error.message ||
+          "Selected region forecast unavailable."
+        );
+        renderForecastPlaceholder(
+          "Forecast unavailable. Open Weather for provider pages."
+        );
+      });
+  }
+
+  function installWarningStateStyles() {
+    var style;
+
+    if (qs("#fieldops-weather-warning-state-fix")) {
+      return;
+    }
+
+    style = document.createElement("style");
+    style.id = "fieldops-weather-warning-state-fix";
+    style.textContent = [
+      ".map-quick-tool.is-weather:not(.has-weather-warning),",
+      ".map-weather-collapsed-button:not(.has-weather-warning){",
+      "border-color:rgba(126,190,235,.48)!important;",
+      "background:linear-gradient(135deg,rgba(29,75,114,.98),",
+      "rgba(8,35,67,.98))!important;",
+      "box-shadow:inset 0 1px 0 rgba(255,255,255,.14),",
+      "0 5px 12px rgba(0,0,0,.22)!important;",
+      "}",
+      ".map-quick-tool.is-weather:not(.has-weather-warning) ",
+      ".map-weather-active-label,",
+      ".map-weather-collapsed-button:not(.has-weather-warning) ",
+      ".map-weather-active-label,",
+      ".map-quick-tool.is-weather:not(.has-weather-warning) ",
+      "[data-metoffice-warning-button],",
+      ".map-weather-collapsed-button:not(.has-weather-warning) ",
+      "[data-metoffice-warning-button]{display:none!important;}",
+      ".map-weather-active-label[hidden],",
+      "[data-metoffice-warning-button][hidden],",
+      "[data-metoffice-warning-card][hidden]{display:none!important;}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function openFullWeather() {
+    window.location.assign(WEATHER_PAGE_URL);
+  }
+
+  function weatherPanelIsOpen() {
+    var panel = qs(".weather-api-panel");
+    return Boolean(panel && !panel.hidden);
+  }
+
+  function bindWeatherPanelControls() {
+    if (controlsBound) {
+      return;
+    }
+
+    controlsBound = true;
+
+    document.addEventListener("click", function handleWeatherClick(event) {
+      var weatherOpen =
+        event.target.closest("[data-weather-panel-open]");
+      var weatherActivate =
+        event.target.closest("[data-weather-activate]");
+      var regionButton =
+        event.target.closest("[data-region-id]");
+
+      if (weatherActivate) {
+        event.preventDefault();
+        event.stopPropagation();
+        openFullWeather();
+        return;
+      }
+
+      if (weatherOpen) {
+        window.setTimeout(function loadAfterPanelOpen() {
+          loadWeatherPanelForecast(false);
+        }, 0);
+        return;
+      }
+
+      if (regionButton && weatherPanelIsOpen()) {
+        window.setTimeout(function reloadSelectedRegion() {
+          loadWeatherPanelForecast(true);
+        }, 250);
+      }
+    }, false);
+  }
+
+  function initWeatherPanelBehaviour() {
+    installWarningStateStyles();
+    bindWeatherPanelControls();
+
+    qsa("[data-weather-activate]").forEach(
+      function configureActivate(button) {
+        button.setAttribute(
+          "aria-label",
+          "Open full Weather provider pages"
+        );
+        button.title = "Open full Weather";
+      }
+    );
   }
 
   window.FieldOpsOSMWeatherMenu = {
@@ -290,10 +540,21 @@
     loadSiteWeather: loadSiteWeather,
     loadRegionForecast: loadRegionForecast,
     loadSelectedRegionForecast: loadSelectedRegionForecast,
-    loadPreseliForecast: loadPreseliForecast,
+    loadPreseliForecast: loadSelectedRegionForecast,
+    loadWeatherPanelForecast: loadWeatherPanelForecast,
     weatherCodeText: weatherCodeText
   };
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initWeatherPanelBehaviour,
+      { once: true }
+    );
+  } else {
+    initWeatherPanelBehaviour();
+  }
 }());
 
 /* Destination: FieldOpsAtlas/Features/maps/OSMweather-menu.js */
-/* End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js | bottom/end of file */
+/* End of file: FieldOpsAtlas/Features/maps/OSMweather-menu.js */
