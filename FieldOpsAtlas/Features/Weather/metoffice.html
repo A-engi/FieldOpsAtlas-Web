@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Met Office Map Images v0.4.2 · FieldOps Atlas Weather</title>
+  <title>Met Office Map Images · FieldOps Atlas Weather</title>
   <link rel="stylesheet" href="styles.css?v=0.3.0-demapped-weather-apis" />
   <link rel="stylesheet" href="metoffice.css?v=0.4.2-default-order-name" />
 </head>
@@ -12,8 +12,8 @@
     <header class="mo-topbar">
       <a class="mo-nav" href="openmeteo.html">‹ Open-Meteo</a>
       <div>
-        <p class="mo-eyebrow">Weather API</p>
         <h1>Met Office Map Images</h1>
+        <p class="mo-eyebrow">Updates: 06:30 and 18:30 UK time</p>
       </div>
       <a class="mo-nav" href="ea-rainfall.html">EA gauges ›</a>
     </header>
@@ -25,19 +25,19 @@
       <a class="provider-tab" href="ea-rainfall.html">EA gauges</a>
     </nav>
 
-    <section class="mo-setup" aria-label="Met Office local credentials">
+    <section class="mo-setup" aria-label="Met Office credentials">
       <label>
         <span>Map Images key</span>
         <input id="moApiKey" type="password" autocomplete="off" placeholder="Stored in this browser only" />
       </label>
       <label>
         <span>Order ID</span>
-        <input id="moOrderId" type="text" autocomplete="off" placeholder="Defaults to Maps-uk1 while building" />
+        <input id="moOrderId" type="text" autocomplete="off" placeholder="maps-uk1" />
       </label>
       <div class="mo-button-row">
         <button id="moSaveSettings" class="mo-primary" type="button">Save</button>
         <button id="moForgetSettings" class="mo-secondary" type="button">Forget</button>
-        <button id="moRefreshOrder" class="mo-secondary" type="button">Refresh order</button>
+        <button id="moRefreshOrder" class="mo-secondary" type="button">Refresh</button>
       </div>
     </section>
 
@@ -59,7 +59,7 @@
       <img id="moImage" class="mo-image" alt="Met Office Map Images preview" hidden />
       <div id="moPlaceholder" class="mo-empty-state">
         <strong>Met Office image</strong>
-        <span>Paste your local key/order, then load a frame. This screen does not use an OSM map.</span>
+        <span>Enter key and order ID.</span>
       </div>
     </section>
 
@@ -71,9 +71,7 @@
   </main>
 
   <script src="weather-display-style.js?v=0.1.2"></script>
-  <script src="app.js?v=0.3.0-demapped-weather-apis"></script>
+  <script src="app.js?v=0.3.1-west-wales-demo-source"></script>
   <script src="metoffice.js?v=0.4.2-default-order-name"></script>
 </body>
 </html>
-<!-- Destination: FieldOpsAtlas/Features/Weather/metoffice.html -->
-<!-- End of file: FieldOpsAtlas/Features/Weather/metoffice.html -->
