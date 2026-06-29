@@ -12,6 +12,8 @@ This feature folder tests:
 
 No internal Atlas operational data belongs here.
 
+Weather site records must be derived only from the anonymised Atlas region datasets. The current Weather source is `data/regions/West-Wales-sites.json`; do not maintain a separate named-location fixture or hardcoded coordinate fallback.
+
 ## Provider notes
 
 ### RainViewer
@@ -67,5 +69,7 @@ FieldOpsAtlas/Features/Weather/README.md
 ## Safety
 
 Do not commit API keys, access notes, contacts, internal links, ports, IPs, spares locations, configuration notes, job details or fault details.
+
+Do not add separate named-location site fixtures. Weather must use the anonymised Atlas region files.
 
 <!-- End of file: FieldOpsAtlas/Features/Weather/README.md -->
