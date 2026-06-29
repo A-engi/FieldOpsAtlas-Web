@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.25-site-input-arrow-restore
+   Version: 1.1.26-south-wales-file-alias
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -14,7 +14,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.25-site-input-arrow-restore";
+  var VERSION = "1.1.26-south-wales-file-alias";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -29,16 +29,24 @@
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
   };
+  var REGION_DATA_FILE_IDS = {
+    "South-Wales": "wenvoe"
+  };
+
+  function regionDataFileId(regionId) {
+    return REGION_DATA_FILE_IDS[String(regionId || "")] || String(regionId || "");
+  }
+
   var DATA_FILES = {
     regions: "../../../data/regions.json",
     regionWalks: function regionWalks(regionId) {
-      return "../../../data/regions/" + encodeURIComponent(regionId) + "-sites.json";
+      return "../../../data/regions/" + encodeURIComponent(regionDataFileId(regionId)) + "-sites.json";
     },
     regionPath: function regionPath(regionId) {
-      return "data/regions/" + encodeURIComponent(regionId) + "-sites.json";
+      return "data/regions/" + encodeURIComponent(regionDataFileId(regionId)) + "-sites.json";
     },
     recyclePath: function recyclePath(regionId) {
-      return "data/recycle-bin/" + encodeURIComponent(regionId) + "-sites-recycle.json";
+      return "data/recycle-bin/" + encodeURIComponent(regionDataFileId(regionId)) + "-sites-recycle.json";
     }
   };
   var DETAIL_FILES = {
@@ -1247,7 +1255,6 @@
     }
 
     removeSatelliteDownloadChevron(record);
-
     parent = linePath.parentNode;
     namespace = linePath.namespaceURI;
     group = document.createElementNS(namespace, "g");
@@ -2248,7 +2255,7 @@
 
   function detailUrlFor(serviceId, regionId) {
     var service = DETAIL_FILES[serviceId] || {};
-    return String(service[regionId] || "");
+    return String(service[regionDataFileId(regionId)] || "");
   }
 
   function loadDetailData(serviceId, regionId) {
