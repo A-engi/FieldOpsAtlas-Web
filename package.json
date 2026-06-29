@@ -1,0 +1,21 @@
+{
+  "name": "fieldopsatlas-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit": "node scripts/check-repo.mjs --audit",
+    "check": "node scripts/check-repo.mjs",
+    "check:js": "node scripts/check-repo.mjs --scope js",
+    "check:json": "node scripts/check-repo.mjs --scope json",
+    "check:html": "node scripts/check-repo.mjs --scope html",
+    "check:links": "node scripts/check-repo.mjs --scope links",
+    "check:refs": "node scripts/check-repo.mjs --scope refs",
+    "check:css": "node scripts/check-repo.mjs --scope css",
+    "check:workflows": "node scripts/check-repo.mjs --scope workflows",
+    "check:secrets": "node scripts/check-repo.mjs --scope secrets"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
