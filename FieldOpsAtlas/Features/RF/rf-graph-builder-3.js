@@ -1,7 +1,7 @@
 /* ==========================================================================
-   FieldOps Atlas RF Builder 3 — full fork lower layer 360
+   FieldOps Atlas RF Builder 3 — two-layer full fork 360
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-3.js
-   Version: 1.1.298-builder-3-full-fork-layer-3-360
+   Version: 1.1.299-builder-3-two-layer-full-fork-360
 
    Geometry:
    - One geometry build, one material, one rendered mountain mesh.
@@ -15,8 +15,8 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.298-builder-3-full-fork-layer-3-360";
-  const MODE = "three-neon-peak-full-fork-layer-3-360-builder-3";
+  const VERSION = "1.1.299-builder-3-two-layer-full-fork-360";
+  const MODE = "three-neon-peak-two-layer-full-fork-360-builder-3";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const LEGACY_KEY_SELECTOR = ".rf-graph-key";
@@ -27,7 +27,7 @@
   const FRONT_AZIMUTH = 0;
   let dependencyPromise = null;
 
-  const META = Object.freeze({"name":"Neon Peak full fork lower layer 360","version":"1.0.0","builderVersion":"1.1.298-builder-3-full-fork-layer-3-360","source":"Based on the v1.1.297 stronger-cyan build. Keeps the solid opaque occluded interior, preserves the summit and shoulder lighting, and adds a true Layer 3 across six smaller lower crest families so the full forked ridge structures light up front and back during 360 degree rotation.","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"summit plus two upper shoulders plus six lower crest clusters with fork coverage front and back","peakCount":7,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main peak; unchanged byte-for-byte.","layer2":"Four source-identified secondary peaks; each receives the Layer-1 colour ramp independently.","layer3":"Six smaller lower crest families receive tight apex targeting, full fork illumination, and descending cyan ridge veins on both the front and rear faces."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}],"transparent":false,"shadingMode":"dark filled rock with stronger stacked cyan bands across nine peaks including six lower fork clusters and a bright cyan rim outline","majorPeakCount":9,"majorPeaks":[{"name":"main","centreXZ":[0.0,-0.005],"baseY":0.06,"peakY":0.5086992847261541,"radiusCore":0.118,"radiusOuter":0.29,"strength":1.0},{"name":"upper-left-shoulder","centreXZ":[-0.16,0.03],"baseY":0.02,"peakY":0.315,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"upper-right-shoulder","centreXZ":[0.158,0.034],"baseY":0.02,"peakY":0.312,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"front-left-fork","centreXZ":[-0.315,0.262],"baseY":-0.155,"peakY":0.032,"radiusCore":0.062,"radiusOuter":0.192,"strength":0.94},{"name":"front-centre-lower","centreXZ":[0.0,0.198],"baseY":-0.165,"peakY":0.012,"radiusCore":0.052,"radiusOuter":0.156,"strength":0.88},{"name":"front-right-fork","centreXZ":[0.322,0.262],"baseY":-0.155,"peakY":0.037,"radiusCore":0.068,"radiusOuter":0.208,"strength":0.96},{"name":"rear-left-fork","centreXZ":[-0.312,-0.272],"baseY":-0.155,"peakY":0.035,"radiusCore":0.064,"radiusOuter":0.194,"strength":0.92},{"name":"rear-centre-lower","centreXZ":[0.0,-0.206],"baseY":-0.165,"peakY":0.014,"radiusCore":0.052,"radiusOuter":0.158,"strength":0.86},{"name":"rear-right-fork","centreXZ":[0.314,-0.279],"baseY":-0.155,"peakY":0.038,"radiusCore":0.068,"radiusOuter":0.206,"strength":0.94}],"sideVeins":"summit-driven fade with two upper shoulders and six lower fork clusters spanning the front and rear faces","sideVeinLength":"main summit reaches into the upper shoulders; all six lower crest clusters keep local stacked bands and full fork branch lighting","visibleLayers":3,"renderMeshes":1,"outlineMode":"single-material view-space rim; no outline mesh or extra render layer","opaqueInterior":true,"integratedOcclusionGeometry":true,"innerOcclusionXZScale":0.965,"innerOcclusionYScale":0.97,"renderMaterials":1,"runtimeAvailabilityFix":true,"runtimeAvailabilityBug":"v1.1.295 referenced retainedFaceCount, index, position, bounds and output arrays before declaration inside createSourceGeometry."});
+  const META = Object.freeze({"name":"Neon Peak two-layer full fork 360","version":"1.0.0","builderVersion":"1.1.299-builder-3-two-layer-full-fork-360","source":"Based on v1.1.298. Removes the separate Layer 3 shader pass. Layer 1 remains the approved main summit. Layer 2 now contains the two upper shoulders and all six lower fork clusters, including their full fork branches on the front and rear of the 360 degree mountain.","texturedSourceFile":"Meshy_AI_Neon_Peak_0627144328_texture.glb","sourceVertexCount":8478,"sourceFaceCount":14062,"vertexCount":8143,"faceCount":12816,"indexCount":38448,"removedInternalPlaneFaces":1246,"removedFaceCount":1246,"mappingRule":"Removed the narrow buried plane under the peaks whose texture statistically matches the original bottom plate.","internalPlaneYRange":[-0.215,-0.135],"bottomTextureDistanceThreshold":2.5,"addedGeometry":false,"addedBaseGeometry":false,"opaqueSurface":true,"positionComponentType":"Uint16 quantized to Float32 at runtime","colourComponentType":"Uint8 normalized baked vertex colour","indexComponentType":"Uint16","boundsMin":[-0.7897142390143058,-0.4,-0.7853454034795696],"boundsMax":[0.7559676500151892,0.5086992847261541,0.7824623450897789],"quantScale":[2.3585593790028153e-05,1.3865862283148762e-05,2.3923212765230006e-05],"center":[-0.016873294499558322,0.054349642363077044,-0.0014415291948953746],"size":[1.545681889029495,0.9086992847261541,1.5678077485693485],"isWatertight":false,"quantizationErrorModelUnits":{"mean":0.0,"p95":0.0,"max":0.0},"runtimeTexture":false,"textureLayerAdded":false,"bakedVertexColour":true,"peakColourBlend":{"lowerTerrainTextureContribution":0.1,"fullTextureFromNormalisedHeight":0.72,"transitionStartsAtNormalisedHeight":0.28},"geometryChanged":false,"peakColourMode":"exactly two layers: main summit; then two upper shoulders plus six lower fork clusters front and rear","peakCount":7,"peaks":[{"centreXZ":[-0.0025720130174635668,0.003742112396228074],"radiusCore":0.04379264493519848,"radiusOuter":0.08054548592230482,"baseY":0.21812627472048862,"peakY":0.5086992847261541,"highVertexCount":285},{"centreXZ":[-0.1134630463660021,0.0006239190791953193],"radiusCore":0.05350222603910863,"radiusOuter":0.1050093855955903,"baseY":0.10095973842788164,"peakY":0.38756711182056647,"highVertexCount":257},{"centreXZ":[0.00023366340318945866,-0.1167867817239937],"radiusCore":0.05651644809623027,"radiusOuter":0.1027571783567823,"baseY":0.10177782430258742,"peakY":0.37829084995314,"highVertexCount":231},{"centreXZ":[0.11250892653245059,0.007148597383246233],"radiusCore":0.05447403853113857,"radiusOuter":0.10828913524492952,"baseY":0.10091814084103212,"peakY":0.36237284005208525,"highVertexCount":220},{"centreXZ":[-0.00819425664095668,0.12464548333409979],"radiusCore":0.05585610126593689,"radiusOuter":0.10155654775624888,"baseY":0.09993366461892861,"peakY":0.34967171020072096,"highVertexCount":256}],"geometryReferenceVersion":"1.1.240-builder-3-internal-plane-removed-13k","positionsSha256":"743e85509559f3b9e86899c9904c25f0c55acb8aad7288bc6497afc99129b389","indicesSha256":"179f8db713d90a8458c705a51a159ef3cbd46deb6a0cac81303cc66beb4a645a","mainPeakColourChanged":false,"secondaryPeakCount":4,"secondaryPeakLookup":"Uploaded GLB high-elevation groups; exact source apexes mapped to retained geometry.","sourceMainApexXYZ":[0.001491,0.521219,-0.000401],"mappedMainApexXYZ":[0.0027617123306401536,0.5086992847261541,-0.0006640247800253629],"secondaryPeaks":[{"sourceGroupCentreXZ":[-0.1389,-0.0076],"sourceApexXYZ":[-0.078398,0.378148,0.00011],"mappedApexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":0.075,"coreRadius":0.056353437349480166,"outerRadius":0.11571943055781153,"changedVertexCount":227},{"sourceGroupCentreXZ":[0.1293,0.0061],"sourceApexXYZ":[0.055423,0.407203,0.000208],"mappedApexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":0.075,"coreRadius":0.058657359157477496,"outerRadius":0.12255162993026053,"changedVertexCount":214},{"sourceGroupCentreXZ":[0.0013,0.1519],"sourceApexXYZ":[0.002606,0.353695,0.085314],"mappedApexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":0.075,"coreRadius":0.06643181712826672,"outerRadius":0.12062755993172357,"changedVertexCount":209},{"sourceGroupCentreXZ":[-0.0027,-0.1274],"sourceApexXYZ":[0.00277,0.402906,-0.053165],"mappedApexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":0.075,"coreRadius":0.06693372515836765,"outerRadius":0.13159058221864872,"changedVertexCount":221}],"colourLayers":{"layer1":"Approved main summit; unchanged.","layer2":"Two upper shoulders and six lower fork families share one secondary cyan band and vein treatment around the complete 360 degree mountain."},"layer1MainPeakColourChanged":false,"layer2SecondaryPeakCount":4,"layer2ChangedVertexCount":1185,"layer2Peaks":[{"group":1,"apexXYZ":[-0.08688712966525691,0.3510444305667527,-0.005687899460723678],"baseY":-0.015,"fullColourRadius":0.08999494326786596,"outerFadeRadius":0.1551636952894241,"changedVertexCount":305},{"group":2,"apexXYZ":[0.07337698013798444,0.36237284005208525,-0.004132890630983765],"baseY":-0.015,"fullColourRadius":0.09905304420443153,"outerFadeRadius":0.17078111069729576,"changedVertexCount":290},{"group":3,"apexXYZ":[-0.014408599948500411,0.32553124396575894,0.09120111223845784],"baseY":-0.015,"fullColourRadius":0.105,"outerFadeRadius":0.18372953148707472,"changedVertexCount":292},{"group":4,"apexXYZ":[0.0026909555492700132,0.37829084995314,-0.06296007082068433],"baseY":-0.015,"fullColourRadius":0.09927140704538673,"outerFadeRadius":0.17115759835411506,"changedVertexCount":298}],"transparent":false,"shadingMode":"dark filled rock with exactly two colour layers: main summit and eight surrounding shoulder/fork groups, plus a bright cyan rim outline","majorPeakCount":9,"majorPeaks":[{"name":"main","centreXZ":[0.0,-0.005],"baseY":0.06,"peakY":0.5086992847261541,"radiusCore":0.118,"radiusOuter":0.29,"strength":1.0},{"name":"upper-left-shoulder","centreXZ":[-0.16,0.03],"baseY":0.02,"peakY":0.315,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"upper-right-shoulder","centreXZ":[0.158,0.034],"baseY":0.02,"peakY":0.312,"radiusCore":0.09,"radiusOuter":0.195,"strength":0.96},{"name":"front-left-fork","centreXZ":[-0.315,0.262],"baseY":-0.155,"peakY":0.032,"radiusCore":0.062,"radiusOuter":0.192,"strength":0.94},{"name":"front-centre-lower","centreXZ":[0.0,0.198],"baseY":-0.165,"peakY":0.012,"radiusCore":0.052,"radiusOuter":0.156,"strength":0.88},{"name":"front-right-fork","centreXZ":[0.322,0.262],"baseY":-0.155,"peakY":0.037,"radiusCore":0.068,"radiusOuter":0.208,"strength":0.96},{"name":"rear-left-fork","centreXZ":[-0.312,-0.272],"baseY":-0.155,"peakY":0.035,"radiusCore":0.064,"radiusOuter":0.194,"strength":0.92},{"name":"rear-centre-lower","centreXZ":[0.0,-0.206],"baseY":-0.165,"peakY":0.014,"radiusCore":0.052,"radiusOuter":0.158,"strength":0.86},{"name":"rear-right-fork","centreXZ":[0.314,-0.279],"baseY":-0.155,"peakY":0.038,"radiusCore":0.068,"radiusOuter":0.206,"strength":0.94}],"sideVeins":"Layer 2 uses one shared secondary vein treatment across two upper shoulders and six lower fork clusters on the front and rear faces","sideVeinLength":"Layer 2 keeps the complete lower fork branches while remaining part of the same secondary lighting layer","visibleLayers":2,"renderMeshes":1,"outlineMode":"single-material view-space rim; no outline mesh or extra render layer","opaqueInterior":true,"integratedOcclusionGeometry":true,"innerOcclusionXZScale":0.965,"innerOcclusionYScale":0.97,"renderMaterials":1,"runtimeAvailabilityFix":true,"runtimeAvailabilityBug":"v1.1.295 referenced retainedFaceCount, index, position, bounds and output arrays before declaration inside createSourceGeometry.","runtimeLayer2PeakCount":8});
 
   const POSITIONS_BASE64 = [
     "SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
@@ -2206,8 +2206,8 @@
     geometry.computeBoundingBox();
     geometry.computeBoundingSphere();
 
-    geometry.userData.rfFullForkLayer3360Mesh = true;
-    geometry.userData.rfFullForkLayer3360MeshVersion = VERSION;
+    geometry.userData.rfTwoLayerFullFork360Mesh = true;
+    geometry.userData.rfTwoLayerFullFork360MeshVersion = VERSION;
     geometry.userData.rfRetainedFaceCount = retainedFaceCount;
     geometry.userData.rfRemovedInvalidFaceCount = removedInvalidFaceCount;
     geometry.userData.rfNeutralisedHorizontalFaceCount = (
@@ -2316,70 +2316,43 @@
         float peakBandMask(int index, vec3 position, float faceLight) {
           vec2 delta = position.xz - uPeakCenters[index];
           float distanceToPeak = length(delta);
-          float radial = 1.0 - smoothstep(uPeakCoreRadius[index] * 0.86, uPeakOuterRadius[index] * 1.04, distanceToPeak);
+          float lowerForkGroup = index >= 3 ? 1.0 : 0.0;
+          float innerRadius = mix(uPeakCoreRadius[index] * 0.86, uPeakCoreRadius[index] * 0.30, lowerForkGroup);
+          float outerRadius = mix(uPeakOuterRadius[index] * 1.04, uPeakOuterRadius[index] * 1.24, lowerForkGroup);
+          float radial = 1.0 - smoothstep(innerRadius, outerRadius, distanceToPeak);
           float localHeight = clamp((position.y - uPeakBaseY[index]) / max(uPeakPeakY[index] - uPeakBaseY[index], 0.0001), 0.0, 1.0);
           float bands = 0.0;
-          float w = 0.026;
-          bands += pulse(0.16, 0.24, localHeight, w);
-          bands += pulse(0.28, 0.36, localHeight, w);
-          bands += pulse(0.40, 0.49, localHeight, w);
-          bands += pulse(0.53, 0.62, localHeight, w);
-          bands += pulse(0.66, 0.75, localHeight, w);
-          bands += pulse(0.79, 0.88, localHeight, w);
-          bands += pulse(0.90, 0.985, localHeight, w * 0.85);
-          float topBias = smoothstep(0.10, 0.96, localHeight);
-          return radial * clamp(bands, 0.0, 1.35) * (0.46 + faceLight * 0.54) * (0.45 + topBias * 0.55) * uPeakStrength[index];
+          float w = mix(0.026, 0.036, lowerForkGroup);
+          bands += pulse(0.12, 0.22, localHeight, w);
+          bands += pulse(0.28, 0.38, localHeight, w);
+          bands += pulse(0.44, 0.55, localHeight, w);
+          bands += pulse(0.61, 0.72, localHeight, w);
+          bands += pulse(0.78, 0.89, localHeight, w * 0.92);
+          bands += pulse(0.91, 0.985, localHeight, w * 0.82);
+          float topBias = smoothstep(0.08, 0.96, localHeight);
+          float heightBias = mix(0.45 + topBias * 0.55, 0.66 + topBias * 0.34, lowerForkGroup);
+          return radial * clamp(bands, 0.0, 1.35) * (0.46 + faceLight * 0.54) * heightBias * uPeakStrength[index];
         }
 
         float peakVeinMask(int index, vec3 position, float topLight, float frontLight) {
           vec2 delta = position.xz - uPeakCenters[index];
           float distanceToPeak = length(delta);
+          float lowerForkGroup = index >= 3 ? 1.0 : 0.0;
           float outerRadius = max(uPeakOuterRadius[index], 0.0001);
-          float radial = 1.0 - smoothstep(uPeakCoreRadius[index] * 0.42, outerRadius * 1.16, distanceToPeak);
+          float innerRadius = mix(uPeakCoreRadius[index] * 0.42, uPeakCoreRadius[index] * 0.18, lowerForkGroup);
+          float outerReach = mix(outerRadius * 1.16, outerRadius * 1.34, lowerForkGroup);
+          float radial = 1.0 - smoothstep(innerRadius, outerReach, distanceToPeak);
           float localHeight = clamp((position.y - uPeakBaseY[index]) / max(uPeakPeakY[index] - uPeakBaseY[index], 0.0001), 0.0, 1.0);
           float lengthMask = smoothstep(0.02, 0.12, localHeight) * (1.0 - smoothstep(0.985, 1.0, localHeight));
           float sideMask = smoothstep(0.06, 0.88, 1.0 - topLight) * (0.56 + frontLight * 0.44);
           float angle = atan(delta.y, delta.x);
           float radiusPhase = distanceToPeak / outerRadius;
-          float seamA = pow(0.5 + 0.5 * cos(angle * 6.0 + radiusPhase * 3.8), 10.0);
-          float seamB = pow(0.5 + 0.5 * cos(angle * 9.0 - radiusPhase * 2.8 + 1.2), 13.0) * 0.48;
-          return radial * lengthMask * (0.24 + sideMask * 0.76) * clamp(seamA + seamB, 0.0, 1.0) * uPeakStrength[index];
+          float seamA = pow(0.5 + 0.5 * cos(angle * mix(6.0, 4.0, lowerForkGroup) + radiusPhase * 3.8), mix(10.0, 7.0, lowerForkGroup));
+          float seamB = pow(0.5 + 0.5 * cos(angle * mix(9.0, 7.0, lowerForkGroup) - radiusPhase * 2.8 + 1.2), mix(13.0, 10.0, lowerForkGroup)) * mix(0.48, 0.78, lowerForkGroup);
+          float seamC = pow(0.5 + 0.5 * cos(angle * 10.0 + radiusPhase * 4.1 + 1.6), 15.0) * 0.42 * lowerForkGroup;
+          return radial * lengthMask * (0.24 + sideMask * 0.76) * clamp(seamA + seamB + seamC, 0.0, 1.0) * uPeakStrength[index];
         }
 
-        float lowerCrestBandMask(int index, vec3 position, float faceLight, float topLight) {
-          if (index < 3) return 0.0;
-          vec2 delta = position.xz - uPeakCenters[index];
-          float distanceToPeak = length(delta);
-          float outerRadius = max(uPeakOuterRadius[index], 0.0001);
-          float radial = 1.0 - smoothstep(uPeakCoreRadius[index] * 0.26, outerRadius * 1.16, distanceToPeak);
-          float localHeight = clamp((position.y - uPeakBaseY[index]) / max(uPeakPeakY[index] - uPeakBaseY[index], 0.0001), 0.0, 1.0);
-          float w = 0.034;
-          float bands = 0.0;
-          bands += pulse(0.12, 0.22, localHeight, w);
-          bands += pulse(0.28, 0.40, localHeight, w);
-          bands += pulse(0.48, 0.60, localHeight, w);
-          bands += pulse(0.68, 0.82, localHeight, w * 0.92);
-          float crestBias = smoothstep(0.04, 0.88, 1.0 - topLight);
-          float lightBias = 0.48 + faceLight * 0.52;
-          return radial * clamp(bands, 0.0, 1.25) * (0.44 + crestBias * 0.56) * lightBias * uPeakStrength[index];
-        }
-
-        float lowerForkMask(int index, vec3 position, float topLight, float frontLight) {
-          if (index < 3) return 0.0;
-          vec2 delta = position.xz - uPeakCenters[index];
-          float distanceToPeak = length(delta);
-          float outerRadius = max(uPeakOuterRadius[index], 0.0001);
-          float radial = 1.0 - smoothstep(uPeakCoreRadius[index] * 0.18, outerRadius * 1.30, distanceToPeak);
-          float localHeight = clamp((position.y - uPeakBaseY[index]) / max(uPeakPeakY[index] - uPeakBaseY[index], 0.0001), 0.0, 1.0);
-          float lengthMask = smoothstep(0.04, 0.18, localHeight) * (1.0 - smoothstep(0.92, 1.0, localHeight));
-          float sideMask = smoothstep(0.06, 0.92, 1.0 - topLight) * (0.44 + frontLight * 0.56);
-          float angle = atan(delta.y, delta.x);
-          float radiusPhase = distanceToPeak / outerRadius;
-          float branchA = pow(0.5 + 0.5 * cos(angle * 4.0 + radiusPhase * 3.2), 7.0);
-          float branchB = pow(0.5 + 0.5 * cos(angle * 7.0 - radiusPhase * 2.7 + 0.8), 10.0) * 0.78;
-          float branchC = pow(0.5 + 0.5 * cos(angle * 10.0 + radiusPhase * 4.1 + 1.6), 15.0) * 0.42;
-          return radial * lengthMask * (0.28 + sideMask * 0.72) * clamp(branchA + branchB + branchC, 0.0, 1.0) * uPeakStrength[index];
-        }
 
         void main() {
           if (vInteriorMask > 0.5 || !gl_FrontFacing) {
@@ -2405,32 +2378,20 @@
           float areaMask = 0.0;
           float bandMask = 0.0;
           float veinMask = 0.0;
-          float lowerBandMask = 0.0;
-          float lowerForkMaskValue = 0.0;
           for (int i = 0; i < 9; i += 1) {
             if (i >= uPeakCount) break;
             areaMask += peakAreaMask(i, vModelPosition);
             bandMask += peakBandMask(i, vModelPosition, faceLight);
             veinMask += peakVeinMask(i, vModelPosition, topLight, frontLight);
-            lowerBandMask += lowerCrestBandMask(i, vModelPosition, faceLight, topLight);
-            lowerForkMaskValue += lowerForkMask(i, vModelPosition, topLight, frontLight);
           }
           areaMask = clamp(areaMask, 0.0, 1.0);
           bandMask = clamp(bandMask, 0.0, 1.0);
           veinMask = clamp(veinMask, 0.0, 1.0);
-          lowerBandMask = clamp(lowerBandMask, 0.0, 1.0);
-          lowerForkMaskValue = clamp(lowerForkMaskValue, 0.0, 1.0);
 
           colour += uPeakFill * areaMask * 0.46;
-          colour += uAccent * bandMask * 0.58;
-          colour += uAccent * veinMask * 0.28;
-          colour += uGlow * bandMask * smoothstep(0.52, 1.0, h) * faceLight * 0.12;
-
-          colour += uPeakFill * lowerBandMask * 0.12;
-          colour += uAccent * lowerBandMask * 0.66;
-          colour += uAccent * lowerForkMaskValue * 0.48;
-          colour += uGlow * lowerBandMask * 0.12;
-          colour += uGlow * lowerForkMaskValue * (0.05 + faceLight * 0.10);
+          colour += uAccent * bandMask * 0.64;
+          colour += uAccent * veinMask * 0.38;
+          colour += uGlow * bandMask * smoothstep(0.42, 1.0, h) * faceLight * 0.14;
 
           float viewDot = max(dot(faceNormal, viewDirection), 0.0);
           float rim = pow(clamp(1.0 - viewDot, 0.0, 1.0), 1.55);
@@ -2443,7 +2404,7 @@
         }
       `
     });
-    material.name = "rf-full-fork-layer-3-360-material";
+    material.name = "rf-two-layer-full-fork-360-material";
     return material;
   }
 
@@ -2470,10 +2431,10 @@
       material.uniforms.uPeakStrength.value[index] = peak.strength;
     });
     const mountain = new THREE.Mesh(geometry, material);
-    mountain.name = "rf-full-fork-layer-3-360-mesh";
+    mountain.name = "rf-two-layer-full-fork-360-mesh";
     mountain.renderOrder = 0;
-    mountain.userData.rfFullForkLayer3360Mesh = true;
-    mountain.userData.rfFullForkLayer3360MeshVersion = VERSION;
+    mountain.userData.rfTwoLayerFullFork360Mesh = true;
+    mountain.userData.rfTwoLayerFullFork360MeshVersion = VERSION;
     return mountain;
   }
 
