@@ -3,14 +3,21 @@ name: Fetch Met Office map images
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 5,17 * * *"
+    - cron: "30 6,18 * * *"
+      timezone: "Europe/London"
 
 permissions:
   contents: write
 
+concurrency:
+  group: fetch-metoffice-map-images
+  cancel-in-progress: false
+
 jobs:
   fetch-metoffice-map-images:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
