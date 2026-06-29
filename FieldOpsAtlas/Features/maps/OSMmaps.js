@@ -1,20 +1,21 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.26-south-wales-file-alias
+   Version: 1.1.27-site-path-moving-chevrons-original-style
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
    - Render or clear map clusters only after the cluster selection changes.
    - Delegate all panel and button presentation to OSMpanes.js.
    - Delegate weather requests and parsing to OSMweather-menu.js.
+   - Animate directional chevrons from feeding sites to receiving sites on physical cluster paths.
    - Use FieldOpsEditor from the shared shell for online GitHub writes.
    ========================================================================== */
 
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.26-south-wales-file-alias";
+  var VERSION = "1.1.27-site-path-moving-chevrons-original-style";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -25,6 +26,8 @@
   var ATTACHED_INPUT_RADIUS_PX = 17;
   var SATELLITE_DOWNLOAD_TRAVEL_MS = 4000;
   var SATELLITE_DOWNLOAD_HOLD_MS = 2000;
+  var SITE_PATH_CHEVRON_TRAVEL_MS = 4000;
+  var SITE_PATH_CHEVRON_HOLD_MS = 2000;
   var INPUT_ICON_URLS = {
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
@@ -99,11 +102,13 @@
       virtualLayer: null,
       siteLabelLayer: null,
       pathLabelLayer: null,
+      pathChevronLayer: null,
       activeCluster: null,
       activeWalks: [],
       activePaths: [],
       siteDetails: new Map(),
       pathLines: new Map(),
+      pathChevrons: new Map(),
       virtualEndpoints: new Map(),
       virtualMarkers: new Map(),
       attachedInputs: new Map(),
@@ -111,6 +116,10 @@
       satelliteDownloadStartedAt: 0,
       satelliteDownloadPausedAt: 0,
       satelliteDownloadPaused: false,
+      sitePathChevronFrame: 0,
+      sitePathChevronStartedAt: 0,
+      sitePathChevronPausedAt: 0,
+      sitePathChevronPaused: false,
       overlayFrame: 0,
       selectedPathId: "",
       serviceId: "",
@@ -1046,6 +1055,232 @@
     };
   }
 
+  function sitePathChevronIcon(serviceId, angleDegrees) {
+    var service = String(serviceId || "dtt").toLowerCase();
+    var rotation = Number(angleDegrees || 0);
+
+    return window.L.divIcon({
+      className:
+        "osmmaps-rf-site-path-chevron-icon is-" +
+        escapeHtml(service),
+      html: [
+        '<svg width="12" height="12" viewBox="0 0 12 12" ',
+        'aria-hidden="true" focusable="false" style="display:block;',
+        'transform:rotate(',
+        escapeHtml(rotation),
+        'deg);transform-origin:center">',
+        '<path d="M2 2 L10 6 L2 10" transform="translate(.55 .7)" ',
+        'fill="none" stroke="#050505" stroke-opacity=".78" ',
+        'stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>',
+        '<path d="M2 2 L10 6 L2 10" fill="none" stroke="#d6a43a" ',
+        'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+        '</svg>'
+      ].join(""),
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+  }
+
+  function ensureSitePathChevronMarker(record, latlng, angleDegrees) {
+    if (!record || !state.rf.pathChevronLayer) {
+      return null;
+    }
+
+    if (!record.marker) {
+      record.marker = window.L.marker(latlng, {
+        pane: "fieldopsRfPathChevrons",
+        icon: sitePathChevronIcon(
+          record.path && record.path.serviceType,
+          angleDegrees
+        ),
+        interactive: false,
+        keyboard: false,
+        opacity: 1
+      }).addTo(state.rf.pathChevronLayer);
+      record.angleDegrees = angleDegrees;
+      return record.marker;
+    }
+
+    record.marker.setLatLng(latlng);
+
+    if (
+      !Number.isFinite(Number(record.angleDegrees)) ||
+      Math.abs(Number(record.angleDegrees) - angleDegrees) > 0.5
+    ) {
+      record.marker.setIcon(
+        sitePathChevronIcon(
+          record.path && record.path.serviceType,
+          angleDegrees
+        )
+      );
+      record.angleDegrees = angleDegrees;
+    }
+
+    return record.marker;
+  }
+
+  function prefersReducedPathMotion() {
+    return Boolean(
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  function stopSitePathChevronAnimation() {
+    if (state.rf.sitePathChevronFrame) {
+      window.cancelAnimationFrame(state.rf.sitePathChevronFrame);
+      state.rf.sitePathChevronFrame = 0;
+    }
+
+    state.rf.sitePathChevronStartedAt = 0;
+    state.rf.sitePathChevronPausedAt = 0;
+    state.rf.sitePathChevronPaused = false;
+  }
+
+  function pauseSitePathChevronAnimation() {
+    if (state.rf.sitePathChevronPaused) {
+      return;
+    }
+
+    state.rf.sitePathChevronPaused = true;
+    state.rf.sitePathChevronPausedAt =
+      window.performance &&
+      typeof window.performance.now === "function"
+        ? window.performance.now()
+        : Date.now();
+
+    if (state.rf.sitePathChevronFrame) {
+      window.cancelAnimationFrame(state.rf.sitePathChevronFrame);
+      state.rf.sitePathChevronFrame = 0;
+    }
+  }
+
+  function resumeSitePathChevronAnimation() {
+    var now;
+
+    if (!state.rf.sitePathChevronPaused) {
+      startSitePathChevronAnimation();
+      return;
+    }
+
+    now = window.performance &&
+      typeof window.performance.now === "function"
+        ? window.performance.now()
+        : Date.now();
+
+    if (
+      state.rf.sitePathChevronStartedAt &&
+      state.rf.sitePathChevronPausedAt
+    ) {
+      state.rf.sitePathChevronStartedAt +=
+        now - state.rf.sitePathChevronPausedAt;
+    }
+
+    state.rf.sitePathChevronPaused = false;
+    state.rf.sitePathChevronPausedAt = 0;
+    startSitePathChevronAnimation();
+  }
+
+  function renderSitePathChevrons(timestamp) {
+    var cycleDuration =
+      SITE_PATH_CHEVRON_TRAVEL_MS +
+      SITE_PATH_CHEVRON_HOLD_MS;
+    var reducedMotion = prefersReducedPathMotion();
+    var activeCount = 0;
+
+    state.rf.sitePathChevronFrame = 0;
+
+    if (
+      state.rf.sitePathChevronPaused ||
+      !state.map ||
+      !state.rf.pathChevrons.size
+    ) {
+      return;
+    }
+
+    if (!state.rf.sitePathChevronStartedAt) {
+      state.rf.sitePathChevronStartedAt = timestamp;
+    }
+
+    state.rf.pathChevrons.forEach(
+      function moveSitePathChevron(record) {
+        var fromPoint;
+        var toPoint;
+        var elapsed;
+        var progress;
+        var currentPoint;
+        var currentLatLng;
+        var angleDegrees;
+
+        if (
+          !record ||
+          !record.fromWalk ||
+          !record.toWalk ||
+          record.fromWalk.isVirtual ||
+          record.toWalk.isVirtual
+        ) {
+          return;
+        }
+
+        fromPoint = state.map.latLngToContainerPoint([
+          record.fromWalk.lat,
+          record.fromWalk.lng
+        ]);
+        toPoint = state.map.latLngToContainerPoint([
+          record.toWalk.lat,
+          record.toWalk.lng
+        ]);
+
+        elapsed =
+          (timestamp - state.rf.sitePathChevronStartedAt) %
+          cycleDuration;
+
+        progress = reducedMotion
+          ? 0.55
+          : elapsed < SITE_PATH_CHEVRON_TRAVEL_MS
+            ? elapsed / SITE_PATH_CHEVRON_TRAVEL_MS
+            : 1;
+
+        currentPoint = window.L.point(
+          fromPoint.x + (toPoint.x - fromPoint.x) * progress,
+          fromPoint.y + (toPoint.y - fromPoint.y) * progress
+        );
+        currentLatLng =
+          state.map.containerPointToLatLng(currentPoint);
+        angleDegrees =
+          Math.atan2(
+            toPoint.y - fromPoint.y,
+            toPoint.x - fromPoint.x
+          ) * 180 / Math.PI;
+
+        ensureSitePathChevronMarker(
+          record,
+          currentLatLng,
+          angleDegrees
+        );
+        activeCount += 1;
+      }
+    );
+
+    if (activeCount && !reducedMotion) {
+      state.rf.sitePathChevronFrame =
+        window.requestAnimationFrame(renderSitePathChevrons);
+    }
+  }
+
+  function startSitePathChevronAnimation() {
+    if (
+      state.rf.sitePathChevronPaused ||
+      state.rf.sitePathChevronFrame ||
+      !state.rf.pathChevrons.size
+    ) {
+      return;
+    }
+
+    state.rf.sitePathChevronFrame =
+      window.requestAnimationFrame(renderSitePathChevrons);
+  }
+
   function ensurePane(name, zIndex) {
     var pane = state.map.getPane(name);
 
@@ -1059,6 +1294,7 @@
 
   function pauseRfAttachedInputLayoutDuringZoom() {
     pauseSatelliteDownloadAnimation();
+    pauseSitePathChevronAnimation();
 
     if (state.rf.overlayFrame) {
       window.cancelAnimationFrame(state.rf.overlayFrame);
@@ -1072,6 +1308,7 @@
       layoutRfAttachedInputs();
       scheduleRfLabelLayout();
       resumeSatelliteDownloadAnimation();
+      resumeSitePathChevronAnimation();
     });
   }
 
@@ -1082,6 +1319,7 @@
 
     ensurePane("fieldopsRfPaths", 430);
     ensurePane("fieldopsRfAttachedInputs", 612);
+    ensurePane("fieldopsRfPathChevrons", 620);
     ensurePane("fieldopsRfEndpoints", 625);
     ensurePane("fieldopsRfLabels", 650);
 
@@ -1091,6 +1329,7 @@
       state.rf.virtualLayer = window.L.layerGroup().addTo(state.map);
       state.rf.siteLabelLayer = window.L.layerGroup().addTo(state.map);
       state.rf.pathLabelLayer = window.L.layerGroup().addTo(state.map);
+      state.rf.pathChevronLayer = window.L.layerGroup().addTo(state.map);
     }
 
     if (!state.rf.mapEventsBound) {
@@ -1106,6 +1345,7 @@
   function clearRfOverlay() {
     setRfPathMode(false);
     stopSatelliteDownloadAnimation();
+    stopSitePathChevronAnimation();
 
     state.rf.attachedInputs.forEach(
       function clearSatelliteDownload(record) {
@@ -1118,7 +1358,8 @@
       state.rf.endpointLayer,
       state.rf.virtualLayer,
       state.rf.siteLabelLayer,
-      state.rf.pathLabelLayer
+      state.rf.pathLabelLayer,
+      state.rf.pathChevronLayer
     ].forEach(function clearLayer(layer) {
       if (layer) {
         layer.clearLayers();
@@ -1130,6 +1371,7 @@
     state.rf.activePaths = [];
     state.rf.siteDetails = new Map();
     state.rf.pathLines = new Map();
+    state.rf.pathChevrons = new Map();
     state.rf.virtualEndpoints = new Map();
     state.rf.virtualMarkers = new Map();
     state.rf.attachedInputs = new Map();
@@ -1897,6 +2139,23 @@
         );
       }
 
+      if (
+        !attached &&
+        displayFrom &&
+        displayTo &&
+        !displayFrom.isVirtual &&
+        !displayTo.isVirtual
+      ) {
+        state.rf.pathChevrons.set(String(path.id), {
+          path: path,
+          line: line,
+          fromWalk: displayFrom,
+          toWalk: displayTo,
+          marker: null,
+          angleDegrees: null
+        });
+      }
+
       line.on("click", function selectLine(event) {
         selectRfPath(path.id, true, event.latlng);
       });
@@ -1937,6 +2196,7 @@
     setRfPathMode(state.rf.pathLines.size > 0);
     layoutRfAttachedInputs();
     startSatelliteDownloadAnimation();
+    startSitePathChevronAnimation();
     scheduleRfLabelLayoutStaged();
   }
 
