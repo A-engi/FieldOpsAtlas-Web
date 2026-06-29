@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas OSM maps
    File: FieldOpsAtlas/Features/maps/OSMmaps.js
-   Version: 1.1.28-site-path-group-cycle
+   Version: 1.1.29-site-path-group-cycle-original-chevron
    Purpose:
    - Own the Leaflet map, regions, sites, service clusters, RF paths, labels, and fitting.
    - Keep service-menu opening fast by returning cached cluster metadata without rerendering.
@@ -15,7 +15,7 @@
 (function fieldOpsOSMMaps() {
   "use strict";
 
-  var VERSION = "1.1.28-site-path-group-cycle";
+  var VERSION = "1.1.29-site-path-group-cycle-original-chevron";
   var REGION_TOAST_MS = 3000;
   var UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   var UK_CENTER = [54.55, -3.15];
@@ -27,6 +27,8 @@
   var SATELLITE_DOWNLOAD_TRAVEL_MS = 4000;
   var SATELLITE_DOWNLOAD_HOLD_MS = 2000;
   var SITE_PATH_CHEVRON_SPEED_PX_PER_SECOND = 72;
+  var SITE_PATH_CHEVRON_ICON_URL =
+    "../../../data/icons/path-pane-chevron-gold.svg?v=1.1.1-visible-mustard";
   var INPUT_ICON_URLS = {
     satellite: "../../../data/icons/satellite-dish.svg?v=1.5.7-large-rx-farther-right",
     fibre: "../../../data/icons/ethernet-fibre.svg?v=1.0.5"
@@ -1056,27 +1058,24 @@
 
   function sitePathChevronIcon(serviceId, angleDegrees) {
     var service = String(serviceId || "dtt").toLowerCase();
-    var rotation = Number(angleDegrees || 0);
+    var rotation = Number(angleDegrees || 0) + 180;
 
     return window.L.divIcon({
       className:
         "osmmaps-rf-site-path-chevron-icon is-" +
         escapeHtml(service),
       html: [
-        '<svg width="12" height="12" viewBox="0 0 12 12" ',
-        'aria-hidden="true" focusable="false" style="display:block;',
+        '<img src="',
+        SITE_PATH_CHEVRON_ICON_URL,
+        '" alt="" aria-hidden="true" style="',
+        'width:14px;height:20px;display:block;',
         'transform:rotate(',
         escapeHtml(rotation),
-        'deg);transform-origin:center">',
-        '<path d="M2 2 L10 6 L2 10" transform="translate(.55 .7)" ',
-        'fill="none" stroke="#050505" stroke-opacity=".78" ',
-        'stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>',
-        '<path d="M2 2 L10 6 L2 10" fill="none" stroke="#d6a43a" ',
-        'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-        '</svg>'
+        'deg);transform-origin:center;',
+        '">'
       ].join(""),
-      iconSize: [12, 12],
-      iconAnchor: [6, 6]
+      iconSize: [14, 20],
+      iconAnchor: [7, 10]
     });
   }
 
