@@ -1,4 +1,4 @@
-/* FieldOps Atlas Weather shared utilities v0.3.0
+/* FieldOps Atlas Weather shared utilities v0.3.1
    Static-safe: no committed API keys, no internal operational data.
    Provider/API screens are data-only here; no provider screen owns a Leaflet/OSM map.
 */
@@ -6,21 +6,15 @@
 window.AtlasWeatherLab = (() => {
   "use strict";
 
-  const version = "0.3.0-demapped-weather-apis";
+  const version = "0.3.1-west-wales-demo-source";
   const regionsUrl = "data/regions.json";
 
   const fallbackRegions = [
     {
-      id: "west-wales",
-      name: "West Wales",
-      bounds: [[51.55, -5.65], [52.55, -3.65]],
-      sites: [
-        { id: "WW-001", name: "Preseli", lat: 51.946, lon: -4.735 },
-        { id: "WW-002", name: "Haverfordwest", lat: 51.801, lon: -4.969 },
-        { id: "WW-003", name: "Fishguard", lat: 52.004, lon: -4.982 },
-        { id: "WW-004", name: "Blaenplwyf", lat: 52.386, lon: -4.075 },
-        { id: "WW-005", name: "Carmarthen", lat: 51.857, lon: -4.312 }
-      ]
+      id: "West-Wales",
+      name: "West-Wales Demo",
+      bounds: null,
+      sites: []
     }
   ];
 
