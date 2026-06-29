@@ -1,31 +1,17 @@
-/* ==========================================================================
-   FieldOps Atlas Met Office warnings
-   File: FieldOpsAtlas/Features/Weather/metoffice-warning.js
-   Version: 1.0.6-details-warning-reason
-   Purpose:
-   - Load official Met Office UK or regional severe-weather RSS warnings.
-   - Link the warning feed to the currently selected Atlas map region.
-   - Render warning summaries in the maps weather panel with Met Office links.
-   - Keep ACTIVE warning controls visible on the Weather button when expanded or collapsed.
-   - Add a Met Office warning entry to the existing site Details > Alerts section.
-   - Fall back to the UK feed when the selected region has no explicit mapping.
-   ========================================================================== */
-
 (function fieldOpsMetOfficeWarning() {
   "use strict";
 
-  var VERSION = "1.0.6-details-warning-reason";
+  var VERSION = "1.0.7-active-warning-only";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
   var WARNING_PAGE_URL =
     "https://weather.metoffice.gov.uk/warnings-and-advice/uk-warnings";
   var FEED_BASE =
     "https://weather.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/";
+
   var cache = new Map();
   var lastContext = null;
   var lastItems = [];
-  var lastStatus = "checking";
-  var lastReason = "Checking the live Met Office warning feed.";
   var detailsRendering = false;
 
   var FEEDS = {
@@ -49,8 +35,8 @@
   };
 
   var ATLAS_REGION_FEEDS = {
-    preseli: "wl",
-    wenvoe: "wl"
+    "west-wales": "wl",
+    "south-wales": "wl"
   };
 
   var NAME_RULES = [
@@ -61,11 +47,7 @@
     { code: "ta", pattern: /\b(tayside|fife|perth|dundee|stirling)\b/i },
     { code: "dg", pattern: /\b(lothian|borders|dumfries|galloway|edinburgh)\b/i },
     { code: "ni", pattern: /\b(northern ireland|ulster|belfast)\b/i },
-    {
-      code: "wl",
-      pattern:
-        /\b(wales|welsh|preseli|wenvoe|cardiff|swansea|pembroke|ceredigion|carmarthen|newport|powys|gwynedd)\b/i
-    },
+    { code: "wl", pattern: /\b(wales|welsh)\b/i },
     {
       code: "nw",
       pattern:
@@ -258,18 +240,26 @@
       headers: {
         Accept: "application/rss+xml, application/xml, text/xml"
       }
-    }).then(function handleResponse(response) {
-      if (!response.ok) {
-        throw new Error("Met Office warning feed unavailable.");
-      }
+    })
+      .then(function handleResponse(response) {
+        if (!response.ok) {
+          throw new Error("Met Office warning feed unavailable.");
+        }
 
-      return response.text();
-    }).then(parseWarningFeed);
+        return response.text();
+      })
+      .then(parseWarningFeed);
   }
 
   function setText(selector, value) {
     qsa(selector).forEach(function update(element) {
       element.textContent = value;
+    });
+  }
+
+  function setHidden(selector, hidden) {
+    qsa(selector).forEach(function update(element) {
+      element.hidden = Boolean(hidden);
     });
   }
 
@@ -324,38 +314,61 @@
     element.classList.add("is-" + String(severity || "general"));
   }
 
-  function setElementHidden(element, hidden) {
-    if (!element) {
-      return;
-    }
+  function resetWeatherButton() {
+    qsa("[data-metoffice-warning-button]").forEach(function resetBadge(badge) {
+      applySeverityClass(badge, "general");
+      badge.hidden = true;
+      badge.textContent = "";
+      badge.removeAttribute("title");
+    });
 
-    element.hidden = Boolean(hidden);
+    qsa(".map-weather-active-label").forEach(function resetLabel(label) {
+      label.hidden = true;
+    });
+
+    qsa("[data-weather-panel-open]").forEach(function resetButton(button) {
+      button.classList.remove("has-weather-warning");
+      button.setAttribute(
+        "aria-label",
+        "Open selected region weather forecast"
+      );
+      button.removeAttribute("title");
+    });
   }
 
   function updateWeatherButtonWarnings(context, items) {
     var activeItems = Array.isArray(items) ? items : [];
-    var active = activeItems.length > 0;
-    var severity = active ? highestSeverity(activeItems) : "yellow";
-    var description = active
-      ? activeItems.length +
-        " active " +
-        severityLabel(severity).toLowerCase() +
-        " Met Office warning" +
-        (activeItems.length === 1 ? "" : "s") +
-        " for " +
-        context.atlasName
-      : "Open Met Office weather warnings for " + context.atlasName;
+    var severity;
+    var description;
 
-    qsa("[data-metoffice-warning-button]").forEach(
-      function updateWarningTriangle(buttonBadge) {
-        applySeverityClass(buttonBadge, severity);
-        setElementHidden(buttonBadge, false);
-        buttonBadge.textContent = "⚠";
-        buttonBadge.title = description;
-      }
-    );
+    if (!activeItems.length) {
+      resetWeatherButton();
+      return;
+    }
 
-    qsa("[data-weather-panel-open]").forEach(function updateWeatherButton(button) {
+    severity = highestSeverity(activeItems);
+    description =
+      activeItems.length +
+      " active " +
+      severityLabel(severity).toLowerCase() +
+      " Met Office warning" +
+      (activeItems.length === 1 ? "" : "s") +
+      " for " +
+      context.atlasName;
+
+    qsa("[data-metoffice-warning-button]").forEach(function updateBadge(badge) {
+      applySeverityClass(badge, severity);
+      badge.hidden = false;
+      badge.textContent = "⚠";
+      badge.title = description;
+    });
+
+    qsa(".map-weather-active-label").forEach(function updateLabel(label) {
+      label.hidden = false;
+    });
+
+    qsa("[data-weather-panel-open]").forEach(function updateButton(button) {
+      button.classList.add("has-weather-warning");
       button.setAttribute(
         "aria-label",
         "Open selected region weather forecast. " + description + "."
@@ -379,13 +392,58 @@
     });
   }
 
-  function createDetailsWarning(
-    context,
-    item,
-    count,
-    status,
-    reason
-  ) {
+  function removeEmptyAlertsFallback(section) {
+    var removed = false;
+
+    qsa(".osmpanes-line", section).forEach(function removeFallback(line) {
+      if (
+        String(line.textContent || "").trim().toLowerCase() ===
+        "no active alerts."
+      ) {
+        line.remove();
+        removed = true;
+      }
+    });
+
+    if (removed) {
+      section.dataset.metofficeRemovedEmptyAlert = "true";
+    }
+  }
+
+  function restoreEmptyAlertsFallback(section) {
+    var title;
+    var line;
+
+    if (
+      !section ||
+      section.dataset.metofficeRemovedEmptyAlert !== "true"
+    ) {
+      return;
+    }
+
+    if (
+      qsa(".osmpanes-line", section).some(function hasFallback(item) {
+        return String(item.textContent || "").trim().toLowerCase() ===
+          "no active alerts.";
+      })
+    ) {
+      delete section.dataset.metofficeRemovedEmptyAlert;
+      return;
+    }
+
+    title = qs(".osmpanes-section-title", section);
+    line = document.createElement("p");
+    line.className = "osmpanes-line";
+    line.textContent = "No active alerts.";
+
+    section.insertBefore(
+      line,
+      title ? title.nextSibling : section.firstChild
+    );
+    delete section.dataset.metofficeRemovedEmptyAlert;
+  }
+
+  function createDetailsWarning(context, item, count) {
     var container = document.createElement("div");
     var iconWrap = document.createElement("span");
     var weatherIcon = document.createElement("img");
@@ -394,13 +452,9 @@
     var heading = document.createElement("strong");
     var reasonText = document.createElement("span");
     var link = document.createElement("a");
-    var severity = String(item && item.severity || "yellow");
-    var severityText = item ? severityLabel(severity) : "Weather";
-    var state = String(status || "checking");
+    var severity = String(item && item.severity || "general");
 
-    container.className =
-      "metoffice-details-alert is-" + severity +
-      " is-" + state;
+    container.className = "metoffice-details-alert is-" + severity;
     container.setAttribute("data-metoffice-details-alert", "");
 
     iconWrap.className = "metoffice-details-alert__icons";
@@ -418,39 +472,20 @@
 
     content.className = "metoffice-details-alert__content";
 
-    if (item) {
-      heading.textContent =
-        severityText +
-        " weather warning" +
-        (count > 1 ? " · " + count + " active" : "");
-      reasonText.textContent =
-        String(item.description || "").trim() ||
-        "An active Met Office warning applies to " + context.label + ".";
-    } else if (state === "unavailable") {
-      heading.textContent = "Met Office warning status unavailable";
-      reasonText.textContent =
-        reason ||
-        "The live warning feed was blocked by this browser.";
-    } else if (state === "loaded") {
-      heading.textContent = "No active Met Office warning";
-      reasonText.textContent =
-        reason ||
-        "No active warning was returned for " + context.label + ".";
-    } else {
-      heading.textContent = "Checking Met Office weather warnings";
-      reasonText.textContent =
-        reason ||
-        "Checking the live " + context.label + " warning feed.";
-    }
+    heading.textContent =
+      severityLabel(severity) +
+      " weather warning" +
+      (count > 1 ? " · " + count + " active" : "");
 
     reasonText.className = "metoffice-details-alert__reason";
+    reasonText.textContent =
+      String(item.description || "").trim() ||
+      "An active Met Office warning applies to " + context.label + ".";
 
-    link.href = item && item.link ? item.link : WARNING_PAGE_URL;
+    link.href = item.link || WARNING_PAGE_URL;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = item
-      ? String(item.title || "Open Met Office warning")
-      : "Open official " + context.label + " warnings";
+    link.textContent = String(item.title || "Open Met Office warning");
 
     content.appendChild(heading);
     content.appendChild(reasonText);
@@ -462,23 +497,7 @@
     return container;
   }
 
-  function removeEmptyAlertsFallback(section) {
-    qsa(".osmpanes-line", section).forEach(function removeFallback(line) {
-      if (
-        String(line.textContent || "").trim().toLowerCase() ===
-        "no active alerts."
-      ) {
-        line.remove();
-      }
-    });
-  }
-
-  function renderDetailsWarning(
-    context,
-    items,
-    status,
-    reason
-  ) {
+  function renderDetailsWarning(context, items) {
     var section;
     var title;
     var activeItems = Array.isArray(items) ? items : [];
@@ -497,40 +516,21 @@
 
     try {
       removeDetailsWarning();
+
+      if (!activeItems.length) {
+        restoreEmptyAlertsFallback(section);
+        return;
+      }
+
       removeEmptyAlertsFallback(section);
       title = qs(".osmpanes-section-title", section);
       section.insertBefore(
-        createDetailsWarning(
-          context,
-          activeItems[0] || null,
-          activeItems.length,
-          status,
-          reason
-        ),
+        createDetailsWarning(context, activeItems[0], activeItems.length),
         title ? title.nextSibling : section.firstChild
       );
     } finally {
       detailsRendering = false;
     }
-  }
-
-  function renderSurfaceWarnings(
-    context,
-    items,
-    status,
-    reason
-  ) {
-    lastContext = context;
-    lastItems = Array.isArray(items) ? items.slice() : [];
-    lastStatus = String(status || "checking");
-    lastReason = String(reason || "");
-    updateWeatherButtonWarnings(context, lastItems);
-    renderDetailsWarning(
-      context,
-      lastItems,
-      lastStatus,
-      lastReason
-    );
   }
 
   function createWarningItem(item) {
@@ -553,99 +553,68 @@
     link.href = item.link || WARNING_PAGE_URL;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = "Open this warning on the Met Office website";
+    link.textContent = "Open warning";
     article.appendChild(link);
 
     return article;
   }
 
-  function renderWarnings(context, items) {
+  function renderWarningCard(context, items) {
+    var activeItems = Array.isArray(items) ? items : [];
+
     clearWarnings();
     setText(
       "[data-metoffice-warning-region]",
       context.atlasName + " · " + context.label
     );
     setOfficialLink(context.warningPageUrl);
-    renderSurfaceWarnings(
-      context,
-      items,
-      "loaded",
-      items.length
-        ? "Active Met Office warning for " + context.label + "."
-        : "No active warning was returned for " + context.label + "."
-    );
 
-    if (!items.length) {
-      setText(
-        "[data-metoffice-warning-status]",
-        "No active warning was returned for " + context.label + "."
-      );
+    if (!activeItems.length) {
+      setHidden("[data-metoffice-warning-card]", true);
+      setText("[data-metoffice-warning-status]", "No active warnings.");
       return;
     }
 
+    setHidden("[data-metoffice-warning-card]", false);
     setText(
       "[data-metoffice-warning-status]",
-      items.length +
-        " active Met Office warning" +
-        (items.length === 1 ? "" : "s") +
-        " for " +
-        context.label +
+      activeItems.length +
+        " active warning" +
+        (activeItems.length === 1 ? "" : "s") +
         "."
     );
 
     qsa("[data-metoffice-warning-list]").forEach(function update(list) {
-      items.slice(0, 3).forEach(function append(item) {
+      activeItems.slice(0, 3).forEach(function append(item) {
         list.appendChild(createWarningItem(item));
       });
     });
   }
 
-  function renderUnavailable(context) {
-    var reason =
-      "The live Met Office warning feed could not be loaded in this browser.";
+  function renderWarnings(context, items) {
+    lastContext = context;
+    lastItems = Array.isArray(items) ? items.slice() : [];
 
-    clearWarnings();
-    renderSurfaceWarnings(
-      context,
-      [],
-      "unavailable",
-      reason
-    );
-    setText(
-      "[data-metoffice-warning-region]",
-      context.atlasName + " · " + context.label
-    );
-    setText(
-      "[data-metoffice-warning-status]",
-      reason + " Open the official " + context.label + " warnings."
-    );
-    setOfficialLink(context.warningPageUrl);
+    updateWeatherButtonWarnings(context, lastItems);
+    renderWarningCard(context, lastItems);
+    renderDetailsWarning(context, lastItems);
+  }
+
+  function renderUnavailable(context) {
+    renderWarnings(context, []);
   }
 
   function loadSelectedRegionWarnings(force) {
     var context = selectedWarningRegion();
     var cached = cache.get(context.code);
 
-    setText(
-      "[data-metoffice-warning-region]",
-      context.atlasName + " · " + context.label
-    );
-    setText(
-      "[data-metoffice-warning-status]",
-      "Checking Met Office warnings for " + context.label + "…"
-    );
-    setOfficialLink(context.warningPageUrl);
-    renderSurfaceWarnings(
-      context,
-      [],
-      "checking",
-      "Checking the live " + context.label + " warning feed."
-    );
-
     if (!force && cached && Date.now() - cached.time < CACHE_MS) {
       renderWarnings(context, cached.items);
       return Promise.resolve(cached.items);
     }
+
+    resetWeatherButton();
+    setHidden("[data-metoffice-warning-card]", true);
 
     return fetchWarningFeed(context)
       .then(function handleWarnings(items) {
@@ -672,9 +641,7 @@
         window.setTimeout(function addWarningToDetails() {
           renderDetailsWarning(
             lastContext || selectedWarningRegion(),
-            lastItems,
-            lastStatus,
-            lastReason
+            lastItems
           );
         }, 120);
       }
@@ -700,20 +667,9 @@
   }
 
   function init() {
-    var context = selectedWarningRegion();
-
+    resetWeatherButton();
+    setHidden("[data-metoffice-warning-card]", true);
     wireControls();
-    setText(
-      "[data-metoffice-warning-region]",
-      context.atlasName + " · " + context.label
-    );
-    setOfficialLink(context.warningPageUrl);
-    renderSurfaceWarnings(
-      context,
-      [],
-      "checking",
-      "Checking the live " + context.label + " warning feed."
-    );
 
     window.setTimeout(function initialWarningLoad() {
       loadSelectedRegionWarnings(false);
@@ -733,6 +689,3 @@
     init();
   }
 }());
-
-/* Destination: FieldOpsAtlas/Features/Weather/metoffice-warning.js */
-/* End of file: FieldOpsAtlas/Features/Weather/metoffice-warning.js | bottom/end of file */
