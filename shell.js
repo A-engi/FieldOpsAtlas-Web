@@ -32,6 +32,12 @@
       icon: "icon--map",
       href: "FieldOpsAtlas/Features/maps/index.html"
     },
+    weather: {
+      label: "Weather",
+      navLabel: "Wthr",
+      icon: "icon--weather",
+      href: "FieldOpsAtlas/Features/Weather/index.html"
+    },
     rf: {
       label: "RF",
       navLabel: "RF",
@@ -58,7 +64,7 @@
     }
   };
 
-  var pageOrder = ["map", "rf", "network", "docs", "tools"];
+  var pageOrder = ["map", "weather", "rf", "network", "docs", "tools"];
   var searchProviders = Object.create(null);
   var editorProviders = Object.create(null);
 
@@ -142,6 +148,10 @@
 
     if (path.indexOf("/features/maps/") !== -1 || path.indexOf("/features/map/") !== -1) {
       return "map";
+    }
+
+    if (path.indexOf("/features/weather/") !== -1) {
+      return "weather";
     }
 
     if (path.indexOf("/features/rf/") !== -1 || path.indexOf("/features/rfpages/") !== -1) {

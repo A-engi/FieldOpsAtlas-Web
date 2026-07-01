@@ -3,75 +3,68 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Met Office Map Images · FieldOps Atlas Weather</title>
-  <link rel="stylesheet" href="styles.css?v=0.3.0-demapped-weather-apis" />
-  <link rel="stylesheet" href="metoffice.css?v=0.4.2-default-order-name" />
+  <title>Met Office - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
 </head>
-<body class="metoffice-redo-page">
-  <main class="mo-shell" data-page="metoffice">
-    <header class="mo-topbar">
-      <a class="mo-nav" href="openmeteo.html">‹ Open-Meteo</a>
-      <div>
-        <h1>Met Office Map Images</h1>
-        <p class="mo-eyebrow">Updates: 06:30 and 18:30 UK time</p>
-      </div>
-      <a class="mo-nav" href="ea-rainfall.html">EA gauges ›</a>
-    </header>
+<body class="weather-page">
+  <main class="fieldops-shell-root weather-shell" data-page="weather" data-weather-provider="metoffice">
+    <section class="weather-stage" aria-label="Met Office map">
+      <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with Met Office image overlay"></div>
 
-    <nav class="provider-tabs mo-tabs" aria-label="Weather provider screens">
-      <a class="provider-tab" href="rainviewer.html">RainViewer</a>
-      <a class="provider-tab" href="openmeteo.html">Open-Meteo</a>
-      <a class="provider-tab active" href="metoffice.html">Met Office</a>
-      <a class="provider-tab" href="ea-rainfall.html">EA gauges</a>
-    </nav>
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link" href="rainviewer.html">Radar</a>
+        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link is-active" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+      </nav>
 
-    <section class="mo-setup" aria-label="Met Office credentials">
-      <label>
-        <span>Map Images key</span>
-        <input id="moApiKey" type="password" autocomplete="off" placeholder="Stored in this browser only" />
-      </label>
-      <label>
-        <span>Order ID</span>
-        <input id="moOrderId" type="text" autocomplete="off" placeholder="maps-uk1" />
-      </label>
-      <div class="mo-button-row">
-        <button id="moSaveSettings" class="mo-primary" type="button">Save</button>
-        <button id="moForgetSettings" class="mo-secondary" type="button">Forget</button>
-        <button id="moRefreshOrder" class="mo-secondary" type="button">Refresh</button>
-      </div>
+      <section class="weather-frame-strip" aria-label="Met Office frame">
+        <button id="moPrevFrame" class="weather-button" type="button">Prev</button>
+        <input id="moFrameSlider" class="weather-range" type="range" min="0" max="0" value="0" />
+        <button id="moNextFrame" class="weather-button" type="button">Next</button>
+      </section>
+
+      <section class="weather-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>Met Office</h1>
+            <p id="moStatus" class="weather-status">Ready.</p>
+          </div>
+          <span id="moFrameCount" class="weather-pill">0/0</span>
+        </div>
+        <div class="weather-field-grid">
+          <label class="weather-label" for="moApiKey">
+            Key
+            <input id="moApiKey" class="weather-input" type="password" autocomplete="off" />
+          </label>
+          <label class="weather-label" for="moOrderId">
+            Order
+            <input id="moOrderId" class="weather-input" type="text" autocomplete="off" />
+          </label>
+        </div>
+        <div class="weather-actions">
+          <button id="moSaveSettings" class="weather-button" type="button">Save</button>
+          <button id="moRefreshOrder" class="weather-button is-primary" type="button">Refresh</button>
+          <button id="moForgetSettings" class="weather-button" type="button">Forget</button>
+          <span id="moValidUkLabel" class="weather-pill">UK time unavailable</span>
+        </div>
+        <div class="weather-actions" role="group" aria-label="Met Office layer">
+          <button class="weather-button mo-layer-button" type="button" data-layer="rainfall">Rain</button>
+          <button class="weather-button mo-layer-button" type="button" data-layer="cloud">Cloud</button>
+          <button class="weather-button mo-layer-button" type="button" data-layer="pressure">Pressure</button>
+          <button class="weather-button mo-layer-button" type="button" data-layer="temperature">Temp</button>
+        </div>
+        <div class="weather-legend" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      </section>
     </section>
-
-    <section class="mo-controls" aria-label="Met Office frame controls">
-      <div class="mo-layer-buttons" role="group" aria-label="Layer type">
-        <button class="mo-layer-button" type="button" data-layer="rainfall">Rainfall</button>
-        <button class="mo-layer-button" type="button" data-layer="cloud">Cloud</button>
-        <button class="mo-layer-button" type="button" data-layer="pressure">Pressure</button>
-        <button class="mo-layer-button" type="button" data-layer="temperature">Temp</button>
-      </div>
-      <div class="mo-frame-controls">
-        <button id="moPrevFrame" class="mo-secondary" type="button">‹</button>
-        <input id="moFrameSlider" type="range" min="0" max="0" value="0" />
-        <button id="moNextFrame" class="mo-secondary" type="button">›</button>
-      </div>
-    </section>
-
-    <section class="mo-stage" aria-label="Met Office image preview">
-      <img id="moImage" class="mo-image" alt="Met Office Map Images preview" hidden />
-      <div id="moPlaceholder" class="mo-empty-state">
-        <strong>Met Office image</strong>
-        <span>Enter key and order ID.</span>
-      </div>
-    </section>
-
-    <footer class="mo-statusbar" aria-live="polite">
-      <span id="moStatus">Ready.</span>
-      <span id="moFrameCount">0/0</span>
-      <span id="moValidUkLabel">UK time unavailable</span>
-    </footer>
   </main>
 
-  <script src="weather-display-style.js?v=0.1.2"></script>
-  <script src="app.js?v=0.3.1-west-wales-demo-source"></script>
-  <script src="metoffice.js?v=0.4.2-default-order-name"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
+  <script src="metoffice.js?v=1.0.0-weather-map-shell" defer></script>
 </body>
 </html>

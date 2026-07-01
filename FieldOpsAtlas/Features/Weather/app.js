@@ -1,31 +1,68 @@
-/* FieldOps Atlas Weather shared utilities v0.3.1
-   Static-safe: no committed API keys, no internal operational data.
-   Provider/API screens are data-only here; no provider screen owns a Leaflet/OSM map.
-*/
-
 window.AtlasWeatherLab = (() => {
   "use strict";
 
-  const version = "0.3.1-west-wales-demo-source";
-  const regionsUrl = "data/regions.json";
+  const VERSION = "1.0.0";
+  const REGIONS_URL = "data/regions.json";
+  const UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
+  const UK_CENTER = [54.55, -3.15];
+  const OSM_TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
 
   const fallbackRegions = [
-    {
-      id: "West-Wales",
-      name: "West-Wales Demo",
-      bounds: null,
-      sites: []
-    }
+    { id: "west-wales", name: "West Wales", bounds: null, sites: [] }
   ];
+
+  function initMap(options = {}) {
+    const element = document.getElementById(options.mapId || "weatherMap");
+    if (!window.L || !element) return null;
+
+    const map = window.L.map(element, {
+      center: options.center || UK_CENTER,
+      zoom: options.zoom || 6,
+      minZoom: 5,
+      maxZoom: 11,
+      maxBounds: UK_BOUNDS,
+      maxBoundsViscosity: 0.9,
+      zoomControl: false,
+      attributionControl: true,
+      preferCanvas: true,
+      worldCopyJump: false
+    });
+
+    createPane(map, "weatherBasePane", 190, "auto", "weather-base-pane");
+    createPane(map, "weatherOverlayPane", 430, "none", "weather-overlay-pane");
+    createPane(map, "weatherMarkerPane", 610, "auto", "weather-marker-pane");
+
+    window.L.control.zoom({ position: "topright" }).addTo(map);
+    window.L.tileLayer(OSM_TILE_URL, {
+      pane: "weatherBasePane",
+      minZoom: 5,
+      maxZoom: 11,
+      noWrap: true,
+      keepBuffer: 1,
+      updateWhenIdle: true,
+      updateWhenZooming: false,
+      attribution: OSM_ATTRIBUTION
+    }).addTo(map);
+
+    window.setTimeout(() => map.invalidateSize(), 160);
+    return map;
+  }
+
+  function createPane(map, name, zIndex, pointerEvents, className) {
+    const pane = map.getPane(name) || map.createPane(name);
+    pane.style.zIndex = String(zIndex);
+    pane.style.pointerEvents = pointerEvents;
+    if (className) pane.classList.add(className);
+    return pane;
+  }
 
   async function loadRegions() {
     try {
-      const response = await fetch(regionsUrl, { cache: "no-store" });
+      const response = await fetch(REGIONS_URL, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      return normaliseRegions(data);
+      return normaliseRegions(await response.json());
     } catch (error) {
-      console.warn("Weather regions fallback used", error);
       return fallbackRegions;
     }
   }
@@ -63,8 +100,32 @@ window.AtlasWeatherLab = (() => {
     });
   }
 
-  function sitesFromRegions(regions) {
-    return allSites(regions);
+  function fitSites(map, sites) {
+    if (!map || !sites.length) return;
+    const points = sites.map((site) => [site.lat, site.lon]);
+    map.fitBounds(points, { padding: [32, 32], maxZoom: 8 });
+  }
+
+  function markerIcon(options = {}) {
+    const colour = options.colour || weatherColour("rain");
+    const label = options.label || "";
+    return window.L.divIcon({
+      className: "weather-marker-shell",
+      html: `<span class="weather-marker" style="--weather-marker-colour:${escapeHtml(colour)}">${escapeHtml(label)}</span>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
+    });
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  }
+
+  function setBusy(button, busy, loadingText, readyText) {
+    if (!button) return;
+    button.disabled = Boolean(busy);
+    button.textContent = busy ? loadingText : readyText;
   }
 
   function escapeHtml(value) {
@@ -77,7 +138,7 @@ window.AtlasWeatherLab = (() => {
   }
 
   function formatDateTime(epochSeconds) {
-    if (!Number.isFinite(epochSeconds)) return "Unknown time";
+    if (!Number.isFinite(epochSeconds)) return "Unknown";
     return new Intl.DateTimeFormat("en-GB", {
       weekday: "short",
       day: "2-digit",
@@ -100,9 +161,18 @@ window.AtlasWeatherLab = (() => {
     }).format(date);
   }
 
-  function riskColor(level) {
-    const style = window.FIELDOPS_WEATHER_DISPLAY_STYLE;
-    return style?.riskStates?.[level]?.colour || style?.riskStates?.rain?.colour || "currentColor";
+  function weatherColour(level) {
+    const bands = window.FIELDOPS_WEATHER_DISPLAY_STYLE?.metOffice?.rainfallBands || [];
+    const map = {
+      extreme: bands[0]?.colour,
+      heavy: bands[2]?.colour,
+      rain: bands[5]?.colour,
+      light: bands[7]?.colour,
+      dry: "#B3D0AE",
+      wind: "#FCCA15",
+      gauge: "#0FBCFF"
+    };
+    return map[level] || map.rain;
   }
 
   function haversineKm(a, b) {
@@ -122,14 +192,20 @@ window.AtlasWeatherLab = (() => {
   }
 
   return {
-    version,
+    VERSION,
+    UK_BOUNDS,
+    UK_CENTER,
+    initMap,
     loadRegions,
     allSites,
-    sitesFromRegions,
+    fitSites,
+    markerIcon,
+    setText,
+    setBusy,
     escapeHtml,
     formatDateTime,
     formatIsoTime,
-    riskColor,
+    weatherColour,
     haversineKm
   };
 })();

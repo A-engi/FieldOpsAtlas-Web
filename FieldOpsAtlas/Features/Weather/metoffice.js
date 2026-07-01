@@ -1,7 +1,8 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.4.2";
+  const Lab = window.AtlasWeatherLab;
+  const VERSION = "1.0.0";
   const DEFAULT_ORDER_ID = "Maps-uk1";
   const METOFFICE_MAP_IMAGES_BASE = "https://data.hub.api.metoffice.gov.uk/map-images/1.0.0";
   const UK_TIME_ZONE = "Europe/London";
@@ -15,43 +16,42 @@
   };
 
   const LAYERS = {
-    rainfall: { label: "Rainfall", patterns: [/precip/i, /rainfall/i, /rain/i], empty: "No rainfall/precipitation files matched this order." },
-    cloud: { label: "Cloud", patterns: [/cloud/i], empty: "No cloud files matched this order." },
-    pressure: { label: "Pressure", patterns: [/pressure/i, /mean[_-]?sea/i, /meansea/i, /mslp/i, /msl/i], empty: "No pressure/MSLP files matched this order." },
-    temperature: { label: "Temp", patterns: [/temperature/i, /temp/i], empty: "No temperature files matched this order." }
+    rainfall: { label: "Rain", patterns: [/precip/i, /rainfall/i, /rain/i], empty: "No rainfall files." },
+    cloud: { label: "Cloud", patterns: [/cloud/i], empty: "No cloud files." },
+    pressure: { label: "Pressure", patterns: [/pressure/i, /mean[_-]?sea/i, /meansea/i, /mslp/i, /msl/i], empty: "No pressure files." },
+    temperature: { label: "Temp", patterns: [/temperature/i, /temp/i], empty: "No temperature files." }
   };
 
   const els = {
-    image: byId("moImage"),
-    placeholder: byId("moPlaceholder"),
     status: byId("moStatus"),
     apiKey: byId("moApiKey"),
     orderId: byId("moOrderId"),
-    saveSettings: byId("moSaveSettings"),
-    forgetSettings: byId("moForgetSettings"),
-    refreshOrder: byId("moRefreshOrder"),
+    save: byId("moSaveSettings"),
+    forget: byId("moForgetSettings"),
+    refresh: byId("moRefreshOrder"),
     layerButtons: Array.from(document.querySelectorAll(".mo-layer-button[data-layer]")),
-    frameCount: byId("moFrameCount"),
-    prevFrame: byId("moPrevFrame"),
-    nextFrame: byId("moNextFrame"),
-    frameSlider: byId("moFrameSlider"),
-    validUkLabel: byId("moValidUkLabel")
+    count: byId("moFrameCount"),
+    prev: byId("moPrevFrame"),
+    next: byId("moNextFrame"),
+    slider: byId("moFrameSlider"),
+    valid: byId("moValidUkLabel")
   };
 
   const state = {
+    map: null,
+    imageLayer: null,
     fileIds: [],
-    layerFiles: [],
     frames: [],
     layer: getStoredLayer(),
     frameKey: localStorage.getItem(STORAGE.frame) || "000",
     selectedFileId: "",
-    loading: false,
     rawUrl: ""
   };
 
   init();
 
   function init() {
+    state.map = Lab.initMap();
     restoreSettingsInputs();
     bindEvents();
     applyLayerButtons();
@@ -60,47 +60,37 @@
   }
 
   function bindEvents() {
-    els.saveSettings?.addEventListener("click", () => {
+    els.save?.addEventListener("click", () => {
       saveSettings();
       loadOrder({ forceRefresh: false, previewAfter: true });
     });
-
-    els.forgetSettings?.addEventListener("click", forgetSettings);
-    els.refreshOrder?.addEventListener("click", () => loadOrder({ forceRefresh: true, previewAfter: true }));
-
-    els.layerButtons.forEach((button) => {
-      button.addEventListener("click", () => setLayer(button.dataset.layer));
-    });
-
-    els.prevFrame?.addEventListener("click", () => bumpFrame(-1));
-    els.nextFrame?.addEventListener("click", () => bumpFrame(1));
-
-    els.frameSlider?.addEventListener("input", () => {
-      const index = Number(els.frameSlider.value || 0);
-      const frame = state.frames[index];
+    els.forget?.addEventListener("click", forgetSettings);
+    els.refresh?.addEventListener("click", () => loadOrder({ forceRefresh: true, previewAfter: true }));
+    els.layerButtons.forEach((button) => button.addEventListener("click", () => setLayer(button.dataset.layer)));
+    els.prev?.addEventListener("click", () => bumpFrame(-1));
+    els.next?.addEventListener("click", () => bumpFrame(1));
+    els.slider?.addEventListener("input", () => {
+      const frame = state.frames[Number(els.slider.value || 0)];
       if (!frame) return;
       state.frameKey = frame.key;
       localStorage.setItem(STORAGE.frame, state.frameKey);
       chooseSelectedFrame();
       applyFrameUi();
     });
-
-    els.frameSlider?.addEventListener("change", () => loadSelectedImage());
+    els.slider?.addEventListener("change", loadSelectedImage);
   }
 
   async function bootstrap() {
-    const apiKey = getApiKey();
-    const orderId = getOrderId();
-    if (!apiKey || !orderId) {
-      setStatus(`Setup needed: paste the Map Images key. Default order ID: ${DEFAULT_ORDER_ID}.`);
+    if (!getApiKey() || !getOrderId()) {
+      setStatus("Add key and order.");
       return;
     }
 
-    const cached = readCachedFiles(orderId);
+    const cached = readCachedFiles(getOrderId());
     if (cached.length) {
       state.fileIds = cached;
       rebuildLayerFiles();
-      setStatus(`Using cached order list: ${cached.length} file(s).`);
+      setStatus("Loaded.");
       await loadSelectedImage();
       return;
     }
@@ -112,7 +102,7 @@
     const apiKey = getApiKey();
     const orderId = getOrderId();
     if (!apiKey || !orderId) {
-      setStatus(`Setup needed: paste a Map Images key first. Order ID defaults to ${DEFAULT_ORDER_ID}.`);
+      setStatus("Add key and order.");
       return;
     }
 
@@ -124,27 +114,26 @@
       if (cached.length) {
         state.fileIds = cached;
         rebuildLayerFiles();
-        setStatus(`Using cached order list: ${cached.length} file(s).`);
+        setStatus("Loaded.");
         if (previewAfter) await loadSelectedImage();
         return;
       }
 
-      setStatus("Fetching latest Met Office order file list...");
+      setStatus("Loading...");
       const url = `${METOFFICE_MAP_IMAGES_BASE}/orders/${encodeURIComponent(orderId)}/latest?detail=MINIMAL`;
       const response = await fetch(url, { headers: { Accept: "application/json", apikey: apiKey } });
-      if (!response.ok) throw new Error(`Met Office latest-order request returned HTTP ${response.status}.`);
+      if (!response.ok) throw new Error(`Met Office HTTP ${response.status}`);
 
-      const json = await response.json();
-      const files = findFileIds(json);
-      if (!files.length) throw new Error(`Order request worked, but no PNG/file IDs were found. JSON keys: ${Object.keys(json || {}).join(", ")}`);
+      const files = findFileIds(await response.json());
+      if (!files.length) throw new Error("No image files.");
 
       state.fileIds = files;
       writeCachedFiles(orderId, files);
       rebuildLayerFiles();
-      setStatus(`${files.length} file(s) listed and cached. Only the selected PNG frame is fetched.`);
+      setStatus("Loaded.");
       if (previewAfter) await loadSelectedImage();
     } catch (error) {
-      setStatus(getErrorMessage(error));
+      setStatus(error?.message || "Met Office failed.");
     } finally {
       disableControls(false);
     }
@@ -153,44 +142,46 @@
   async function loadSelectedImage() {
     const apiKey = getApiKey();
     const orderId = getOrderId();
-
     if (!apiKey || !orderId) {
-      setStatus(`Setup needed: paste a Map Images key first. Order ID defaults to ${DEFAULT_ORDER_ID}.`);
+      setStatus("Add key and order.");
       return;
     }
 
     if (!state.frames.length || !state.selectedFileId) {
       setStatus(LAYERS[state.layer].empty);
-      clearImage();
+      clearImageLayer();
       return;
     }
 
-    state.loading = true;
     disableControls(true);
     clearImageUrl();
 
     try {
-      setStatus(`Loading ${LAYERS[state.layer].label}: ${state.selectedFileId}`);
+      setStatus("Loading...");
       const includeLand = state.layer === "rainfall" ? "false" : "true";
       const url = `${METOFFICE_MAP_IMAGES_BASE}/orders/${encodeURIComponent(orderId)}/latest/${encodeURIComponent(state.selectedFileId)}/data?includeLand=${includeLand}`;
       const response = await fetch(url, { headers: { Accept: "image/png", apikey: apiKey } });
-      if (!response.ok) throw new Error(`Met Office image request returned HTTP ${response.status}.`);
+      if (!response.ok) throw new Error(`Met Office image HTTP ${response.status}`);
 
       const blob = await response.blob();
       state.rawUrl = URL.createObjectURL(blob);
-
-      applyImageSource();
-      els.image.alt = `Met Office ${LAYERS[state.layer].label} image: ${state.selectedFileId}`;
-      els.image.hidden = false;
-      els.placeholder.hidden = true;
-      setStatus(state.layer === "rainfall" ? "Loaded." : "Loaded.");
+      drawImageLayer();
+      setStatus("Loaded.");
     } catch (error) {
-      setStatus(getErrorMessage(error));
-      clearImage();
+      setStatus(error?.message || "Met Office image failed.");
     } finally {
-      state.loading = false;
       disableControls(false);
     }
+  }
+
+  function drawImageLayer() {
+    clearImageLayer();
+    state.imageLayer = window.L.imageOverlay(state.rawUrl, Lab.UK_BOUNDS, {
+      pane: "weatherOverlayPane",
+      opacity: state.layer === "rainfall" ? 0.92 : 0.78,
+      className: "weather-map-image"
+    }).addTo(state.map);
+    state.map.fitBounds(Lab.UK_BOUNDS, { padding: [4, 4] });
   }
 
   function setLayer(layer) {
@@ -216,13 +207,14 @@
 
   function rebuildLayerFiles() {
     const layerConfig = LAYERS[state.layer] || LAYERS.rainfall;
-    const matched = state.fileIds
+    state.frames = state.fileIds
       .filter((fileId) => layerConfig.patterns.some((pattern) => pattern.test(fileId)))
-      .map((fileId) => ({ fileId, key: extractFrameKey(fileId), valid: extractValidTime(fileId) }))
-      .sort((a, b) => a.fileId.localeCompare(b.fileId));
-
-    state.layerFiles = matched;
-    state.frames = matched.map((item, index) => ({ ...item, index }));
+      .map((fileId, index) => ({ fileId, index, key: extractFrameKey(fileId), valid: extractValidTime(fileId) }))
+      .sort((a, b) => {
+        const at = a.valid ? a.valid.getTime() : 0;
+        const bt = b.valid ? b.valid.getTime() : 0;
+        return at - bt || a.fileId.localeCompare(b.fileId);
+      });
     chooseSelectedFrame();
   }
 
@@ -239,54 +231,37 @@
   }
 
   function applyLayerButtons() {
-    els.layerButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.layer === state.layer));
+    els.layerButtons.forEach((button) => {
+      const active = button.dataset.layer === state.layer;
+      button.classList.toggle("is-primary", active);
+      button.classList.toggle("is-active", active);
+    });
   }
 
   function applyFrameUi() {
     const index = Math.max(0, state.frames.findIndex((frame) => frame.fileId === state.selectedFileId));
-
-    if (els.frameSlider) {
-      els.frameSlider.max = String(Math.max(0, state.frames.length - 1));
-      els.frameSlider.value = String(index);
-      els.frameSlider.disabled = state.frames.length <= 1;
+    if (els.slider) {
+      els.slider.max = String(Math.max(0, state.frames.length - 1));
+      els.slider.value = String(index);
+      els.slider.disabled = state.frames.length <= 1;
     }
-
-    if (els.frameCount) {
-      els.frameCount.textContent = state.frames.length ? `${index + 1}/${state.frames.length}` : "0/0";
-    }
-
+    if (els.count) els.count.textContent = state.frames.length ? `${index + 1}/${state.frames.length}` : "0/0";
     const current = state.frames[index];
-    if (els.validUkLabel) {
-      els.validUkLabel.textContent = current?.valid ? `UK valid ${formatDate(current.valid)}` : "UK time unavailable";
-    }
-  }
-
-  function applyImageSource() {
-    if (!els.image || !state.rawUrl) return;
-    els.image.src = state.rawUrl;
+    if (els.valid) els.valid.textContent = current?.valid ? formatDate(current.valid) : "UK time unavailable";
   }
 
   function disableControls(disabled) {
-    [
-      els.saveSettings,
-      els.forgetSettings,
-      els.refreshOrder,
-      els.prevFrame,
-      els.nextFrame,
-      els.frameSlider,
-      ...els.layerButtons
-    ].forEach((element) => {
-      if (element) element.disabled = Boolean(disabled || state.loading);
+    [els.save, els.forget, els.refresh, els.prev, els.next, els.slider, ...els.layerButtons].forEach((element) => {
+      if (element) element.disabled = Boolean(disabled);
     });
   }
 
-  function clearImage() {
-    clearImageUrl();
-    if (els.image) {
-      els.image.removeAttribute("src");
-      els.image.hidden = true;
+  function clearImageLayer() {
+    if (state.imageLayer && state.map) {
+      state.map.removeLayer(state.imageLayer);
+      state.imageLayer = null;
     }
-    if (els.placeholder) els.placeholder.hidden = false;
+    clearImageUrl();
   }
 
   function clearImageUrl() {
@@ -310,13 +285,12 @@
       .filter((key) => key.startsWith(STORAGE.cachePrefix))
       .forEach((key) => localStorage.removeItem(key));
     state.fileIds = [];
-    state.layerFiles = [];
     state.frames = [];
     state.selectedFileId = "";
-    clearImage();
+    clearImageLayer();
     restoreSettingsInputs();
     applyFrameUi();
-    setStatus("Met Office local settings and cached file list cleared.");
+    setStatus("Cleared.");
   }
 
   function restoreSettingsInputs() {
@@ -349,7 +323,7 @@
     try {
       localStorage.setItem(STORAGE.cachePrefix + orderId, JSON.stringify(files));
     } catch {
-      setStatus("File list loaded, but this browser could not cache it.");
+      setStatus("Loaded.");
     }
   }
 
@@ -359,7 +333,6 @@
 
     function visit(value) {
       if (!value) return;
-
       if (typeof value === "string") {
         if (looksLikeImageFile(value) && !seen.has(value)) {
           seen.add(value);
@@ -367,18 +340,11 @@
         }
         return;
       }
-
       if (Array.isArray(value)) {
         value.forEach(visit);
         return;
       }
-
-      if (typeof value === "object") {
-        ["fileId", "file_id", "id", "name", "filename", "fileName", "path", "key"].forEach((key) => {
-          if (typeof value[key] === "string") visit(value[key]);
-        });
-        Object.values(value).forEach(visit);
-      }
+      if (typeof value === "object") Object.values(value).forEach(visit);
     }
 
     visit(payload);
@@ -386,8 +352,7 @@
   }
 
   function looksLikeImageFile(value) {
-    const text = String(value);
-    return /png/i.test(text) || /precip|rainfall|rain|cloud|pressure|temperature|temp|mslp|meansea/i.test(text);
+    return /png|precip|rainfall|rain|cloud|pressure|temperature|temp|mslp|meansea/i.test(String(value));
   }
 
   function extractFrameKey(fileId) {
@@ -398,16 +363,9 @@
   function extractValidTime(fileId) {
     const iso = String(fileId).match(/(20\d{2}[01]\d[0-3]\d[T_ -]?[0-2]\d(?:[0-5]\d)?)/);
     if (!iso) return null;
-
     const compact = iso[1].replace(/[T_ -]/g, "");
     if (compact.length < 10) return null;
-
-    const year = compact.slice(0, 4);
-    const month = compact.slice(4, 6);
-    const day = compact.slice(6, 8);
-    const hour = compact.slice(8, 10);
-    const minute = compact.slice(10, 12) || "00";
-    return new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);
+    return new Date(`${compact.slice(0, 4)}-${compact.slice(4, 6)}-${compact.slice(6, 8)}T${compact.slice(8, 10)}:${compact.slice(10, 12) || "00"}:00Z`);
   }
 
   function formatDate(date) {
@@ -429,9 +387,6 @@
     if (els.status) els.status.textContent = message;
   }
 
-  function getErrorMessage(error) {
-    return error?.message || String(error || "Unknown Met Office error.");
-  }
-
   window.addEventListener("beforeunload", clearImageUrl);
+  window.FieldOpsMetOfficeMapImages = { VERSION, reload: () => loadOrder({ forceRefresh: true, previewAfter: true }) };
 })();

@@ -3,57 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>EA Rainfall Gauges - FieldOps Atlas Weather</title>
-  <link rel="stylesheet" href="styles.css?v=0.3.2-provider-test-clean" />
+  <title>EA Rainfall - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
 </head>
-<body>
-  <main class="lab-shell provider-shell" data-page="ea-rainfall">
-    <header class="lab-header">
-      <a class="back-link" href="metoffice.html">Met Office</a>
-      <div>
-        <h1>EA rainfall gauges</h1>
-      </div>
-      <a class="back-link" href="rainviewer.html">RainViewer</a>
-    </header>
+<body class="weather-page">
+  <main class="fieldops-shell-root weather-shell" data-page="weather" data-weather-provider="ea-rainfall">
+    <section class="weather-stage" aria-label="EA rainfall map">
+      <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with rainfall gauges"></div>
 
-    <nav class="provider-tabs" aria-label="Weather provider screens">
-      <a class="provider-tab" href="rainviewer.html">RainViewer</a>
-      <a class="provider-tab" href="openmeteo.html">Open-Meteo</a>
-      <a class="provider-tab" href="metoffice.html">Met Office</a>
-      <a class="provider-tab active" href="ea-rainfall.html">EA gauges</a>
-    </nav>
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link" href="rainviewer.html">Radar</a>
+        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link is-active" href="ea-rainfall.html">EA rainfall</a>
+      </nav>
 
-    <section class="hero-card provider-card-stack">
-      <div>
-        <h2>Nearby rainfall gauges</h2>
-      </div>
-      <div class="button-row">
-        <button id="clearGaugesButton" class="secondary-button" type="button">Clear</button>
-        <button id="loadGaugesButton" class="primary-button" type="button">Load</button>
-      </div>
-    </section>
-
-    <section class="weather-data-card">
-      <div class="weather-card-header">
-        <div>
-          <h2>Site</h2>
+      <section class="weather-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>EA rainfall</h1>
+            <p id="statusText" class="weather-status">Ready.</p>
+          </div>
+          <span id="gaugeCount" class="weather-pill">0 gauges</span>
         </div>
-        <label class="field-label" for="siteSelect">Sample site</label>
-      </div>
-      <select id="siteSelect" class="text-input"></select>
-      <label class="field-label" for="distanceRange">Radius <span id="distanceLabel">40 km</span></label>
-      <input id="distanceRange" type="range" min="5" max="100" value="40" step="5" />
-      <p id="statusText" class="status-text">Ready.</p>
-    </section>
-
-    <section class="weather-data-card">
-      <h2>Gauges</h2>
-      <div id="gaugeList" class="risk-list"></div>
+        <div class="weather-field-grid">
+          <label class="weather-label" for="siteSelect">
+            Site
+            <select id="siteSelect" class="weather-select"></select>
+          </label>
+          <label class="weather-label" for="distanceRange">
+            Radius <span id="distanceLabel">40 km</span>
+            <input id="distanceRange" class="weather-range" type="range" min="5" max="100" value="40" step="5" />
+          </label>
+        </div>
+        <div class="weather-actions">
+          <button id="clearGaugesButton" class="weather-button" type="button">Clear</button>
+          <button id="loadGaugesButton" class="weather-button is-primary" type="button">Load</button>
+        </div>
+        <div id="gaugeList" class="weather-list"></div>
+      </section>
     </section>
   </main>
 
-  <script src="weather-display-style.js?v=0.1.2"></script>
-  <script src="app.js?v=0.3.0-demapped-weather-apis"></script>
-  <script src="ea-rainfall.js?v=0.3.0-demapped-weather-apis"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
+  <script src="ea-rainfall.js?v=1.0.0-weather-map-shell" defer></script>
 </body>
 </html>

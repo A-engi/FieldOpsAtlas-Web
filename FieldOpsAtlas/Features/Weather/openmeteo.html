@@ -3,55 +3,53 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Open-Meteo Site Risk - FieldOps Atlas Weather</title>
-  <link rel="stylesheet" href="styles.css?v=0.3.2-provider-test-clean" />
+  <title>Open-Meteo - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
 </head>
-<body>
-  <main class="lab-shell provider-shell" data-page="openmeteo">
-    <header class="lab-header">
-      <a class="back-link" href="rainviewer.html">RainViewer</a>
-      <div>
-        <h1>Open-Meteo site risk</h1>
-      </div>
-      <a class="back-link" href="metoffice.html">Met Office</a>
-    </header>
+<body class="weather-page">
+  <main class="fieldops-shell-root weather-shell" data-page="weather" data-weather-provider="openmeteo">
+    <section class="weather-stage" aria-label="Open-Meteo risk map">
+      <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with site risk markers"></div>
 
-    <nav class="provider-tabs" aria-label="Weather provider screens">
-      <a class="provider-tab" href="rainviewer.html">RainViewer</a>
-      <a class="provider-tab active" href="openmeteo.html">Open-Meteo</a>
-      <a class="provider-tab" href="metoffice.html">Met Office</a>
-      <a class="provider-tab" href="ea-rainfall.html">EA gauges</a>
-    </nav>
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link" href="rainviewer.html">Radar</a>
+        <a class="weather-provider-link is-active" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+      </nav>
 
-    <section class="hero-card provider-card-stack">
-      <div>
-        <h2>Site risk</h2>
-      </div>
-      <div class="button-row">
-        <button id="loadSitesButton" class="secondary-button" type="button">Reload sites</button>
-        <button id="fetchRiskButton" class="primary-button" type="button">Fetch risk</button>
-      </div>
-    </section>
-
-    <section class="weather-data-card">
-      <div class="weather-card-header">
-        <div>
-          <h2><span id="regionCount">0</span> region(s), <span id="siteCount">0</span> site(s)</h2>
+      <section class="weather-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>Open-Meteo risk</h1>
+            <p id="statusText" class="weather-status">Ready.</p>
+          </div>
+          <span class="weather-pill"><span id="siteCount">0</span> sites</span>
         </div>
-        <label class="field-label" for="siteSearch">Find site</label>
-      </div>
-      <input id="siteSearch" class="text-input" autocomplete="off" placeholder="Search site" />
-      <p id="statusText" class="status-text">Ready.</p>
-    </section>
-
-    <section class="weather-data-card">
-      <h2>Risk cards</h2>
-      <div id="riskList" class="risk-list"></div>
+        <label class="weather-label" for="siteSearch">
+          Site filter
+          <input id="siteSearch" class="weather-input" autocomplete="off" placeholder="Search" />
+        </label>
+        <div class="weather-actions">
+          <button id="loadSitesButton" class="weather-button" type="button">Reload</button>
+          <button id="fetchRiskButton" class="weather-button is-primary" type="button">Refresh</button>
+        </div>
+        <div class="weather-metrics">
+          <div class="weather-metric"><strong id="regionCount">0</strong><span>Regions</span></div>
+          <div class="weather-metric"><strong id="rainCount">0</strong><span>Rain</span></div>
+          <div class="weather-metric"><strong id="windCount">0</strong><span>Wind</span></div>
+        </div>
+        <div id="riskList" class="weather-list"></div>
+      </section>
     </section>
   </main>
 
-  <script src="weather-display-style.js?v=0.1.2"></script>
-  <script src="app.js?v=0.3.0-demapped-weather-apis"></script>
-  <script src="openmeteo.js?v=0.3.0-demapped-weather-apis"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
+  <script src="openmeteo.js?v=1.0.0-weather-map-shell" defer></script>
 </body>
 </html>

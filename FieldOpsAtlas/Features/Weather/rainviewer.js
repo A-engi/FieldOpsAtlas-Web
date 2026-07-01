@@ -1,140 +1,126 @@
-/* RainViewer API frame tester v0.3.0
-   No OSM/Leaflet map. No recolour filter. All frame display choices come from weather-display-style.js.
-*/
-
 (() => {
   "use strict";
 
   const Lab = window.AtlasWeatherLab;
   const Style = window.FIELDOPS_WEATHER_DISPLAY_STYLE;
   const RAINVIEWER_API = "https://api.rainviewer.com/public/weather-maps.json";
-  const rainStyle = Style?.rainViewer || {};
 
   const state = {
+    map: null,
+    layer: null,
     host: "",
     frames: []
   };
 
   const els = {
-    statusText: document.getElementById("statusText"),
-    loadRadarButton: document.getElementById("loadRadarButton"),
-    radarFrameRange: document.getElementById("radarFrameRange"),
-    radarTimeLabel: document.getElementById("radarTimeLabel"),
-    radarFrameCount: document.getElementById("radarFrameCount"),
-    tileTemplate: document.getElementById("tileTemplate"),
-    frameList: document.getElementById("frameList")
+    status: document.getElementById("statusText"),
+    load: document.getElementById("loadRadarButton"),
+    range: document.getElementById("radarFrameRange"),
+    time: document.getElementById("radarTimeLabel"),
+    count: document.getElementById("radarFrameCount")
   };
 
-  bindEvents();
-  loadFrames({ manual: false });
+  init();
 
-  function bindEvents() {
-    els.loadRadarButton?.addEventListener("click", () => loadFrames({ manual: true }));
-    els.radarFrameRange?.addEventListener("input", () => showFrame(Number(els.radarFrameRange.value || 0)));
+  function init() {
+    state.map = Lab.initMap();
+    bindEvents();
+    loadFrames({ manual: false });
   }
 
-  async function loadFrames({ manual } = { manual: false }) {
-    if (els.loadRadarButton) {
-      els.loadRadarButton.disabled = true;
-      els.loadRadarButton.textContent = manual ? "Reloading..." : "Loading...";
-    }
+  function bindEvents() {
+    els.load?.addEventListener("click", () => loadFrames({ manual: true }));
+    els.range?.addEventListener("input", () => showFrame(Number(els.range.value || 0)));
+  }
+
+  async function loadFrames({ manual }) {
+    Lab.setBusy(els.load, true, "Loading...", "Refresh");
 
     try {
       setStatus("Loading...");
       const response = await fetch(RAINVIEWER_API, { cache: "no-store" });
       if (!response.ok) throw new Error(`RainViewer HTTP ${response.status}`);
+
       const data = await response.json();
       const frames = data?.radar?.past || [];
-      if (!frames.length) throw new Error("No observed radar frames returned.");
+      if (!frames.length) throw new Error("No radar frames.");
 
       state.host = String(data.host || "");
-      state.frames = frames.map((frame, index) => ({
-        index,
-        time: Number(frame.time),
-        path: String(frame.path || "")
-      }));
+      state.frames = frames
+        .map((frame, index) => ({
+          index,
+          time: Number(frame.time),
+          path: String(frame.path || "")
+        }))
+        .filter((frame) => frame.time && frame.path);
 
-      if (els.radarFrameRange) {
-        els.radarFrameRange.disabled = false;
-        els.radarFrameRange.min = "0";
-        els.radarFrameRange.max = String(Math.max(0, state.frames.length - 1));
-        els.radarFrameRange.value = String(Math.max(0, state.frames.length - 1));
-      }
+      if (!state.frames.length) throw new Error("No usable radar frames.");
 
-      renderFrameList();
-      showFrame(Math.max(0, state.frames.length - 1));
-      setStatus("Loaded.");
+      configureRange();
+      showFrame(state.frames.length - 1);
+      setStatus(manual ? "Loaded." : "Loaded.");
     } catch (error) {
-      setStatus(error?.message || "RainViewer frame load failed.");
-      state.frames = [];
-      renderFrameList();
-      showFrame(0);
+      clearRadar();
+      setStatus(error?.message || "RainViewer failed.");
     } finally {
-      if (els.loadRadarButton) {
-        els.loadRadarButton.disabled = false;
-        els.loadRadarButton.textContent = "Reload RainViewer frames";
-      }
+      Lab.setBusy(els.load, false, "Loading...", "Refresh");
     }
+  }
+
+  function configureRange() {
+    if (!els.range) return;
+    els.range.disabled = false;
+    els.range.min = "0";
+    els.range.max = String(state.frames.length - 1);
+    els.range.value = String(state.frames.length - 1);
   }
 
   function showFrame(index) {
     const frame = state.frames[index];
-    if (!frame) {
-      if (els.radarFrameCount) els.radarFrameCount.textContent = "0 frames";
-      if (els.radarTimeLabel) els.radarTimeLabel.textContent = "Not loaded";
-      if (els.tileTemplate) els.tileTemplate.textContent = "No frame selected.";
+    if (!frame || !state.map) {
+      clearRadar();
       return;
     }
 
-    const scheme = Number.isFinite(Number(rainStyle.freeColourScheme)) ? Number(rainStyle.freeColourScheme) : 2;
-    const opacity = Number.isFinite(Number(rainStyle.defaultOpacity)) ? Number(rainStyle.defaultOpacity) : 0.95;
+    const scheme = Number(Style?.rainViewer?.freeColourScheme || 2);
+    const opacity = Number(Style?.rainViewer?.defaultOpacity || 0.95);
     const template = `${state.host}${frame.path}/256/{z}/{x}/{y}/${scheme}/1_1.png`;
 
-    if (els.radarFrameCount) els.radarFrameCount.textContent = `${index + 1}/${state.frames.length} frames`;
-    if (els.radarTimeLabel) els.radarTimeLabel.textContent = Lab.formatDateTime(frame.time);
-    if (els.tileTemplate) {
-      els.tileTemplate.textContent = [
-        `time: ${Lab.formatDateTime(frame.time)}`,
-        `epoch: ${frame.time}`,
-        `nativeColourScheme: ${scheme}`,
-        `opacity: ${opacity}`,
-        `tileTemplate: ${template}`
-      ].join("\n");
-    }
+    clearRadar();
+    state.layer = window.L.tileLayer(template, {
+      pane: "weatherOverlayPane",
+      minZoom: 5,
+      maxZoom: 11,
+      tileSize: 256,
+      opacity,
+      keepBuffer: 1,
+      noWrap: true,
+      updateWhenIdle: true,
+      updateWhenZooming: false,
+      attribution: '&copy; <a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a>'
+    }).addTo(state.map);
 
-    markSelectedFrame(index);
+    if (els.range) els.range.value = String(index);
+    if (els.count) els.count.textContent = `${index + 1}/${state.frames.length}`;
+    if (els.time) els.time.textContent = Lab.formatDateTime(frame.time);
   }
 
-  function renderFrameList() {
-    if (!els.frameList) return;
-    if (!state.frames.length) {
-    els.frameList.innerHTML = `<p class="status-text">No results.</p>`;
-      return;
+  function clearRadar() {
+    if (state.layer && state.map) {
+      state.map.removeLayer(state.layer);
+      state.layer = null;
     }
 
-    els.frameList.innerHTML = state.frames.map((frame, index) => `
-      <button class="list-row frame-row" type="button" data-frame-index="${index}">
-        <span>${index + 1}. ${Lab.escapeHtml(Lab.formatDateTime(frame.time))}</span>
-        <code>${Lab.escapeHtml(String(frame.time))}</code>
-      </button>
-    `).join("");
-
-    els.frameList.querySelectorAll("[data-frame-index]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const index = Number(button.dataset.frameIndex || 0);
-        if (els.radarFrameRange) els.radarFrameRange.value = String(index);
-        showFrame(index);
-      });
-    });
-  }
-
-  function markSelectedFrame(index) {
-    els.frameList?.querySelectorAll("[data-frame-index]").forEach((button) => {
-      button.classList.toggle("active", Number(button.dataset.frameIndex || 0) === index);
-    });
+    if (els.count) els.count.textContent = "0";
+    if (els.time) els.time.textContent = "Not loaded";
+    if (els.range) {
+      els.range.disabled = true;
+      els.range.value = "0";
+      els.range.max = "0";
+    }
   }
 
   function setStatus(message) {
-    if (els.statusText) els.statusText.textContent = message;
+    if (els.status) els.status.textContent = message;
   }
 })();

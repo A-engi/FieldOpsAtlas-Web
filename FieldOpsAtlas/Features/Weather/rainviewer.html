@@ -3,53 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>RainViewer Radar Frames - FieldOps Atlas Weather</title>
-  <link rel="stylesheet" href="styles.css?v=0.3.2-provider-test-clean" />
+  <title>RainViewer - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
 </head>
-<body>
-  <main class="lab-shell provider-shell" data-page="rainviewer">
-    <header class="lab-header">
-      <a class="back-link" href="../maps/index.html">Atlas Map</a>
-      <div>
-        <h1>RainViewer radar frames</h1>
-      </div>
-      <span class="version-pill">v0.3.2</span>
-    </header>
+<body class="weather-page">
+  <main class="fieldops-shell-root weather-shell" data-page="weather" data-weather-provider="rainviewer">
+    <section class="weather-stage" aria-label="RainViewer map">
+      <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with RainViewer radar"></div>
 
-    <nav class="provider-tabs" aria-label="Weather provider screens">
-      <a class="provider-tab active" href="rainviewer.html">RainViewer</a>
-      <a class="provider-tab" href="openmeteo.html">Open-Meteo</a>
-      <a class="provider-tab" href="metoffice.html">Met Office</a>
-      <a class="provider-tab" href="ea-rainfall.html">EA gauges</a>
-    </nav>
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link is-active" href="rainviewer.html">Radar</a>
+        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+      </nav>
 
-    <section class="hero-card provider-card-stack">
-      <div>
-        <h2>Radar frames</h2>
-      </div>
-      <button id="loadRadarButton" class="primary-button" type="button">Load RainViewer frames</button>
-    </section>
+      <section class="weather-frame-strip" aria-label="Radar frame">
+        <span id="radarFrameCount" class="weather-pill">0</span>
+        <input id="radarFrameRange" class="weather-range" type="range" min="0" max="0" value="0" disabled />
+        <span id="radarTimeLabel" class="weather-pill">Not loaded</span>
+      </section>
 
-    <section class="weather-data-card" aria-live="polite">
-      <div class="weather-card-header">
-        <div>
-          <h2 id="radarFrameCount">0 frames</h2>
+      <section class="weather-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>RainViewer radar</h1>
+            <p id="statusText" class="weather-status">Ready.</p>
+          </div>
+          <span class="weather-pill">Live</span>
         </div>
-        <span id="radarTimeLabel" class="metric-pill">Not loaded</span>
-      </div>
-      <input id="radarFrameRange" class="range-control" type="range" min="0" max="0" value="0" disabled />
-      <p id="statusText" class="status-text">Ready.</p>
-      <pre id="tileTemplate" class="code-panel">No frame selected.</pre>
-    </section>
-
-    <section class="weather-data-card">
-      <h2>Available frames</h2>
-      <div id="frameList" class="compact-list"></div>
+        <div class="weather-actions">
+          <button id="loadRadarButton" class="weather-button is-primary" type="button">Refresh</button>
+          <a class="weather-button" href="openmeteo.html">Risk</a>
+        </div>
+        <div class="weather-legend" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      </section>
     </section>
   </main>
 
-  <script src="weather-display-style.js?v=0.1.2"></script>
-  <script src="app.js?v=0.3.0-demapped-weather-apis"></script>
-  <script src="rainviewer.js?v=0.3.0-demapped-weather-apis"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
+  <script src="rainviewer.js?v=1.0.0-weather-map-shell" defer></script>
 </body>
 </html>

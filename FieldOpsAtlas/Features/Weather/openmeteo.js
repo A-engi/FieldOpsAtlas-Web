@@ -1,31 +1,17 @@
-/* Open-Meteo site-risk API tester v0.3.1
-   Data-only screen. No OSM/Leaflet map, no markers, no local colour palette.
-*/
-
 (() => {
   "use strict";
 
   const Lab = window.AtlasWeatherLab;
-  const Style = window.FIELDOPS_WEATHER_DISPLAY_STYLE;
   const OPEN_METEO_API = "https://api.open-meteo.com/v1/forecast";
-  const MAX_SITES_PER_BATCH = 12;
+  const MAX_SITES_PER_BATCH = 24;
   const HOURS_TO_SHOW = 12;
 
   const CURRENT_FIELDS = [
     "temperature_2m",
-    "relative_humidity_2m",
-    "apparent_temperature",
-    "is_day",
     "precipitation",
     "rain",
-    "showers",
-    "snowfall",
     "weather_code",
-    "cloud_cover",
-    "pressure_msl",
-    "surface_pressure",
     "wind_speed_10m",
-    "wind_direction_10m",
     "wind_gusts_10m"
   ];
 
@@ -33,106 +19,104 @@
     "precipitation_probability",
     "precipitation",
     "rain",
-    "showers",
-    "snowfall",
     "weather_code",
-    "wind_speed_10m",
-    "wind_gusts_10m",
-    "visibility"
+    "wind_gusts_10m"
   ];
 
   const state = {
+    map: null,
+    markerLayer: null,
     regions: [],
     sites: [],
     selectedSites: [],
-    riskBySite: new Map(),
-    fetchSequence: 0
+    riskBySite: new Map()
   };
 
   const els = {
-    statusText: document.getElementById("statusText"),
+    status: document.getElementById("statusText"),
     regionCount: document.getElementById("regionCount"),
     siteCount: document.getElementById("siteCount"),
-    loadSitesButton: document.getElementById("loadSitesButton"),
-    fetchRiskButton: document.getElementById("fetchRiskButton"),
-    riskList: document.getElementById("riskList"),
-    siteSearch: document.getElementById("siteSearch")
+    rainCount: document.getElementById("rainCount"),
+    windCount: document.getElementById("windCount"),
+    loadSites: document.getElementById("loadSitesButton"),
+    fetchRisk: document.getElementById("fetchRiskButton"),
+    list: document.getElementById("riskList"),
+    search: document.getElementById("siteSearch")
   };
 
   init();
 
   async function init() {
+    state.map = Lab.initMap();
+    state.markerLayer = window.L.layerGroup().addTo(state.map);
     bindEvents();
     await loadSites();
-    await fetchRisk({ auto: true });
+    await fetchRisk();
   }
 
   function bindEvents() {
-    els.loadSitesButton?.addEventListener("click", loadSites);
-    els.fetchRiskButton?.addEventListener("click", () => fetchRisk({ auto: false }));
-    els.siteSearch?.addEventListener("input", updateSelectedSites);
+    els.loadSites?.addEventListener("click", loadSites);
+    els.fetchRisk?.addEventListener("click", fetchRisk);
+    els.search?.addEventListener("input", () => {
+      updateSelectedSites();
+      render();
+    });
   }
 
   async function loadSites() {
-    setBusy(true);
+    Lab.setBusy(els.loadSites, true, "Loading...", "Reload");
     try {
+      setStatus("Loading...");
       state.regions = await Lab.loadRegions();
       state.sites = Lab.allSites(state.regions);
       updateSelectedSites();
-      setStatus(`Loaded.`);
+      render();
+      Lab.fitSites(state.map, state.selectedSites);
+      setStatus("Loaded.");
     } catch (error) {
-      setStatus(error?.message || "Site list failed to load.");
+      setStatus(error?.message || "Sites failed.");
     } finally {
-      setBusy(false);
+      Lab.setBusy(els.loadSites, false, "Loading...", "Reload");
     }
   }
 
   function updateSelectedSites() {
-    const query = String(els.siteSearch?.value || "").trim().toLowerCase();
+    const query = String(els.search?.value || "").trim().toLowerCase();
     const source = query
-      ? state.sites.filter((site) => site.name.toLowerCase().includes(query) || site.region.toLowerCase().includes(query))
-      : preferDemoBatch(state.sites);
+      ? state.sites.filter((site) => {
+          return site.name.toLowerCase().includes(query) ||
+            site.region.toLowerCase().includes(query);
+        })
+      : state.sites;
 
     state.selectedSites = source.slice(0, MAX_SITES_PER_BATCH);
-    if (els.regionCount) els.regionCount.textContent = String(state.regions.length);
-    if (els.siteCount) els.siteCount.textContent = String(state.selectedSites.length);
-    renderRisks();
   }
 
-  function preferDemoBatch(sites) {
-    return sites;
-  }
-
-  async function fetchRisk({ auto }) {
+  async function fetchRisk() {
     if (!state.selectedSites.length) {
-      setStatus("No sites available for Open-Meteo risk fetch.");
+      setStatus("No sites.");
       return;
     }
 
-    const fetchId = ++state.fetchSequence;
-    setBusy(true);
-    setStatus(`${auto ? "Auto" : "Manual"} Open-Meteo request for ${state.selectedSites.length} site(s)...`);
-
+    Lab.setBusy(els.fetchRisk, true, "Loading...", "Refresh");
     try {
-      const url = buildForecastUrl(state.selectedSites);
-      const response = await fetch(url, { cache: "no-store" });
+      setStatus("Loading...");
+      const response = await fetch(buildForecastUrl(state.selectedSites), { cache: "no-store" });
       if (!response.ok) throw new Error(`Open-Meteo HTTP ${response.status}`);
-      const payload = await response.json();
-      if (fetchId !== state.fetchSequence) return;
 
+      const payload = await response.json();
       const forecasts = Array.isArray(payload) ? payload : [payload];
       forecasts.forEach((forecast, index) => {
         const site = state.selectedSites[index];
-        if (!site) return;
-        state.riskBySite.set(site.id, buildRisk(site, forecast));
+        if (site) state.riskBySite.set(site.id, buildRisk(site, forecast));
       });
 
-      renderRisks();
-      setStatus(`Loaded.`);
+      render();
+      setStatus("Loaded.");
     } catch (error) {
-      setStatus(error?.message || "Open-Meteo request failed.");
+      setStatus(error?.message || "Open-Meteo failed.");
     } finally {
-      setBusy(false);
+      Lab.setBusy(els.fetchRisk, false, "Loading...", "Refresh");
     }
   }
 
@@ -149,32 +133,28 @@
 
   function buildRisk(site, forecast) {
     const current = forecast?.current || {};
-    const hourly = forecast?.hourly || {};
-    const hours = collectHours(hourly);
-    const maxRain = Math.max(Number(current.rain || 0), ...hours.map((hour) => Number(hour.rain || hour.precipitation || 0)));
-    const maxWind = Math.max(Number(current.wind_gusts_10m || 0), ...hours.map((hour) => Number(hour.wind_gusts_10m || 0)));
+    const hours = collectHours(forecast?.hourly || {});
+    const maxRain = Math.max(Number(current.rain || current.precipitation || 0), ...hours.map((hour) => Number(hour.rain || hour.precipitation || 0)));
+    const maxWind = Math.max(Number(current.wind_gusts_10m || current.wind_speed_10m || 0), ...hours.map((hour) => Number(hour.wind_gusts_10m || 0)));
     const maxProb = Math.max(0, ...hours.map((hour) => Number(hour.precipitation_probability || 0)));
     const weatherCode = Number(current.weather_code || 0);
-    const visual = makeVisualState({ weatherCode, maxRain, maxWind, maxProb, isDay: Number(current.is_day) === 1 });
+    const level = riskLevel({ weatherCode, maxRain, maxWind, maxProb });
 
     return {
       site,
-      visual,
-      score: scoreRisk({ weatherCode, maxRain, maxWind, maxProb }),
-      current,
-      hours,
+      level,
+      colour: Lab.weatherColour(level),
       summary: [
         `${Number(current.temperature_2m ?? 0).toFixed(1)} C`,
-        `${Number(current.wind_speed_10m ?? 0).toFixed(0)} km/h wind`,
-        `${Number(current.precipitation ?? 0).toFixed(1)} mm now`,
-        `${maxProb.toFixed(0)}% precip risk`
+        `${Number(current.wind_speed_10m ?? 0).toFixed(0)} km/h`,
+        `${Number(current.precipitation ?? 0).toFixed(1)} mm`,
+        `${maxProb.toFixed(0)}%`
       ].join(" · ")
     };
   }
 
   function collectHours(hourly) {
-    const times = hourly?.time || [];
-    return times.slice(0, HOURS_TO_SHOW).map((time, index) => ({
+    return (hourly.time || []).slice(0, HOURS_TO_SHOW).map((time, index) => ({
       time,
       precipitation_probability: readHourly(hourly, "precipitation_probability", index),
       precipitation: readHourly(hourly, "precipitation", index),
@@ -189,77 +169,61 @@
     return Array.isArray(list) ? list[index] : null;
   }
 
-  function makeVisualState(values) {
-    const riskStates = Style?.riskStates || {};
-    if (isThunderCode(values.weatherCode)) {
-      return { state: "lightning", label: riskStates.lightning?.label || "Lightning / thunder", colour: riskStates.lightning?.colour || "currentColor" };
-    }
-    if (values.maxWind >= 55 || values.weatherCode >= 95) {
-      return { state: "storm", label: riskStates.storm?.label || "Storm / wind", colour: riskStates.storm?.colour || "currentColor" };
-    }
-    if (values.maxRain >= 0.5 || values.maxProb >= 45) {
-      return { state: "rain", label: riskStates.rain?.label || "Rain", colour: riskStates.rain?.colour || "currentColor" };
-    }
-    return { state: "normal", label: values.isDay ? "Normal / sunny" : "Normal / night", colour: riskStates.normal?.colour || "currentColor" };
+  function riskLevel(values) {
+    if (values.weatherCode >= 95 || values.maxWind >= 70) return "extreme";
+    if (values.maxWind >= 55 || values.maxRain >= 4) return "heavy";
+    if (values.maxRain >= 0.5 || values.maxProb >= 45) return "rain";
+    return "dry";
   }
 
-  function isThunderCode(code) {
-    return code === 95 || code === 96 || code === 99;
+  function render() {
+    renderCounts();
+    renderMarkers();
+    renderList();
   }
 
-  function scoreRisk(values) {
-    let score = 0;
-    if (isThunderCode(values.weatherCode)) score += 90;
-    if (values.maxWind >= 55) score += 45;
-    if (values.maxRain >= 2) score += 35;
-    if (values.maxRain >= 0.5) score += 20;
-    if (values.maxProb >= 70) score += 15;
-    return Math.min(100, score);
+  function renderCounts() {
+    const risks = state.selectedSites.map((site) => state.riskBySite.get(site.id)).filter(Boolean);
+    Lab.setText("regionCount", String(state.regions.length));
+    Lab.setText("siteCount", String(state.selectedSites.length));
+    Lab.setText("rainCount", String(risks.filter((risk) => risk.level === "rain" || risk.level === "heavy" || risk.level === "extreme").length));
+    Lab.setText("windCount", String(risks.filter((risk) => risk.level === "heavy" || risk.level === "extreme").length));
   }
 
-  function renderRisks() {
-    if (!els.riskList) return;
+  function renderMarkers() {
+    state.markerLayer.clearLayers();
+    state.selectedSites.forEach((site) => {
+      const risk = state.riskBySite.get(site.id);
+      const colour = risk?.colour || Lab.weatherColour("dry");
+      window.L.marker([site.lat, site.lon], {
+        pane: "weatherMarkerPane",
+        icon: Lab.markerIcon({ colour, label: risk?.level === "dry" ? "" : "!" })
+      })
+        .bindPopup(`<strong>${Lab.escapeHtml(site.name)}</strong><br>${Lab.escapeHtml(risk?.summary || site.region)}`)
+        .addTo(state.markerLayer);
+    });
+  }
+
+  function renderList() {
+    if (!els.list) return;
     if (!state.selectedSites.length) {
-      els.riskList.innerHTML = `<p class="status-text">No matching sites.</p>`;
+      els.list.innerHTML = '<p class="weather-status">No results.</p>';
       return;
     }
 
-    els.riskList.innerHTML = state.selectedSites.map((site) => {
-      const risk = state.riskBySite.get(site.id) || makeEmptyRisk(site);
-      const visual = risk.visual;
-      return `
-        <article class="risk-card" style="--risk-colour:${Lab.escapeHtml(visual.colour)}">
-          <div class="risk-card-top">
-            <div>
-              <h3>${Lab.escapeHtml(site.name)}</h3>
-              <p>${Lab.escapeHtml(site.region)} · ${site.lat.toFixed(3)}, ${site.lon.toFixed(3)}</p>
-            </div>
-            <span class="risk-pill">${Lab.escapeHtml(visual.label)}</span>
-          </div>
-          <p>${Lab.escapeHtml(risk.summary)}</p>
-        </article>
-      `;
+    els.list.innerHTML = state.selectedSites.slice(0, 8).map((site) => {
+      const risk = state.riskBySite.get(site.id);
+      return [
+        '<article class="weather-list-row">',
+        `<strong>${Lab.escapeHtml(site.name)}</strong>`,
+        `<span style="color:${Lab.escapeHtml(risk?.colour || Lab.weatherColour("dry"))}">${Lab.escapeHtml(risk?.level || "dry")}</span>`,
+        `<small>${Lab.escapeHtml(risk?.summary || site.region)}</small>`,
+        "</article>"
+      ].join("");
     }).join("");
   }
 
-  function makeEmptyRisk(site) {
-    const unloaded = Style?.riskStates?.unloaded || { label: "Not loaded", colour: "currentColor" };
-    return {
-      site,
-      visual: { state: "unloaded", label: unloaded.label, colour: unloaded.colour },
-      score: 0,
-      current: {},
-      hours: [],
-      summary: "Not loaded."
-    };
-  }
-
-  function setBusy(isBusy) {
-    if (els.loadSitesButton) els.loadSitesButton.disabled = isBusy;
-    if (els.fetchRiskButton) els.fetchRiskButton.disabled = isBusy;
-  }
-
   function setStatus(message) {
-    if (els.statusText) els.statusText.textContent = message;
+    if (els.status) els.status.textContent = message;
   }
 })();

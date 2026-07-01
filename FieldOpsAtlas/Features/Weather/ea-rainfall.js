@@ -1,7 +1,3 @@
-/* Environment Agency rainfall gauge API tester v0.3.1
-   Data-only screen. No OSM/Leaflet map and no markers.
-*/
-
 (() => {
   "use strict";
 
@@ -9,44 +5,69 @@
   const EA_ROOT = "https://environment.data.gov.uk/flood-monitoring";
 
   const state = {
+    map: null,
+    siteLayer: null,
+    gaugeLayer: null,
     regions: [],
     sites: []
   };
 
   const els = {
-    statusText: document.getElementById("statusText"),
+    status: document.getElementById("statusText"),
     siteSelect: document.getElementById("siteSelect"),
     distanceRange: document.getElementById("distanceRange"),
     distanceLabel: document.getElementById("distanceLabel"),
-    loadGaugesButton: document.getElementById("loadGaugesButton"),
-    clearGaugesButton: document.getElementById("clearGaugesButton"),
-    gaugeList: document.getElementById("gaugeList")
+    load: document.getElementById("loadGaugesButton"),
+    clear: document.getElementById("clearGaugesButton"),
+    list: document.getElementById("gaugeList"),
+    count: document.getElementById("gaugeCount")
   };
 
   init();
 
   async function init() {
+    state.map = Lab.initMap();
+    state.siteLayer = window.L.layerGroup().addTo(state.map);
+    state.gaugeLayer = window.L.layerGroup().addTo(state.map);
+    bindEvents();
+
     state.regions = await Lab.loadRegions();
     state.sites = Lab.allSites(state.regions);
     populateSites();
-    bindEvents();
+    renderSites();
     setStatus("Ready.");
-  }
-
-  function populateSites() {
-    if (!els.siteSelect) return;
-    els.siteSelect.innerHTML = state.sites.map((site) => `
-      <option value="${Lab.escapeHtml(site.id)}">${Lab.escapeHtml(site.name)} · ${Lab.escapeHtml(site.region)}</option>
-    `).join("");
-    if (state.sites[0]) els.siteSelect.value = state.sites[0].id;
   }
 
   function bindEvents() {
     els.distanceRange?.addEventListener("input", () => {
-      els.distanceLabel.textContent = `${els.distanceRange.value} km`;
+      if (els.distanceLabel) els.distanceLabel.textContent = `${els.distanceRange.value} km`;
     });
-    els.loadGaugesButton?.addEventListener("click", loadNearbyGauges);
-    els.clearGaugesButton?.addEventListener("click", clearGauges);
+    els.siteSelect?.addEventListener("change", renderSites);
+    els.load?.addEventListener("click", loadNearbyGauges);
+    els.clear?.addEventListener("click", clearGauges);
+  }
+
+  function populateSites() {
+    if (!els.siteSelect) return;
+    els.siteSelect.innerHTML = state.sites.map((site) => {
+      return `<option value="${Lab.escapeHtml(site.id)}">${Lab.escapeHtml(site.name)}</option>`;
+    }).join("");
+    if (state.sites[0]) els.siteSelect.value = state.sites[0].id;
+  }
+
+  function renderSites() {
+    const site = currentSite();
+    state.siteLayer.clearLayers();
+    if (!site) return;
+
+    window.L.marker([site.lat, site.lon], {
+      pane: "weatherMarkerPane",
+      icon: Lab.markerIcon({ colour: Lab.weatherColour("wind"), label: "S" })
+    })
+      .bindPopup(`<strong>${Lab.escapeHtml(site.name)}</strong><br>${Lab.escapeHtml(site.region)}`)
+      .addTo(state.siteLayer);
+
+    state.map.setView([site.lat, site.lon], 8);
   }
 
   async function loadNearbyGauges() {
@@ -57,22 +78,26 @@
     }
 
     const radiusKm = Number(els.distanceRange?.value || 40);
-    setBusy(true);
-    setStatus(`Loading...`);
+    Lab.setBusy(els.load, true, "Loading...", "Load");
+    setStatus("Loading...");
 
     try {
       const url = `${EA_ROOT}/id/stations?parameter=rainfall&lat=${site.lat}&long=${site.lon}&dist=${radiusKm}`;
       const response = await fetch(url, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) throw new Error(`EA rainfall station request returned HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`EA rainfall HTTP ${response.status}`);
+
       const data = await response.json();
-      const stations = Array.isArray(data?.items) ? data.items : [];
-      const gauges = stations.map((station) => normaliseGauge(station, site)).filter(Boolean).sort((a, b) => a.distanceKm - b.distanceKm);
+      const gauges = (Array.isArray(data?.items) ? data.items : [])
+        .map((station) => normaliseGauge(station, site))
+        .filter(Boolean)
+        .sort((a, b) => a.distanceKm - b.distanceKm);
+
       renderGauges(gauges);
-      setStatus(`Loaded.`);
+      setStatus("Loaded.");
     } catch (error) {
-      setStatus(error?.message || "EA rainfall gauge request failed.");
+      setStatus(error?.message || "EA rainfall failed.");
     } finally {
-      setBusy(false);
+      Lab.setBusy(els.load, false, "Loading...", "Load");
     }
   }
 
@@ -80,6 +105,7 @@
     const lat = Number(station.lat);
     const lon = Number(station.long ?? station.lon);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+
     return {
       id: String(station.stationReference || station.notation || station["@id"] || station.label || "unknown"),
       label: String(station.label || station.stationReference || "Unnamed gauge"),
@@ -92,23 +118,50 @@
   }
 
   function renderGauges(gauges) {
-    if (!els.gaugeList) return;
+    state.gaugeLayer.clearLayers();
+    const visible = gauges.slice(0, 30);
+
+    visible.forEach((gauge) => {
+      window.L.marker([gauge.lat, gauge.lon], {
+        pane: "weatherMarkerPane",
+        icon: Lab.markerIcon({ colour: Lab.weatherColour("gauge"), label: "R" })
+      })
+        .bindPopup(`<strong>${Lab.escapeHtml(gauge.label)}</strong><br>${gauge.distanceKm.toFixed(1)} km`)
+        .addTo(state.gaugeLayer);
+    });
+
+    if (visible.length) {
+      const allPoints = visible.concat(currentSite() || []);
+      Lab.fitSites(state.map, allPoints);
+    }
+
+    if (els.count) els.count.textContent = `${visible.length} gauges`;
+    renderList(visible);
+  }
+
+  function renderList(gauges) {
+    if (!els.list) return;
     if (!gauges.length) {
-      els.gaugeList.innerHTML = `<p class="status-text">No results.</p>`;
+      els.list.innerHTML = '<p class="weather-status">No results.</p>';
       return;
     }
 
-    els.gaugeList.innerHTML = gauges.slice(0, 30).map((gauge) => `
-      <article class="list-row gauge-row">
-        <span>${Lab.escapeHtml(gauge.label)}</span>
-        <code>${gauge.distanceKm.toFixed(1)} km</code>
-        <small>${Lab.escapeHtml([gauge.town, gauge.riverName].filter(Boolean).join(" · "))}</small>
-      </article>
-    `).join("");
+    els.list.innerHTML = gauges.slice(0, 8).map((gauge) => {
+      const detail = [gauge.town, gauge.riverName].filter(Boolean).join(" · ");
+      return [
+        '<article class="weather-list-row">',
+        `<strong>${Lab.escapeHtml(gauge.label)}</strong>`,
+        `<span>${gauge.distanceKm.toFixed(1)} km</span>`,
+        `<small>${Lab.escapeHtml(detail)}</small>`,
+        "</article>"
+      ].join("");
+    }).join("");
   }
 
   function clearGauges() {
-    if (els.gaugeList) els.gaugeList.innerHTML = "";
+    state.gaugeLayer.clearLayers();
+    if (els.list) els.list.innerHTML = "";
+    if (els.count) els.count.textContent = "0 gauges";
     setStatus("Cleared.");
   }
 
@@ -117,11 +170,7 @@
     return state.sites.find((site) => site.id === id) || state.sites[0] || null;
   }
 
-  function setBusy(isBusy) {
-    if (els.loadGaugesButton) els.loadGaugesButton.disabled = isBusy;
-  }
-
   function setStatus(message) {
-    if (els.statusText) els.statusText.textContent = message;
+    if (els.status) els.status.textContent = message;
   }
 })();

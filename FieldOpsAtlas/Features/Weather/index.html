@@ -3,50 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FieldOps Atlas Weather Map v0.3.6</title>
+  <title>Weather - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=0.3.6-domain-rainviewer-map" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
 </head>
-<body class="weather-map-body">
-  <main class="weather-map-shell" data-page="weather-map">
-    <header class="weather-map-header">
-      <a class="back-link" href="../maps/index.html">Atlas Map</a>
-      <div>
-        <p class="eyebrow">Weather map</p>
-        <h1>Stadia Smooth radar</h1>
-      </div>
-      <span class="version-pill">v0.3.6</span>
-    </header>
+<body class="weather-page">
+  <main class="fieldops-shell-root weather-shell" data-page="weather" data-weather-provider="rainviewer">
+    <section class="weather-stage" aria-label="Weather map">
+      <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with weather overlay"></div>
 
-    <section class="weather-map-stage" aria-label="Weather map with RainViewer radar">
-      <div id="weatherMap" class="weather-map-canvas weather-map-base-filter" aria-label="Stadia Alidade Smooth weather radar map"></div>
-
-      <aside class="weather-map-float" aria-label="Weather map controls">
-        <p class="eyebrow">oive layer</p>
-        <h2>RainViewer radar</h2>
-        <p id="weatherMapStatus">ooading Stadia Smooth base and RainViewer radar...</p>
-
-        <div class="button-row">
-          <button id="loadRainViewerButton" class="primary-button" type="button">Reload radar</button>
-        </div>
-
-        <label class="field-label" for="rainFrameRange">Radar frame</label>
-        <input id="rainFrameRange" class="range-control" type="range" min="0" max="0" value="0" disabled />
-        <p id="rainFrameTime" class="weather-map-frame-time">Radar frame not loaded.</p>
-
-        <p class="source-note">Domain-auth Stadia Smooth is the filtered base. RainViewer radar is mapped above it unfiltered.</p>
-      </aside>
-
-      <nav class="weather-map-provider-links" aria-label="Weather provider tests">
-        <a href="rainviewer.html">RainViewer</a>
-        <a href="openmeteo.html">Open-Meteo</a>
-        <a href="metoffice.html">Met Office</a>
-        <a href="ea-rainfall.html">EA gauges</a>
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link is-active" href="index.html">Radar</a>
+        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
       </nav>
+
+      <section class="weather-frame-strip" aria-label="Radar frame">
+        <span id="radarFrameCount" class="weather-pill">0</span>
+        <input id="radarFrameRange" class="weather-range" type="range" min="0" max="0" value="0" disabled />
+        <span id="radarTimeLabel" class="weather-pill">Not loaded</span>
+      </section>
+
+      <section class="weather-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>RainViewer radar</h1>
+            <p id="statusText" class="weather-status">Ready.</p>
+          </div>
+          <span class="weather-pill">OSM</span>
+        </div>
+        <div class="weather-actions">
+          <button id="loadRadarButton" class="weather-button is-primary" type="button">Refresh</button>
+          <a class="weather-button" href="../maps/index.html">Map</a>
+        </div>
+        <div class="weather-legend" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      </section>
     </section>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="weather-map.js?v=0.3.6-domain-rainviewer-map"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
+  <script src="rainviewer.js?v=1.0.0-weather-map-shell" defer></script>
 </body>
 </html>

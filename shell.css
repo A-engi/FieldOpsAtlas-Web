@@ -74,7 +74,7 @@
 
   /* Bottom nav */
   --nav-height: 38px;
-  --nav-button-width: calc((min(100vw, var(--page-width)) - (var(--shell-side) * 2) - (var(--nav-active-gap) * 2)) / 5);
+  --nav-button-width: calc((min(100vw, var(--page-width)) - (var(--shell-side) * 2) - (var(--nav-active-gap) * 2)) / 6);
   --nav-pad-x: 8px;
   --nav-pad-y: 6px;
   --nav-icon-size: 16px;
@@ -166,6 +166,7 @@ select {
 .icon--filter { --icon-src: url("data/icons/filter.svg"); }
 .icon--atlas { --icon-src: url("data/icons/atlas-transmitter-gold.svg"); }
 .icon--map { --icon-src: url("data/icons/map.svg"); }
+.icon--weather { --icon-src: url("data/icons/weather.svg"); }
 .icon--rf { --icon-src: url("data/icons/rf.svg"); }
 .icon--network { --icon-src: url("data/icons/network.svg"); }
 .icon--docs { --icon-src: url("data/icons/docs.svg"); }
@@ -866,14 +867,6 @@ select {
    10. Bottom nav RF content-width fill
    ========================================================================== */
 
-/*
-   The top shell only needs the frame/padding fix. The bottom rail also has
-   five fixed-width buttons plus active-button margins, so the button width
-   must be calculated from the same RF content frame:
-   430px page - 7px left - 7px right = 416px content width.
-   416px - 16px active margins = 400px.
-   400px / 5 nav items = 80px each on the normal phone frame.
-*/
 .bottom-shell,
 .fieldops-shell-root[data-page] .bottom-shell,
 .fieldops-shell-root[data-current-page] .bottom-shell,
