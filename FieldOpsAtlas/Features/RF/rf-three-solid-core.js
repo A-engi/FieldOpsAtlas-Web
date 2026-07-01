@@ -1,28 +1,33 @@
 /* ========================================================================== 
-   FieldOps Atlas RF Three.js closed-mountain adapter
+   FieldOps Atlas RF Three.js inset solid-core adapter
    File: FieldOpsAtlas/Features/RF/rf-three-solid-core.js
-   Version: 1.1.249-builder-3-closed-remesh
+   Version: 1.1.251-builder-3-inset-background-core
 
    Purpose:
-   - Treat Builder 3's current exterior triangles as a coloured point cloud.
-   - Rebuild those points onto one continuous 360-degree mountain surface.
-   - Close the perimeter with a wall and bottom cap so the mesh has no holes.
-   - Preserve Builder 3's existing colour points and shader colour masks.
-   - Render one opaque, front-sided mesh with normal depth testing.
+   - Keep Builder 3's exterior mountain geometry and colours unchanged.
+   - Remove Builder 3's repeated internal occlusion duplicate.
+   - Add one smaller, smooth, closed core behind the exterior surface.
+   - Keep the core below the highest Builder 3 points.
+   - Render the core in the same dark background/neutral terrain colour.
+   - Preserve 360-degree orbit interaction and normal depth occlusion.
    ========================================================================== */
 
 import * as THREEBase from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 export * from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 
-const VERSION = "1.1.249-builder-3-closed-remesh";
-const ANGLE_SEGMENTS = 160;
-const RADIAL_SEGMENTS = 64;
-const NEAREST_SAMPLE_COUNT = 8;
-const SEARCH_CELL_DIVISOR = 52;
+const VERSION = "1.1.251-builder-3-inset-background-core";
+const CORE_XZ_SCALE = 0.94;
+const CORE_Y_SCALE = 0.90;
+const CORE_TOP_RATIO = 0.90;
+const ANGLE_SEGMENTS = 144;
+const RADIAL_SEGMENTS = 54;
+const NEAREST_SAMPLE_COUNT = 18;
+const POINT_GRID_DIVISOR = 58;
 const POSITION_QUANTISATION = 100000;
-const TOP_RADIAL_EXPONENT = 1.24;
-const SIDE_COLOUR = Object.freeze([0.025, 0.105, 0.145]);
-const BOTTOM_COLOUR = Object.freeze([0.018, 0.070, 0.095]);
+const RADIAL_EXPONENT = 1.10;
+const SMOOTHING_PASSES = 2;
+const CORE_COLOUR = 0x06131a;
+const CORE_RGB = Object.freeze([6 / 255, 19 / 255, 26 / 255]);
 
 const OriginalMesh = THREEBase.Mesh;
 const OriginalShaderMaterial = THREEBase.ShaderMaterial;
@@ -165,9 +170,9 @@ function patchBuilderShaderParameters(parameters) {
   return {
     ...parameters,
     transparent: false,
+    opacity: 1,
     depthWrite: true,
     depthTest: true,
-    side: THREEBase.FrontSide,
     vertexShader: patchBuilderVertexShader(parameters.vertexShader),
     fragmentShader: patchBuilderFragmentShader(parameters.fragmentShader)
   };
@@ -195,65 +200,206 @@ function exteriorVertexCount(geometry, totalCount) {
   return totalCount;
 }
 
-function collectExteriorSamples(geometry) {
-  const position = geometry.getAttribute("position");
-  const colour = geometry.getAttribute("color");
-  const colourMask = geometry.getAttribute("colourMask");
-  const count = exteriorVertexCount(geometry, position.count);
-  const unique = new Map();
+function cloneAttributeRange(attribute, count) {
+  const valueCount = count * attribute.itemSize;
+  const sourceArray = attribute.array;
+  const copiedArray = typeof sourceArray.slice === "function"
+    ? sourceArray.slice(0, valueCount)
+    : new sourceArray.constructor(Array.from(sourceArray).slice(0, valueCount));
 
-  for (let index = 0; index < count; index += 1) {
+  return new THREEBase.BufferAttribute(
+    copiedArray,
+    attribute.itemSize,
+    attribute.normalized
+  );
+}
+
+function extractExteriorGeometry(sourceGeometry) {
+  const position = sourceGeometry.getAttribute("position");
+  const count = exteriorVertexCount(sourceGeometry, position.count);
+  const geometry = new THREEBase.BufferGeometry();
+
+  Object.entries(sourceGeometry.attributes).forEach(([name, attribute]) => {
+    geometry.setAttribute(name, cloneAttributeRange(attribute, count));
+  });
+
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData = {
+    ...sourceGeometry.userData,
+    rfExteriorOnly: true,
+    rfExteriorVertexCount: count,
+    rfIntegratedOcclusionRemoved: true
+  };
+
+  return geometry;
+}
+
+function median(values) {
+  if (!values.length) return 0;
+  const ordered = [...values].sort((left, right) => left - right);
+  const middle = Math.floor(ordered.length / 2);
+  return ordered.length % 2
+    ? ordered[middle]
+    : (ordered[middle - 1] + ordered[middle]) * 0.5;
+}
+
+function spatialKey(column, row) {
+  return `${column}:${row}`;
+}
+
+function collectSamples(exteriorGeometry) {
+  const position = exteriorGeometry.getAttribute("position");
+  const groups = new Map();
+  const bounds = {
+    minX: Infinity,
+    maxX: -Infinity,
+    minY: Infinity,
+    maxY: -Infinity,
+    minZ: Infinity,
+    maxZ: -Infinity
+  };
+
+  for (let index = 0; index < position.count; index += 1) {
     const x = position.getX(index);
     const y = position.getY(index);
     const z = position.getZ(index);
 
     if (![x, y, z].every(Number.isFinite)) continue;
 
+    bounds.minX = Math.min(bounds.minX, x);
+    bounds.maxX = Math.max(bounds.maxX, x);
+    bounds.minY = Math.min(bounds.minY, y);
+    bounds.maxY = Math.max(bounds.maxY, y);
+    bounds.minZ = Math.min(bounds.minZ, z);
+    bounds.maxZ = Math.max(bounds.maxZ, z);
+
     const key = `${Math.round(x * POSITION_QUANTISATION)}:`
       + `${Math.round(z * POSITION_QUANTISATION)}`;
-    const sample = {
-      x,
-      y,
-      z,
-      r: Math.hypot(x, z),
-      colour: [
-        colour.getX(index),
-        colour.getY(index),
-        colour.getZ(index)
-      ],
-      colourMask: colourMask.getX(index) >= 0.5 ? 1 : 0
-    };
-    const existing = unique.get(key);
-
-    if (!existing || sample.y > existing.y) {
-      unique.set(key, sample);
-    }
+    const group = groups.get(key) || { x, z, heights: [] };
+    group.heights.push(y);
+    groups.set(key, group);
   }
 
-  const samples = Array.from(unique.values());
+  const samples = Array.from(groups.values()).map((group) => ({
+    x: group.x,
+    y: median(group.heights),
+    z: group.z
+  }));
 
   if (samples.length < 32) {
-    throw new Error("Builder 3 does not contain enough exterior colour points.");
+    throw new Error("Builder 3 does not contain enough exterior points for the core.");
   }
 
-  return samples;
+  const width = bounds.maxX - bounds.minX;
+  const depth = bounds.maxZ - bounds.minZ;
+  const maximumSpan = Math.max(width, depth, 0.001);
+  const cellSize = maximumSpan / POINT_GRID_DIVISOR;
+  const cells = new Map();
+
+  samples.forEach((sample, sampleIndex) => {
+    const column = Math.floor(sample.x / cellSize);
+    const row = Math.floor(sample.z / cellSize);
+    const key = spatialKey(column, row);
+    const bucket = cells.get(key) || [];
+    bucket.push(sampleIndex);
+    cells.set(key, bucket);
+  });
+
+  return {
+    samples,
+    bounds,
+    maximumSpan,
+    cellSize,
+    cells,
+    heightRange: Math.max(bounds.maxY - bounds.minY, 0.001)
+  };
 }
 
-function angularIndex(x, z) {
-  const angle = Math.atan2(z, x);
+function nearestSamples(x, z, surface) {
+  const originColumn = Math.floor(x / surface.cellSize);
+  const originRow = Math.floor(z / surface.cellSize);
+  const candidateIndices = new Set();
+
+  for (let radius = 0; radius <= 10; radius += 1) {
+    for (let column = originColumn - radius;
+      column <= originColumn + radius;
+      column += 1) {
+      for (let row = originRow - radius;
+        row <= originRow + radius;
+        row += 1) {
+        if (
+          radius > 0
+          && column > originColumn - radius
+          && column < originColumn + radius
+          && row > originRow - radius
+          && row < originRow + radius
+        ) {
+          continue;
+        }
+
+        const bucket = surface.cells.get(spatialKey(column, row));
+        if (bucket) bucket.forEach((index) => candidateIndices.add(index));
+      }
+    }
+
+    if (candidateIndices.size >= NEAREST_SAMPLE_COUNT) break;
+  }
+
+  return Array.from(candidateIndices)
+    .map((index) => {
+      const sample = surface.samples[index];
+      return {
+        sample,
+        distanceSquared: (sample.x - x) ** 2 + (sample.z - z) ** 2
+      };
+    })
+    .sort((left, right) => left.distanceSquared - right.distanceSquared)
+    .slice(0, NEAREST_SAMPLE_COUNT);
+}
+
+function robustHeight(x, z, surface) {
+  const neighbours = nearestSamples(x, z, surface);
+
+  if (!neighbours.length) return surface.bounds.minY;
+
+  const heights = neighbours
+    .map(({ sample }) => sample.y)
+    .sort((left, right) => left - right);
+  const lower = heights[Math.min(2, heights.length - 1)];
+  const upper = heights[Math.max(0, heights.length - 3)];
+  let weightedHeight = 0;
+  let totalWeight = 0;
+
+  neighbours.forEach(({ sample, distanceSquared }) => {
+    const clippedHeight = Math.min(upper, Math.max(lower, sample.y));
+    const weight = 1 / Math.pow(
+      Math.max(distanceSquared, surface.maximumSpan ** 2 * 1e-8),
+      0.72
+    );
+    weightedHeight += clippedHeight * weight;
+    totalWeight += weight;
+  });
+
+  return weightedHeight / Math.max(totalWeight, 1e-9);
+}
+
+function angularIndex(x, z, origin) {
+  const angle = Math.atan2(z - origin.z, x - origin.x);
   const normalised = (angle + Math.PI * 2) % (Math.PI * 2);
   return Math.floor(normalised / (Math.PI * 2) * ANGLE_SEGMENTS)
     % ANGLE_SEGMENTS;
 }
 
-function buildBoundary(samples) {
+function buildBoundary(surface, origin) {
   const boundary = new Float32Array(ANGLE_SEGMENTS);
   let globalMaximum = 0;
 
-  samples.forEach((sample) => {
-    const index = angularIndex(sample.x, sample.z);
-    boundary[index] = Math.max(boundary[index], sample.r);
-    globalMaximum = Math.max(globalMaximum, sample.r);
+  surface.samples.forEach((sample) => {
+    const radius = Math.hypot(sample.x - origin.x, sample.z - origin.z);
+    const index = angularIndex(sample.x, sample.z, origin);
+    boundary[index] = Math.max(boundary[index], radius);
+    globalMaximum = Math.max(globalMaximum, radius);
   });
 
   for (let index = 0; index < ANGLE_SEGMENTS; index += 1) {
@@ -284,111 +430,63 @@ function buildBoundary(samples) {
         (index - 1 + ANGLE_SEGMENTS) % ANGLE_SEGMENTS
       ];
       const next = boundary[(index + 1) % ANGLE_SEGMENTS];
-      smoothed[index] = boundary[index] * 0.60 + (previous + next) * 0.20;
+      smoothed[index] = (
+        boundary[index] * 0.70 + (previous + next) * 0.15
+      ) * CORE_XZ_SCALE;
     }
 
     boundary.set(smoothed);
   }
 
-  return { boundary, globalMaximum };
+  return boundary;
 }
 
-function spatialKey(column, row) {
-  return `${column}:${row}`;
-}
-
-function buildSpatialIndex(samples, globalMaximum) {
-  const cellSize = Math.max(globalMaximum / SEARCH_CELL_DIVISOR, 0.0025);
-  const cells = new Map();
-
-  samples.forEach((sample) => {
-    const column = Math.floor(sample.x / cellSize);
-    const row = Math.floor(sample.z / cellSize);
-    const key = spatialKey(column, row);
-    const bucket = cells.get(key) || [];
-    bucket.push(sample);
-    cells.set(key, bucket);
-  });
-
-  return { cells, cellSize, samples };
-}
-
-function nearestSamples(x, z, spatialIndex) {
-  const { cells, cellSize } = spatialIndex;
-  const originColumn = Math.floor(x / cellSize);
-  const originRow = Math.floor(z / cellSize);
-  const candidates = [];
-
-  for (let radius = 0; radius <= 8; radius += 1) {
-    for (let column = originColumn - radius;
-      column <= originColumn + radius;
-      column += 1) {
-      for (let row = originRow - radius;
-        row <= originRow + radius;
-        row += 1) {
-        if (
-          radius > 0
-          && column > originColumn - radius
-          && column < originColumn + radius
-          && row > originRow - radius
-          && row < originRow + radius
-        ) {
-          continue;
-        }
-
-        const bucket = cells.get(spatialKey(column, row));
-        if (bucket) candidates.push(...bucket);
-      }
-    }
-
-    if (candidates.length >= NEAREST_SAMPLE_COUNT) break;
-  }
-
-  return candidates
-    .map((sample) => ({
-      sample,
-      distanceSquared: (sample.x - x) ** 2 + (sample.z - z) ** 2
-    }))
-    .sort((left, right) => left.distanceSquared - right.distanceSquared)
-    .slice(0, NEAREST_SAMPLE_COUNT);
-}
-
-function sampleSurface(x, z, spatialIndex, fallback) {
-  const neighbours = nearestSamples(x, z, spatialIndex);
-
-  if (!neighbours.length) {
-    const nearest = spatialIndex.samples.reduce((best, sample) => {
-      const distanceSquared = (sample.x - x) ** 2 + (sample.z - z) ** 2;
-      return !best || distanceSquared < best.distanceSquared
-        ? { sample, distanceSquared }
-        : best;
-    }, null);
-
-    return nearest ? { ...nearest.sample, x, z } : { ...fallback, x, z };
-  }
-
-  const nearest = neighbours[0].sample;
-
-  if (neighbours[0].distanceSquared <= 1e-10) {
-    return { ...nearest, x, z };
-  }
-
-  let weightedHeight = 0;
-  let totalWeight = 0;
-
-  neighbours.forEach(({ sample, distanceSquared }) => {
-    const weight = 1 / Math.max(distanceSquared, 1e-8);
-    weightedHeight += sample.y * weight;
-    totalWeight += weight;
-  });
+function corePoint(x, z, sourceX, sourceZ, surface, coreMaximumY) {
+  const sourceHeight = robustHeight(sourceX, sourceZ, surface);
+  const insetHeight = surface.bounds.minY
+    + (sourceHeight - surface.bounds.minY) * CORE_Y_SCALE;
 
   return {
     x,
-    y: nearest.y * 0.72 + (weightedHeight / totalWeight) * 0.28,
+    y: Math.min(insetHeight, coreMaximumY),
     z,
-    colour: nearest.colour,
-    colourMask: nearest.colourMask
+    colour: CORE_RGB,
+    colourMask: 0,
+    interiorMask: 1
   };
+}
+
+function smoothCore(rings, center) {
+  for (let pass = 0; pass < SMOOTHING_PASSES; pass += 1) {
+    const replacements = [];
+
+    rings.forEach((ring, ringIndex) => {
+      ring.forEach((point, angleIndex) => {
+        const previous = ring[
+          (angleIndex - 1 + ANGLE_SEGMENTS) % ANGLE_SEGMENTS
+        ];
+        const next = ring[(angleIndex + 1) % ANGLE_SEGMENTS];
+        const inner = ringIndex > 0
+          ? rings[ringIndex - 1][angleIndex]
+          : center;
+        const outer = ringIndex + 1 < rings.length
+          ? rings[ringIndex + 1][angleIndex]
+          : point;
+        const average = (
+          previous.y + next.y + inner.y + outer.y
+        ) * 0.25;
+
+        replacements.push({
+          point,
+          height: point.y * 0.72 + average * 0.28
+        });
+      });
+    });
+
+    replacements.forEach(({ point, height }) => {
+      point.y = height;
+    });
+  }
 }
 
 function triangleNormal(a, b, c) {
@@ -406,57 +504,55 @@ function triangleNormal(a, b, c) {
   };
 }
 
-function pushTriangle(output, first, second, third, surfaceType) {
+function pushTriangle(output, first, second, third, surfaceType, origin) {
   let a = first;
   let b = second;
   let c = third;
-  let normal = triangleNormal(a, b, c);
+  const normal = triangleNormal(a, b, c);
 
   if (surfaceType === "top" && normal.y < 0) {
     [b, c] = [c, b];
   } else if (surfaceType === "bottom" && normal.y > 0) {
     [b, c] = [c, b];
   } else if (surfaceType === "side") {
-    const outwardX = (a.x + b.x + c.x) / 3;
-    const outwardZ = (a.z + b.z + c.z) / 3;
+    const outwardX = (a.x + b.x + c.x) / 3 - origin.x;
+    const outwardZ = (a.z + b.z + c.z) / 3 - origin.z;
     const outwardDot = normal.x * outwardX + normal.z * outwardZ;
-
     if (outwardDot < 0) [b, c] = [c, b];
   }
 
-  const barycentrics = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1]
-  ];
-
-  [a, b, c].forEach((point, index) => {
-    output.positions.push(point.x, point.y, point.z);
-    output.colours.push(...point.colour);
-    output.barycentrics.push(...barycentrics[index]);
-    output.colourMasks.push(point.colourMask);
-    output.interiorMasks.push(point.interiorMask || 0);
+  [a, b, c].forEach((point) => {
+    output.push(point.x, point.y, point.z);
   });
 }
 
-function buildClosedMountainGeometry(sourceGeometry) {
-  const samples = collectExteriorSamples(sourceGeometry);
-  const { boundary, globalMaximum } = buildBoundary(samples);
-  const spatialIndex = buildSpatialIndex(samples, globalMaximum);
-  const bounds = sourceGeometry.boundingBox
-    || (sourceGeometry.computeBoundingBox(), sourceGeometry.boundingBox);
-  const baseY = bounds?.min?.y ?? Math.min(...samples.map((sample) => sample.y));
-  const peakSample = samples.reduce(
-    (highest, sample) => sample.y > highest.y ? sample : highest,
-    samples[0]
-  );
-  const center = sampleSurface(0, 0, spatialIndex, peakSample);
+function buildInsetCoreGeometry(exteriorGeometry) {
+  const surface = collectSamples(exteriorGeometry);
+  const origin = {
+    x: (surface.bounds.minX + surface.bounds.maxX) * 0.5,
+    z: (surface.bounds.minZ + surface.bounds.maxZ) * 0.5
+  };
+  const boundary = buildBoundary(surface, origin);
+  const coreMaximumY = surface.bounds.minY + surface.heightRange * CORE_TOP_RATIO;
+  const sourceCenterHeight = robustHeight(origin.x, origin.z, surface);
+  const center = {
+    x: origin.x,
+    y: Math.min(
+      surface.bounds.minY
+        + (sourceCenterHeight - surface.bounds.minY) * CORE_Y_SCALE,
+      coreMaximumY
+    ),
+    z: origin.z,
+    colour: CORE_RGB,
+    colourMask: 0,
+    interiorMask: 1
+  };
   const rings = [];
 
   for (let ring = 1; ring <= RADIAL_SEGMENTS; ring += 1) {
     const radialFraction = Math.pow(
       ring / RADIAL_SEGMENTS,
-      TOP_RADIAL_EXPONENT
+      RADIAL_EXPONENT
     );
     const points = [];
 
@@ -465,21 +561,26 @@ function buildClosedMountainGeometry(sourceGeometry) {
       angleIndex += 1) {
       const angle = angleIndex / ANGLE_SEGMENTS * Math.PI * 2;
       const radius = boundary[angleIndex] * radialFraction;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      points.push(sampleSurface(x, z, spatialIndex, peakSample));
+      const x = origin.x + Math.cos(angle) * radius;
+      const z = origin.z + Math.sin(angle) * radius;
+      const sourceX = origin.x + (x - origin.x) / CORE_XZ_SCALE;
+      const sourceZ = origin.z + (z - origin.z) / CORE_XZ_SCALE;
+      points.push(corePoint(
+        x,
+        z,
+        sourceX,
+        sourceZ,
+        surface,
+        coreMaximumY
+      ));
     }
 
     rings.push(points);
   }
 
-  const output = {
-    positions: [],
-    colours: [],
-    barycentrics: [],
-    colourMasks: [],
-    interiorMasks: []
-  };
+  smoothCore(rings, center);
+
+  const positions = [];
   const firstRing = rings[0];
 
   for (let angleIndex = 0;
@@ -487,11 +588,12 @@ function buildClosedMountainGeometry(sourceGeometry) {
     angleIndex += 1) {
     const next = (angleIndex + 1) % ANGLE_SEGMENTS;
     pushTriangle(
-      output,
+      positions,
       center,
       firstRing[angleIndex],
       firstRing[next],
-      "top"
+      "top",
+      origin
     );
   }
 
@@ -504,38 +606,35 @@ function buildClosedMountainGeometry(sourceGeometry) {
       angleIndex += 1) {
       const next = (angleIndex + 1) % ANGLE_SEGMENTS;
       pushTriangle(
-        output,
+        positions,
         inner[angleIndex],
         outer[angleIndex],
         outer[next],
-        "top"
+        "top",
+        origin
       );
       pushTriangle(
-        output,
+        positions,
         inner[angleIndex],
         outer[next],
         inner[next],
-        "top"
+        "top",
+        origin
       );
     }
   }
 
+  const baseY = surface.bounds.minY;
   const outerRing = rings[rings.length - 1];
   const bottomRing = outerRing.map((point) => ({
     x: point.x,
     y: baseY,
-    z: point.z,
-    colour: SIDE_COLOUR,
-    colourMask: 0,
-    interiorMask: 1
+    z: point.z
   }));
   const bottomCenter = {
-    x: 0,
+    x: origin.x,
     y: baseY,
-    z: 0,
-    colour: BOTTOM_COLOUR,
-    colourMask: 0,
-    interiorMask: 1
+    z: origin.z
   };
 
   for (let angleIndex = 0;
@@ -547,49 +646,42 @@ function buildClosedMountainGeometry(sourceGeometry) {
     const bottomA = bottomRing[angleIndex];
     const bottomB = bottomRing[next];
 
-    pushTriangle(output, topA, bottomA, bottomB, "side");
-    pushTriangle(output, topA, bottomB, topB, "side");
-    pushTriangle(output, bottomCenter, bottomB, bottomA, "bottom");
+    pushTriangle(positions, topA, bottomA, bottomB, "side", origin);
+    pushTriangle(positions, topA, bottomB, topB, "side", origin);
+    pushTriangle(
+      positions,
+      bottomCenter,
+      bottomB,
+      bottomA,
+      "bottom",
+      origin
+    );
   }
 
   const geometry = new THREEBase.BufferGeometry();
   geometry.setAttribute(
     "position",
-    new THREEBase.Float32BufferAttribute(output.positions, 3)
+    new THREEBase.Float32BufferAttribute(positions, 3)
   );
-  geometry.setAttribute(
-    "color",
-    new THREEBase.Float32BufferAttribute(output.colours, 3)
-  );
-  geometry.setAttribute(
-    "barycentric",
-    new THREEBase.Float32BufferAttribute(output.barycentrics, 3)
-  );
-  geometry.setAttribute(
-    "colourMask",
-    new THREEBase.Float32BufferAttribute(output.colourMasks, 1)
-  );
-  geometry.setAttribute(
-    "interiorMask",
-    new THREEBase.Float32BufferAttribute(output.interiorMasks, 1)
-  );
+  geometry.computeVertexNormals();
   geometry.computeBoundingBox();
   geometry.computeBoundingSphere();
   geometry.userData = {
-    ...sourceGeometry.userData,
-    rfClosedRemesh: true,
-    rfClosedRemeshVersion: VERSION,
-    rfClosedRemeshWatertight: true,
-    rfClosedRemeshSourcePointCount: samples.length,
-    rfClosedRemeshAngleSegments: ANGLE_SEGMENTS,
-    rfClosedRemeshRadialSegments: RADIAL_SEGMENTS,
-    rfInternalCapAttached: true
+    rfInsetSolidCore: true,
+    rfInsetSolidCoreVersion: VERSION,
+    rfInsetSolidCoreWatertight: true,
+    rfInsetSolidCoreColour: CORE_COLOUR,
+    rfInsetSolidCoreXZScale: CORE_XZ_SCALE,
+    rfInsetSolidCoreYScale: CORE_Y_SCALE,
+    rfInsetSolidCoreMaximumY: coreMaximumY,
+    rfInsetSolidCoreSourceMaximumY: surface.bounds.maxY,
+    rfInsetSolidCoreBelowSourcePeak: coreMaximumY < surface.bounds.maxY
   };
 
   return geometry;
 }
 
-function configureOpaqueClosedSurface(material) {
+function configureExteriorMaterial(material) {
   materialList(material).forEach((entry) => {
     if (!entry) return;
 
@@ -599,7 +691,6 @@ function configureOpaqueClosedSurface(material) {
     entry.depthWrite = true;
     entry.depthTest = true;
     entry.colorWrite = true;
-    entry.side = THREEBase.FrontSide;
     entry.blending = THREEBase.NoBlending;
     entry.premultipliedAlpha = false;
     entry.needsUpdate = true;
@@ -610,11 +701,25 @@ function configureVisibleWireframe(material) {
   materialList(material).forEach((entry) => {
     if (!entry?.wireframe) return;
 
-    entry.side = THREEBase.FrontSide;
     entry.depthTest = true;
     entry.depthWrite = false;
     entry.needsUpdate = true;
   });
+}
+
+function createCoreMaterial() {
+  const material = new THREEBase.MeshBasicMaterial({
+    color: CORE_COLOUR,
+    transparent: false,
+    opacity: 1,
+    depthTest: true,
+    depthWrite: true,
+    side: THREEBase.DoubleSide,
+    blending: THREEBase.NoBlending,
+    toneMapped: false
+  });
+  material.name = "rf-inset-background-core-material";
+  return material;
 }
 
 export class ShaderMaterial extends OriginalShaderMaterial {
@@ -631,33 +736,48 @@ export class ShaderMaterial extends OriginalShaderMaterial {
 export class Mesh extends OriginalMesh {
   constructor(geometry, material) {
     const builderMountain = isBuilderMountainGeometry(geometry, material);
-    const renderGeometry = builderMountain
-      ? buildClosedMountainGeometry(geometry)
-      : geometry;
 
-    super(renderGeometry, material);
-
-    if (builderMountain) {
-      geometry.dispose?.();
-      configureOpaqueClosedSurface(material);
-      this.name = "rf-closed-mountain-shell";
-      this.userData.rfSolidShellVersion = VERSION;
-      this.userData.rfClosedRemesh = true;
-      this.userData.rfInternalCapAttached = true;
+    if (!builderMountain) {
+      super(geometry, material);
+      if (isWireframeMaterial(material)) configureVisibleWireframe(material);
       return;
     }
 
-    if (isWireframeMaterial(material)) {
-      configureVisibleWireframe(material);
-    }
+    const exteriorGeometry = extractExteriorGeometry(geometry);
+    super(exteriorGeometry, material);
+
+    configureExteriorMaterial(material);
+
+    const coreGeometry = buildInsetCoreGeometry(exteriorGeometry);
+    const coreMaterial = createCoreMaterial();
+    const coreMesh = new OriginalMesh(coreGeometry, coreMaterial);
+    coreMesh.name = "rf-inset-background-core";
+    coreMesh.frustumCulled = true;
+    coreMesh.userData.rfInsetSolidCore = true;
+    coreMesh.userData.rfInsetSolidCoreVersion = VERSION;
+    this.add(coreMesh);
+
+    geometry.dispose?.();
+
+    this.name = "rf-builder-3-with-inset-solid-core";
+    this.userData.rfSolidShellVersion = VERSION;
+    this.userData.rfExteriorGeometryPreserved = true;
+    this.userData.rfIntegratedOcclusionRemoved = true;
+    this.userData.rfInsetSolidCore = true;
+    this.userData.rfInsetSolidCoreColour = CORE_COLOUR;
+    this.userData.rfInsetSolidCoreChildName = coreMesh.name;
   }
 }
 
 globalThis.FieldOpsRFThreeSolidCore = Object.freeze({
   VERSION,
-  angleSegments: ANGLE_SEGMENTS,
-  radialSegments: RADIAL_SEGMENTS,
-  closedRemesh: true
+  mode: "builder-3-visible-exterior-plus-inset-background-core",
+  coreXZScale: CORE_XZ_SCALE,
+  coreYScale: CORE_Y_SCALE,
+  coreTopRatio: CORE_TOP_RATIO,
+  coreColour: CORE_COLOUR,
+  exteriorGeometryPreserved: true,
+  closedCore: true
 });
 
 /* Destination: FieldOpsAtlas/Features/RF/rf-three-solid-core.js */
