@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.306-builder-3-lean-runtime">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.308-builder-3-topology-core-fix">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -135,26 +135,17 @@
       ]
     });
   </script>
-
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "./rf-three-solid-core.js?v=1.1.253-builder-3-paired-lean-core"
-      }
-    }
-  </script>
-
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.122-pane-fit" defer></script>
   <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
-  <script src="./rf-graph-builder-3.js?v=1.1.301-builder-3-lean-runtime" defer></script>
+  <script src="./rf-graph-builder-3.js?v=1.1.303-builder-3-topology-core-fix" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.306-builder-3-lean-runtime */
+    /* RF load toast | Version: 1.1.308-builder-3-topology-core-fix */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.306-builder-3-lean-runtime";
+      const PAGE_VERSION = "1.1.308-builder-3-topology-core-fix";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -189,7 +180,7 @@
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
-          `rf-three-solid-core.js ${versionOf("FieldOpsRFThreeSolidCore")}`,
+          `integrated topology core ${versionOf("FieldOpsRFThreeSolidCore")}`,
           `rf-graph-builder-3.js ${versionOf("FieldOpsRFGraph")}`
         ];
 
