@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas RF Three.js solid-shell adapter
    File: FieldOpsAtlas/Features/RF/rf-three-solid-core.js
-   Version: 1.1.247-builder-3-opaque-shell-no-plane-bright-peaks-13k
+   Version: 1.1.248-builder-3-mask-colour-output
 
    Purpose:
    - Preserve the current Builder 3 exterior geometry.
@@ -9,14 +9,16 @@
    - Brighten only the four secondary peaks.
    - Keep the visible mountain shell fully opaque.
    - Do not create any internal horizontal cap or replacement plane.
-   - Remove coloured vertex treatment from low, almost-horizontal skin faces.
-   - Prevent the transparent wireframe overlays from drawing back faces.
+   - Remove coloured treatment from low, almost-horizontal skin faces.
+   - Apply Builder 3's colour mask inside its custom shader.
+   - Apply Three.js tone mapping and output colour-space conversion.
+   - Prevent transparent wireframe overlays from drawing back faces.
    ========================================================================== */
 
 import * as THREEBase from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 export * from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 
-const VERSION = "1.1.247-builder-3-opaque-shell-no-plane-bright-peaks-13k";
+const VERSION = "1.1.248-builder-3-mask-colour-output";
 
 const SECONDARY_PEAK_TARGET_MAX = 1;
 const SECONDARY_PEAK_STRENGTH = 0.96;
@@ -77,6 +79,7 @@ const SECONDARY_PEAKS = Object.freeze([
 ]);
 
 const OriginalMesh = THREEBase.Mesh;
+const OriginalShaderMaterial = THREEBase.ShaderMaterial;
 
 function materialList(material) {
   return Array.isArray(material) ? material : [material];
@@ -102,6 +105,105 @@ function isBuilderSurface(geometry, material) {
 
 function isWireframeMaterial(material) {
   return materialList(material).some((entry) => entry?.wireframe === true);
+}
+
+function isBuilderMountainShader(parameters) {
+  const vertexShader = parameters?.vertexShader;
+  const fragmentShader = parameters?.fragmentShader;
+
+  return typeof vertexShader === "string"
+    && typeof fragmentShader === "string"
+    && vertexShader.includes("attribute vec3 barycentric;")
+    && fragmentShader.includes("float triangleEdgeMask()")
+    && fragmentShader.includes("float layer1Area = circularAreaMask(0, vModelPosition);");
+}
+
+function insertOnce(source, search, replacement, label) {
+  if (!source.includes(search)) {
+    console.warn(`FieldOps RF shader patch skipped missing ${label}.`);
+    return source;
+  }
+
+  return source.replace(search, replacement);
+}
+
+function patchBuilderVertexShader(source) {
+  let shader = source;
+
+  shader = insertOnce(
+    shader,
+    "attribute vec3 barycentric;",
+    "attribute vec3 barycentric;\n        attribute float colourMask;",
+    "colourMask attribute"
+  );
+
+  shader = insertOnce(
+    shader,
+    "varying vec3 vBarycentric;",
+    "varying vec3 vBarycentric;\n        varying float vColourMask;",
+    "colourMask varying"
+  );
+
+  shader = insertOnce(
+    shader,
+    "vBarycentric = barycentric;",
+    "vBarycentric = barycentric;\n          vColourMask = colourMask;",
+    "colourMask assignment"
+  );
+
+  return shader;
+}
+
+function patchBuilderFragmentShader(source) {
+  let shader = source;
+
+  shader = insertOnce(
+    shader,
+    "varying vec3 vBarycentric;",
+    "varying vec3 vBarycentric;\n        varying float vColourMask;",
+    "fragment colourMask varying"
+  );
+
+  shader = insertOnce(
+    shader,
+    "layer2Branch = clamp(layer2Branch, 0.0, 1.0);",
+    [
+      "layer2Branch = clamp(layer2Branch, 0.0, 1.0);",
+      "",
+      "          layer1Area *= vColourMask;",
+      "          layer1Band *= vColourMask;",
+      "          layer1Vein *= vColourMask;",
+      "          layer2Area *= vColourMask;",
+      "          layer2Band *= vColourMask;",
+      "          layer2Branch *= vColourMask;"
+    ].join("\n"),
+    "colourMask application"
+  );
+
+  shader = insertOnce(
+    shader,
+    "gl_FragColor = vec4(colour, 1.0);",
+    [
+      "gl_FragColor = vec4(colour, 1.0);",
+      "          #include <tonemapping_fragment>",
+      "          #include <colorspace_fragment>"
+    ].join("\n"),
+    "tone mapping and colour-space output"
+  );
+
+  return shader;
+}
+
+function patchBuilderShaderParameters(parameters) {
+  if (!isBuilderMountainShader(parameters)) {
+    return parameters;
+  }
+
+  return {
+    ...parameters,
+    vertexShader: patchBuilderVertexShader(parameters.vertexShader),
+    fragmentShader: patchBuilderFragmentShader(parameters.fragmentShader)
+  };
 }
 
 function smoothstep(minimum, maximum, value) {
@@ -328,6 +430,17 @@ function configureVisibleWireframe(material) {
     entry.depthWrite = false;
     entry.needsUpdate = true;
   });
+}
+
+export class ShaderMaterial extends OriginalShaderMaterial {
+  constructor(parameters = {}) {
+    super(patchBuilderShaderParameters(parameters));
+
+    if (isBuilderMountainShader(parameters)) {
+      this.userData.rfBuilderShaderPatched = true;
+      this.userData.rfBuilderShaderPatchVersion = VERSION;
+    }
+  }
 }
 
 export class Mesh extends OriginalMesh {
