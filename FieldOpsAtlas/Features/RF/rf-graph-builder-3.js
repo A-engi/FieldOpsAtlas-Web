@@ -1,6 +1,6 @@
 (async () => {
   "use strict";
-  const i = "1.1.306-builder-3-closed-envelope-core";
+  const i = "1.1.307-builder-3-near-surface-closed-core";
   const e = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js");
   const ED = 398106;
 
@@ -18,10 +18,10 @@
     const X = (Z.min.z + Z.max.z) * 0.5;
     const H = Z.min.y;
     const m = Math.max(Z.max.y - Z.min.y, 1e-6);
-    const segments = 96;
-    const rings = 28;
-    const topScale = 0.76;
-    const bottomLift = m * 0.012;
+    const segments = 128;
+    const rings = 36;
+    const topScale = 0.974;
+    const bottomLift = m * 0.006;
     const profile = Array.from(
       { length: rings + 1 },
       () => new Float32Array(segments)
@@ -111,7 +111,7 @@
     for (let level = 0; level <= rings; level += 1) {
       const levelRatio = level / rings;
       const y = H + bottomLift + levelRatio * m * topScale;
-      const radialScale = 0.82 - levelRatio * 0.15;
+      const radialScale = 0.975 - levelRatio * 0.005;
 
       for (let bin = 0; bin < segments; bin += 1) {
         const angle = (bin / segments) * Math.PI * 2;
@@ -204,6 +204,8 @@
     k.userData.rfInsetSolidCoreClosed = true;
     k.userData.rfInsetSolidCoreSegments = segments;
     k.userData.rfInsetSolidCoreRings = rings;
+    k.userData.rfInsetSolidCoreHeightScale = 0.98;
+    k.userData.rfInsetSolidCoreRadialScale = [0.975, 0.97];
 
     return k;
   }
@@ -230,7 +232,7 @@
   const oD = Object.freeze({ ACESFilmicToneMapping: e.ACESFilmicToneMapping, Box3: e.Box3, BufferAttribute: e.BufferAttribute, BufferGeometry: e.BufferGeometry, Color: e.Color, DoubleSide: e.DoubleSide, Float32BufferAttribute: e.Float32BufferAttribute, Fog: e.Fog, Mesh: GD, PerspectiveCamera: e.PerspectiveCamera, Scene: e.Scene, ShaderMaterial: e.ShaderMaterial, SRGBColorSpace: e.SRGBColorSpace, Vector2: e.Vector2, Vector3: e.Vector3, WebGLRenderer: e.WebGLRenderer });
   globalThis.FieldOpsRFThreeSolidCore = Object.freeze({ VERSION: i, integrated: !0, coreColour: ED, coreShellCount: 1, coreMethod: "closed-polar-envelope", exteriorGeometryPreserved: !0, runtime: "cdn-three-0.160.0" }), globalThis.FieldOpsRFMountainThreeLayer = Object.freeze({ VERSION: i, layers: Object.freeze(["shared-three-runtime", "closed-envelope-core", "builder-3"]) }), (() => {
     "use strict";
-    let G = "1.1.306-builder-3-closed-envelope-core", Y = "three-neon-peak-builder-3-closed-envelope-core", t = "[data-rf-graph]", b = ".rf-map-paper", f = ".rf-graph-key", Z = "fieldops:rf-graph-rendered", r = "site-1-to-site-2", L = Math.PI / 180, X = 0, H = Object.freeze({ name: "Neon Peak two-layer topology forks 360", version: "1.0.0", builderVersion: "1.1.306-builder-3-closed-envelope-core", vertexCount: 8143, faceCount: 12816, indexCount: 38448, boundsMin: [-0.7897142390143058, -0.4, -0.7853454034795696], quantScale: [23585593790028153e-21, 13865862283148762e-21, 23923212765230006e-21], center: [-0.016873294499558322, 0.054349642363077044, -0.0014415291948953746], majorPeaks: [{ name: "main", role: "layer1-main", centreXZ: [0, -5e-3], baseY: 0.06, peakY: 0.5086992847261541, radiusCore: 0.118, radiusOuter: 0.29, strength: 1 }, { name: "shoulder-left", role: "layer2-shoulder", centreXZ: [-0.08688712966525691, -0.005687899460723678], baseY: -0.055, peakY: 0.3510444305667527, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-right", role: "layer2-shoulder", centreXZ: [0.07337698013798444, -0.004132890630983765], baseY: -0.055, peakY: 0.36237284005208525, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-front", role: "layer2-shoulder", centreXZ: [-0.014408599948500411, 0.09120111223845784], baseY: -0.055, peakY: 0.32553124396575894, radiusCore: 0.078, radiusOuter: 0.205, strength: 1 }, { name: "shoulder-rear", role: "layer2-shoulder", centreXZ: [0.0026909555492700132, -0.06296007082068433], baseY: -0.055, peakY: 0.37829084995314, radiusCore: 0.074, radiusOuter: 0.195, strength: 1 }, { name: "fork-front-right", role: "layer2-fork", centreXZ: [0.303053492, 0.302754083], baseY: -0.37, peakY: 0.043471873, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-centre", role: "layer2-fork", centreXZ: [-0.011436815, 0.239501108], baseY: -0.37, peakY: 0.081131555, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-left", role: "layer2-fork", centreXZ: [-0.302058502, 0.314715689], baseY: -0.37, peakY: 0.034833441, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-left", role: "layer2-fork", centreXZ: [-0.300053726, -0.303388359], baseY: -0.37, peakY: 0.041461323, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-centre", role: "layer2-fork", centreXZ: [-0.025989126, -0.252073068], baseY: -0.37, peakY: 0.027955974, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-right", role: "layer2-fork", centreXZ: [0.295081562, -0.311785407], baseY: -0.37, peakY: 0.043166824, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }], opaqueSurface: !0, transparent: !1, coreMethod: "closed-polar-envelope", coreShellCount: 1 }), m = ["SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
+    let G = "1.1.307-builder-3-near-surface-closed-core", Y = "three-neon-peak-builder-3-closed-envelope-core", t = "[data-rf-graph]", b = ".rf-map-paper", f = ".rf-graph-key", Z = "fieldops:rf-graph-rendered", r = "site-1-to-site-2", L = Math.PI / 180, X = 0, H = Object.freeze({ name: "Neon Peak two-layer topology forks 360", version: "1.0.0", builderVersion: "1.1.307-builder-3-near-surface-closed-core", vertexCount: 8143, faceCount: 12816, indexCount: 38448, boundsMin: [-0.7897142390143058, -0.4, -0.7853454034795696], quantScale: [23585593790028153e-21, 13865862283148762e-21, 23923212765230006e-21], center: [-0.016873294499558322, 0.054349642363077044, -0.0014415291948953746], majorPeaks: [{ name: "main", role: "layer1-main", centreXZ: [0, -5e-3], baseY: 0.06, peakY: 0.5086992847261541, radiusCore: 0.118, radiusOuter: 0.29, strength: 1 }, { name: "shoulder-left", role: "layer2-shoulder", centreXZ: [-0.08688712966525691, -0.005687899460723678], baseY: -0.055, peakY: 0.3510444305667527, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-right", role: "layer2-shoulder", centreXZ: [0.07337698013798444, -0.004132890630983765], baseY: -0.055, peakY: 0.36237284005208525, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-front", role: "layer2-shoulder", centreXZ: [-0.014408599948500411, 0.09120111223845784], baseY: -0.055, peakY: 0.32553124396575894, radiusCore: 0.078, radiusOuter: 0.205, strength: 1 }, { name: "shoulder-rear", role: "layer2-shoulder", centreXZ: [0.0026909555492700132, -0.06296007082068433], baseY: -0.055, peakY: 0.37829084995314, radiusCore: 0.074, radiusOuter: 0.195, strength: 1 }, { name: "fork-front-right", role: "layer2-fork", centreXZ: [0.303053492, 0.302754083], baseY: -0.37, peakY: 0.043471873, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-centre", role: "layer2-fork", centreXZ: [-0.011436815, 0.239501108], baseY: -0.37, peakY: 0.081131555, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-left", role: "layer2-fork", centreXZ: [-0.302058502, 0.314715689], baseY: -0.37, peakY: 0.034833441, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-left", role: "layer2-fork", centreXZ: [-0.300053726, -0.303388359], baseY: -0.37, peakY: 0.041461323, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-centre", role: "layer2-fork", centreXZ: [-0.025989126, -0.252073068], baseY: -0.37, peakY: 0.027955974, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-right", role: "layer2-fork", centreXZ: [0.295081562, -0.311785407], baseY: -0.37, peakY: 0.043166824, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }], opaqueSurface: !0, transparent: !1, coreMethod: "closed-polar-envelope", coreShellCount: 1 }), m = ["SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
     "d0UAAFEFA8kFAE4D/skYAroFJsoAAKYFDckAAGIDuK6KAGwFA7A/AY8F8K4AAI4Ebq4AAOAEF7AAAKQEEIDyCawFQa8AAOEEi3B0BCwFh3BxBw0H4HHDB7EG",
     "kndkBiwGXHvRCVcGZHoDBloFd0RpA7oGUnzKCdwHP3zJD0EItHA+DFIJv36oDXEHiID6DToJqK+4AtUI6FYLAu4Hf1MlBO4IB1fbAVYGIrByBhIKb1cxBBYJ",
     "2DGGAyEJAzMyBQcKZTIAANkFPzIAAOoFwsl0CZoKK8oAAOoFeU07BJEHoU0pBJ0IdF3AAWUHrFuTBD4KFl7GAq0HGctVC1kMPMoAAPQF2XHsDjQMvnu0EpgK",
