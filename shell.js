@@ -12,7 +12,7 @@
 (function fieldOpsSharedShell() {
   "use strict";
 
-  var VERSION = "1.1.20-web-repo-profile-link";
+  var VERSION = "1.1.21-session-editor-token";
   var ROOT_SELECTOR = ".phone, .app-shell, .fieldops-shell-root";
   var CHROME_SELECTOR = [
     ":scope > .top-shell",
@@ -77,12 +77,13 @@
   };
 
   var editorState = {
-    token: localGet(EDITOR_KEYS.token),
+    token: "",
     owner: localGet(EDITOR_KEYS.owner) || "A-engi",
     repo: localGet(EDITOR_KEYS.repo) || "FieldOpsAtlas-Web",
     branch: localGet(EDITOR_KEYS.branch) || "main",
     online: localGet(EDITOR_KEYS.online) === "true"
   };
+  localRemove(EDITOR_KEYS.token);
 
   function scriptRoot() {
     var scripts = Array.prototype.slice.call(document.querySelectorAll("script[src]"));
@@ -370,13 +371,13 @@
       '<header class="editor-panel__header">',
       '<div>',
       '<h2 class="panel-heading">Settings</h2>',
-      '<p class="panel-subtext">GitHub editor key and edit mode.</p>',
+      '<p class="panel-subtext">GitHub editor key for this browser session.</p>',
       '</div>',
       '<button class="panel-close-button" type="button" data-editor-close>Close</button>',
       '</header>',
       '<label class="editor-field">',
       '<span>Token / key</span>',
-      '<input type="password" data-editor-token autocomplete="off" placeholder="GitHub fine-grained token">',
+      '<input type="password" data-editor-token autocomplete="off" placeholder="GitHub fine-grained token for this session">',
       '</label>',
       '<div class="editor-field-grid">',
       '<label class="editor-field">',
@@ -462,7 +463,7 @@
 
   function editorStatusText() {
     if (editorMode() === "online") {
-      return "Online edits write to GitHub.";
+      return "Online edits write to GitHub for this session.";
     }
 
     if (editorState.online && !editorState.token) {
@@ -785,7 +786,14 @@
 
     if (this.refs.onlineButton) {
       this.refs.onlineButton.addEventListener("click", function onlineClick() {
-        editorState.online = editorMode() !== "online";
+        if (editorMode() === "online") {
+          editorState.online = false;
+        } else if (editorState.token) {
+          editorState.online = true;
+        } else {
+          editorState.online = false;
+          controller.setEditorOpen(true);
+        }
         localSet(EDITOR_KEYS.online, editorState.online ? "true" : "false");
         controller.syncEditorUi();
         dispatchEditorChange();
@@ -812,7 +820,13 @@
 
     if (this.refs.editorOnlineToggle) {
       this.refs.editorOnlineToggle.addEventListener("click", function toggleOnlineClick() {
-        editorState.online = editorMode() !== "online";
+        if (editorMode() === "online") {
+          editorState.online = false;
+        } else if (editorState.token) {
+          editorState.online = true;
+        } else {
+          editorState.online = false;
+        }
         localSet(EDITOR_KEYS.online, editorState.online ? "true" : "false");
         controller.syncEditorUi();
         dispatchEditorChange();
@@ -1099,7 +1113,6 @@
     editorState.branch = this.refs.editorBranch ? this.refs.editorBranch.value.trim() || "main" : editorState.branch;
     editorState.online = Boolean(editorState.token);
 
-    localSet(EDITOR_KEYS.token, editorState.token);
     localSet(EDITOR_KEYS.owner, editorState.owner);
     localSet(EDITOR_KEYS.repo, editorState.repo);
     localSet(EDITOR_KEYS.branch, editorState.branch);
@@ -1108,7 +1121,7 @@
     this.syncEditorUi();
 
     if (this.refs.editorPanelStatus) {
-      this.refs.editorPanelStatus.textContent = editorState.token ? "Key saved. Online editing enabled." : "No key saved.";
+      this.refs.editorPanelStatus.textContent = editorState.token ? "Key active for this session. Online editing enabled." : "No key active.";
     }
 
     dispatchEditorChange();
@@ -1127,7 +1140,7 @@
     this.syncEditorUi();
 
     if (this.refs.editorPanelStatus) {
-      this.refs.editorPanelStatus.textContent = "Key removed. Local editing only.";
+      this.refs.editorPanelStatus.textContent = "Session key removed. Local editing only.";
     }
 
     dispatchEditorChange();
