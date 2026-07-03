@@ -1,5 +1,5 @@
 /*!
- * FieldOpsAtlas RF Builder 3 — self-contained v1.1.317
+ * FieldOpsAtlas RF Builder 3 — self-contained v1.1.341
  * Embedded tree-shaken Three.js r160 runtime.
  * Three.js is Copyright 2010-2023 Three.js Authors, SPDX-License-Identifier: MIT.
  * Builder/core source derived from current main v1.1.307 baseline.
@@ -3732,9 +3732,10 @@ var Xr=class extends vt{
 ;
 (async () => {
   "use strict";
-  const i = "1.1.340-builder-3-restored-exterior-skin-contained-core-verified";
+  const i = "1.1.346-builder-3-centre-glow-dot-per-triangle";
   const e = np;
-  const ED = 0x041b24;
+  const ED = 0x02131f;
+  const INTERNAL_DOT_COLOUR = 0x47f3ff;
 
   function AD(G) {
     G.computeBoundingBox();
@@ -3977,21 +3978,175 @@ var Xr=class extends vt{
     k.userData.rfGapNetworkShell = true;
     k.userData.rfGapNetworkPalette = ["#043b45", "#075d68", "#0a838d", "#16bcc4"];
 
-    // The actual internal mountain is smaller, completely opaque and untextured.
+    // The actual internal mountain is smaller and fully opaque. Its base is only
+    // slightly bluer than the page background. The reference uses a dense field
+    // of tiny surface pinpricks, not one large dot at each triangle centre, so
+    // the internal dots are a separate randomly sampled micro-quad cloud.
     const coreGeometry = faceted.clone();
+    const corePosition = coreGeometry.getAttribute("position");
     const coreMaterial = new e.MeshBasicMaterial({
       color: ED,
+      transparent: false,
+      opacity: 1,
       side: e.DoubleSide,
       depthTest: true,
       depthWrite: true,
-      blending: e.NoBlending,
       toneMapped: false
     });
+    coreMaterial.name = "rf-contained-solid-core-blue-base-material";
+
     const solidCore = new e.Mesh(coreGeometry, coreMaterial);
-    solidCore.name = "rf-contained-solid-core";
+    solidCore.name = "rf-contained-solid-core-fine-blue-dots";
     solidCore.scale.set(0.92, 0.96, 0.92);
     solidCore.renderOrder = -2;
     solidCore.userData.rfContainedSolidCore = true;
+    solidCore.userData.rfContainedSolidCoreDots = true;
+    solidCore.userData.rfContainedSolidCoreColour = ED;
+
+    const dotPositions = [];
+    const dotUvs = [];
+    const dotStrengths = [];
+    const dotSizes = [];
+    const hash01 = (value) => {
+      const noise = Math.sin(value) * 43758.5453123;
+      return noise - Math.floor(noise);
+    };
+    const pushDotQuad = (point, tangent, bitangent, normal, radius, lift, strength) => {
+      const centre = [
+        point[0] + normal[0] * lift,
+        point[1] + normal[1] * lift,
+        point[2] + normal[2] * lift
+      ];
+      const tx = tangent[0] * radius, ty = tangent[1] * radius, tz = tangent[2] * radius;
+      const bx = bitangent[0] * radius, by = bitangent[1] * radius, bz = bitangent[2] * radius;
+      const corners = [
+        [centre[0] - tx - bx, centre[1] - ty - by, centre[2] - tz - bz],
+        [centre[0] + tx - bx, centre[1] + ty - by, centre[2] + tz - bz],
+        [centre[0] + tx + bx, centre[1] + ty + by, centre[2] + tz + bz],
+        [centre[0] - tx + bx, centre[1] - ty + by, centre[2] - tz + bz]
+      ];
+      const order = [0, 1, 2, 0, 2, 3];
+      const uv = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+      order.forEach((index) => {
+        dotPositions.push(...corners[index]);
+        dotUvs.push(...uv[index]);
+        dotStrengths.push(strength);
+        dotSizes.push(radius);
+      });
+    };
+
+    let internalDotCount = 0;
+    const coreHeight = Math.max(m * topScale, 1e-6);
+    for (let face = 0; face < corePosition.count; face += 3) {
+      const a = [corePosition.getX(face), corePosition.getY(face), corePosition.getZ(face)];
+      const b = [corePosition.getX(face + 1), corePosition.getY(face + 1), corePosition.getZ(face + 1)];
+      const c = [corePosition.getX(face + 2), corePosition.getY(face + 2), corePosition.getZ(face + 2)];
+      const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+      const ac = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+      const normal = [
+        ab[1] * ac[2] - ab[2] * ac[1],
+        ab[2] * ac[0] - ab[0] * ac[2],
+        ab[0] * ac[1] - ab[1] * ac[0]
+      ];
+      const normalLength = Math.hypot(normal[0], normal[1], normal[2]);
+      const tangentLength = Math.hypot(ab[0], ab[1], ab[2]);
+      if (normalLength <= 1e-10 || tangentLength <= 1e-10) continue;
+      normal[0] /= normalLength; normal[1] /= normalLength; normal[2] /= normalLength;
+      const faceCentre = [
+        (a[0] + b[0] + c[0]) / 3,
+        (a[1] + b[1] + c[1]) / 3,
+        (a[2] + b[2] + c[2]) / 3
+      ];
+      const outward = [
+        faceCentre[0] - L,
+        (faceCentre[1] - (H + m * 0.36)) * 0.35,
+        faceCentre[2] - X
+      ];
+      if (normal[0] * outward[0] + normal[1] * outward[1] + normal[2] * outward[2] < 0) {
+        normal[0] *= -1; normal[1] *= -1; normal[2] *= -1;
+      }
+      const tangent = [ab[0] / tangentLength, ab[1] / tangentLength, ab[2] / tangentLength];
+      const bitangent = [
+        normal[1] * tangent[2] - normal[2] * tangent[1],
+        normal[2] * tangent[0] - normal[0] * tangent[2],
+        normal[0] * tangent[1] - normal[1] * tangent[0]
+      ];
+      const centreY = (a[1] + b[1] + c[1]) / 3;
+      const heightRatio = Math.max(0, Math.min(1, (centreY - H) / coreHeight));
+      const faceSeed = face * 0.071 + (a[0] + b[0] + c[0]) * 91.7 + (a[2] + b[2] + c[2]) * 57.3;
+      const point = [
+        (a[0] + b[0] + c[0]) / 3,
+        (a[1] + b[1] + c[1]) / 3,
+        (a[2] + b[2] + c[2]) / 3
+      ];
+      const sizeSeed = hash01(faceSeed + 5.9);
+      const strengthSeed = hash01(faceSeed + 7.3);
+      const radius = 0.00115 + sizeSeed * 0.00020;
+      const strength = 0.90 + strengthSeed * 0.10;
+      const lift = 0.00110 + radius * 0.34;
+      pushDotQuad(point, tangent, bitangent, normal, radius, lift, strength);
+      internalDotCount += 1;
+    }
+
+    const dotGeometry = new e.BufferGeometry();
+    dotGeometry.setAttribute("position", new e.Float32BufferAttribute(dotPositions, 3));
+    dotGeometry.setAttribute("dotUv", new e.Float32BufferAttribute(dotUvs, 2));
+    dotGeometry.setAttribute("dotStrength", new e.Float32BufferAttribute(dotStrengths, 1));
+    dotGeometry.computeBoundingSphere();
+
+    const dotMaterial = new e.ShaderMaterial({
+      transparent: true,
+      depthTest: true,
+      depthWrite: false,
+      toneMapped: false,
+      side: e.DoubleSide,
+      uniforms: {
+        uDotDim: { value: new e.Color(INTERNAL_DOT_COLOUR) },
+        uDotBright: { value: new e.Color(0xeaffff) }
+      },
+      vertexShader: `
+        attribute vec2 dotUv;
+        attribute float dotStrength;
+        varying vec2 vDotUv;
+        varying float vDotStrength;
+
+        void main() {
+          vDotUv = dotUv;
+          vDotStrength = dotStrength;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vDotUv;
+        varying float vDotStrength;
+        uniform vec3 uDotDim;
+        uniform vec3 uDotBright;
+
+        void main() {
+          float radius = length(vDotUv);
+          if (radius > 1.18) discard;
+          float core = 1.0 - smoothstep(0.20, 0.50, radius);
+          float innerGlow = 1.0 - smoothstep(0.38, 0.82, radius);
+          float outerGlow = 1.0 - smoothstep(0.72, 1.18, radius);
+          float alpha = (core * 0.72 + innerGlow * 0.34 + outerGlow * 0.22) * vDotStrength;
+          vec3 colour = mix(uDotDim, uDotBright, pow(vDotStrength, 0.95));
+          gl_FragColor = vec4(colour, alpha);
+          #include <colorspace_fragment>
+        }
+      `
+    });
+    dotMaterial.name = "rf-contained-core-fine-pinpoint-dot-material";
+
+    const dotCloud = new e.Mesh(dotGeometry, dotMaterial);
+    dotCloud.name = "rf-contained-core-fine-pinpoint-dots";
+    dotCloud.renderOrder = -1.5;
+    dotCloud.frustumCulled = false;
+    dotCloud.userData.rfInternalDotCount = internalDotCount;
+    dotCloud.userData.rfInternalDotStyle = "one-centre-glow-cyan-dot-per-triangle";
+    dotCloud.userData.rfInternalDotColour = INTERNAL_DOT_COLOUR;
+    solidCore.userData.rfContainedSolidCoreDotCount = internalDotCount;
+    solidCore.userData.rfContainedSolidCoreDotColour = INTERNAL_DOT_COLOUR;
+    solidCore.add(dotCloud);
     k.add(solidCore);
 
     k.name = "rf-closed-envelope-core";
@@ -3999,7 +4154,9 @@ var Xr=class extends vt{
     k.userData.rfInsetSolidCore = true;
     k.userData.rfInsetSolidCoreVersion = i;
     k.userData.rfInsetSolidCoreColour = ED;
-    k.userData.rfInsetSolidCoreMethod = "varied-triangle-wire-gap-shell-plus-deep-solid-core";
+    k.userData.rfInsetSolidCoreMethod = "varied-triangle-wire-gap-shell-plus-two-cyan-pinpoints-per-triangle-deep-solid-core";
+    k.userData.rfInsetSolidCoreDots = true;
+    k.userData.rfInsetSolidCoreDotColour = INTERNAL_DOT_COLOUR;
     k.userData.rfInsetSolidCoreClosed = true;
     k.userData.rfInsetSolidCoreSegments = segments;
     k.userData.rfInsetSolidCoreRings = rings;
@@ -4030,9 +4187,9 @@ var Xr=class extends vt{
     }
   }
   const oD = Object.freeze({ ACESFilmicToneMapping: e.ACESFilmicToneMapping, Box3: e.Box3, BufferAttribute: e.BufferAttribute, BufferGeometry: e.BufferGeometry, Color: e.Color, DoubleSide: e.DoubleSide, Float32BufferAttribute: e.Float32BufferAttribute, Fog: e.Fog, Mesh: GD, PerspectiveCamera: e.PerspectiveCamera, Scene: e.Scene, ShaderMaterial: e.ShaderMaterial, SRGBColorSpace: e.SRGBColorSpace, Vector2: e.Vector2, Vector3: e.Vector3, WebGLRenderer: e.WebGLRenderer });
-  globalThis.FieldOpsRFThreeSolidCore = Object.freeze({ VERSION: i, integrated: !0, coreColour: ED, coreShellCount: 1, coreMethod: "varied-gap-network-plus-deep-solid-core", exteriorGeometryPreserved: !0, runtime: "embedded-tree-shaken-three-0.160.0" }), globalThis.FieldOpsRFMountainThreeLayer = Object.freeze({ VERSION: i, layers: Object.freeze(["embedded-three-runtime", "deep-solid-core", "separated-gap-network-shell", "builder-3-surface", "restored-mid-lower-exterior-skin"]) }), (() => {
+  globalThis.FieldOpsRFThreeSolidCore = Object.freeze({ VERSION: i, integrated: !0, coreColour: ED, coreDotColour: INTERNAL_DOT_COLOUR, coreShellCount: 1, coreMethod: "varied-gap-network-plus-one-centre-glow-cyan-dot-per-triangle-deep-solid-core", exteriorGeometryPreserved: !0, runtime: "embedded-tree-shaken-three-0.160.0" }), globalThis.FieldOpsRFMountainThreeLayer = Object.freeze({ VERSION: i, layers: Object.freeze(["embedded-three-runtime", "deep-solid-core", "one-centre-glow-cyan-dot-per-triangle-cloud", "separated-gap-network-shell", "builder-3-surface", "restored-mid-lower-exterior-skin"]) }), (() => {
     "use strict";
-    let G = "1.1.340-builder-3-restored-exterior-skin-contained-core-verified", Y = "three-faceted-cyan-restored-exterior-skin-contained-core-opaque-360", t = "[data-rf-graph]", b = ".rf-map-paper", f = ".rf-graph-key", Z = "fieldops:rf-graph-rendered", r = "site-1-to-site-2", L = Math.PI / 180, X = 0, H = Object.freeze({ name: "Faceted cyan surface ridges with restored mid-lower exterior skin and contained opaque core", version: "1.0.0", builderVersion: "1.1.340-builder-3-restored-exterior-skin-contained-core-verified", vertexCount: 8143, faceCount: 12816, indexCount: 38448, boundsMin: [-0.7897142390143058, -0.4, -0.7853454034795696], quantScale: [23585593790028153e-21, 13865862283148762e-21, 23923212765230006e-21], center: [-0.016873294499558322, 0.054349642363077044, -0.0014415291948953746], majorPeaks: [{ name: "main", role: "layer1-main", centreXZ: [0, -5e-3], baseY: 0.06, peakY: 0.5086992847261541, radiusCore: 0.118, radiusOuter: 0.29, strength: 1 }, { name: "shoulder-left", role: "layer2-shoulder", centreXZ: [-0.08688712966525691, -0.005687899460723678], baseY: -0.055, peakY: 0.3510444305667527, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-right", role: "layer2-shoulder", centreXZ: [0.07337698013798444, -0.004132890630983765], baseY: -0.055, peakY: 0.36237284005208525, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-front", role: "layer2-shoulder", centreXZ: [-0.014408599948500411, 0.09120111223845784], baseY: -0.055, peakY: 0.32553124396575894, radiusCore: 0.078, radiusOuter: 0.205, strength: 1 }, { name: "shoulder-rear", role: "layer2-shoulder", centreXZ: [0.0026909555492700132, -0.06296007082068433], baseY: -0.055, peakY: 0.37829084995314, radiusCore: 0.074, radiusOuter: 0.195, strength: 1 }, { name: "fork-front-right", role: "layer2-fork", centreXZ: [0.303053492, 0.302754083], baseY: -0.37, peakY: 0.043471873, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-centre", role: "layer2-fork", centreXZ: [-0.011436815, 0.239501108], baseY: -0.37, peakY: 0.081131555, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-left", role: "layer2-fork", centreXZ: [-0.302058502, 0.314715689], baseY: -0.37, peakY: 0.034833441, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-left", role: "layer2-fork", centreXZ: [-0.300053726, -0.303388359], baseY: -0.37, peakY: 0.041461323, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-centre", role: "layer2-fork", centreXZ: [-0.025989126, -0.252073068], baseY: -0.37, peakY: 0.027955974, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-right", role: "layer2-fork", centreXZ: [0.295081562, -0.311785407], baseY: -0.37, peakY: 0.043166824, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }], opaqueSurface: !0, transparent: !1, coreMethod: "varied-gap-network-plus-deep-solid-core", coreShellCount: 1 }), m = ["SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
+    let G = "1.1.346-builder-3-centre-glow-dot-per-triangle", Y = "three-faceted-cyan-restored-exterior-skin-fine-internal-pinpoints-opaque-360", t = "[data-rf-graph]", b = ".rf-map-paper", f = ".rf-graph-key", Z = "fieldops:rf-graph-rendered", r = "site-1-to-site-2", L = Math.PI / 180, X = 0, H = Object.freeze({ name: "Faceted cyan surface ridges with restored mid-lower exterior skin and contained fine-pinpoint core", version: "1.0.0", builderVersion: "1.1.346-builder-3-centre-glow-dot-per-triangle", vertexCount: 8143, faceCount: 12816, indexCount: 38448, boundsMin: [-0.7897142390143058, -0.4, -0.7853454034795696], quantScale: [23585593790028153e-21, 13865862283148762e-21, 23923212765230006e-21], center: [-0.016873294499558322, 0.054349642363077044, -0.0014415291948953746], majorPeaks: [{ name: "main", role: "layer1-main", centreXZ: [0, -5e-3], baseY: 0.06, peakY: 0.5086992847261541, radiusCore: 0.118, radiusOuter: 0.29, strength: 1 }, { name: "shoulder-left", role: "layer2-shoulder", centreXZ: [-0.08688712966525691, -0.005687899460723678], baseY: -0.055, peakY: 0.3510444305667527, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-right", role: "layer2-shoulder", centreXZ: [0.07337698013798444, -0.004132890630983765], baseY: -0.055, peakY: 0.36237284005208525, radiusCore: 0.072, radiusOuter: 0.19, strength: 1.02 }, { name: "shoulder-front", role: "layer2-shoulder", centreXZ: [-0.014408599948500411, 0.09120111223845784], baseY: -0.055, peakY: 0.32553124396575894, radiusCore: 0.078, radiusOuter: 0.205, strength: 1 }, { name: "shoulder-rear", role: "layer2-shoulder", centreXZ: [0.0026909555492700132, -0.06296007082068433], baseY: -0.055, peakY: 0.37829084995314, radiusCore: 0.074, radiusOuter: 0.195, strength: 1 }, { name: "fork-front-right", role: "layer2-fork", centreXZ: [0.303053492, 0.302754083], baseY: -0.37, peakY: 0.043471873, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-centre", role: "layer2-fork", centreXZ: [-0.011436815, 0.239501108], baseY: -0.37, peakY: 0.081131555, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-front-left", role: "layer2-fork", centreXZ: [-0.302058502, 0.314715689], baseY: -0.37, peakY: 0.034833441, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-left", role: "layer2-fork", centreXZ: [-0.300053726, -0.303388359], baseY: -0.37, peakY: 0.041461323, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-centre", role: "layer2-fork", centreXZ: [-0.025989126, -0.252073068], baseY: -0.37, peakY: 0.027955974, radiusCore: 0.05, radiusOuter: 0.78, strength: 1 }, { name: "fork-rear-right", role: "layer2-fork", centreXZ: [0.295081562, -0.311785407], baseY: -0.37, peakY: 0.043166824, radiusCore: 0.055, radiusOuter: 0.78, strength: 1 }], opaqueSurface: !0, transparent: !1, coreMethod: "varied-gap-network-plus-fine-pinpoint-deep-solid-core", coreShellCount: 1 }), m = ["SX8AAMMAyX7zAhUDf3/DBLMCtn8AAAAAS2oAAO0CZGpTACQDW2oAAA4DnWgAADUDi2hfAFEDm2gAAA8DeEMAAJoDWkM9ALwDk0MAAJgD0UUAAEoFeEX1AEIG",
     "d0UAAFEFA8kFAE4D/skYAroFJsoAAKYFDckAAGIDuK6KAGwFA7A/AY8F8K4AAI4Ebq4AAOAEF7AAAKQEEIDyCawFQa8AAOEEi3B0BCwFh3BxBw0H4HHDB7EG",
     "kndkBiwGXHvRCVcGZHoDBloFd0RpA7oGUnzKCdwHP3zJD0EItHA+DFIJv36oDXEHiID6DToJqK+4AtUI6FYLAu4Hf1MlBO4IB1fbAVYGIrByBhIKb1cxBBYJ",
     "2DGGAyEJAzMyBQcKZTIAANkFPzIAAOoFwsl0CZoKK8oAAOoFeU07BJEHoU0pBJ0IdF3AAWUHrFuTBD4KFl7GAq0HGctVC1kMPMoAAPQF2XHsDjQMvnu0EpgK",
