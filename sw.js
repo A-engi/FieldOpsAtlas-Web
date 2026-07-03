@@ -1,4 +1,4 @@
-const CACHE_NAME = "fieldops-atlas-v1.1.16-rf-builder-3-self-contained";
+const CACHE_NAME = "fieldops-atlas-v1.1.17-rf-builder-3-clean";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -19,7 +19,7 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.120-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.122-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.125-network-topology",
-  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.1.317-builder-3-self-contained-v307-core",
+  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.1.318-builder-3-self-contained-v307-core",
   "./FieldOpsAtlas/Features/RFPages/sites.html",
   "./FieldOpsAtlas/Features/RFPages/dtt.html",
   "./FieldOpsAtlas/Features/RFPages/dab.html",
