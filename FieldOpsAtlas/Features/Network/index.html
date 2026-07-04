@@ -3,276 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas Network</title>
+  <title>FieldOps Atlas Service Layout</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
-  <style>
-
-    :root {
-      --feature-content-side: 7px;
-      --feature-content-radius: 20px;
-    }
-
-    .content-canvas {
-      position: absolute;
-      z-index: 1;
-      top: calc(var(--safe-top) + var(--top-height) + var(--feature-content-side));
-      right: var(--feature-content-side);
-      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--feature-content-side));
-      left: var(--feature-content-side);
-      min-height: 0;
-      overflow: hidden;
-      border: 2px solid var(--gold-border);
-      border-radius: var(--feature-content-radius);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.55),
-        inset 0 0 0 1px rgba(255, 231, 168, 0.20),
-        0 14px 30px rgba(2, 9, 20, 0.26);
-    }
-
-    .feature-page {
-      height: 100%;
-      min-height: 0;
-      padding: 10px;
-      display: grid;
-      align-content: start;
-      gap: 10px;
-      overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .feature-hero {
-      padding: 12px;
-      border-radius: 16px;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06));
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.26),
-        0 6px 18px rgba(37, 24, 8, 0.10);
-    }
-
-    .feature-kicker {
-      margin: 0 0 5px;
-      color: rgba(68, 80, 92, 0.68);
-      font-size: 10px;
-      font-weight: 850;
-      letter-spacing: 0.16em;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .feature-title {
-      margin: 0;
-      color: #172b3e;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-
-    .feature-copy {
-      margin: 7px 0 0;
-      color: rgba(22, 43, 62, 0.72);
-      font-size: 13px;
-      font-weight: 650;
-      line-height: 1.35;
-    }
-
-    .feature-section {
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.62);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.54),
-        0 6px 18px rgba(37, 24, 8, 0.08);
-    }
-
-    .feature-section h2 {
-      margin: 0 0 10px;
-      color: #172b3e;
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      line-height: 1;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .metric-card,
-    .action-card {
-      min-height: 66px;
-      padding: 10px;
-      display: grid;
-      align-content: center;
-      gap: 5px;
-      color: #172b3e;
-      border: 1px solid rgba(192, 150, 68, 0.26);
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.64), transparent 42%),
-        linear-gradient(180deg, rgba(255, 252, 244, 0.88), rgba(247, 236, 212, 0.78));
-      text-decoration: none;
-      box-shadow: 0 5px 12px rgba(37, 24, 8, 0.06);
-    }
-
-    .metric-card strong,
-    .action-card strong {
-      display: block;
-      overflow: hidden;
-      color: #172b3e;
-      font-size: 20px;
-      font-weight: 950;
-      line-height: 1;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .metric-card span,
-    .action-card span {
-      color: rgba(22, 43, 62, 0.64);
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .feature-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .list-row {
-      min-height: 46px;
-      padding: 9px 10px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      color: #172b3e;
-      border: 1px solid rgba(192, 150, 68, 0.22);
-      border-radius: 14px;
-      background: rgba(255, 252, 244, 0.72);
-      text-decoration: none;
-    }
-
-    .list-row strong {
-      display: block;
-      overflow: hidden;
-      font-size: 13px;
-      font-weight: 850;
-      line-height: 1;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .list-row small {
-      display: block;
-      margin-top: 4px;
-      overflow: hidden;
-      color: rgba(22, 43, 62, 0.62);
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 1;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .status-pill {
-      padding: 5px 8px;
-      color: #0d4d2a;
-      border-radius: 999px;
-      background: rgba(21, 115, 58, 0.12);
-      font-size: 10px;
-      font-weight: 900;
-      line-height: 1;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 360px) {
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .phone[data-page="network"] .content-canvas {
-      background:
-        radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.78), transparent 39%),
-        linear-gradient(180deg, #f3fbff 0%, #dcefff 100%);
-    }
-  </style>
+  <link rel="stylesheet" href="../Docs/ops-page.css?v=1.0.0-docs-split">
 </head>
 <body>
-  <main class="phone" data-page="network" data-version="1.1.2">
-    <section class="content-canvas" aria-label="Network content">
-      <article class="feature-page">
-        <header class="feature-hero">
-          <p class="feature-kicker">Topology</p>
-          <h1 class="feature-title">Network</h1>
-          <p class="feature-copy">View link topology, online paths, degraded branches, and route health.</p>
+  <main class="phone fieldops-shell-root">
+    <section class="content-canvas">
+      <article class="ops-page">
+        <header class="ops-hero">
+          <p class="ops-kicker">Network</p>
+          <h1>Service layout</h1>
+          <p>Use this page for where the service goes, what it passes through and what equipment is live. Access control and site condition reports live elsewhere.</p>
         </header>
 
-        <section class="feature-section" aria-label="Network summary">
-          <h2>Summary</h2>
-          <div class="feature-grid">
-          <article class="metric-card">
-            <strong>18</strong>
-            <span>Total</span>
-          </article>
-          <article class="metric-card">
-            <strong>16</strong>
-            <span>Good</span>
-          </article>
-          <article class="metric-card">
-            <strong>2</strong>
-            <span>Degraded</span>
-          </article>
+        <section class="ops-section">
+          <h2>Where am I going?</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Building and room walkthrough</strong><span>Building, floor, room, cabinet/rack, telemetry location, route through the building and any separate room for monitoring kit.</span></article>
+            <article class="ops-row"><strong>Rack view</strong><span>Rack position, live kit, redundant kit, reserve/bypass kit, removed-but-left kit, patch points and measurement points.</span></article>
+            <article class="ops-row"><strong>Power path</strong><span>Incoming supply, UPS, DC plant, breakers, fuses, isolators and safe test points.</span></article>
           </div>
         </section>
 
-        <section class="feature-section" aria-labelledby="networkTopologyTitle">
-          <h2 id="networkTopologyTitle">Network topology</h2>
-          <div class="feature-list">
-            <a class="list-row" href="../RFPages/paths.html">
-              <span>
-                <strong>Core link topology</strong>
-                <small>RF, IP, and microwave route overview</small>
-              </span>
-              <span class="status-pill">Online</span>
-            </a>
-            <a class="list-row" href="../RFPages/sites.html">
-              <span>
-                <strong>Degraded branches</strong>
-                <small>Two paths need attention</small>
-              </span>
-              <span class="status-pill">Review</span>
-            </a>
+        <section class="ops-section">
+          <h2>How does it work?</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Incoming services</strong><span>RF, IP, fibre, microwave, satellite, control, monitoring, power and timing inputs.</span></article>
+            <article class="ops-row"><strong>Device interaction</strong><span>What feeds what, what controls what, alarm paths, changeover logic, interlocks and failure chain.</span></article>
+            <article class="ops-row"><strong>Outgoing services</strong><span>Broadcast outputs, onward links, dependent services, parent/sister sites and customer-facing impact.</span></article>
           </div>
         </section>
-        <section class="feature-section" aria-labelledby="networkHealthTitle">
-          <h2 id="networkHealthTitle">Link health</h2>
-          <div class="feature-list">
-            <article class="list-row">
-              <span>
-                <strong>North route</strong>
-                <small>All services nominal</small>
-              </span>
-              <span class="status-pill">Good</span>
-            </article>
-            <article class="list-row">
-              <span>
-                <strong>South relay chain</strong>
-                <small>Reduced margin on one hop</small>
-              </span>
-              <span class="status-pill">Watch</span>
-            </article>
+
+        <form id="layoutForm" class="ops-form" autocomplete="off">
+          <h2>Local layout draft</h2>
+          <p class="ops-note">Use this only when the live diagram or site pack is missing detail. Push the correction back to the source system later.</p>
+          <div class="ops-field-grid">
+            <label class="ops-field"><span>Building / room / rack</span><textarea name="walkthrough" placeholder="Exact route to equipment, rack/cabinet labels, telemetry room if different"></textarea></label>
+            <label class="ops-field"><span>Power diagram notes</span><textarea name="power" placeholder="Supply, UPS, DC, breaker, fuse, isolation and test point notes"></textarea></label>
+            <label class="ops-field"><span>Network / RF diagram notes</span><textarea name="network" placeholder="Patch path, RF path, IP path, incoming and outgoing services"></textarea></label>
+            <label class="ops-field"><span>Redundant / reserve kit</span><textarea name="redundant" placeholder="What is live, spare, reserve, bypassed, redundant or safe to ignore"></textarea></label>
           </div>
-        </section>
+          <div class="ops-actions">
+            <button class="ops-button is-primary" type="submit">Save layout draft</button>
+            <button id="clearLayout" class="ops-button" type="button">Clear</button>
+            <a class="ops-button" href="../RFPages/paths.html">RF paths</a>
+            <a class="ops-button" href="../Docs/manuals-methods.html">Methods</a>
+          </div>
+          <p id="layoutStatus" class="ops-status" role="status"></p>
+        </form>
       </article>
     </section>
   </main>
@@ -281,34 +60,33 @@
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
       page: "network",
-      label: "Network",
-      placeholder: "Search network...",
-      emptyText: "No network matches found.",
+      label: "Service Layout",
+      placeholder: "Search service layout...",
+      emptyText: "No service layout matches found.",
       items: [
-        {
-          id: "network-topology",
-          title: "Network topology",
-          subtitle: "Topology and route overview",
-          href: "./index.html#networkTopologyTitle",
-          keywords: ["network", "topology", "routes", "links"]
-        },
-        {
-          id: "network-health",
-          title: "Link health",
-          subtitle: "Good and degraded link status",
-          href: "./index.html#networkHealthTitle",
-          keywords: ["health", "degraded", "good", "status"]
-        },
-        {
-          id: "network-paths",
-          title: "RF paths",
-          subtitle: "Open RF path analysis",
-          href: "../RFPages/paths.html",
-          keywords: ["paths", "rf", "link", "microwave"]
-        }
+        { id: "layout-walkthrough", title: "Building and room walkthrough", subtitle: "Building, room, rack and telemetry location", href: "./index.html", keywords: ["building", "room", "rack", "walkthrough", "telemetry"] },
+        { id: "layout-power", title: "Power path", subtitle: "Supply, UPS, DC, breakers, fuses and test points", href: "./index.html", keywords: ["power", "ups", "dc", "breaker", "fuse", "test"] },
+        { id: "layout-services", title: "Incoming and outgoing services", subtitle: "RF, IP, fibre, microwave, monitoring and dependencies", href: "./index.html", keywords: ["incoming", "outgoing", "service", "rf", "ip", "fibre"] },
+        { id: "layout-redundant", title: "Redundant and reserve kit", subtitle: "Live, spare, reserve, bypassed and redundant equipment", href: "./index.html", keywords: ["redundant", "reserve", "spare", "bypass", "equipment"] }
       ]
     });
+
+    (() => {
+      const key = "fieldOpsAtlas.network.layoutDraft.v1";
+      const form = document.getElementById("layoutForm");
+      const status = document.getElementById("layoutStatus");
+      const saved = JSON.parse(localStorage.getItem(key) || "{}");
+      Array.from(form.elements).forEach((field) => { if (field.name) field.value = saved[field.name] || ""; });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = {};
+        Array.from(form.elements).forEach((field) => { if (field.name) values[field.name] = field.value.trim(); });
+        localStorage.setItem(key, JSON.stringify(values));
+        status.textContent = "Local layout draft saved.";
+      });
+      document.getElementById("clearLayout").addEventListener("click", () => { localStorage.removeItem(key); form.reset(); status.textContent = "Local layout draft cleared."; });
+    })();
   </script>
-  <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
 </body>
 </html>

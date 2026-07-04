@@ -117,6 +117,23 @@
     }).join("") + '</ul>';
   }
 
+  function accessControlLines(walk) {
+    var access = walk && walk.accessControl && typeof walk.accessControl === "object"
+      ? walk.accessControl
+      : {};
+
+    return [
+      access.summary || walk.accessNotes ? "Summary: " + (access.summary || walk.accessNotes) : "",
+      access.keys ? "Keys: " + access.keys : "",
+      access.gate ? "Gate/barrier: " + access.gate : "",
+      access.cctv ? "CCTV: " + access.cctv : "",
+      access.parking ? "Parking: " + access.parking : "",
+      access.contact ? "Access contact: " + access.contact : ""
+    ].filter(function onlyText(item) {
+      return String(item || "").trim();
+    });
+  }
+
   function sectionHtml(title, bodyHtml) {
     return [
       '<section class="osmpanes-section">',
@@ -237,13 +254,7 @@
   function detailsPaneHtml(walk, region, options) {
     var coordinates = formatCoordinates(walk);
     var what3words = valueOrFallback(walk.what3words, "No w3w recorded.");
-    var accessLines = [
-      walk.accessNotes,
-      walk.address,
-      walk.gridRef ? "Grid: " + walk.gridRef : ""
-    ].filter(function onlyText(item) {
-      return String(item || "").trim();
-    });
+    var accessLines = accessControlLines(walk);
     var notes = valueOrFallback(walk.notes || walk.description, "No notes recorded.");
     var weatherText = valueOrFallback(options && options.weatherText, "Weather not loaded.");
     var alerts = walk.alerts && walk.alerts.length ? walk.alerts : [];
@@ -260,11 +271,16 @@
       copyRowHtml("Coordinates", coordinates),
       copyRowHtml("w3w", what3words),
       sectionHtml(
-        "Access info",
+        "Access control",
         accessLines.length
-          ? listHtml(accessLines, "No access info recorded.")
-          : '<p class="osmpanes-line">No access info recorded.</p>'
+          ? listHtml(accessLines, "No access control recorded.")
+          : '<p class="osmpanes-line">No access control recorded.</p>'
       ),
+      sectionHtml("Location identifiers", listHtml([
+        walk.address ? "Address: " + walk.address : "",
+        walk.gridRef ? "Grid: " + walk.gridRef : "",
+        coordinates
+      ], "No location identifiers recorded.")),
       sectionHtml("Services", listHtml(walk.services, "No services recorded.")),
       optionalExtraSections(walk),
       sectionHtml("Weather", [
@@ -279,6 +295,10 @@
       ].join("")),
       sectionHtml("Alerts", listHtml(alerts, "No active alerts.")),
       sectionHtml("Notes", '<p class="osmpanes-line">' + escapeHtml(notes) + '</p>'),
+      sectionHtml("Site reporting", [
+        '<p class="osmpanes-line">Overgrowth, blocked route, damage and vehicle scratches are condition reports, not access notes.</p>',
+        '<p class="osmpanes-line"><a href="../Docs/site-reporting.html">Open site reporting</a></p>'
+      ].join("")),
       '<div class="osmpanes-actions">',
       '<button class="osmpanes-button" type="button" data-collapse-details="',
       escapeHtml(walk.id),
@@ -308,6 +328,7 @@
 
   function editPaneHtml(walk, region, statusText) {
     var walkthrough = walk.walkthrough || {};
+    var access = walk.accessControl || {};
 
     return [
       '<article>',
@@ -333,7 +354,12 @@
       fieldHtml("what3words", "w3w", walk.what3words, true, false),
       fieldHtml("gridRef", "Grid ref", walk.gridRef, true, false),
       fieldHtml("address", "Address", walk.address, true, true),
-      fieldHtml("accessNotes", "Access info", walk.accessNotes, true, true),
+      fieldHtml("accessSummary", "Access summary", access.summary || walk.accessNotes, true, true),
+      fieldHtml("accessKeys", "Keys / fob / Tile", access.keys, true, true),
+      fieldHtml("accessGate", "Gate / barrier / lock", access.gate, true, true),
+      fieldHtml("accessCctv", "CCTV / access monitoring", access.cctv, true, true),
+      fieldHtml("accessParking", "Parking / vehicle position", access.parking, true, true),
+      fieldHtml("accessContact", "Access contact", access.contact, true, true),
       fieldHtml("services", "Services", asList(walk.services).join("\\n"), true, true),
       fieldHtml("alerts", "Alerts", asList(walk.alerts).join("\\n"), true, true),
       fieldHtml("inputs", "Inputs", asList(walk.inputs).join("\\n"), true, true),
@@ -792,7 +818,7 @@
       .catch(function weatherPreviewError(error) {
         setWeatherUpdated("Not loaded");
         setWeatherStatus(error.message || "Preview unavailable.");
-        renderForecastPlaceholder("Preview unavailable. Open full Weather for provider pages.");
+        renderForecastPlaceholder("Preview unavailable. Try again from the map weather panel.");
       });
   }
 

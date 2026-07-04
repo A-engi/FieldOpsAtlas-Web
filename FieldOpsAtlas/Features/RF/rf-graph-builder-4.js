@@ -13,9 +13,7 @@
 
   const VERSION = "1.0.1-builder-4-clean";
   const SOURCE_VERSION = "1.1.348-builder-3-fork-gap-blend";
-  const SOURCE_URL =
-    "https://cdn.jsdelivr.net/gh/A-engi/FieldOpsAtlas-Web@main/" +
-    "FieldOpsAtlas/Features/RF/rf-graph-builder-3.js";
+  const SOURCE_URL = new URL("rf-graph-builder-3.js", window.location.href).href;
   const MOUNT_SELECTOR = "[data-rf-graph]";
 
   let sourcePromise;

@@ -4,7 +4,6 @@
   var VERSION = "1.0.28-weather-panel-routing";
   var CACHE_MS = 10 * 60 * 1000;
   var REGION_STORAGE_KEY = "fieldops-osmmaps-selected-region-v1";
-  var WEATHER_PAGE_URL = "../Weather/index.html";
   var siteCache = new Map();
   var forecastCache = new Map();
   var controlsBound = false;
@@ -423,9 +422,7 @@
           error.message ||
           "Selected region forecast unavailable."
         );
-        renderForecastPlaceholder(
-          "Forecast unavailable. Open Weather for provider pages."
-        );
+        renderForecastPlaceholder("Forecast unavailable. Try again from the map weather panel.");
       });
   }
 
@@ -462,10 +459,6 @@
     document.head.appendChild(style);
   }
 
-  function openFullWeather() {
-    window.location.assign(WEATHER_PAGE_URL);
-  }
-
   function weatherPanelIsOpen() {
     var panel = qs(".weather-api-panel");
     return Boolean(panel && !panel.hidden);
@@ -481,17 +474,8 @@
     document.addEventListener("click", function handleWeatherClick(event) {
       var weatherOpen =
         event.target.closest("[data-weather-panel-open]");
-      var weatherActivate =
-        event.target.closest("[data-weather-activate]");
       var regionButton =
         event.target.closest("[data-region-id]");
-
-      if (weatherActivate) {
-        event.preventDefault();
-        event.stopPropagation();
-        openFullWeather();
-        return;
-      }
 
       if (weatherOpen) {
         window.setTimeout(function loadAfterPanelOpen() {
@@ -511,16 +495,6 @@
   function initWeatherPanelBehaviour() {
     installWarningStateStyles();
     bindWeatherPanelControls();
-
-    qsa("[data-weather-activate]").forEach(
-      function configureActivate(button) {
-        button.setAttribute(
-          "aria-label",
-          "Open full Weather provider pages"
-        );
-        button.title = "Open full Weather";
-      }
-    );
   }
 
   window.FieldOpsOSMWeatherMenu = {

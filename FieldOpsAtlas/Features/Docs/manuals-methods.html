@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Manuals</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <link rel="stylesheet" href="./ops-page.css?v=1.0.0-docs-split">
+</head>
+<body>
+  <main class="phone fieldops-shell-root">
+    <section class="content-canvas">
+      <article class="ops-page">
+        <header class="ops-hero">
+          <p class="ops-kicker">Reference</p>
+          <h1>Manuals, methods and known fixes</h1>
+          <p>Customer methods, PM history and fault knowledge live here. Network layout and rack walkthroughs stay in Network.</p>
+        </header>
+
+        <section class="ops-section">
+          <h2>Reference sets</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Customer work method</strong><span>Isolation rules, outage permissions, required extra equipment and customer-specific sign-off.</span></article>
+            <article class="ops-row"><strong>Manuals and software</strong><span>Manuals, connection guide, software version, licence/source location and cable/port notes.</span></article>
+            <article class="ops-row"><strong>Common faults</strong><span>Symptoms, measurements, known fixes, resets, alarms, ongoing faults and alternative kit.</span></article>
+            <article class="ops-row"><strong>PM history</strong><span>Last PM date, expected condition, defects carried forward, time allowance and service parameters.</span></article>
+          </div>
+        </section>
+
+        <form id="methodForm" class="ops-form" autocomplete="off">
+          <h2>Local reference gap</h2>
+          <div class="ops-field-grid">
+            <label class="ops-field"><span>System / service</span><input name="system" placeholder="Service, rack, device or customer"></label>
+            <label class="ops-field"><span>Missing reference</span><textarea name="gap" placeholder="Manual, method, fault fix, PM note or support contact needed"></textarea></label>
+            <label class="ops-field"><span>Alias / tag</span><input name="alias" placeholder="Plain-English tag for an unclear system name"></label>
+          </div>
+          <div class="ops-actions">
+            <button class="ops-button is-primary" type="submit">Save local gap</button>
+            <button id="clearMethodGap" class="ops-button" type="button">Clear</button>
+            <a class="ops-button" href="../Network/index.html">Service layout</a>
+          </div>
+          <p id="methodStatus" class="ops-status" role="status"></p>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const key = "fieldOpsAtlas.docs.methodGap.v1";
+      const form = document.getElementById("methodForm");
+      const status = document.getElementById("methodStatus");
+      const saved = JSON.parse(localStorage.getItem(key) || "{}");
+      Array.from(form.elements).forEach((field) => { if (field.name) field.value = saved[field.name] || ""; });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = {};
+        Array.from(form.elements).forEach((field) => { if (field.name) values[field.name] = field.value.trim(); });
+        localStorage.setItem(key, JSON.stringify(values));
+        status.textContent = "Local reference gap saved.";
+      });
+      document.getElementById("clearMethodGap").addEventListener("click", () => { localStorage.removeItem(key); form.reset(); status.textContent = "Local reference gap cleared."; });
+    })();
+  </script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+</body>
+</html>

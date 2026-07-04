@@ -288,6 +288,21 @@
     };
   }
 
+  function normaliseAccessControl(rawWalk) {
+    var source = rawWalk && rawWalk.accessControl && typeof rawWalk.accessControl === "object"
+      ? rawWalk.accessControl
+      : {};
+
+    return {
+      summary: String(source.summary || source.notes || rawWalk.accessInfo || rawWalk.accessNotes || rawWalk.access || ""),
+      keys: String(source.keys || source.key || source.keySafe || ""),
+      gate: String(source.gate || source.barrier || source.lock || ""),
+      cctv: String(source.cctv || source.camera || ""),
+      parking: String(source.parking || source.vehicle || ""),
+      contact: String(source.contact || source.contacts || source.phone || "")
+    };
+  }
+
   function normaliseWalk(rawWalk, fallbackRegionId) {
     if (!rawWalk) {
       return null;
@@ -319,6 +334,7 @@
       gridRef: String(rawWalk.gridRef || rawWalk.grid || ""),
       what3words: String(rawWalk.what3words || rawWalk.w3w || ""),
       accessNotes: String(rawWalk.accessInfo || rawWalk.accessNotes || rawWalk.access || ""),
+      accessControl: normaliseAccessControl(rawWalk),
       address: String(rawWalk.address || ""),
       services: asStringList(rawWalk.services),
       alerts: asStringList(rawWalk.alerts || rawWalk.warnings),
@@ -340,6 +356,7 @@
       lng: Number(walk.lng),
       what3words: walk.what3words || "",
       accessNotes: walk.accessNotes || "",
+      accessControl: normaliseAccessControl(walk),
       address: walk.address || "",
       gridRef: walk.gridRef || "",
       services: asStringList(walk.services),
@@ -2828,7 +2845,15 @@
       what3words: formValue(form, "what3words"),
       gridRef: formValue(form, "gridRef"),
       address: formValue(form, "address"),
-      accessNotes: formValue(form, "accessNotes"),
+      accessNotes: formValue(form, "accessSummary"),
+      accessControl: {
+        summary: formValue(form, "accessSummary"),
+        keys: formValue(form, "accessKeys"),
+        gate: formValue(form, "accessGate"),
+        cctv: formValue(form, "accessCctv"),
+        parking: formValue(form, "accessParking"),
+        contact: formValue(form, "accessContact")
+      },
       services: parseLines(formValue(form, "services")),
       alerts: parseLines(formValue(form, "alerts")),
       inputs: parseLines(formValue(form, "inputs")),

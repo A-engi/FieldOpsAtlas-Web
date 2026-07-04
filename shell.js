@@ -12,7 +12,7 @@
 (function fieldOpsSharedShell() {
   "use strict";
 
-  var VERSION = "1.1.21-session-editor-token";
+  var VERSION = "1.1.22-no-weather-shell-nav";
   var ROOT_SELECTOR = ".phone, .app-shell, .fieldops-shell-root";
   var CHROME_SELECTOR = [
     ":scope > .top-shell",
@@ -31,12 +31,6 @@
       navLabel: "Map",
       icon: "icon--map",
       href: "FieldOpsAtlas/Features/maps/index.html"
-    },
-    weather: {
-      label: "Weather",
-      navLabel: "Wthr",
-      icon: "icon--weather",
-      href: "FieldOpsAtlas/Features/Weather/index.html"
     },
     rf: {
       label: "RF",
@@ -64,7 +58,7 @@
     }
   };
 
-  var pageOrder = ["map", "weather", "rf", "network", "docs", "tools"];
+  var pageOrder = ["map", "rf", "network", "docs", "tools"];
   var searchProviders = Object.create(null);
   var editorProviders = Object.create(null);
 
@@ -152,7 +146,7 @@
     }
 
     if (path.indexOf("/features/weather/") !== -1) {
-      return "weather";
+      return "map";
     }
 
     if (path.indexOf("/features/rf/") !== -1 || path.indexOf("/features/rfpages/") !== -1) {

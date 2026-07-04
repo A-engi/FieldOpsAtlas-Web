@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Site Reporting</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <link rel="stylesheet" href="./ops-page.css?v=1.0.0-docs-split">
+</head>
+<body>
+  <main class="phone fieldops-shell-root">
+    <section class="content-canvas">
+      <article class="ops-page">
+        <header class="ops-hero">
+          <p class="ops-kicker">Site reporting</p>
+          <h1>Condition and incident notes</h1>
+          <p>This is not the access record. Use it for things seen on arrival or during the visit: overgrowth, blocked routes, damage, vehicle scratches and safety observations.</p>
+        </header>
+
+        <form id="reportForm" class="ops-form" autocomplete="off">
+          <h2>New local report</h2>
+          <div class="ops-field-grid">
+            <label class="ops-field"><span>Report type</span><select name="type"><option>Overgrowth / blocked access</option><option>Vehicle scratch or damage</option><option>Site hazard</option><option>Access failed</option><option>Other condition report</option></select></label>
+            <label class="ops-field"><span>Site / job</span><input name="site" placeholder="Site name, job reference or route point"></label>
+            <label class="ops-field"><span>Details</span><textarea name="details" placeholder="What happened, where, impact and who was told"></textarea></label>
+            <label class="ops-field"><span>Evidence</span><input name="files" type="file" accept="image/*,.pdf" capture="environment" multiple></label>
+          </div>
+          <div class="ops-actions">
+            <button class="ops-button is-primary" type="submit">Add report</button>
+            <button id="clearReports" class="ops-button" type="button">Clear reports</button>
+            <a class="ops-button" href="../maps/index.html">Open site map</a>
+          </div>
+          <p id="reportStatus" class="ops-status" role="status"></p>
+        </form>
+
+        <section class="ops-section">
+          <h2>Boundary</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Access record</strong><span>Keys, gates, CCTV, access codes, parking and access contacts belong on the site access record.</span></article>
+            <article class="ops-row"><strong>Walkthrough record</strong><span>Building, room, rack, cabinet and telemetry location belong with the walkthrough/layout record.</span></article>
+          </div>
+        </section>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const key = "fieldOpsAtlas.docs.siteReports.v1";
+      const form = document.getElementById("reportForm");
+      const status = document.getElementById("reportStatus");
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        const values = {};
+        Array.from(form.elements).forEach((field) => {
+          if (!field.name || field.type === "file") return;
+          values[field.name] = field.value.trim();
+        });
+        values.files = Array.from(form.elements.files.files || []).map((file) => file.name).join(", ");
+        values.time = new Date().toLocaleString();
+        existing.unshift(values);
+        localStorage.setItem(key, JSON.stringify(existing.slice(0, 25)));
+        form.reset();
+        status.textContent = "Local site report saved. Send it to the reporting system when connected.";
+      });
+      document.getElementById("clearReports").addEventListener("click", () => { localStorage.removeItem(key); status.textContent = "Local reports cleared."; });
+    })();
+  </script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+</body>
+</html>

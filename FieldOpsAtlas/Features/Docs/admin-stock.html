@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Admin and Stock</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <link rel="stylesheet" href="./ops-page.css?v=1.0.0-docs-split">
+</head>
+<body>
+  <main class="phone fieldops-shell-root">
+    <section class="content-canvas">
+      <article class="ops-page">
+        <header class="ops-hero">
+          <p class="ops-kicker">After job</p>
+          <h1>Admin, spares and stock</h1>
+          <p>Closeout is separate from technical notes: time, mileage, stock movement and follow-on work need their own workflow.</p>
+        </header>
+
+        <section class="ops-section">
+          <h2>Closeout checks</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Time and billing</strong><span>Timesheet, customer bill time, overtime, on-call timecard and travel/mileage.</span></article>
+            <article class="ops-row"><strong>Fleet</strong><span>Vehicle mileage, MOT/service reminders, damage reports and fuel-card notes.</span></article>
+            <article class="ops-row"><strong>Fault and follow-on</strong><span>Report fault, create job, update notes, add photos/scans and assign owner.</span></article>
+            <article class="ops-row"><strong>Stock</strong><span>Send spares back, update inventory, consumables list, deliveries being processed and recommended RS buys.</span></article>
+          </div>
+        </section>
+
+        <form id="stockForm" class="ops-form" autocomplete="off">
+          <h2>Local stock/admin note</h2>
+          <div class="ops-field-grid">
+            <label class="ops-field"><span>Job / vehicle</span><input name="job" placeholder="Job reference, vehicle or stock location"></label>
+            <label class="ops-field"><span>Admin note</span><textarea name="admin" placeholder="Mileage, timesheet, fault creation, customer billing or on-call note"></textarea></label>
+            <label class="ops-field"><span>Spares / inventory</span><textarea name="stock" placeholder="Used, returned, needed, delivered, missing, consumables"></textarea></label>
+          </div>
+          <div class="ops-actions">
+            <button class="ops-button is-primary" type="submit">Save local note</button>
+            <button id="clearStock" class="ops-button" type="button">Clear</button>
+          </div>
+          <p id="stockStatus" class="ops-status" role="status"></p>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const key = "fieldOpsAtlas.docs.adminStock.v1";
+      const form = document.getElementById("stockForm");
+      const status = document.getElementById("stockStatus");
+      const saved = JSON.parse(localStorage.getItem(key) || "{}");
+      Array.from(form.elements).forEach((field) => { if (field.name) field.value = saved[field.name] || ""; });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = {};
+        Array.from(form.elements).forEach((field) => { if (field.name) values[field.name] = field.value.trim(); });
+        localStorage.setItem(key, JSON.stringify(values));
+        status.textContent = "Local admin/stock note saved.";
+      });
+      document.getElementById("clearStock").addEventListener("click", () => { localStorage.removeItem(key); form.reset(); status.textContent = "Local admin/stock note cleared."; });
+    })();
+  </script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+</body>
+</html>

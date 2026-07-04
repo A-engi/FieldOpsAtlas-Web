@@ -3,13 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas Tools</title>
+  <title>FieldOps Atlas Field Tools</title>
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <style>
-
     :root {
       --feature-content-side: 7px;
       --feature-content-radius: 20px;
+      --tool-ink: #102033;
+      --tool-muted: rgba(16, 32, 51, 0.68);
+      --tool-line: rgba(42, 67, 93, 0.18);
+      --tool-panel: rgba(255, 255, 255, 0.74);
+      --tool-blue: #225f86;
+      --tool-green: #17623f;
+      --tool-amber: #866018;
+      --tool-red: #8d2f2f;
     }
 
     .content-canvas {
@@ -23,13 +30,17 @@
       overflow: hidden;
       border: 2px solid var(--gold-border);
       border-radius: var(--feature-content-radius);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(34, 95, 134, 0.20), transparent 32%),
+        radial-gradient(circle at 86% 10%, rgba(134, 96, 24, 0.20), transparent 28%),
+        linear-gradient(180deg, #f7f9fa 0%, #e1e9ea 100%);
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.55),
         inset 0 0 0 1px rgba(255, 231, 168, 0.20),
         0 14px 30px rgba(2, 9, 20, 0.26);
     }
 
-    .feature-page {
+    .tools-page {
       height: 100%;
       min-height: 0;
       padding: 10px;
@@ -38,235 +49,527 @@
       gap: 10px;
       overflow-x: hidden;
       overflow-y: auto;
+      color: var(--tool-ink);
       -webkit-overflow-scrolling: touch;
     }
 
-    .feature-hero {
+    .tools-hero,
+    .tool-section,
+    .tool-card {
       padding: 12px;
+      border: 1px solid var(--tool-line);
       border-radius: 16px;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 42%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06));
+      background: var(--tool-panel);
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.26),
-        0 6px 18px rgba(37, 24, 8, 0.10);
+        inset 0 1px 0 rgba(255, 255, 255, 0.58),
+        0 8px 18px rgba(37, 50, 62, 0.08);
     }
 
-    .feature-kicker {
-      margin: 0 0 5px;
-      color: rgba(68, 80, 92, 0.68);
+    .tools-hero {
+      display: grid;
+      gap: 10px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(239, 244, 243, 0.74)),
+        var(--tool-panel);
+    }
+
+    .tool-kicker {
+      margin: 0;
+      color: rgba(16, 32, 51, 0.58);
       font-size: 10px;
       font-weight: 850;
-      letter-spacing: 0.16em;
+      letter-spacing: 0;
       line-height: 1;
       text-transform: uppercase;
     }
 
-    .feature-title {
+    .tool-title {
       margin: 0;
-      color: #172b3e;
-      font-size: 24px;
+      color: var(--tool-ink);
+      font-size: 25px;
       font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1;
+      letter-spacing: 0;
+      line-height: 1.04;
     }
 
-    .feature-copy {
-      margin: 7px 0 0;
-      color: rgba(22, 43, 62, 0.72);
-      font-size: 13px;
+    .tool-copy,
+    .section-copy,
+    .status-text,
+    .result-text {
+      margin: 0;
+      color: var(--tool-muted);
+      font-size: 12px;
       font-weight: 650;
-      line-height: 1.35;
+      line-height: 1.38;
     }
 
-    .feature-section {
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.62);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.54),
-        0 6px 18px rgba(37, 24, 8, 0.08);
-    }
-
-    .feature-section h2 {
-      margin: 0 0 10px;
-      color: #172b3e;
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      line-height: 1;
-    }
-
-    .feature-grid {
+    .tool-metrics,
+    .calculator-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      gap: 7px;
     }
 
     .metric-card,
-    .action-card {
-      min-height: 66px;
-      padding: 10px;
+    .reading-row,
+    .log-row,
+    .quick-link,
+    .test-row {
+      border: 1px solid var(--tool-line);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56);
+    }
+
+    .metric-card {
+      min-height: 58px;
+      padding: 9px;
       display: grid;
       align-content: center;
-      gap: 5px;
-      color: #172b3e;
-      border: 1px solid rgba(192, 150, 68, 0.26);
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.64), transparent 42%),
-        linear-gradient(180deg, rgba(255, 252, 244, 0.88), rgba(247, 236, 212, 0.78));
-      text-decoration: none;
-      box-shadow: 0 5px 12px rgba(37, 24, 8, 0.06);
+      gap: 4px;
     }
 
-    .metric-card strong,
-    .action-card strong {
-      display: block;
+    .metric-card strong {
       overflow: hidden;
-      color: #172b3e;
-      font-size: 20px;
+      color: var(--tool-blue);
+      font-size: 18px;
       font-weight: 950;
       line-height: 1;
-      white-space: nowrap;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .metric-card span,
-    .action-card span {
-      color: rgba(22, 43, 62, 0.64);
+    .metric-card span {
+      overflow: hidden;
+      color: var(--tool-muted);
       font-size: 10px;
-      font-weight: 800;
-      line-height: 1.1;
+      font-weight: 850;
+      line-height: 1.15;
       text-transform: uppercase;
     }
 
-    .feature-list {
+    .tool-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .section-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .section-heading h2,
+    .card-title {
+      margin: 0;
+      color: var(--tool-ink);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1.1;
+    }
+
+    .tool-card {
+      display: grid;
+      align-content: start;
+      gap: 9px;
+    }
+
+    .tool-card h3 {
+      margin: 0;
+      color: var(--tool-ink);
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .form-grid {
       display: grid;
       gap: 8px;
     }
 
-    .list-row {
-      min-height: 46px;
+    .form-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .form-field span {
+      color: rgba(16, 32, 51, 0.70);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      width: 100%;
+      min-width: 0;
+      padding: 10px;
+      color: var(--tool-ink);
+      border: 1px solid rgba(42, 67, 93, 0.24);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.78);
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
+    }
+
+    .form-field textarea {
+      min-height: 78px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .action-button {
+      min-height: 36px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(32, 95, 134, 0.22);
+      border-radius: 11px;
+      color: var(--tool-ink);
+      background: rgba(255, 255, 255, 0.72);
+      font: inherit;
+      font-size: 11px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .action-button.is-primary {
+      color: #fff;
+      border-color: rgba(21, 74, 107, 0.22);
+      background: linear-gradient(180deg, #2d7398, #1f587d);
+    }
+
+    .action-button.is-danger {
+      color: #fff;
+      border-color: rgba(101, 19, 19, 0.18);
+      background: #8d2f2f;
+    }
+
+    .result-panel {
+      min-height: 40px;
+      padding: 9px 10px;
+      border: 1px solid rgba(32, 95, 134, 0.18);
+      border-radius: 12px;
+      background: rgba(32, 95, 134, 0.08);
+    }
+
+    .reading-list,
+    .quick-links,
+    .test-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .reading-row,
+    .log-row,
+    .quick-link,
+    .test-row {
+      min-height: 50px;
       padding: 9px 10px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       align-items: center;
-      color: #172b3e;
-      border: 1px solid rgba(192, 150, 68, 0.22);
-      border-radius: 14px;
-      background: rgba(255, 252, 244, 0.72);
+      color: var(--tool-ink);
       text-decoration: none;
     }
 
-    .list-row strong {
+    .reading-row strong,
+    .log-row strong,
+    .quick-link strong,
+    .test-row strong {
       display: block;
       overflow: hidden;
+      color: var(--tool-ink);
       font-size: 13px;
       font-weight: 850;
-      line-height: 1;
-      white-space: nowrap;
+      line-height: 1.15;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .list-row small {
+    .reading-row small,
+    .log-row small,
+    .quick-link small,
+    .test-row small {
       display: block;
       margin-top: 4px;
       overflow: hidden;
-      color: rgba(22, 43, 62, 0.62);
+      color: var(--tool-muted);
       font-size: 10px;
       font-weight: 700;
-      line-height: 1;
-      white-space: nowrap;
+      line-height: 1.2;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .status-pill {
+      min-width: 50px;
       padding: 5px 8px;
-      color: #0d4d2a;
+      color: var(--tool-green);
       border-radius: 999px;
-      background: rgba(21, 115, 58, 0.12);
+      background: rgba(23, 98, 63, 0.12);
       font-size: 10px;
       font-weight: 900;
       line-height: 1;
+      text-align: center;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
-    @media (max-width: 360px) {
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
+    .status-pill.is-watch {
+      color: var(--tool-amber);
+      background: rgba(134, 96, 24, 0.14);
     }
 
-    .phone[data-page="tools"] .content-canvas {
-      background:
-        radial-gradient(circle at 50% 37%, rgba(255, 255, 255, 0.78), transparent 39%),
-        linear-gradient(180deg, #f8fbff 0%, #e8eef8 100%);
+    .status-pill.is-risk {
+      color: var(--tool-red);
+      background: rgba(141, 47, 47, 0.12);
+    }
+
+    .wide-card {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 390px) {
+      .tool-metrics,
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.1.2">
-    <section class="content-canvas" aria-label="Tools content">
-      <article class="feature-page">
-        <header class="feature-hero">
-          <p class="feature-kicker">Utilities</p>
-          <h1 class="feature-title">Tools</h1>
-          <p class="feature-copy">Field calculators and quick checks for RF and site work.</p>
+  <main class="phone" data-page="tools" data-version="1.2.0-field-tools">
+    <section class="content-canvas" aria-label="Field tools content">
+      <article class="tools-page">
+        <header class="tools-hero">
+          <div>
+            <p class="tool-kicker">Field tools</p>
+            <h1 class="tool-title">Measure, log, decide</h1>
+            <p class="tool-copy">Browser-side calculators and local logs for RF checks, location sharing, route readings, break planning and basic circuit tests.</p>
+          </div>
+
+          <div class="tool-metrics" aria-label="Tools summary">
+            <article class="metric-card">
+              <strong>dB</strong>
+              <span>Power</span>
+            </article>
+            <article class="metric-card">
+              <strong>VSWR</strong>
+              <span>Return loss</span>
+            </article>
+            <article class="metric-card">
+              <strong>GPS</strong>
+              <span>Route log</span>
+            </article>
+          </div>
         </header>
 
-        <section class="feature-section" aria-label="Tools summary">
-          <h2>Summary</h2>
-          <div class="feature-grid">
-          <article class="metric-card">
-            <strong>dB</strong>
-            <span>Calculator</span>
-          </article>
-          <article class="metric-card">
-            <strong>LoS</strong>
-            <span>Line of sight</span>
-          </article>
-          <article class="metric-card">
-            <strong>â</strong>
-            <span>Settings</span>
-          </article>
+        <section class="tool-section" aria-labelledby="calculatorTitle">
+          <div class="section-heading">
+            <h2 id="calculatorTitle">Calculators</h2>
+            <p class="section-copy">Use measured values from approved instruments. Results here are quick field references.</p>
+          </div>
+
+          <div class="calculator-grid">
+            <article class="tool-card" aria-labelledby="dbCalcTitle">
+              <h3 id="dbCalcTitle">dB / dBm</h3>
+              <div class="form-grid">
+                <label class="form-field">
+                  <span>Watts</span>
+                  <input id="wattsInput" type="number" step="0.001" min="0" placeholder="e.g. 25">
+                </label>
+                <label class="form-field">
+                  <span>dBm</span>
+                  <input id="dbmInput" type="number" step="0.01" placeholder="e.g. 44">
+                </label>
+                <div class="result-panel">
+                  <p id="dbResult" class="result-text">Enter watts or dBm.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="tool-card" aria-labelledby="vswrCalcTitle">
+              <h3 id="vswrCalcTitle">VSWR</h3>
+              <div class="form-grid">
+                <label class="form-field">
+                  <span>VSWR</span>
+                  <input id="vswrInput" type="number" step="0.01" min="1" placeholder="e.g. 1.25">
+                </label>
+                <div class="result-panel">
+                  <p id="vswrResult" class="result-text">Enter VSWR to calculate return loss.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="tool-card" aria-labelledby="sunCalcTitle">
+              <h3 id="sunCalcTitle">Sunrise / sunset</h3>
+              <div class="form-grid">
+                <label class="form-field">
+                  <span>Latitude</span>
+                  <input id="sunLatInput" type="number" step="0.0001" placeholder="51.5000">
+                </label>
+                <label class="form-field">
+                  <span>Longitude</span>
+                  <input id="sunLonInput" type="number" step="0.0001" placeholder="-0.1200">
+                </label>
+                <label class="form-field">
+                  <span>Date</span>
+                  <input id="sunDateInput" type="date">
+                </label>
+                <div class="form-actions">
+                  <button id="sunUseLocationButton" class="action-button" type="button">Use GPS</button>
+                </div>
+                <div class="result-panel">
+                  <p id="sunResult" class="result-text">Enter a location and date.</p>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
 
-        <section class="feature-section" aria-labelledby="toolsEngineerTitle">
-          <h2 id="toolsEngineerTitle">Engineer tools</h2>
-          <div class="feature-grid">
-            <a class="action-card" href="../RFPages/paths.html">
-              <strong>Path</strong>
-              <span>Analysis</span>
-            </a>
-            <a class="action-card" href="../RFPages/equipment.html">
-              <strong>â¦</strong>
-              <span>Equipment</span>
-            </a>
-            <a class="action-card" href="../../../settings.html">
-              <strong>â</strong>
-              <span>Settings</span>
-            </a>
+        <section class="tool-section" aria-labelledby="locationTitle">
+          <div class="section-heading">
+            <h2 id="locationTitle">Location and route signal</h2>
+            <p class="section-copy">Share a current map link or log service readings against GPS while driving a route.</p>
+          </div>
+
+          <article class="tool-card wide-card" aria-labelledby="shareLocationTitle">
+            <h3 id="shareLocationTitle">Engineer location</h3>
+            <div class="form-grid">
+              <div class="form-actions">
+                <button id="getLocationButton" class="action-button is-primary" type="button">Get current location</button>
+                <button id="copyLocationButton" class="action-button" type="button">Copy map link</button>
+              </div>
+              <div class="result-panel">
+                <p id="locationResult" class="result-text">Location not captured.</p>
+              </div>
+            </div>
+          </article>
+
+          <form id="signalLogForm" class="tool-card wide-card" autocomplete="off" aria-labelledby="signalLogTitle">
+            <h3 id="signalLogTitle">Route signal log</h3>
+            <div class="form-grid">
+              <label class="form-field">
+                <span>Service</span>
+                <input name="service" type="text" placeholder="DAB, FM, DTT, telemetry, link">
+              </label>
+              <label class="form-field">
+                <span>Frequency / channel</span>
+                <input name="frequency" type="text" placeholder="MHz, block, channel or carrier">
+              </label>
+              <label class="form-field">
+                <span>Reading</span>
+                <input name="reading" type="text" placeholder="Level, MER, RSSI, audio state, cutoff point">
+              </label>
+              <label class="form-field">
+                <span>GPS</span>
+                <input name="gps" type="text" placeholder="Latitude, longitude">
+              </label>
+              <label class="form-field">
+                <span>Notes</span>
+                <textarea name="notes" placeholder="Route, antenna, receiver, vehicle setup, signal cutout, service reach"></textarea>
+              </label>
+              <div class="form-actions">
+                <button id="useSignalLocationButton" class="action-button" type="button">Use GPS</button>
+                <button class="action-button is-primary" type="submit">Add reading</button>
+                <button id="clearSignalLogButton" class="action-button is-danger" type="button">Clear log</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="signalLogList" class="reading-list" aria-live="polite"></div>
+        </section>
+
+        <section class="tool-section" aria-labelledby="fieldNotesTitle">
+          <div class="section-heading">
+            <h2 id="fieldNotesTitle">Break, amenities, evidence</h2>
+            <p class="section-copy">Use confirmed local knowledge when public listings are stale or unreliable.</p>
+          </div>
+
+          <form id="breakForm" class="tool-card wide-card" autocomplete="off" aria-labelledby="breakFormTitle">
+            <h3 id="breakFormTitle">Break and amenity note</h3>
+            <div class="form-grid">
+              <label class="form-field">
+                <span>Fuel card / fuel</span>
+                <input name="fuel" type="text" placeholder="Confirmed 24 hour fuel, card accepted, access notes">
+              </label>
+              <label class="form-field">
+                <span>Food, toilet, shop close</span>
+                <input name="amenities" type="text" placeholder="Known open times and reliable facilities">
+              </label>
+              <label class="form-field">
+                <span>Break or route note</span>
+                <textarea name="breakNote" placeholder="One hour break option, nearby walk, roads to avoid, parking constraints"></textarea>
+              </label>
+              <label class="form-field">
+                <span>Camera / magnifier capture</span>
+                <input id="cameraCaptureInput" type="file" accept="image/*" capture="environment" multiple>
+              </label>
+              <div class="form-actions">
+                <button class="action-button is-primary" type="submit">Save amenity note</button>
+                <button id="clearBreakButton" class="action-button is-danger" type="button">Clear</button>
+              </div>
+              <p id="breakStatus" class="status-text" role="status" aria-live="polite"></p>
+              <p id="cameraStatus" class="status-text" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <section class="tool-section" aria-labelledby="basicTestsTitle">
+          <div class="section-heading">
+            <h2 id="basicTestsTitle">Back to basics</h2>
+          </div>
+          <div class="test-list">
+            <article class="test-row">
+              <span>
+                <strong>Before circuit tests</strong>
+                <small>Confirm isolation state, drawing, expected voltage, load, reference earth and PPE.</small>
+              </span>
+              <span class="status-pill is-risk">Safety</span>
+            </article>
+            <article class="test-row">
+              <span>
+                <strong>Continuity and polarity</strong>
+                <small>Prove meter, test known source, test circuit, prove meter again, record points.</small>
+              </span>
+              <span class="status-pill is-watch">Method</span>
+            </article>
+            <article class="test-row">
+              <span>
+                <strong>RF line check</strong>
+                <small>Know service limits, measure forward/reflected power, VSWR, return loss and trend.</small>
+              </span>
+              <span class="status-pill">RF</span>
+            </article>
           </div>
         </section>
-        <section class="feature-section" aria-labelledby="toolsNotesTitle">
-          <h2 id="toolsNotesTitle">Quick notes</h2>
-          <div class="feature-list">
-            <a class="list-row" href="../RFPages/paths.html">
-              <span>
-                <strong>dB / dBm calculator</strong>
-                <small>Convert watts, dBm, and margin</small>
-              </span>
+
+        <section class="tool-section" aria-labelledby="quickOpenTitle">
+          <div class="section-heading">
+            <h2 id="quickOpenTitle">Quick open</h2>
+          </div>
+          <div class="quick-links">
+            <a class="quick-link" href="../Docs/index.html">
+              <span><strong>Job pack</strong><small>Before, on site, break and closeout checklist</small></span>
               <span class="status-pill">Open</span>
             </a>
-            <a class="list-row" href="../RFPages/paths.html">
-              <span>
-                <strong>LoS line of sight</strong>
-                <small>Check clearance and bearing</small>
-              </span>
+            <a class="quick-link" href="../Network/index.html">
+              <span><strong>Service context</strong><small>Room, rack, diagrams, incoming and outgoing services</small></span>
+              <span class="status-pill">Open</span>
+            </a>
+            <a class="quick-link" href="../RFPages/paths.html">
+              <span><strong>RF paths</strong><small>Path analysis and service route context</small></span>
               <span class="status-pill">Open</span>
             </a>
           </div>
@@ -279,41 +582,338 @@
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
       page: "tools",
-      label: "Tools",
-      placeholder: "Search tools...",
-      emptyText: "No tools matches found.",
+      label: "Field Tools",
+      placeholder: "Search field tools...",
+      emptyText: "No field tools matches found.",
       items: [
         {
-          id: "tools-path",
-          title: "Path analysis",
-          subtitle: "Open RF path analysis",
-          href: "../RFPages/paths.html",
-          keywords: ["path", "analysis", "los", "line of sight"]
-        },
-        {
-          id: "tools-equipment",
-          title: "Equipment check",
-          subtitle: "Open RF equipment tools",
-          href: "../RFPages/equipment.html",
-          keywords: ["equipment", "check", "tx", "antenna"]
-        },
-        {
-          id: "tools-settings",
-          title: "Settings",
-          subtitle: "Open app settings",
-          href: "../../../settings.html",
-          keywords: ["settings", "preferences", "theme"]
-        },
-        {
-          id: "tools-dbm",
+          id: "tools-db",
           title: "dB / dBm calculator",
-          subtitle: "Convert watts, dBm, and margin",
-          href: "../RFPages/paths.html",
-          keywords: ["db", "dbm", "watts", "margin", "calculator"]
+          subtitle: "Convert watts and dBm",
+          href: "./index.html#calculatorTitle",
+          keywords: ["db", "dbm", "watts", "power", "calculator"]
+        },
+        {
+          id: "tools-vswr",
+          title: "VSWR calculator",
+          subtitle: "Return loss, reflection coefficient and mismatch loss",
+          href: "./index.html#calculatorTitle",
+          keywords: ["vswr", "return loss", "reflection", "rf"]
+        },
+        {
+          id: "tools-sun",
+          title: "Sunrise and sunset",
+          subtitle: "Daylight from latitude, longitude and date",
+          href: "./index.html#calculatorTitle",
+          keywords: ["sunrise", "sunset", "daylight", "weather"]
+        },
+        {
+          id: "tools-location",
+          title: "Engineer location",
+          subtitle: "Get GPS and copy a map link",
+          href: "./index.html#locationTitle",
+          keywords: ["location", "gps", "share", "map", "engineer"]
+        },
+        {
+          id: "tools-signal",
+          title: "Route signal log",
+          subtitle: "Service, frequency, reading and GPS",
+          href: "./index.html#signalLogTitle",
+          keywords: ["route", "signal", "frequency", "carrier", "dab", "fm", "tv", "rssi"]
+        },
+        {
+          id: "tools-break",
+          title: "Break and amenity note",
+          subtitle: "Fuel card, facilities, break and route notes",
+          href: "./index.html#fieldNotesTitle",
+          keywords: ["break", "fuel", "amenities", "shop", "walk"]
+        },
+        {
+          id: "tools-basic-tests",
+          title: "Back to basics",
+          subtitle: "Circuit and RF line test prompts",
+          href: "./index.html#basicTestsTitle",
+          keywords: ["circuit", "test", "meter", "continuity", "polarity", "rf"]
         }
       ]
     });
+
+    (() => {
+      "use strict";
+
+      const SIGNAL_KEY = "fieldOpsAtlas.tools.signalLog.v1";
+      const BREAK_KEY = "fieldOpsAtlas.tools.breakNote.v1";
+      let currentLocation = null;
+
+      const readStored = (key, fallback) => {
+        try {
+          return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+        } catch {
+          return fallback;
+        }
+      };
+
+      const writeStored = (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value));
+      };
+
+      const stamp = () => new Date().toLocaleString([], {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[character]));
+
+      const toNumber = (value) => {
+        const number = Number(value);
+        return Number.isFinite(number) ? number : null;
+      };
+
+      const wattsInput = document.getElementById("wattsInput");
+      const dbmInput = document.getElementById("dbmInput");
+      const dbResult = document.getElementById("dbResult");
+      const vswrInput = document.getElementById("vswrInput");
+      const vswrResult = document.getElementById("vswrResult");
+
+      wattsInput.addEventListener("input", () => {
+        const watts = toNumber(wattsInput.value);
+        if (watts === null || watts <= 0) {
+          dbResult.textContent = "Enter watts above zero.";
+          return;
+        }
+        const dbm = 10 * Math.log10(watts * 1000);
+        dbmInput.value = dbm.toFixed(2);
+        dbResult.textContent = watts.toFixed(4) + " W = " + dbm.toFixed(2) + " dBm.";
+      });
+
+      dbmInput.addEventListener("input", () => {
+        const dbm = toNumber(dbmInput.value);
+        if (dbm === null) {
+          dbResult.textContent = "Enter dBm.";
+          return;
+        }
+        const watts = Math.pow(10, dbm / 10) / 1000;
+        wattsInput.value = watts.toFixed(6);
+        dbResult.textContent = dbm.toFixed(2) + " dBm = " + watts.toFixed(6) + " W.";
+      });
+
+      vswrInput.addEventListener("input", () => {
+        const vswr = toNumber(vswrInput.value);
+        if (vswr === null || vswr < 1) {
+          vswrResult.textContent = "VSWR must be 1.00 or higher.";
+          return;
+        }
+        const gamma = (vswr - 1) / (vswr + 1);
+        const returnLoss = gamma === 0 ? Infinity : -20 * Math.log10(gamma);
+        const mismatchLoss = -10 * Math.log10(1 - (gamma * gamma));
+        vswrResult.textContent = [
+          "Return loss " + (Number.isFinite(returnLoss) ? returnLoss.toFixed(2) + " dB" : "ideal"),
+          "reflection " + gamma.toFixed(4),
+          "mismatch " + mismatchLoss.toFixed(3) + " dB"
+        ].join(" - ");
+      });
+
+      const sunLatInput = document.getElementById("sunLatInput");
+      const sunLonInput = document.getElementById("sunLonInput");
+      const sunDateInput = document.getElementById("sunDateInput");
+      const sunResult = document.getElementById("sunResult");
+      sunDateInput.valueAsDate = new Date();
+
+      const degToRad = (degrees) => degrees * Math.PI / 180;
+      const radToDeg = (radians) => radians * 180 / Math.PI;
+      const normaliseDegrees = (value) => ((value % 360) + 360) % 360;
+      const normaliseHours = (value) => ((value % 24) + 24) % 24;
+
+      const dayOfYear = (date) => {
+        const start = Date.UTC(date.getUTCFullYear(), 0, 0);
+        const current = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+        return Math.floor((current - start) / 86400000);
+      };
+
+      const sunTimeUtc = (date, latitude, longitude, rising) => {
+        const zenith = 90.833;
+        const lngHour = longitude / 15;
+        const day = dayOfYear(date);
+        const t = day + ((rising ? 6 : 18) - lngHour) / 24;
+        const meanAnomaly = (0.9856 * t) - 3.289;
+        const trueLongitude = normaliseDegrees(meanAnomaly + (1.916 * Math.sin(degToRad(meanAnomaly))) + (0.020 * Math.sin(degToRad(2 * meanAnomaly))) + 282.634);
+        let rightAscension = radToDeg(Math.atan(0.91764 * Math.tan(degToRad(trueLongitude))));
+        rightAscension = normaliseDegrees(rightAscension);
+        rightAscension += Math.floor(trueLongitude / 90) * 90 - Math.floor(rightAscension / 90) * 90;
+        rightAscension /= 15;
+        const sinDec = 0.39782 * Math.sin(degToRad(trueLongitude));
+        const cosDec = Math.cos(Math.asin(sinDec));
+        const cosHour = (Math.cos(degToRad(zenith)) - (sinDec * Math.sin(degToRad(latitude)))) / (cosDec * Math.cos(degToRad(latitude)));
+        if (cosHour > 1 || cosHour < -1) return null;
+        const hourAngle = (rising ? 360 - radToDeg(Math.acos(cosHour)) : radToDeg(Math.acos(cosHour))) / 15;
+        const localMean = hourAngle + rightAscension - (0.06571 * t) - 6.622;
+        return normaliseHours(localMean - lngHour);
+      };
+
+      const formatSunTime = (date, utcHour) => {
+        if (utcHour === null) return "not available";
+        const hours = Math.floor(utcHour);
+        const minutes = Math.round((utcHour - hours) * 60);
+        const value = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours, minutes));
+        return value.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      };
+
+      const updateSun = () => {
+        const lat = toNumber(sunLatInput.value);
+        const lon = toNumber(sunLonInput.value);
+        if (lat === null || lon === null || !sunDateInput.value) {
+          sunResult.textContent = "Enter a location and date.";
+          return;
+        }
+        const date = new Date(sunDateInput.value + "T00:00:00Z");
+        const rise = sunTimeUtc(date, lat, lon, true);
+        const set = sunTimeUtc(date, lat, lon, false);
+        sunResult.textContent = "Sunrise " + formatSunTime(date, rise) + " - sunset " + formatSunTime(date, set) + ".";
+      };
+
+      [sunLatInput, sunLonInput, sunDateInput].forEach((input) => input.addEventListener("input", updateSun));
+
+      const getPosition = () => new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          reject(new Error("Geolocation is not available in this browser."));
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 12000,
+          maximumAge: 30000
+        });
+      });
+
+      document.getElementById("sunUseLocationButton").addEventListener("click", () => {
+        getPosition().then((position) => {
+          sunLatInput.value = position.coords.latitude.toFixed(5);
+          sunLonInput.value = position.coords.longitude.toFixed(5);
+          updateSun();
+        }).catch((error) => {
+          sunResult.textContent = error.message;
+        });
+      });
+
+      const locationResult = document.getElementById("locationResult");
+      const mapLink = () => currentLocation ? "https://maps.google.com/?q=" + currentLocation.lat + "," + currentLocation.lon : "";
+
+      document.getElementById("getLocationButton").addEventListener("click", () => {
+        getPosition().then((position) => {
+          currentLocation = {
+            lat: position.coords.latitude.toFixed(6),
+            lon: position.coords.longitude.toFixed(6),
+            accuracy: Math.round(position.coords.accuracy || 0)
+          };
+          locationResult.innerHTML = '<a href="' + mapLink() + '" target="_blank" rel="noopener noreferrer">Map link</a> - ' +
+            currentLocation.lat + ", " + currentLocation.lon + " +/- " + currentLocation.accuracy + " m.";
+        }).catch((error) => {
+          locationResult.textContent = error.message;
+        });
+      });
+
+      document.getElementById("copyLocationButton").addEventListener("click", () => {
+        if (!currentLocation) {
+          locationResult.textContent = "Capture location first.";
+          return;
+        }
+        const text = mapLink();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            locationResult.textContent = "Map link copied: " + text;
+          }).catch(() => {
+            locationResult.textContent = text;
+          });
+        } else {
+          locationResult.textContent = text;
+        }
+      });
+
+      const signalForm = document.getElementById("signalLogForm");
+      const signalList = document.getElementById("signalLogList");
+
+      const renderSignalLog = () => {
+        const items = readStored(SIGNAL_KEY, []);
+        if (!items.length) {
+          signalList.innerHTML = '<p class="status-text">No route readings logged yet.</p>';
+          return;
+        }
+        signalList.innerHTML = items.map((item) => [
+          '<article class="log-row">',
+          '<span>',
+          '<strong>', escapeHtml(item.service || "Service reading"), '</strong>',
+          '<small>', escapeHtml([item.frequency, item.reading, item.gps, item.notes].filter(Boolean).join(" - ")), '</small>',
+          '</span>',
+          '<span class="status-pill is-watch">', escapeHtml(item.time), '</span>',
+          '</article>'
+        ].join("")).join("");
+      };
+
+      document.getElementById("useSignalLocationButton").addEventListener("click", () => {
+        getPosition().then((position) => {
+          signalForm.elements.gps.value = position.coords.latitude.toFixed(6) + ", " + position.coords.longitude.toFixed(6);
+        });
+      });
+
+      signalForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = Array.from(signalForm.elements).reduce((entry, field) => {
+          if (field.name) entry[field.name] = field.value.trim();
+          return entry;
+        }, {});
+        values.time = stamp();
+        const items = readStored(SIGNAL_KEY, []);
+        items.unshift(values);
+        writeStored(SIGNAL_KEY, items.slice(0, 50));
+        signalForm.reset();
+        renderSignalLog();
+      });
+
+      document.getElementById("clearSignalLogButton").addEventListener("click", () => {
+        localStorage.removeItem(SIGNAL_KEY);
+        renderSignalLog();
+      });
+
+      const breakForm = document.getElementById("breakForm");
+      const breakStatus = document.getElementById("breakStatus");
+      const breakValues = readStored(BREAK_KEY, {});
+      Array.from(breakForm.elements).forEach((field) => {
+        if (field.name) field.value = breakValues[field.name] || "";
+      });
+
+      breakForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = Array.from(breakForm.elements).reduce((entry, field) => {
+          if (field.name) entry[field.name] = field.value.trim();
+          return entry;
+        }, {});
+        writeStored(BREAK_KEY, values);
+        breakStatus.textContent = "Amenity note saved on this device - " + stamp();
+      });
+
+      document.getElementById("clearBreakButton").addEventListener("click", () => {
+        localStorage.removeItem(BREAK_KEY);
+        breakForm.reset();
+        breakStatus.textContent = "Amenity note cleared.";
+      });
+
+      document.getElementById("cameraCaptureInput").addEventListener("change", (event) => {
+        const names = Array.from(event.target.files || []).map((file) => file.name).join(", ");
+        document.getElementById("cameraStatus").textContent = names ? "Selected: " + names : "";
+      });
+
+      updateSun();
+      renderSignalLog();
+    })();
   </script>
-  <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
 </body>
 </html>

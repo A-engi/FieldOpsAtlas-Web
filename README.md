@@ -22,6 +22,19 @@ npm run check:css
 npm run check:json
 ```
 
+## Desktop App
+
+The Electron desktop wrapper opens the same GitHub Pages app that the repository publishes, so normal web updates are picked up without copying app files into a second desktop source tree. If the live app cannot load, it falls back to the packaged repository files.
+
+```powershell
+npm install
+npm run desktop
+npm run desktop:local
+npm run desktop:dist
+```
+
+Set `FIELDOPS_DESKTOP_URL` to point the desktop app at another Pages/custom-domain deployment.
+
 ## GitHub Editing
 
 The in-app editor can write JSON updates through the GitHub contents API when a user supplies a fine-grained token in Settings. Tokens are kept in memory for the active browser session only and must not be committed into HTML, JavaScript, documentation, or repository history.

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Before Leaving</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <link rel="stylesheet" href="./ops-page.css?v=1.0.0-docs-split">
+</head>
+<body>
+  <main class="phone fieldops-shell-root">
+    <section class="content-canvas">
+      <article class="ops-page">
+        <header class="ops-hero">
+          <p class="ops-kicker">Before leaving</p>
+          <h1>Job readiness</h1>
+          <p>Confirm the live job facts from source systems, then record only missing local notes on this device.</p>
+        </header>
+
+        <section class="ops-section">
+          <h2>Source facts to pull</h2>
+          <div class="ops-list">
+            <article class="ops-row"><strong>Fault and SLA</strong><span>Fault call-in time, current SLA, priority, customer billable state and job-note updates.</span></article>
+            <article class="ops-row"><strong>Outages and method</strong><span>Change request, planned outage start/end times, customer-specific method and extra equipment.</span></article>
+            <article class="ops-row"><strong>People and site state</strong><span>Who else is on site, mast works, TAR/danger warnings, Stay Safe status and escalation contacts.</span></article>
+            <article class="ops-row"><strong>Engineer readiness</strong><span>Fleet status, keys/Tile, spares, tools, PPE, kit, on-call rota, team calendar, meetings and training.</span></article>
+          </div>
+        </section>
+
+        <form id="readinessForm" class="ops-form" autocomplete="off">
+          <h2>Missing local notes</h2>
+          <p class="ops-note">This is a draft only. It does not replace the source job system.</p>
+          <div class="ops-field-grid">
+            <label class="ops-field"><span>Job reference</span><input name="jobRef" placeholder="Source job or fault reference"></label>
+            <label class="ops-field"><span>Missing job facts</span><textarea name="missingFacts" placeholder="Anything the source system does not show clearly"></textarea></label>
+            <label class="ops-field"><span>Kit, tools, PPE, spares</span><textarea name="kit" placeholder="Required kit, what is missing, where spares are expected"></textarea></label>
+            <label class="ops-field"><span>Outage / method notes</span><textarea name="method" placeholder="Planned outage times, method constraints, customer requirements"></textarea></label>
+          </div>
+          <div class="ops-actions">
+            <button class="ops-button is-primary" type="submit">Save local draft</button>
+            <button id="clearReadiness" class="ops-button" type="button">Clear</button>
+            <a class="ops-button" href="../maps/index.html">Site map</a>
+          </div>
+          <p id="readinessStatus" class="ops-status" role="status"></p>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const key = "fieldOpsAtlas.docs.readiness.v1";
+      const form = document.getElementById("readinessForm");
+      const status = document.getElementById("readinessStatus");
+      const read = () => { try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch { return {}; } };
+      const write = (value) => localStorage.setItem(key, JSON.stringify(value));
+      Array.from(form.elements).forEach((field) => { if (field.name) field.value = read()[field.name] || ""; });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const values = {};
+        Array.from(form.elements).forEach((field) => { if (field.name) values[field.name] = field.value.trim(); });
+        write(values);
+        status.textContent = "Local readiness draft saved.";
+      });
+      document.getElementById("clearReadiness").addEventListener("click", () => { localStorage.removeItem(key); form.reset(); status.textContent = "Local readiness draft cleared."; });
+    })();
+  </script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+</body>
+</html>

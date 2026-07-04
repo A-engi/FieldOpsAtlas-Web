@@ -1,4 +1,4 @@
-const CACHE_NAME = "fieldops-atlas-v1.1.17-rf-builder-3-clean";
+const CACHE_NAME = "fieldops-atlas-v1.1.20-map-weather-only";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -6,7 +6,7 @@ const CORE_FILES = [
   "./index.html",
   MAP_FALLBACK,
   "./shell.css?v=1.1.22-weather-nav",
-  "./shell.js?v=1.1.21-session-editor-token",
+  "./shell.js?v=1.1.22-no-weather-shell-nav",
   "./components.css",
   "./theme.css",
   "./settings.html",
@@ -19,7 +19,7 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.120-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.122-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.125-network-topology",
-  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.1.318-builder-3-self-contained-v307-core",
+  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.1.318-builder-3-solid-fill-v307-core",
   "./FieldOpsAtlas/Features/RFPages/sites.html",
   "./FieldOpsAtlas/Features/RFPages/dtt.html",
   "./FieldOpsAtlas/Features/RFPages/dab.html",
@@ -30,20 +30,13 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RFPages/settings.html",
   "./FieldOpsAtlas/Features/Network/index.html",
   "./FieldOpsAtlas/Features/Docs/index.html",
+  "./FieldOpsAtlas/Features/Docs/ops-page.css",
+  "./FieldOpsAtlas/Features/Docs/job-readiness.html",
+  "./FieldOpsAtlas/Features/Docs/site-reporting.html",
+  "./FieldOpsAtlas/Features/Docs/manuals-methods.html",
+  "./FieldOpsAtlas/Features/Docs/admin-stock.html",
   "./FieldOpsAtlas/Features/Tools/index.html",
-  "./FieldOpsAtlas/Features/Weather/index.html",
-  "./FieldOpsAtlas/Features/Weather/styles.css?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/app.js?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/weather-display-style.js?v=0.1.2",
-  "./FieldOpsAtlas/Features/Weather/rainviewer.html",
-  "./FieldOpsAtlas/Features/Weather/rainviewer.js?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/openmeteo.html",
-  "./FieldOpsAtlas/Features/Weather/openmeteo.js?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/metoffice.html",
-  "./FieldOpsAtlas/Features/Weather/metoffice.js?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/ea-rainfall.html",
-  "./FieldOpsAtlas/Features/Weather/ea-rainfall.js?v=1.0.0-weather-map-shell",
-  "./FieldOpsAtlas/Features/Weather/data/regions.json"
+  "./FieldOpsAtlas/Features/Weather/metoffice-warning.js?v=1.0.7-map-weather-only"
 ];
 
 self.addEventListener("install", (event) => {
