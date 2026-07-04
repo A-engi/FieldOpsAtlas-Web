@@ -1,0 +1,448 @@
+openapi: 3.1.0
+info:
+  title: FieldOpsAtlas Web GitHub Full-Control Action
+  version: 1.0.0
+  description: Full repository-control GitHub REST API action for A-engi/FieldOpsAtlas-Web.
+servers:
+  - url: https://api.github.com
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: GitHub token
+  schemas:
+    ContentWriteRequest:
+      type: object
+      required:
+        - message
+        - content
+      properties:
+        message:
+          type: string
+          description: Commit message.
+        content:
+          type: string
+          description: Base64-encoded file content.
+        sha:
+          type: string
+          description: Current blob SHA. Required when updating an existing file.
+        branch:
+          type: string
+          description: Target branch. Defaults to repository default branch.
+        committer:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+        author:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+    ContentDeleteRequest:
+      type: object
+      required:
+        - message
+        - sha
+      properties:
+        message:
+          type: string
+        sha:
+          type: string
+        branch:
+          type: string
+        committer:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+        author:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+    RefCreateRequest:
+      type: object
+      required:
+        - ref
+        - sha
+      properties:
+        ref:
+          type: string
+          description: Full ref name, for example refs/heads/recovery-rf.
+        sha:
+          type: string
+    RefUpdateRequest:
+      type: object
+      required:
+        - sha
+      properties:
+        sha:
+          type: string
+        force:
+          type: boolean
+          default: false
+    PullRequestCreateRequest:
+      type: object
+      required:
+        - title
+        - head
+        - base
+      properties:
+        title:
+          type: string
+        head:
+          type: string
+        base:
+          type: string
+        body:
+          type: string
+        draft:
+          type: boolean
+    PullRequestUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        state:
+          type: string
+          enum:
+            - open
+            - closed
+        base:
+          type: string
+        maintainer_can_modify:
+          type: boolean
+    WorkflowDispatchRequest:
+      type: object
+      required:
+        - ref
+      properties:
+        ref:
+          type: string
+        inputs:
+          type: object
+          additionalProperties:
+            type: string
+paths:
+  /repos/A-engi/FieldOpsAtlas-Web:
+    get:
+      operationId: getRepository
+      summary: Get repository metadata
+      responses:
+        "200":
+          description: Repository metadata
+    patch:
+      operationId: updateRepository
+      summary: Update repository settings
+      description: Full-control operation. Use only when explicitly requested.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        "200":
+          description: Updated repository
+  /repos/A-engi/FieldOpsAtlas-Web/contents/{path}:
+    get:
+      operationId: getRepositoryContent
+      summary: Read a repository file or directory
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ref
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Repository content
+    put:
+      operationId: putRepositoryContent
+      summary: Create or update a repository file
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentWriteRequest"
+      responses:
+        "200":
+          description: File updated
+        "201":
+          description: File created
+    delete:
+      operationId: deleteRepositoryContent
+      summary: Delete a repository file
+      description: Destructive full-control operation. Use only when explicitly requested.
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentDeleteRequest"
+      responses:
+        "200":
+          description: File deleted
+  /repos/A-engi/FieldOpsAtlas-Web/commits:
+    get:
+      operationId: listCommits
+      summary: List commits
+      parameters:
+        - name: sha
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        "200":
+          description: Commit list
+  /repos/A-engi/FieldOpsAtlas-Web/compare/{basehead}:
+    get:
+      operationId: compareCommits
+      summary: Compare two commits or branches
+      parameters:
+        - name: basehead
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Format is base...head.
+      responses:
+        "200":
+          description: Comparison
+  /repos/A-engi/FieldOpsAtlas-Web/git/ref/{ref}:
+    get:
+      operationId: getGitRef
+      summary: Get a Git reference
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Ref without refs prefix, for example heads/main.
+      responses:
+        "200":
+          description: Git reference
+    patch:
+      operationId: updateGitRef
+      summary: Update a Git reference
+      description: Full-control operation. Can force-update refs if force is true.
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Ref without refs prefix, for example heads/main.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefUpdateRequest"
+      responses:
+        "200":
+          description: Reference updated
+    delete:
+      operationId: deleteGitRef
+      summary: Delete a Git reference
+      description: Destructive full-control operation. Use only when explicitly requested.
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Reference deleted
+  /repos/A-engi/FieldOpsAtlas-Web/git/refs:
+    post:
+      operationId: createGitRef
+      summary: Create a Git reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefCreateRequest"
+      responses:
+        "201":
+          description: Reference created
+  /repos/A-engi/FieldOpsAtlas-Web/pulls:
+    get:
+      operationId: listPullRequests
+      summary: List pull requests
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - closed
+              - all
+      responses:
+        "200":
+          description: Pull request list
+    post:
+      operationId: createPullRequest
+      summary: Create a pull request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PullRequestCreateRequest"
+      responses:
+        "201":
+          description: Pull request created
+  /repos/A-engi/FieldOpsAtlas-Web/pulls/{pull_number}:
+    get:
+      operationId: getPullRequest
+      summary: Get a pull request
+      parameters:
+        - name: pull_number
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Pull request
+    patch:
+      operationId: updatePullRequest
+      summary: Update a pull request
+      parameters:
+        - name: pull_number
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PullRequestUpdateRequest"
+      responses:
+        "200":
+          description: Pull request updated
+  /repos/A-engi/FieldOpsAtlas-Web/issues:
+    get:
+      operationId: listIssues
+      summary: List issues
+      responses:
+        "200":
+          description: Issue list
+    post:
+      operationId: createIssue
+      summary: Create an issue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+                labels:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "201":
+          description: Issue created
+  /repos/A-engi/FieldOpsAtlas-Web/actions/workflows:
+    get:
+      operationId: listWorkflows
+      summary: List GitHub Actions workflows
+      responses:
+        "200":
+          description: Workflow list
+  /repos/A-engi/FieldOpsAtlas-Web/actions/workflows/{workflow_id}/dispatches:
+    post:
+      operationId: dispatchWorkflow
+      summary: Trigger a workflow dispatch
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Workflow ID or workflow file name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkflowDispatchRequest"
+      responses:
+        "204":
+          description: Workflow dispatched
+  /repos/A-engi/FieldOpsAtlas-Web/pages:
+    get:
+      operationId: getPagesSite
+      summary: Get GitHub Pages site metadata
+      responses:
+        "200":
+          description: Pages site
+  /repos/A-engi/FieldOpsAtlas-Web/pages/builds:
+    post:
+      operationId: requestPagesBuild
+      summary: Request a GitHub Pages build
+      responses:
+        "201":
+          description: Pages build requested
