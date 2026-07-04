@@ -33,7 +33,7 @@ function initialSource() {
   if (process.argv.includes("--live")) return "live";
 
   const envSource = String(process.env.FIELDOPS_DESKTOP_SOURCE || "").toLowerCase();
-  return envSource === "local" ? "local" : "live";
+  return envSource === "live" ? "live" : "local";
 }
 
 function mimeType(filePath) {

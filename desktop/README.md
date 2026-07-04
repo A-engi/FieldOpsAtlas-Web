@@ -2,8 +2,9 @@
 
 The desktop app is an Electron wrapper around the same static app that GitHub Pages serves.
 
-- `npm run desktop` opens the live GitHub Pages copy at `https://a-engi.github.io/FieldOpsAtlas-Web/`.
-- `npm run desktop:local` opens the packaged repository files through the private `fieldops://app/` protocol.
+- `npm run desktop` opens the local repository files through the private `fieldops://app/` protocol.
+- `npm run desktop:live` opens the live GitHub Pages copy at `https://a-engi.github.io/FieldOpsAtlas-Web/`.
+- `npm run desktop:local` also opens the local repository files.
 - If the live copy fails to load, the app falls back to the packaged copy automatically.
 
 The live URL can be changed without editing code:
