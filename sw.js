@@ -1,4 +1,4 @@
-const CACHE_NAME = "fieldops-atlas-v1.1.20-map-weather-only";
+const CACHE_NAME = "fieldops-atlas-v1.1.22-rf-quarter-dock";
 const MAP_FALLBACK = "./FieldOpsAtlas/Features/maps/index.html";
 
 const CORE_FILES = [
@@ -15,11 +15,11 @@ const CORE_FILES = [
   "./FieldOpsAtlas/Features/RF/index.html",
   "./FieldOpsAtlas/Features/RF/background.css?v=1.1.76-graph-label",
   "./FieldOpsAtlas/Features/RF/rf-graph.css?v=1.1.85-network-topology",
-  "./FieldOpsAtlas/Features/RF/rf-graph.js?v=1.1.90-builder-source",
   "./FieldOpsAtlas/Features/RF/rf-interface.css?v=1.1.120-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-interface.js?v=1.1.122-pane-fit",
   "./FieldOpsAtlas/Features/RF/rf-path-builder.js?v=1.1.125-network-topology",
-  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.1.318-builder-3-solid-fill-v307-core",
+  "./FieldOpsAtlas/Features/RF/rf-three-solid-core.js?v=1.2.1-quarter-dock",
+  "./FieldOpsAtlas/Features/RF/rf-graph-builder-3.js?v=1.2.1-quarter-dock-adapter",
   "./FieldOpsAtlas/Features/RFPages/sites.html",
   "./FieldOpsAtlas/Features/RFPages/dtt.html",
   "./FieldOpsAtlas/Features/RFPages/dab.html",
