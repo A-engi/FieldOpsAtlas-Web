@@ -1,7 +1,7 @@
 /* ========================================================================== 
-   FieldOps Atlas RF Three renderer
-   File: FieldOpsAtlas/Features/RF/rf-three-solid-core.js
-   Version: 1.2.1-quarter-dock
+   FieldOps Atlas RF 3D renderer
+   File: FieldOpsAtlas/Features/RF/3d-render.js
+   Version: 1.2.2-quarter-dock-3d-render
 
    Owns only:
    - Loading the Three.js module.
@@ -12,7 +12,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.2.1-quarter-dock";
+  const VERSION = "1.2.2-quarter-dock-3d-render";
   const THREE_MODULE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.min.js";
   const QUARTER_TURN = Math.PI * 0.5;
 
@@ -231,7 +231,7 @@
     return group;
   }
 
-  class RFThreeRenderer {
+  class RF3DRenderer {
     constructor(element, THREE, options) {
       this.element = element;
       this.THREE = THREE;
@@ -260,7 +260,7 @@
       this.renderer.toneMappingExposure = 1.04;
 
       this.canvas = this.renderer.domElement;
-      this.canvas.className = "rf-three-renderer-canvas";
+      this.canvas.className = "rf-3d-render-canvas";
       this.canvas.setAttribute("role", "img");
       this.canvas.setAttribute(
         "aria-label",
@@ -574,7 +574,7 @@
 
     instances.get(element)?.destroy();
     const THREE = await loadThree();
-    const instance = new RFThreeRenderer(element, THREE, options);
+    const instance = new RF3DRenderer(element, THREE, options);
     instances.set(element, instance);
     await instance.setImages(options.images || []);
     return instance;
@@ -645,6 +645,5 @@
     ready: loadThree
   });
 
-  window.FieldOpsRFThreeRenderer = api;
-  window.FieldOpsRFThreeSolidCore = api;
-})();
+  window.FieldOpsRF3DRenderer = api;
+  })();
