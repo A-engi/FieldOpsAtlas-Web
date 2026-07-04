@@ -2,8 +2,7 @@
   "name": "fieldopsatlas-web",
   "version": "0.0.0",
   "private": true,
-  "description": "Static FieldOps Atlas web app and desktop wrapper.",
-  "main": "desktop/main.mjs",
+  "description": "Static FieldOps Atlas web app.",
   "homepage": "https://a-engi.github.io/FieldOpsAtlas-Web/",
   "author": "A-engi",
   "repository": {
@@ -22,47 +21,9 @@
     "check:css": "node scripts/check-repo.mjs --scope css",
     "check:workflows": "node scripts/check-repo.mjs --scope workflows",
     "check:secrets": "node scripts/check-repo.mjs --scope secrets",
-    "desktop": "electron .",
-    "desktop:live": "electron . --live",
-    "desktop:local": "electron . --local",
-    "desktop:pack": "electron-builder --dir",
-    "desktop:dist": "electron-builder",
     "test:metoffice": "node scripts/test-fetch-metoffice-map-images.mjs"
   },
   "engines": {
     "node": ">=20"
-  },
-  "devDependencies": {
-    "electron": "41.7.1",
-    "electron-builder": "^26.15.3"
-  },
-  "build": {
-    "appId": "com.fieldopsatlas.desktop",
-    "productName": "FieldOps Atlas",
-    "directories": {
-      "output": "dist/desktop"
-    },
-    "files": [
-      "desktop/**",
-      "_config.yml",
-      "archive/**",
-      "components.css",
-      "data/**",
-      "FieldOpsAtlas/**",
-      "index.html",
-      "Keep.js",
-      "offline-shell-menu.html",
-      "settings.html",
-      "shell.css",
-      "shell.html",
-      "shell.js",
-      "sw.js",
-      "theme.css"
-    ],
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    }
   }
 }
