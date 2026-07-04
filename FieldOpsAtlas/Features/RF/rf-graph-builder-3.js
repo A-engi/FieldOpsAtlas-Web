@@ -1,15 +1,15 @@
 /* ========================================================================== 
    FieldOps Atlas RF graph adapter
    File: FieldOpsAtlas/Features/RF/rf-graph-builder-3.js
-   Version: 1.2.1-quarter-dock-adapter
+   Version: 1.2.2-quarter-dock-adapter
 
    This file is intentionally small. The Three renderer, mirrored mountain and
-   fixed docking anchor live in rf-three-solid-core.js.
+   fixed docking anchor live in 3d-render.js.
    ========================================================================== */
 (() => {
   "use strict";
 
-  const VERSION = "1.2.1-quarter-dock-adapter";
+  const VERSION = "1.2.2-quarter-dock-adapter";
   const MODE = "three-quarter-mirror-dock";
   const MOUNT_SELECTOR = "[data-rf-graph]";
   const RENDERED_EVENT = "fieldops:rf-graph-rendered";
@@ -17,9 +17,9 @@
   const instances = new Map();
 
   function rendererApi() {
-    const api = window.FieldOpsRFThreeRenderer;
+    const api = window.FieldOpsRF3DRenderer;
     if (!api) {
-      throw new Error("rf-three-solid-core.js did not load.");
+      throw new Error("3d-render.js did not load.");
     }
     return api;
   }
