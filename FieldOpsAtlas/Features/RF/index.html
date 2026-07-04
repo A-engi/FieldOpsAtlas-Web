@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF opaque graph with triangle borders</title>
+  <title>FieldOps Atlas RF quarter-mirrored renderer</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
@@ -41,7 +41,7 @@
 </head>
 
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.1.323-builder-3-solid-fill-v307-core">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.2.2-rf-quarter-dock-3d-render">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -135,17 +135,19 @@
       ]
     });
   </script>
+
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.122-pane-fit" defer></script>
   <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
-  <script src="./rf-graph-builder-3.js?v=1.1.318-builder-3-solid-fill-v307-core" defer></script>
+  <script src="./3d-render.js?v=1.2.2-quarter-dock-3d-render" defer></script>
+  <script src="./rf-graph-builder-3.js?v=1.2.2-quarter-dock-adapter" defer></script>
 
   <script>
-    /* RF load toast | Version: 1.1.323-builder-3-solid-fill-v307-core */
+    /* RF load toast | Version: 1.2.2-rf-quarter-dock-3d-render */
     (() => {
       "use strict";
 
-      const PAGE_VERSION = "1.1.323-builder-3-solid-fill-v307-core";
+      const PAGE_VERSION = "1.2.2-rf-quarter-dock-3d-render";
       const TOAST_ID = "rfLoadToast";
 
       function versionOf(globalName) {
@@ -180,7 +182,7 @@
           `shell.js ${versionOf("FieldOpsEditor")}`,
           `rf-interface.js ${versionOf("FieldOpsRFInterface")}`,
           `rf-path-builder.js ${versionOf("FieldOpsRFPathBuilder")}`,
-          `integrated topology core ${versionOf("FieldOpsRFThreeSolidCore")}`,
+          `3d-render.js ${versionOf("FieldOpsRF3DRenderer")}`,
           `rf-graph-builder-3.js ${versionOf("FieldOpsRFGraph")}`
         ];
 
