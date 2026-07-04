@@ -2,7 +2,16 @@
 
 This folder contains the setup package for a private custom GPT that can inspect screenshots, inspect this repository, edit files, push commits, manage branches, run workflows, and open pull requests through GitHub's REST API.
 
-It does not contain a GitHub token. Never commit tokens, API keys, or private setup notes to this repository.
+It does not contain a GitHub token or an OpenAI API key. Never commit tokens, API keys, or private setup notes to this repository.
+
+## Two Different Keys
+
+Do not mix these up:
+
+- OpenAI API key: starts with `sk-` or `sk-proj-`. This lets an app call OpenAI models. It does not grant GitHub repository write access.
+- GitHub token: usually starts with `github_pat_` for a fine-grained token or `ghp_` for a classic token. This is what the GPT Action needs to read, edit, commit, push, and open pull requests in GitHub.
+
+If ChatGPT says it can access a model provider or an OpenAI API key, that only proves OpenAI model access. It does not prove GitHub file-write access.
 
 ## What This Gives ChatGPT
 
@@ -17,7 +26,7 @@ It does not contain a GitHub token. Never commit tokens, API keys, or private se
 
 This is full repository control for this repo through selected GitHub REST endpoints. It is not organization-wide control, billing control, or account control.
 
-## Token Permission
+## GitHub Token Permission
 
 Use one of these:
 
@@ -49,11 +58,29 @@ https://docs.github.com/en/rest/authentication/permissions-required-for-fine-gra
 5. Import `openapi.yaml`.
 6. Set Authentication to API Key.
 7. Use Bearer authentication.
-8. Paste the GitHub token in the GPT editor authentication field.
+8. Paste the GitHub token in the GPT editor authentication field, not an OpenAI API key.
 9. Keep the GPT private.
 
 OpenAI documents GPT Action authentication here:
 https://developers.openai.com/api/docs/actions/authentication
+
+## Access Test
+
+After setup, ask the private GPT to run this exact test:
+
+```text
+Use the GitHub Action, not the built-in GitHub connector.
+Read README.md from A-engi/FieldOpsAtlas-Web.
+Create or update integrations/chatgpt-github-action/access-test.txt with one line:
+ChatGPT GitHub Action write test.
+Commit directly to main and report the commit SHA.
+```
+
+If reading works but writing fails with 401, 403, or "resource not accessible", the Action authentication is wrong or the GitHub token lacks repository write permissions.
+
+If ChatGPT reports `Admin: enabled`, `Maintain: enabled`, or `Push: enabled` but cannot commit, that report is only a capability claim from the current connector. The real test is a successful `putRepositoryContent` call that returns a commit SHA.
+
+If the GPT uses the built-in GitHub connector instead of this Action, it may inspect the repo but still fail to write. Tell it: "Use the custom GitHub Action operation `putRepositoryContent`."
 
 ## How To Use It
 
@@ -72,4 +99,3 @@ You may delete obsolete RF renderer files if they are no longer referenced.
 ```
 
 Without an explicit instruction like that, the GPT instructions tell ChatGPT to avoid destructive operations.
-

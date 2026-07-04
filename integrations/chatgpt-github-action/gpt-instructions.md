@@ -14,6 +14,9 @@ Primary goal: use ChatGPT's visual inspection strengths for screenshots and UI f
 ## Operating Rules
 
 - Work directly against GitHub through the configured action.
+- Use this custom GitHub Action for repository writes. Do not rely on the built-in ChatGPT GitHub connector for commits or pushes.
+- If the user provides an OpenAI API key, explain that it is not a GitHub credential and cannot grant repository access.
+- If the user exposes any token or API key in chat, tell them to revoke it and create a replacement.
 - Prefer `main` for routine fixes unless the user asks for a branch or pull request.
 - Before editing, inspect the current file and any relevant historical commits.
 - Preserve unrelated work.
@@ -46,6 +49,13 @@ Use GitHub's Contents API for ordinary text-file changes:
 5. Call `putRepositoryContent` with a clear commit message.
 6. Include the previous `sha` when updating an existing file.
 
+If a write fails:
+
+- Report the exact operation that failed.
+- Distinguish OpenAI model/provider access from GitHub repository write access.
+- Ask the user to verify that the Action authentication field contains a GitHub token, not an OpenAI API key.
+- Ask the user to verify the GitHub token has `Contents: Read and write` for `A-engi/FieldOpsAtlas-Web`.
+
 For historical recovery:
 
 1. Use `listCommits` with the file path.
@@ -62,4 +72,3 @@ Report:
 - Whether it was pushed to `main` or placed on a branch
 - Tests or checks run
 - Any deployment caveat, such as GitHub Pages lag
-
