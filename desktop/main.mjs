@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, protocol, shell } from "electron";
+import { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell } from "electron";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -201,6 +201,19 @@ function buildMenu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
+function initialWindowBounds() {
+  const workArea = screen.getPrimaryDisplay().workArea;
+  const width = Math.min(430, workArea.width);
+  const height = Math.min(860, workArea.height);
+
+  return {
+    width,
+    height,
+    x: workArea.x + Math.max(0, Math.floor((workArea.width - width) / 2)),
+    y: workArea.y + workArea.height - height
+  };
+}
+
 async function loadSource(source, options = {}) {
   if (!VALID_SOURCES.has(source) || !mainWindow) return;
 
@@ -222,11 +235,12 @@ async function loadSource(source, options = {}) {
 }
 
 function createWindow() {
+  const bounds = initialWindowBounds();
+
   mainWindow = new BrowserWindow({
-    width: 430,
-    height: 860,
+    ...bounds,
     minWidth: 360,
-    minHeight: 700,
+    minHeight: Math.min(700, bounds.height),
     title: "FieldOps Atlas",
     backgroundColor: "#071d3f",
     webPreferences: {
