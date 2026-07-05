@@ -1,12 +1,12 @@
 /* FieldOps Atlas — RF scene selector and selected-path binding
- * Version: 1.7.0-selected-path-binding
+ * Version: 1.8.0-path-distance-elevation
  * Selects scenes, binds scene controls, and maps the active path endpoints to
  * the left and right mountain/transmitter pairs.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.7.0-selected-path-binding";
+  const VERSION="1.8.0-path-distance-elevation";
   const DEFAULT_SCENE="mount-a_b-comp-scene";
   const STYLE_ID="fieldops-rf-scene-endpoint-style";
   const SCENES=Object.freeze([
@@ -55,12 +55,20 @@
     return text||fallback;
   }
 
+  function numberOrNull(value){
+    const number=Number(value);
+    return Number.isFinite(number)?number:null;
+  }
+
   function normaliseEndpoint(value,fallback){
     const source=value&&typeof value==="object"?value:{};
     return {
       siteId:clean(source.siteId||source.id,fallback.siteId),
       name:clean(source.name||source.label,fallback.name),
-      role:clean(source.role||source.siteRole,fallback.role)
+      role:clean(source.role||source.siteRole,fallback.role),
+      elevationM:numberOrNull(source.elevationM??source.elevation),
+      lat:numberOrNull(source.lat??source.latitude),
+      lng:numberOrNull(source.lng??source.lon??source.longitude)
     };
   }
 
@@ -70,6 +78,7 @@
       id:clean(source.id||source.pathId,"default-rf-path"),
       clusterId:clean(source.clusterId,""),
       serviceType:clean(source.serviceType||source.service,"dtt").toLowerCase(),
+      distanceKm:numberOrNull(source.distanceKm),
       from:normaliseEndpoint(source.from||source.feeding,{
         siteId:"site-from",name:"Site From",role:"Source Site"
       }),
@@ -117,13 +126,25 @@
     style.id=STYLE_ID;
     style.textContent=`
       .rf-scene-endpoints{position:absolute;inset:0;z-index:4;pointer-events:none}
-      .rf-scene-endpoint{position:absolute;top:8px;max-width:42%;padding:4px 7px;border:1px solid rgba(237,191,99,.56);border-radius:8px;background:rgba(1,14,22,.76);color:#f8ecd2;box-shadow:0 4px 10px rgba(0,0,0,.24);font:700 8px/1.12 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .rf-scene-endpoint{position:absolute;top:8px;max-width:42%;padding:5px 7px;border:1px solid rgba(237,191,99,.56);border-radius:8px;background:rgba(1,14,22,.76);color:#f8ecd2;box-shadow:0 4px 10px rgba(0,0,0,.24);font:700 8px/1.12 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .rf-scene-endpoint small{display:block;margin-bottom:2px;color:rgba(255,220,150,.8);font-size:6px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
       .rf-scene-endpoint strong{display:block;overflow:hidden;text-overflow:ellipsis}
+      .rf-scene-endpoint span{display:block;margin-top:3px;color:#ffe0a0;font-size:6.5px;font-weight:850}
       .rf-scene-endpoint.is-from{left:8px;text-align:left}
       .rf-scene-endpoint.is-to{right:8px;text-align:right}
+      .rf-scene-distance{position:absolute;top:9px;left:50%;max-width:30%;padding:4px 7px;border:1px solid rgba(237,191,99,.56);border-radius:999px;background:rgba(1,14,22,.82);color:#ffe0a0;box-shadow:0 4px 10px rgba(0,0,0,.24);font:850 7px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap;transform:translateX(-50%)}
     `;
     document.head.appendChild(style);
+  }
+
+  function elevationText(value){
+    const number=numberOrNull(value);
+    return number===null?"Elevation loading…":`Elevation ${Math.round(number)} m`;
+  }
+
+  function distanceText(value){
+    const number=numberOrNull(value);
+    return number===null?"Distance —":`${number.toFixed(number<10?2:1)} km`;
   }
 
   function endpointLabel(endpoint,direction){
@@ -132,10 +153,20 @@
     label.dataset.rfSceneEndpoint=direction;
     label.dataset.rfSiteId=endpoint.siteId;
     const small=document.createElement("small");
-    small.textContent=direction==="from"?"From · left site":"To · right site";
+    small.textContent=direction==="from"?"From · left":"To · right";
     const strong=document.createElement("strong");
     strong.textContent=endpoint.name;
-    label.append(small,strong);
+    const elevation=document.createElement("span");
+    elevation.textContent=elevationText(endpoint.elevationM);
+    label.append(small,strong,elevation);
+    return label;
+  }
+
+  function distanceLabel(path){
+    const label=document.createElement("span");
+    label.className="rf-scene-distance";
+    label.dataset.rfSceneDistance="true";
+    label.textContent=distanceText(path.distanceKm);
     return label;
   }
 
@@ -161,7 +192,10 @@
     layer.dataset.rfSceneEndpoints="true";
     layer.dataset.rfPathId=path.id;
     layer.appendChild(endpointLabel(path.from,"from"));
-    if(pairScene(sceneName))layer.appendChild(endpointLabel(path.to,"to"));
+    if(pairScene(sceneName)){
+      layer.appendChild(distanceLabel(path));
+      layer.appendChild(endpointLabel(path.to,"to"));
+    }
     root.appendChild(layer);
     return path;
   }

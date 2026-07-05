@@ -1,7 +1,7 @@
 /* ===========================================================================
    FieldOps Atlas RF path builder
    File: FieldOpsAtlas/Features/RF/rf-path-builder.js
-   Version: 1.2.0-cluster-default-path
+   Version: 1.3.0-path-distance-elevation
 
    Purpose:
    - Own the currently selected RF path used by the path-details pane.
@@ -13,12 +13,18 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.2.0-cluster-default-path";
+  const VERSION = "1.3.0-path-distance-elevation";
   const SLOT_SELECTOR = "[data-rf-path-details]";
   const PANE_READY_EVENT = "fieldops:rf-pane-shell-ready";
   const RENDERED_EVENT = "fieldops:rf-path-details-rendered";
   const SELECTED_EVENT = "fieldops:rf-selected-path-change";
   const STORAGE_KEY = "fieldops-rf-selected-path-v1";
+  const ELEVATION_CACHE_KEY = "fieldops-rf-elevation-cache-v1";
+  const OVERPASS_ENDPOINTS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter"
+  ];
+  let elevationRequest = null;
 
   const SITES = [
     {
@@ -177,13 +183,21 @@
       siteId: "stone-shelf-loop",
       name: "Stone Shelf Loop",
       role: "Head Site",
-      input: "Primary DTT Feed"
+      input: "Primary DTT Feed",
+      lat: 51.434999,
+      lng: -3.311963,
+      elevationM: null,
+      elevationSource: ""
     }),
     to: Object.freeze({
       siteId: "crystal-valley-path",
       name: "Crystal Valley Path",
       role: "Relay Site",
-      input: "Off-air Antenna"
+      input: "Off-air Antenna",
+      lat: 51.554036,
+      lng: -3.224351,
+      elevationM: null,
+      elevationSource: ""
     }),
     frequency: "234.928 MHz",
     channel: "DTT · 3 mux",
@@ -194,10 +208,10 @@
       Object.freeze({ type: "DTT", name: "PSB2" }),
       Object.freeze({ type: "DTT", name: "PSB3" })
     ]),
+    distanceKm: 14.56,
     metrics: Object.freeze([
-      Object.freeze({ label: "Path length", value: "37.6 km" }),
-      Object.freeze({ label: "Azimuth", value: "123.4°" }),
-      Object.freeze({ label: "Elevation", value: "1,245 m" }),
+      Object.freeze({ label: "Path length", value: "14.6 km" }),
+      Object.freeze({ label: "Azimuth", value: "24.6°" }),
       Object.freeze({ label: "RX power", value: "-58.2 dBm" }),
       Object.freeze({ label: "Fade margin", value: "18.6 dB" }),
       Object.freeze({ label: "Availability", value: "99.98%" })
@@ -221,6 +235,178 @@
     return JSON.parse(JSON.stringify(value));
   }
 
+
+  function numberOrNull(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function radians(value) {
+    return value * Math.PI / 180;
+  }
+
+  function straightLineDistanceKm(from, to) {
+    const lat1 = numberOrNull(from && from.lat);
+    const lng1 = numberOrNull(from && from.lng);
+    const lat2 = numberOrNull(to && to.lat);
+    const lng2 = numberOrNull(to && to.lng);
+
+    if (lat1 === null || lng1 === null || lat2 === null || lng2 === null) {
+      return null;
+    }
+
+    const earthRadiusKm = 6371.0088;
+    const dLat = radians(lat2 - lat1);
+    const dLng = radians(lng2 - lng1);
+    const sinLat = Math.sin(dLat / 2);
+    const sinLng = Math.sin(dLng / 2);
+    const value = sinLat * sinLat +
+      Math.cos(radians(lat1)) * Math.cos(radians(lat2)) * sinLng * sinLng;
+
+    return earthRadiusKm * 2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+  }
+
+  function bearingDegrees(from, to) {
+    const lat1 = radians(Number(from.lat));
+    const lat2 = radians(Number(to.lat));
+    const dLng = radians(Number(to.lng) - Number(from.lng));
+    const y = Math.sin(dLng) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) -
+      Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+    return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  }
+
+  function distanceText(value) {
+    const number = numberOrNull(value);
+    return number === null ? "—" : number.toFixed(number < 10 ? 2 : 1) + " km";
+  }
+
+  function elevationText(value) {
+    const number = numberOrNull(value);
+    return number === null ? "Loading…" : Math.round(number) + " m";
+  }
+
+  function readElevationCache() {
+    try {
+      const raw = window.localStorage.getItem(ELEVATION_CACHE_KEY);
+      const cache = raw ? JSON.parse(raw) : {};
+      return cache && typeof cache === "object" ? cache : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function writeElevationCache(cache) {
+    try {
+      window.localStorage.setItem(ELEVATION_CACHE_KEY, JSON.stringify(cache));
+    } catch (error) {
+      // Storage can be unavailable in previews and embedded webviews.
+    }
+  }
+
+  function elevationKey(endpoint) {
+    return Number(endpoint.lat).toFixed(5) + "," + Number(endpoint.lng).toFixed(5);
+  }
+
+  function parseElevation(value) {
+    const match = String(value == null ? "" : value).replaceAll(",", "").match(/-?\d+(?:\.\d+)?/);
+    return match ? numberOrNull(match[0]) : null;
+  }
+
+  function elementPoint(element) {
+    const lat = numberOrNull(element && (element.lat ?? element.center?.lat));
+    const lng = numberOrNull(element && (element.lon ?? element.center?.lon));
+    return lat === null || lng === null ? null : { lat, lng };
+  }
+
+  function nearestMappedElevation(payload, endpoint) {
+    const elements = payload && Array.isArray(payload.elements) ? payload.elements : [];
+    return elements.map((element) => {
+      const point = elementPoint(element);
+      const elevationM = parseElevation(element?.tags?.ele);
+      if (!point || elevationM === null) return null;
+      return {
+        elevationM,
+        distanceKm: straightLineDistanceKm(endpoint, point),
+        source: "osm-nearby-hill"
+      };
+    }).filter(Boolean).sort((a, b) => a.distanceKm - b.distanceKm)[0] || null;
+  }
+
+  function overpassQuery(endpoint) {
+    return [
+      "[out:json][timeout:20];",
+      "nwr(around:20000,", Number(endpoint.lat).toFixed(6), ",", Number(endpoint.lng).toFixed(6), ")",
+      '["natural"~"^(peak|hill)$"]["ele"];',
+      "out center tags;"
+    ].join("");
+  }
+
+  function requestOverpass(endpoint, index = 0) {
+    const url = OVERPASS_ENDPOINTS[index] + "?data=" + encodeURIComponent(overpassQuery(endpoint));
+    return fetch(url, {
+      cache: "force-cache",
+      headers: { Accept: "application/json" }
+    }).then((response) => {
+      if (!response.ok) throw new Error("Mapped elevation lookup failed.");
+      return response.json();
+    }).then((payload) => {
+      const result = nearestMappedElevation(payload, endpoint);
+      if (!result) throw new Error("No mapped elevation was found nearby.");
+      return result;
+    }).catch((error) => {
+      if (index + 1 < OVERPASS_ENDPOINTS.length) {
+        return requestOverpass(endpoint, index + 1);
+      }
+      throw error;
+    });
+  }
+
+  function requestTerrainFallback(endpoint) {
+    const url = "https://api.open-meteo.com/v1/elevation?latitude=" +
+      encodeURIComponent(endpoint.lat) + "&longitude=" + encodeURIComponent(endpoint.lng);
+    return fetch(url, {
+      cache: "force-cache",
+      headers: { Accept: "application/json" }
+    }).then((response) => {
+      if (!response.ok) throw new Error("Elevation lookup failed.");
+      return response.json();
+    }).then((payload) => {
+      const elevationM = numberOrNull(payload && Array.isArray(payload.elevation) ? payload.elevation[0] : null);
+      if (elevationM === null) throw new Error("Elevation is unavailable.");
+      return { elevationM, distanceKm: 0, source: "terrain-fallback" };
+    });
+  }
+
+  function resolveElevation(endpoint) {
+    const key = elevationKey(endpoint);
+    const cache = readElevationCache();
+    const cached = cache[key];
+
+    if (cached && numberOrNull(cached.elevationM) !== null) {
+      return Promise.resolve(cached);
+    }
+
+    return requestOverpass(endpoint)
+      .catch(() => requestTerrainFallback(endpoint))
+      .then((result) => {
+        const nextCache = readElevationCache();
+        nextCache[key] = result;
+        writeElevationCache(nextCache);
+        return result;
+      });
+  }
+
+  function calculatedMetrics(path, existing) {
+    const metrics = Array.isArray(existing) ? clone(existing) : [];
+    const calculated = [
+      { label: "Path length", value: distanceText(path.distanceKm) },
+      { label: "Azimuth", value: Number.isFinite(path.azimuthDegrees) ? path.azimuthDegrees.toFixed(1) + "°" : "—" }
+    ];
+    const excluded = new Set(["path length", "azimuth", "elevation", "from elevation", "to elevation"]);
+    return calculated.concat(metrics.filter((metric) => !excluded.has(cleanText(metric.label).toLowerCase())));
+  }
+
   function normaliseEndpoint(value, fallback) {
     const source = value && typeof value === "object" ? value : {};
 
@@ -228,7 +414,11 @@
       siteId: cleanText(source.siteId || source.id || fallback.siteId),
       name: cleanText(source.name || source.label || fallback.name),
       role: cleanText(source.role || source.siteRole || fallback.role),
-      input: cleanText(source.input || source.feed || source.feedMethod || fallback.input)
+      input: cleanText(source.input || source.feed || source.feedMethod || fallback.input),
+      lat: numberOrNull(source.lat ?? source.latitude ?? fallback.lat),
+      lng: numberOrNull(source.lng ?? source.lon ?? source.longitude ?? fallback.lng),
+      elevationM: numberOrNull(source.elevationM ?? source.elevation ?? fallback.elevationM),
+      elevationSource: cleanText(source.elevationSource || fallback.elevationSource)
     };
   }
 
@@ -256,21 +446,31 @@
 
   function normaliseSelectedPath(value) {
     const source = value && typeof value === "object" ? value : {};
-
-    return {
+    const from = normaliseEndpoint(source.from || source.feeding, DEFAULT_SELECTED_PATH.from);
+    const to = normaliseEndpoint(source.to || source.receiving, DEFAULT_SELECTED_PATH.to);
+    const calculatedDistance = straightLineDistanceKm(from, to);
+    const distanceKm = numberOrNull(source.distanceKm) ?? calculatedDistance ?? DEFAULT_SELECTED_PATH.distanceKm;
+    const azimuthDegrees = from.lat !== null && from.lng !== null && to.lat !== null && to.lng !== null
+      ? bearingDegrees(from, to)
+      : null;
+    const path = {
       id: cleanText(source.id || source.pathId || DEFAULT_SELECTED_PATH.id),
       clusterId: cleanText(source.clusterId || DEFAULT_SELECTED_PATH.clusterId),
       serviceType: cleanText(source.serviceType || source.service || DEFAULT_SELECTED_PATH.serviceType).toLowerCase(),
       status: cleanText(source.status || DEFAULT_SELECTED_PATH.status),
-      from: normaliseEndpoint(source.from || source.feeding, DEFAULT_SELECTED_PATH.from),
-      to: normaliseEndpoint(source.to || source.receiving, DEFAULT_SELECTED_PATH.to),
+      from,
+      to,
+      distanceKm,
+      azimuthDegrees,
       frequency: cleanText(source.frequency || DEFAULT_SELECTED_PATH.frequency),
       channel: cleanText(source.channel || source.labelText || DEFAULT_SELECTED_PATH.channel),
       bandwidth: cleanText(source.bandwidth || DEFAULT_SELECTED_PATH.bandwidth),
       serviceCount: cleanText(source.serviceCount || DEFAULT_SELECTED_PATH.serviceCount),
       services: normaliseList(source.services, DEFAULT_SELECTED_PATH.services),
-      metrics: normaliseMetrics(source.metrics, DEFAULT_SELECTED_PATH.metrics)
+      metrics: []
     };
+    path.metrics = calculatedMetrics(path, normaliseMetrics(source.metrics, DEFAULT_SELECTED_PATH.metrics));
+    return path;
   }
 
   function readStoredPath() {
@@ -419,6 +619,7 @@
         <b>${escapeHTML(endpoint.name)}</b>
         <span>${escapeHTML(endpoint.role)}</span>
         <em>${escapeHTML(endpoint.input)}</em>
+        <span class="rf-endpoint-elevation">Elevation ${escapeHTML(elevationText(endpoint.elevationM))}</span>
       </section>
     `;
   }
@@ -504,6 +705,7 @@
     slot.dataset.rfPathBuilderLoaded = "true";
     slot.dataset.rfPathBuilderVersion = VERSION;
     slot.dataset.rfPathId = pack.id;
+    slot.dataset.rfPathDistanceKm = String(selectedPath.distanceKm ?? "");
 
     document.dispatchEvent(new CustomEvent(RENDERED_EVENT, {
       detail: {
@@ -541,9 +743,42 @@
     return getSelectedPath();
   }
 
+  function enrichSelectedPath() {
+    if (elevationRequest) return elevationRequest;
+
+    elevationRequest = Promise.all([
+      selectedPath.from.elevationM === null ? resolveElevation(selectedPath.from).catch(() => null) : null,
+      selectedPath.to.elevationM === null ? resolveElevation(selectedPath.to).catch(() => null) : null
+    ]).then(([fromResult, toResult]) => {
+      if (!fromResult && !toResult) return getSelectedPath();
+
+      const next = getSelectedPath();
+      if (fromResult) {
+        next.from.elevationM = fromResult.elevationM;
+        next.from.elevationSource = fromResult.source;
+      }
+      if (toResult) {
+        next.to.elevationM = toResult.elevationM;
+        next.to.elevationSource = toResult.source;
+      }
+      return setSelectedPath(next);
+    }).finally(() => {
+      elevationRequest = null;
+    });
+
+    return elevationRequest;
+  }
+
   function init() {
-    if (render()) return;
-    document.addEventListener(PANE_READY_EVENT, () => { render(); }, { once: true });
+    const rendered = render();
+    if (!rendered) {
+      document.addEventListener(PANE_READY_EVENT, () => {
+        render();
+        enrichSelectedPath();
+      }, { once: true });
+      return;
+    }
+    enrichSelectedPath();
   }
 
   window.FieldOpsRFPathBuilder = {
@@ -555,6 +790,9 @@
     buildGraph,
     getSelectedPath,
     setSelectedPath,
+    straightLineDistanceKm,
+    resolveElevation,
+    enrichSelectedPath,
     render
   };
 
