@@ -1,11 +1,11 @@
 /* FieldOps Atlas — reusable WebGL scene renderer
- * Version: 1.6.3-orbit-screen-shift
+ * Version: 1.6.4-bidirectional-side-tilt
  * Supports packed/full mountains, indexed scene objects, shared GPU assets and orbit-linked camera motion.
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.6.3-orbit-screen-shift";
+  const VERSION = "1.6.4-bidirectional-side-tilt";
   const assets = new Map();
   const instances = new WeakMap();
 
@@ -374,6 +374,23 @@
     ]);
   };
 
+  // Applies a camera roll after lookAt without changing the scene objects.
+  // This lets scene definitions gradually tilt the floor while orbiting.
+  const rollView = (matrix, radians) => {
+    if (!radians) return matrix;
+    const cosine = Math.cos(radians);
+    const sine = Math.sin(radians);
+    const output = new Float32Array(matrix);
+    for (let column = 0; column < 4; column += 1) {
+      const offset = column * 4;
+      const x = matrix[offset];
+      const y = matrix[offset + 1];
+      output[offset] = cosine * x + sine * y;
+      output[offset + 1] = -sine * x + cosine * y;
+    }
+    return output;
+  };
+
   function create(root, scene) {
     if (!root) throw new Error("3D graph mount was not found");
     instances.get(root)?.destroy();
@@ -494,19 +511,38 @@
         view.size[1] / (2 * Math.tan(Math.max(fov, 0.18) / 2)) * 1.30
       ) * (view.distanceScale || 1);
       const orbitWave = Math.sin(phase);
-      const distance = baseDistance * (1 + orbitWave * (Number(motion.dolly) || 0));
+      const sideThreshold = Math.min(0.95, Math.max(0, Number(motion.sideThreshold) || 0));
+      const sideRaw = Math.min(1, Math.max(0,
+        (Math.abs(orbitWave) - sideThreshold) / Math.max(0.001, 1 - sideThreshold)
+      ));
+      const sideWave = sideRaw * sideRaw * (3 - 2 * sideRaw);
+      const sideSign = orbitWave < 0 ? -1 : 1;
+      const sideValue = key => Number(
+        sideSign < 0
+          ? motion[`${key}Negative`] ?? motion[key]
+          : motion[`${key}Positive`] ?? motion[key]
+      ) || 0;
+      const distance = baseDistance * (
+        1 + orbitWave * (Number(motion.dolly) || 0) + sideWave * sideValue("sideDolly")
+      );
       const orbitScreenY = Math.max(0, orbitWave) * (Number(motion.screenY) || 0);
+      const sideScreenY = sideWave * sideValue("sideScreenY");
       const target = [
-        view.target[0] + Math.sin(phase) * (Number(motion.targetX) || 0),
-        view.target[1] + (0.5 - 0.5 * Math.cos(phase)) * (Number(motion.targetY) || 0),
+        view.target[0] + Math.sin(phase) * (Number(motion.targetX) || 0)
+          + sideWave * sideValue("sideTargetX"),
+        view.target[1] + (0.5 - 0.5 * Math.cos(phase)) * (Number(motion.targetY) || 0)
+          + sideWave * sideValue("sideTargetY"),
         view.target[2] + Math.cos(phase) * (Number(motion.targetZ) || 0)
+          + sideWave * sideValue("sideTargetZ")
       ];
       const eye = [
         target[0] + Math.sin(angle) * distance,
-        target[1] + (view.lift || 0) + Math.sin(phase) * (Number(motion.lift) || 0),
+        target[1] + (view.lift || 0) + Math.sin(phase) * (Number(motion.lift) || 0)
+          + sideWave * sideValue("sideLift"),
         target[2] + Math.cos(angle) * distance
       ];
-      state.viewMatrix = lookAt(eye, target);
+      const sideRoll = sideSign * sideWave * sideValue("sideRoll");
+      state.viewMatrix = rollView(lookAt(eye, target), sideRoll);
       state.projectionMatrix = perspective(fov, aspect, 0.1, 220);
 
       // Bottom anchoring is evaluated after the camera and aspect ratio are
@@ -543,7 +579,7 @@
 
       // Scene-owned side-view composition. A positive value lowers the scene
       // only while the configured orbit wave is on its forward side.
-      state.projectionMatrix[9] += orbitScreenY;
+      state.projectionMatrix[9] += orbitScreenY + sideScreenY;
 
       gl.viewport(0, 0, state.width, state.height);
       gl.clearColor(rgb[0], rgb[1], rgb[2], 1);
