@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.3.1-rf-scene-compat">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.3.2-river-object">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -67,12 +67,12 @@
   <script src="./rf-interface.js?v=1.1.122-pane-fit" defer></script>
   <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
   <script src="./3d-render.js?v=1.2.0-scene-renderer" defer></script>
-  <script src="./graph-builder.js?v=1.2.1-scene-compat" defer></script>
+  <script src="./graph-builder.js?v=1.3.0-river-object" defer></script>
 
   <script>
     (() => {
       "use strict";
-      const PAGE_VERSION = "1.3.1-rf-scene-compat";
+      const PAGE_VERSION = "1.3.2-river-object";
       const TOAST_ID = "rfLoadToast";
       const versionOf = globalName => window[globalName]?.VERSION || window[globalName]?.version || "missing";
       function showToast() {

@@ -1,12 +1,13 @@
 /* FieldOps Atlas — RF 3D scene builder
  * File: FieldOpsAtlas/Features/RF/graph-builder.js
- * Version: 1.2.1-scene-compat
+ * Version: 1.3.0-river-object
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.2.1-scene-compat";
+  const VERSION = "1.3.0-river-object";
   const BASE = "./3D Graphics/";
+
   const SCENES = {
     A: {
       id: "mountain-a",
@@ -14,7 +15,8 @@
       files: {
         compressed: "mountain-a-compressed.js",
         full: "mountain-a-full.js"
-      }
+      },
+      assetId: quality => `mountain-a-${quality}`
     },
     B: {
       id: "mountain-b",
@@ -22,27 +24,59 @@
       files: {
         compressed: "mountain-b-compressed.js",
         full: "mountain-b-full.js"
-      }
+      },
+      assetId: quality => `mountain-b-${quality}`
+    },
+    RIVER: {
+      id: "river-floor",
+      label: "River and mountain floor",
+      files: {
+        compressed: "river-scene.js",
+        full: "river-scene.js"
+      },
+      assetId: "river-floor",
+      registeredOnly: true
     }
   };
 
   let active = null;
 
+  function normaliseObject(value) {
+    const requested = String(value || "A").trim().toUpperCase();
+
+    if (["B", "2", "MOUNTAIN-B", "MOUNTAIN B"].includes(requested)) {
+      return "B";
+    }
+
+    if (["R", "RIVER", "WATER", "RIVER-FLOOR", "RIVER FLOOR"].includes(requested)) {
+      return "RIVER";
+    }
+
+    return "A";
+  }
+
   function choice(root) {
     const params = new URLSearchParams(location.search);
-    const requestedMountain = String(
-      root?.dataset.mountain || params.get("mountain") || "A"
-    ).toUpperCase();
-    const mountain = requestedMountain === "B" || requestedMountain === "2" ? "B" : "A";
+    const object = normaliseObject(
+      root?.dataset.rfObject ||
+      params.get("scene") ||
+      root?.dataset.mountain ||
+      params.get("mountain") ||
+      "A"
+    );
 
     const requestedQuality = String(
-      root?.dataset.mountainQuality || params.get("quality") || "compressed"
+      root?.dataset.mountainQuality ||
+      root?.dataset.rfQuality ||
+      params.get("quality") ||
+      "compressed"
     ).toLowerCase();
+
     const quality = ["full", "uncompressed", "lossless", "3mb"].includes(requestedQuality)
       ? "full"
       : "compressed";
 
-    return { mountain, quality };
+    return { object, quality };
   }
 
   function loadScript(file) {
@@ -75,8 +109,28 @@
     });
   }
 
+  function assetIdFor(definition, quality) {
+    return typeof definition.assetId === "function"
+      ? definition.assetId(quality)
+      : definition.assetId || `${definition.id}-${quality}`;
+  }
+
   function registeredAssetAvailable(assetId) {
     return Boolean(globalThis.FieldOps3DAssets?.has?.(assetId));
+  }
+
+  function clearActive(root) {
+    const standalone = root._rfBuilder3 || null;
+
+    if (standalone) {
+      standalone.destroy?.();
+    }
+
+    if (active && active !== standalone) {
+      active.destroy?.();
+    }
+
+    active = null;
   }
 
   function createRegisteredScene(root, definition, quality, assetId) {
@@ -84,8 +138,7 @@
       throw new Error("Reusable 3D renderer is unavailable");
     }
 
-    root._rfBuilder3?.destroy?.();
-    if (active && active !== root._rfBuilder3) active.destroy?.();
+    clearActive(root);
 
     return globalThis.FieldOps3DRenderer.create(root, {
       id: `${definition.id}-${quality}-scene`,
@@ -103,17 +156,16 @@
   }
 
   function adoptStandaloneScene(root, definition, quality) {
-    let instance = root._rfBuilder3 || null;
-
-    if (!instance && globalThis.FieldOpsRFBuilder3?.init) {
-      instance = globalThis.FieldOpsRFBuilder3.init(root);
-    }
-
-    if (!instance) {
+    if (!globalThis.FieldOpsRFBuilder3?.init) {
       throw new Error("Loaded mountain file did not initialise or register a scene");
     }
 
-    if (active && active !== instance) active.destroy?.();
+    clearActive(root);
+    const instance = globalThis.FieldOpsRFBuilder3.init(root);
+
+    if (!instance) {
+      throw new Error("Loaded mountain file did not initialise a standalone scene");
+    }
 
     root.dataset.rfBuilder3Ready = root.dataset.rfBuilder3Ready || "true";
     root.dataset.rfScene = `${definition.id}-${quality}-scene`;
@@ -123,20 +175,35 @@
   async function build(root = document.querySelector("[data-rf-graph]")) {
     if (!root) return null;
 
-    const { mountain, quality } = choice(root);
-    const definition = SCENES[mountain];
+    const { object, quality } = choice(root);
+    const definition = SCENES[object];
     const file = definition.files[quality];
-    const assetId = `${definition.id}-${quality}`;
+    const assetId = assetIdFor(definition, quality);
 
-    root.dataset.mountain = mountain;
-    root.dataset.mountainQuality = quality;
+    root.dataset.rfObject = object;
+    root.dataset.rfQuality = quality;
     root.dataset.rfBuilderVersion = VERSION;
+
+    if (object === "A" || object === "B") {
+      root.dataset.mountain = object;
+      root.dataset.mountainQuality = quality;
+    } else {
+      delete root.dataset.mountain;
+      delete root.dataset.mountainQuality;
+    }
+
     root.setAttribute("aria-busy", "true");
 
     try {
       await loadScript(file);
 
-      active = registeredAssetAvailable(assetId)
+      const registered = registeredAssetAvailable(assetId);
+
+      if (!registered && definition.registeredOnly) {
+        throw new Error(`3D asset did not register: ${assetId}`);
+      }
+
+      active = registered
         ? createRegisteredScene(root, definition, quality, assetId)
         : adoptStandaloneScene(root, definition, quality);
 
@@ -146,10 +213,10 @@
       document.dispatchEvent(new CustomEvent("fieldops:rf-scene-ready", {
         detail: {
           version: VERSION,
-          mountain,
+          object,
           quality,
           scene: root.dataset.rfScene,
-          source: registeredAssetAvailable(assetId) ? "registered-asset" : "standalone-compat"
+          source: registered ? "registered-asset" : "standalone-compat"
         }
       }));
 
@@ -164,13 +231,31 @@
     }
   }
 
+  function select(
+    object,
+    quality = "compressed",
+    root = document.querySelector("[data-rf-graph]")
+  ) {
+    if (!root) return Promise.resolve(null);
+
+    root.dataset.rfObject = normaliseObject(object);
+    root.dataset.rfQuality = quality;
+    return build(root);
+  }
+
   function initAll() {
-    document.querySelectorAll("[data-rf-graph]").forEach((root) => {
+    document.querySelectorAll("[data-rf-graph]").forEach(root => {
       build(root);
     });
   }
 
-  globalThis.FieldOpsGraphBuilder = { VERSION, SCENES, build, initAll };
+  globalThis.FieldOpsGraphBuilder = {
+    VERSION,
+    SCENES,
+    build,
+    select,
+    initAll
+  };
   globalThis.FieldOpsRFGraph = globalThis.FieldOpsGraphBuilder;
 
   if (document.readyState === "loading") {
