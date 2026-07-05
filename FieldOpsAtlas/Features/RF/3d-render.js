@@ -1,11 +1,11 @@
 /* FieldOps Atlas — reusable WebGL scene renderer
- * Version: 1.6.4-bidirectional-side-tilt
+ * Version: 1.6.5-scene-plate-pitch
  * Supports packed/full mountains, indexed scene objects, shared GPU assets and orbit-linked camera motion.
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.6.4-bidirectional-side-tilt";
+  const VERSION = "1.6.5-scene-plate-pitch";
   const assets = new Map();
   const instances = new WeakMap();
 
@@ -339,6 +339,57 @@
     ]);
   };
 
+  const identityMatrix = () => new Float32Array([
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+  ]);
+
+  const multiplyMatrix = (a, b) => {
+    const output = new Float32Array(16);
+    for (let column = 0; column < 4; column += 1) {
+      for (let row = 0; row < 4; row += 1) {
+        output[column * 4 + row] =
+          a[0 * 4 + row] * b[column * 4 + 0] +
+          a[1 * 4 + row] * b[column * 4 + 1] +
+          a[2 * 4 + row] * b[column * 4 + 2] +
+          a[3 * 4 + row] * b[column * 4 + 3];
+      }
+    }
+    return output;
+  };
+
+  const transformMatrixPoint = (matrix, point) => {
+    const [x, y, z] = point;
+    return [
+      matrix[0] * x + matrix[4] * y + matrix[8] * z + matrix[12],
+      matrix[1] * x + matrix[5] * y + matrix[9] * z + matrix[13],
+      matrix[2] * x + matrix[6] * y + matrix[10] * z + matrix[14]
+    ];
+  };
+
+  const rotationAroundAxis = (axis, radians, pivot = [0, 0, 0]) => {
+    if (!radians) return identityMatrix();
+    let [x, y, z] = axis;
+    const length = Math.hypot(x, y, z) || 1;
+    x /= length; y /= length; z /= length;
+    const c = Math.cos(radians);
+    const s = Math.sin(radians);
+    const t = 1 - c;
+    const rotation = new Float32Array([
+      t*x*x+c,     t*x*y+s*z,   t*x*z-s*y,   0,
+      t*x*y-s*z,   t*y*y+c,     t*y*z+s*x,   0,
+      t*x*z+s*y,   t*y*z-s*x,   t*z*z+c,     0,
+      0,            0,           0,           1
+    ]);
+    const rotatedPivot = transformMatrixPoint(rotation, pivot);
+    rotation[12] = pivot[0] - rotatedPivot[0];
+    rotation[13] = pivot[1] - rotatedPivot[1];
+    rotation[14] = pivot[2] - rotatedPivot[2];
+    return rotation;
+  };
+
   const perspective = (fov, aspect, near, far) => {
     const f = 1 / Math.tan(fov / 2);
     const range = 1 / (near - far);
@@ -432,7 +483,8 @@
         gpuAssets.set(definition.asset, layers);
       }
 
-      return { definition, asset, layers, model: modelMatrix(definition) };
+      const baseModel = modelMatrix(definition);
+      return { definition, asset, layers, baseModel, model: baseModel };
     });
 
     const state = {
@@ -527,6 +579,18 @@
       );
       const orbitScreenY = Math.max(0, orbitWave) * (Number(motion.screenY) || 0);
       const sideScreenY = sideWave * sideValue("sideScreenY");
+      const scenePitch = sideWave * sideValue("sideScenePitch");
+      const pivotKey = sideSign < 0 ? "sideScenePivotNegative" : "sideScenePivotPositive";
+      const scenePivot = motion[pivotKey] || motion.sideScenePivot || [0, 0, 0];
+      // Rotate the complete scene like one rigid plate around the camera's
+      // horizontal screen axis. This changes depth without changing the
+      // relative height or mounting of any mountain/transmitter object.
+      const sceneMatrix = rotationAroundAxis(
+        [Math.cos(angle), 0, -Math.sin(angle)],
+        scenePitch,
+        scenePivot
+      );
+      for (const object of objects) object.model = multiplyMatrix(sceneMatrix, object.baseModel);
       const target = [
         view.target[0] + Math.sin(phase) * (Number(motion.targetX) || 0)
           + sideWave * sideValue("sideTargetX"),
@@ -552,7 +616,8 @@
       if (Array.isArray(view.bottomAnchorPoints) && view.bottomAnchorPoints.length) {
         let lowest = Infinity;
         for (const point of view.bottomAnchorPoints) {
-          const x = point[0], y = point[1], z = point[2];
+          const worldPoint = transformMatrixPoint(sceneMatrix, point);
+          const x = worldPoint[0], y = worldPoint[1], z = worldPoint[2];
           const matrix = state.viewMatrix;
           const viewX = matrix[0] * x + matrix[4] * y + matrix[8] * z + matrix[12];
           const viewY = matrix[1] * x + matrix[5] * y + matrix[9] * z + matrix[13];
