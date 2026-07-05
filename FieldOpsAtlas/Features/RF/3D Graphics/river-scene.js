@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.1-transmitters-mounted
+ * Version: 1.6.3-flat-transmitter-orbit
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.1-transmitters-mounted";
+  const VERSION="1.6.3-flat-transmitter-orbit";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -13,21 +13,26 @@
   const sourceCache=new Map();
   const assetCache=new Map();
   const scriptCache=new Map();
+  const OBJECT_CACHE_VERSION="1.6.3-clean-transmitter";
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
     target:[0,7.15,0],
-    lift:8.2,
+    // Tight front fit. Around 110 degrees the camera lowers slightly, moves
+    // closer and shifts the composition down so the rear tip clears the
+    // foreground transmitter while its feet sit near the graph edge.
+    lift:8.8,
     fov:42,
-    distanceScale:1.02,
+    distanceScale:0.66,
     bottomAnchorPoints:[[-26,0,-19],[0,0,-19],[26,0,-19],[-26,0,0],[26,0,0],[-26,0,19],[0,0,19],[26,0,19]],
-    bottomNdc:-0.985,
-    orbitMotion:{frequency:1,targetX:1.15,targetY:1.75,targetZ:0.7,lift:0.8,dolly:0.018,phase:-0.35}
+    bottomNdc:-1.08,
+    orbitMotion:{frequency:1,targetX:1.15,targetY:3.2,targetZ:0.7,lift:-1.4,dolly:-0.05,screenY:0.58,phase:-0.418}
   });
 
   const LEFT=Object.freeze({position:[-13.35,0.015,0.8],rotation:[0,0,0],scale:[0.82,0.90,0.90],mirror:true});
   const RIGHT=Object.freeze({position:[13.35,0.015,-1.8],rotation:[0,Math.PI,0],scale:[0.82,0.90,0.90],mirror:true});
   const TRANSMITTER_TIP_CLEARANCE=0.35;
+  const TRANSMITTER_FLAT_Y=24*Math.PI/180;
 
   // The compressed mountain sources contain the original square mounting blocks.
   // Full mountain sources do not, so these exact eight-vertex blocks are used as
@@ -115,7 +120,9 @@
   });
 
   function loadScript(file){
-    const url=new URL(OBJECT_BASE+file,document.baseURI).href;
+    const assetUrl=new URL(OBJECT_BASE+file,document.baseURI);
+    assetUrl.searchParams.set("v",OBJECT_CACHE_VERSION);
+    const url=assetUrl.href;
     if(scriptCache.has(url))return scriptCache.get(url);
     const promise=new Promise((resolve,reject)=>{
       const existing=[...document.scripts].find(script=>script.src===url);
@@ -311,7 +318,11 @@
 
     return Object.freeze({
       position:[top[0],top[1]-transmitterBounds.min[1]*scale,top[2]],
-      rotation:[...(mountain.transform.rotation||[0,0,0])],
+      rotation:[
+        mountain.transform.rotation?.[0]||0,
+        (mountain.transform.rotation?.[1]||0)+TRANSMITTER_FLAT_Y,
+        mountain.transform.rotation?.[2]||0
+      ],
       scale:[scale,scale,scale]
     });
   }

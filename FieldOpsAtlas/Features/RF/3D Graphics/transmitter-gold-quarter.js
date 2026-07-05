@@ -1,9 +1,9 @@
 /* FieldOps Atlas — detailed gold transmitter, quarter geometry mirrored four ways by the renderer
- * Version: 1.5.1-gold-transmitter-quarter
+ * Version: 1.6.3-gold-transmitter-clean-middle-quarter
  */
 (()=>{
   "use strict";
-  const VERSION="1.5.1-gold-transmitter-quarter";
+  const VERSION="1.6.3-gold-transmitter-clean-middle-quarter";
   const ASSET_ID="transmitter-gold-quarter";
   const positions=[];
   const indices=[];
@@ -58,25 +58,10 @@
       }
     }
 
-    // Wide foot, service platforms and hand rails.
+    // Keep the feet and tapered lattice. The three middle service decks,
+    // handrails and projecting panel antennas have been removed.
     beam([sx*3.7,0,sz*3.7],[sx*radius(2.7),2.7,sz*radius(2.7)],0.22,1);
     box(sx*1.75,0.18,sz*1.75,3.5,0.28,3.5,0);
-    for(const y of [5.7,9.0,12.05]){
-      const r=radius(y)+0.48;
-      box(sx*r/2,y,sz*r/2,r,0.14,r,1);
-      beam([0,y+0.75,sz*r],[sx*r,y+0.75,sz*r],0.055,3);
-      beam([sx*r,y+0.75,0],[sx*r,y+0.75,sz*r],0.055,3);
-      beam([sx*r,y,sz*r],[sx*r,y+0.75,sz*r],0.055,3);
-    }
-
-    // Detailed panel antennas on two visible faces of each quarter.
-    for(const spec of [[6.6,0.48,1.55],[9.7,0.42,1.35],[12.65,0.34,1.12]]){
-      const y=spec[0],r=radius(y)+0.68,w=spec[1],h=spec[2];
-      box(sx*r,y,sz*(r*0.55),0.18,h,w,4);
-      box(sx*(r*0.55),y,sz*r,w,h,0.18,4);
-      beam([sx*radius(y),y-0.35,sz*radius(y)],[sx*r,y,sz*(r*0.55)],0.045,3);
-      beam([sx*radius(y),y-0.35,sz*radius(y)],[sx*(r*0.55),y,sz*r],0.045,3);
-    }
   }
 
   // Axis mast, upper cage and beacon are emitted once for the full asset and

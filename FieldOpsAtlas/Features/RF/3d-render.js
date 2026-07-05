@@ -1,11 +1,11 @@
 /* FieldOps Atlas — reusable WebGL scene renderer
- * Version: 1.5.1-instanced-orbit-motion
+ * Version: 1.6.3-orbit-screen-shift
  * Supports packed/full mountains, indexed scene objects, shared GPU assets and orbit-linked camera motion.
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.5.1-instanced-orbit-motion";
+  const VERSION = "1.6.3-orbit-screen-shift";
   const assets = new Map();
   const instances = new WeakMap();
 
@@ -493,7 +493,9 @@
         Math.max(view.size[0], view.size[2]) / (2 * Math.tan(Math.max(horizontal, 0.18) / 2)) * 1.18,
         view.size[1] / (2 * Math.tan(Math.max(fov, 0.18) / 2)) * 1.30
       ) * (view.distanceScale || 1);
-      const distance = baseDistance * (1 + Math.sin(phase) * (Number(motion.dolly) || 0));
+      const orbitWave = Math.sin(phase);
+      const distance = baseDistance * (1 + orbitWave * (Number(motion.dolly) || 0));
+      const orbitScreenY = Math.max(0, orbitWave) * (Number(motion.screenY) || 0);
       const target = [
         view.target[0] + Math.sin(phase) * (Number(motion.targetX) || 0),
         view.target[1] + (0.5 - 0.5 * Math.cos(phase)) * (Number(motion.targetY) || 0),
@@ -538,6 +540,10 @@
         // the scene down in projection space.
         state.projectionMatrix[9] = Number(view.screenOffsetY) || 0;
       }
+
+      // Scene-owned side-view composition. A positive value lowers the scene
+      // only while the configured orbit wave is on its forward side.
+      state.projectionMatrix[9] += orbitScreenY;
 
       gl.viewport(0, 0, state.width, state.height);
       gl.clearColor(rgb[0], rgb[1], rgb[2], 1);
