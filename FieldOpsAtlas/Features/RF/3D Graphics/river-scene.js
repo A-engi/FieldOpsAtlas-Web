@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.8-equal-towers-scene-pitch
+ * Version: 1.6.9-mirrored-side-profile
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.8-equal-towers-scene-pitch";
+  const VERSION="1.6.9-mirrored-side-profile";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -39,10 +39,10 @@
       // True plate rotation: tip the complete valley back-to-front around the camera's horizontal axis.
       sideScenePitch:0.32,
       sideScenePivot:[0,0,0],
-      // Mountain A/white-front side needs more downward framing so its
-      // foreground transmitter feet reach the graph edge.
-      sideScreenYPositive:0.35,
-      sideScreenYNegative:0.55
+      // Use the approved B-to-A side composition in both directions.
+      // The opposite turn now receives the exact same vertical framing;
+      // only the horizontal orbit direction is mirrored by the renderer.
+      sideScreenY:0.55
     }
   });
 
