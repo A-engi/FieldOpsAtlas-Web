@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas RF 3D scenes</title>
+  <title>FieldOps Atlas RF selected path scene</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
   <link rel="stylesheet" href="./background.css?v=1.1.76-graph-label">
@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.6.1-transmitters-mounted" data-rf-scene-default="mount-a_b-comp-scene">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.0-selected-path-binding" data-rf-scene-default="mount-a_b-comp-scene">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -65,15 +65,15 @@
 
   <script src="../../../shell.js?v=1.1.20-web-repo-profile-link" defer></script>
   <script src="./rf-interface.js?v=1.1.123-scene-selector" defer></script>
-  <script src="./rf-path-builder.js?v=1.1.125-network-topology" defer></script>
+  <script src="./rf-path-builder.js?v=1.2.0-cluster-default-path" defer></script>
   <script src="./3d-render.js?v=1.5.1-instanced-orbit-motion" defer></script>
   <script src="./3D Graphics/river-scene.js?v=1.6.1-transmitters-mounted" defer></script>
-  <script src="./graph-builder.js?v=1.6.0-scene-dropdown" defer></script>
+  <script src="./graph-builder.js?v=1.7.0-selected-path-binding" defer></script>
 
   <script>
     (() => {
       "use strict";
-      const PAGE_VERSION = "1.6.1-transmitters-mounted";
+      const PAGE_VERSION = "1.7.0-selected-path-binding";
       const TOAST_ID = "rfLoadToast";
       const versionOf = globalName => window[globalName]?.VERSION || window[globalName]?.version || "missing";
       function showToast() {
@@ -87,6 +87,7 @@
           `index.html ${PAGE_VERSION}`,
           `3d-render.js ${versionOf("FieldOps3DRenderer")}`,
           `graph-builder.js ${versionOf("FieldOpsGraphBuilder")}`,
+          `path ${document.querySelector("[data-rf-graph]")?.dataset.rfPathId || "loading"}`,
           `scene ${document.querySelector("[data-rf-graph]")?.dataset.rfScene || "loading"}`
         ].join("\n");
         document.body.appendChild(toast);
