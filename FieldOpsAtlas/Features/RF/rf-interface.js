@@ -1,7 +1,7 @@
 /* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.js
-   Version: 1.1.122-pane-fit
+   Version: 1.1.123-scene-selector
    Purpose:
    - Own the RF interface shell and static RF UI.
    - Create the RF title, RF/IP/MW/All graph filter controls, graph holder,
@@ -13,7 +13,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "1.1.122-pane-fit";
+  const VERSION = "1.1.123-scene-selector";
   const HOME_SELECTOR = ".rf-home";
   const MAP_PAPER_SELECTOR = ".rf-map-paper";
   const MAP_STAGE_SELECTOR = ".rf-map-stage";
@@ -33,7 +33,7 @@
         </div>
       </header>
 
-      <section class="rf-map-recent" aria-label="RF graph and recently opened">
+      <section class="rf-map-recent" aria-label="RF graph and recently opened" data-rf-scene-scope>
         <article class="rf-map-paper" aria-label="RF graph topology">
           <img
             class="rf-map-background"
@@ -43,6 +43,27 @@
           >
           <div class="rf-map-stage" data-rf-graph aria-label="RF graph"></div>
         </article>
+
+        <div class="rf-scene-control" data-rf-scene-selector>
+          <label class="rf-scene-label" for="rfSceneSelect">Scene</label>
+          <span class="rf-scene-select-shell">
+            <select
+              id="rfSceneSelect"
+              class="rf-scene-select"
+              data-rf-scene-select
+              aria-label="Select 3D scene"
+            >
+              <option value="mount-a_b-full-scene">mount-a_b-full-scene</option>
+              <option value="mount-a_b-comp-scene" selected>mount-a_b-comp-scene</option>
+              <option value="mount-a_a-comp-scene">mount-a_a-comp-scene</option>
+              <option value="mount-a-full-scene">mount a</option>
+              <option value="mount-b-full-scene">mount b</option>
+              <option value="mount-a-comp-scene">mount a comp</option>
+              <option value="mount-b-comp-scene">mount b comp</option>
+              <option value="transmitter-scene">transmitter</option>
+            </select>
+          </span>
+        </div>
 
         <section class="rf-recent" aria-label="Recently opened">
           <div class="rf-recent-head">
@@ -322,6 +343,10 @@
       .forEach(attachPathPane);
 
     wireTabs(root);
+
+    document.dispatchEvent(new CustomEvent("fieldops:rf-interface-ready", {
+      detail: { version: VERSION }
+    }));
   }
 
   window.FieldOpsRFInterface = {
@@ -335,3 +360,6 @@
     initAll();
   }
 })();
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-interface.js */
+/* End of file: FieldOpsAtlas/Features/RF/rf-interface.js */

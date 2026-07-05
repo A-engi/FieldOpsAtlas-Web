@@ -1,7 +1,7 @@
 /* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.120-pane-fit
+   Version: 1.1.121-scene-selector
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
@@ -88,7 +88,7 @@
 .rf-map-recent {
   min-height: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 74px;
+  grid-template-rows: minmax(0, 1fr) 30px 74px;
   gap: 0;
   overflow: hidden;
 }
@@ -133,6 +133,87 @@
 
 .rf-map-paper.is-path-pane-collapsed .rf-map-stage {
   right: var(--path-handle-width);
+}
+
+
+.rf-scene-control {
+  min-width: 0;
+  height: 30px;
+  padding: 4px 8px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid rgba(130, 91, 22, 0.13);
+  border-left: 1px solid rgba(130, 91, 22, 0.13);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(248, 236, 211, 0.12)),
+    #f8ecd2;
+}
+
+.rf-scene-label {
+  color: rgba(7, 31, 56, 0.72);
+  font-size: 7px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rf-scene-select-shell {
+  position: relative;
+  min-width: 0;
+  display: block;
+}
+
+.rf-scene-select-shell::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid rgba(7, 31, 56, 0.72);
+  border-bottom: 1.5px solid rgba(7, 31, 56, 0.72);
+  transform: translateY(-68%) rotate(45deg);
+  pointer-events: none;
+}
+
+.rf-scene-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 22px;
+  min-width: 0;
+  padding: 0 27px 0 8px;
+  overflow: hidden;
+  color: #071c32;
+  border: 1px solid rgba(130, 91, 22, 0.26);
+  border-radius: 7px;
+  outline: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 247, 229, 0.30)),
+    rgba(255, 248, 232, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 7px;
+  font-weight: 850;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rf-scene-select:focus-visible {
+  border-color: rgba(15, 111, 120, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    0 0 0 2px rgba(15, 111, 120, 0.13);
+}
+
+.rf-scene-select:disabled {
+  cursor: wait;
+  opacity: 0.68;
 }
 
 .rf-map-stage svg {
@@ -830,3 +911,6 @@
   background: rgba(255, 255, 255, 0.40);
   text-decoration: none;
 }
+
+/* Destination: FieldOpsAtlas/Features/RF/rf-interface.css */
+/* End of file: FieldOpsAtlas/Features/RF/rf-interface.css */
