@@ -1,11 +1,11 @@
 /* FieldOps Atlas — RF 3D scene builder
  * File: FieldOpsAtlas/Features/RF/graph-builder.js
- * Version: 1.3.0-river-object
+ * Version: 1.3.1-river-default
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.3.0-river-object";
+  const VERSION = "1.3.1-river-default";
   const BASE = "./3D Graphics/";
 
   const SCENES = {
@@ -62,7 +62,7 @@
       params.get("scene") ||
       root?.dataset.mountain ||
       params.get("mountain") ||
-      "A"
+      "RIVER"
     );
 
     const requestedQuality = String(
