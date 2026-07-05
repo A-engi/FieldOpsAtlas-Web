@@ -1,11 +1,11 @@
 /* FieldOps Atlas — reusable WebGL scene renderer
- * Version: 1.6.5-scene-plate-pitch
+ * Version: 1.6.6-smooth-side-transition
  * Supports packed/full mountains, indexed scene objects, shared GPU assets and orbit-linked camera motion.
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.6.5-scene-plate-pitch";
+  const VERSION = "1.6.6-smooth-side-transition";
   const assets = new Map();
   const instances = new WeakMap();
 
@@ -567,7 +567,10 @@
       const sideRaw = Math.min(1, Math.max(0,
         (Math.abs(orbitWave) - sideThreshold) / Math.max(0.001, 1 - sideThreshold)
       ));
-      const sideWave = sideRaw * sideRaw * (3 - 2 * sideRaw);
+      // Quintic smootherstep removes the perceptible midpoint step while
+      // preserving the same front and side endpoints.
+      const sideWave = sideRaw * sideRaw * sideRaw
+        * (sideRaw * (sideRaw * 6 - 15) + 10);
       const sideSign = orbitWave < 0 ? -1 : 1;
       const sideValue = key => Number(
         sideSign < 0
@@ -626,10 +629,13 @@
           if (clipW > 0.0001) {
             const ndcX = state.projectionMatrix[0] * viewX / clipW;
             const ndcY = state.projectionMatrix[5] * viewY / clipW;
-            // Only visible or near-visible floor points should control the
-            // vertical anchor. A close corner far outside the horizontal
-            // viewport must not pull the whole scene upwards while rotating.
-            if (Math.abs(ndcX) <= 1.08) lowest = Math.min(lowest, ndcY);
+            // Keep every anchor continuous as it crosses the viewport edge.
+            // The old hard 1.08 cutoff abruptly removed a floor corner and
+            // caused a visible jump halfway through the orbit. Off-screen
+            // anchors now fade out through a quadratic horizontal penalty.
+            const outside = Math.max(0, Math.abs(ndcX) - 1.08);
+            const candidate = ndcY + outside * outside * 0.9;
+            lowest = Math.min(lowest, candidate);
           }
         }
         if (Number.isFinite(lowest)) {
