@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.1-river-camera-transmitter" data-rf-scene-default="mount-a_b-comp-scene">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.2-platform-footprint-mount" data-rf-scene-default="mount-a_b-comp-scene">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -67,13 +67,13 @@
   <script src="./rf-interface.js?v=1.1.123-scene-selector" defer></script>
   <script src="./rf-path-builder.js?v=1.2.0-cluster-default-path" defer></script>
   <script src="./3d-render.js?v=1.6.3-orbit-screen-shift" defer></script>
-  <script src="./3D Graphics/river-scene.js?v=1.6.3-flat-transmitter-orbit" defer></script>
+  <script src="./3D Graphics/river-scene.js?v=1.6.4-platform-footprint-mount" defer></script>
   <script src="./graph-builder.js?v=1.7.0-selected-path-binding" defer></script>
 
   <script>
     (() => {
       "use strict";
-      const PAGE_VERSION = "1.7.1-river-camera-transmitter";
+      const PAGE_VERSION = "1.7.2-platform-footprint-mount";
       const TOAST_ID = "rfLoadToast";
       const versionOf = globalName => window[globalName]?.VERSION || window[globalName]?.version || "missing";
       function showToast() {

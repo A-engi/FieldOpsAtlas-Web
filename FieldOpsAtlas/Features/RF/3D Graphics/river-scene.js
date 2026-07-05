@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.3-flat-transmitter-orbit
+ * Version: 1.6.4-platform-footprint-mount
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.3-flat-transmitter-orbit";
+  const VERSION="1.6.4-platform-footprint-mount";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -31,7 +31,8 @@
 
   const LEFT=Object.freeze({position:[-13.35,0.015,0.8],rotation:[0,0,0],scale:[0.82,0.90,0.90],mirror:true});
   const RIGHT=Object.freeze({position:[13.35,0.015,-1.8],rotation:[0,Math.PI,0],scale:[0.82,0.90,0.90],mirror:true});
-  const TRANSMITTER_TIP_CLEARANCE=0.35;
+  const TRANSMITTER_TIP_CLEARANCE=Object.freeze({A:0.35,B:0.85});
+  const TRANSMITTER_FOOTPRINT_FILL=0.90;
   const TRANSMITTER_FLAT_Y=24*Math.PI/180;
 
   // The compressed mountain sources contain the original square mounting blocks.
@@ -49,7 +50,7 @@
         5.670000076293945,1.100000023841858,5.96999979019165,
         3.8299999237060547,1.100000023841858,5.96999979019165
       ]),
-      centre:Object.freeze([4.75,5.049999952316284]),topY:6.820000171661377
+      centre:Object.freeze([4.75,5.049999952316284]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:6.820000171661377
     }),
     B:Object.freeze({
       positions:Object.freeze([
@@ -62,7 +63,7 @@
         4.420000076293945,1.100000023841858,2.919999599456787,
         2.5799999237060547,1.100000023841858,2.919999599456787
       ]),
-      centre:Object.freeze([3.5,1.999999761581421]),topY:5.799999713897705
+      centre:Object.freeze([3.5,1.999999761581421]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:5.799999713897705
     })
   });
   const MOUNT_INDICES=Object.freeze([0,1,2,0,2,3,4,5,1,4,1,0,5,6,2,5,2,1,6,7,3,6,3,2,7,4,0,7,0,3]);
@@ -241,13 +242,17 @@
     let block=MOUNT_BLOCKS[mount]||null;
     if(sourcePlatform){
       const bounds=positionBounds(sourcePositions(sourcePlatform,format));
-      block={centre:[(bounds.min[0]+bounds.max[0])/2,(bounds.min[2]+bounds.max[2])/2],topY:bounds.max[1]};
+      block={
+        centre:[(bounds.min[0]+bounds.max[0])/2,(bounds.min[2]+bounds.max[2])/2],
+        size:[bounds.max[0]-bounds.min[0],bounds.max[2]-bounds.min[2]],
+        topY:bounds.max[1]
+      };
     }
 
     return {
       centre:capture.centre||DEFAULT_CENTRE,mirror:true,view:capture.view,
       palettes:{shell:capture.palettes.shell,ridge:capture.palettes.ridge},layers,
-      mountPoint:block?Object.freeze({centre:[...block.centre],topY:block.topY,peakY}):null
+      mountPoint:block?Object.freeze({centre:[...block.centre],size:[...block.size],topY:block.topY,peakY}):null
     };
   }
 
@@ -311,19 +316,29 @@
     if(!mount||!transmitterBounds)throw new Error(`A transmitter mount could not be resolved for ${mountain.asset}`);
 
     const top=transformPoint(mountain.transform,[mount.centre[0],mount.topY,mount.centre[1]]);
-    const verticalScale=Math.abs(mountain.transform.scale?.[1]??1);
+    const mountainScale=mountain.transform.scale||[1,1,1];
+    const verticalScale=Math.abs(mountainScale[1]??1);
     const mountainPeak=(mountain.transform.position?.[1]||0)+mount.peakY*verticalScale;
     const transmitterHeight=transmitterBounds.max[1]-transmitterBounds.min[1];
-    const scale=Math.max(0.28,Math.min(0.62,(mountainPeak+TRANSMITTER_TIP_CLEARANCE-top[1])/transmitterHeight));
+    const transmitterWidth=transmitterBounds.max[0]-transmitterBounds.min[0];
+    const transmitterDepth=transmitterBounds.max[2]-transmitterBounds.min[2];
+    const platformWidth=mount.size[0]*Math.abs(mountainScale[0]??1);
+    const platformDepth=mount.size[1]*Math.abs(mountainScale[2]??1);
+    const footprintScale=TRANSMITTER_FOOTPRINT_FILL*Math.min(
+      platformWidth/transmitterWidth,
+      platformDepth/transmitterDepth
+    );
+    const clearance=TRANSMITTER_TIP_CLEARANCE[mountain.mount]??TRANSMITTER_TIP_CLEARANCE.A;
+    const heightScale=Math.max(0.28,Math.min(0.62,(mountainPeak+clearance-top[1])/transmitterHeight));
 
     return Object.freeze({
-      position:[top[0],top[1]-transmitterBounds.min[1]*scale,top[2]],
+      position:[top[0],top[1]-transmitterBounds.min[1]*heightScale,top[2]],
       rotation:[
         mountain.transform.rotation?.[0]||0,
         (mountain.transform.rotation?.[1]||0)+TRANSMITTER_FLAT_Y,
         mountain.transform.rotation?.[2]||0
       ],
-      scale:[scale,scale,scale]
+      scale:[footprintScale,heightScale,footprintScale]
     });
   }
 
