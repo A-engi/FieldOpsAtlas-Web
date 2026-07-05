@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.6-pitch-only-high-camera
+ * Version: 1.6.8-equal-towers-scene-pitch
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.6-pitch-only-high-camera";
+  const VERSION="1.6.8-equal-towers-scene-pitch";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -30,12 +30,15 @@
       lift:0,dolly:0,screenY:0,
       sideThreshold:0.42,
       // Move closer while lifting the camera above both transmitters. The eased
-      // side view pitches back-to-front without introducing any screen roll.
+      // side view uses double the previous back-to-front pitch without introducing any screen roll.
       sideTargetY:3.5,
-      sideLift:-1.0,
+      sideLift:-2.0,
       sideDolly:-0.12,
       // Keep the horizon level: depth comes from camera pitch, not left/right roll.
       sideRoll:0,
+      // True plate rotation: tip the complete valley back-to-front around the camera's horizontal axis.
+      sideScenePitch:0.32,
+      sideScenePivot:[0,0,0],
       // Mountain A/white-front side needs more downward framing so its
       // foreground transmitter feet reach the graph edge.
       sideScreenYPositive:0.35,
@@ -45,7 +48,7 @@
 
   const LEFT=Object.freeze({position:[-13.35,0.015,0.8],rotation:[0,0,0],scale:[0.82,0.90,0.90],mirror:true});
   const RIGHT=Object.freeze({position:[13.35,0.015,-1.8],rotation:[0,Math.PI,0],scale:[0.82,0.90,0.90],mirror:true});
-  const TRANSMITTER_TIP_CLEARANCE=Object.freeze({A:0.35,B:3.5});
+  const TRANSMITTER_TIP_CLEARANCE=0.35;
   const TRANSMITTER_FOOTPRINT_FILL=0.90;
   const TRANSMITTER_FLAT_Y=24*Math.PI/180;
 
@@ -322,7 +325,7 @@
     return null;
   }
 
-  function transmitterOnMountain(scene,mountain){
+  function transmitterOnMountain(scene,mountain,heightScale){
     const mountainAsset=globalThis.FieldOps3DAssets.get(mountain.asset);
     const transmitterAsset=globalThis.FieldOps3DAssets.get(scene.transmitterAsset);
     const mount=mountainAsset?.mountPoint;
@@ -342,8 +345,9 @@
       platformWidth/transmitterWidth,
       platformDepth/transmitterDepth
     );
-    const clearance=TRANSMITTER_TIP_CLEARANCE[mountain.mount]??TRANSMITTER_TIP_CLEARANCE.A;
-    const heightScale=Math.max(0.28,Math.min(0.72,(mountainPeak+clearance-top[1])/transmitterHeight));
+    const requiredHeightScale=Math.max(0.28,Math.min(0.72,
+      (mountainPeak+TRANSMITTER_TIP_CLEARANCE-top[1])/transmitterHeight
+    ));
 
     return Object.freeze({
       position:[top[0],top[1]-transmitterBounds.min[1]*heightScale,top[2]],
@@ -352,8 +356,17 @@
         (mountain.transform.rotation?.[1]||0)+TRANSMITTER_FLAT_Y,
         mountain.transform.rotation?.[2]||0
       ],
-      scale:[footprintScale,heightScale,footprintScale]
+      scale:[footprintScale,heightScale,footprintScale],
+      requiredHeightScale
     });
+  }
+
+  function commonTransmitterHeightScale(scene){
+    const required=(scene.mountains||[]).map(mountain=>{
+      const probe=transmitterOnMountain(scene,mountain,1);
+      return probe.requiredHeightScale;
+    });
+    return Math.max(0.28,Math.min(0.72,...required));
   }
 
   function objectsFor(scene){
@@ -361,7 +374,10 @@
     if(scene.baseAsset)objects.push({asset:scene.baseAsset,position:[0,0,0],rotation:[0,0,0],scale:[1,1,1],mirror:false});
     objects.push(...(scene.mountains||[]).map(item=>object(item.asset,item.transform,item.transform?.mirror)));
     if(scene.attachTransmitters){
-      objects.push(...(scene.mountains||[]).map(item=>object(scene.transmitterAsset,transmitterOnMountain(scene,item))));
+      const sharedHeightScale=commonTransmitterHeightScale(scene);
+      objects.push(...(scene.mountains||[]).map(item=>
+        object(scene.transmitterAsset,transmitterOnMountain(scene,item,sharedHeightScale))
+      ));
     }
     objects.push(...(scene.transmitters||[]).map(transform=>object(scene.transmitterAsset,transform)));
     return objects;
