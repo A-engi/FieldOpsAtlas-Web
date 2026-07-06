@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.11-continuous-side-orbit
+ * Version: 1.6.12-elevation-tags
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.11-continuous-side-orbit";
+  const VERSION="1.6.12-elevation-tags";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -64,7 +64,10 @@
         5.670000076293945,1.100000023841858,5.96999979019165,
         3.8299999237060547,1.100000023841858,5.96999979019165
       ]),
-      centre:Object.freeze([4.75,5.049999952316284]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:6.820000171661377
+      centre:Object.freeze([4.75,5.049999952316284]),
+      size:Object.freeze([1.8400001525878906,1.8399996757507324]),
+      topY:6.820000171661377,
+      bottomY:1.100000023841858
     }),
     B:Object.freeze({
       positions:Object.freeze([
@@ -77,11 +80,33 @@
         4.420000076293945,1.100000023841858,2.919999599456787,
         2.5799999237060547,1.100000023841858,2.919999599456787
       ]),
-      centre:Object.freeze([3.5,1.999999761581421]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:5.799999713897705
+      centre:Object.freeze([3.5,1.999999761581421]),
+      size:Object.freeze([1.8400001525878906,1.8399996757507324]),
+      topY:5.799999713897705,
+      bottomY:1.100000023841858
     })
   });
   const MOUNT_INDICES=Object.freeze([0,1,2,0,2,3,4,5,1,4,1,0,5,6,2,5,2,1,6,7,3,6,3,2,7,4,0,7,0,3]);
   const MOUNT_COLOURS=Object.freeze([1,1,0,0,0,0,0,0,0,0]);
+
+  const TAG_GLYPHS=Object.freeze({
+    "0":Object.freeze(["11111","10001","10011","10101","11001","10001","11111"]),
+    "1":Object.freeze(["00100","01100","00100","00100","00100","00100","01110"]),
+    "2":Object.freeze(["11110","00001","00001","11110","10000","10000","11111"]),
+    "3":Object.freeze(["11110","00001","00001","01110","00001","00001","11110"]),
+    "4":Object.freeze(["10010","10010","10010","11111","00010","00010","00010"]),
+    "5":Object.freeze(["11111","10000","10000","11110","00001","00001","11110"]),
+    "6":Object.freeze(["01111","10000","10000","11110","10001","10001","01110"]),
+    "7":Object.freeze(["11111","00001","00010","00100","01000","01000","01000"]),
+    "8":Object.freeze(["01110","10001","10001","01110","10001","10001","01110"]),
+    "9":Object.freeze(["01110","10001","10001","01111","00001","00001","11110"]),
+    E:Object.freeze(["11111","10000","10000","11110","10000","10000","11111"]),
+    L:Object.freeze(["10000","10000","10000","10000","10000","10000","11111"]),
+    V:Object.freeze(["10001","10001","10001","10001","10001","01010","00100"]),
+    M:Object.freeze(["10001","11011","10101","10101","10001","10001","10001"]),
+    "-":Object.freeze(["00000","00000","00000","11111","00000","00000","00000"]),
+    " ":Object.freeze(["00000","00000","00000","00000","00000","00000","00000"])
+  });
 
   const riverVariant=(id,label,quality,baseFile,baseAsset,transmitterFile,transmitterAsset,mountains)=>Object.freeze({
     id,label,quality,camera:RIVER_CAMERA,baseFile,baseAsset,transmitterFile,transmitterAsset,
@@ -165,8 +190,8 @@
 
   function injectCapture(source,format){
     const capture=format==="full"
-      ? ";globalThis.__fieldopsCapture={data:w,palettes:C,view:B};"
-      : ";globalThis.__fieldopsCapture={data:P,palettes:L,centre:C,view:W};";
+      ?";globalThis.__fieldopsCapture={data:w,palettes:C,view:B};"
+      :";globalThis.__fieldopsCapture={data:P,palettes:L,centre:C,view:W};";
     const replaced=source.replace(/\}\)\(\);?\s*$/,`${capture}})();`);
     if(replaced===source)throw new Error("Mountain source ending was not recognised");
     return replaced;
@@ -366,10 +391,128 @@
     return Math.max(0.28,Math.min(0.72,...required));
   }
 
-  function objectsFor(scene){
+  function appendRectangle(layer,x0,y0,x1,y1,z,colour){
+    const index=layer.positions.length/3;
+    layer.positions.push(x0,y0,z,x1,y0,z,x1,y1,z,x0,y1,z);
+    layer.indices.push(index,index+1,index+2,index,index+2,index+3);
+    layer.faceColours.push(colour,colour);
+  }
+
+  function appendBitmapText(layer,text,{centerY,height,maxWidth,z,colour}){
+    const value=String(text||"").toUpperCase();
+    if(!value)return;
+    const columns=value.length*5+Math.max(0,value.length-1);
+    let cell=height/7;
+    if(columns*cell>maxWidth)cell=maxWidth/columns;
+    const width=columns*cell;
+    const actualHeight=7*cell;
+    let x=-width/2;
+    const top=centerY+actualHeight/2;
+    const inset=cell*0.10;
+
+    for(const character of value){
+      const glyph=TAG_GLYPHS[character]||TAG_GLYPHS[" "];
+      for(let row=0;row<7;row+=1){
+        for(let column=0;column<5;column+=1){
+          if(glyph[row][column]!=="1")continue;
+          const x0=x+column*cell+inset;
+          const x1=x+(column+1)*cell-inset;
+          const y1=top-row*cell-inset;
+          const y0=top-(row+1)*cell+inset;
+          appendRectangle(layer,x0,y0,x1,y1,z,colour);
+        }
+      }
+      x+=6*cell;
+    }
+  }
+
+  function elevationTagAsset(endpoint,direction){
+    const width=4.4,height=1.85,depth=0.12;
+    const x=width/2,y=height/2,z=depth/2;
+    const shellPositions=new Float32Array([
+      -x,-y,-z, x,-y,-z, x,y,-z, -x,y,-z,
+      -x,-y,z,  x,-y,z,  x,y,z,  -x,y,z
+    ]);
+    const shellIndices=new Uint32Array([
+      0,2,1,0,3,2,
+      4,5,6,4,6,7,
+      0,4,7,0,7,3,
+      1,2,6,1,6,5,
+      0,1,5,0,5,4,
+      3,7,6,3,6,2
+    ]);
+    const shellColours=new Uint8Array([0,0,1,1,0,0,0,0,0,0,0,0]);
+    const ridge={positions:[],indices:[],faceColours:[]};
+    const faceZ=z+0.012;
+    const border=0.065;
+
+    appendRectangle(ridge,-x+0.12,y-0.18,x-0.12,y-0.18+border,faceZ,0);
+    appendRectangle(ridge,-x+0.12,-y+0.18-border,x-0.12,-y+0.18,faceZ,0);
+    appendRectangle(ridge,-x+0.12,-y+0.18,-x+0.12+border,y-0.18,faceZ,0);
+    appendRectangle(ridge,x-0.12-border,-y+0.18,x-0.12,y-0.18,faceZ,0);
+    appendRectangle(ridge,-1.32,-0.76,1.32,-0.69,faceZ+0.002,2);
+
+    appendBitmapText(ridge,endpoint?.elevationTagLabel||"ELEV",{
+      centerY:0.38,height:0.36,maxWidth:2.35,z:faceZ+0.004,colour:0
+    });
+    appendBitmapText(ridge,endpoint?.elevationTagText||`${Math.round(Number(endpoint?.elevationM)||0)} M`,{
+      centerY:-0.22,height:0.72,maxWidth:3.55,z:faceZ+0.006,colour:1
+    });
+
+    return {
+      centre:[0,0],mirror:false,
+      palettes:{
+        shell:["06141d","102b35"],
+        ridge:["d5aa55","fff1c2",direction==="from"?"67c98b":"d47770"]
+      },
+      layers:{
+        shell:{format:"raw-indexed",normals:true,positions:shellPositions,indices:shellIndices,faceColours:shellColours},
+        ridge:{
+          format:"raw-indexed",normals:false,
+          positions:new Float32Array(ridge.positions),
+          indices:new Uint32Array(ridge.indices),
+          faceColours:new Uint8Array(ridge.faceColours)
+        }
+      }
+    };
+  }
+
+  function tagTransform(mountain){
+    const block=MOUNT_BLOCKS[mountain.mount];
+    if(!block)return IDENTITY;
+    const yaw=mountain.transform.rotation?.[1]||0;
+    const localFacing=Math.cos(yaw)>=0?1:-1;
+    const localPoint=[
+      block.centre[0],
+      block.bottomY+(block.topY-block.bottomY)*0.51,
+      block.centre[1]+localFacing*(block.size[1]/2+0.14)
+    ];
+    const position=transformPoint(mountain.transform,localPoint);
+    return Object.freeze({position,rotation:[0,0,0],scale:[0.94,0.94,0.94]});
+  }
+
+  function elevationTagObjects(scene,path){
+    const mountains=scene.mountains||[];
+    if(!path||!mountains.length)return [];
+    const output=[];
+
+    mountains.slice(0,2).forEach((mountain,index)=>{
+      const direction=index===0?"from":"to";
+      const endpoint=mountains.length===1&&mountain.mount==="B"?path.to:path[direction];
+      if(!Number.isFinite(Number(endpoint?.elevationM)))return;
+      const assetId=`rf-elevation-tag-${direction}`;
+      globalThis.FieldOps3DAssets.register(assetId,elevationTagAsset(endpoint,direction));
+      output.push(object(assetId,tagTransform(mountain),false));
+    });
+
+    return output;
+  }
+
+  function objectsFor(scene,path){
     const objects=[];
     if(scene.baseAsset)objects.push({asset:scene.baseAsset,position:[0,0,0],rotation:[0,0,0],scale:[1,1,1],mirror:false});
     objects.push(...(scene.mountains||[]).map(item=>object(item.asset,item.transform,item.transform?.mirror)));
+    objects.push(...elevationTagObjects(scene,path));
     if(scene.attachTransmitters){
       const sharedHeightScale=commonTransmitterHeightScale(scene);
       objects.push(...(scene.mountains||[]).map(item=>
@@ -380,7 +523,7 @@
     return objects;
   }
 
-  async function build(root,{variant="mount-a_b-comp-scene"}={}){
+  async function build(root,{variant="mount-a_b-comp-scene",path=null}={}){
     if(!root)throw new Error("Scene graph mount was not found");
     const scene=VARIANTS[variant]||VARIANTS["mount-a_b-comp-scene"];
     if(!globalThis.FieldOps3DRenderer?.create)throw new Error("3d-render.js must load before river-scene.js builds");
@@ -400,7 +543,7 @@
     }
 
     const rendererScene={
-      id:scene.id,label:scene.label,background:"#01090e",initialAngle:0,objects:objectsFor(scene)
+      id:scene.id,label:scene.label,background:"#01090e",initialAngle:0,objects:objectsFor(scene,path)
     };
     if(scene.camera)rendererScene.camera=scene.camera;
 
@@ -408,6 +551,8 @@
     root.setAttribute("aria-busy","false");
     root.dataset.rfScene=scene.id;
     root.dataset.rfSceneObjects=rendererScene.objects.map(item=>item.asset).join(",");
+    root.dataset.rfElevationFrom=Number.isFinite(Number(path?.from?.elevationM))?String(Math.round(Number(path.from.elevationM))):"";
+    root.dataset.rfElevationTo=Number.isFinite(Number(path?.to?.elevationM))?String(Math.round(Number(path.to.elevationM))):"";
     return instance;
   }
 
