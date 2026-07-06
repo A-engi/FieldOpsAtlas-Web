@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.19-assembly-only
+ * Version: 1.6.20-asset-owned-visual-fixes
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.19-assembly-only";
+  const VERSION="1.6.20-asset-owned-visual-fixes";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -13,7 +13,7 @@
   const sourceCache=new Map();
   const assetCache=new Map();
   const scriptCache=new Map();
-  const OBJECT_CACHE_VERSION="1.6.3-clean-transmitter";
+  const OBJECT_CACHE_VERSION="1.6.20-asset-owned-visual-fixes";
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
@@ -348,37 +348,6 @@
     return null;
   }
 
-  function brightenPalette(values,factor,lift){
-    if(!values)return values;
-    if(ArrayBuffer.isView(values)||typeof values[0]==="number"){
-      return new Float32Array(Array.from(values,value=>Math.min(1,Number(value)*factor+lift)));
-    }
-    return values.map(value=>{
-      const hex=String(value).replace("#","").padStart(6,"0").slice(-6);
-      const channels=hex.match(/../g).map(channel=>
-        Math.min(255,Math.round(parseInt(channel,16)*factor+lift*255))
-      );
-      return channels.map(channel=>channel.toString(16).padStart(2,"0")).join("");
-    });
-  }
-
-  function visibleTransmitterAsset(scene){
-    if(!scene.transmitterAsset)return null;
-    const assetId=`${scene.transmitterAsset}-high-visibility`;
-    if(globalThis.FieldOps3DAssets.has(assetId))return assetId;
-    const source=globalThis.FieldOps3DAssets.get(scene.transmitterAsset);
-    if(!source)return scene.transmitterAsset;
-    globalThis.FieldOps3DAssets.register(assetId,{
-      ...source,
-      palettes:{
-        ...source.palettes,
-        shell:brightenPalette(source.palettes?.shell,1.42,0.09),
-        ridge:brightenPalette(source.palettes?.ridge,1.28,0.13)
-      }
-    });
-    return assetId;
-  }
-
   function transmitterOnMountain(scene,mountain,heightScale){
     const mountainAsset=globalThis.FieldOps3DAssets.get(mountain.asset);
     const transmitterAsset=globalThis.FieldOps3DAssets.get(scene.transmitterAsset);
@@ -572,15 +541,14 @@
     objects.push(...(scene.mountains||[]).map(item=>object(item.asset,item.transform,item.transform?.mirror)));
     objects.push(...elevationTagObjects(scene,path));
 
-    const transmitterAsset=visibleTransmitterAsset(scene);
-    if(scene.attachTransmitters&&transmitterAsset){
+    if(scene.attachTransmitters&&scene.transmitterAsset){
       const sharedHeightScale=commonTransmitterHeightScale(scene);
       objects.push(...(scene.mountains||[]).map(item=>
-        object(transmitterAsset,transmitterOnMountain(scene,item,sharedHeightScale))
+        object(scene.transmitterAsset,transmitterOnMountain(scene,item,sharedHeightScale))
       ));
     }
-    if(transmitterAsset){
-      objects.push(...(scene.transmitters||[]).map(transform=>object(transmitterAsset,transform)));
+    if(scene.transmitterAsset){
+      objects.push(...(scene.transmitters||[]).map(transform=>object(scene.transmitterAsset,transform)));
     }
     return objects;
   }

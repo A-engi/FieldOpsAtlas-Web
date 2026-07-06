@@ -1,9 +1,9 @@
 /* FieldOps Atlas — detailed gold transmitter, quarter geometry mirrored four ways by the renderer
- * Version: 1.6.3-gold-transmitter-clean-middle-quarter
+ * Version: 1.6.4-gold-transmitter-high-visibility-quarter
  */
 (()=>{
   "use strict";
-  const VERSION="1.6.3-gold-transmitter-clean-middle-quarter";
+  const VERSION="1.6.4-gold-transmitter-high-visibility-quarter";
   const ASSET_ID="transmitter-gold-quarter";
   const positions=[];
   const indices=[];
@@ -29,7 +29,7 @@
     let ux=d[1]*ref[2]-d[2]*ref[1],uy=d[2]*ref[0]-d[0]*ref[2],uz=d[0]*ref[1]-d[1]*ref[0];
     let ul=Math.hypot(ux,uy,uz)||1;ux/=ul;uy/=ul;uz/=ul;
     const vx=d[1]*uz-d[2]*uy,vy=d[2]*ux-d[0]*uz,vz=d[0]*uy-d[1]*ux;
-    const w=width/2;
+    const w=width*0.69;
     const corners=[];
     for(const p of [a,b]) for(const su of [-1,1]) for(const sv of [-1,1]) corners.push(vertex(p[0]+(ux*su+vx*sv)*w,p[1]+(uy*su+vy*sv)*w,p[2]+(uz*su+vz*sv)*w));
     quad(corners[0],corners[1],corners[3],corners[2],colour);
@@ -66,7 +66,7 @@
 
   // Axis mast, upper cage and beacon are emitted once for the full asset and
   // once in the quarter asset; overlapping mirrored copies are depth-identical.
-  beam([0,13.5,0],[0,18.4,0],0.20,2);
+  beam([0,13.5,0],[0,18.4,0],0.28,2);
   for(const y of [14.8,15.8,16.8]){
     box(0,y,0,1.05,0.10,1.05,1);
     for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
@@ -76,15 +76,15 @@
     }
   }
   box(0,18.55,0,0.34,0.34,0.34,5);
-  beam([0,18.45,0],[0,19.15,0],0.08,5);
+  beam([0,18.45,0],[0,19.15,0],0.13,5);
 
   const asset={
     centre:[0,0],
     mirror:true,
     view:{size:[8.4,19.4,8.4],target:[0,9.1,0],lift:2.2,fov:38},
     palettes:{
-      shell:["4B2500","8A4900","C87800","F0A800","FFCA36","FFE38A"],
-      ridge:["C87800","F0A800","FFCA36","FFE38A"]
+      shell:["7A3900","B85D00","E58A00","FFB51B","FFD95B","FFF2B8"],
+      ridge:["E58A00","FFB51B","FFD95B","FFF2B8"]
     },
     layers:{
       shell:{
