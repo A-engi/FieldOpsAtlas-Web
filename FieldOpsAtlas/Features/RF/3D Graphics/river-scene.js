@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.14-terrain-elevation-tags
+ * Version: 1.6.15-river-engraved-elevation
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.14-terrain-elevation-tags";
+  const VERSION="1.6.15-river-engraved-elevation";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -424,7 +424,9 @@
   }
 
   function elevationTagAsset(endpoint,direction){
-    const width=4.2,height=1.65,depth=0.045;
+    // A shallow, horizontal insert: most of the depth sits below the river
+    // surface, leaving only the cut face, bevel and lettering visible.
+    const width=4.6,height=1.72,depth=0.12;
     const x=width/2,y=height/2,z=depth/2;
     const shellPositions=new Float32Array([
       -x,-y,-z, x,-y,-z, x,y,-z, -x,y,-z,
@@ -438,29 +440,38 @@
       0,1,5,0,5,4,
       3,7,6,3,6,2
     ]);
+    // The upward face is the slightly lighter river-cut surface; every other
+    // face is the darker wall of the recess.
     const shellColours=new Uint8Array([0,0,1,1,0,0,0,0,0,0,0,0]);
     const ridge={positions:[],indices:[],faceColours:[]};
-    const faceZ=z+0.012;
-    const border=0.055;
+    const faceZ=z+0.004;
+    const trench=0.105;
+    const edge=0.026;
 
-    appendRectangle(ridge,-x+0.12,y-0.18,x-0.12,y-0.18+border,faceZ,0);
-    appendRectangle(ridge,-x+0.12,-y+0.18-border,x-0.12,-y+0.18,faceZ,0);
-    appendRectangle(ridge,-x+0.12,-y+0.18,-x+0.12+border,y-0.18,faceZ,0);
-    appendRectangle(ridge,x-0.12-border,-y+0.18,x-0.12,y-0.18,faceZ,0);
-    appendRectangle(ridge,-1.32,-0.76,1.32,-0.69,faceZ+0.002,2);
+    // Broad dark trench, then a fine inner cut edge. Together these read as a
+    // chisel-cut rectangular well instead of a sign resting on the surface.
+    appendRectangle(ridge,-x+0.10,y-0.14,x-0.10,y-0.14+trench,faceZ,0);
+    appendRectangle(ridge,-x+0.10,-y+0.14-trench,x-0.10,-y+0.14,faceZ,0);
+    appendRectangle(ridge,-x+0.10,-y+0.14,-x+0.10+trench,y-0.14,faceZ,0);
+    appendRectangle(ridge,x-0.10-trench,-y+0.14,x-0.10,y-0.14,faceZ,0);
+
+    appendRectangle(ridge,-x+0.22,y-0.27,x-0.22,y-0.27+edge,faceZ+0.002,1);
+    appendRectangle(ridge,-x+0.22,-y+0.27-edge,x-0.22,-y+0.27,faceZ+0.002,1);
+    appendRectangle(ridge,-x+0.22,-y+0.27,-x+0.22+edge,y-0.27,faceZ+0.002,1);
+    appendRectangle(ridge,x-0.22-edge,-y+0.27,x-0.22,y-0.27,faceZ+0.002,1);
 
     appendBitmapText(ridge,endpoint?.elevationTagLabel||"ELEV",{
-      centerY:0.33,height:0.31,maxWidth:2.20,z:faceZ+0.004,colour:0
+      centerY:0.32,height:0.30,maxWidth:2.15,z:faceZ+0.003,colour:2
     });
     appendBitmapText(ridge,endpoint?.elevationTagText||`${Math.round(Number(endpoint?.elevationM)||0)} M`,{
-      centerY:-0.20,height:0.64,maxWidth:3.30,z:faceZ+0.006,colour:1
+      centerY:-0.22,height:0.66,maxWidth:3.45,z:faceZ+0.004,colour:3
     });
 
     return {
       centre:[0,0],mirror:false,
       palettes:{
-        shell:["06141d","102b35"],
-        ridge:["d5aa55","fff1c2",direction==="from"?"67c98b":"d47770"]
+        shell:["01141b","063743"],
+        ridge:["001016","c79a48","d8c79d",direction==="from"?"75d49a":"dc8a82"]
       },
       layers:{
         shell:{format:"raw-indexed",normals:true,positions:shellPositions,indices:shellIndices,faceColours:shellColours},
@@ -474,29 +485,23 @@
     };
   }
 
-  function tagTransform(mountain,index,total){
-    const transform=mountain.transform||IDENTITY;
-    const position=transform.position||[0,0,0];
-    const pair=total>1;
-    const foregroundZ=pair
-      ? 8.4-(index*0.7)
-      : (position[2]||0)+8.0;
+  function tagTransform(mountain){
+    const position=mountain.transform?.position||[0,0,0];
 
-    // The plaque is part of the 3D scene, but it sits low in the terrain
-    // in front of its mountain instead of being repeated in the HTML label.
-    // A slight backward pitch makes it read as a terrain inset rather than
-    // a floating upright sign. Scene rotation and depth testing still hide it
-    // naturally from side and rear views.
+    // The local plaque face points along +Z. Rotating it -90 degrees around X
+    // makes that face point straight upward, flat in the river terrain. The
+    // centre sits low enough that the slab depth disappears into the river,
+    // while the cut face remains visible just above the surface.
     return Object.freeze({
-      position:[position[0]||0,0.88,foregroundZ],
-      rotation:[-0.18,0,0],
-      scale:[0.82,0.82,0.82]
+      position:[position[0]||0,0.055,(position[2]||0)+11.5],
+      rotation:[-Math.PI/2,0,0],
+      scale:[0.88,0.88,0.88]
     });
   }
 
   function elevationTagObjects(scene,path){
     const mountains=scene.mountains||[];
-    if(!path||!mountains.length)return [];
+    if(!scene.baseAsset||!path||!mountains.length)return [];
     const output=[];
 
     mountains.slice(0,2).forEach((mountain,index)=>{
@@ -505,7 +510,7 @@
       if(!Number.isFinite(Number(endpoint?.elevationM)))return;
       const assetId=`rf-elevation-tag-${direction}`;
       globalThis.FieldOps3DAssets.register(assetId,elevationTagAsset(endpoint,direction));
-      output.push(object(assetId,tagTransform(mountain,index,mountains.length),false));
+      output.push(object(assetId,tagTransform(mountain),false));
     });
 
     return output;
