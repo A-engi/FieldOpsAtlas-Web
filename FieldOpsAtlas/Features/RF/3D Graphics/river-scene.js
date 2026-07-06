@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.13-unified-camera-elevation-tags
+ * Version: 1.6.14-terrain-elevation-tags
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.13-unified-camera-elevation-tags";
+  const VERSION="1.6.14-terrain-elevation-tags";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -424,7 +424,7 @@
   }
 
   function elevationTagAsset(endpoint,direction){
-    const width=4.4,height=1.85,depth=0.12;
+    const width=4.2,height=1.65,depth=0.045;
     const x=width/2,y=height/2,z=depth/2;
     const shellPositions=new Float32Array([
       -x,-y,-z, x,-y,-z, x,y,-z, -x,y,-z,
@@ -441,7 +441,7 @@
     const shellColours=new Uint8Array([0,0,1,1,0,0,0,0,0,0,0,0]);
     const ridge={positions:[],indices:[],faceColours:[]};
     const faceZ=z+0.012;
-    const border=0.065;
+    const border=0.055;
 
     appendRectangle(ridge,-x+0.12,y-0.18,x-0.12,y-0.18+border,faceZ,0);
     appendRectangle(ridge,-x+0.12,-y+0.18-border,x-0.12,-y+0.18,faceZ,0);
@@ -450,10 +450,10 @@
     appendRectangle(ridge,-1.32,-0.76,1.32,-0.69,faceZ+0.002,2);
 
     appendBitmapText(ridge,endpoint?.elevationTagLabel||"ELEV",{
-      centerY:0.38,height:0.36,maxWidth:2.35,z:faceZ+0.004,colour:0
+      centerY:0.33,height:0.31,maxWidth:2.20,z:faceZ+0.004,colour:0
     });
     appendBitmapText(ridge,endpoint?.elevationTagText||`${Math.round(Number(endpoint?.elevationM)||0)} M`,{
-      centerY:-0.22,height:0.72,maxWidth:3.55,z:faceZ+0.006,colour:1
+      centerY:-0.20,height:0.64,maxWidth:3.30,z:faceZ+0.006,colour:1
     });
 
     return {
@@ -474,18 +474,24 @@
     };
   }
 
-  function tagTransform(mountain){
-    const block=MOUNT_BLOCKS[mountain.mount];
-    if(!block)return IDENTITY;
-    const yaw=mountain.transform.rotation?.[1]||0;
-    const localFacing=Math.cos(yaw)>=0?1:-1;
-    const localPoint=[
-      block.centre[0],
-      block.bottomY+(block.topY-block.bottomY)*0.51,
-      block.centre[1]+localFacing*(block.size[1]/2+0.14)
-    ];
-    const position=transformPoint(mountain.transform,localPoint);
-    return Object.freeze({position,rotation:[0,0,0],scale:[0.94,0.94,0.94]});
+  function tagTransform(mountain,index,total){
+    const transform=mountain.transform||IDENTITY;
+    const position=transform.position||[0,0,0];
+    const pair=total>1;
+    const foregroundZ=pair
+      ? 8.4-(index*0.7)
+      : (position[2]||0)+8.0;
+
+    // The plaque is part of the 3D scene, but it sits low in the terrain
+    // in front of its mountain instead of being repeated in the HTML label.
+    // A slight backward pitch makes it read as a terrain inset rather than
+    // a floating upright sign. Scene rotation and depth testing still hide it
+    // naturally from side and rear views.
+    return Object.freeze({
+      position:[position[0]||0,0.88,foregroundZ],
+      rotation:[-0.18,0,0],
+      scale:[0.82,0.82,0.82]
+    });
   }
 
   function elevationTagObjects(scene,path){
@@ -499,7 +505,7 @@
       if(!Number.isFinite(Number(endpoint?.elevationM)))return;
       const assetId=`rf-elevation-tag-${direction}`;
       globalThis.FieldOps3DAssets.register(assetId,elevationTagAsset(endpoint,direction));
-      output.push(object(assetId,tagTransform(mountain),false));
+      output.push(object(assetId,tagTransform(mountain,index,mountains.length),false));
     });
 
     return output;
