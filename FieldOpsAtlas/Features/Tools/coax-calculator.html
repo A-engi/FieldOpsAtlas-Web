@@ -76,6 +76,7 @@
 
     h1,
     h2,
+    h3,
     p { margin: 0; }
 
     h1 {
@@ -88,6 +89,12 @@
       font-size: 16px;
       font-weight: 900;
       line-height: 1.1;
+    }
+
+    h3 {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.15;
     }
 
     .copy,
@@ -178,12 +185,14 @@
       line-height: 1;
     }
 
-    .rows {
+    .rows,
+    .candidate-list {
       display: grid;
       gap: 7px;
     }
 
-    .row {
+    .row,
+    .candidate {
       min-height: 50px;
       padding: 9px 10px;
       display: grid;
@@ -195,19 +204,22 @@
       background: rgba(255,255,255,.68);
     }
 
-    .row strong {
+    .row strong,
+    .candidate strong {
       display: block;
       font-size: 13px;
       font-weight: 850;
+      line-height: 1.2;
     }
 
-    .row small {
+    .row small,
+    .candidate small {
       display: block;
       margin-top: 4px;
       color: var(--muted);
       font-size: 10px;
       font-weight: 700;
-      line-height: 1.25;
+      line-height: 1.28;
     }
 
     .pill {
@@ -266,6 +278,17 @@
 
     .warning strong { color: var(--amber); }
 
+    .empty-candidate {
+      padding: 12px;
+      color: var(--muted);
+      border: 1px dashed rgba(42,67,93,.28);
+      border-radius: 13px;
+      background: rgba(255,255,255,.42);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
     @media (max-width: 680px) {
       .two-column,
       .field-row { grid-template-columns: 1fr; }
@@ -273,13 +296,13 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.0.1-coax-mechanical-calculator">
+  <main class="phone" data-page="tools" data-version="1.1.0-coax-construction-matcher">
     <section class="content-canvas" aria-label="Coax mechanical identifier">
       <article class="page">
         <header class="card hero">
           <p class="kicker">Field tools · Coax</p>
-          <h1>Mechanical impedance check</h1>
-          <p class="copy">Measure the centre conductor and the dielectric directly under the screen. This estimates the cable's characteristic impedance from its geometry.</p>
+          <h1>Mechanical coax identifier</h1>
+          <p class="copy">Enter the measured geometry and visible construction. The result estimates impedance and ranks likely cable families.</p>
           <div class="actions">
             <a class="button" href="./index.html">Back to field tools</a>
           </div>
@@ -287,7 +310,7 @@
 
         <div class="two-column">
           <section class="card" aria-labelledby="measurementsTitle">
-            <h2 id="measurementsTitle">Enter measurements</h2>
+            <h2 id="measurementsTitle">Measurements and construction</h2>
 
             <div class="form-grid">
               <div class="field-row">
@@ -302,27 +325,66 @@
                 </label>
               </div>
 
-              <p class="help">D is the diameter immediately inside the shield. Do not enter the black outer jacket diameter.</p>
+              <p class="help">D is the diameter directly under the screen. Do not enter the black outer jacket diameter.</p>
 
-              <label class="field">
-                <span>Dielectric material</span>
-                <select id="material">
-                  <option value="2.25">Solid polyethylene (PE)</option>
-                  <option value="2.10">PTFE / FEP</option>
-                  <option value="1.50">Foam polyethylene — approximate</option>
-                  <option value="1.05">Air-spaced — approximate</option>
-                  <option value="custom">Custom relative permittivity</option>
-                </select>
-              </label>
+              <div class="field-row">
+                <label class="field">
+                  <span>Outer jacket OD (mm)</span>
+                  <input id="jacket" type="number" inputmode="decimal" min="0" step="0.1" placeholder="4.95">
+                </label>
+
+                <label class="field">
+                  <span>Dielectric material</span>
+                  <select id="material">
+                    <option value="unknown">Unknown</option>
+                    <option value="solid-pe">Solid polyethylene (PE)</option>
+                    <option value="ptfe">PTFE / FEP</option>
+                    <option value="foam-pe">Foam polyethylene</option>
+                    <option value="air">Air-spaced</option>
+                    <option value="custom">Custom εr</option>
+                  </select>
+                </label>
+              </div>
 
               <label id="customField" class="field" hidden>
                 <span>Relative permittivity εr</span>
                 <input id="customEr" type="number" inputmode="decimal" min="1" step="0.01" placeholder="1.42">
               </label>
 
+              <div class="field-row">
+                <label class="field">
+                  <span>Centre conductor</span>
+                  <select id="centreBuild">
+                    <option value="unknown">Unknown</option>
+                    <option value="solid">Solid</option>
+                    <option value="stranded">Stranded</option>
+                    <option value="tube">Hollow / tube</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Centre conductor material</span>
+                  <select id="centreMaterial">
+                    <option value="unknown">Unknown</option>
+                    <option value="copper">Bare copper</option>
+                    <option value="plated-copper">Tinned / silver-plated copper</option>
+                    <option value="ccs">Copper-clad steel</option>
+                    <option value="cca">Copper-clad aluminium</option>
+                  </select>
+                </label>
+              </div>
+
               <label class="field">
-                <span>Outer jacket OD (mm) — optional</span>
-                <input id="jacket" type="number" inputmode="decimal" min="0" step="0.1" placeholder="10.3">
+                <span>Screen / outer conductor</span>
+                <select id="screen">
+                  <option value="unknown">Unknown</option>
+                  <option value="single-braid">Single braid</option>
+                  <option value="foil-braid">Foil + braid</option>
+                  <option value="double-braid">Double braid</option>
+                  <option value="solid-tube">Solid metal tube / semi-rigid</option>
+                  <option value="corrugated">Corrugated outer conductor</option>
+                  <option value="triax">Two insulated screens / triax</option>
+                </select>
               </label>
 
               <div class="actions">
@@ -339,7 +401,7 @@
             <div class="result-main">
               <span id="impedance" class="result-value">— Ω</span>
               <span class="result-label">Estimated characteristic impedance</span>
-              <p id="summary" class="result-copy">Enter d, D and the dielectric type.</p>
+              <p id="summary" class="result-copy">Enter dimensions and construction details.</p>
             </div>
 
             <div class="rows">
@@ -349,21 +411,29 @@
               </article>
 
               <article class="row">
-                <span><strong>Measured D ÷ d ratio</strong><small id="ratioText">Uses the two mechanical diameters.</small></span>
-                <span id="ratioPill" class="pill watch">—</span>
+                <span><strong>Observed construction</strong><small id="constructionText">No construction selected.</small></span>
+                <span id="constructionPill" class="pill watch">Unknown</span>
               </article>
 
               <article class="row">
-                <span><strong>Cable thickness</strong><small id="thicknessText">Optional jacket measurement.</small></span>
+                <span><strong>Cable thickness</strong><small id="thicknessText">Enter the outer jacket diameter.</small></span>
                 <span id="thicknessPill" class="pill watch">—</span>
               </article>
             </div>
 
             <div class="warning">
-              <p id="warningText" class="result-copy"><strong>Estimate only.</strong> This does not prove attenuation, screening, power handling or frequency suitability.</p>
+              <p id="warningText" class="result-copy"><strong>Estimate only.</strong> A likely family is not a confirmed cable designation.</p>
             </div>
           </section>
         </div>
+
+        <section class="card" aria-labelledby="likelyTitle">
+          <h2 id="likelyTitle">Likely cable family</h2>
+          <p class="help">Candidates are ranked from impedance, overall diameter, dielectric, centre conductor and screening. Generic cable names cover many manufacturer variants.</p>
+          <div id="candidateList" class="candidate-list">
+            <p class="empty-candidate">Enter enough measurements to produce likely matches.</p>
+          </div>
+        </section>
 
         <section class="card" aria-labelledby="referenceTitle">
           <h2 id="referenceTitle">Expected D ÷ d ratios</h2>
@@ -372,7 +442,7 @@
             <div><strong id="ratio75">—</strong><span>75 Ω</span></div>
             <div><strong id="ratio93">—</strong><span>93 Ω</span></div>
           </div>
-          <p class="help">Braided screens and foam density make the dimensions approximate. Treat foam and air-spaced results as lower confidence.</p>
+          <p class="help">Foam density, braid compression and corrugation make mechanical dimensions approximate.</p>
         </section>
       </article>
     </section>
@@ -387,33 +457,72 @@
       emptyText: "No coax calculator matches found.",
       items: [{
         id: "tools-coax-mechanical",
-        title: "Coax mechanical impedance check",
-        subtitle: "Estimate 50, 75 or 93 ohm coax from measured geometry",
+        title: "Coax mechanical identifier",
+        subtitle: "Estimate impedance and likely cable family from measured construction",
         href: "./coax-calculator.html",
-        keywords: ["coax", "cable", "impedance", "50 ohm", "75 ohm", "93 ohm", "diameter", "mechanical"]
+        keywords: ["coax", "cable", "rg58", "rg59", "rg6", "rg213", "impedance", "braid", "screen", "diameter"]
       }]
     });
 
     (() => {
       "use strict";
 
-      const KEY = "fieldOpsAtlas.tools.coaxMechanical.v1";
+      const KEY = "fieldOpsAtlas.tools.coaxMechanical.v2";
       const COMMON = [50, 75, 93];
+      const MATERIAL_ER = {
+        "solid-pe": 2.25,
+        "ptfe": 2.10,
+        "foam-pe": 1.50,
+        "air": 1.05
+      };
+
+      const CABLES = [
+        { name: "RG178 / miniature PTFE coax", impedance: 50, od: 1.80, odTolerance: 0.35, dielectric: ["ptfe"], centre: ["stranded", "solid"], screen: ["single-braid"], material: ["plated-copper", "ccs"], note: "Very small PTFE equipment or microwave lead." },
+        { name: "RG174", impedance: 50, od: 2.54, odTolerance: 0.45, dielectric: ["solid-pe"], centre: ["stranded"], screen: ["single-braid"], material: ["copper", "plated-copper"], note: "Miniature flexible 50 Ω equipment coax." },
+        { name: "RG316", impedance: 50, od: 2.49, odTolerance: 0.40, dielectric: ["ptfe"], centre: ["stranded"], screen: ["single-braid"], material: ["plated-copper"], note: "Miniature PTFE 50 Ω cable, often with SMA/SMB/MCX." },
+        { name: "RG58 family", impedance: 50, od: 4.95, odTolerance: 0.65, dielectric: ["solid-pe"], centre: ["stranded", "solid"], screen: ["single-braid"], material: ["copper", "plated-copper"], note: "Common small flexible 50 Ω RF cable; many variants exist." },
+        { name: "URM43 family", impedance: 50, od: 5.15, odTolerance: 0.55, dielectric: ["solid-pe"], centre: ["stranded"], screen: ["single-braid"], material: ["copper", "plated-copper"], note: "Legacy UK flexible 50 Ω RF cable in the RG58 size region." },
+        { name: "RCM / BBC PSF1/6 family", impedance: 50, od: 5.20, odTolerance: 0.55, dielectric: ["solid-pe"], centre: ["stranded"], screen: ["double-braid", "foil-braid"], material: ["copper", "plated-copper"], note: "Broadcast-grade small 50 Ω cable with enhanced screening." },
+        { name: "RG223 family", impedance: 50, od: 5.40, odTolerance: 0.55, dielectric: ["solid-pe"], centre: ["solid", "stranded"], screen: ["double-braid"], material: ["plated-copper"], note: "Double-screened 50 Ω cable in the small flexible size." },
+        { name: "RG142 / RG400 family", impedance: 50, od: 4.95, odTolerance: 0.55, dielectric: ["ptfe"], centre: ["solid", "stranded"], screen: ["double-braid"], material: ["plated-copper"], note: "High-temperature PTFE 50 Ω cable." },
+        { name: "LMR-195 / LMR-200 size family", impedance: 50, od: 4.95, odTolerance: 0.55, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper", "cca"], note: "Small low-loss 50 Ω foil-and-braid cable." },
+        { name: "RG8X / Mini-8 family", impedance: 50, od: 6.10, odTolerance: 0.75, dielectric: ["foam-pe", "solid-pe"], centre: ["stranded"], screen: ["single-braid"], material: ["copper", "plated-copper"], note: "Medium flexible 50 Ω cable." },
+        { name: "LMR-240 size family", impedance: 50, od: 6.10, odTolerance: 0.65, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper", "cca"], note: "Medium low-loss 50 Ω cable." },
+        { name: "RG59 / 75 Ω video family", impedance: 75, od: 6.15, odTolerance: 0.85, dielectric: ["solid-pe", "foam-pe"], centre: ["solid", "stranded"], screen: ["single-braid", "foil-braid"], material: ["copper", "ccs"], note: "75 Ω video or monitoring cable; exact digital rating varies." },
+        { name: "PSF1/3 / VCS analogue video family", impedance: 75, od: 6.50, odTolerance: 0.70, dielectric: ["solid-pe"], centre: ["stranded", "solid"], screen: ["single-braid", "double-braid"], material: ["copper", "plated-copper"], note: "Legacy broadcast analogue-video cable family." },
+        { name: "RG62 / 93 Ω data family", impedance: 93, od: 6.15, odTolerance: 0.85, dielectric: ["solid-pe", "foam-pe"], centre: ["solid"], screen: ["single-braid"], material: ["copper", "ccs"], note: "Legacy 93 Ω pulse, instrumentation or data cable." },
+        { name: "RG6 / CT100 / WF100 family", impedance: 75, od: 6.80, odTolerance: 0.75, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper", "ccs"], note: "75 Ω satellite, receive distribution or digital-video cable." },
+        { name: "Broadcast RG6 / 1694-type family", impedance: 75, od: 6.95, odTolerance: 0.65, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper"], note: "75 Ω broadcast digital-video or ASI cable family." },
+        { name: "RG213 / URM67 family", impedance: 50, od: 10.30, odTolerance: 0.90, dielectric: ["solid-pe"], centre: ["stranded"], screen: ["single-braid"], material: ["copper", "plated-copper"], note: "Large flexible 50 Ω RF cable." },
+        { name: "RG214 family", impedance: 50, od: 10.80, odTolerance: 0.90, dielectric: ["solid-pe"], centre: ["stranded"], screen: ["double-braid"], material: ["plated-copper"], note: "Large double-screened 50 Ω cable." },
+        { name: "LMR-400 / low-loss 400-size family", impedance: 50, od: 10.30, odTolerance: 0.80, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper", "cca"], note: "Large low-loss 50 Ω foil-and-braid cable." },
+        { name: "RG11 / CT167 long-run family", impedance: 75, od: 10.30, odTolerance: 1.00, dielectric: ["foam-pe"], centre: ["solid"], screen: ["foil-braid"], material: ["copper", "ccs"], note: "Large 75 Ω long-run receive, video or satellite cable." },
+        { name: "0.086-inch semi-rigid / RG405-size", impedance: 50, od: 2.18, odTolerance: 0.20, dielectric: ["ptfe"], centre: ["solid"], screen: ["solid-tube"], material: ["plated-copper"], note: "Semi-rigid microwave coax with a continuous metal outer." },
+        { name: "0.141-inch semi-rigid / RG402-size", impedance: 50, od: 3.58, odTolerance: 0.25, dielectric: ["ptfe"], centre: ["solid"], screen: ["solid-tube"], material: ["plated-copper"], note: "Larger semi-rigid microwave coax." },
+        { name: "Small corrugated feeder / jumper", impedance: 50, od: 13.0, odTolerance: 5.0, dielectric: ["foam-pe", "air"], centre: ["solid", "tube"], screen: ["corrugated"], material: ["copper", "cca"], note: "Corrugated 50 Ω jumper or feeder; exact cable series must be identified." },
+        { name: "Large corrugated broadcast feeder", impedance: 50, od: 27.0, odTolerance: 16.0, dielectric: ["foam-pe", "air"], centre: ["solid", "tube"], screen: ["corrugated"], material: ["copper", "cca"], note: "Large 50 Ω feeder family; connector selection is cable-series specific." },
+        { name: "Triaxial cable", impedance: null, od: 8.0, odTolerance: 5.0, dielectric: ["solid-pe", "ptfe", "foam-pe"], centre: ["solid", "stranded"], screen: ["triax"], material: ["copper", "plated-copper"], note: "Two separately insulated screens; not ordinary coax." }
+      ];
+
       const centre = document.getElementById("centre");
       const dielectric = document.getElementById("dielectric");
+      const jacket = document.getElementById("jacket");
       const material = document.getElementById("material");
       const customField = document.getElementById("customField");
       const customEr = document.getElementById("customEr");
-      const jacket = document.getElementById("jacket");
+      const centreBuild = document.getElementById("centreBuild");
+      const centreMaterial = document.getElementById("centreMaterial");
+      const screen = document.getElementById("screen");
       const impedance = document.getElementById("impedance");
       const summary = document.getElementById("summary");
       const nearestText = document.getElementById("nearestText");
       const nearestPill = document.getElementById("nearestPill");
-      const ratioText = document.getElementById("ratioText");
-      const ratioPill = document.getElementById("ratioPill");
+      const constructionText = document.getElementById("constructionText");
+      const constructionPill = document.getElementById("constructionPill");
       const thicknessText = document.getElementById("thicknessText");
       const thicknessPill = document.getElementById("thicknessPill");
       const warningText = document.getElementById("warningText");
+      const candidateList = document.getElementById("candidateList");
       let copiedResult = "";
 
       const positiveNumber = (input) => {
@@ -421,9 +530,10 @@
         return Number.isFinite(value) && value > 0 ? value : null;
       };
 
-      const erValue = () => material.value === "custom"
-        ? positiveNumber(customEr)
-        : Number(material.value);
+      const erValue = () => {
+        if (material.value === "custom") return positiveNumber(customEr);
+        return MATERIAL_ER[material.value] || null;
+      };
 
       const expectedRatio = (ohms, er) => Math.exp((ohms * Math.sqrt(er)) / 60);
 
@@ -432,14 +542,98 @@
         element.className = "pill" + (state ? " " + state : "");
       };
 
+      const optionText = (select) => select.options[select.selectedIndex].text;
+
       const sizeClass = (diameter) => {
         if (!diameter) return null;
         if (diameter < 3.5) return ["Mini", "Miniature or equipment coax size."];
         if (diameter < 6) return ["Small", "Small flexible RF or video coax size."];
         if (diameter < 9) return ["Medium", "RG6 or medium flexible cable size."];
         if (diameter < 12.5) return ["Large", "RG213, RG11 or LMR-400 size region."];
-        if (diameter < 20) return ["Jumper", "Large flexible or small jumper region."];
-        return ["Feeder", "Feeder-sized cable; identify its exact series before termination."];
+        if (diameter < 20) return ["Jumper", "Large flexible or small feeder/jumper region."];
+        return ["Feeder", "Feeder-sized cable; identify the exact series before termination."];
+      };
+
+      const scoreCable = (cable, measured) => {
+        let score = 100;
+        const reasons = [];
+
+        if (measured.z0 !== null && cable.impedance !== null) {
+          const impedanceDifference = Math.abs(measured.z0 - cable.impedance);
+          score -= Math.min(45, impedanceDifference * 2.2);
+          reasons.push(Math.round(cable.impedance) + " Ω family");
+        } else if (measured.z0 !== null && cable.impedance === null) {
+          score -= 25;
+        }
+
+        if (measured.jacket !== null) {
+          const odDifference = Math.abs(measured.jacket - cable.od);
+          const normalised = odDifference / Math.max(cable.odTolerance, 0.2);
+          score -= Math.min(42, normalised * 18);
+          reasons.push(cable.od.toFixed(2) + " mm nominal OD region");
+        } else {
+          score -= 12;
+        }
+
+        if (measured.material !== "unknown") {
+          if (cable.dielectric.includes(measured.material)) reasons.push(optionText(material));
+          else score -= 17;
+        }
+
+        if (measured.centreBuild !== "unknown") {
+          if (cable.centre.includes(measured.centreBuild)) reasons.push(optionText(centreBuild) + " centre");
+          else score -= 19;
+        }
+
+        if (measured.screen !== "unknown") {
+          if (cable.screen.includes(measured.screen)) reasons.push(optionText(screen));
+          else score -= 25;
+        }
+
+        if (measured.centreMaterial !== "unknown") {
+          if (cable.material.includes(measured.centreMaterial)) reasons.push(optionText(centreMaterial));
+          else score -= 10;
+        }
+
+        return {
+          ...cable,
+          score: Math.max(0, Math.min(100, score)),
+          reasons
+        };
+      };
+
+      const renderCandidates = (measured) => {
+        const enoughData = measured.jacket !== null || measured.screen !== "unknown" || measured.z0 !== null;
+        if (!enoughData) {
+          candidateList.innerHTML = '<p class="empty-candidate">Enter dimensions or visible construction to produce likely matches.</p>';
+          return [];
+        }
+
+        const matches = CABLES
+          .map((cable) => scoreCable(cable, measured))
+          .sort((a, b) => b.score - a.score)
+          .filter((cable) => cable.score >= 42)
+          .slice(0, 5);
+
+        if (!matches.length || matches[0].score < 52) {
+          candidateList.innerHTML = '<article class="candidate"><span><strong>Not recognised</strong><small>The measurements do not closely fit the stored common cable families. Keep it marked unknown until a jacket code or datasheet is found.</small></span><span class="pill risk">Unknown</span></article>';
+          return [];
+        }
+
+        candidateList.innerHTML = matches.map((match, index) => {
+          const confidence = match.score >= 78 ? "Strong" : match.score >= 62 ? "Possible" : "Weak";
+          const state = match.score >= 78 ? "" : match.score >= 62 ? "watch" : "risk";
+          const reasonText = match.reasons.length ? match.reasons.join(" · ") : "Limited construction details";
+          return [
+            '<article class="candidate">',
+            '<span><strong>', index + 1, '. ', match.name, '</strong>',
+            '<small>', match.note, ' Match basis: ', reasonText, '.</small></span>',
+            '<span class="pill ', state, '">', confidence, ' ', Math.round(match.score), '%</span>',
+            '</article>'
+          ].join("");
+        }).join("");
+
+        return matches;
       };
 
       const save = () => {
@@ -447,9 +641,12 @@
           localStorage.setItem(KEY, JSON.stringify({
             centre: centre.value,
             dielectric: dielectric.value,
+            jacket: jacket.value,
             material: material.value,
             customEr: customEr.value,
-            jacket: jacket.value
+            centreBuild: centreBuild.value,
+            centreMaterial: centreMaterial.value,
+            screen: screen.value
           }));
         } catch (_) {}
       };
@@ -457,13 +654,20 @@
       const calculate = () => {
         const d = positiveNumber(centre);
         const D = positiveNumber(dielectric);
-        const er = erValue();
         const jacketOd = positiveNumber(jacket);
+        const er = erValue();
+        let z0 = null;
+        let nearest = null;
+        let impedanceDifference = null;
 
         if (Number.isFinite(er) && er >= 1) {
           document.getElementById("ratio50").textContent = expectedRatio(50, er).toFixed(2);
           document.getElementById("ratio75").textContent = expectedRatio(75, er).toFixed(2);
           document.getElementById("ratio93").textContent = expectedRatio(93, er).toFixed(2);
+        } else {
+          document.getElementById("ratio50").textContent = "—";
+          document.getElementById("ratio75").textContent = "—";
+          document.getElementById("ratio93").textContent = "—";
         }
 
         const size = sizeClass(jacketOd);
@@ -471,65 +675,78 @@
           thicknessText.textContent = jacketOd.toFixed(2) + " mm overall. " + size[1];
           setPill(thicknessPill, size[0]);
         } else {
-          thicknessText.textContent = "Optional jacket measurement.";
+          thicknessText.textContent = "Enter the outer jacket diameter.";
           setPill(thicknessPill, "—", "watch");
         }
 
-        save();
+        const constructionParts = [
+          centreBuild.value !== "unknown" ? optionText(centreBuild) + " centre" : "",
+          centreMaterial.value !== "unknown" ? optionText(centreMaterial) : "",
+          screen.value !== "unknown" ? optionText(screen) : "",
+          material.value !== "unknown" ? optionText(material) : ""
+        ].filter(Boolean);
 
-        if (!d || !D || !Number.isFinite(er) || er < 1) {
+        constructionText.textContent = constructionParts.length
+          ? constructionParts.join(" · ")
+          : "No construction selected.";
+        setPill(constructionPill, constructionParts.length >= 3 ? "Detailed" : constructionParts.length ? "Partial" : "Unknown", constructionParts.length >= 3 ? "" : "watch");
+
+        if (d && D && Number.isFinite(er) && er >= 1) {
+          if (D <= d) {
+            impedance.textContent = "Invalid";
+            summary.textContent = "D must be larger than d. Use the dielectric OD, not the jacket OD.";
+            nearestText.textContent = "The dimensions do not describe coax geometry.";
+            setPill(nearestPill, "Check", "risk");
+          } else {
+            const ratio = D / d;
+            z0 = (60 / Math.sqrt(er)) * Math.log(ratio);
+            nearest = COMMON.reduce((best, value) => Math.abs(value - z0) < Math.abs(best - z0) ? value : best);
+            impedanceDifference = Math.abs(z0 - nearest) / nearest * 100;
+            const state = impedanceDifference <= 5 ? "" : impedanceDifference <= 12 ? "watch" : "risk";
+            const verdict = impedanceDifference <= 5 ? "Strong" : impedanceDifference <= 12 ? "Closest" : "Unclear";
+
+            impedance.textContent = z0.toFixed(1) + " Ω";
+            summary.textContent = "Calculated from D ÷ d = " + ratio.toFixed(3) + " and εr = " + er.toFixed(2) + ".";
+            nearestText.textContent = nearest + " Ω is " + impedanceDifference.toFixed(1) + "% from the estimate.";
+            setPill(nearestPill, verdict + " " + nearest + " Ω", state);
+          }
+        } else {
           impedance.textContent = "— Ω";
-          summary.textContent = "Enter d, D and the dielectric type.";
+          summary.textContent = "Enter d, D and a dielectric to calculate impedance. Type matching can still use jacket and construction.";
           nearestText.textContent = "50 Ω, 75 Ω or 93 Ω";
-          ratioText.textContent = "Uses the two mechanical diameters.";
           setPill(nearestPill, "Waiting", "watch");
-          setPill(ratioPill, "—", "watch");
-          copiedResult = "";
-          return;
         }
 
-        if (D <= d) {
-          impedance.textContent = "Invalid";
-          summary.textContent = "D must be larger than d. Use the dielectric OD, not the jacket OD.";
-          nearestText.textContent = "The measurements do not describe coax geometry.";
-          ratioText.textContent = "D ÷ d must be greater than 1.";
-          setPill(nearestPill, "Check", "risk");
-          setPill(ratioPill, (D / d).toFixed(2), "risk");
-          copiedResult = "";
-          return;
-        }
+        const measured = {
+          z0,
+          jacket: jacketOd,
+          material: material.value,
+          centreBuild: centreBuild.value,
+          centreMaterial: centreMaterial.value,
+          screen: screen.value
+        };
+        const matches = renderCandidates(measured);
 
-        const ratio = D / d;
-        const z0 = (60 / Math.sqrt(er)) * Math.log(ratio);
-        const nearest = COMMON.reduce((best, value) =>
-          Math.abs(value - z0) < Math.abs(best - z0) ? value : best
-        );
-        const difference = Math.abs(z0 - nearest) / nearest * 100;
-        const state = difference <= 5 ? "" : difference <= 12 ? "watch" : "risk";
-        const verdict = difference <= 5 ? "Strong" : difference <= 12 ? "Closest" : "Unclear";
-
-        impedance.textContent = z0.toFixed(1) + " Ω";
-        summary.textContent = "Calculated from D ÷ d = " + ratio.toFixed(3) + " and εr = " + er.toFixed(2) + ".";
-        nearestText.textContent = nearest + " Ω is " + difference.toFixed(1) + "% from the estimate.";
-        ratioText.textContent = "Measured D ÷ d = " + ratio.toFixed(3) + ".";
-        setPill(nearestPill, verdict + " " + nearest + " Ω", state);
-        setPill(ratioPill, ratio.toFixed(2));
-
-        const approximate = material.value === "1.50" || material.value === "1.05";
+        const approximate = material.value === "foam-pe" || material.value === "air" || material.value === "unknown";
         warningText.innerHTML = approximate
-          ? "<strong>Lower confidence.</strong> Foam and air-spaced dielectric constants vary. Confirm before permanent RF use."
-          : "<strong>Mechanical estimate.</strong> This does not prove attenuation, screening, power handling or frequency suitability.";
+          ? "<strong>Heuristic result.</strong> Foam density and unknown dielectric properties reduce confidence. A likely family is not a confirmed designation."
+          : "<strong>Heuristic result.</strong> Dimensions and construction can narrow the family but do not confirm attenuation, power handling or frequency rating.";
 
         copiedResult = [
-          "Coax mechanical estimate",
-          "Centre conductor d: " + d.toFixed(3) + " mm",
-          "Dielectric OD D: " + D.toFixed(3) + " mm",
-          "Relative permittivity: " + er.toFixed(2),
-          "D/d ratio: " + ratio.toFixed(3),
-          "Estimated impedance: " + z0.toFixed(1) + " ohms",
-          "Nearest common value: " + nearest + " ohms (" + difference.toFixed(1) + "% difference)",
-          jacketOd ? "Outer jacket OD: " + jacketOd.toFixed(2) + " mm" : ""
+          "Coax mechanical identifier",
+          d ? "Centre conductor d: " + d.toFixed(3) + " mm" : "",
+          D ? "Dielectric OD D: " + D.toFixed(3) + " mm" : "",
+          jacketOd ? "Outer jacket OD: " + jacketOd.toFixed(2) + " mm" : "",
+          material.value !== "unknown" ? "Dielectric: " + optionText(material) : "",
+          centreBuild.value !== "unknown" ? "Centre: " + optionText(centreBuild) : "",
+          centreMaterial.value !== "unknown" ? "Centre material: " + optionText(centreMaterial) : "",
+          screen.value !== "unknown" ? "Screen: " + optionText(screen) : "",
+          z0 !== null ? "Estimated impedance: " + z0.toFixed(1) + " ohms" : "",
+          nearest !== null ? "Nearest common impedance: " + nearest + " ohms" : "",
+          matches.length ? "Likely families: " + matches.map((match) => match.name + " (" + Math.round(match.score) + "%)").join("; ") : "Likely family: Not recognised"
         ].filter(Boolean).join("\n");
+
+        save();
       };
 
       const restore = () => {
@@ -538,13 +755,17 @@
           if (!saved) return;
           centre.value = saved.centre || "";
           dielectric.value = saved.dielectric || "";
-          material.value = saved.material || "2.25";
-          customEr.value = saved.customEr || "";
           jacket.value = saved.jacket || "";
+          material.value = saved.material || "unknown";
+          customEr.value = saved.customEr || "";
+          centreBuild.value = saved.centreBuild || "unknown";
+          centreMaterial.value = saved.centreMaterial || "unknown";
+          screen.value = saved.screen || "unknown";
         } catch (_) {}
       };
 
-      [centre, dielectric, customEr, jacket].forEach((input) => input.addEventListener("input", calculate));
+      [centre, dielectric, jacket, customEr].forEach((input) => input.addEventListener("input", calculate));
+      [centreBuild, centreMaterial, screen].forEach((select) => select.addEventListener("change", calculate));
 
       material.addEventListener("change", () => {
         customField.hidden = material.value !== "custom";
@@ -557,9 +778,12 @@
       document.getElementById("clear").addEventListener("click", () => {
         centre.value = "";
         dielectric.value = "";
-        material.value = "2.25";
-        customEr.value = "";
         jacket.value = "";
+        material.value = "unknown";
+        customEr.value = "";
+        centreBuild.value = "unknown";
+        centreMaterial.value = "unknown";
+        screen.value = "unknown";
         customField.hidden = true;
         try { localStorage.removeItem(KEY); } catch (_) {}
         calculate();
@@ -567,7 +791,7 @@
 
       document.getElementById("copy").addEventListener("click", async () => {
         if (!copiedResult) {
-          summary.textContent = "Enter valid measurements before copying.";
+          summary.textContent = "Enter measurements or construction before copying.";
           return;
         }
         try {
