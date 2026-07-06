@@ -17,16 +17,15 @@
     --id-gold: #d78c00;
     --id-red: #b5262b;
     --id-purple: #504097;
+    --id-green: #17623f;
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; }
-  body {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
-
+  body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
   button, input, select, a { font: inherit; }
   button, a { -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }
 
   .id-content {
     position: absolute;
@@ -53,8 +52,8 @@
   .id-content::before {
     content: "";
     position: absolute;
-    z-index: 0;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     opacity: .35;
     background-image:
@@ -68,24 +67,6 @@
       radial-gradient(ellipse 68% 112px at 37% 42px, #000 0 46%, transparent 78%),
       radial-gradient(ellipse 48% 154px at 88% 460px, #000 0 33%, transparent 76%),
       radial-gradient(ellipse 58% 176px at 14% 1080px, #000 0 29%, transparent 72%);
-  }
-
-  .id-content::after {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    pointer-events: none;
-    opacity: .27;
-    background:
-      linear-gradient(180deg, rgba(100,196,210,.18), transparent 88px) top/100% 118px no-repeat,
-      linear-gradient(0deg, rgba(223,188,83,.16), transparent 88px) bottom/100% 118px no-repeat,
-      repeating-linear-gradient(0deg, rgba(82,171,188,.16) 0 1px, transparent 1px 16px) top/100% 118px no-repeat,
-      repeating-linear-gradient(90deg, rgba(82,171,188,.16) 0 1px, transparent 1px 16px) top/100% 118px no-repeat,
-      repeating-linear-gradient(0deg, rgba(223,188,83,.14) 0 1px, transparent 1px 16px) bottom/100% 118px no-repeat,
-      repeating-linear-gradient(90deg, rgba(223,188,83,.14) 0 1px, transparent 1px 16px) bottom/100% 118px no-repeat;
-    -webkit-mask-image: linear-gradient(180deg,#000 0,#000 88px,transparent 132px,transparent calc(100% - 132px),#000 calc(100% - 88px),#000 100%);
-    mask-image: linear-gradient(180deg,#000 0,#000 88px,transparent 132px,transparent calc(100% - 132px),#000 calc(100% - 88px),#000 100%);
   }
 
   .id-page {
@@ -135,14 +116,12 @@
   }
 
   .id-hero {
-    position: relative;
     min-height: 58px;
     padding: 2px 9px;
     display: grid;
     grid-template-columns: minmax(0,1fr) 54px;
     align-items: center;
     gap: 8px;
-    overflow: hidden;
   }
 
   .hero-copy { min-width: 0; }
@@ -164,11 +143,7 @@
     font-weight: 780;
   }
 
-  .hero-meta strong {
-    color: var(--id-gold);
-    font-size: 9px;
-    font-weight: 920;
-  }
+  .hero-meta strong { color: var(--id-gold); font-size: 9px; font-weight: 920; }
 
   .scan-button {
     min-width: 0;
@@ -178,7 +153,6 @@
     grid-template-rows: 24px auto;
     place-items: center;
     gap: 2px;
-    overflow: hidden;
     border: 1px solid rgba(13,133,135,.22);
     border-radius: 12px;
     color: #0b6668;
@@ -191,35 +165,17 @@
   .scan-button .svg-host { width: 24px; height: 24px; }
 
   .section-bar {
-    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
   }
 
-  .section-bar h2 {
-    margin: 0;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: -.02em;
-  }
-
-  .section-bar span {
-    color: var(--id-muted);
-    font-size: 8px;
-    font-weight: 720;
-  }
+  .section-bar h2 { margin: 0; font-size: 12px; font-weight: 900; letter-spacing: -.02em; }
+  .section-bar span { color: var(--id-muted); font-size: 8px; font-weight: 720; }
 
   .recent-section { display: grid; gap: 3px; }
-
-  .recent-grid {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: repeat(3,minmax(0,1fr));
-    gap: 6px;
-  }
-
+  .recent-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
   .recent-card {
     min-width: 0;
     min-height: 43px;
@@ -243,33 +199,12 @@
   }
 
   .recent-copy { min-width: 0; }
-  .recent-copy strong {
-    display: block;
-    overflow: hidden;
-    font-size: 8px;
-    font-weight: 880;
-    line-height: 1.08;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .recent-copy small {
-    display: block;
-    margin-top: 2px;
-    overflow: hidden;
-    color: var(--id-muted);
-    font-size: 6.5px;
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .recent-copy strong,
+  .recent-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .recent-copy strong { font-size: 8px; font-weight: 880; line-height: 1.08; }
+  .recent-copy small { margin-top: 2px; color: var(--id-muted); font-size: 6.5px; font-weight: 700; }
 
-  .category-strip {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: repeat(6,minmax(0,1fr));
-    gap: 5px;
-  }
-
+  .category-strip { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 5px; }
   .category-button {
     min-width: 0;
     min-height: 50px;
@@ -278,7 +213,6 @@
     grid-template-rows: 26px auto;
     place-items: center;
     gap: 2px;
-    overflow: hidden;
     border: 1px solid var(--id-line);
     border-radius: 11px;
     color: var(--id-ink);
@@ -309,17 +243,11 @@
     font-size: 12px;
     font-weight: 920;
   }
+
   .category-mark.svg-host { background: transparent; border-radius: 0; }
 
-  .workspace {
-    min-width: 0;
-    padding: 7px;
-    display: grid;
-    gap: 7px;
-  }
-
+  .workspace { padding: 7px; display: grid; gap: 7px; }
   .workspace-head {
-    min-width: 0;
     display: grid;
     grid-template-columns: minmax(0,1fr) auto;
     align-items: center;
@@ -327,29 +255,12 @@
   }
 
   .workspace-title { min-width: 0; }
-  .workspace-title strong {
-    display: block;
-    overflow: hidden;
-    font-size: 12px;
-    font-weight: 920;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .workspace-title small {
-    display: block;
-    margin-top: 2px;
-    color: var(--id-muted);
-    font-size: 7px;
-    font-weight: 700;
-  }
+  .workspace-title strong,
+  .workspace-title small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .workspace-title strong { font-size: 12px; font-weight: 920; }
+  .workspace-title small { margin-top: 2px; color: var(--id-muted); font-size: 7px; font-weight: 700; }
 
-  .mode-tabs {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    gap: 3px;
-  }
-
+  .mode-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: max-content; gap: 3px; }
   .mode-tab {
     min-height: 24px;
     padding: 0 7px;
@@ -362,21 +273,9 @@
     cursor: pointer;
   }
 
-  .mode-tab[aria-selected="true"] {
-    border-color: rgba(24,87,184,.35);
-    color: #fff;
-    background: #1857b8;
-  }
-
+  .mode-tab[aria-selected="true"] { border-color: rgba(24,87,184,.35); color: #fff; background: #1857b8; }
   .tool-panel { min-width: 0; display: grid; gap: 7px; }
-  .tool-panel[hidden] { display: none !important; }
-
-  .identifier-stage {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: minmax(0,1.06fr) minmax(0,.94fr);
-    gap: 7px;
-  }
+  .identifier-stage { display: grid; grid-template-columns: minmax(0,1.06fr) minmax(0,.94fr); gap: 7px; }
 
   .visual-stage {
     min-width: 0;
@@ -394,315 +293,215 @@
       repeating-linear-gradient(90deg,rgba(61,99,137,.10) 0 1px,transparent 1px 15px);
   }
 
-  .component-art {
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
-  }
+  .component-art { min-width: 0; min-height: 0; overflow: hidden; }
+  .band-preview { display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .band-preview span { width: 14px; height: 27px; border-radius: 4px; background: var(--band); box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
 
-  .band-preview {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
+  .control-stack,
+  .form-grid,
+  .candidate-list,
+  .other-tools { display: grid; gap: 6px; }
 
-  .band-preview span {
-    width: 14px;
-    height: 27px;
-    border-radius: 4px;
-    border: 1px solid rgba(0,0,0,.15);
-    background: var(--band,#72503a);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.35);
-  }
-
-  .control-stack {
-    min-width: 0;
-    display: grid;
-    align-content: start;
-    gap: 5px;
-  }
-
-  .control-row {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: 46px minmax(0,1fr);
-    align-items: center;
-    gap: 4px;
-  }
-
-  .control-row label {
-    color: var(--id-muted);
-    font-size: 7px;
-    font-weight: 850;
-  }
-
+  .control-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.3fr); align-items: center; gap: 6px; }
+  .control-row label,
+  .field label { color: #536177; font-size: 7.5px; font-weight: 820; }
+  .control-row input,
   .control-row select,
-  .control-row input {
+  .field input,
+  .field select {
     width: 100%;
     min-width: 0;
-    height: 27px;
-    padding: 0 6px;
+    min-height: 31px;
+    padding: 5px 7px;
     border: 1px solid rgba(56,75,101,.18);
-    border-radius: 7px;
+    border-radius: 8px;
     color: var(--id-ink);
     background: #fff;
-    font-size: 8px;
-    font-weight: 800;
+    font-size: 9px;
+    font-weight: 760;
+    outline: none;
   }
+
+  .field { display: grid; gap: 3px; }
+  .form-grid.two { grid-template-columns: repeat(2,minmax(0,1fr)); }
 
   .result-card {
     min-width: 0;
-    padding: 7px;
-    overflow: hidden;
-    border: 1px solid rgba(24,87,184,.16);
-    border-radius: 11px;
-    background: linear-gradient(135deg,#fff,#eef5ff);
-  }
-
-  .result-card small {
-    display: block;
-    color: var(--id-muted);
-    font-size: 7px;
-    font-weight: 820;
-    text-transform: uppercase;
-  }
-
-  .result-card output {
-    display: block;
-    margin-top: 2px;
-    overflow: hidden;
-    color: #1857b8;
-    font-size: 20px;
-    font-weight: 930;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .result-card p {
-    margin: 4px 0 0;
-    color: #46556a;
-    font-size: 7px;
-    font-weight: 700;
-    line-height: 1.25;
-  }
-
-  .spec-grid {
-    min-width: 0;
+    padding: 8px;
     display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 5px;
+    gap: 3px;
+    border: 1px solid rgba(24,87,184,.18);
+    border-radius: 11px;
+    background: linear-gradient(180deg,rgba(245,249,255,.96),rgba(238,245,254,.88));
   }
 
+  .result-card small { color: var(--id-muted); font-size: 7px; font-weight: 800; text-transform: uppercase; }
+  .result-card output { color: #154b9b; font-size: 16px; font-weight: 930; line-height: 1.05; }
+  .result-card p { margin: 0; color: var(--id-muted); font-size: 7.5px; font-weight: 690; line-height: 1.35; }
+
+  .spec-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px; }
   .spec {
     min-width: 0;
     padding: 6px;
-    overflow: hidden;
-    border: 1px solid rgba(56,75,101,.12);
+    border: 1px solid rgba(56,75,101,.13);
     border-radius: 9px;
-    background: rgba(255,255,255,.74);
+    background: rgba(255,255,255,.84);
   }
+  .spec small,
+  .spec strong { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .spec small { color: var(--id-muted); font-size: 6.5px; font-weight: 760; }
+  .spec strong { margin-top: 2px; font-size: 8.5px; font-weight: 900; line-height: 1.15; }
 
-  .spec small {
-    display: block;
-    overflow: hidden;
-    color: var(--id-muted);
-    font-size: 6.5px;
-    font-weight: 800;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .spec strong {
-    display: block;
-    margin-top: 2px;
-    overflow: hidden;
-    color: var(--id-ink);
-    font-size: 9px;
-    font-weight: 900;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .coax-select-grid,
-  .connector-grid {
+  .candidate {
     min-width: 0;
+    padding: 7px 8px;
     display: grid;
-    grid-template-columns: repeat(3,minmax(0,1fr));
-    gap: 5px;
+    grid-template-columns: minmax(0,1fr) auto;
+    gap: 8px;
+    align-items: center;
+    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 10px;
+    background: rgba(255,255,255,.8);
+  }
+  .candidate strong,
+  .candidate small { display: block; }
+  .candidate strong { font-size: 9px; font-weight: 900; }
+  .candidate small { margin-top: 2px; color: var(--id-muted); font-size: 7px; line-height: 1.25; }
+  .score-pill {
+    min-width: 45px;
+    padding: 5px 6px;
+    border-radius: 999px;
+    color: var(--id-green);
+    background: rgba(23,98,63,.11);
+    font-size: 7px;
+    font-weight: 900;
+    text-align: center;
   }
 
-  .choice-card {
+  .compact-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+  .action-link,
+  .action-button {
+    min-height: 29px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(24,87,184,.18);
+    border-radius: 8px;
+    color: #154b9b;
+    background: rgba(244,248,255,.92);
+    font-size: 7.5px;
+    font-weight: 870;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .action-button.primary { color: #fff; background: #1857b8; }
+
+
+
+  .coax-groups { display: grid; gap: 6px; }
+  .coax-group {
+    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 10px;
+    background: rgba(255,255,255,.72);
+    overflow: hidden;
+  }
+  .coax-group summary {
+    min-height: 31px;
+    padding: 0 8px;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto;
+    align-items: center;
+    gap: 7px;
+    color: #40516b;
+    font-size: 8px;
+    font-weight: 900;
+    list-style: none;
+    cursor: pointer;
+  }
+  .coax-group summary::-webkit-details-marker { display: none; }
+  .coax-group summary::after { content: "+"; color: var(--id-blue); font-size: 13px; }
+  .coax-group[open] summary::after { content: "−"; }
+  .coax-group-body { padding: 0 7px 7px; display: grid; gap: 6px; }
+  .coax-note {
+    margin: 0;
+    color: var(--id-muted);
+    font-size: 6.8px;
+    font-weight: 680;
+    line-height: 1.35;
+  }
+  .comparison-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px; }
+  .comparison-item {
     min-width: 0;
-    min-height: 43px;
-    padding: 5px;
+    padding: 6px;
+    border: 1px solid rgba(56,75,101,.13);
+    border-radius: 9px;
+    background: rgba(255,255,255,.82);
+  }
+  .comparison-item small,
+  .comparison-item strong,
+  .comparison-item span { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .comparison-item small { color: var(--id-muted); font-size: 6.3px; font-weight: 760; text-transform: uppercase; }
+  .comparison-item strong { margin-top: 2px; font-size: 8px; font-weight: 900; }
+  .comparison-item span { margin-top: 2px; color: var(--id-muted); font-size: 6.6px; line-height: 1.25; }
+  .comparison-item.is-match { border-color: rgba(23,98,63,.22); background: rgba(23,98,63,.055); }
+  .comparison-item.is-watch { border-color: rgba(134,96,24,.22); background: rgba(134,96,24,.06); }
+  .comparison-item.is-conflict { border-color: rgba(141,47,47,.22); background: rgba(141,47,47,.055); }
+  .geometry-card { border-color: rgba(13,133,135,.20); background: linear-gradient(180deg,rgba(244,252,251,.95),rgba(237,248,247,.88)); }
+  .geometry-card output { color: #0b6668; }
+  .candidate { cursor: pointer; }
+  .candidate:focus-visible { outline: 2px solid rgba(24,87,184,.38); outline-offset: 2px; }
+  .candidate-tags { margin-top: 3px; display: flex; flex-wrap: wrap; gap: 3px; }
+  .candidate-tag { padding: 2px 4px; border-radius: 999px; color: #516077; background: rgba(81,96,119,.08); font-size: 5.8px; font-weight: 820; }
+
+  .smd-stage { display: grid; grid-template-columns: minmax(90px,.65fr) minmax(0,1.35fr); gap: 7px; }
+  .smd-chip {
+    min-height: 112px;
     display: grid;
     place-items: center;
-    overflow: hidden;
-    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 12px;
+    color: #f2f2e8;
+    background: linear-gradient(145deg,#24252a,#111216);
+    font-size: 27px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.04), inset 0 0 22px rgba(0,0,0,.55);
+  }
+
+  .connector-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
+  .choice-card {
+    min-height: 34px;
+    border: 1px solid rgba(56,75,101,.16);
     border-radius: 9px;
     color: var(--id-ink);
-    background: rgba(255,255,255,.8);
+    background: #fff;
     font-size: 8px;
     font-weight: 850;
     cursor: pointer;
   }
+  .choice-card[aria-pressed="true"] { color: #fff; border-color: #1857b8; background: #1857b8; }
 
-  .choice-card[aria-pressed="true"] {
-    border-color: rgba(13,133,135,.45);
-    color: #075d60;
-    background: #eaf8f7;
-    box-shadow: inset 0 -2px 0 rgba(13,133,135,.5);
-  }
-
-  .smd-stage {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: minmax(0,.72fr) minmax(0,1.28fr);
-    gap: 7px;
-  }
-
-  .smd-chip {
-    min-height: 106px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px;
-    color: #f7f0d9;
-    background:
-      linear-gradient(90deg,#c9b06c 0 7%,#222 7% 93%,#c9b06c 93% 100%);
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 5px 12px rgba(16,32,51,.16);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 24px;
-    font-weight: 850;
-    letter-spacing: .08em;
-  }
-
-  .other-tools {
-    min-width: 0;
-    display: grid;
-    grid-template-columns: repeat(3,minmax(0,1fr));
-    gap: 6px;
-  }
-
+  .other-tools { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .other-tool {
     min-width: 0;
-    min-height: 58px;
+    min-height: 56px;
     padding: 6px;
     display: grid;
-    grid-template-columns: 27px minmax(0,1fr);
+    grid-template-columns: 29px minmax(0,1fr);
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     color: var(--id-ink);
     text-decoration: none;
   }
-
-  .other-icon {
-    width: 27px;
-    height: 27px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    color: #fff;
-    background: var(--tool,#1857b8);
-    font-size: 9px;
-    font-weight: 920;
-  }
-
+  .other-icon { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 9px; color: #fff; background: var(--tool); font-size: 8px; font-weight: 900; }
   .other-copy { min-width: 0; }
-  .other-copy strong {
-    display: block;
-    overflow: hidden;
-    font-size: 7.5px;
-    font-weight: 880;
-    line-height: 1.06;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .other-copy small {
-    display: -webkit-box;
-    margin-top: 2px;
-    overflow: hidden;
-    color: var(--id-muted);
-    font-size: 6.3px;
-    font-weight: 690;
-    line-height: 1.1;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
+  .other-copy strong,
+  .other-copy small { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .other-copy strong { font-size: 7.5px; font-weight: 900; white-space: nowrap; }
+  .other-copy small { margin-top: 2px; color: var(--id-muted); font-size: 6.5px; line-height: 1.2; }
 
-  .photo-sheet {
-    position: fixed;
-    z-index: 100;
-    inset: 0;
-    padding: max(18px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));
-    display: grid;
-    place-items: center;
-    background: rgba(7,17,32,.68);
-    backdrop-filter: blur(5px);
-  }
-
-  .photo-sheet[hidden] { display: none; }
-
-  .photo-card {
-    width: min(100%,390px);
-    max-height: 88vh;
-    padding: 11px;
-    display: grid;
-    gap: 8px;
-    overflow: auto;
-    border: 1px solid rgba(222,180,74,.55);
-    border-radius: 17px;
-    background: #f7fafc;
-    box-shadow: 0 22px 50px rgba(0,0,0,.35);
-  }
-
-  .photo-card header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .photo-card h2 { margin: 0; font-size: 15px; }
-  .photo-close {
-    width: 31px;
-    height: 31px;
-    border: 0;
-    border-radius: 50%;
-    color: #fff;
-    background: #536078;
-    font-size: 17px;
-    font-weight: 850;
-  }
-
-  .photo-card p {
-    margin: 0;
-    color: var(--id-muted);
-    font-size: 9px;
-    line-height: 1.35;
-  }
-
-  .photo-input {
-    min-height: 42px;
-    padding: 7px;
-    border: 1px dashed rgba(13,133,135,.5);
-    border-radius: 10px;
-    background: #effafa;
-    font-size: 9px;
-    font-weight: 760;
-  }
-
-  .photo-preview {
-    width: 100%;
-    max-height: 280px;
-    object-fit: contain;
-    border-radius: 11px;
-    background: #e8eef3;
-  }
-
-  .photo-preview[hidden] { display: none; }
+  .photo-panel { padding: 8px; display: grid; gap: 7px; }
+  .photo-preview { width: 100%; max-height: 260px; object-fit: contain; border-radius: 11px; background: #e8eef3; }
 
   @media (max-width: 365px) {
     .id-page { padding: 7px; gap: 6px; }
@@ -714,11 +513,12 @@
     .identifier-stage, .smd-stage { grid-template-columns: 1fr; }
     .visual-stage { min-height: 132px; }
     .other-tools { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .form-grid.two, .comparison-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-<main class="phone" data-current-page="tools" data-page="tools" data-version="1.0.0-identifiers-decoder">
+<main class="phone" data-current-page="tools" data-page="tools" data-version="1.2.0-identifiers-complete-coax">
 <section aria-label="Identifiers and Decoders" class="id-content">
 <article class="id-page">
 
@@ -736,9 +536,9 @@
 <section class="recent-section" aria-labelledby="recentTitle">
   <div class="section-bar"><h2 id="recentTitle">Recent</h2><span>Tap to reopen</span></div>
   <div class="recent-grid">
-    <a class="recent-card surface" href="?tool=coax&amp;item=rg58">
+    <a class="recent-card surface" href="?tool=coax&amp;mode=identify">
       <span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></span>
-      <span class="recent-copy"><strong>RG58 coax</strong><small>50 Ω · flexible</small></span>
+      <span class="recent-copy"><strong>Coax identifier</strong><small>Measurements · ranked match</small></span>
     </a>
     <a class="recent-card surface" href="?tool=resistor">
       <span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span></span>
@@ -783,6 +583,10 @@
       <button class="mode-tab" data-bands="5" aria-selected="false" type="button">5 band</button>
       <button class="mode-tab" data-bands="6" aria-selected="false" type="button">6 band</button>
     </div>
+    <div class="mode-tabs" id="coaxModes" hidden>
+      <button class="mode-tab" data-coax-mode="identify" aria-selected="true" type="button">Identify</button>
+      <button class="mode-tab" data-coax-mode="browse" aria-selected="false" type="button">Browse</button>
+    </div>
   </header>
 
   <div class="tool-panel" data-panel="resistor">
@@ -808,32 +612,101 @@
   </div>
 
   <div class="tool-panel" data-panel="coax" hidden>
-    <div class="identifier-stage">
-      <div class="visual-stage">
-        <div class="component-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></div>
-        <div class="band-preview" aria-hidden="true"><span style="--band:#c6a25a"></span><span style="--band:#f1f1e8"></span><span style="--band:#b9c2c9"></span><span style="--band:#303a43"></span></div>
-      </div>
+    <div id="coaxIdentifyPanel" class="identifier-stage">
       <div class="control-stack">
-        <div class="control-row"><label for="coaxFamily">Cable</label>
-          <select id="coaxFamily">
-            <option value="rg58">RG58</option>
-            <option value="rg59">RG59</option>
-            <option value="rg6">RG6</option>
-            <option value="lmr400">LMR-400</option>
-            <option value="wf100">WF100 / CT100</option>
-            <option value="rg213">RG213</option>
-          </select>
+        <div class="visual-stage">
+          <div class="component-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></div>
+          <div class="compact-actions">
+            <a class="action-link" href="./coax-calculator.html">Mechanical detail page</a>
+          </div>
         </div>
-        <div class="spec-grid">
-          <div class="spec"><small>Impedance</small><strong id="coaxImpedance">50 Ω</strong></div>
-          <div class="spec"><small>Velocity factor</small><strong id="coaxVelocity">0.66</strong></div>
-          <div class="spec"><small>Outer diameter</small><strong id="coaxDiameter">4.95 mm</strong></div>
-          <div class="spec"><small>Typical use</small><strong id="coaxUse">Short RF leads</strong></div>
+        <div class="result-card geometry-card">
+          <small>Geometry estimate</small>
+          <output id="coaxCalculatedImpedance">—</output>
+          <p id="coaxGeometryDetail">Enter centre-conductor and dielectric diameters. The estimate uses the selected effective dielectric constant.</p>
         </div>
-        <div class="result-card">
-          <small>Identification notes</small>
-          <output id="coaxName">RG58</output>
-          <p id="coaxNotes">Thin flexible 50 Ω coax. Common on short patch leads and mobile installations.</p>
+      </div>
+
+      <div class="control-stack">
+        <div class="coax-groups">
+          <details class="coax-group" open>
+            <summary>Measurements and basic type</summary>
+            <div class="coax-group-body">
+              <div class="form-grid two">
+                <div class="field"><label for="coaxStructure">Cable structure</label><select id="coaxStructure"><option value="unknown">Unknown</option><option value="flexible-coax">Flexible coax</option><option value="semi-rigid">Semi-rigid coax</option><option value="corrugated">Corrugated feeder</option><option value="smooth-hardline">Smooth hardline / rigid line</option><option value="triax">Triax</option><option value="twinax">Twinax</option></select></div>
+                <div class="field"><label for="coaxConductorCount">Signal conductors</label><select id="coaxConductorCount"><option value="unknown">Unknown</option><option value="1">One</option><option value="2">Two</option></select></div>
+                <div class="field"><label for="coaxJacket">Jacket / outer OD (mm)</label><input id="coaxJacket" type="number" inputmode="decimal" min="0" step="0.01" placeholder="6.9"></div>
+                <div class="field"><label for="coaxDielectric">Dielectric / inner screen OD (mm)</label><input id="coaxDielectric" type="number" inputmode="decimal" min="0" step="0.01" placeholder="4.6"></div>
+                <div class="field"><label for="coaxCentre">Centre conductor OD (mm)</label><input id="coaxCentre" type="number" inputmode="decimal" min="0" step="0.01" placeholder="1.0"></div>
+                <div class="field"><label for="coaxSecondSpacing">Twinax conductor spacing (mm)</label><input id="coaxSecondSpacing" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Optional"></div>
+                <div class="field"><label for="coaxImpedanceChoice">Expected impedance</label><select id="coaxImpedanceChoice"><option value="unknown">Unknown</option><option value="50">50 Ω</option><option value="75">75 Ω</option><option value="78">78 Ω</option><option value="93">93 Ω</option><option value="100">100 Ω</option></select></div>
+              </div>
+              <p class="coax-note">For ordinary coax, dielectric OD should be the diameter immediately beneath the screen. For corrugated or rigid line, use the inner diameter of the outer conductor where available.</p>
+            </div>
+          </details>
+
+          <details class="coax-group">
+            <summary>Conductor, dielectric and screening</summary>
+            <div class="coax-group-body">
+              <div class="form-grid two">
+                <div class="field"><label for="coaxCentreBuild">Centre build</label><select id="coaxCentreBuild"><option value="unknown">Unknown</option><option value="solid">Solid</option><option value="stranded">Stranded</option><option value="tube">Hollow / tube</option></select></div>
+                <div class="field"><label for="coaxCentreMaterial">Centre material</label><select id="coaxCentreMaterial"><option value="unknown">Unknown</option><option value="copper">Bare copper</option><option value="tinned-copper">Tinned copper</option><option value="ccs">Copper-clad steel</option><option value="silver-copper">Silver-plated copper</option><option value="aluminium">Aluminium / copper-clad aluminium</option></select></div>
+                <div class="field"><label for="coaxDielectricType">Dielectric</label><select id="coaxDielectricType"><option value="unknown">Unknown</option><option value="solid-pe">Solid PE</option><option value="foam-pe">Foam PE</option><option value="ptfe">PTFE / FEP</option><option value="air">Air-spaced</option><option value="custom">Custom effective εr</option></select></div>
+                <div class="field" id="coaxCustomErField" hidden><label for="coaxCustomEr">Effective εr</label><input id="coaxCustomEr" type="number" inputmode="decimal" min="1" step="0.01" placeholder="1.42"></div>
+                <div class="field"><label for="coaxScreen">Screen / outer conductor</label><select id="coaxScreen"><option value="unknown">Unknown</option><option value="braid">Single braid</option><option value="double-braid">Double braid</option><option value="foil-braid">Foil + braid</option><option value="foil-double-braid">Foil + dual braid</option><option value="corrugated">Corrugated metal</option><option value="smooth-tube">Smooth metal tube</option><option value="triax">Two isolated concentric screens</option><option value="twinax-shield">Shield around conductor pair</option></select></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="coax-group">
+            <summary>Markings and physical clues</summary>
+            <div class="coax-group-body">
+              <div class="field"><label for="coaxMarking">Jacket writing / generic marking</label><input id="coaxMarking" type="text" autocomplete="off" placeholder="RG58, 75 OHM, 1/2 IN, TRIAX…"></div>
+              <div class="form-grid two">
+                <div class="field"><label for="coaxJacketColour">Jacket colour</label><select id="coaxJacketColour"><option value="unknown">Unknown</option><option value="black">Black</option><option value="white">White</option><option value="grey">Grey</option><option value="brown">Brown / tan</option><option value="blue">Blue</option><option value="red">Red / orange</option><option value="bare-metal">Bare metal</option></select></div>
+                <div class="field"><label for="coaxFlexibility">Flexibility</label><select id="coaxFlexibility"><option value="unknown">Unknown</option><option value="flexible">Flexible</option><option value="semi-flex">Semi-flexible</option><option value="semi-rigid">Semi-rigid</option><option value="rigid">Rigid</option></select></div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="compact-actions">
+          <button id="identifyCoaxButton" class="action-button primary" type="button">Identify cable</button>
+          <button id="clearCoaxButton" class="action-button" type="button">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <small>Best match</small>
+      <output id="coaxBestMatch">Enter measurements</output>
+      <p id="coaxBestReason">Add any measurements, construction details or generic jacket marking. More independent clues produce a stronger result.</p>
+    </div>
+    <div id="coaxComparison" class="comparison-grid"></div>
+    <div id="coaxCandidateList" class="candidate-list"></div>
+
+    <div id="coaxBrowsePanel" hidden>
+      <div class="identifier-stage">
+        <div class="visual-stage">
+          <div class="component-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></div>
+          <div class="band-preview" aria-hidden="true"><span style="--band:#c6a25a"></span><span style="--band:#f1f1e8"></span><span style="--band:#b9c2c9"></span><span style="--band:#303a43"></span></div>
+        </div>
+        <div class="control-stack">
+          <div class="control-row"><label for="coaxFamily">Cable family</label><select id="coaxFamily"></select></div>
+          <div class="spec-grid">
+            <div class="spec"><small>Impedance</small><strong id="coaxImpedance">50 Ω</strong></div>
+            <div class="spec"><small>Velocity factor</small><strong id="coaxVelocity">0.66</strong></div>
+            <div class="spec"><small>Outer diameter</small><strong id="coaxDiameter">4.95 mm</strong></div>
+            <div class="spec"><small>Structure</small><strong id="coaxStructureSpec">Flexible coax</strong></div>
+            <div class="spec"><small>Centre</small><strong id="coaxCentreSpec">Stranded copper</strong></div>
+            <div class="spec"><small>Screen</small><strong id="coaxScreenSpec">Single braid</strong></div>
+            <div class="spec"><small>Typical use</small><strong id="coaxUse">Short RF leads</strong></div>
+          </div>
+          <div class="result-card">
+            <small>Reference notes</small>
+            <output id="coaxName">RG58</output>
+            <p id="coaxNotes">Thin flexible 50 Ω coax.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -844,15 +717,8 @@
       <div class="smd-chip" id="smdChip">103</div>
       <div class="control-stack">
         <div class="control-row"><label for="smdCode">Code</label><input id="smdCode" value="103" maxlength="6" inputmode="text" autocomplete="off"/></div>
-        <div class="result-card">
-          <small>Decoded value</small>
-          <output id="smdResult">10 kΩ</output>
-          <p id="smdDetail">Three-digit code: 10 × 10³ Ω.</p>
-        </div>
-        <div class="spec-grid">
-          <div class="spec"><small>Format</small><strong id="smdFormat">3 digit</strong></div>
-          <div class="spec"><small>Raw ohms</small><strong id="smdOhms">10,000 Ω</strong></div>
-        </div>
+        <div class="result-card"><small>Decoded value</small><output id="smdResult">10 kΩ</output><p id="smdDetail">Three-digit code: 10 × 10³ Ω.</p></div>
+        <div class="spec-grid"><div class="spec"><small>Format</small><strong id="smdFormat">3 digit</strong></div><div class="spec"><small>Raw ohms</small><strong id="smdOhms">10,000 Ω</strong></div></div>
       </div>
     </div>
   </div>
@@ -872,19 +738,11 @@
       <div class="spec"><small>Typical ceiling</small><strong id="connectorFrequency">4 GHz</strong></div>
       <div class="spec"><small>Common use</small><strong id="connectorUse">Test and broadcast</strong></div>
     </div>
-    <div class="result-card">
-      <small>Selected connector</small>
-      <output id="connectorName">BNC</output>
-      <p id="connectorNotes">Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical.</p>
-    </div>
+    <div class="result-card"><small>Selected connector</small><output id="connectorName">BNC</output><p id="connectorNotes">Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical.</p></div>
   </div>
 
   <div class="tool-panel" data-panel="markings" hidden>
-    <div class="result-card">
-      <small>Marking tools</small>
-      <output>Components</output>
-      <p>Capacitor, inductor, fuse and semiconductor marking references are available below.</p>
-    </div>
+    <div class="result-card"><small>Marking tools</small><output>Components</output><p>Capacitor, inductor, fuse and semiconductor marking references.</p></div>
     <div class="other-tools">
       <a class="other-tool surface" href="./calculator-library.html?search=capacitor"><span class="other-icon" style="--tool:#d78c00">µF</span><span class="other-copy"><strong>Capacitor markings</strong><small>Three-digit and tolerance codes</small></span></a>
       <a class="other-tool surface" href="./calculator-library.html?search=inductor"><span class="other-icon" style="--tool:#1857b8">L</span><span class="other-copy"><strong>Inductor codes</strong><small>Colour and printed markings</small></span></a>
@@ -893,110 +751,67 @@
   </div>
 
   <div class="tool-panel" data-panel="pinouts" hidden>
-    <div class="result-card">
-      <small>Pinout references</small>
-      <output>Ports &amp; cables</output>
-      <p>Open a compact wiring reference for common field connectors and data cables.</p>
-    </div>
+    <div class="result-card"><small>Pinout references</small><output>Ports &amp; cables</output><p>Compact wiring references for common field connectors and data cables.</p></div>
     <div class="other-tools">
       <a class="other-tool surface" href="./calculator-library.html?search=ethernet"><span class="other-icon" style="--tool:#0d8587">RJ</span><span class="other-copy"><strong>Ethernet pinout</strong><small>T568A, T568B and pair colours</small></span></a>
       <a class="other-tool surface" href="./calculator-library.html?search=usb"><span class="other-icon" style="--tool:#504097">USB</span><span class="other-copy"><strong>USB pinouts</strong><small>A, B, Micro and USB-C basics</small></span></a>
-      <a class="other-tool surface" href="./calculator-library.html?search=d-sub"><span class="other-icon" style="--tool:#1857b8">D</span><span class="other-copy"><strong>D-sub pinouts</strong><small>DE-9, DB-25 and common uses</small></span></a>
+      <a class="other-tool surface" href="./calculator-library.html?search=d-sub"><span class="other-icon" style="--tool:#b5262b">D</span><span class="other-copy"><strong>D-sub pinouts</strong><small>Common serial and equipment ports</small></span></a>
     </div>
   </div>
 </section>
 
-<section aria-labelledby="moreToolsTitle">
-  <div class="section-bar"><h2 id="moreToolsTitle">More identifier tools</h2><span>Library shortcuts</span></div>
-  <div class="other-tools">
-    <a class="other-tool surface" href="./calculator-library.html?search=resistor"><span class="other-icon" style="--tool:#d78c00">R↔</span><span class="other-copy"><strong>Reverse resistor code</strong><small>Enter a value and generate bands</small></span></a>
-    <a class="other-tool surface" href="./calculator-library.html?search=package"><span class="other-icon" style="--tool:#504097">IC</span><span class="other-copy"><strong>Package identifier</strong><small>SOT, SOIC, QFN and through-hole</small></span></a>
-    <a class="other-tool surface" href="./calculator-library.html?search=semiconductor"><span class="other-icon" style="--tool:#b5262b">Q</span><span class="other-copy"><strong>Semiconductor marks</strong><small>Device prefixes and top codes</small></span></a>
-    <a class="other-tool surface" href="./calculator-library.html?search=cable-colour"><span class="other-icon" style="--tool:#0d8587">C</span><span class="other-copy"><strong>Cable colour codes</strong><small>RF, mains and multicore references</small></span></a>
-    <a class="other-tool surface" href="./calculator-library.html?search=connector"><span class="other-icon" style="--tool:#1857b8">RF</span><span class="other-copy"><strong>Connector comparison</strong><small>Coupling, impedance and frequency</small></span></a>
-    <a class="other-tool surface" href="./calculator-library.html?search=identifier"><span class="other-icon" style="--tool:#536078">•••</span><span class="other-copy"><strong>All identifiers</strong><small>Open the complete tool library</small></span></a>
-  </div>
+<section id="photoPanel" class="photo-panel surface" hidden>
+  <div class="section-bar"><h2>Photo reference</h2><button id="closePhoto" class="action-button" type="button">Close</button></div>
+  <input id="photoInput" type="file" accept="image/*" capture="environment"/>
+  <img id="photoPreview" class="photo-preview" alt="Selected component reference" hidden/>
 </section>
 
 </article>
 </section>
 </main>
 
-<div class="photo-sheet" id="photoSheet" hidden>
-  <section class="photo-card" role="dialog" aria-modal="true" aria-labelledby="photoTitle">
-    <header><h2 id="photoTitle">Photo reference</h2><button class="photo-close" id="closePhoto" type="button" aria-label="Close">×</button></header>
-    <p>Take or choose a photo, then keep it visible while using the manual identifier. This page does not claim automatic image recognition.</p>
-    <input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"/>
-    <img class="photo-preview" id="photoPreview" alt="Selected component reference" hidden/>
-  </section>
-</div>
-
 <script>
-window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
-window.FieldOpsSearchQueue.push({
-  page: "tools",
-  label: "Identifiers & Decoders",
-  placeholder: "Search identifiers...",
-  emptyText: "No identifiers found.",
-  items: [
-    { id: "identifier-resistor", title: "Resistor colour code", subtitle: "4, 5 and 6 band decoding", href: "./identifiers.html?tool=resistor", keywords: ["resistor","colour","color","bands","ohms"] },
-    { id: "identifier-coax", title: "Coax identifier", subtitle: "RG58, RG59, RG6, LMR-400 and more", href: "./identifiers.html?tool=coax", keywords: ["coax","cable","rg58","rg6","lmr400"] },
-    { id: "identifier-smd", title: "SMD resistor code", subtitle: "Three digit, four digit and R notation", href: "./identifiers.html?tool=smd", keywords: ["smd","103","resistor","code"] },
-    { id: "identifier-connectors", title: "RF connector identifier", subtitle: "BNC, N, TNC, SMA, F and UHF", href: "./identifiers.html?tool=connector", keywords: ["connector","bnc","n type","sma","tnc","f type"] },
-    { id: "identifier-markings", title: "Component markings", subtitle: "Capacitor, inductor, fuse and semiconductor", href: "./identifiers.html?tool=markings", keywords: ["markings","capacitor","inductor","fuse","semiconductor"] },
-    { id: "identifier-pinouts", title: "Ports and pinouts", subtitle: "Ethernet, USB and D-sub", href: "./identifiers.html?tool=pinouts", keywords: ["pinout","ethernet","usb","d-sub","rj45"] }
-  ]
-});
-
 (() => {
   "use strict";
 
-  const loadSvgAssets = () => Promise.all(
-    Array.from(document.querySelectorAll("[data-svg]")).map(async (host) => {
+  const loadSvgs = async () => {
+    const hosts = [...document.querySelectorAll("[data-svg]")];
+    await Promise.all(hosts.map(async (host) => {
       try {
-        const response = await fetch(host.dataset.svg, { credentials: "same-origin" });
-        if (!response.ok) throw new Error(`SVG ${response.status}`);
-        const template = document.createElement("template");
-        template.innerHTML = (await response.text()).trim();
-        const svg = template.content.querySelector("svg");
-        if (!svg) throw new Error("Invalid SVG");
-        svg.querySelectorAll("script, foreignObject").forEach((node) => node.remove());
-        svg.setAttribute("aria-hidden","true");
-        svg.setAttribute("focusable","false");
-        svg.removeAttribute("width");
-        svg.removeAttribute("height");
-        host.replaceChildren(svg);
-      } catch (error) {
+        const response = await fetch(host.dataset.svg);
+        if (!response.ok) throw new Error("SVG unavailable");
+        host.innerHTML = await response.text();
+      } catch {
         host.classList.add("is-missing");
-        console.warn("Identifier asset failed to load", host.dataset.svg, error);
       }
-    })
-  );
-  loadSvgAssets();
+    }));
+  };
+  loadSvgs();
 
-  const toolNames = {
-    resistor: ["Resistor colour code","Select the bands to decode the resistance."],
-    coax: ["Coax identifier","Compare common cable families and construction clues."],
-    smd: ["SMD resistor code","Decode three-digit, four-digit and R-notation markings."],
-    connector: ["RF connector identifier","Compare coupling, impedance and typical frequency range."],
-    markings: ["Component markings","Open capacitor, inductor, fuse and semiconductor references."],
-    pinouts: ["Ports & pinouts","Open compact wiring references for field connectors."]
+  const categoryButtons = [...document.querySelectorAll("[data-tool]")];
+  const panels = [...document.querySelectorAll("[data-panel]")];
+  const workspaceTitle = document.getElementById("workspaceTitle");
+  const workspaceSubtitle = document.getElementById("workspaceSubtitle");
+  const resistorModes = document.getElementById("resistorModes");
+  const coaxModes = document.getElementById("coaxModes");
+  const titles = {
+    resistor: ["Resistor colour code", "Select the bands to decode the resistance."],
+    coax: ["Coax cable identifier", "Identify from measurements or browse known cable families."],
+    smd: ["SMD resistor code", "Decode common three-digit, four-digit and R notation."],
+    connector: ["RF connector reference", "Compare common coupling, impedance and frequency ranges."],
+    markings: ["Component markings", "Open capacitor, inductor and fuse references."],
+    pinouts: ["Pinout references", "Open common port and cable wiring references."]
   };
 
-  const categoryButtons = Array.from(document.querySelectorAll("[data-tool]"));
-  const panels = Array.from(document.querySelectorAll("[data-panel]"));
-  const title = document.getElementById("workspaceTitle");
-  const subtitle = document.getElementById("workspaceSubtitle");
-  const resistorModes = document.getElementById("resistorModes");
-
-  const selectTool = (tool, push = false) => {
-    if (!toolNames[tool]) tool = "resistor";
+  const selectTool = (tool, updateUrl = false) => {
     categoryButtons.forEach((button) => button.setAttribute("aria-selected", String(button.dataset.tool === tool)));
-    panels.forEach((panel) => panel.hidden = panel.dataset.panel !== tool);
-    title.textContent = toolNames[tool][0];
-    subtitle.textContent = toolNames[tool][1];
+    panels.forEach((panel) => { panel.hidden = panel.dataset.panel !== tool; });
+    const title = titles[tool] || titles.resistor;
+    workspaceTitle.textContent = title[0];
+    workspaceSubtitle.textContent = title[1];
     resistorModes.hidden = tool !== "resistor";
-    if (push) {
+    coaxModes.hidden = tool !== "coax";
+    if (updateUrl) {
       const url = new URL(location.href);
       url.searchParams.set("tool", tool);
       history.replaceState(null, "", url);
@@ -1017,28 +832,17 @@ window.FieldOpsSearchQueue.push({
     { name:"Grey", digit:8, multiplier:100000000, hex:"#858b91" },
     { name:"White", digit:9, multiplier:1000000000, hex:"#f4f2e8" }
   ];
-  const multipliers = [
-    ...colours.map((c) => ({ name:c.name, value:c.multiplier, hex:c.hex })),
-    { name:"Gold", value:.1, hex:"#c9a23b" },
-    { name:"Silver", value:.01, hex:"#bcc3c8" }
-  ];
+  const multipliers = [...colours.map((c) => ({ name:c.name, value:c.multiplier, hex:c.hex })), { name:"Gold", value:.1, hex:"#c9a23b" }, { name:"Silver", value:.01, hex:"#bcc3c8" }];
   const tolerances = [
-    { name:"Brown ±1%", value:1, hex:"#744122" },
-    { name:"Red ±2%", value:2, hex:"#c52e2e" },
-    { name:"Green ±0.5%", value:.5, hex:"#27824a" },
-    { name:"Blue ±0.25%", value:.25, hex:"#2259b8" },
-    { name:"Violet ±0.1%", value:.1, hex:"#71429b" },
-    { name:"Grey ±0.05%", value:.05, hex:"#858b91" },
-    { name:"Gold ±5%", value:5, hex:"#c9a23b" },
-    { name:"Silver ±10%", value:10, hex:"#bcc3c8" }
+    { name:"Brown ±1%", value:1, hex:"#744122" }, { name:"Red ±2%", value:2, hex:"#c52e2e" },
+    { name:"Green ±0.5%", value:.5, hex:"#27824a" }, { name:"Blue ±0.25%", value:.25, hex:"#2259b8" },
+    { name:"Violet ±0.1%", value:.1, hex:"#71429b" }, { name:"Grey ±0.05%", value:.05, hex:"#858b91" },
+    { name:"Gold ±5%", value:5, hex:"#c9a23b" }, { name:"Silver ±10%", value:10, hex:"#bcc3c8" }
   ];
   const tempcos = [
-    { name:"Brown 100 ppm/K", value:100, hex:"#744122" },
-    { name:"Red 50 ppm/K", value:50, hex:"#c52e2e" },
-    { name:"Orange 15 ppm/K", value:15, hex:"#e77d21" },
-    { name:"Yellow 25 ppm/K", value:25, hex:"#e7c928" },
-    { name:"Blue 10 ppm/K", value:10, hex:"#2259b8" },
-    { name:"Violet 5 ppm/K", value:5, hex:"#71429b" }
+    { name:"Brown 100 ppm/K", value:100, hex:"#744122" }, { name:"Red 50 ppm/K", value:50, hex:"#c52e2e" },
+    { name:"Orange 15 ppm/K", value:15, hex:"#e77d21" }, { name:"Yellow 25 ppm/K", value:25, hex:"#e7c928" },
+    { name:"Blue 10 ppm/K", value:10, hex:"#2259b8" }, { name:"Violet 5 ppm/K", value:5, hex:"#71429b" }
   ];
 
   const band1 = document.getElementById("band1");
@@ -1063,20 +867,10 @@ window.FieldOpsSearchQueue.push({
       return option;
     }));
   };
-  addOptions(band1, colours);
-  addOptions(band2, colours);
-  addOptions(band3, colours);
-  addOptions(multiplier, multipliers, "value");
-  addOptions(tolerance, tolerances, "value");
-  addOptions(tempco, tempcos, "value");
 
-  band1.value = "4";
-  band2.value = "7";
-  multiplier.value = "100";
-  tolerance.value = "5";
-
-  const colourByDigit = (digit) => colours.find((item) => item.digit === Number(digit));
-  const itemByValue = (list, value) => list.find((item) => Number(item.value) === Number(value));
+  addOptions(band1, colours); addOptions(band2, colours); addOptions(band3, colours);
+  addOptions(multiplier, multipliers, "value"); addOptions(tolerance, tolerances, "value"); addOptions(tempco, tempcos, "value");
+  band1.value = "4"; band2.value = "7"; multiplier.value = "100"; tolerance.value = "5";
 
   const formatResistance = (ohms) => {
     if (!Number.isFinite(ohms)) return "—";
@@ -1086,20 +880,13 @@ window.FieldOpsSearchQueue.push({
     return `${ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
   };
 
+  const byDigit = (digit) => colours.find((item) => item.digit === Number(digit));
+  const byValue = (list, value) => list.find((item) => Number(item.value) === Number(value));
   const updateResistor = () => {
-    const digits = bandCount >= 5
-      ? Number(`${band1.value}${band2.value}${band3.value}`)
-      : Number(`${band1.value}${band2.value}`);
+    const digits = bandCount >= 5 ? Number(`${band1.value}${band2.value}${band3.value}`) : Number(`${band1.value}${band2.value}`);
     const ohms = digits * Number(multiplier.value);
-    const tol = itemByValue(tolerances, tolerance.value);
-    const selected = [
-      colourByDigit(band1.value),
-      colourByDigit(band2.value),
-      ...(bandCount >= 5 ? [colourByDigit(band3.value)] : []),
-      itemByValue(multipliers, multiplier.value),
-      tol,
-      ...(bandCount === 6 ? [itemByValue(tempcos, tempco.value)] : [])
-    ];
+    const tol = byValue(tolerances, tolerance.value);
+    const selected = [byDigit(band1.value), byDigit(band2.value), ...(bandCount >= 5 ? [byDigit(band3.value)] : []), byValue(multipliers, multiplier.value), tol, ...(bandCount === 6 ? [byValue(tempcos, tempco.value)] : [])];
     resistorResult.textContent = `${formatResistance(ohms)} ±${tol.value}%`;
     resistorDetail.textContent = selected.map((item) => item.name.split(" ±")[0].split(" ")[0]).join(" · ");
     bandPreview.replaceChildren(...selected.map((item) => {
@@ -1110,80 +897,349 @@ window.FieldOpsSearchQueue.push({
     }));
   };
 
-  document.querySelectorAll("[data-bands]").forEach((button) => {
-    button.addEventListener("click", () => {
-      bandCount = Number(button.dataset.bands);
-      document.querySelectorAll("[data-bands]").forEach((tab) => tab.setAttribute("aria-selected", String(tab === button)));
-      band3Row.hidden = bandCount < 5;
-      tempcoRow.hidden = bandCount !== 6;
-      updateResistor();
-    });
-  });
+  document.querySelectorAll("[data-bands]").forEach((button) => button.addEventListener("click", () => {
+    bandCount = Number(button.dataset.bands);
+    document.querySelectorAll("[data-bands]").forEach((tab) => tab.setAttribute("aria-selected", String(tab === button)));
+    band3Row.hidden = bandCount < 5;
+    tempcoRow.hidden = bandCount !== 6;
+    updateResistor();
+  }));
   [band1,band2,band3,multiplier,tolerance,tempco].forEach((control) => control.addEventListener("change", updateResistor));
   updateResistor();
 
-  const coaxData = {
-    rg58: { name:"RG58", impedance:"50 Ω", velocity:"0.66", diameter:"4.95 mm", use:"Short RF leads", notes:"Thin flexible 50 Ω coax. Common on short patch leads and mobile installations." },
-    rg59: { name:"RG59", impedance:"75 Ω", velocity:"0.66", diameter:"6.15 mm", use:"Video / legacy RF", notes:"75 Ω cable commonly associated with baseband video and older receive systems." },
-    rg6: { name:"RG6", impedance:"75 Ω", velocity:"0.82", diameter:"6.9 mm", use:"Satellite / TV", notes:"Foam dielectric 75 Ω cable with low loss for television, satellite and receive distribution." },
-    lmr400: { name:"LMR-400", impedance:"50 Ω", velocity:"0.85", diameter:"10.3 mm", use:"Low-loss RF feeder", notes:"Low-loss 50 Ω cable with bonded foil and braid. Often used for VHF, UHF and microwave feeder runs." },
-    wf100: { name:"WF100 / CT100", impedance:"75 Ω", velocity:"0.85", diameter:"6.6 mm", use:"Broadcast receive", notes:"Double-screened 75 Ω cable used in domestic and professional television distribution." },
-    rg213: { name:"RG213", impedance:"50 Ω", velocity:"0.66", diameter:"10.3 mm", use:"HF / VHF feeder", notes:"Heavy flexible 50 Ω coax with solid polyethylene dielectric and robust braid screen." }
+  const coaxData = {"rg178":{"name":"RG178","impedance":50,"velocity":0.7,"jacket":1.83,"dielectric":0.86,"centre":0.31,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["silver-copper"],"dielectricType":"ptfe","screens":["braid"],"colours":["brown","white"],"flexibility":"flexible","markings":["RG178","RG-178"],"use":"Miniature microwave leads","notes":"Very small PTFE coax with silver-plated conductors for short internal and microwave interconnects."},"rg174":{"name":"RG174","impedance":50,"velocity":0.66,"jacket":2.8,"dielectric":1.52,"centre":0.48,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["copper","tinned-copper"],"dielectricType":"solid-pe","screens":["braid"],"colours":["black"],"flexibility":"flexible","markings":["RG174","RG-174"],"use":"Miniature patch leads","notes":"Small flexible 50 Ω coax used for short internal and equipment leads."},"rg316":{"name":"RG316","impedance":50,"velocity":0.695,"jacket":2.49,"dielectric":1.52,"centre":0.51,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["silver-copper"],"dielectricType":"ptfe","screens":["braid"],"colours":["brown","white"],"flexibility":"flexible","markings":["RG316","RG-316"],"use":"High-temperature patch leads","notes":"Small PTFE 50 Ω coax used where temperature and stability matter."},"rg179":{"name":"RG179","impedance":75,"velocity":0.7,"jacket":2.54,"dielectric":1.6,"centre":0.31,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["silver-copper"],"dielectricType":"ptfe","screens":["braid"],"colours":["brown","white"],"flexibility":"flexible","markings":["RG179","RG-179"],"use":"Miniature 75 Ω video/RF","notes":"Small PTFE 75 Ω coax often used for compact video and instrumentation interconnects."},"rg58":{"name":"RG58","impedance":50,"velocity":0.66,"jacket":4.95,"dielectric":2.95,"centre":0.9,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["copper","tinned-copper"],"dielectricType":"solid-pe","screens":["braid"],"colours":["black"],"flexibility":"flexible","markings":["RG58","RG-58"],"use":"Short RF leads","notes":"Thin flexible 50 Ω coax common on patch leads and mobile installations."},"rg223":{"name":"RG223","impedance":50,"velocity":0.66,"jacket":5.35,"dielectric":2.95,"centre":0.94,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["silver-copper"],"dielectricType":"solid-pe","screens":["double-braid"],"colours":["black"],"flexibility":"flexible","markings":["RG223","RG-223"],"use":"Double-screened RF jumpers","notes":"50 Ω cable similar in size to RG58 but with double braid and a silver-plated solid centre conductor."},"rg400":{"name":"RG400","impedance":50,"velocity":0.7,"jacket":4.95,"dielectric":2.95,"centre":0.98,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["silver-copper"],"dielectricType":"ptfe","screens":["double-braid"],"colours":["brown","white"],"flexibility":"flexible","markings":["RG400","RG-400"],"use":"High-temperature RF jumpers","notes":"PTFE 50 Ω cable with silver-plated stranded centre and double braid, commonly used for equipment and transmitter jumpers."},"rg59":{"name":"RG59","impedance":75,"velocity":0.66,"jacket":6.15,"dielectric":3.7,"centre":0.64,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["ccs","copper"],"dielectricType":"solid-pe","screens":["braid","foil-braid"],"colours":["black","white"],"flexibility":"flexible","markings":["RG59","RG-59"],"use":"Video / legacy RF","notes":"75 Ω cable associated with baseband video and older receive systems."},"rg6":{"name":"RG6","impedance":75,"velocity":0.82,"jacket":6.9,"dielectric":4.57,"centre":1.02,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["ccs","copper"],"dielectricType":"foam-pe","screens":["foil-braid","foil-double-braid"],"colours":["black","white"],"flexibility":"flexible","markings":["RG6","RG-6"],"use":"Satellite / TV","notes":"Foam dielectric 75 Ω cable with foil and braid screening for television and satellite distribution."},"wf100":{"name":"WF100 / CT100 class","impedance":75,"velocity":0.85,"jacket":6.6,"dielectric":4.6,"centre":1.0,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["copper"],"dielectricType":"foam-pe","screens":["foil-braid","foil-double-braid"],"colours":["black","white","brown"],"flexibility":"flexible","markings":["WF100","CT100"],"use":"Broadcast receive","notes":"Double-screened 75 Ω television distribution cable with a solid copper centre conductor."},"rg8x":{"name":"RG8X / Mini-8","impedance":50,"velocity":0.78,"jacket":6.15,"dielectric":3.9,"centre":1.02,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["copper","tinned-copper"],"dielectricType":"foam-pe","screens":["braid"],"colours":["black"],"flexibility":"flexible","markings":["RG8X","RG-8X","MINI8","MINI-8"],"use":"Flexible HF/VHF feeder","notes":"Medium-size flexible 50 Ω cable, larger than RG58 but much smaller than RG213."},"lmr240":{"name":"0.240 in low-loss 50 Ω class","impedance":50,"velocity":0.84,"jacket":6.1,"dielectric":3.81,"centre":1.42,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["ccs","copper"],"dielectricType":"foam-pe","screens":["foil-braid"],"colours":["black"],"flexibility":"semi-flex","markings":["LMR240","LMR-240","240 LOW LOSS"],"use":"Low-loss flexible feeder","notes":"Medium-size low-loss 50 Ω construction with bonded foil and braid."},"rg213":{"name":"RG213","impedance":50,"velocity":0.66,"jacket":10.3,"dielectric":7.24,"centre":2.26,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["copper"],"dielectricType":"solid-pe","screens":["braid"],"colours":["black"],"flexibility":"flexible","markings":["RG213","RG-213"],"use":"HF / VHF feeder","notes":"Heavy flexible 50 Ω coax with solid polyethylene dielectric and a robust single braid."},"rg214":{"name":"RG214","impedance":50,"velocity":0.66,"jacket":10.8,"dielectric":7.28,"centre":2.25,"structure":"flexible-coax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["silver-copper"],"dielectricType":"solid-pe","screens":["double-braid"],"colours":["black"],"flexibility":"flexible","markings":["RG214","RG-214"],"use":"Double-screened heavy RF feeder","notes":"Heavy 50 Ω coax similar in size to RG213 but normally using double silver-plated braid."},"lmr400":{"name":"0.400 in low-loss 50 Ω class","impedance":50,"velocity":0.85,"jacket":10.29,"dielectric":7.24,"centre":2.74,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["ccs","copper"],"dielectricType":"foam-pe","screens":["foil-braid"],"colours":["black"],"flexibility":"semi-flex","markings":["LMR400","LMR-400","400 LOW LOSS"],"use":"Low-loss RF feeder","notes":"Low-loss 50 Ω construction with foam dielectric, bonded foil and braid."},"rg11":{"name":"RG11","impedance":75,"velocity":0.84,"jacket":10.3,"dielectric":7.1,"centre":1.63,"structure":"flexible-coax","conductorCount":1,"centreBuild":"solid","centreMaterials":["ccs","copper"],"dielectricType":"foam-pe","screens":["foil-braid","foil-double-braid"],"colours":["black","white"],"flexibility":"semi-flex","markings":["RG11","RG-11"],"use":"Long 75 Ω distribution","notes":"Large low-loss 75 Ω cable used for longer television and broadband distribution runs."},"semi047":{"name":"0.047 in semi-rigid 50 Ω","impedance":50,"velocity":0.7,"jacket":1.19,"dielectric":0.94,"centre":0.29,"structure":"semi-rigid","conductorCount":1,"centreBuild":"solid","centreMaterials":["silver-copper","copper"],"dielectricType":"ptfe","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"semi-rigid","markings":["0.047","047 SEMI RIGID"],"use":"Microwave modules","notes":"Very small PTFE semi-rigid coax with a continuous metal outer conductor."},"semi086":{"name":"0.086 in semi-rigid 50 Ω","impedance":50,"velocity":0.7,"jacket":2.18,"dielectric":1.68,"centre":0.51,"structure":"semi-rigid","conductorCount":1,"centreBuild":"solid","centreMaterials":["silver-copper","copper"],"dielectricType":"ptfe","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"semi-rigid","markings":["0.086","086 SEMI RIGID"],"use":"Microwave assemblies","notes":"Common miniature semi-rigid microwave cable with a smooth copper outer tube."},"semi141":{"name":"0.141 in semi-rigid 50 Ω","impedance":50,"velocity":0.7,"jacket":3.58,"dielectric":2.98,"centre":0.92,"structure":"semi-rigid","conductorCount":1,"centreBuild":"solid","centreMaterials":["silver-copper","copper"],"dielectricType":"ptfe","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"semi-rigid","markings":["0.141","141 SEMI RIGID"],"use":"Microwave assemblies","notes":"Widely used 0.141-inch semi-rigid microwave coax."},"semi250":{"name":"0.250 in semi-rigid 50 Ω","impedance":50,"velocity":0.7,"jacket":6.35,"dielectric":5.3,"centre":1.63,"structure":"semi-rigid","conductorCount":1,"centreBuild":"solid","centreMaterials":["silver-copper","copper"],"dielectricType":"ptfe","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"semi-rigid","markings":["0.250","250 SEMI RIGID"],"use":"High-power microwave assemblies","notes":"Large semi-rigid 50 Ω coax with PTFE dielectric and smooth metal outer conductor."},"corr025":{"name":"1/4 in corrugated 50 Ω feeder","impedance":50,"velocity":0.85,"jacket":7.5,"dielectric":5.0,"centre":1.9,"structure":"corrugated","conductorCount":1,"centreBuild":"solid","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["1/4 IN","1/4\"","0.25 CORRUGATED"],"use":"Compact outdoor feeder","notes":"Small corrugated-outer-conductor feeder used where weather resistance and lower loss are required."},"corr038":{"name":"3/8 in corrugated 50 Ω feeder","impedance":50,"velocity":0.86,"jacket":10.0,"dielectric":6.8,"centre":2.7,"structure":"corrugated","conductorCount":1,"centreBuild":"solid","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["3/8 IN","3/8\"","0.375 CORRUGATED"],"use":"Outdoor RF feeder","notes":"Medium-small corrugated feeder between flexible cable and larger cellular/broadcast feeder sizes."},"corr050":{"name":"1/2 in corrugated 50 Ω feeder","impedance":50,"velocity":0.88,"jacket":14.0,"dielectric":9.8,"centre":3.6,"structure":"corrugated","conductorCount":1,"centreBuild":"solid","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["1/2 IN","1/2\"","0.5 CORRUGATED"],"use":"Base-station and broadcast feeder","notes":"Common outdoor feeder size with corrugated metal outer conductor and foam dielectric."},"corr087":{"name":"7/8 in corrugated 50 Ω feeder","impedance":50,"velocity":0.89,"jacket":28.0,"dielectric":20.0,"centre":8.8,"structure":"corrugated","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["7/8 IN","7/8\"","0.875 CORRUGATED"],"use":"High-power RF feeder","notes":"Large corrugated feeder commonly used between transmitter equipment and antenna systems."},"corr125":{"name":"1-1/4 in corrugated 50 Ω feeder","impedance":50,"velocity":0.89,"jacket":39.0,"dielectric":29.0,"centre":13.0,"structure":"corrugated","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["1-1/4 IN","1 1/4 IN","1.25 CORRUGATED"],"use":"High-power broadcast feeder","notes":"Large corrugated feeder for high-power and low-loss antenna systems."},"corr158":{"name":"1-5/8 in corrugated 50 Ω feeder","impedance":50,"velocity":0.9,"jacket":50.0,"dielectric":37.0,"centre":17.0,"structure":"corrugated","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"foam-pe","screens":["corrugated"],"colours":["black"],"flexibility":"semi-flex","markings":["1-5/8 IN","1 5/8 IN","1.625 CORRUGATED"],"use":"Very high-power broadcast feeder","notes":"Very large corrugated feeder used for high-power transmitter and antenna installations."},"hard050":{"name":"0.500 in 75 Ω smooth hardline","impedance":75,"velocity":0.88,"jacket":13.7,"dielectric":9.5,"centre":2.8,"structure":"smooth-hardline","conductorCount":1,"centreBuild":"solid","centreMaterials":["aluminium","ccs"],"dielectricType":"foam-pe","screens":["smooth-tube"],"colours":["black","bare-metal"],"flexibility":"semi-rigid","markings":["0.500 HARDLINE","1/2 HARDLINE","500 75 OHM"],"use":"CATV distribution","notes":"Smooth aluminium outer-conductor 75 Ω hardline used for broadband distribution networks."},"hard075":{"name":"0.750 in 75 Ω smooth hardline","impedance":75,"velocity":0.89,"jacket":20.0,"dielectric":14.5,"centre":4.2,"structure":"smooth-hardline","conductorCount":1,"centreBuild":"solid","centreMaterials":["aluminium","ccs"],"dielectricType":"foam-pe","screens":["smooth-tube"],"colours":["black","bare-metal"],"flexibility":"semi-rigid","markings":["0.750 HARDLINE","3/4 HARDLINE","750 75 OHM"],"use":"CATV trunk distribution","notes":"Larger smooth-wall 75 Ω hardline used for low-loss broadband trunk and distribution networks."},"rigid087":{"name":"7/8 in rigid 50 Ω air line","impedance":50,"velocity":0.99,"jacket":22.2,"dielectric":17.5,"centre":7.6,"structure":"smooth-hardline","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"air","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"rigid","markings":["7/8 RIGID","7/8 AIR LINE"],"use":"High-power RF plant","notes":"Rigid air-dielectric transmission line using smooth tubular inner and outer conductors."},"rigid158":{"name":"1-5/8 in rigid 50 Ω air line","impedance":50,"velocity":0.99,"jacket":41.3,"dielectric":34.0,"centre":14.7,"structure":"smooth-hardline","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"air","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"rigid","markings":["1-5/8 RIGID","1 5/8 AIR LINE"],"use":"High-power broadcast RF plant","notes":"Large rigid air line used inside high-power transmitter and antenna systems."},"rigid3125":{"name":"3-1/8 in rigid 50 Ω air line","impedance":50,"velocity":0.99,"jacket":79.4,"dielectric":67.0,"centre":29.0,"structure":"smooth-hardline","conductorCount":1,"centreBuild":"tube","centreMaterials":["copper","aluminium"],"dielectricType":"air","screens":["smooth-tube"],"colours":["bare-metal"],"flexibility":"rigid","markings":["3-1/8 RIGID","3 1/8 AIR LINE"],"use":"Very high-power broadcast plant","notes":"Very large rigid air-dielectric line for high-power transmitter outputs and antenna combining systems."},"triax50":{"name":"Miniature 50 Ω triax","impedance":50,"velocity":0.66,"jacket":5.0,"dielectric":2.9,"centre":0.9,"structure":"triax","conductorCount":1,"centreBuild":"stranded","centreMaterials":["copper","silver-copper"],"dielectricType":"solid-pe","screens":["triax"],"colours":["black","grey"],"flexibility":"flexible","markings":["TRIAX","50 OHM TRIAX"],"use":"Guarded instrumentation","notes":"Coaxial signal core with a separately insulated inner screen and an outer screen for guarding or isolation."},"triax75":{"name":"75 Ω video triax","impedance":75,"velocity":0.78,"jacket":10.3,"dielectric":4.6,"centre":1.0,"structure":"triax","conductorCount":1,"centreBuild":"solid","centreMaterials":["copper"],"dielectricType":"foam-pe","screens":["triax"],"colours":["black","blue","red"],"flexibility":"flexible","markings":["75 OHM TRIAX","VIDEO TRIAX","TRIAX"],"use":"Camera and broadcast video","notes":"Larger 75 Ω triax with two isolated concentric screens, historically used for broadcast camera systems."},"twinax100":{"name":"100 Ω shielded twinax","impedance":100,"velocity":0.7,"jacket":6.0,"dielectric":3.2,"centre":0.5,"secondSpacing":1.5,"structure":"twinax","conductorCount":2,"centreBuild":"stranded","centreMaterials":["tinned-copper","copper"],"dielectricType":"solid-pe","screens":["twinax-shield"],"colours":["black","blue"],"flexibility":"flexible","markings":["100 OHM TWINAX","TWINAX"],"use":"Balanced high-speed links","notes":"Shielded balanced pair with two equal signal conductors rather than one concentric centre conductor."},"twinax78":{"name":"78 Ω legacy twinax","impedance":78,"velocity":0.66,"jacket":8.0,"dielectric":5.0,"centre":0.64,"secondSpacing":2.0,"structure":"twinax","conductorCount":2,"centreBuild":"solid","centreMaterials":["copper","tinned-copper"],"dielectricType":"solid-pe","screens":["twinax-shield"],"colours":["black","grey"],"flexibility":"flexible","markings":["78 OHM TWINAX","TWINAX"],"use":"Legacy data and instrumentation","notes":"Older shielded balanced twinax family, distinguishable by two central conductors inside a common shield."}};
+
+  const labels = {
+    structure: {"flexible-coax":"Flexible coax","semi-rigid":"Semi-rigid coax","corrugated":"Corrugated feeder","smooth-hardline":"Smooth hardline / rigid line","triax":"Triax","twinax":"Twinax","unknown":"Unknown"},
+    centreBuild: {solid:"Solid",stranded:"Stranded",tube:"Hollow / tube",unknown:"Unknown"},
+    centreMaterial: {copper:"Bare copper","tinned-copper":"Tinned copper",ccs:"Copper-clad steel","silver-copper":"Silver-plated copper",aluminium:"Aluminium / CCA",unknown:"Unknown"},
+    dielectricType: {"solid-pe":"Solid PE","foam-pe":"Foam PE",ptfe:"PTFE / FEP",air:"Air-spaced",custom:"Custom εr",unknown:"Unknown"},
+    screen: {braid:"Single braid","double-braid":"Double braid","foil-braid":"Foil + braid","foil-double-braid":"Foil + dual braid",corrugated:"Corrugated metal","smooth-tube":"Smooth metal tube",triax:"Two isolated screens","twinax-shield":"Shielded pair",unknown:"Unknown"},
+    flexibility: {flexible:"Flexible","semi-flex":"Semi-flexible","semi-rigid":"Semi-rigid",rigid:"Rigid",unknown:"Unknown"}
   };
+
+  const coaxInputs = {
+    structure: document.getElementById("coaxStructure"),
+    conductorCount: document.getElementById("coaxConductorCount"),
+    jacket: document.getElementById("coaxJacket"),
+    dielectric: document.getElementById("coaxDielectric"),
+    centre: document.getElementById("coaxCentre"),
+    secondSpacing: document.getElementById("coaxSecondSpacing"),
+    impedance: document.getElementById("coaxImpedanceChoice"),
+    centreBuild: document.getElementById("coaxCentreBuild"),
+    centreMaterial: document.getElementById("coaxCentreMaterial"),
+    dielectricType: document.getElementById("coaxDielectricType"),
+    customEr: document.getElementById("coaxCustomEr"),
+    screen: document.getElementById("coaxScreen"),
+    marking: document.getElementById("coaxMarking"),
+    jacketColour: document.getElementById("coaxJacketColour"),
+    flexibility: document.getElementById("coaxFlexibility")
+  };
+
+  const dielectricEr = {"solid-pe":2.25,"foam-pe":1.45,ptfe:2.10,air:1.0006};
+  const normaliseMarking = (value) => String(value || "").toUpperCase().replace(/[Ω]/g," OHM ").replace(/[^A-Z0-9./\"-]+/g," ").replace(/\s+/g," ").trim();
+  const isFinitePositive = (value) => Number.isFinite(value) && value > 0;
+  const formatNumber = (value, digits = 2) => Number(value).toLocaleString(undefined,{maximumFractionDigits:digits});
+
+  const getEffectiveEr = (values) => {
+    if (values.dielectricType === "custom") return isFinitePositive(values.customEr) && values.customEr >= 1 ? values.customEr : null;
+    return dielectricEr[values.dielectricType] || null;
+  };
+
+  const calculateGeometryImpedance = (values) => {
+    if (values.structure === "twinax") return {value:null, message:"The concentric coax formula does not apply to twinax."};
+    if (!isFinitePositive(values.centre) || !isFinitePositive(values.dielectric) || values.dielectric <= values.centre) return {value:null, message:"Enter a dielectric/inner-screen diameter larger than the centre conductor."};
+    const er = getEffectiveEr(values);
+    if (!er) return {value:null, message:"Select a dielectric or enter a custom effective εr."};
+    const ratio = values.dielectric / values.centre;
+    const z0 = (138 / Math.sqrt(er)) * Math.log10(ratio);
+    if (!Number.isFinite(z0) || z0 <= 0) return {value:null, message:"The supplied dimensions do not produce a valid estimate."};
+    const qualifier = values.dielectricType === "foam-pe" || values.dielectricType === "air" || values.structure === "corrugated" ? "Approximate effective-dielectric result" : "Homogeneous-dielectric estimate";
+    return {value:z0, er, ratio, message:`${qualifier} · D/d ${formatNumber(ratio,3)} · εr ${formatNumber(er,3)}`};
+  };
+
+  const readCoaxValues = () => ({
+    structure: coaxInputs.structure.value,
+    conductorCount: coaxInputs.conductorCount.value,
+    jacket: Number(coaxInputs.jacket.value),
+    dielectric: Number(coaxInputs.dielectric.value),
+    centre: Number(coaxInputs.centre.value),
+    secondSpacing: Number(coaxInputs.secondSpacing.value),
+    impedance: coaxInputs.impedance.value,
+    centreBuild: coaxInputs.centreBuild.value,
+    centreMaterial: coaxInputs.centreMaterial.value,
+    dielectricType: coaxInputs.dielectricType.value,
+    customEr: Number(coaxInputs.customEr.value),
+    screen: coaxInputs.screen.value,
+    marking: normaliseMarking(coaxInputs.marking.value),
+    jacketColour: coaxInputs.jacketColour.value,
+    flexibility: coaxInputs.flexibility.value
+  });
+
+  const updateGeometry = () => {
+    const result = calculateGeometryImpedance(readCoaxValues());
+    document.getElementById("coaxCalculatedImpedance").textContent = result.value ? `${formatNumber(result.value,1)} Ω` : "—";
+    document.getElementById("coaxGeometryDetail").textContent = result.message;
+    return result;
+  };
+
+  const dimensionScore = (actual, target, toleranceFraction) => {
+    if (!isFinitePositive(actual) || !isFinitePositive(target)) return null;
+    const error = Math.abs(actual - target) / target;
+    return Math.max(0, 1 - error / toleranceFraction);
+  };
+
+  const extractMarkingHints = (marking) => {
+    const hints = {impedance:null, structure:null, conductorCount:null};
+    if (/\b50\s*OHM\b/.test(marking)) hints.impedance = 50;
+    else if (/\b75\s*OHM\b/.test(marking)) hints.impedance = 75;
+    else if (/\b78\s*OHM\b/.test(marking)) hints.impedance = 78;
+    else if (/\b93\s*OHM\b/.test(marking)) hints.impedance = 93;
+    else if (/\b100\s*OHM\b/.test(marking)) hints.impedance = 100;
+    if (/TWINAX/.test(marking)) { hints.structure = "twinax"; hints.conductorCount = 2; }
+    else if (/TRIAX/.test(marking)) hints.structure = "triax";
+    else if (/SEMI[ -]?RIGID/.test(marking)) hints.structure = "semi-rigid";
+    else if (/CORRUGATED/.test(marking)) hints.structure = "corrugated";
+    else if (/HARDLINE|AIR LINE|RIGID LINE/.test(marking)) hints.structure = "smooth-hardline";
+    return hints;
+  };
+
+  const includesValue = (profileValue, selected) => Array.isArray(profileValue) ? profileValue.includes(selected) : String(profileValue) === String(selected);
+
+  const scoreCoax = (key, cable, values, geometry) => {
+    let earned = 0;
+    let available = 0;
+    const reasons = [];
+    const conflicts = [];
+    const markingHints = extractMarkingHints(values.marking);
+
+    const dimensions = [
+      ["jacket","outer OD",.24,3.0],
+      ["dielectric","dielectric/inner screen OD",.28,3.2],
+      ["centre","centre conductor",.30,3.2],
+      ["secondSpacing","conductor spacing",.35,2.4]
+    ];
+    dimensions.forEach(([field,label,tolerance,weight]) => {
+      const target = cable[field];
+      if (!isFinitePositive(target)) return;
+      const score = dimensionScore(values[field], target, tolerance);
+      if (score === null) return;
+      available += weight;
+      earned += score * weight;
+      const deltaPct = Math.abs(values[field] - target) / target * 100;
+      if (score >= .78) reasons.push(`${label} close`);
+      else if (deltaPct > tolerance * 100) conflicts.push(`${label} differs`);
+    });
+
+    const compare = (field, profileField, label, weight = 1.5) => {
+      const selected = values[field];
+      if (selected === "unknown" || selected === "" || selected === null) return;
+      available += weight;
+      if (includesValue(cable[profileField], selected)) { earned += weight; reasons.push(`${label} matches`); }
+      else conflicts.push(`${label} differs`);
+    };
+
+    compare("structure","structure","structure",3.5);
+    compare("conductorCount","conductorCount","conductor count",2.4);
+    compare("impedance","impedance","impedance",2.7);
+    compare("centreBuild","centreBuild","centre build",1.5);
+    compare("centreMaterial","centreMaterials","centre material",1.2);
+    compare("dielectricType","dielectricType","dielectric",1.7);
+    compare("screen","screens","screen construction",2.4);
+    compare("jacketColour","colours","jacket colour",.7);
+    compare("flexibility","flexibility","flexibility",1.0);
+
+    if (geometry.value && cable.structure !== "twinax") {
+      const score = dimensionScore(geometry.value, cable.impedance, .35);
+      available += 2.0;
+      earned += (score || 0) * 2.0;
+      if (score >= .75) reasons.push("calculated impedance close");
+      else conflicts.push("calculated impedance differs");
+    }
+
+    if (values.marking) {
+      const tokenMatch = cable.markings.some((token) => values.marking.includes(normaliseMarking(token)));
+      if (tokenMatch) { available += 5; earned += 5; reasons.unshift("jacket marking matches"); }
+      if (markingHints.impedance) {
+        available += 1.5;
+        if (Number(cable.impedance) === markingHints.impedance) earned += 1.5; else conflicts.push("marked impedance differs");
+      }
+      if (markingHints.structure) {
+        available += 1.5;
+        if (cable.structure === markingHints.structure) earned += 1.5; else conflicts.push("marked construction differs");
+      }
+      if (markingHints.conductorCount) {
+        available += 1;
+        if (cable.conductorCount === markingHints.conductorCount) earned += 1;
+      }
+    }
+
+    const score = available ? Math.max(0, Math.min(100, Math.round(earned / available * 100))) : 0;
+    return {key,cable,score,reasons:[...new Set(reasons)],conflicts:[...new Set(conflicts)],available};
+  };
+
+  const comparisonItem = (label, entered, expected, state) => {
+    const item = document.createElement("div");
+    item.className = `comparison-item ${state ? `is-${state}` : ""}`;
+    const small = document.createElement("small"); small.textContent = label;
+    const strong = document.createElement("strong"); strong.textContent = entered;
+    const span = document.createElement("span"); span.textContent = `Typical: ${expected}`;
+    item.append(small,strong,span);
+    return item;
+  };
+
+  const buildComparison = (best, values, geometry) => {
+    const cable = best.cable;
+    const items = [];
+    const addDim = (field,label,digits=2) => {
+      if (!isFinitePositive(values[field]) || !isFinitePositive(cable[field])) return;
+      const delta = Math.abs(values[field] - cable[field]) / cable[field] * 100;
+      const state = delta <= 8 ? "match" : delta <= 20 ? "watch" : "conflict";
+      items.push(comparisonItem(label,`${formatNumber(values[field],digits)} mm`,`${formatNumber(cable[field],digits)} mm · ${formatNumber(delta,1)}% difference`,state));
+    };
+    addDim("jacket","Outer diameter");
+    addDim("dielectric","Dielectric / inner screen");
+    addDim("centre","Centre conductor");
+    addDim("secondSpacing","Twinax spacing");
+    if (geometry.value && cable.structure !== "twinax") {
+      const delta = Math.abs(geometry.value - cable.impedance) / cable.impedance * 100;
+      items.push(comparisonItem("Calculated Z₀",`${formatNumber(geometry.value,1)} Ω`,`${cable.impedance} Ω · ${formatNumber(delta,1)}% difference`,delta <= 8 ? "match" : delta <= 20 ? "watch" : "conflict"));
+    }
+    const addChoice = (field, profileField, label, formatter) => {
+      if (values[field] === "unknown" || values[field] === "") return;
+      const expectedRaw = cable[profileField];
+      const expectedList = Array.isArray(expectedRaw) ? expectedRaw : [expectedRaw];
+      const match = expectedList.map(String).includes(String(values[field]));
+      const expected = expectedList.map((value) => formatter(value)).join(" / ");
+      items.push(comparisonItem(label,formatter(values[field]),expected,match ? "match" : "conflict"));
+    };
+    addChoice("structure","structure","Structure",(value)=>labels.structure[value] || value);
+    addChoice("centreBuild","centreBuild","Centre build",(value)=>labels.centreBuild[value] || value);
+    addChoice("centreMaterial","centreMaterials","Centre material",(value)=>labels.centreMaterial[value] || value);
+    addChoice("dielectricType","dielectricType","Dielectric",(value)=>labels.dielectricType[value] || value);
+    addChoice("screen","screens","Screen",(value)=>labels.screen[value] || value);
+    document.getElementById("coaxComparison").replaceChildren(...items);
+  };
+
+  const identifyCoax = () => {
+    const values = readCoaxValues();
+    const geometry = updateGeometry();
+    const hasInput = [values.jacket,values.dielectric,values.centre,values.secondSpacing].some(isFinitePositive)
+      || [values.structure,values.conductorCount,values.impedance,values.centreBuild,values.centreMaterial,values.dielectricType,values.screen,values.jacketColour,values.flexibility].some((value)=>value !== "unknown")
+      || Boolean(values.marking);
+
+    if (!hasInput) {
+      document.getElementById("coaxBestMatch").textContent = "Enter measurements";
+      document.getElementById("coaxBestReason").textContent = "Add any measurements, construction details or generic jacket marking. More independent clues produce a stronger result.";
+      document.getElementById("coaxComparison").replaceChildren();
+      document.getElementById("coaxCandidateList").replaceChildren();
+      return;
+    }
+
+    const ranked = Object.entries(coaxData).map(([key,cable])=>scoreCoax(key,cable,values,geometry)).filter((item)=>item.available > 0).sort((a,b)=>b.score-a.score);
+    const best = ranked[0];
+    const second = ranked[1];
+    const gap = second ? best.score - second.score : best.score;
+    const confidence = best.score >= 88 && gap >= 10 ? "High confidence" : best.score >= 72 && gap >= 5 ? "Probable match" : best.score >= 52 ? "Possible match" : "Low confidence";
+    document.getElementById("coaxBestMatch").textContent = `${best.cable.name} · ${best.score}%`;
+    const reasonText = [...best.reasons.slice(0,4),...best.conflicts.slice(0,1)].join(" · ") || "Limited independent information supplied.";
+    document.getElementById("coaxBestReason").textContent = `${confidence}. ${reasonText}`;
+    buildComparison(best,values,geometry);
+
+    const list = document.getElementById("coaxCandidateList");
+    list.replaceChildren(...ranked.slice(0,6).map((item)=>{
+      const article = document.createElement("button");
+      article.type = "button";
+      article.className = "candidate";
+      article.dataset.cableKey = item.key;
+      const copy = document.createElement("span");
+      const strong = document.createElement("strong"); strong.textContent = item.cable.name;
+      const small = document.createElement("small"); small.textContent = `${item.cable.impedance} Ω · ${formatNumber(item.cable.jacket,2)} mm OD · ${item.cable.use}`;
+      const tags = document.createElement("span"); tags.className = "candidate-tags";
+      [labels.structure[item.cable.structure],labels.screen[item.cable.screens[0]],labels.flexibility[item.cable.flexibility]].filter(Boolean).forEach((text)=>{ const tag=document.createElement("span"); tag.className="candidate-tag"; tag.textContent=text; tags.append(tag); });
+      copy.append(strong,small,tags);
+      const pill = document.createElement("span"); pill.className = "score-pill"; pill.textContent = `${item.score}%`;
+      article.append(copy,pill);
+      article.addEventListener("click",()=>{ coaxFamily.value=item.key; updateCoaxBrowse(); setCoaxMode("browse",true); document.getElementById("coaxBrowsePanel").scrollIntoView({behavior:"smooth",block:"nearest"}); });
+      return article;
+    }));
+  };
+
+  document.getElementById("identifyCoaxButton").addEventListener("click",identifyCoax);
+  document.getElementById("clearCoaxButton").addEventListener("click",()=>{
+    Object.entries(coaxInputs).forEach(([key,control])=>{
+      if (control.tagName === "SELECT") control.value = "unknown";
+      else control.value = "";
+    });
+    document.getElementById("coaxCustomErField").hidden = true;
+    identifyCoax();
+  });
+
+  coaxInputs.dielectricType.addEventListener("change",()=>{
+    document.getElementById("coaxCustomErField").hidden = coaxInputs.dielectricType.value !== "custom";
+    updateGeometry();
+  });
+  [coaxInputs.centre,coaxInputs.dielectric,coaxInputs.customEr,coaxInputs.structure].forEach((control)=>control.addEventListener("input",updateGeometry));
+  Object.values(coaxInputs).forEach((control)=>control.addEventListener("change",updateGeometry));
+  updateGeometry();
+
   const coaxFamily = document.getElementById("coaxFamily");
-  const updateCoax = () => {
+  coaxFamily.replaceChildren(...Object.entries(coaxData).map(([key,item])=>{
+    const option = document.createElement("option"); option.value=key; option.textContent=item.name; return option;
+  }));
+  coaxFamily.value = "rg58";
+
+  const updateCoaxBrowse = () => {
     const item = coaxData[coaxFamily.value];
     document.getElementById("coaxName").textContent = item.name;
-    document.getElementById("coaxImpedance").textContent = item.impedance;
-    document.getElementById("coaxVelocity").textContent = item.velocity;
-    document.getElementById("coaxDiameter").textContent = item.diameter;
+    document.getElementById("coaxImpedance").textContent = `${item.impedance} Ω`;
+    document.getElementById("coaxVelocity").textContent = item.velocity.toFixed(3).replace(/0+$/,"").replace(/\.$/,"");
+    document.getElementById("coaxDiameter").textContent = `${formatNumber(item.jacket,2)} mm`;
+    document.getElementById("coaxStructureSpec").textContent = labels.structure[item.structure] || item.structure;
+    document.getElementById("coaxCentreSpec").textContent = `${labels.centreBuild[item.centreBuild] || item.centreBuild} · ${(item.centreMaterials || []).map((value)=>labels.centreMaterial[value] || value).join(" / ")}`;
+    document.getElementById("coaxScreenSpec").textContent = (item.screens || []).map((value)=>labels.screen[value] || value).join(" / ");
     document.getElementById("coaxUse").textContent = item.use;
     document.getElementById("coaxNotes").textContent = item.notes;
   };
-  coaxFamily.addEventListener("change", updateCoax);
-  updateCoax();
+  coaxFamily.addEventListener("change",updateCoaxBrowse);
+  updateCoaxBrowse();
+
+  const setCoaxMode = (mode,updateUrl=false) => {
+    document.getElementById("coaxIdentifyPanel").hidden = mode !== "identify";
+    document.getElementById("coaxComparison").hidden = mode !== "identify";
+    document.getElementById("coaxCandidateList").hidden = mode !== "identify";
+    document.getElementById("coaxBrowsePanel").hidden = mode !== "browse";
+    document.querySelectorAll("[data-coax-mode]").forEach((button)=>button.setAttribute("aria-selected",String(button.dataset.coaxMode===mode)));
+    if (updateUrl) {
+      const url = new URL(location.href); url.searchParams.set("tool","coax"); url.searchParams.set("mode",mode); history.replaceState(null,"",url);
+    }
+  };
+  document.querySelectorAll("[data-coax-mode]").forEach((button)=>button.addEventListener("click",()=>setCoaxMode(button.dataset.coaxMode,true)));
 
   const smdCode = document.getElementById("smdCode");
-  const smdChip = document.getElementById("smdChip");
-  const smdResult = document.getElementById("smdResult");
-  const smdDetail = document.getElementById("smdDetail");
-  const smdFormat = document.getElementById("smdFormat");
-  const smdOhms = document.getElementById("smdOhms");
-
   const decodeSmd = (raw) => {
     const code = raw.trim().toUpperCase();
-    if (/^\d{3}$/.test(code)) {
-      const sig = Number(code.slice(0,2));
-      const power = Number(code[2]);
-      return { ohms:sig * 10 ** power, format:"3 digit", detail:`${sig} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][power]} Ω.` };
-    }
-    if (/^\d{4}$/.test(code)) {
-      const sig = Number(code.slice(0,3));
-      const power = Number(code[3]);
-      return { ohms:sig * 10 ** power, format:"4 digit", detail:`${sig} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][power]} Ω.` };
-    }
-    if (/^\d*R\d*$/.test(code) && code !== "R") {
-      return { ohms:Number(code.replace("R",".")), format:"R notation", detail:"R marks the decimal point in ohms." };
-    }
+    if (/^\d{3}$/.test(code)) return { ohms:Number(code.slice(0,2)) * 10 ** Number(code[2]), format:"3 digit", detail:`${Number(code.slice(0,2))} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][Number(code[2])]} Ω.` };
+    if (/^\d{4}$/.test(code)) return { ohms:Number(code.slice(0,3)) * 10 ** Number(code[3]), format:"4 digit", detail:`${Number(code.slice(0,3))} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][Number(code[3])]} Ω.` };
+    if (/^\d*R\d*$/.test(code) && code !== "R") return { ohms:Number(code.replace("R",".")), format:"R notation", detail:"R marks the decimal point in ohms." };
     return null;
   };
-
   const updateSmd = () => {
     const code = smdCode.value.trim().toUpperCase().slice(0,6);
     smdCode.value = code;
-    smdChip.textContent = code || "—";
+    document.getElementById("smdChip").textContent = code || "—";
     const decoded = decodeSmd(code);
     if (!decoded || !Number.isFinite(decoded.ohms)) {
-      smdResult.textContent = "Unknown";
-      smdDetail.textContent = "Enter 103, 1002 or an R notation such as 4R7.";
-      smdFormat.textContent = "—";
-      smdOhms.textContent = "—";
+      document.getElementById("smdResult").textContent = "Unknown";
+      document.getElementById("smdDetail").textContent = "Enter 103, 1002 or an R notation such as 4R7.";
+      document.getElementById("smdFormat").textContent = "—";
+      document.getElementById("smdOhms").textContent = "—";
       return;
     }
-    smdResult.textContent = formatResistance(decoded.ohms);
-    smdDetail.textContent = decoded.detail;
-    smdFormat.textContent = decoded.format;
-    smdOhms.textContent = `${decoded.ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
+    document.getElementById("smdResult").textContent = formatResistance(decoded.ohms);
+    document.getElementById("smdDetail").textContent = decoded.detail;
+    document.getElementById("smdFormat").textContent = decoded.format;
+    document.getElementById("smdOhms").textContent = `${decoded.ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
   };
   smdCode.addEventListener("input", updateSmd);
   updateSmd();
@@ -1193,59 +1249,38 @@ window.FieldOpsSearchQueue.push({
     n: { name:"N type", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz+", use:"Outdoor RF feeders", notes:"Weather-resistant threaded RF connector widely used on base-station, antenna and feeder systems." },
     tnc: { name:"TNC", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz", use:"Vibration-resistant RF", notes:"Threaded relative of BNC. Used where vibration or environmental sealing matters." },
     sma: { name:"SMA", impedance:"50 Ω", coupling:"Threaded", frequency:"18 GHz+", use:"Microwave and modules", notes:"Compact precision RF connector. Avoid excessive torque and repeated rough mating." },
-    f: { name:"F type", impedance:"75 Ω", coupling:"Threaded", frequency:"3 GHz", use:"TV and satellite", notes:"Uses the cable centre conductor as the contact. Common on 75 Ω broadcast receive and satellite systems." },
+    f: { name:"F type", impedance:"75 Ω", coupling:"Threaded", frequency:"3 GHz", use:"TV and satellite", notes:"Uses the cable centre conductor as the contact. Common on 75 Ω receive and satellite systems." },
     uhf: { name:"UHF / PL-259", impedance:"Non-constant", coupling:"Threaded", frequency:"~300 MHz", use:"HF and low VHF", notes:"Robust legacy connector. Not constant impedance, so it is unsuitable for precision microwave work." }
   };
+  document.querySelectorAll("[data-connector]").forEach((button) => button.addEventListener("click", () => {
+    const item = connectors[button.dataset.connector];
+    document.querySelectorAll("[data-connector]").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+    document.getElementById("connectorName").textContent = item.name;
+    document.getElementById("connectorImpedance").textContent = item.impedance;
+    document.getElementById("connectorCoupling").textContent = item.coupling;
+    document.getElementById("connectorFrequency").textContent = item.frequency;
+    document.getElementById("connectorUse").textContent = item.use;
+    document.getElementById("connectorNotes").textContent = item.notes;
+  }));
 
-  document.querySelectorAll("[data-connector]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const key = button.dataset.connector;
-      const item = connectors[key];
-      document.querySelectorAll("[data-connector]").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
-      document.getElementById("connectorName").textContent = item.name;
-      document.getElementById("connectorImpedance").textContent = item.impedance;
-      document.getElementById("connectorCoupling").textContent = item.coupling;
-      document.getElementById("connectorFrequency").textContent = item.frequency;
-      document.getElementById("connectorUse").textContent = item.use;
-      document.getElementById("connectorNotes").textContent = item.notes;
-    });
-  });
-
-  const photoSheet = document.getElementById("photoSheet");
-  const photoInput = document.getElementById("photoInput");
-  const photoPreview = document.getElementById("photoPreview");
-  document.getElementById("openPhoto").addEventListener("click", () => {
-    photoSheet.hidden = false;
-    document.getElementById("closePhoto").focus();
-  });
-  document.getElementById("closePhoto").addEventListener("click", () => {
-    photoSheet.hidden = true;
-    document.getElementById("openPhoto").focus();
-  });
-  photoSheet.addEventListener("click", (event) => {
-    if (event.target === photoSheet) photoSheet.hidden = true;
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !photoSheet.hidden) photoSheet.hidden = true;
-  });
-  photoInput.addEventListener("change", () => {
-    const file = photoInput.files && photoInput.files[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    photoPreview.src = url;
-    photoPreview.hidden = false;
-    photoPreview.onload = () => URL.revokeObjectURL(url);
+  const photoPanel = document.getElementById("photoPanel");
+  document.getElementById("openPhoto").addEventListener("click", () => { photoPanel.hidden = false; photoPanel.scrollIntoView({ behavior:"smooth", block:"start" }); });
+  document.getElementById("closePhoto").addEventListener("click", () => { photoPanel.hidden = true; });
+  document.getElementById("photoInput").addEventListener("change", (event) => {
+    const file = event.target.files && event.target.files[0];
+    const preview = document.getElementById("photoPreview");
+    if (!file) { preview.hidden = true; return; }
+    preview.src = URL.createObjectURL(file);
+    preview.hidden = false;
   });
 
   const params = new URLSearchParams(location.search);
-  const initialTool = params.get("tool") || "resistor";
-  if (params.get("code")) smdCode.value = params.get("code").slice(0,6);
-  if (params.get("item") && coaxData[params.get("item")]) coaxFamily.value = params.get("item");
-  updateSmd();
-  updateCoax();
-  selectTool(initialTool);
+  const initialTool = titles[params.get("tool")] ? params.get("tool") : "resistor";
+  selectTool(initialTool, false);
+  if (initialTool === "coax") setCoaxMode(params.get("mode") === "browse" ? "browse" : "identify", false);
+  if (initialTool === "smd" && params.get("code")) { smdCode.value = params.get("code"); updateSmd(); }
 })();
 </script>
-<script src="../../../shell.js?v=1.1.21-session-editor-token"></script>
+<script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
 </body>
 </html>
