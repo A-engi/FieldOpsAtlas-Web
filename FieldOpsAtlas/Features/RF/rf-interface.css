@@ -1,7 +1,7 @@
 /* ===========================================================================
    FieldOps Atlas RF interface
    File: FieldOpsAtlas/Features/RF/rf-interface.css
-   Version: 1.1.121-scene-selector
+   Version: 1.1.122-pane-overlay-centering
 
    Purpose:
    - Own RF interface layout, panels, cards, controls, and path pane shell styling.
@@ -122,13 +122,12 @@
 .rf-map-stage {
   position: absolute;
   top: 0;
-  right: calc(var(--path-pane-width) - var(--path-handle-width));
+  right: var(--path-handle-width);
   bottom: 0;
   left: 0;
   z-index: 2;
   overflow: hidden;
   border-radius: 12px 0 0 0;
-  transition: right 180ms ease;
 }
 
 .rf-map-paper.is-path-pane-collapsed .rf-map-stage {
@@ -597,7 +596,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .rf-recent {
   min-height: 0;
   padding: 5px 8px;
