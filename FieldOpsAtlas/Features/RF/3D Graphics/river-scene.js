@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.16-river-engraved-elevation-tilt
+ * Version: 1.6.17-museum-plaque-wide-side
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.16-river-engraved-elevation-tilt";
+  const VERSION="1.6.17-museum-plaque-wide-side";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -27,16 +27,17 @@
     orbitMotion:{
       frequency:1,phase:0,targetX:0,targetY:0,targetZ:0,
       lift:0,dolly:0,screenY:0,
-      sideTargetY:3.5,
-      sideLift:-2.0,
-      // 0.80 × 0.74 preserves the approved side-view distance while giving
-      // the front enough room to include both mountains.
-      sideDolly:-0.26,
+      // At the side, pull back and rotate the complete composition enough to
+      // separate both mountain/transmitter pairs instead of letting the nearer
+      // transmitter obscure or crop the farther one.
+      sideTargetY:2.4,
+      sideLift:-1.4,
+      sideDolly:-0.10,
       sideRoll:0,
-      sideScenePitch:0.32,
-      sideScenePivot:[0,0,0],
-      // The vertical framing follows the same continuous front-to-side curve.
-      sideScreenY:0.35
+      sideScenePitch:0.44,
+      sideScenePivot:[0,5.2,0],
+      // Keep the widened side composition vertically centred.
+      sideScreenY:0.18
     }
   });
 
@@ -488,12 +489,11 @@
   function tagTransform(mountain){
     const position=mountain.transform?.position||[0,0,0];
 
-    // Keep the lower edge cut into the river, but lift the far edge by about
-    // 18 degrees so the engraved face reads from the approved front camera.
-    // The larger plate remains part of the terrain rather than becoming a sign.
+    // Museum-plaque angle: the lower edge remains cut into the river while
+    // the engraved face rises at 45 degrees toward the viewer.
     return Object.freeze({
       position:[position[0]||0,0.22,(position[2]||0)+11.5],
-      rotation:[-72*Math.PI/180,0,0],
+      rotation:[-45*Math.PI/180,0,0],
       scale:[0.95,0.95,0.95]
     });
   }
