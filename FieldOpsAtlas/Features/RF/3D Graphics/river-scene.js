@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.17-museum-plaque-wide-side
+ * Version: 1.6.18-steady-camera-visible-assets
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.17-museum-plaque-wide-side";
+  const VERSION="1.6.18-steady-camera-visible-assets";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -17,34 +17,35 @@
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
-    // One continuous camera path. The front is the centred, widest point;
-    // the approved side composition is reached through the same smooth curve.
-    target:[0,7.29,0],
-    lift:9.35,
+    // Hold the approved side-view eye height and target through the orbit.
+    // The front now opens mainly by distance instead of dropping, lifting and
+    // changing aim at the same time.
+    target:[0,9.69,0],
+    lift:7.95,
     fov:42,
-    distanceScale:0.80,
+    distanceScale:0.88,
     screenOffsetY:0,
     orbitMotion:{
       frequency:1,phase:0,targetX:0,targetY:0,targetZ:0,
       lift:0,dolly:0,screenY:0,
-      // At the side, pull back and rotate the complete composition enough to
-      // separate both mountain/transmitter pairs instead of letting the nearer
-      // transmitter obscure or crop the farther one.
-      sideTargetY:2.4,
-      sideLift:-1.4,
-      sideDolly:-0.10,
+      sideTargetY:0,
+      sideLift:0,
+      // 0.88 × 0.82 preserves the approved side distance. Moving toward the
+      // front now mostly zooms out, with only the side separation pitch left.
+      sideDolly:-0.18,
       sideRoll:0,
       sideScenePitch:0.44,
       sideScenePivot:[0,5.2,0],
-      // Keep the widened side composition vertically centred.
       sideScreenY:0.18
     }
   });
 
   const LEFT=Object.freeze({position:[-13.35,0.015,0.8],rotation:[0,0,0],scale:[0.82,0.90,0.90],mirror:true});
   const RIGHT=Object.freeze({position:[13.35,0.015,-1.8],rotation:[0,Math.PI,0],scale:[0.82,0.90,0.90],mirror:true});
-  const TRANSMITTER_TIP_CLEARANCE=0.35;
-  const TRANSMITTER_FOOTPRINT_FILL=0.90;
+  const TRANSMITTER_TIP_CLEARANCE=2.35;
+  const TRANSMITTER_FOOTPRINT_FILL=1.08;
+  const TRANSMITTER_MIN_HEIGHT_SCALE=0.34;
+  const TRANSMITTER_MAX_HEIGHT_SCALE=1.02;
   const TRANSMITTER_FLAT_Y=24*Math.PI/180;
 
   // The compressed mountain sources contain the original square mounting blocks.
@@ -271,7 +272,9 @@
     const map=format==="full"?fullLayer:compressedLayer;
     const layers={shell:map(capture.data.shell),ridge:map(capture.data.ridge)};
     const sourcePlatform=capture.data.platform||null;
-    if(includePlatform)layers.platform=sourcePlatform?map(sourcePlatform):fallbackPlatform(mount);
+    if(includePlatform)layers.platform=mount==="B"
+      ?fallbackPlatform("B")
+      :(sourcePlatform?map(sourcePlatform):fallbackPlatform(mount));
 
     const shellBounds=positionBounds(sourcePositions(capture.data.shell,format));
     const ridgeBounds=positionBounds(sourcePositions(capture.data.ridge,format));
@@ -345,6 +348,114 @@
     return null;
   }
 
+  function brightenPalette(values,factor,lift){
+    if(!values)return values;
+    if(ArrayBuffer.isView(values)||typeof values[0]==="number"){
+      return new Float32Array(Array.from(values,value=>Math.min(1,Number(value)*factor+lift)));
+    }
+    return values.map(value=>{
+      const hex=String(value).replace("#","").padStart(6,"0").slice(-6);
+      const channels=hex.match(/../g).map(channel=>
+        Math.min(255,Math.round(parseInt(channel,16)*factor+lift*255))
+      );
+      return channels.map(channel=>channel.toString(16).padStart(2,"0")).join("");
+    });
+  }
+
+  function visibleTransmitterAsset(scene){
+    if(!scene.transmitterAsset)return null;
+    const assetId=`${scene.transmitterAsset}-high-visibility`;
+    if(globalThis.FieldOps3DAssets.has(assetId))return assetId;
+    const source=globalThis.FieldOps3DAssets.get(scene.transmitterAsset);
+    if(!source)return scene.transmitterAsset;
+    globalThis.FieldOps3DAssets.register(assetId,{
+      ...source,
+      palettes:{
+        ...source.palettes,
+        shell:brightenPalette(source.palettes?.shell,1.42,0.09),
+        ridge:brightenPalette(source.palettes?.ridge,1.28,0.13)
+      }
+    });
+    return assetId;
+  }
+
+  function mountainATipCoreAsset(){
+    const segments=8;
+    const positions=[];
+    const indices=[];
+    const faceColours=[];
+    const lowerRadius=0.72,shoulderRadius=0.30;
+    const lowerY=-0.72,shoulderY=0.08,apexY=0.50;
+
+    for(let ring=0;ring<2;ring+=1){
+      const radius=ring===0?lowerRadius:shoulderRadius;
+      const y=ring===0?lowerY:shoulderY;
+      for(let index=0;index<segments;index+=1){
+        const angle=index*Math.PI*2/segments;
+        positions.push(Math.cos(angle)*radius,y,Math.sin(angle)*radius);
+      }
+    }
+
+    const apex=positions.length/3;
+    positions.push(0,apexY,0);
+    const base=positions.length/3;
+    positions.push(0,lowerY,0);
+
+    for(let index=0;index<segments;index+=1){
+      const next=(index+1)%segments;
+      const lower=index;
+      const lowerNext=next;
+      const upper=segments+index;
+      const upperNext=segments+next;
+      indices.push(lower,lowerNext,upperNext,lower,upperNext,upper);
+      faceColours.push(index%2,index%2);
+      indices.push(upper,upperNext,apex);
+      faceColours.push(2);
+      indices.push(base,lowerNext,lower);
+      faceColours.push(0);
+    }
+
+    return {
+      centre:[0,0],mirror:false,
+      palettes:{shell:["022b33","044b54","08757f"]},
+      layers:{
+        shell:{
+          format:"raw-indexed",normals:true,
+          positions:new Float32Array(positions),
+          indices:new Uint32Array(indices),
+          faceColours:new Uint8Array(faceColours)
+        }
+      }
+    };
+  }
+
+  function mountainATipCoreObjects(scene){
+    const mountains=(scene.mountains||[]).filter(mountain=>mountain.mount==="A");
+    if(!mountains.length)return [];
+    const assetId="rf-mountain-a-tip-core";
+    if(!globalThis.FieldOps3DAssets.has(assetId)){
+      globalThis.FieldOps3DAssets.register(assetId,mountainATipCoreAsset());
+    }
+
+    return mountains.map(mountain=>{
+      const source=globalThis.FieldOps3DAssets.get(mountain.asset);
+      const peakY=source?.mountPoint?.peakY;
+      if(!Number.isFinite(peakY))return null;
+      const centre=source.centre||DEFAULT_CENTRE;
+      const mountainScale=mountain.transform?.scale||[1,1,1];
+      const position=transformPoint(mountain.transform,[centre[0],peakY-0.43,centre[1]]);
+      return object(assetId,{
+        position,
+        rotation:[...(mountain.transform?.rotation||[0,0,0])],
+        scale:[
+          Math.abs(mountainScale[0]??1)*0.72,
+          Math.abs(mountainScale[1]??1)*0.92,
+          Math.abs(mountainScale[2]??1)*0.72
+        ]
+      },false);
+    }).filter(Boolean);
+  }
+
   function transmitterOnMountain(scene,mountain,heightScale){
     const mountainAsset=globalThis.FieldOps3DAssets.get(mountain.asset);
     const transmitterAsset=globalThis.FieldOps3DAssets.get(scene.transmitterAsset);
@@ -365,7 +476,7 @@
       platformWidth/transmitterWidth,
       platformDepth/transmitterDepth
     );
-    const requiredHeightScale=Math.max(0.28,Math.min(0.72,
+    const requiredHeightScale=Math.max(TRANSMITTER_MIN_HEIGHT_SCALE,Math.min(TRANSMITTER_MAX_HEIGHT_SCALE,
       (mountainPeak+TRANSMITTER_TIP_CLEARANCE-top[1])/transmitterHeight
     ));
 
@@ -386,7 +497,7 @@
       const probe=transmitterOnMountain(scene,mountain,1);
       return probe.requiredHeightScale;
     });
-    return Math.max(0.28,Math.min(0.72,...required));
+    return Math.max(TRANSMITTER_MIN_HEIGHT_SCALE,Math.min(TRANSMITTER_MAX_HEIGHT_SCALE,...required));
   }
 
   function appendRectangle(layer,x0,y0,x1,y1,z,colour){
@@ -396,7 +507,7 @@
     layer.faceColours.push(colour,colour);
   }
 
-  function appendBitmapText(layer,text,{centerY,height,maxWidth,z,colour}){
+  function appendBitmapText(layer,text,{centerX=0,centerY,height,maxWidth,z,colour,insetRatio=0.035}){
     const value=String(text||"").toUpperCase();
     if(!value)return;
     const columns=value.length*5+Math.max(0,value.length-1);
@@ -404,9 +515,9 @@
     if(columns*cell>maxWidth)cell=maxWidth/columns;
     const width=columns*cell;
     const actualHeight=7*cell;
-    let x=-width/2;
+    let x=centerX-width/2;
     const top=centerY+actualHeight/2;
-    const inset=cell*0.10;
+    const inset=cell*insetRatio;
 
     for(const character of value){
       const glyph=TAG_GLYPHS[character]||TAG_GLYPHS[" "];
@@ -425,9 +536,7 @@
   }
 
   function elevationTagAsset(endpoint,direction){
-    // A shallow, horizontal insert: most of the depth sits below the river
-    // surface, leaving only the cut face, bevel and lettering visible.
-    const width=5.4,height=2.05,depth=0.12;
+    const width=5.8,height=2.25,depth=0.12;
     const x=width/2,y=height/2,z=depth/2;
     const shellPositions=new Float32Array([
       -x,-y,-z, x,-y,-z, x,y,-z, -x,y,-z,
@@ -441,38 +550,57 @@
       0,1,5,0,5,4,
       3,7,6,3,6,2
     ]);
-    // The upward face is the slightly lighter river-cut surface; every other
-    // face is the darker wall of the recess.
     const shellColours=new Uint8Array([0,0,1,1,0,0,0,0,0,0,0,0]);
     const ridge={positions:[],indices:[],faceColours:[]};
     const faceZ=z+0.004;
-    const trench=0.105;
-    const edge=0.026;
+    const trench=0.11;
+    const edge=0.03;
+    const label=endpoint?.elevationTagLabel||"ELEV";
+    const value=endpoint?.elevationTagText||`${Math.round(Number(endpoint?.elevationM)||0)} M`;
 
-    // Broad dark trench, then a fine inner cut edge. Together these read as a
-    // chisel-cut rectangular well instead of a sign resting on the surface.
     appendRectangle(ridge,-x+0.10,y-0.14,x-0.10,y-0.14+trench,faceZ,0);
     appendRectangle(ridge,-x+0.10,-y+0.14-trench,x-0.10,-y+0.14,faceZ,0);
     appendRectangle(ridge,-x+0.10,-y+0.14,-x+0.10+trench,y-0.14,faceZ,0);
     appendRectangle(ridge,x-0.10-trench,-y+0.14,x-0.10,y-0.14,faceZ,0);
 
-    appendRectangle(ridge,-x+0.22,y-0.27,x-0.22,y-0.27+edge,faceZ+0.002,1);
-    appendRectangle(ridge,-x+0.22,-y+0.27-edge,x-0.22,-y+0.27,faceZ+0.002,1);
-    appendRectangle(ridge,-x+0.22,-y+0.27,-x+0.22+edge,y-0.27,faceZ+0.002,1);
-    appendRectangle(ridge,x-0.22-edge,-y+0.27,x-0.22,y-0.27,faceZ+0.002,1);
+    appendRectangle(ridge,-x+0.23,y-0.28,x-0.23,y-0.28+edge,faceZ+0.002,1);
+    appendRectangle(ridge,-x+0.23,-y+0.28-edge,x-0.23,-y+0.28,faceZ+0.002,1);
+    appendRectangle(ridge,-x+0.23,-y+0.28,-x+0.23+edge,y-0.28,faceZ+0.002,1);
+    appendRectangle(ridge,x-0.23-edge,-y+0.28,x-0.23,y-0.28,faceZ+0.002,1);
 
-    appendBitmapText(ridge,endpoint?.elevationTagLabel||"ELEV",{
-      centerY:0.39,height:0.36,maxWidth:2.60,z:faceZ+0.003,colour:2
+    // A small direction accent remains coloured, while the lettering itself is
+    // high-contrast pale gold so it stays readable at the 45-degree plaque angle.
+    appendRectangle(ridge,-1.55,-0.96,1.55,-0.89,faceZ+0.003,4);
+
+    appendBitmapText(ridge,label,{
+      centerX:0.045,centerY:0.48,height:0.48,maxWidth:3.15,
+      z:faceZ+0.003,colour:0,insetRatio:0.02
     });
-    appendBitmapText(ridge,endpoint?.elevationTagText||`${Math.round(Number(endpoint?.elevationM)||0)} M`,{
-      centerY:-0.27,height:0.80,maxWidth:4.18,z:faceZ+0.004,colour:3
+    appendBitmapText(ridge,label,{
+      centerY:0.52,height:0.48,maxWidth:3.15,
+      z:faceZ+0.006,colour:2,insetRatio:0.035
+    });
+
+    appendBitmapText(ridge,value,{
+      centerX:0.055,centerY:-0.28,height:1.02,maxWidth:4.75,
+      z:faceZ+0.004,colour:0,insetRatio:0.02
+    });
+    appendBitmapText(ridge,value,{
+      centerY:-0.23,height:1.02,maxWidth:4.75,
+      z:faceZ+0.008,colour:3,insetRatio:0.035
     });
 
     return {
       centre:[0,0],mirror:false,
       palettes:{
         shell:["01141b","063743"],
-        ridge:["001016","c79a48","d8c79d",direction==="from"?"75d49a":"dc8a82"]
+        ridge:[
+          "001016",
+          "c79a48",
+          "ffe2a0",
+          "fff8df",
+          direction==="from"?"69d995":"e98d84"
+        ]
       },
       layers:{
         shell:{format:"raw-indexed",normals:true,positions:shellPositions,indices:shellIndices,faceColours:shellColours},
@@ -489,10 +617,10 @@
   function tagTransform(mountain){
     const position=mountain.transform?.position||[0,0,0];
 
-    // Museum-plaque angle: the lower edge remains cut into the river while
-    // the engraved face rises at 45 degrees toward the viewer.
+    // The lower edge still meets the river, but the whole plaque is raised
+    // enough to stop the face and lettering sinking into the terrain.
     return Object.freeze({
-      position:[position[0]||0,0.22,(position[2]||0)+11.5],
+      position:[position[0]||0,0.72,(position[2]||0)+11.5],
       rotation:[-45*Math.PI/180,0,0],
       scale:[0.95,0.95,0.95]
     });
@@ -519,14 +647,19 @@
     const objects=[];
     if(scene.baseAsset)objects.push({asset:scene.baseAsset,position:[0,0,0],rotation:[0,0,0],scale:[1,1,1],mirror:false});
     objects.push(...(scene.mountains||[]).map(item=>object(item.asset,item.transform,item.transform?.mirror)));
+    objects.push(...mountainATipCoreObjects(scene));
     objects.push(...elevationTagObjects(scene,path));
-    if(scene.attachTransmitters){
+
+    const transmitterAsset=visibleTransmitterAsset(scene);
+    if(scene.attachTransmitters&&transmitterAsset){
       const sharedHeightScale=commonTransmitterHeightScale(scene);
       objects.push(...(scene.mountains||[]).map(item=>
-        object(scene.transmitterAsset,transmitterOnMountain(scene,item,sharedHeightScale))
+        object(transmitterAsset,transmitterOnMountain(scene,item,sharedHeightScale))
       ));
     }
-    objects.push(...(scene.transmitters||[]).map(transform=>object(scene.transmitterAsset,transform)));
+    if(transmitterAsset){
+      objects.push(...(scene.transmitters||[]).map(transform=>object(transmitterAsset,transform)));
+    }
     return objects;
   }
 
