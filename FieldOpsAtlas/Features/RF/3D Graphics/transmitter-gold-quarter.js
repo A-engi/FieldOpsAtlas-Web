@@ -1,5 +1,5 @@
-/* FieldOps Atlas — reference transmitter replacement
- * Version: 1.6.36-installed-reference-transmitter
+/* FieldOps Atlas — balanced scene transmitter with visible lights
+ * Version: 1.6.37-balanced-scale-visible-lights
  *
  * - full geometry; no quarter mirroring
  * - continuous base-to-apex outer legs
@@ -7,16 +7,21 @@
  * - upper deck only slightly smaller than the deck below
  * - white lamps fixed to visible surround ends
  * - compact collar, beacon stalk and white beacon
+ * - live scene aspect correction prevents vertical stretching
+ * - unshaded ridge flares keep white lamps visible at mountain scale
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.36-installed-reference-transmitter";
+  const VERSION="1.6.37-balanced-scale-visible-lights";
   const ASSET_ID="transmitter-gold-quarter";
 
   const positions=[];
   const indices=[];
   const faceColours=[];
+  const ridgePositions=[];
+  const ridgeIndices=[];
+  const ridgeFaceColours=[];
   const lampPositions=[];
 
   const STRUCTURE=3;
@@ -150,6 +155,57 @@
     }
   }
 
+
+  const ridgeVertex=(x,y,z)=>{
+    ridgePositions.push(x,y,z);
+    return ridgePositions.length/3-1;
+  };
+
+  const ridgeTri=(a,b,c,colour)=>{
+    ridgeIndices.push(a,b,c);
+    ridgeFaceColours.push(colour);
+  };
+
+  function ridgeDiamondXY(cx,cy,cz,radius,colour){
+    const left=ridgeVertex(cx-radius,cy,cz);
+    const top=ridgeVertex(cx,cy+radius,cz);
+    const right=ridgeVertex(cx+radius,cy,cz);
+    const bottom=ridgeVertex(cx,cy-radius,cz);
+    ridgeTri(left,top,right,colour);
+    ridgeTri(left,right,bottom,colour);
+  }
+
+  function ridgeDiamondYZ(cx,cy,cz,radius,colour){
+    const back=ridgeVertex(cx,cy,cz-radius);
+    const top=ridgeVertex(cx,cy+radius,cz);
+    const front=ridgeVertex(cx,cy,cz+radius);
+    const bottom=ridgeVertex(cx,cy-radius,cz);
+    ridgeTri(back,top,front,colour);
+    ridgeTri(back,front,bottom,colour);
+  }
+
+  function visibleLamp(cx,cy,cz,coreRadius){
+    sphere(cx,cy,cz,coreRadius,14,8,WHITE_LIGHT,true);
+
+    // The production renderer has no bloom pass. These unshaded ridge diamonds
+    // create a small gold halo and a white-hot core that remain visible after
+    // the transmitter is scaled down onto the mountain.
+    const outer=coreRadius*2.85;
+    const middle=coreRadius*1.70;
+    const core=coreRadius*0.78;
+
+    ridgeDiamondXY(cx,cy,cz+0.010,outer,0);
+    ridgeDiamondYZ(cx,cy,cz,middle,1);
+    ridgeDiamondXY(cx,cy,cz+0.018,core,2);
+  }
+
+  function visibleBeacon(cx,cy,cz,radius){
+    sphere(cx,cy,cz,radius,20,11,WHITE_BEACON,false);
+    ridgeDiamondXY(cx,cy,cz+0.012,radius*1.72,0);
+    ridgeDiamondYZ(cx,cy,cz,radius*1.34,1);
+    ridgeDiamondXY(cx,cy,cz+0.024,radius*0.88,2);
+  }
+
   function rectangularSurround(
     y,halfX,halfZ,
     frontWidth,sideWidth,rearWidth
@@ -271,7 +327,7 @@
   // Collar, short beacon stalk and beacon.
   box(0,APEX_Y+0.10,0,0.32,0.14,0.24);
   beam([0,APEX_Y+0.17,0],[0,16.98,0],0.038);
-  sphere(0,17.40,0,0.40,20,11,WHITE_BEACON,false);
+  visibleBeacon(0,17.40,0,0.44);
 
   // Deeper open equipment base.
   const BASE_FRAME_X=3.04;
@@ -311,14 +367,19 @@
   // Small white lamps fixed to visible surround ends.
   for(const [y,radius] of [[4.15,0.082],[7.75,0.080],[11.05,0.078]]){
     const x=legX(y),z=legZ(y);
-    sphere(-x,y,z,radius,14,8,WHITE_LIGHT,true);
-    sphere( x,y,z,radius,14,8,WHITE_LIGHT,true);
+    visibleLamp(-x,y,z,radius*1.32);
+    visibleLamp( x,y,z,radius*1.32);
   }
 
-  sphere(-CLAMP_X,CLAMP_Y,CLAMP_Z,0.086,14,8,WHITE_LIGHT,true);
-  sphere( CLAMP_X,CLAMP_Y,CLAMP_Z,0.086,14,8,WHITE_LIGHT,true);
-  sphere(-BASE_FRAME_X,0.56,BASE_FRAME_Z,0.105,14,8,WHITE_LIGHT,true);
-  sphere( BASE_FRAME_X,0.56,BASE_FRAME_Z,0.105,14,8,WHITE_LIGHT,true);
+  visibleLamp(-CLAMP_X,CLAMP_Y,CLAMP_Z,0.125);
+  visibleLamp( CLAMP_X,CLAMP_Y,CLAMP_Z,0.125);
+  visibleLamp(-BASE_FRAME_X,0.56,BASE_FRAME_Z,0.145);
+  visibleLamp( BASE_FRAME_X,0.56,BASE_FRAME_Z,0.145);
+
+  let ASSET_MIN_Y=Infinity;
+  for(let index=1;index<positions.length;index+=3){
+    ASSET_MIN_Y=Math.min(ASSET_MIN_Y,positions[index]);
+  }
 
   const asset={
     centre:[0,0],
@@ -333,8 +394,8 @@
       distance:29.2
     },
     palettes:{
-      shell:["2C0A00","6B2200","B13F00","FF9300","FFCB55","FFFFFF","FFFFFF"],
-      ridge:["B13F00","FF9300","FFCB55","FFFFFF","FFFFFF"]
+      shell:["2C0A00","6B2200","B13F00","FFA000","FFD264","FFFFFF","FFFFFF"],
+      ridge:["FF9C00","FFE09A","FFFFFF"]
     },
     effects:{
       emissive:true,
@@ -363,6 +424,13 @@
         positions:new Float32Array(positions),
         indices:new Uint32Array(indices),
         faceColours:new Uint8Array(faceColours)
+      },
+      ridge:{
+        format:"raw-indexed",
+        normals:false,
+        positions:new Float32Array(ridgePositions),
+        indices:new Uint32Array(ridgeIndices),
+        faceColours:new Uint8Array(ridgeFaceColours)
       }
     }
   };
@@ -371,6 +439,55 @@
     globalThis.FieldOps3DAssets.register(ASSET_ID,asset);
   }else{
     (globalThis.FieldOps3DAssetQueue||=[]).push({id:ASSET_ID,...asset});
+  }
+
+
+  // river-scene.js currently applies a narrow footprint scale and a much larger
+  // height scale. Balance those values before the production renderer builds
+  // its model matrices, so the transmitter remains one rigid proportioned object.
+  const renderer=globalThis.FieldOps3DRenderer;
+  if(renderer?.create&&!renderer.__fieldOpsBalancedTransmitterScale){
+    const originalCreate=renderer.create.bind(renderer);
+
+    renderer.create=(root,scene)=>{
+      const objects=(scene?.objects||[]).map(definition=>{
+        if(definition?.asset!==ASSET_ID||!Array.isArray(definition.scale)){
+          return definition;
+        }
+
+        const [sx=1,sy=1,sz=1]=definition.scale;
+        const horizontal=(Math.abs(sx)+Math.abs(sz))*0.5;
+        const vertical=Math.abs(sy);
+
+        // Standalone and already-uniform scenes pass through unchanged.
+        if(!Number.isFinite(horizontal)||!Number.isFinite(vertical)||
+           Math.abs(horizontal-vertical)<0.001){
+          return definition;
+        }
+
+        // Geometric mean gives the tower more width and less height than the
+        // stretched version while preserving its visual prominence.
+        const uniform=Math.min(vertical,Math.sqrt(Math.max(0.000001,horizontal*vertical)));
+        const position=[...(definition.position||[0,0,0])];
+
+        // Keep the feet on the exact same mountain mounting plane.
+        position[1]+=ASSET_MIN_Y*(sy-uniform);
+
+        return {
+          ...definition,
+          position,
+          scale:[
+            (Math.sign(sx)||1)*uniform,
+            (Math.sign(sy)||1)*uniform,
+            (Math.sign(sz)||1)*uniform
+          ]
+        };
+      });
+
+      return originalCreate(root,{...scene,objects});
+    };
+
+    renderer.__fieldOpsBalancedTransmitterScale=VERSION;
   }
 
   globalThis.FieldOpsGoldTransmitterQuarter=Object.freeze({VERSION,ASSET_ID});
