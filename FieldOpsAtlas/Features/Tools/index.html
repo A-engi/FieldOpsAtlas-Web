@@ -1,1558 +1,1115 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FieldOps Atlas Field Tools</title>
-  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Field Tools | FieldOps Atlas</title>
+<link href="../../../shell.css?v=1.1.21-shell-smoke-controls" rel="stylesheet"/>
+<style>
     :root {
-      --feature-side: 7px;
-      --feature-radius: 20px;
-      --ink: #102033;
-      --muted: rgba(16, 32, 51, 0.66);
-      --line: rgba(42, 67, 93, 0.18);
-      --panel: rgba(255, 255, 255, 0.76);
-      --panel-strong: rgba(255, 255, 255, 0.90);
-      --blue: #225f86;
-      --green: #17623f;
-      --amber: #866018;
-      --red: #8d2f2f;
-      --gold-soft: rgba(170, 126, 38, 0.22);
+      --tools-side: 7px;
+      --tools-radius: 20px;
+      --tools-ink: #102033;
+      --tools-muted: #687386;
+      --tools-line: rgba(56, 75, 101, 0.16);
+      --tools-paper: #f8fafc;
+      --tools-blue: #1857b8;
+      --tools-teal: #0d8587;
+      --tools-green: #297d41;
+      --tools-amber: #d78c00;
+      --tools-red: #b5262b;
+      --tools-purple: #504097;
+      --tools-gold: #d5a027;
     }
 
     * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 
-    .content-canvas {
+    .tools-content {
       position: absolute;
       z-index: 1;
-      top: calc(var(--safe-top) + var(--top-height) + var(--feature-side));
-      right: var(--feature-side);
-      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--feature-side));
-      left: var(--feature-side);
+      top: calc(var(--safe-top) + var(--top-height) + var(--tools-side));
+      right: var(--tools-side);
+      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--tools-side));
+      left: var(--tools-side);
+      min-width: 0;
       min-height: 0;
       overflow: hidden;
       border: 2px solid var(--gold-border);
-      border-radius: var(--feature-radius);
+      border-radius: var(--tools-radius);
+      color: var(--tools-ink);
       background:
-        radial-gradient(circle at 16% 0%, rgba(34, 95, 134, 0.16), transparent 28%),
-        radial-gradient(circle at 90% 2%, rgba(134, 96, 24, 0.16), transparent 24%),
-        linear-gradient(180deg, #f7f9fa 0%, #e1e9ea 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.58),
-        inset 0 0 0 1px rgba(255, 231, 168, 0.18),
-        0 14px 30px rgba(2, 9, 20, 0.26);
+        radial-gradient(circle at 85% 0%, rgba(222, 180, 74, 0.12), transparent 21%),
+        linear-gradient(180deg, #ffffff 0%, #f4f7fa 72%, #eef3f7 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 14px 30px rgba(2, 9, 20, 0.24);
     }
 
     .tools-page {
       height: 100%;
+      min-width: 0;
       min-height: 0;
-      padding: 9px;
+      padding: 10px;
       display: grid;
       align-content: start;
       gap: 9px;
       overflow-x: hidden;
       overflow-y: auto;
-      color: var(--ink);
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
     }
 
-    .surface {
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: var(--panel);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.62),
-        0 7px 16px rgba(37, 50, 62, 0.07);
-    }
-
-    .compact-hero {
-      padding: 11px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(239, 244, 243, 0.76)),
-        var(--panel);
-    }
-
-    .hero-copy {
+    .tools-page a,
+    .tools-page button,
+    .tools-page input,
+    .tools-page select {
       min-width: 0;
-      display: grid;
-      gap: 4px;
-    }
-
-    .kicker,
-    .field span,
-    .mini-label {
-      margin: 0;
-      color: rgba(16, 32, 51, 0.58);
-      font-size: 9px;
-      font-weight: 850;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    h1,
-    h2,
-    h3,
-    p { margin: 0; }
-
-    h1 {
-      font-size: 21px;
-      font-weight: 900;
-      line-height: 1.02;
-    }
-
-    h2 {
-      font-size: 15px;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    h3 {
-      font-size: 13px;
-      font-weight: 900;
-      line-height: 1.15;
-    }
-
-    .copy,
-    .status-text,
-    .result-text,
-    .category-copy,
-    .panel-copy {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 650;
-      line-height: 1.35;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .icon-button,
-    .action-button,
-    .category-card,
-    .panel-close,
-    .quick-link {
+      font: inherit;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .icon-button,
-    .action-button,
-    .panel-close {
-      min-height: 34px;
-      padding: 0 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(32, 95, 134, 0.22);
-      border-radius: 10px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.76);
-      font: inherit;
-      font-size: 10px;
-      font-weight: 900;
-      text-decoration: none;
-    }
-
-    .icon-button.is-primary,
-    .action-button.is-primary {
-      color: #fff;
-      border-color: rgba(21, 74, 107, 0.22);
-      background: linear-gradient(180deg, #2d7398, #1f587d);
-    }
-
-    .action-button.is-danger {
-      color: #fff;
-      border-color: rgba(101, 19, 19, 0.18);
-      background: #8d2f2f;
-    }
-
-    .hub-search {
-      padding: 8px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .hub-search input {
-      width: 100%;
-      min-width: 0;
-      min-height: 36px;
-      padding: 0 11px;
-      color: var(--ink);
-      border: 1px solid rgba(42, 67, 93, 0.22);
-      border-radius: 11px;
-      background: rgba(255, 255, 255, 0.82);
-      outline: none;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-
-    .quick-tools {
-      padding: 9px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .quick-tools-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .quick-tools-heading-copy {
-      min-width: 0;
-      display: grid;
-      gap: 3px;
-    }
-
-    .small-action-link {
-      color: var(--blue);
-      font-size: 9px;
-      font-weight: 900;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .quick-tools-grid {
-      display: grid;
-      grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
-      gap: 7px;
-      align-items: stretch;
-    }
-
-    .quick-calculator-card,
-    .quick-converter-card {
-      min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.72);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.62);
-    }
-
-    .quick-calculator-card {
-      padding: 10px;
-      display: grid;
-      align-content: space-between;
-      gap: 12px;
-      color: var(--ink);
-      text-decoration: none;
-    }
-
-    .quick-card-head {
-      display: grid;
-      grid-template-columns: 30px minmax(0,1fr) auto;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .quick-card-icon {
-      width: 30px;
-      height: 30px;
-      display: inline-grid;
-      place-items: center;
-      border-radius: 10px;
-      color: #fff;
-      background: linear-gradient(180deg, #173c63, #0c2948);
-      font-size: 15px;
-      font-weight: 950;
-    }
-
-    .quick-card-title {
+    .tools-page img,
+    .tools-page .svg-host,
+    .tools-page .svg-host > svg {
       display: block;
-      font-size: 13px;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    .quick-card-count {
-      color: var(--blue);
-      font-size: 9px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .quick-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .quick-chip {
-      padding: 4px 6px;
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(34,95,134,.07);
-      font-size: 8px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .quick-calc-label {
-      color: var(--muted);
-      font-size: 8px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .quick-calc-select,
-    .quick-calc-field input,
-    .quick-calc-field select {
       width: 100%;
-      min-width: 0;
-      min-height: 34px;
-      padding: 0 8px;
-      border: 1px solid rgba(42,67,93,.22);
-      border-radius: 9px;
-      color: var(--ink);
-      background: rgba(255,255,255,.86);
-      outline: none;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 720;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      object-position: center;
+      pointer-events: none;
     }
 
-    .quick-calc-fields {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 5px;
-    }
-
-    .quick-calc-field {
-      min-width: 0;
-      display: grid;
-      gap: 4px;
-    }
-
-    .quick-calc-field span {
+    .svg-host {
+      display: block;
       overflow: hidden;
-      color: var(--muted);
-      font-size: 8px;
-      font-weight: 850;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
-    .quick-calc-result {
-      min-height: 52px;
-      padding: 8px;
-      border: 1px solid rgba(32,95,134,.16);
-      border-radius: 10px;
-      background: rgba(32,95,134,.07);
+    .svg-host.is-missing::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(72, 91, 116, .08), rgba(72, 91, 116, .02));
     }
 
-    .quick-calc-result strong,
-    .quick-calc-result small { display:block; }
-    .quick-calc-result strong { color:var(--blue);font-size:15px;line-height:1.1; }
-    .quick-calc-result small { margin-top:4px;color:var(--muted);font-size:9px;line-height:1.25; }
-    .quick-calc-footer { display:flex;align-items:center;justify-content:space-between;gap:6px; }
-    .quick-calc-run { min-height:28px;padding:0 8px;border:1px solid rgba(32,95,134,.2);border-radius:9px;background:rgba(255,255,255,.8); }
+    .surface {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--tools-line);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 5px 14px rgba(25, 48, 77, 0.055);
+    }
 
-    .quick-converter-card {
-      padding: 9px;
-      display: grid;
-      gap: 7px;
+    .tools-hero {
+      position: relative;
+      min-height: 118px;
+      padding: 13px 12px 11px;
+      isolation: isolate;
       background:
-        linear-gradient(145deg, rgba(255,255,255,.94), rgba(238,243,245,.82)),
-        rgba(255,255,255,.72);
+        linear-gradient(100deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.96) 52%, rgba(247,249,252,.76) 100%);
     }
 
-    .quick-converter-title-row {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .quick-converter-title {
-      display: flex;
-      gap: 7px;
-      align-items: center;
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      width: 63%;
       min-width: 0;
     }
 
-    .quick-converter-count {
-      color: var(--green);
-      font-size: 8px;
-      font-weight: 900;
-      white-space: nowrap;
+    .hero-eyebrow {
+      margin: 0 0 2px;
+      font-size: 10px;
+      font-weight: 820;
+      letter-spacing: .015em;
     }
 
-    .quick-converter-filter,
-    .quick-converter-select,
-    .quick-converter-value {
-      width: 100%;
-      min-width: 0;
-      border: 1px solid rgba(42,67,93,.22);
-      border-radius: 9px;
-      color: var(--ink);
-      background: rgba(255,255,255,.86);
-      outline: none;
-      font: inherit;
-      font-size: 16px;
-      font-weight: 720;
+    .tools-hero h1 {
+      margin: 0;
+      font-size: clamp(29px, 8.2vw, 36px);
+      font-weight: 920;
+      line-height: .98;
+      letter-spacing: -.045em;
     }
 
-    .quick-converter-filter {
-      min-height: 34px;
-      padding: 0 9px;
-    }
-
-    .quick-converter-grid {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) 34px minmax(0,1fr);
-      gap: 5px;
-      align-items: stretch;
-    }
-
-    .quick-converter-side {
-      min-width: 0;
-      display: grid;
-      gap: 5px;
-    }
-
-    .quick-converter-side label {
-      color: rgba(16,32,51,.56);
-      font-size: 8px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .quick-converter-select {
-      min-height: 34px;
-      padding: 0 24px 0 7px;
-    }
-
-    .quick-converter-value {
-      min-height: 44px;
-      padding: 0 8px;
-      font-size: 18px;
-      font-weight: 850;
-    }
-
-    .quick-converter-value[readonly] {
-      color: var(--blue);
-      background: rgba(34,95,134,.06);
-    }
-
-    .quick-converter-swap {
-      width: 34px;
-      height: 34px;
-      align-self: end;
-      margin-bottom: 5px;
-      border: 1px solid rgba(170,126,38,.34);
-      border-radius: 50%;
-      color: var(--blue);
-      background: rgba(255,255,255,.88);
-      font: inherit;
-      font-size: 16px;
-      font-weight: 950;
-    }
-
-    .quick-converter-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 7px;
-      color: var(--muted);
-      font-size: 8px;
-      font-weight: 780;
-    }
-
-    .quick-converter-meta strong {
-      overflow: hidden;
-      color: var(--ink);
-      font-weight: 900;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .quick-converter-note,
-    .quick-converter-error {
-      color: var(--muted);
-      font-size: 8px;
-      font-weight: 700;
+    .hero-subtitle {
+      margin: 7px 0 0;
+      color: var(--tools-muted);
+      font-size: 11px;
+      font-weight: 650;
       line-height: 1.3;
     }
 
-    .quick-converter-note[hidden] { display: none; }
-    .quick-converter-error { color: var(--red); }
-
-    .quick-converter-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .quick-converter-footer a {
-      color: var(--blue);
-      font-size: 9px;
-      font-weight: 900;
-      text-decoration: none;
-    }
-
-    @media (max-width: 520px) {
-      .quick-tools-grid { grid-template-columns: 1fr; }
-      .quick-calculator-card { min-height: 90px; }
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 7px;
-    }
-
-    .category-card {
-      min-height: 112px;
-      padding: 10px;
-      display: grid;
-      align-content: space-between;
-      gap: 9px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.72);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
-      text-align: left;
-      text-decoration: none;
-      font: inherit;
-    }
-
-    .category-card.is-primary {
-      border-color: rgba(170, 126, 38, 0.34);
-      background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(241, 237, 223, 0.82));
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.72),
-        0 8px 18px rgba(90, 68, 22, 0.09);
-    }
-
-    .category-card[hidden] { display: none; }
-
-    .category-head {
-      display: grid;
-      grid-template-columns: 28px minmax(0, 1fr) auto;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .category-icon {
-      width: 28px;
-      height: 28px;
-      display: inline-grid;
-      place-items: center;
-      border: 1px solid rgba(34, 95, 134, 0.18);
-      border-radius: 9px;
-      color: var(--blue);
-      background: rgba(34, 95, 134, 0.08);
-      font-size: 14px;
-      font-weight: 950;
-    }
-
-    .category-title {
+    .hero-art {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: -5px;
+      width: 48%;
+      height: 100%;
       overflow: hidden;
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1.15;
-      text-overflow: ellipsis;
+      opacity: .95;
     }
 
-    .category-arrow {
-      color: rgba(16, 32, 51, 0.46);
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    .category-footer {
-      display: flex;
+    .page-search {
+      position: relative;
+      z-index: 3;
+      margin-top: 11px;
+      min-height: 40px;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) 36px;
       align-items: center;
-      justify-content: space-between;
-      gap: 7px;
-    }
-
-    .category-count {
-      min-width: 40px;
-      padding: 4px 7px;
-      border-radius: 999px;
-      color: var(--green);
-      background: rgba(23, 98, 63, 0.10);
-      font-size: 9px;
-      font-weight: 900;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .category-count.is-usage {
-      color: var(--amber);
-      background: rgba(134, 96, 24, 0.12);
-    }
-
-    .detail-panel {
-      padding: 11px;
-      display: grid;
-      gap: 9px;
-    }
-
-    .detail-panel[hidden] { display: none; }
-
-    .panel-heading {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 9px;
-      align-items: start;
-    }
-
-    .panel-title-copy {
-      display: grid;
-      gap: 4px;
-    }
-
-    .panel-close {
-      min-width: 34px;
-      padding: 0 8px;
-      font-size: 16px;
-    }
-
-    .subpanel {
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      background: rgba(255, 255, 255, 0.66);
-      overflow: hidden;
-    }
-
-    .subpanel summary {
-      min-height: 46px;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px;
-      align-items: center;
-      cursor: pointer;
-      list-style: none;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .subpanel summary::-webkit-details-marker { display: none; }
-
-    .subpanel summary::after {
-      content: "+";
-      color: var(--blue);
-      font-size: 17px;
-      line-height: 1;
-    }
-
-    .subpanel[open] summary::after { content: "−"; }
-
-    .subpanel-content {
-      padding: 0 10px 10px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 8px;
-    }
-
-    .field {
-      display: grid;
       gap: 5px;
+      overflow: hidden;
+      border: 1px solid rgba(61, 78, 107, .19);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 4px 12px rgba(40, 57, 81, .06);
     }
 
-    .field input,
-    .field textarea,
-    .field select {
+    .search-icon {
+      width: 19px;
+      height: 19px;
+      justify-self: end;
+      opacity: .75;
+    }
+
+    .page-search input {
       width: 100%;
-      min-width: 0;
-      padding: 9px 10px;
-      color: var(--ink);
-      border: 1px solid rgba(42, 67, 93, 0.22);
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.80);
-      outline: none;
-      font: inherit;
+      height: 38px;
+      padding: 0 3px;
+      border: 0;
+      outline: 0;
+      color: var(--tools-ink);
+      background: transparent;
       font-size: 12px;
       font-weight: 650;
     }
 
-    .field textarea {
-      min-height: 72px;
-      resize: vertical;
+    .scan-link {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-left: 1px solid rgba(61, 78, 107, .12);
     }
 
-    .form-actions {
+    .scan-link .svg-host { width: 20px; height: 20px; opacity: .8; }
+
+    .section-bar {
+      min-width: 0;
       display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    .result-panel {
-      min-height: 40px;
-      padding: 9px 10px;
-      border: 1px solid rgba(32, 95, 134, 0.16);
-      border-radius: 11px;
-      background: rgba(32, 95, 134, 0.07);
-    }
-
-    .reading-list,
-    .quick-links,
-    .procedure-list {
-      display: grid;
-      gap: 7px;
-    }
-
-    .log-row,
-    .quick-link,
-    .procedure-row {
-      min-height: 48px;
-      padding: 9px 10px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 9px;
       align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.68);
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-bar h2 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    .section-link {
+      flex: 0 0 auto;
+      color: #34429d;
+      font-size: 10px;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .recent-section { display: grid; gap: 7px; min-width: 0; }
+
+    .recent-grid {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .recent-card {
+      min-width: 0;
+      min-height: 92px;
+      padding: 8px 7px 7px;
+      display: grid;
+      grid-template-rows: 34px auto auto;
+      gap: 3px;
+      overflow: hidden;
+      color: var(--tools-ink);
       text-decoration: none;
     }
 
-    .log-row strong,
-    .quick-link strong,
-    .procedure-row strong {
+    .recent-top {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      align-items: center;
+      gap: 5px;
+    }
+
+    .recent-icon {
+      width: 34px;
+      height: 34px;
+      padding: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(56,75,101,.18);
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .recent-name {
+      min-width: 0;
       display: block;
       overflow: hidden;
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1.15;
+      font-size: 9px;
+      font-weight: 850;
+      line-height: 1.08;
+      text-overflow: ellipsis;
+    }
+
+    .recent-value {
+      display: block;
+      overflow: hidden;
+      font-size: 17px;
+      font-weight: 920;
+      line-height: 1.03;
+      letter-spacing: -.025em;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    .log-row small,
-    .quick-link small,
-    .procedure-row small {
-      display: block;
-      margin-top: 3px;
+    .recent-meta {
       overflow: hidden;
-      color: var(--muted);
-      font-size: 10px;
+      color: var(--tools-muted);
+      font-size: 8px;
       font-weight: 700;
-      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .quick-launchers {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .quick-launch {
+      min-width: 0;
+      min-height: 72px;
+      padding: 6px 3px 5px;
+      display: grid;
+      grid-template-rows: 34px auto;
+      place-items: center;
+      gap: 3px;
+      overflow: hidden;
+      border: 1px solid var(--tools-line);
+      border-radius: 12px;
+      color: var(--tools-ink);
+      background: rgba(255,255,255,.84);
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .quick-launch:nth-child(2) { color: #d75d00; background: #fffaf7; }
+    .quick-launch:nth-child(4) { color: var(--tools-teal); background: #f6fbfb; }
+    .quick-launch:nth-child(5) { color: var(--tools-red); background: #fff9f9; }
+
+    .quick-art {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .omega-mark,
+    .more-mark {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .more-mark {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: #536078;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .quick-launch span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1.1;
       text-overflow: ellipsis;
     }
 
-    .status-pill {
-      min-width: 46px;
-      padding: 5px 7px;
-      border-radius: 999px;
-      color: var(--green);
-      background: rgba(23, 98, 63, 0.11);
+    .tools-grid {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .tool-card {
+      --accent: var(--tools-blue);
+      min-width: 0;
+      padding: 8px;
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      overflow: hidden;
+    }
+
+    .tool-card.is-teal { --accent: var(--tools-teal); background: linear-gradient(145deg, #fff, #f2fbfa); }
+    .tool-card.is-gold { --accent: var(--tools-amber); background: linear-gradient(145deg, #fff, #fffaf4); }
+    .tool-card.is-red { --accent: var(--tools-red); background: linear-gradient(145deg, #fff, #fff6f6); }
+    .tool-card.is-blue { --accent: var(--tools-blue); background: linear-gradient(145deg, #fff, #f5f9ff); }
+
+    .tool-head {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-icon {
+      width: 28px;
+      height: 28px;
+      overflow: hidden;
+    }
+
+    .tool-head h3 {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -.015em;
+      text-overflow: ellipsis;
+    }
+
+    .tool-count {
+      color: var(--accent);
+      font-size: 8px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mini-calc {
+      min-width: 0;
+      min-height: 92px;
+      padding: 7px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      gap: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(39,88,167,.16);
+      border-radius: 11px;
+      background: linear-gradient(135deg, #fff 0%, #fff 57%, #e8f2ff 100%);
+    }
+
+    .calc-inputs,
+    .calc-result {
+      min-width: 0;
+      display: grid;
+      align-content: start;
+      gap: 4px;
+    }
+
+    .mini-title {
+      overflow: hidden;
       font-size: 9px;
       font-weight: 900;
-      text-align: center;
-      text-transform: uppercase;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    .status-pill.is-watch {
-      color: var(--amber);
-      background: rgba(134, 96, 24, 0.13);
+    .formula {
+      color: #2454a5;
+      font-size: 8px;
+      font-weight: 800;
     }
 
-    .status-pill.is-risk {
-      color: var(--red);
-      background: rgba(141, 47, 47, 0.11);
+    .mini-field {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 29px minmax(0, 1fr);
+      align-items: center;
+      gap: 3px;
+      font-size: 8px;
+      font-weight: 750;
     }
 
-    .empty-state {
-      padding: 13px;
-      display: none;
+    .mini-field input {
+      width: 100%;
+      height: 22px;
+      padding: 0 4px;
+      border: 1px solid rgba(56,75,101,.18);
+      border-radius: 5px;
+      color: var(--tools-ink);
+      background: #fff;
+      font-size: 10px;
+      font-weight: 780;
+    }
+
+    .calc-result small {
+      color: var(--tools-muted);
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .calc-result output {
+      overflow: hidden;
+      color: #2a68c2;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .converter-panel {
+      min-width: 0;
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 29px minmax(0, 1fr);
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    .convert-side {
+      min-width: 0;
+      padding: 5px;
+      display: grid;
+      align-content: start;
+      gap: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(13,133,135,.16);
+      border-radius: 10px;
+      background: rgba(255,255,255,.78);
+    }
+
+    .convert-side label {
+      color: var(--tools-muted);
+      font-size: 7px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .convert-side select,
+    .convert-side input,
+    .convert-side output {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(56,75,101,.18);
+      border-radius: 6px;
+      color: var(--tools-ink);
+      background: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+    }
+
+    .convert-side select { height: 25px; padding: 0 2px; }
+    .convert-side input { height: 29px; padding: 0 4px; text-align: center; font-size: 14px; }
+    .convert-side output {
+      min-height: 29px;
+      padding: 5px 2px 0;
+      border-color: transparent;
+      background: transparent;
+      color: #0b5961;
+      font-size: 15px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .swap-button {
+      width: 29px;
+      height: 29px;
+      align-self: center;
+      display: grid;
+      place-items: center;
+      border: 1px dashed rgba(205,149,0,.72);
+      border-radius: 50%;
+      color: #0d7d7f;
+      background: rgba(255,255,255,.88);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .visual-pair {
+      min-width: 0;
+      min-height: 101px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    .visual-pair.equal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .visual-box {
+      min-width: 0;
+      min-height: 0;
+      padding: 4px;
+      display: grid;
+      grid-template-rows: 13px minmax(0, 1fr);
+      gap: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(56,75,101,.13);
+      border-radius: 10px;
+      background: rgba(255,255,255,.75);
+    }
+
+    .visual-box strong {
+      min-width: 0;
+      overflow: hidden;
+      font-size: 7px;
+      font-weight: 880;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .visual-art {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .diagnostic-layout {
+      min-width: 0;
+      min-height: 101px;
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    .reading-tile {
+      min-width: 0;
+      padding: 6px 4px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(181,38,43,.14);
+      border-radius: 10px;
+      background: rgba(255,255,255,.76);
       text-align: center;
     }
 
-    .empty-state.is-visible { display: block; }
+    .reading-tile strong { font-size: 9px; }
+    .reading-tile output { font-size: 15px; font-weight: 900; white-space: nowrap; }
+    .reading-tile small { color: var(--tools-muted); font-size: 7px; }
 
-    @media (max-width: 350px) {
-      .compact-hero { grid-template-columns: 1fr; }
-      .hero-actions { justify-content: flex-start; }
-      .category-grid { grid-template-columns: 1fr; }
+    .spectrum-box,
+    .reference-box {
+      min-width: 0;
+      min-height: 0;
+      padding: 3px;
+      overflow: hidden;
+      border-radius: 9px;
+      background: #fff;
+    }
+
+    .reference-copy {
+      margin: 0;
+      color: var(--tools-muted);
+      font-size: 8px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+
+    .chip-row {
+      min-width: 0;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    .chip {
+      min-width: 0;
+      min-height: 25px;
+      padding: 0 4px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+      border-radius: 8px;
+      color: color-mix(in srgb, var(--accent) 86%, #182033);
+      background: rgba(255,255,255,.76);
+      font-size: 7px;
+      font-weight: 820;
+      line-height: 1.05;
+      text-align: center;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .open-row {
+      min-width: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .open-link {
+      min-height: 27px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 8px;
+      font-weight: 880;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .shortcut-grid {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .shortcut-card {
+      min-width: 0;
+      min-height: 86px;
+      padding: 7px 5px;
+      display: grid;
+      grid-template-rows: 34px auto auto;
+      justify-items: center;
+      gap: 4px;
+      overflow: hidden;
+      color: var(--tools-ink);
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .shortcut-card > .svg-host { width: 34px; height: 34px; }
+    .shortcut-card strong {
+      max-width: 100%;
+      overflow: hidden;
+      color: var(--shortcut, var(--tools-blue));
+      font-size: 8px;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .shortcut-card small {
+      max-width: 100%;
+      overflow: hidden;
+      color: var(--tools-muted);
+      font-size: 7px;
+      font-weight: 650;
+      line-height: 1.15;
+      text-overflow: ellipsis;
+    }
+
+    .packs-card {
+      min-width: 0;
+      min-height: 58px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      background: linear-gradient(100deg, #fff, #f7f5ff);
+    }
+
+    .packs-icon {
+      width: 42px;
+      height: 42px;
+      overflow: hidden;
+    }
+
+    .packs-copy { min-width: 0; }
+    .packs-copy strong { display: block; font-size: 11px; }
+    .packs-copy small {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      color: var(--tools-muted);
+      font-size: 8px;
+      font-weight: 650;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+    }
+
+    .manage-link {
+      min-width: 88px;
+      min-height: 36px;
+      padding: 0 8px;
+      display: grid;
+      grid-template-columns: 20px auto;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      overflow: hidden;
+      border-radius: 9px;
+      color: #fff;
+      background: linear-gradient(180deg, #4939a0, #352480);
+      font-size: 8px;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .manage-link .svg-host { width: 20px; height: 20px; }
+
+    .search-empty {
+      padding: 16px;
+      color: var(--tools-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 365px) {
+      .tools-page { padding: 8px; gap: 8px; }
+      .tools-hero { min-height: 111px; }
+      .hero-copy { width: 67%; }
+      .tools-hero h1 { font-size: 28px; }
+      .recent-card { padding-inline: 5px; }
+      .recent-top { grid-template-columns: 29px minmax(0, 1fr); }
+      .recent-icon { width: 29px; height: 29px; }
+      .recent-value { font-size: 14px; }
+      .quick-launchers { gap: 4px; }
+      .quick-launch { min-height: 68px; padding-inline: 2px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .shortcut-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="2.0.0-modular-calculators-converters">
-    <section class="content-canvas" aria-label="Field tools content">
-      <article class="tools-page">
-        <header class="compact-hero surface">
-          <div class="hero-copy">
-            <p class="kicker">Field tools</p>
-            <h1>Engineering toolbox</h1>
-            <p class="copy">Calculators, field logs, diagnostics and quick references.</p>
-          </div>
-          <div class="hero-actions">
-            <a class="icon-button is-primary" href="./calculator-library.html" data-track-library>Calculators</a>
-            <a class="icon-button" href="./converter.html">Converters</a>
-          </div>
-        </header>
-
-        <section class="hub-search surface" aria-label="Filter field tools">
-          <input id="hubSearchInput" type="search" inputmode="search" autocomplete="off" placeholder="Filter tools…" aria-label="Filter tool categories">
-          <button id="clearHubSearchButton" class="icon-button" type="button">Clear</button>
-        </section>
-
-
-        <section class="quick-tools surface" aria-labelledby="quickToolsTitle">
-          <div class="quick-tools-heading">
-            <div class="quick-tools-heading-copy">
-              <h2 id="quickToolsTitle">Quick tools</h2>
-              <p class="copy">Use a common tool here or open its full library.</p>
-            </div>
-            <a class="small-action-link" id="reportErrorLink" href="https://github.com/A-engi/FieldOpsAtlas-Web/issues/new" target="_blank" rel="noopener noreferrer">Report error</a>
-          </div>
-
-          <div class="quick-tools-grid">
-            <article class="quick-calculator-card" data-quick-calculator>
-              <div class="quick-card-head">
-                <span class="quick-card-icon" aria-hidden="true">▦</span>
-                <span class="quick-card-title">Calculators</span>
-                <span class="quick-card-count">151 calculators</span>
-              </div>
-              <label class="quick-calc-label" for="quickCalculatorSelect">Formula</label>
-              <select id="quickCalculatorSelect" class="quick-calc-select" data-quick-calc-select aria-label="Quick calculator"></select>
-              <div class="quick-calc-fields" data-quick-calc-fields></div>
-              <div class="quick-calc-result" data-quick-calc-result>
-                <strong>Choose a calculator</strong>
-                <small>Common formulas work here. Complex tools open in the library.</small>
-              </div>
-              <div class="quick-calc-footer">
-                <button class="small-action-link quick-calc-run" data-quick-calc-run type="button">Calculate</button>
-                <a class="small-action-link" href="./calculator-library.html" data-track-library>View all calculators ›</a>
-              </div>
-            </article>
-
-            <article class="quick-converter-card" data-converter-widget>
-              <div class="quick-converter-title-row">
-                <div class="quick-converter-title">
-                  <span class="quick-card-icon" aria-hidden="true">⇄</span>
-                  <span class="quick-card-title">Converters</span>
-                </div>
-                <span class="quick-converter-count" data-converter-count></span>
-              </div>
-
-              <input class="quick-converter-filter" data-converter-filter type="search" inputmode="search" autocomplete="off" placeholder="Filter conversions…" aria-label="Filter conversions">
-
-              <div class="quick-converter-grid">
-                <div class="quick-converter-side">
-                  <label for="quickConverterFrom">From</label>
-                  <select id="quickConverterFrom" class="quick-converter-select" data-converter-from-unit aria-label="Convert from unit"></select>
-                  <input class="quick-converter-value" data-converter-from-value type="text" inputmode="decimal" value="23" aria-label="Source value">
-                </div>
-
-                <button class="quick-converter-swap" data-converter-swap type="button" aria-label="Swap conversion direction">⇄</button>
-
-                <div class="quick-converter-side">
-                  <label for="quickConverterTo">To</label>
-                  <select id="quickConverterTo" class="quick-converter-select" data-converter-to-unit aria-label="Convert to unit"></select>
-                  <input class="quick-converter-value" data-converter-to-value type="text" readonly aria-label="Converted value">
-                </div>
-              </div>
-
-              <div class="quick-converter-meta">
-                <strong data-converter-family>RF power level</strong>
-                <span>Bidirectional</span>
-              </div>
-              <p class="quick-converter-note" data-converter-note hidden></p>
-              <p class="quick-converter-error" data-converter-error role="status" aria-live="polite"></p>
-
-              <div class="quick-converter-footer">
-                <span class="quick-converter-meta">Direct conversions only</span>
-                <a href="./converter.html">View all conversions ›</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section id="categoryGrid" class="category-grid" aria-label="Field tool categories">
-          <a
-            class="category-card is-primary"
-            href="./calculator-library.html"
-            data-search="calculator library rf electronics electrical identifiers smith chart bessel components cable broadcast instruments usage customise"
-            data-track-library
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">ƒ</span>
-                <span class="category-title">Calculator Library</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Calculators, identifiers, Smith chart and visual tools.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">151 calculators</span>
-              <span id="usageSummary" class="category-count is-usage">0 uses</span>
-            </div>
-          </a>
-
-          <button
-            class="category-card"
-            type="button"
-            data-panel="locationRoutePanel"
-            data-search="location route gps map signal log frequency service engineer"
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">⌖</span>
-                <span class="category-title">Location & Route</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Capture GPS, share a map link and log route readings.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">2 tools</span>
-            </div>
-          </button>
-
-          <button
-            class="category-card"
-            type="button"
-            data-panel="fieldNotesPanel"
-            data-search="field notes evidence camera fuel amenities break route note"
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">▤</span>
-                <span class="category-title">Field Notes</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Save practical site, amenity and evidence notes locally.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">Notes</span>
-            </div>
-          </button>
-
-          <button
-            class="category-card"
-            type="button"
-            data-panel="proceduresPanel"
-            data-search="test procedures circuit continuity polarity rf line safety meter checks"
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">✓</span>
-                <span class="category-title">Test Procedures</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Compact prompts for safe electrical and RF checks.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">3 checks</span>
-            </div>
-          </button>
-
-          <button
-            class="category-card"
-            type="button"
-            data-panel="quickAccessPanel"
-            data-search="quick access job pack network service context rf paths docs"
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">↗</span>
-                <span class="category-title">Quick Access</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Jump to job packs, service context and RF paths.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">3 links</span>
-            </div>
-          </button>
-
-          <a
-            class="category-card"
-            href="./calculator-library.html"
-            data-search="usage layout customise hide show reorder most used unused export reset report error"
-            data-track-library
-          >
-            <div>
-              <div class="category-head">
-                <span class="category-icon" aria-hidden="true">≡</span>
-                <span class="category-title">Usage & Layout</span>
-                <span class="category-arrow" aria-hidden="true">›</span>
-              </div>
-              <p class="category-copy">Hide, show, reorder and review calculator usage.</p>
-            </div>
-            <div class="category-footer">
-              <span class="category-count">Customise</span>
-            </div>
-          </a>
-        </section>
-
-        <p id="emptyState" class="empty-state surface copy">No categories match that search.</p>
-
-        <section id="locationRoutePanel" class="detail-panel surface" aria-labelledby="locationRouteTitle" hidden>
-          <div class="panel-heading">
-            <div class="panel-title-copy">
-              <h2 id="locationRouteTitle">Location & Route</h2>
-              <p class="panel-copy">GPS and route readings stay on this device unless you copy or share them.</p>
-            </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close panel">×</button>
-          </div>
-
-          <details class="subpanel" open>
-            <summary>Engineer location</summary>
-            <div class="subpanel-content">
-              <div class="form-actions">
-                <button id="getLocationButton" class="action-button is-primary" type="button">Get current location</button>
-                <button id="copyLocationButton" class="action-button" type="button">Copy map link</button>
-              </div>
-              <div class="result-panel">
-                <p id="locationResult" class="result-text">Location not captured.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="subpanel">
-            <summary>Route signal log</summary>
-            <div class="subpanel-content">
-              <form id="signalLogForm" class="form-grid" autocomplete="off">
-                <label class="field">
-                  <span>Service</span>
-                  <input name="service" type="text" placeholder="DAB, FM, DTT, telemetry, link">
-                </label>
-                <label class="field">
-                  <span>Frequency / channel</span>
-                  <input name="frequency" type="text" placeholder="MHz, block, channel or carrier">
-                </label>
-                <label class="field">
-                  <span>Reading</span>
-                  <input name="reading" type="text" placeholder="Level, MER, RSSI, audio state, cutoff point">
-                </label>
-                <label class="field">
-                  <span>GPS</span>
-                  <input name="gps" type="text" placeholder="Latitude, longitude">
-                </label>
-                <label class="field">
-                  <span>Notes</span>
-                  <textarea name="notes" placeholder="Route, antenna, receiver, vehicle setup or service reach"></textarea>
-                </label>
-                <div class="form-actions">
-                  <button id="useSignalLocationButton" class="action-button" type="button">Use GPS</button>
-                  <button class="action-button is-primary" type="submit">Add reading</button>
-                  <button id="clearSignalLogButton" class="action-button is-danger" type="button">Clear log</button>
-                </div>
-              </form>
-              <div id="signalLogList" class="reading-list" aria-live="polite"></div>
-            </div>
-          </details>
-        </section>
-
-        <section id="fieldNotesPanel" class="detail-panel surface" aria-labelledby="fieldNotesTitle" hidden>
-          <div class="panel-heading">
-            <div class="panel-title-copy">
-              <h2 id="fieldNotesTitle">Field Notes & Evidence</h2>
-              <p class="panel-copy">Save confirmed local details and selected evidence filenames on this device.</p>
-            </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close panel">×</button>
-          </div>
-
-          <form id="breakForm" class="form-grid" autocomplete="off">
-            <label class="field">
-              <span>Fuel card / fuel</span>
-              <input name="fuel" type="text" placeholder="24-hour fuel, card accepted, access notes">
-            </label>
-            <label class="field">
-              <span>Food, toilet or shop</span>
-              <input name="amenities" type="text" placeholder="Confirmed facilities and opening notes">
-            </label>
-            <label class="field">
-              <span>Break or route note</span>
-              <textarea name="breakNote" placeholder="Parking, road access, walk or break option"></textarea>
-            </label>
-            <label class="field">
-              <span>Camera / evidence</span>
-              <input id="cameraCaptureInput" type="file" accept="image/*" capture="environment" multiple>
-            </label>
-            <div class="form-actions">
-              <button class="action-button is-primary" type="submit">Save note</button>
-              <button id="clearBreakButton" class="action-button is-danger" type="button">Clear</button>
-            </div>
-            <p id="breakStatus" class="status-text" role="status" aria-live="polite"></p>
-            <p id="cameraStatus" class="status-text" aria-live="polite"></p>
-          </form>
-        </section>
-
-        <section id="proceduresPanel" class="detail-panel surface" aria-labelledby="proceduresTitle" hidden>
-          <div class="panel-heading">
-            <div class="panel-title-copy">
-              <h2 id="proceduresTitle">Test Procedures</h2>
-              <p class="panel-copy">Prompts only. Follow approved site procedures and current safety rules.</p>
-            </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close panel">×</button>
-          </div>
-
-          <div class="procedure-list">
-            <article class="procedure-row">
-              <span>
-                <strong>Before circuit tests</strong>
-                <small>Confirm isolation state, drawing, expected voltage, load, reference earth and PPE.</small>
-              </span>
-              <span class="status-pill is-risk">Safety</span>
-            </article>
-            <article class="procedure-row">
-              <span>
-                <strong>Continuity and polarity</strong>
-                <small>Prove meter, test known source, test circuit, prove meter again and record test points.</small>
-              </span>
-              <span class="status-pill is-watch">Method</span>
-            </article>
-            <article class="procedure-row">
-              <span>
-                <strong>RF line check</strong>
-                <small>Confirm service limits, then measure forward/reflected power, VSWR, return loss and trend.</small>
-              </span>
-              <span class="status-pill">RF</span>
-            </article>
-          </div>
-        </section>
-
-        <section id="quickAccessPanel" class="detail-panel surface" aria-labelledby="quickAccessTitle" hidden>
-          <div class="panel-heading">
-            <div class="panel-title-copy">
-              <h2 id="quickAccessTitle">Quick Access</h2>
-              <p class="panel-copy">Open supporting FieldOps Atlas sections.</p>
-            </div>
-            <button class="panel-close" type="button" data-close-panel aria-label="Close panel">×</button>
-          </div>
-
-          <div class="quick-links">
-            <a class="quick-link" href="../Docs/index.html">
-              <span><strong>Job pack</strong><small>Before, on-site, break and closeout checklist</small></span>
-              <span class="status-pill">Open</span>
-            </a>
-            <a class="quick-link" href="../Network/index.html">
-              <span><strong>Service context</strong><small>Rooms, racks, diagrams and incoming/outgoing services</small></span>
-              <span class="status-pill">Open</span>
-            </a>
-            <a class="quick-link" href="../RFPages/paths.html">
-              <span><strong>RF paths</strong><small>Path analysis and service-route context</small></span>
-              <span class="status-pill">Open</span>
-            </a>
-          </div>
-        </section>
-      </article>
-    </section>
-  </main>
-
-  <script src="./calculators/calculator-helpers.js?v=2.0.0"></script>
-  <script src="./calculators/general.js?v=2.0.0"></script>
-  <script src="./calculators/rf.js?v=2.0.0"></script>
-  <script src="./calculators/electronics.js?v=2.0.0"></script>
-  <script src="./calculators/electrical.js?v=2.0.0"></script>
-  <script src="./calculators/broadcast.js?v=2.0.0"></script>
-  <script src="./calculators/instruments.js?v=2.0.0"></script>
-  <script src="./calculators/cable.js?v=2.0.0"></script>
-  <script src="./calculators/sensors.js?v=2.0.0"></script>
-  <script src="./converters/converter-registry.js?v=2.0.0"></script>
-  <script>
+<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.0-tools-visual-front">
+<section aria-label="Field Tools" class="tools-content">
+<article class="tools-page">
+<header class="tools-hero surface">
+<div class="hero-copy">
+<p class="hero-eyebrow">FieldOps Atlas</p>
+<h1>Field Tools</h1>
+<p class="hero-subtitle">Engineering tools for the field.</p>
+</div>
+<div aria-hidden="true" class="hero-art">
+<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-header-art.svg?v=2.1.0"></span>
+</div>
+<div class="page-search">
+<span aria-hidden="true" class="search-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-search.svg?v=2.1.0"></span></span>
+<input aria-label="Search tools, calculators and converters" autocomplete="off" id="toolSearch" inputmode="search" placeholder="Search tools, calculators, converters…" type="search"/>
+<a aria-label="Open identifiers" class="scan-link" href="./calculator-library.html?search=identifier">
+<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-scan.svg?v=2.1.0"></span>
+</a>
+</div>
+</header>
+<section aria-labelledby="recentTitle" class="recent-section">
+<div class="section-bar">
+<h2 id="recentTitle">Recent</h2>
+<a class="section-link" href="./calculator-library.html">View all ›</a>
+</div>
+<div class="recent-grid">
+<a class="recent-card surface" data-searchable="cable loss calculator coax attenuation lmr 400" href="./calculator-library.html?tool=cable-loss">
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.0"></span></span><span class="recent-name">Cable Loss Calc</span></span>
+<strong class="recent-value">1.72 dB</strong>
+<small class="recent-meta">50 m · LMR-400</small>
+</a>
+<a class="recent-card surface" data-searchable="dbm watts power conversion" href="./calculator-library.html?tool=dbm-watts">
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.0"></span></span><span class="recent-name">dBm to Watts</span></span>
+<strong class="recent-value">23.0 dBm</strong>
+<small class="recent-meta">199.53 mW</small>
+</a>
+<a class="recent-card surface" data-searchable="rf link budget margin" href="./calculator-library.html?tool=link-budget">
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-link-budget.svg?v=2.1.0"></span></span><span class="recent-name">Link Budget</span></span>
+<strong class="recent-value">+18.6 dB</strong>
+<small class="recent-meta">Margin</small>
+</a>
+</div>
+</section>
+<nav aria-label="Quick calculators" class="quick-launchers">
+<a class="quick-launch" data-searchable="ohms law resistance voltage current" href="./calculator-library.html?tool=ohms-law"><span aria-hidden="true" class="quick-art omega-mark">Ω</span><span>Ohm’s Law</span></a>
+<a class="quick-launch" data-searchable="dbm watts" href="./calculator-library.html?tool=dbm-watts"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.0"></span></span><span>dBm / Watts</span></a>
+<a class="quick-launch" data-searchable="cable loss" href="./calculator-library.html?tool=cable-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.0"></span></span><span>Cable Loss</span></a>
+<a class="quick-launch" data-searchable="antenna gain" href="./calculator-library.html?tool=antenna-gain"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-antenna-gain.svg?v=2.1.0"></span></span><span>Antenna Gain</span></a>
+<a class="quick-launch" data-searchable="vswr return loss" href="./calculator-library.html?tool=vswr-return-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-vswr.svg?v=2.1.0"></span></span><span>VSWR</span></a>
+<a class="quick-launch" href="./calculator-library.html"><span aria-hidden="true" class="quick-art more-mark">•••</span><span>More</span></a>
+</nav>
+<section aria-label="Tool categories" class="tools-grid">
+<article class="tool-card surface" data-searchable="calculators ohms law rf electrical electronics cable link budget">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-calculators.svg?v=2.1.0"></span></span>
+<h3>Calculators</h3>
+<span class="tool-count">87 tools</span>
+</header>
+<div aria-label="Ohm's law quick calculator" class="mini-calc">
+<div class="calc-inputs">
+<strong class="mini-title">Ohm’s Law</strong>
+<span class="formula">R = V ÷ I</span>
+<label class="mini-field"><span>V (V)</span><input id="ohmVoltage" inputmode="decimal" step="any" type="number" value="12"/></label>
+<label class="mini-field"><span>I (A)</span><input id="ohmCurrent" inputmode="decimal" step="any" type="number" value="2.5"/></label>
+</div>
+<div class="calc-result">
+<strong class="mini-title">Result</strong>
+<small>R (Ω)</small>
+<output id="ohmResult">4.80 Ω</output>
+</div>
+</div>
+<div class="chip-row">
+<a class="chip" href="./calculator-library.html?tool=dbm-watts">dBm/W</a>
+<a class="chip" href="./calculator-library.html?tool=vswr-return-loss">VSWR</a>
+<a class="chip" href="./calculator-library.html">More</a>
+</div>
+</article>
+<article class="tool-card is-teal surface" data-searchable="converters units dbm watts voltage temperature pressure">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-converters.svg?v=2.1.0"></span></span>
+<h3>Converters</h3>
+<span class="tool-count">77 families</span>
+</header>
+<div aria-label="Power converter" class="converter-panel">
+<div class="convert-side">
+<label for="convertFrom">From</label>
+<select id="convertFrom"><option value="dbm">dBm</option><option value="mw">mW</option><option value="w">Watts</option></select>
+<input aria-label="Value to convert" id="convertInput" inputmode="decimal" step="any" type="number" value="23"/>
+</div>
+<button aria-label="Swap conversion direction" class="swap-button" id="swapConverter" type="button">⇄</button>
+<div class="convert-side">
+<label for="convertTo">To</label>
+<select id="convertTo"><option value="mw">mW</option><option value="w">Watts</option><option value="dbm">dBm</option></select>
+<output id="convertOutput">199.53</output>
+</div>
+</div>
+<div class="chip-row">
+<a class="chip" href="./converter.html">dBm ↔ W</a>
+<a class="chip" href="./converter.html">dBµV</a>
+<a class="chip" href="./converter.html">More</a>
+</div>
+</article>
+<article class="tool-card is-gold surface" data-searchable="identifiers decoders coax cable resistor smd codes">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-identifiers.svg?v=2.1.0"></span></span>
+<h3>Identifiers &amp; Decoders</h3>
+<span class="tool-count">15 tools</span>
+</header>
+<div class="visual-pair">
+<a class="visual-box" href="./coax-calculator.html"><strong>RG58 coax</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=2.1.0"></span></span></a>
+<a class="visual-box" href="./calculator-library.html?search=resistor"><strong>Resistor</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=2.1.0"></span></span></a>
+</div>
+<div class="chip-row">
+<a class="chip" href="./coax-calculator.html">Coax ID</a>
+<a class="chip" href="./calculator-library.html?search=resistor">Resistor</a>
+<a class="chip" href="./calculator-library.html?search=smd">SMD Codes</a>
+</div>
+</article>
+<article class="tool-card is-gold surface" data-searchable="charts visualisers smith chart frequency response polar s parameters">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-charts.svg?v=2.1.0"></span></span>
+<h3>Charts &amp; Visualisers</h3>
+<span class="tool-count">14 tools</span>
+</header>
+<div class="visual-pair equal">
+<a class="visual-box" href="./calculator-library.html?search=smith"><strong>Smith chart</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-smith-chart.svg?v=2.1.0"></span></span></a>
+<a class="visual-box" href="./calculator-library.html?search=frequency"><strong>Frequency response</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-frequency-response.svg?v=2.1.0"></span></span></a>
+</div>
+<div class="chip-row">
+<a class="chip" href="./calculator-library.html?search=smith">Smith</a>
+<a class="chip" href="./calculator-library.html?search=polar">Polar</a>
+<a class="chip" href="./calculator-library.html?search=s-parameters">S-Params</a>
+</div>
+</article>
+<article class="tool-card is-red surface" data-searchable="diagnostics measurement spectrum analyser oscilloscope power meter rf level rbw vbw">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-measurement.svg?v=2.1.0"></span></span>
+<h3>Diagnostics &amp; Measurement</h3>
+<span class="tool-count">20 tools</span>
+</header>
+<div class="diagnostic-layout">
+<div class="reading-tile"><strong>Spectrum</strong><output>−42.6</output><small>dBm @ 145 MHz</small></div>
+<a class="spectrum-box" href="./calculator-library.html?search=spectrum"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-spectrum-plot.svg?v=2.1.0"></span></a>
+</div>
+<div class="chip-row">
+<a class="chip" href="./calculator-library.html?search=spectrum">Spectrum</a>
+<a class="chip" href="./calculator-library.html?search=oscilloscope">Scope</a>
+<a class="chip" href="./calculator-library.html?search=power%20meter">Power</a>
+</div>
+</article>
+<article class="tool-card is-blue surface" data-searchable="references channels blocks connectors tables formulas dab dtt signal chain">
+<header class="tool-head">
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-references.svg?v=2.1.0"></span></span>
+<h3>References</h3>
+<span class="tool-count">36 tools</span>
+</header>
+<p class="reference-copy">Channels, blocks, connectors, tables, formulas and quick references.</p>
+<a class="reference-box" href="../Network/index.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain-diagram.svg?v=2.1.0"></span></a>
+<div class="chip-row">
+<a class="chip" href="../RF/index.html">DAB Blocks</a>
+<a class="chip" href="../RF/index.html">DTT Channels</a>
+<a class="chip" href="../Docs/index.html">Connectors</a>
+</div>
+</article>
+</section>
+<nav aria-label="Tool shortcuts" class="shortcut-grid">
+<a class="shortcut-card surface" data-searchable="quick formulas" href="./calculator-library.html" style="--shortcut:#1857b8"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-quick-formulas.svg?v=2.1.0"></span><strong>Quick Formulas</strong><small>Ohm’s law, P=VI, attenuation</small></a>
+<a class="shortcut-card surface" data-searchable="unit tables prefixes constants" href="./converter.html" style="--shortcut:#d78c00"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-unit-tables.svg?v=2.1.0"></span><strong>Unit Tables</strong><small>Prefixes, units and constants</small></a>
+<a class="shortcut-card surface" data-searchable="signal chain rf chain" href="../Network/index.html" style="--shortcut:#0d8587"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain.svg?v=2.1.0"></span><strong>Signal Chain</strong><small>Build and analyse RF chains</small></a>
+<a class="shortcut-card surface" data-searchable="favourites saved tools" href="./calculator-library.html" style="--shortcut:#504097"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-favourites.svg?v=2.1.0"></span><strong>Favourites</strong><small>Saved tools and shortcuts</small></a>
+</nav>
+<section class="packs-card surface" data-searchable="tool packs manage customise">
+<span class="packs-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-tool-packs.svg?v=2.1.0"></span></span>
+<span class="packs-copy"><strong>Tool Packs</strong><small>Enable or disable tool packs to customise your toolbox.</small></span>
+<a class="manage-link" href="./calculator-library.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-manage-packs.svg?v=2.1.0"></span><span>Manage</span></a>
+</section>
+<p class="search-empty surface" hidden="" id="searchEmpty">No tools match that search.</p>
+</article>
+</section>
+</main>
+<script>
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
       page: "tools",
       label: "Field Tools",
       placeholder: "Search field tools...",
-      emptyText: "No field tools matches found.",
+      emptyText: "No field tools found.",
       items: [
-        {
-          id: "tools-library",
-          title: "Calculator Library",
-          subtitle: "Calculators, converters, identifiers and visual tools",
-          href: "./calculator-library.html",
-          keywords: ["calculator", "converter", "identifier", "smith chart", "bessel", "rf", "electronics", "electrical"]
-        },
-        {
-          id: "tools-universal-converter",
-          title: "Universal Converter",
-          subtitle: "77 direct conversion families and 453 source units",
-          href: "./converter.html",
-          keywords: ["converter", "units", "dbm", "watts", "length", "temperature", "pressure", "dab", "dtt", "binary", "hex"]
-        },
-        {
-          id: "tools-location-route",
-          title: "Location and route",
-          subtitle: "GPS, map link and route signal logging",
-          href: "./index.html#locationRoutePanel",
-          keywords: ["location", "gps", "route", "signal", "map", "reading"]
-        },
-        {
-          id: "tools-field-notes",
-          title: "Field notes and evidence",
-          subtitle: "Fuel, amenities, route notes and camera evidence",
-          href: "./index.html#fieldNotesPanel",
-          keywords: ["notes", "evidence", "fuel", "amenities", "camera", "break"]
-        },
-        {
-          id: "tools-procedures",
-          title: "Test procedures",
-          subtitle: "Electrical and RF test prompts",
-          href: "./index.html#proceduresPanel",
-          keywords: ["test", "procedure", "continuity", "polarity", "meter", "rf", "safety"]
-        },
-        {
-          id: "tools-quick-access",
-          title: "Quick access",
-          subtitle: "Job pack, service context and RF paths",
-          href: "./index.html#quickAccessPanel",
-          keywords: ["job pack", "network", "rf paths", "docs", "quick"]
-        }
+        { id: "tools-calculators", title: "Calculators", subtitle: "RF, electrical and engineering calculators", href: "./calculator-library.html", keywords: ["calculator", "ohms law", "link budget", "cable loss", "vswr"] },
+        { id: "tools-converters", title: "Converters", subtitle: "Units, RF power and engineering conversions", href: "./converter.html", keywords: ["converter", "dbm", "watts", "units"] },
+        { id: "tools-identifiers", title: "Identifiers & Decoders", subtitle: "Coax, resistor and component identification", href: "./calculator-library.html?search=identifier", keywords: ["identifier", "coax", "resistor", "smd"] },
+        { id: "tools-charts", title: "Charts & Visualisers", subtitle: "Smith chart, frequency response and plots", href: "./calculator-library.html?search=chart", keywords: ["smith", "chart", "frequency", "polar"] },
+        { id: "tools-diagnostics", title: "Diagnostics & Measurement", subtitle: "Spectrum, scopes and power measurement", href: "./calculator-library.html?search=measurement", keywords: ["spectrum", "oscilloscope", "power meter", "measurement"] },
+        { id: "tools-references", title: "References", subtitle: "Channels, blocks, connectors and tables", href: "../Docs/index.html", keywords: ["reference", "dab", "dtt", "connector", "table"] }
       ]
     });
 
     (() => {
       "use strict";
 
-      const SIGNAL_KEY = "fieldOpsAtlas.tools.signalLog.v1";
-      const BREAK_KEY = "fieldOpsAtlas.tools.breakNote.v1";
-      const USAGE_KEY = "fieldOpsAtlas.calculatorUsage.v1";
-      let currentLocation = null;
+      const loadSvgAssets = () => Promise.all(
+        Array.from(document.querySelectorAll("[data-svg]")).map(async (host) => {
+          try {
+            const response = await fetch(host.dataset.svg, { credentials: "same-origin" });
+            if (!response.ok) throw new Error(`SVG ${response.status}`);
+            const template = document.createElement("template");
+            template.innerHTML = (await response.text()).trim();
+            const svg = template.content.querySelector("svg");
+            if (!svg) throw new Error("Invalid SVG");
+            svg.querySelectorAll("script, foreignObject").forEach((node) => node.remove());
+            svg.setAttribute("aria-hidden", "true");
+            svg.setAttribute("focusable", "false");
+            svg.removeAttribute("width");
+            svg.removeAttribute("height");
+            host.replaceChildren(svg);
+          } catch (error) {
+            host.classList.add("is-missing");
+            console.warn("Field Tools icon failed to load", host.dataset.svg, error);
+          }
+        })
+      );
 
-      const readStored = (key, fallback) => {
-        try {
-          return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
-        } catch {
-          return fallback;
-        }
+      loadSvgAssets();
+
+      const voltage = document.getElementById("ohmVoltage");
+      const current = document.getElementById("ohmCurrent");
+      const resistance = document.getElementById("ohmResult");
+
+      const updateOhmsLaw = () => {
+        const volts = Number(voltage.value);
+        const amps = Number(current.value);
+        resistance.textContent = Number.isFinite(volts) && Number.isFinite(amps) && amps !== 0
+          ? `${(volts / amps).toFixed(2)} Ω`
+          : "—";
       };
 
-      const writeStored = (key, value) => {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-        } catch {
-          // Storage may be disabled in previews.
-        }
+      voltage.addEventListener("input", updateOhmsLaw);
+      current.addEventListener("input", updateOhmsLaw);
+
+      const from = document.getElementById("convertFrom");
+      const to = document.getElementById("convertTo");
+      const input = document.getElementById("convertInput");
+      const output = document.getElementById("convertOutput");
+      const swap = document.getElementById("swapConverter");
+
+      const toWatts = (value, unit) => {
+        if (unit === "dbm") return Math.pow(10, (value - 30) / 10);
+        if (unit === "mw") return value / 1000;
+        return value;
       };
 
-      const stamp = () => new Date().toLocaleString([], {
-        day: "2-digit",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit"
+      const fromWatts = (watts, unit) => {
+        if (unit === "dbm") return watts > 0 ? 10 * Math.log10(watts * 1000) : NaN;
+        if (unit === "mw") return watts * 1000;
+        return watts;
+      };
+
+      const formatValue = (value) => {
+        if (!Number.isFinite(value)) return "—";
+        if (Math.abs(value) >= 1000) return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        if (Math.abs(value) >= 1) return value.toFixed(2);
+        return value.toPrecision(4);
+      };
+
+      const updateConverter = () => {
+        const value = Number(input.value);
+        const watts = toWatts(value, from.value);
+        output.textContent = formatValue(fromWatts(watts, to.value));
+      };
+
+      [from, to, input].forEach((control) => control.addEventListener("input", updateConverter));
+      swap.addEventListener("click", () => {
+        const previousFrom = from.value;
+        from.value = to.value;
+        to.value = previousFrom;
+        const previousOutput = Number(String(output.textContent).replace(/,/g, ""));
+        if (Number.isFinite(previousOutput)) input.value = String(previousOutput);
+        updateConverter();
       });
 
-      const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (character) => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      }[character]));
+      const search = document.getElementById("toolSearch");
+      const searchable = Array.from(document.querySelectorAll("[data-searchable]"));
+      const empty = document.getElementById("searchEmpty");
 
-      const panels = Array.from(document.querySelectorAll(".detail-panel"));
-      const panelButtons = Array.from(document.querySelectorAll("[data-panel]"));
-
-      const openPanel = (panelId, shouldScroll = true) => {
-        panels.forEach((panel) => {
-          panel.hidden = panel.id !== panelId;
-        });
-        panelButtons.forEach((button) => {
-          button.setAttribute("aria-expanded", button.dataset.panel === panelId ? "true" : "false");
-        });
-        const panel = document.getElementById(panelId);
-        if (panel && shouldScroll) {
-          requestAnimationFrame(() => panel.scrollIntoView({ behavior: "smooth", block: "start" }));
-        }
-      };
-
-      panelButtons.forEach((button) => {
-        button.setAttribute("aria-expanded", "false");
-        button.addEventListener("click", () => {
-          openPanel(button.dataset.panel);
-          history.replaceState(null, "", "#" + button.dataset.panel);
-        });
-      });
-
-      document.querySelectorAll("[data-close-panel]").forEach((button) => {
-        button.addEventListener("click", () => {
-          panels.forEach((panel) => { panel.hidden = true; });
-          panelButtons.forEach((panelButton) => panelButton.setAttribute("aria-expanded", "false"));
-          history.replaceState(null, "", location.pathname + location.search);
-        });
-      });
-
-      const openHashPanel = () => {
-        const panelId = location.hash.replace(/^#/, "");
-        if (panels.some((panel) => panel.id === panelId)) openPanel(panelId, false);
-      };
-
-      window.addEventListener("hashchange", openHashPanel);
-      openHashPanel();
-
-      const searchInput = document.getElementById("hubSearchInput");
-      const categoryCards = Array.from(document.querySelectorAll(".category-card"));
-      const emptyState = document.getElementById("emptyState");
-
-      const filterCategories = () => {
-        const query = searchInput.value.trim().toLowerCase();
+      const filterTools = () => {
+        const query = search.value.trim().toLowerCase();
         let visible = 0;
-        categoryCards.forEach((card) => {
-          const matches = !query || card.dataset.search.includes(query) || card.textContent.toLowerCase().includes(query);
-          card.hidden = !matches;
+        searchable.forEach((item) => {
+          const text = `${item.dataset.searchable || ""} ${item.textContent || ""}`.toLowerCase();
+          const matches = !query || text.includes(query);
+          item.hidden = !matches;
           if (matches) visible += 1;
         });
-        emptyState.classList.toggle("is-visible", visible === 0);
+        empty.hidden = visible !== 0;
       };
 
-      searchInput.addEventListener("input", filterCategories);
-      document.getElementById("clearHubSearchButton").addEventListener("click", () => {
-        searchInput.value = "";
-        filterCategories();
-        searchInput.focus();
-      });
-
-      const refreshUsageSummary = () => {
-        const usage = readStored(USAGE_KEY, {});
-        let total = 0;
-        Object.values(usage).forEach((entry) => {
-          total += Number(entry.opens || 0) + Number(entry.calculations || 0);
-        });
-        document.getElementById("usageSummary").textContent = total + (total === 1 ? " use" : " uses");
-      };
-
-      document.querySelectorAll("[data-track-library]").forEach((link) => {
-        link.addEventListener("click", () => {
-          const usage = readStored(USAGE_KEY, {});
-          const entry = usage["tools-library-hub"] || { opens: 0, calculations: 0, lastUsed: null };
-          entry.opens += 1;
-          entry.lastUsed = new Date().toISOString();
-          usage["tools-library-hub"] = entry;
-          writeStored(USAGE_KEY, usage);
-        });
-      });
-
-      const issueBody = [
-        "## Field Tools error",
-        "",
-        "Page version: 1.4.0-universal-converter-front",
-        "URL: " + location.href,
-        "Browser: " + navigator.userAgent,
-        "",
-        "## What happened",
-        "Describe the problem here."
-      ].join("\n");
-      document.getElementById("reportErrorLink").href =
-        "https://github.com/A-engi/FieldOpsAtlas-Web/issues/new?title=" +
-        encodeURIComponent("Field Tools error") +
-        "&body=" + encodeURIComponent(issueBody);
-
-      const getPosition = () => new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-          reject(new Error("Geolocation is not available in this browser."));
-          return;
-        }
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 12000,
-          maximumAge: 30000
-        });
-      });
-
-      const locationResult = document.getElementById("locationResult");
-      const mapLink = () => currentLocation
-        ? "https://maps.google.com/?q=" + currentLocation.lat + "," + currentLocation.lon
-        : "";
-
-      document.getElementById("getLocationButton").addEventListener("click", () => {
-        locationResult.textContent = "Capturing location...";
-        getPosition().then((position) => {
-          currentLocation = {
-            lat: position.coords.latitude.toFixed(6),
-            lon: position.coords.longitude.toFixed(6),
-            accuracy: Math.round(position.coords.accuracy || 0)
-          };
-          locationResult.innerHTML = '<a href="' + mapLink() + '" target="_blank" rel="noopener noreferrer">Open map</a> · ' +
-            currentLocation.lat + ", " + currentLocation.lon + " ±" + currentLocation.accuracy + " m";
-        }).catch((error) => {
-          locationResult.textContent = error.message;
-        });
-      });
-
-      document.getElementById("copyLocationButton").addEventListener("click", () => {
-        if (!currentLocation) {
-          locationResult.textContent = "Capture location first.";
-          return;
-        }
-        const text = mapLink();
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(() => {
-            locationResult.textContent = "Map link copied: " + text;
-          }).catch(() => {
-            locationResult.textContent = text;
-          });
-        } else {
-          locationResult.textContent = text;
-        }
-      });
-
-      const signalForm = document.getElementById("signalLogForm");
-      const signalList = document.getElementById("signalLogList");
-
-      const renderSignalLog = () => {
-        const items = readStored(SIGNAL_KEY, []);
-        if (!items.length) {
-          signalList.innerHTML = '<p class="status-text">No route readings logged yet.</p>';
-          return;
-        }
-        signalList.innerHTML = items.map((item) => [
-          '<article class="log-row">',
-          '<span>',
-          '<strong>', escapeHtml(item.service || "Service reading"), '</strong>',
-          '<small>', escapeHtml([item.frequency, item.reading, item.gps, item.notes].filter(Boolean).join(" · ")), '</small>',
-          '</span>',
-          '<span class="status-pill is-watch">', escapeHtml(item.time), '</span>',
-          '</article>'
-        ].join("")).join("");
-      };
-
-      document.getElementById("useSignalLocationButton").addEventListener("click", () => {
-        getPosition().then((position) => {
-          signalForm.elements.gps.value = position.coords.latitude.toFixed(6) + ", " + position.coords.longitude.toFixed(6);
-        }).catch((error) => {
-          signalForm.elements.gps.value = error.message;
-        });
-      });
-
-      signalForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const values = Array.from(signalForm.elements).reduce((entry, field) => {
-          if (field.name) entry[field.name] = field.value.trim();
-          return entry;
-        }, {});
-        values.time = stamp();
-        const items = readStored(SIGNAL_KEY, []);
-        items.unshift(values);
-        writeStored(SIGNAL_KEY, items.slice(0, 50));
-        signalForm.reset();
-        renderSignalLog();
-      });
-
-      document.getElementById("clearSignalLogButton").addEventListener("click", () => {
-        localStorage.removeItem(SIGNAL_KEY);
-        renderSignalLog();
-      });
-
-      const breakForm = document.getElementById("breakForm");
-      const breakStatus = document.getElementById("breakStatus");
-      const breakValues = readStored(BREAK_KEY, {});
-      Array.from(breakForm.elements).forEach((field) => {
-        if (field.name) field.value = breakValues[field.name] || "";
-      });
-
-      breakForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const values = Array.from(breakForm.elements).reduce((entry, field) => {
-          if (field.name) entry[field.name] = field.value.trim();
-          return entry;
-        }, {});
-        writeStored(BREAK_KEY, values);
-        breakStatus.textContent = "Field note saved on this device · " + stamp();
-      });
-
-      document.getElementById("clearBreakButton").addEventListener("click", () => {
-        localStorage.removeItem(BREAK_KEY);
-        breakForm.reset();
-        breakStatus.textContent = "Field note cleared.";
-      });
-
-      document.getElementById("cameraCaptureInput").addEventListener("change", (event) => {
-        const names = Array.from(event.target.files || []).map((file) => file.name).join(", ");
-        document.getElementById("cameraStatus").textContent = names ? "Selected: " + names : "";
-      });
-
-      (() => {
-        const host = document.querySelector("[data-quick-calculator]");
-        const select = host && host.querySelector("[data-quick-calc-select]");
-        const fieldsHost = host && host.querySelector("[data-quick-calc-fields]");
-        const resultHost = host && host.querySelector("[data-quick-calc-result]");
-        const runButton = host && host.querySelector("[data-quick-calc-run]");
-        if (!host || !window.FieldOpsCalculatorRegistry) return;
-        const preferred = ["ohms-law", "dbm-watts", "db-power-change", "vswr-return-loss", "link-budget", "cable-loss", "voltage-drop-single", "loop-4-20"];
-        const quickTools = preferred.map((id) => window.FieldOpsCalculatorRegistry.find((tool) => tool.id === id)).filter(Boolean);
-        quickTools.forEach((tool) => {
-          const option = document.createElement("option");
-          option.value = tool.id;
-          option.textContent = tool.title;
-          select.append(option);
-        });
-        const renderFields = () => {
-          const tool = quickTools.find((item) => item.id === select.value) || quickTools[0];
-          fieldsHost.innerHTML = "";
-          tool.fields.forEach((field) => {
-            const label = document.createElement("label");
-            label.className = "quick-calc-field";
-            const caption = document.createElement("span");
-            caption.textContent = field.label;
-            let input;
-            if (field.type === "select") {
-              input = document.createElement("select");
-              (field.options || []).forEach(([value, text]) => {
-                const option = document.createElement("option");
-                option.value = value;
-                option.textContent = text;
-                input.append(option);
-              });
-            } else {
-              input = document.createElement("input");
-              input.type = field.type || "number";
-              input.inputMode = field.type === "text" ? "text" : "decimal";
-            }
-            input.name = field.id;
-            input.value = field.value ?? "";
-            label.append(caption, input);
-            fieldsHost.append(label);
-          });
-          resultHost.innerHTML = "<strong>Ready</strong><small>Enter values and calculate.</small>";
-        };
-        const calculate = () => {
-          const tool = quickTools.find((item) => item.id === select.value) || quickTools[0];
-          const values = {};
-          fieldsHost.querySelectorAll("input,select").forEach((input) => { values[input.name] = input.value; });
-          try {
-            const output = tool.compute(values);
-            resultHost.innerHTML = "<strong>" + output.primary + "</strong><small>" + (output.secondary || "") + "</small>";
-            if (window.FieldOpsUsage) window.FieldOpsUsage.calculate(tool.id);
-          } catch (error) {
-            resultHost.innerHTML = "<strong>Calculation error</strong><small>" + error.message + "</small>";
-          }
-        };
-        select.addEventListener("change", renderFields);
-        runButton.addEventListener("click", calculate);
-        renderFields();
-      })();
-
-      window.FieldOpsConverter.mount(document.querySelector("[data-converter-widget]"), {
-        storageKey: "fieldOpsAtlas.converter.quick.v1",
-        defaultFrom: "rf-power::dbm",
-        defaultTo: "mw",
-        defaultValue: "23"
-      });
-
-      refreshUsageSummary();
-      renderSignalLog();
+      search.addEventListener("input", filterTools);
+      updateOhmsLaw();
+      updateConverter();
     })();
   </script>
-  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+<script defer="" src="../../../shell.js?v=1.1.21-session-editor-token"></script>
 </body>
 </html>
