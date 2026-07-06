@@ -148,7 +148,7 @@
 
     .controls {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
       gap: 7px;
     }
 
@@ -274,6 +274,19 @@
     }
 
     .modal-heading { display: grid; gap: 4px; }
+    .modal-header-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+    .field textarea {
+      width: 100%; min-height: 100px; padding: 10px; resize: vertical;
+      color: var(--ink); border: 1px solid rgba(42,67,93,.24); border-radius: 11px;
+      background: rgba(255,255,255,.82); font: inherit; font-size: 14px; outline: none;
+    }
+    .domain-badge { color: var(--blue); background: rgba(34,95,134,.11); }
+    .tool-kind { color: var(--muted); font-size: 8px; font-weight: 900; text-transform: uppercase; white-space: nowrap; }
+    .chart-wrap { overflow-x: auto; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.72); }
+    .engineering-chart { width: 100%; min-width: 300px; height: auto; display: block; }
+    .chart-legend { margin-top: 7px; color: var(--muted); font-size: 10px; font-weight: 700; line-height: 1.35; }
+    .identifier-note { padding: 9px; border-radius: 10px; background: rgba(134,96,24,.10); color: var(--muted); font-size: 10px; font-weight: 700; line-height: 1.35; }
+
     .modal-heading small { color: var(--muted); font-size: 10px; font-weight: 850; text-transform: uppercase; }
     .form-grid { display: grid; gap: 9px; }
     .field { display: grid; gap: 5px; }
@@ -392,31 +405,42 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.1.0-all-calculators-layout">
+  <main class="phone" data-page="tools" data-version="1.2.0-tool-types-smith-components-errors">
     <section class="content-canvas" aria-label="Calculator library">
       <article class="page">
         <header class="card hero">
-          <p class="kicker">Field tools · Calculators</p>
-          <h1>Calculator library</h1>
-          <p class="copy">RF, electronics, electrical, instruments, broadcast, cable and sensor tools. Usage, hidden tools and custom order are stored only on this phone.</p>
+          <p class="kicker">Field tools · Engineering toolkit</p>
+          <h1>Engineering tool library</h1>
+          <p class="copy">Calculators, converters, identifiers, charts, references and diagnostics across Calculators, converters, identifiers, charts, references and diagnostics. Usage, hidden tools and custom order are stored only on this phone.</p>
           <div class="hero-actions">
             <a class="button-link" href="./index.html">Back to field tools</a>
             <button id="manageButton" class="button is-primary" type="button">Manage tools</button>
             <button id="usageButton" class="button" type="button">View usage</button>
             <button id="exportButton" class="button" type="button">Export data</button>
+            <button id="reportButton" class="button" type="button">Report error</button>
           </div>
           <div class="metrics" aria-label="Calculator usage summary">
-            <article class="metric"><strong id="totalToolsMetric">0</strong><span>Tools listed</span></article>
-            <article class="metric"><strong id="readyToolsMetric">0</strong><span>Ready now</span></article>
+            <article class="metric"><strong id="totalToolsMetric">0</strong><span>All tools</span></article>
+            <article class="metric"><strong id="readyToolsMetric">0</strong><span>Working tools</span></article>
             <article class="metric"><strong id="opensMetric">0</strong><span>Total opens</span></article>
-            <article class="metric"><strong id="calculationsMetric">0</strong><span>Calculations</span></article>
+            <article class="metric"><strong id="calculationsMetric">0</strong><span>Completed runs</span></article>
           </div>
         </header>
 
         <section class="card">
           <div class="controls">
-            <input id="searchInput" type="search" autocomplete="off" placeholder="Search calculators..." aria-label="Search calculators">
-            <select id="statusFilter" aria-label="Filter calculators">
+            <input id="searchInput" type="search" autocomplete="off" placeholder="Search all engineering tools..." aria-label="Search engineering tools">
+            <select id="domainFilter" aria-label="Filter by discipline">
+              <option value="all">All disciplines</option>
+              <option value="rf">RF</option>
+              <option value="electronics">Electronics</option>
+              <option value="electrical">Electrical</option>
+              <option value="instruments">Test instruments</option>
+              <option value="broadcast">Broadcast</option>
+              <option value="cable">Cable & connectors</option>
+              <option value="sensors">Sensors & control</option>
+            </select>
+            <select id="statusFilter" aria-label="Filter tools">
               <option value="all">All tools</option>
               <option value="ready">Ready now</option>
               <option value="hidden">Hidden</option>
@@ -424,16 +448,16 @@
               <option value="unused">Unused</option>
             </select>
             <select id="sortSelect" aria-label="Sort calculators">
-              <option value="category">Custom order</option>
+              <option value="category">Umbrella order</option>
               <option value="usage">Most used</option>
               <option value="alpha">A–Z</option>
             </select>
           </div>
-          <p class="help">Use Manage tools to hide items and change category or calculator order. Every listed calculator is now functional.</p>
+          <p class="help">The main sections are tool types. Discipline labels show whether a tool belongs to RF, electronics, electrical, instruments, broadcast, cable or sensors. Use Manage tools to hide or reorder anything.</p>
         </section>
 
         <section id="categoryList" class="category-list" aria-live="polite"></section>
-        <section id="emptyState" class="card empty-state" hidden><p class="empty-copy">No calculators match the current filter.</p></section>
+        <section id="emptyState" class="card empty-state" hidden><p class="empty-copy">No tools match the current filter.</p></section>
       </article>
     </section>
   </main>
@@ -446,7 +470,10 @@
           <h2 id="modalTitle">Tool</h2>
           <p id="modalDescription" class="copy"></p>
         </div>
-        <button id="closeModalButton" class="button" type="button">Close</button>
+        <span class="modal-header-actions">
+          <button id="reportToolButton" class="button" type="button">Report error</button>
+          <button id="closeModalButton" class="button" type="button">Close</button>
+        </span>
       </header>
       <div id="modalBody"></div>
     </article>
@@ -457,8 +484,8 @@
       <header class="modal-header">
         <div class="modal-heading">
           <small>Local phone data</small>
-          <h2 id="usageTitle">Calculator usage</h2>
-          <p class="copy">Use this list later to remove tools that receive few opens and no completed calculations.</p>
+          <h2 id="usageTitle">Tool usage</h2>
+          <p class="copy">Use this list later to remove tools that receive few opens and no completed runs.</p>
         </div>
         <button id="closeUsageButton" class="button" type="button">Close</button>
       </header>
@@ -476,7 +503,7 @@
         <div class="modal-heading">
           <small>Phone layout</small>
           <h2 id="manageTitle">Manage calculators</h2>
-          <p class="copy">Move categories and calculators up or down. Hidden tools remain available through the Hidden filter and can be shown again here.</p>
+          <p class="copy">Move umbrella sections and tools up or down. Hidden tools remain available through the Hidden filter and can be shown again here.</p>
         </div>
         <button id="closeManageButton" class="button" type="button">Close</button>
       </header>
@@ -490,6 +517,28 @@
     </article>
   </section>
 
+
+  <section id="reportModal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="reportTitle">
+    <article class="modal-card">
+      <header class="modal-header">
+        <div class="modal-heading">
+          <small>Error report</small>
+          <h2 id="reportTitle">Report a tool problem</h2>
+          <p class="copy">The report includes the selected tool, last inputs, app version and browser details. Review it before copying or opening a GitHub issue.</p>
+        </div>
+        <button id="closeReportButton" class="button" type="button">Close</button>
+      </header>
+      <label class="field"><span>What went wrong?</span><textarea id="reportDescription" rows="5" placeholder="Describe the wrong result, error message or steps that caused it."></textarea></label>
+      <label class="field"><span>Prepared report</span><textarea id="reportPreview" rows="12" readonly></textarea></label>
+      <div class="modal-actions">
+        <button id="copyReportButton" class="button is-primary" type="button">Copy report</button>
+        <button id="openIssueButton" class="button" type="button">Open GitHub issue</button>
+        <button id="clearErrorLogButton" class="button is-danger" type="button">Clear error log</button>
+      </div>
+      <p id="reportStatus" class="help"></p>
+    </article>
+  </section>
+
   <script>
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
@@ -498,7 +547,7 @@
       placeholder: "Search calculator library...",
       emptyText: "No calculator matches found.",
       items: [
-        { id: "calculator-library", title: "Calculator library", subtitle: "RF, electronics, electrical, instruments, broadcast, cable and sensors", href: "./calculator-library.html", keywords: ["calculator", "rf", "electronics", "electrical", "instrument", "broadcast", "cable", "sensor"] }
+        { id: "calculator-library", title: "Calculator library", subtitle: "Calculators, converters, identifiers, charts, references and diagnostics", href: "./calculator-library.html", keywords: ["calculator", "converter", "identifier", "smith chart", "bessel", "component", "rf", "electronics", "electrical", "instrument", "broadcast", "cable", "sensor"] }
       ]
     });
 
@@ -506,16 +555,22 @@
       "use strict";
 
       const USAGE_KEY = "fieldOpsAtlas.calculatorUsage.v1";
-      const LAYOUT_KEY = "fieldOpsAtlas.calculatorLayout.v1";
-      const DEFAULT_CATEGORY_ORDER = ["rf", "electronics", "electrical", "instruments", "broadcast", "cable", "sensors"];
+      const LAYOUT_KEY = "fieldOpsAtlas.calculatorLayout.v2";
+      const OLD_LAYOUT_KEY = "fieldOpsAtlas.calculatorLayout.v1";
+      const ERROR_KEY = "fieldOpsAtlas.calculatorErrors.v1";
+      const APP_VERSION = "1.2.0-tool-types-smith-components-errors";
+      const DEFAULT_CATEGORY_ORDER = ["calculators", "converters", "identifiers", "charts", "references", "diagnostics"];
       const categories = {
-        rf: { title: "RF", description: "Power, impedance, propagation, matching and link calculations." },
-        electronics: { title: "Electronics", description: "Components, analogue circuits, timing and power electronics." },
-        electrical: { title: "Electrical", description: "Single-phase, three-phase, cable and power-system references." },
-        instruments: { title: "Test instruments", description: "Spectrum analyser, scope, generator, meter and uncertainty helpers." },
-        broadcast: { title: "Broadcast", description: "FM, DAB, DTT, satellite and microwave calculations." },
-        cable: { title: "Cable & connectors", description: "Coax identification, loss, delay, reel and connector checks." },
-        sensors: { title: "Sensors & control", description: "4–20 mA, 0–10 V, RTDs, thermocouples and calibration." }
+        calculators: { title: "Calculators", singular: "Calculator", description: "Formula tools that calculate a new engineering value from measured or design inputs." },
+        converters: { title: "Converters", singular: "Converter", description: "Unit, level, channel, code and representation conversions." },
+        identifiers: { title: "Identifiers & decoders", singular: "Identifier", description: "Cable, connector and component identification from dimensions, colours or markings." },
+        charts: { title: "Charts & visualisers", singular: "Chart", description: "Interactive engineering plots including Smith and filter-response charts." },
+        references: { title: "References", singular: "Reference", description: "Field lookup tools and practical limits that do not need a full calculation." },
+        diagnostics: { title: "Diagnostics & measurement", singular: "Diagnostic", description: "Instrument loading, uncertainty, corrections and fault-finding helpers." }
+      };
+      const domains = {
+        rf: "RF", electronics: "Electronics", electrical: "Electrical", instruments: "Test instruments",
+        broadcast: "Broadcast", cable: "Cable & connectors", sensors: "Sensors & control"
       };
 
       const tools = [
@@ -604,8 +659,33 @@
         { id: "thermocouple", category: "sensors", title: "Thermocouple", description: "Voltage and cold-junction compensation.", status: "ready" },
         { id: "pressure", category: "sensors", title: "Pressure units", description: "Pa, bar, psi, mbar and water-column units.", status: "ready" },
         { id: "sensor-offset", category: "sensors", title: "Sensor offset and span", description: "Expected versus measured calibration error.", status: "ready" },
-        { id: "uncertainty", category: "sensors", title: "Calibration uncertainty", description: "Resolution, repeatability and reference uncertainty.", status: "ready" }
+        { id: "uncertainty", category: "sensors", title: "Calibration uncertainty", description: "Resolution, repeatability and reference uncertainty.", status: "ready" },
+
+        { id: "smith-chart", category: "rf", title: "Smith chart", description: "Plot complex impedance and calculate Γ, VSWR and return loss.", status: "ready" },
+        { id: "filter-response-chart", category: "electronics", title: "Filter response chart", description: "Plot Butterworth, Bessel or Chebyshev low-pass response.", status: "ready" },
+        { id: "resistor-colour-id", category: "electronics", title: "Resistor colour identifier", description: "Decode 4, 5 or 6-band resistor colour markings.", status: "ready" },
+        { id: "smd-resistor-id", category: "electronics", title: "SMD resistor code", description: "Decode 3-digit, 4-digit, R notation and EIA-96 markings.", status: "ready" },
+        { id: "capacitor-code-id", category: "electronics", title: "Capacitor code identifier", description: "Decode common numeric capacitor markings and tolerance letters.", status: "ready" },
+        { id: "inductor-colour-id", category: "electronics", title: "Inductor colour identifier", description: "Decode axial inductor colour bands in microhenries.", status: "ready" },
+        { id: "component-classifier", category: "electronics", title: "Component identifier guide", description: "Identify the likely component class from package, leads and markings.", status: "ready" }
       ];
+
+      const GROUP_ASSIGNMENTS = {
+        converters: ["rf-power","vswr-return-loss","wavelength","field-strength","phase-delay","awg-mm2","dtt-channel","dab-block","satellite-if","dab-mer-evm","dtt-mer-evm","sfn-delay","cable-delay","velocity-factor","4-20ma","0-10v","pt100","pt1000","pressure","adc-dac"],
+        identifiers: ["coax-identifier","connector-fit","feeder-id","resistor-colour-id","smd-resistor-id","capacitor-code-id","inductor-colour-id","component-classifier"],
+        charts: ["smith-chart","filter-response-chart"],
+        references: ["bend-radius"],
+        diagnostics: ["scope-bandwidth","analyser-noise","scope-sample-rate","fft-bin","rbw-correction","generator-correction","probe-loading","meter-loading","mismatch-uncertainty","measurement-uncertainty","sensor-offset","uncertainty","fault-current"]
+      };
+      tools.forEach((tool) => {
+        tool.group = "calculators";
+        Object.entries(GROUP_ASSIGNMENTS).some(([group, ids]) => {
+          if (!ids.includes(tool.id)) return false;
+          tool.group = group;
+          return true;
+        });
+      });
+
 
       const readyDefinitions = {
         "rf-power": {
@@ -1801,11 +1881,66 @@
             const rss = Math.sqrt(values.reduce((sum, n) => sum + n * n, 0));
             return ok(rss.toFixed(8) + " standard units", (2 * rss).toFixed(8) + " expanded units at k=2");
           }
+        },
+        "smith-chart": {
+          fields: [
+            { id: "mode", label: "Input", type: "select", options: [["z", "Impedance R + jX"], ["y", "Admittance G + jB"]] },
+            { id: "real", label: "Real value", type: "number", step: "any", value: "50" },
+            { id: "imag", label: "Imaginary value", type: "number", step: "any", value: "0" },
+            { id: "z0", label: "Reference impedance Z₀ (Ω)", type: "number", min: "0", step: "any", value: "50" }
+          ],
+          compute: smithChartResult
+        },
+        "filter-response-chart": {
+          fields: [
+            { id: "response", label: "Response", type: "select", options: [["butterworth", "Butterworth"], ["bessel", "Bessel"], ["chebyshev", "Chebyshev I"]] },
+            { id: "order", label: "Order", type: "select", options: [["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"]] },
+            { id: "cutoff", label: "Cutoff / edge frequency (Hz)", type: "number", min: "0", step: "any", value: "1000" },
+            { id: "ripple", label: "Chebyshev ripple (dB)", type: "number", min: "0", step: "any", value: "0.5" }
+          ],
+          compute: filterResponseResult
+        },
+        "resistor-colour-id": {
+          fields: [
+            { id: "bands", label: "Band count", type: "select", options: [["4","4 bands"],["5","5 bands"],["6","6 bands"]] },
+            { id: "b1", label: "Band 1", type: "select", options: colourDigitOptions() },
+            { id: "b2", label: "Band 2", type: "select", options: colourDigitOptions() },
+            { id: "b3", label: "Band 3 (5/6 band)", type: "select", options: colourDigitOptions() },
+            { id: "mult", label: "Multiplier", type: "select", options: colourMultiplierOptions() },
+            { id: "tol", label: "Tolerance", type: "select", options: colourToleranceOptions() },
+            { id: "tempco", label: "Temperature coefficient", type: "select", options: [["","Not marked"],["100","Brown · 100 ppm/°C"],["50","Red · 50 ppm/°C"],["15","Orange · 15 ppm/°C"],["25","Yellow · 25 ppm/°C"],["20","Blue · 20 ppm/°C"],["10","Violet · 10 ppm/°C"],["5","Grey · 5 ppm/°C"]] }
+          ],
+          compute: resistorColourResult
+        },
+        "smd-resistor-id": {
+          fields: [{ id: "code", label: "Printed code", type: "text", placeholder: "103, 4992, 4R7 or 01C" }],
+          compute: smdResistorResult
+        },
+        "capacitor-code-id": {
+          fields: [{ id: "code", label: "Printed code", type: "text", placeholder: "104K, 472J, 2n2 or 0.1u" }],
+          compute: capacitorCodeResult
+        },
+        "inductor-colour-id": {
+          fields: [
+            { id: "b1", label: "Band 1", type: "select", options: colourDigitOptions() },
+            { id: "b2", label: "Band 2", type: "select", options: colourDigitOptions() },
+            { id: "mult", label: "Multiplier", type: "select", options: colourMultiplierOptions() },
+            { id: "tol", label: "Tolerance", type: "select", options: colourToleranceOptions() }
+          ],
+          compute: inductorColourResult
+        },
+        "component-classifier": {
+          fields: [
+            { id: "package", label: "Physical form", type: "select", options: [["axial-bands","Axial body with colour bands"],["axial-stripe","Axial cylinder with one polarity stripe"],["radial-disc","Two-lead disc / bead"],["radial-can","Two-lead cylindrical can"],["smd-two","Two-terminal SMD"],["three-pin","Three-lead semiconductor package"],["ic","Multi-pin IC package"],["coil","Visible winding / magnetic core"],["relay","Box with coil and contact pins"]] },
+            { id: "marking", label: "Visible marking", type: "text", placeholder: "Colours, number, logo, stripe or part code" }
+          ],
+          compute: componentClassifierResult
         }
 
       };
       const categoryList = document.getElementById("categoryList");
       const searchInput = document.getElementById("searchInput");
+      const domainFilter = document.getElementById("domainFilter");
       const statusFilter = document.getElementById("statusFilter");
       const sortSelect = document.getElementById("sortSelect");
       const toolModal = document.getElementById("toolModal");
@@ -1816,6 +1951,9 @@
       const usageModal = document.getElementById("usageModal");
       const manageModal = document.getElementById("manageModal");
       const manageList = document.getElementById("manageList");
+      const reportModal = document.getElementById("reportModal");
+      let currentToolId = null;
+      let lastToolSnapshot = null;
       let layout = readLayout();
       let openCategories = new Set(layout.categoryOrder);
 
@@ -1832,6 +1970,170 @@
 
       function ok(main, detail) { return { ok: true, main, detail }; }
       function fail(message) { return { ok: false, main: "Check inputs", detail: message }; }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
+      }
+
+      function formatResistance(ohms) {
+        const value = Math.abs(ohms);
+        if (value >= 1e9) return (ohms / 1e9).toPrecision(6) + " GΩ";
+        if (value >= 1e6) return (ohms / 1e6).toPrecision(6) + " MΩ";
+        if (value >= 1e3) return (ohms / 1e3).toPrecision(6) + " kΩ";
+        if (value >= 1) return ohms.toPrecision(6) + " Ω";
+        if (value >= 1e-3) return (ohms * 1e3).toPrecision(6) + " mΩ";
+        return ohms.toPrecision(6) + " Ω";
+      }
+
+      function colourDigitOptions() {
+        return [["0","Black · 0"],["1","Brown · 1"],["2","Red · 2"],["3","Orange · 3"],["4","Yellow · 4"],["5","Green · 5"],["6","Blue · 6"],["7","Violet · 7"],["8","Grey · 8"],["9","White · 9"]];
+      }
+      function colourMultiplierOptions() {
+        return [["-2","Silver · ×0.01"],["-1","Gold · ×0.1"],["0","Black · ×1"],["1","Brown · ×10"],["2","Red · ×100"],["3","Orange · ×1k"],["4","Yellow · ×10k"],["5","Green · ×100k"],["6","Blue · ×1M"],["7","Violet · ×10M"],["8","Grey · ×100M"],["9","White · ×1G"]];
+      }
+      function colourToleranceOptions() {
+        return [["20","None · ±20%"],["10","Silver · ±10%"],["5","Gold · ±5%"],["1","Brown · ±1%"],["2","Red · ±2%"],["0.05","Orange · ±0.05%"],["0.02","Yellow · ±0.02%"],["0.5","Green · ±0.5%"],["0.25","Blue · ±0.25%"],["0.1","Violet · ±0.1%"],["0.01","Grey · ±0.01%"]];
+      }
+
+      function resistorColourResult(v) {
+        const bands = Number(v.bands), digits = bands === 4 ? [v.b1,v.b2] : [v.b1,v.b2,v.b3];
+        const base = Number(digits.join(""));
+        const ohms = base * Math.pow(10, Number(v.mult));
+        if (!Number.isFinite(ohms)) return fail("Choose every required colour band.");
+        const tempco = bands === 6 && v.tempco ? " · " + v.tempco + " ppm/°C" : "";
+        return ok(formatResistance(ohms), "±" + v.tol + "%" + tempco);
+      }
+
+      function inductorColourResult(v) {
+        const microhenry = Number(String(v.b1) + String(v.b2)) * Math.pow(10, Number(v.mult));
+        if (!Number.isFinite(microhenry)) return fail("Choose each colour band.");
+        const henry = microhenry * 1e-6;
+        return ok(microhenry.toPrecision(6) + " µH", formatFrequency(1 / (2 * Math.PI * Math.sqrt(Math.max(henry, 1e-30) * 1e-9))) + " resonance with 1 nF · ±" + v.tol + "%");
+      }
+
+      function smdResistorResult(v) {
+        const code = String(v.code || "").trim().toUpperCase();
+        if (!code) return fail("Enter the printed resistor code.");
+        if (/^\d*R\d+$/.test(code) || /^R\d+$/.test(code)) {
+          const value = Number(code.replace("R", "."));
+          return ok(formatResistance(value), "R notation");
+        }
+        if (/^\d{3}$/.test(code)) {
+          const value = Number(code.slice(0,2)) * Math.pow(10, Number(code[2]));
+          return ok(formatResistance(value), "3-digit SMD code");
+        }
+        if (/^\d{4}$/.test(code)) {
+          const value = Number(code.slice(0,3)) * Math.pow(10, Number(code[3]));
+          return ok(formatResistance(value), "4-digit precision SMD code");
+        }
+        const match = code.match(/^(\d{2})([A-Z])$/);
+        if (match) {
+          const e96 = [100,102,105,107,110,113,115,118,121,124,127,130,133,137,140,143,147,150,154,158,162,165,169,174,178,182,187,191,196,200,205,210,215,221,226,232,237,243,249,255,261,267,274,280,287,294,301,309,316,324,332,340,348,357,365,374,383,392,402,412,422,432,442,453,464,475,487,499,511,523,536,549,562,576,590,604,619,634,649,665,681,698,715,732,750,768,787,806,825,845,866,887,909,931,953,976];
+          const index = Number(match[1]);
+          const multipliers = {Z:0.001,Y:0.01,R:0.01,X:0.1,S:0.1,A:1,B:10,H:10,C:100,D:1000,E:10000,F:100000};
+          if (index >= 1 && index <= 96 && multipliers[match[2]] !== undefined) return ok(formatResistance(e96[index-1] * multipliers[match[2]]), "EIA-96 code");
+        }
+        return fail("Code not recognised. Supported: 3-digit, 4-digit, R notation and EIA-96.");
+      }
+
+      function capacitorCodeResult(v) {
+        const raw = String(v.code || "").trim().replace(/µ/gi,"u");
+        if (!raw) return fail("Enter the printed capacitor code.");
+        const code = raw.toUpperCase();
+        const toleranceMap = {F:"±1%",G:"±2%",J:"±5%",K:"±10%",M:"±20%",Z:"+80/−20%"};
+        const tolLetter = toleranceMap[code.slice(-1)] ? code.slice(-1) : "";
+        const core = tolLetter ? code.slice(0,-1) : code;
+        let farads = null;
+        if (/^\d{3}$/.test(core)) farads = Number(core.slice(0,2)) * Math.pow(10, Number(core[2])) * 1e-12;
+        else if (/^\d{1,2}$/.test(core)) farads = Number(core) * 1e-12;
+        else if (/^\d*R\d+$/.test(core)) farads = Number(core.replace("R",".")) * 1e-12;
+        else {
+          const m = core.match(/^(\d*\.?\d+)(P|N|U|M)$/);
+          if (m) farads = Number(m[1]) * ({P:1e-12,N:1e-9,U:1e-6,M:1e-3}[m[2]]);
+        }
+        if (!(farads >= 0)) return fail("Code not recognised. Try examples such as 104K, 472J, 2N2 or 0.1U.");
+        const display = farads >= 1e-3 ? (farads*1e3).toPrecision(6)+" mF" : farads >= 1e-6 ? (farads*1e6).toPrecision(6)+" µF" : farads >= 1e-9 ? (farads*1e9).toPrecision(6)+" nF" : (farads*1e12).toPrecision(6)+" pF";
+        return ok(display, (tolLetter ? toleranceMap[tolLetter] : "Tolerance not encoded") + " · " + farads.toExponential(6) + " F");
+      }
+
+      function componentClassifierResult(v) {
+        const guides = {
+          "axial-bands":["Resistor or axial inductor","Count the bands. A resistor is normally specified in ohms; many axial inductors use the same digit/multiplier system in µH."],
+          "axial-stripe":["Diode","The stripe normally marks the cathode. Confirm the printed part code before testing or replacement."],
+          "radial-disc":["Ceramic capacitor, MOV or thermistor","Look for capacitance code, voltage, MOV voltage or NTC/PTC marking. Do not identify from colour alone."],
+          "radial-can":["Electrolytic capacitor","The stripe normally marks negative on aluminium electrolytics. Verify capacitance and voltage markings."],
+          "smd-two":["Resistor, capacitor, inductor, diode or fuse","Board reference designator and circuit position are usually more reliable than package colour."],
+          "three-pin":["Transistor, regulator, diode pair or sensor","Pinout is part-specific. Search the exact marking before powering or substituting."],
+          "ic":["Integrated circuit","Record the full top marking, logo, package and board function. Pin 1 is commonly shown by a dot, notch or bevel."],
+          "coil":["Inductor, choke or transformer","Count windings and terminals; identify core type and whether there are isolated windings."],
+          "relay":["Relay or contactor","Separate coil pins from contacts using the diagram or resistance measurement before applying voltage."]
+        };
+        const info = guides[v.package];
+        if (!info) return fail("Choose a physical form.");
+        const marking = String(v.marking || "").trim();
+        return { ok:true, main:info[0], detail:info[1] + (marking ? " · Recorded marking: " + marking : ""), html:'<div class="identifier-note">This is a component-class guide, not a guaranteed part-number identification. Confirm with the circuit, reference designator and datasheet.</div>' };
+      }
+
+      function smithChartResult(v) {
+        let real = num(v.real), imag = num(v.imag), z0 = positive(v.z0);
+        if (real === null || imag === null || !z0) return fail("Enter real, imaginary and reference impedance values.");
+        let zr, zi;
+        if (v.mode === "y") {
+          const den = real*real + imag*imag;
+          if (den === 0) return fail("Admittance cannot be zero.");
+          zr = real / den; zi = -imag / den;
+        } else { zr = real; zi = imag; }
+        const nr = zr / z0, ni = zi / z0;
+        const ar = nr - 1, ai = ni, br = nr + 1, bi = ni, den = br*br + bi*bi;
+        const gr = (ar*br + ai*bi)/den, gi = (ai*br - ar*bi)/den;
+        const gm = Math.hypot(gr,gi), angle = Math.atan2(gi,gr)*180/Math.PI;
+        const vswr = gm >= 1 ? Infinity : (1+gm)/(1-gm);
+        const rl = gm === 0 ? Infinity : -20*Math.log10(gm);
+        const cx=160, cy=160, rad=145, px=cx+rad*gr, py=cy-rad*gi;
+        const resistanceCircles = [0,0.2,0.5,1,2,5].map((r) => '<circle cx="'+(cx+rad*r/(1+r)).toFixed(2)+'" cy="'+cy+'" r="'+(rad/(1+r)).toFixed(2)+'"/>').join('');
+        const reactanceCircles = [0.2,0.5,1,2,5].flatMap((x) => [x,-x].map((q) => '<circle cx="'+(cx+rad).toFixed(2)+'" cy="'+(cy-rad/q).toFixed(2)+'" r="'+(rad/Math.abs(q)).toFixed(2)+'"/>')).join('');
+        const svg = '<div class="chart-wrap"><svg class="engineering-chart" viewBox="0 0 320 320" role="img" aria-label="Smith chart"><defs><clipPath id="smithClip"><circle cx="160" cy="160" r="145"/></clipPath></defs><circle cx="160" cy="160" r="145" fill="#fff" stroke="#225f86" stroke-width="2"/><g clip-path="url(#smithClip)" fill="none" stroke="rgba(34,95,134,.24)" stroke-width="1">'+resistanceCircles+reactanceCircles+'<line x1="15" y1="160" x2="305" y2="160"/></g><circle cx="'+px.toFixed(2)+'" cy="'+py.toFixed(2)+'" r="6" fill="#8d2f2f" stroke="#fff" stroke-width="2"/><line x1="160" y1="160" x2="'+px.toFixed(2)+'" y2="'+py.toFixed(2)+'" stroke="#8d2f2f" stroke-width="2"/></svg><div class="chart-legend">Normalised z = '+nr.toFixed(5)+' '+(ni>=0?'+':'−')+' j'+Math.abs(ni).toFixed(5)+' · Γ = '+gm.toFixed(5)+' ∠ '+angle.toFixed(2)+'°</div></div>';
+        return {ok:true, main:gm.toFixed(5)+" |Γ|", detail:(Number.isFinite(vswr)?vswr.toFixed(4)+":1 VSWR":"VSWR unbounded")+" · "+(Number.isFinite(rl)?rl.toFixed(3)+" dB return loss":"Ideal match"), html:svg};
+      }
+
+      function besselCoefficients(n) {
+        const factorial = (x) => { let y=1; for(let i=2;i<=x;i+=1)y*=i; return y; };
+        const a=[]; for(let k=0;k<=n;k+=1) a.push(factorial(2*n-k)/(Math.pow(2,n-k)*factorial(k)*factorial(n-k))); return a;
+      }
+      function complexPolyMagnitude(coeffs, w) {
+        let re=0, im=0; for(let k=0;k<coeffs.length;k+=1){ const phase=k*Math.PI/2; re+=coeffs[k]*Math.pow(w,k)*Math.cos(phase); im+=coeffs[k]*Math.pow(w,k)*Math.sin(phase); } return Math.hypot(re,im);
+      }
+      function besselScale(n) {
+        const a=besselCoefficients(n), target=a[0]*Math.sqrt(2); let lo=0, hi=100;
+        for(let i=0;i<80;i+=1){ const mid=(lo+hi)/2; if(complexPolyMagnitude(a,mid)<target) lo=mid; else hi=mid; } return (lo+hi)/2;
+      }
+      function filterMagnitude(response,n,x,ripple) {
+        if(response==="butterworth") return 1/Math.sqrt(1+Math.pow(x,2*n));
+        if(response==="chebyshev") { const eps=Math.sqrt(Math.pow(10,ripple/10)-1); const t=Math.abs(x)<=1?Math.cos(n*Math.acos(x)):Math.cosh(n*Math.acosh(x)); return 1/Math.sqrt(1+eps*eps*t*t); }
+        const a=besselCoefficients(n), scale=besselScale(n); return a[0]/complexPolyMagnitude(a,x*scale);
+      }
+      function filterResponseResult(v) {
+        const n=Number(v.order), fc=positive(v.cutoff), ripple=positive(v.ripple)||0.5; if(!Number.isInteger(n)||n<1||n>8||!fc) return fail("Choose an order and cutoff above zero.");
+        const pts=[]; for(let i=0;i<=80;i+=1){ const lx=-1+2*i/80, x=Math.pow(10,lx), mag=filterMagnitude(v.response,n,x,ripple), db=Math.max(-80,20*Math.log10(Math.max(mag,1e-12))); pts.push({x,db}); }
+        const W=420,H=240,L=42,R=12,T=12,B=32; const sx=(x)=>L+(Math.log10(x)+1)/2*(W-L-R); const sy=(db)=>T+(3-db)/83*(H-T-B);
+        const path=pts.map((p,i)=>(i?'L':'M')+sx(p.x).toFixed(2)+' '+sy(p.db).toFixed(2)).join(' ');
+        const grid=[0,-3,-20,-40,-60,-80].map((db)=>'<line x1="'+L+'" y1="'+sy(db).toFixed(2)+'" x2="'+(W-R)+'" y2="'+sy(db).toFixed(2)+'"/><text x="4" y="'+(sy(db)+4).toFixed(2)+'">'+db+' dB</text>').join('');
+        const xgrid=[[0.1,'0.1×'],[1,'1×'],[10,'10×']].map(([x,l])=>'<line x1="'+sx(x).toFixed(2)+'" y1="'+T+'" x2="'+sx(x).toFixed(2)+'" y2="'+(H-B)+'"/><text x="'+(sx(x)-10).toFixed(2)+'" y="'+(H-9)+'">'+l+'</text>').join('');
+        const svg='<div class="chart-wrap"><svg class="engineering-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Filter response chart"><g stroke="rgba(42,67,93,.18)" fill="none">'+grid+xgrid+'</g><g fill="#102033" font-size="10" font-family="system-ui">'+grid.replace(/<line[^>]*>/g,'')+xgrid.replace(/<line[^>]*>/g,'')+'</g><path d="'+path+'" fill="none" stroke="#225f86" stroke-width="3"/></svg><div class="chart-legend">Frequency axis is relative to '+fc+' Hz. '+v.response+' order '+n+(v.response==='chebyshev'?' · '+ripple+' dB ripple':'')+'.</div></div>';
+        const atCut=20*Math.log10(filterMagnitude(v.response,n,1,ripple)); return {ok:true, main:atCut.toFixed(3)+" dB at reference frequency", detail:"Response plotted from 0.1× to 10× reference frequency", html:svg};
+      }
+
+      function readErrors() { try { return JSON.parse(localStorage.getItem(ERROR_KEY)||"[]"); } catch { return []; } }
+      function recordError(error, context={}) {
+        const errors=readErrors(); errors.unshift({time:new Date().toISOString(),message:String(error&&error.message||error),stack:String(error&&error.stack||""),toolId:currentToolId,...context});
+        try { localStorage.setItem(ERROR_KEY,JSON.stringify(errors.slice(0,20))); } catch {}
+      }
+      function reportText() {
+        const tool=tools.find((item)=>item.id===currentToolId); const description=document.getElementById("reportDescription").value.trim();
+        return ["FieldOps Atlas tool error","","Tool: "+(tool?tool.title:"General library"),"Tool ID: "+(currentToolId||"none"),"Version: "+APP_VERSION,"Time: "+new Date().toISOString(),"Browser: "+navigator.userAgent,"","User description:",description||"Not supplied","","Last tool state:",JSON.stringify(lastToolSnapshot,null,2),"","Recent captured errors:",JSON.stringify(readErrors().slice(0,5),null,2)].join("\n");
+      }
+      function refreshReport() { document.getElementById("reportPreview").value=reportText(); }
+      function openReport(toolId=null) { currentToolId=toolId; refreshReport(); reportModal.hidden=false; }
 
 
       function formatTimeSeconds(seconds) {
@@ -1883,7 +2185,7 @@
       function defaultLayout() {
         const toolOrder = {};
         DEFAULT_CATEGORY_ORDER.forEach((category) => {
-          toolOrder[category] = tools.filter((tool) => tool.category === category).map((tool) => tool.id);
+          toolOrder[category] = tools.filter((tool) => tool.group === category).map((tool) => tool.id);
         });
         return {
           categoryOrder: DEFAULT_CATEGORY_ORDER.slice(),
@@ -1928,7 +2230,12 @@
 
       function readLayout() {
         try {
-          return normaliseLayout(JSON.parse(localStorage.getItem(LAYOUT_KEY) || "null"));
+          const current = JSON.parse(localStorage.getItem(LAYOUT_KEY) || "null");
+          if (current) return normaliseLayout(current);
+          const old = JSON.parse(localStorage.getItem(OLD_LAYOUT_KEY) || "null");
+          const migrated = defaultLayout();
+          if (old && Array.isArray(old.hidden)) migrated.hidden = old.hidden.slice();
+          return normaliseLayout(migrated);
         } catch {
           return defaultLayout();
         }
@@ -1983,7 +2290,7 @@
       }
 
       function categoryUsage(category) {
-        return tools.filter((tool) => tool.category === category).reduce((sum, tool) => {
+        return tools.filter((tool) => tool.group === category).reduce((sum, tool) => {
           const u = usageFor(tool.id);
           return sum + u.opens + u.calculations;
         }, 0);
@@ -2005,11 +2312,13 @@
       function visibleTools() {
         const query = searchInput.value.trim().toLowerCase();
         const filter = statusFilter.value;
+        const domain = domainFilter.value;
         const matches = tools.filter((tool) => {
           const usage = usageFor(tool.id);
           const hidden = isHidden(tool.id);
-          const haystack = [tool.title, tool.description, categories[tool.category].title, tool.id].join(" ").toLowerCase();
+          const haystack = [tool.title, tool.description, categories[tool.group].title, domains[tool.category], tool.id].join(" ").toLowerCase();
           if (query && !haystack.includes(query)) return false;
+          if (domain !== "all" && tool.category !== domain) return false;
           if (filter === "hidden") return hidden;
           if (hidden) return false;
           if (filter === "ready" && !(tool.status === "ready" || tool.status === "external")) return false;
@@ -2027,9 +2336,9 @@
           matches.sort((a, b) => a.title.localeCompare(b.title));
         } else {
           matches.sort((a, b) => {
-            const categoryDifference = layout.categoryOrder.indexOf(a.category) - layout.categoryOrder.indexOf(b.category);
+            const categoryDifference = layout.categoryOrder.indexOf(a.group) - layout.categoryOrder.indexOf(b.group);
             if (categoryDifference) return categoryDifference;
-            return layout.toolOrder[a.category].indexOf(a.id) - layout.toolOrder[b.category].indexOf(b.id);
+            return layout.toolOrder[a.group].indexOf(a.id) - layout.toolOrder[b.group].indexOf(b.id);
           });
         }
         return matches;
@@ -2038,7 +2347,7 @@
       function render() {
         const matches = visibleTools();
         const grouped = new Map(layout.categoryOrder.map((category) => [category, []]));
-        matches.forEach((tool) => grouped.get(tool.category).push(tool));
+        matches.forEach((tool) => grouped.get(tool.group).push(tool));
         categoryList.innerHTML = "";
 
         layout.categoryOrder.forEach((category) => {
@@ -2063,9 +2372,9 @@
             button.className = "tool-button" + (uses === 0 ? " is-unused" : "");
             button.dataset.toolId = tool.id;
             const pillClass = tool.status === "external" ? " is-external" : "";
-            const label = tool.status === "external" ? "Page" : "Ready";
+            const label = domains[tool.category] || tool.category;
             button.innerHTML = [
-              '<span class="tool-title"><strong>', tool.title, '</strong><span class="tool-copy">', tool.description, '</span></span>',
+              '<span class="tool-title"><strong>', tool.title, '</strong><span class="tool-copy">', tool.description, ' · ', domains[tool.category], '</span></span>',
               '<span class="tool-side"><span class="pill', pillClass, '">', label, '</span><span class="use-count">', usage.opens, ' open · ', usage.calculations, ' calc</span></span>'
             ].join("");
             toolList.appendChild(button);
@@ -2081,6 +2390,9 @@
         if (field.type === "select") {
           return '<label class="field"><span>' + field.label + '</span><select name="' + field.id + '">' + field.options.map((option) => '<option value="' + option[0] + '">' + option[1] + '</option>').join("") + '</select></label>';
         }
+        if (field.type === "text") {
+          return '<label class="field"><span>' + field.label + '</span><input name="' + field.id + '" type="text" autocomplete="off" placeholder="' + escapeHtml(field.placeholder || "") + '"></label>';
+        }
         const attrs = ["min", "max", "step", "value"].filter((key) => field[key] !== undefined).map((key) => ' ' + key + '="' + field[key] + '"').join("");
         return '<label class="field"><span>' + field.label + '</span><input name="' + field.id + '" type="number" inputmode="decimal"' + attrs + '></label>';
       }
@@ -2088,6 +2400,8 @@
       function openTool(id) {
         const tool = tools.find((item) => item.id === id);
         if (!tool) return;
+        currentToolId = id;
+        lastToolSnapshot = { toolId:id, openedAt:new Date().toISOString(), inputs:null, result:null };
         recordUsage(id, "opens");
 
         if (tool.status === "external" && tool.href) {
@@ -2095,21 +2409,22 @@
           return;
         }
 
-        modalCategory.textContent = categories[tool.category].title;
+        modalCategory.textContent = categories[tool.group].singular + " · " + domains[tool.category];
         modalTitle.textContent = tool.title;
         modalDescription.textContent = tool.description;
 
         const definition = readyDefinitions[id];
         if (!definition) {
-          modalBody.innerHTML = '<section class="result-panel"><strong>Definition missing</strong><small>This tool has no calculator definition in the current file.</small></section>';
+          modalBody.innerHTML = '<section class="result-panel"><strong>Definition missing</strong><small>This tool has no definition in the current file.</small></section>';
+          recordError(new Error("Definition missing"), {toolId:id});
           toolModal.hidden = false;
           return;
         }
         modalBody.innerHTML = [
           '<form id="calculatorForm" class="form-grid" autocomplete="off">',
             definition.fields.map(inputMarkup).join(""),
-            '<div class="form-actions"><button class="button is-primary" type="submit">Calculate</button></div>',
-            '<section id="calculatorResult" class="result-panel"><strong>Enter values</strong><small>The completed calculation count increases when Calculate succeeds.</small></section>',
+            '<div class="form-actions"><button class="button is-primary" type="submit">Run tool</button></div>',
+            '<section id="calculatorResult" class="result-panel"><strong>Enter values</strong><small>A completed result increases the usage count.</small></section>',
           '</form>'
         ].join("");
         toolModal.hidden = false;
@@ -2117,12 +2432,20 @@
         document.getElementById("calculatorForm").addEventListener("submit", (event) => {
           event.preventDefault();
           const values = Object.fromEntries(new FormData(event.currentTarget).entries());
-          const result = definition.compute(values);
           const panel = document.getElementById("calculatorResult");
-          panel.innerHTML = '<strong>' + result.main + '</strong><small>' + result.detail + '</small>';
-          if (result.ok) {
-            recordUsage(id, "calculations");
-            render();
+          lastToolSnapshot = { toolId:id, time:new Date().toISOString(), inputs:values, result:null };
+          try {
+            const result = definition.compute(values);
+            lastToolSnapshot.result = result;
+            panel.innerHTML = '<strong>' + escapeHtml(result.main) + '</strong><small>' + escapeHtml(result.detail) + '</small>' + (result.html || "");
+            if (result.ok) {
+              recordUsage(id, "calculations");
+              render();
+            }
+          } catch (error) {
+            recordError(error, {toolId:id, inputs:values});
+            lastToolSnapshot.result = {error:String(error && error.message || error)};
+            panel.innerHTML = '<strong>Tool error captured</strong><small>' + escapeHtml(String(error && error.message || error)) + '. Use Report error to copy the diagnostic report.</small>';
           }
         });
       }
@@ -2137,7 +2460,7 @@
         });
         usageTable.innerHTML = sorted.map((tool) => {
           const u = usageFor(tool.id);
-          return '<article class="usage-row"><span>' + tool.title + (isHidden(tool.id) ? ' · hidden' : '') + '</span><span>' + u.opens + ' opens</span><span>' + u.calculations + ' calcs</span></article>';
+          return '<article class="usage-row"><span>' + tool.title + ' · ' + categories[tool.group].singular + ' · ' + domains[tool.category] + (isHidden(tool.id) ? ' · hidden' : '') + '</span><span>' + u.opens + ' opens</span><span>' + u.calculations + ' runs</span></article>';
         }).join("");
       }
 
@@ -2153,7 +2476,7 @@
           section.className = "manage-category";
           section.innerHTML = [
             '<header class="manage-category-header">',
-              '<span><strong>', categories[category].title, '</strong><span class="manage-tool-copy">', orderedTools(category).length, ' calculators</span></span>',
+              '<span><strong>', categories[category].title, '</strong><span class="manage-tool-copy">', orderedTools(category).length, ' tools</span></span>',
               '<span class="manage-actions">',
                 '<button class="manage-mini" type="button" data-category-move="up" data-category="', category, '" ', categoryIndex === 0 ? 'disabled' : '', '>↑</button>',
                 '<button class="manage-mini" type="button" data-category-move="down" data-category="', category, '" ', categoryIndex === layout.categoryOrder.length - 1 ? 'disabled' : '', '>↓</button>',
@@ -2168,7 +2491,7 @@
             const row = document.createElement("article");
             row.className = "manage-tool-row" + (hidden ? " is-hidden" : "");
             row.innerHTML = [
-              '<span><strong>', tool.title, '</strong><span class="manage-tool-copy">', tool.description, '</span></span>',
+              '<span><strong>', tool.title, '</strong><span class="manage-tool-copy">', tool.description, ' · ', domains[tool.category], '</span></span>',
               '<span class="manage-actions">',
                 '<button class="manage-mini" type="button" data-tool-move="up" data-tool-id="', tool.id, '" data-category="', category, '" ', toolIndex === 0 ? 'disabled' : '', '>↑</button>',
                 '<button class="manage-mini" type="button" data-tool-move="down" data-tool-id="', tool.id, '" data-category="', category, '" ', toolIndex === ordered.length - 1 ? 'disabled' : '', '>↓</button>',
@@ -2199,8 +2522,10 @@
         if (toolButton) openTool(toolButton.dataset.toolId);
       });
 
-      [searchInput, statusFilter, sortSelect].forEach((control) => control.addEventListener("input", render));
+      [searchInput, domainFilter, statusFilter, sortSelect].forEach((control) => control.addEventListener("input", render));
       document.getElementById("closeModalButton").addEventListener("click", () => closeModal(toolModal));
+      document.getElementById("reportToolButton").addEventListener("click", () => openReport(currentToolId));
+      document.getElementById("reportButton").addEventListener("click", () => openReport(null));
       toolModal.addEventListener("click", (event) => { if (event.target === toolModal) closeModal(toolModal); });
 
       document.getElementById("manageButton").addEventListener("click", () => {
@@ -2272,7 +2597,7 @@
         render();
       });
       document.getElementById("exportButton").addEventListener("click", () => {
-        const payload = JSON.stringify({ exportedAt: new Date().toISOString(), usage: readUsage(), layout }, null, 2);
+        const payload = JSON.stringify({ exportedAt: new Date().toISOString(), version: APP_VERSION, usage: readUsage(), layout, errors: readErrors() }, null, 2);
         const blob = new Blob([payload], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -2283,6 +2608,22 @@
         link.remove();
         URL.revokeObjectURL(url);
       });
+
+      document.getElementById("closeReportButton").addEventListener("click", () => closeModal(reportModal));
+      reportModal.addEventListener("click", (event) => { if (event.target === reportModal) closeModal(reportModal); });
+      document.getElementById("reportDescription").addEventListener("input", refreshReport);
+      document.getElementById("copyReportButton").addEventListener("click", async () => {
+        refreshReport(); const text=document.getElementById("reportPreview").value;
+        try { await navigator.clipboard.writeText(text); document.getElementById("reportStatus").textContent="Report copied."; }
+        catch { document.getElementById("reportPreview").select(); document.execCommand("copy"); document.getElementById("reportStatus").textContent="Report selected/copied where supported."; }
+      });
+      document.getElementById("openIssueButton").addEventListener("click", () => {
+        refreshReport(); const tool=tools.find((item)=>item.id===currentToolId); const title="Tool error: "+(tool?tool.title:"Calculator library");
+        const body=document.getElementById("reportPreview").value; window.open("https://github.com/A-engi/FieldOpsAtlas-Web/issues/new?title="+encodeURIComponent(title)+"&body="+encodeURIComponent(body),"_blank","noopener");
+      });
+      document.getElementById("clearErrorLogButton").addEventListener("click", () => { try { localStorage.removeItem(ERROR_KEY); } catch {} refreshReport(); document.getElementById("reportStatus").textContent="Captured error log cleared."; });
+      window.addEventListener("error", (event) => recordError(event.error || event.message, {source:event.filename,line:event.lineno,column:event.colno}));
+      window.addEventListener("unhandledrejection", (event) => recordError(event.reason || "Unhandled promise rejection"));
 
       render();
     })();
