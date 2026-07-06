@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.15-river-engraved-elevation
+ * Version: 1.6.16-front-framing-restored
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.15-river-engraved-elevation";
+  const VERSION="1.6.16-front-framing-restored";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -17,26 +17,27 @@
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
-    // One continuous camera path. The front is the centred, widest point;
-    // the approved side composition is reached through the same smooth curve.
+    // One continuous camera path. The approved side endpoints stay unchanged;
+    // only the centred front is widened and lifted so both mountains and both
+    // complete transmitters remain inside the graph viewport.
     target:[0,7.29,0],
     lift:9.35,
     fov:42,
-    distanceScale:0.80,
-    screenOffsetY:0,
+    distanceScale:0.92,
+    screenOffsetY:-0.12,
     orbitMotion:{
       frequency:1,phase:0,targetX:0,targetY:0,targetZ:0,
       lift:0,dolly:0,screenY:0,
       sideTargetY:3.5,
       sideLift:-2.0,
-      // 0.80 × 0.74 preserves the approved side-view distance while giving
-      // the front enough room to include both mountains.
-      sideDolly:-0.26,
+      // 0.92 × (1 - 0.356521739) = 0.592, matching the existing approved
+      // side-view distance exactly while the front receives extra room.
+      sideDolly:-0.356521739,
       sideRoll:0,
       sideScenePitch:0.32,
       sideScenePivot:[0,0,0],
-      // The vertical framing follows the same continuous front-to-side curve.
-      sideScreenY:0.35
+      // -0.12 + 0.47 = 0.35, so the side-view vertical framing is unchanged.
+      sideScreenY:0.47
     }
   });
 
@@ -61,10 +62,7 @@
         5.670000076293945,1.100000023841858,5.96999979019165,
         3.8299999237060547,1.100000023841858,5.96999979019165
       ]),
-      centre:Object.freeze([4.75,5.049999952316284]),
-      size:Object.freeze([1.8400001525878906,1.8399996757507324]),
-      topY:6.820000171661377,
-      bottomY:1.100000023841858
+      centre:Object.freeze([4.75,5.049999952316284]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:6.820000171661377
     }),
     B:Object.freeze({
       positions:Object.freeze([
@@ -77,10 +75,7 @@
         4.420000076293945,1.100000023841858,2.919999599456787,
         2.5799999237060547,1.100000023841858,2.919999599456787
       ]),
-      centre:Object.freeze([3.5,1.999999761581421]),
-      size:Object.freeze([1.8400001525878906,1.8399996757507324]),
-      topY:5.799999713897705,
-      bottomY:1.100000023841858
+      centre:Object.freeze([3.5,1.999999761581421]),size:Object.freeze([1.8400001525878906,1.8399996757507324]),topY:5.799999713897705
     })
   });
   const MOUNT_INDICES=Object.freeze([0,1,2,0,2,3,4,5,1,4,1,0,5,6,2,5,2,1,6,7,3,6,3,2,7,4,0,7,0,3]);
@@ -187,8 +182,8 @@
 
   function injectCapture(source,format){
     const capture=format==="full"
-      ?";globalThis.__fieldopsCapture={data:w,palettes:C,view:B};"
-      :";globalThis.__fieldopsCapture={data:P,palettes:L,centre:C,view:W};";
+      ? ";globalThis.__fieldopsCapture={data:w,palettes:C,view:B};"
+      : ";globalThis.__fieldopsCapture={data:P,palettes:L,centre:C,view:W};";
     const replaced=source.replace(/\}\)\(\);?\s*$/,`${capture}})();`);
     if(replaced===source)throw new Error("Mountain source ending was not recognised");
     return replaced;
@@ -512,7 +507,6 @@
       globalThis.FieldOps3DAssets.register(assetId,elevationTagAsset(endpoint,direction));
       output.push(object(assetId,tagTransform(mountain),false));
     });
-
     return output;
   }
 
