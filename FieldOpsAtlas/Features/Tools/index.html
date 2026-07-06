@@ -196,6 +196,257 @@
       font-weight: 700;
     }
 
+
+    .quick-tools {
+      padding: 9px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .quick-tools-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .quick-tools-heading-copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .small-action-link {
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 900;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .quick-tools-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
+      gap: 7px;
+      align-items: stretch;
+    }
+
+    .quick-calculator-card,
+    .quick-converter-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.62);
+    }
+
+    .quick-calculator-card {
+      padding: 10px;
+      display: grid;
+      align-content: space-between;
+      gap: 12px;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .quick-card-head {
+      display: grid;
+      grid-template-columns: 30px minmax(0,1fr) auto;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .quick-card-icon {
+      width: 30px;
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(180deg, #173c63, #0c2948);
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .quick-card-title {
+      display: block;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .quick-card-count {
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .quick-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .quick-chip {
+      padding: 4px 6px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(34,95,134,.07);
+      font-size: 8px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .quick-converter-card {
+      padding: 9px;
+      display: grid;
+      gap: 7px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.94), rgba(238,243,245,.82)),
+        rgba(255,255,255,.72);
+    }
+
+    .quick-converter-title-row {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .quick-converter-title {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .quick-converter-count {
+      color: var(--green);
+      font-size: 8px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .quick-converter-filter,
+    .quick-converter-select,
+    .quick-converter-value {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid rgba(42,67,93,.22);
+      border-radius: 9px;
+      color: var(--ink);
+      background: rgba(255,255,255,.86);
+      outline: none;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 720;
+    }
+
+    .quick-converter-filter {
+      min-height: 34px;
+      padding: 0 9px;
+    }
+
+    .quick-converter-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 34px minmax(0,1fr);
+      gap: 5px;
+      align-items: stretch;
+    }
+
+    .quick-converter-side {
+      min-width: 0;
+      display: grid;
+      gap: 5px;
+    }
+
+    .quick-converter-side label {
+      color: rgba(16,32,51,.56);
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .quick-converter-select {
+      min-height: 34px;
+      padding: 0 24px 0 7px;
+    }
+
+    .quick-converter-value {
+      min-height: 44px;
+      padding: 0 8px;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .quick-converter-value[readonly] {
+      color: var(--blue);
+      background: rgba(34,95,134,.06);
+    }
+
+    .quick-converter-swap {
+      width: 34px;
+      height: 34px;
+      align-self: end;
+      margin-bottom: 5px;
+      border: 1px solid rgba(170,126,38,.34);
+      border-radius: 50%;
+      color: var(--blue);
+      background: rgba(255,255,255,.88);
+      font: inherit;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .quick-converter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 780;
+    }
+
+    .quick-converter-meta strong {
+      overflow: hidden;
+      color: var(--ink);
+      font-weight: 900;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .quick-converter-note,
+    .quick-converter-error {
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .quick-converter-note[hidden] { display: none; }
+    .quick-converter-error { color: var(--red); }
+
+    .quick-converter-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .quick-converter-footer a {
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    @media (max-width: 520px) {
+      .quick-tools-grid { grid-template-columns: 1fr; }
+      .quick-calculator-card { min-height: 90px; }
+    }
+
     .category-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -482,7 +733,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.3.0-tools-hub-redesign">
+  <main class="phone" data-page="tools" data-version="1.4.0-universal-converter-front">
     <section class="content-canvas" aria-label="Field tools content">
       <article class="tools-page">
         <header class="compact-hero surface">
@@ -493,7 +744,7 @@
           </div>
           <div class="hero-actions">
             <a class="icon-button is-primary" href="./calculator-library.html" data-track-library>Calculators</a>
-            <a class="icon-button" id="reportErrorLink" href="https://github.com/A-engi/FieldOpsAtlas-Web/issues/new" target="_blank" rel="noopener noreferrer">Report</a>
+            <a class="icon-button" href="./converter.html">Converters</a>
           </div>
         </header>
 
@@ -502,11 +753,78 @@
           <button id="clearHubSearchButton" class="icon-button" type="button">Clear</button>
         </section>
 
+
+        <section class="quick-tools surface" aria-labelledby="quickToolsTitle">
+          <div class="quick-tools-heading">
+            <div class="quick-tools-heading-copy">
+              <h2 id="quickToolsTitle">Quick tools</h2>
+              <p class="copy">Use a common tool here or open its full library.</p>
+            </div>
+            <a class="small-action-link" id="reportErrorLink" href="https://github.com/A-engi/FieldOpsAtlas-Web/issues/new" target="_blank" rel="noopener noreferrer">Report error</a>
+          </div>
+
+          <div class="quick-tools-grid">
+            <a class="quick-calculator-card" href="./calculator-library.html" data-track-library>
+              <div class="quick-card-head">
+                <span class="quick-card-icon" aria-hidden="true">▦</span>
+                <span class="quick-card-title">Calculators</span>
+                <span class="quick-card-count">87 tools</span>
+              </div>
+              <p class="copy">Multi-input formulas, engineering calculators, identifiers and visual tools.</p>
+              <div class="quick-chip-row" aria-hidden="true">
+                <span class="quick-chip">Ohm’s law</span>
+                <span class="quick-chip">dB gain/loss</span>
+                <span class="quick-chip">Link budget</span>
+              </div>
+            </a>
+
+            <article class="quick-converter-card" data-converter-widget>
+              <div class="quick-converter-title-row">
+                <div class="quick-converter-title">
+                  <span class="quick-card-icon" aria-hidden="true">⇄</span>
+                  <span class="quick-card-title">Converters</span>
+                </div>
+                <span class="quick-converter-count" data-converter-count></span>
+              </div>
+
+              <input class="quick-converter-filter" data-converter-filter type="search" inputmode="search" autocomplete="off" placeholder="Filter conversions…" aria-label="Filter conversions">
+
+              <div class="quick-converter-grid">
+                <div class="quick-converter-side">
+                  <label for="quickConverterFrom">From</label>
+                  <select id="quickConverterFrom" class="quick-converter-select" data-converter-from-unit aria-label="Convert from unit"></select>
+                  <input class="quick-converter-value" data-converter-from-value type="text" inputmode="decimal" value="23" aria-label="Source value">
+                </div>
+
+                <button class="quick-converter-swap" data-converter-swap type="button" aria-label="Swap conversion direction">⇄</button>
+
+                <div class="quick-converter-side">
+                  <label for="quickConverterTo">To</label>
+                  <select id="quickConverterTo" class="quick-converter-select" data-converter-to-unit aria-label="Convert to unit"></select>
+                  <input class="quick-converter-value" data-converter-to-value type="text" readonly aria-label="Converted value">
+                </div>
+              </div>
+
+              <div class="quick-converter-meta">
+                <strong data-converter-family>RF power level</strong>
+                <span>Bidirectional</span>
+              </div>
+              <p class="quick-converter-note" data-converter-note hidden></p>
+              <p class="quick-converter-error" data-converter-error role="status" aria-live="polite"></p>
+
+              <div class="quick-converter-footer">
+                <span class="quick-converter-meta">Direct conversions only</span>
+                <a href="./converter.html">View all conversions ›</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section id="categoryGrid" class="category-grid" aria-label="Field tool categories">
           <a
             class="category-card is-primary"
             href="./calculator-library.html"
-            data-search="calculator library rf electronics electrical converters identifiers smith chart bessel components cable broadcast instruments usage customise"
+            data-search="calculator library rf electronics electrical identifiers smith chart bessel components cable broadcast instruments usage customise"
             data-track-library
           >
             <div>
@@ -515,7 +833,7 @@
                 <span class="category-title">Calculator Library</span>
                 <span class="category-arrow" aria-hidden="true">›</span>
               </div>
-              <p class="category-copy">Calculators, converters, identifiers, Smith chart and visual tools.</p>
+              <p class="category-copy">Calculators, identifiers, Smith chart and visual tools.</p>
             </div>
             <div class="category-footer">
               <span class="category-count">87 tools</span>
@@ -775,6 +1093,7 @@
     </section>
   </main>
 
+  <script src="./converter-registry.js?v=1.0.0"></script>
   <script>
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
@@ -789,6 +1108,13 @@
           subtitle: "Calculators, converters, identifiers and visual tools",
           href: "./calculator-library.html",
           keywords: ["calculator", "converter", "identifier", "smith chart", "bessel", "rf", "electronics", "electrical"]
+        },
+        {
+          id: "tools-universal-converter",
+          title: "Universal Converter",
+          subtitle: "77 direct conversion families and 453 source units",
+          href: "./converter.html",
+          keywords: ["converter", "units", "dbm", "watts", "length", "temperature", "pressure", "dab", "dtt", "binary", "hex"]
         },
         {
           id: "tools-location-route",
@@ -945,7 +1271,7 @@
       const issueBody = [
         "## Field Tools error",
         "",
-        "Page version: 1.3.0-tools-hub-redesign",
+        "Page version: 1.4.0-universal-converter-front",
         "URL: " + location.href,
         "Browser: " + navigator.userAgent,
         "",
@@ -1079,6 +1405,13 @@
       document.getElementById("cameraCaptureInput").addEventListener("change", (event) => {
         const names = Array.from(event.target.files || []).map((file) => file.name).join(", ");
         document.getElementById("cameraStatus").textContent = names ? "Selected: " + names : "";
+      });
+
+      window.FieldOpsConverter.mount(document.querySelector("[data-converter-widget]"), {
+        storageKey: "fieldOpsAtlas.converter.quick.v1",
+        defaultFrom: "rf-power::dbm",
+        defaultTo: "mw",
+        defaultValue: "23"
       });
 
       refreshUsageSummary();
