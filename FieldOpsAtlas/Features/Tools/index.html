@@ -349,7 +349,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.2.0-field-tools">
+  <main class="phone" data-page="tools" data-version="1.2.1-coax-calculator-link">
     <section class="content-canvas" aria-label="Field tools content">
       <article class="tools-page">
         <header class="tools-hero">
@@ -433,6 +433,14 @@
                 <div class="result-panel">
                   <p id="sunResult" class="result-text">Enter a location and date.</p>
                 </div>
+              </div>
+            </article>
+
+            <article class="tool-card wide-card" aria-labelledby="coaxCalcTitle">
+              <h3 id="coaxCalcTitle">Coax mechanical identifier</h3>
+              <p class="result-text">Estimate whether an unmarked reel is closest to 50 Ω, 75 Ω or 93 Ω from the centre-conductor and dielectric diameters.</p>
+              <div class="form-actions">
+                <a class="action-button is-primary" href="./coax-calculator.html">Open coax calculator</a>
               </div>
             </article>
           </div>
@@ -606,6 +614,13 @@
           subtitle: "Daylight from latitude, longitude and date",
           href: "./index.html#calculatorTitle",
           keywords: ["sunrise", "sunset", "daylight", "weather"]
+        },
+        {
+          id: "tools-coax",
+          title: "Coax mechanical identifier",
+          subtitle: "Estimate cable impedance from measured diameters",
+          href: "./coax-calculator.html",
+          keywords: ["coax", "cable", "impedance", "50 ohm", "75 ohm", "93 ohm", "diameter"]
         },
         {
           id: "tools-location",
