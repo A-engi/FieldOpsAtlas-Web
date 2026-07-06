@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.20-asset-owned-visual-fixes
+ * Version: 1.6.21-mountain-geometry-fix
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.20-asset-owned-visual-fixes";
+  const VERSION="1.6.21-mountain-geometry-fix";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -13,7 +13,7 @@
   const sourceCache=new Map();
   const assetCache=new Map();
   const scriptCache=new Map();
-  const OBJECT_CACHE_VERSION="1.6.20-asset-owned-visual-fixes";
+  const OBJECT_CACHE_VERSION="1.6.21-mountain-geometry-fix";
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
