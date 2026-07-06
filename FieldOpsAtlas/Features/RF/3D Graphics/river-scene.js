@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.10-mirrored-good-side
+ * Version: 1.6.11-continuous-side-orbit
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.10-mirrored-good-side";
+  const VERSION="1.6.11-continuous-side-orbit";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -17,18 +17,16 @@
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
-    // Preserve the approved front view. Side motion is applied only after the
-    // orbit passes the threshold, then eases smoothly toward the profile view.
+    // The approved side views are the orbit anchors. The front is no longer
+    // a separately framed pose; every camera value follows one continuous curve.
     target:[0,7.29,0],
     lift:9.35,
     fov:42,
     distanceScale:0.673,
-    bottomAnchorPoints:[[-26,0,-19],[0,0,-19],[26,0,-19],[-26,0,0],[26,0,0],[-26,0,19],[0,0,19],[26,0,19]],
-    bottomNdc:-1.08,
+    screenOffsetY:0.35,
     orbitMotion:{
       frequency:1,phase:-0.418,targetX:1.15,targetY:0,targetZ:0.7,
       lift:0,dolly:0,screenY:0,
-      sideThreshold:0.42,
       // Move closer while lifting the camera above both transmitters. The eased
       // side view uses double the previous back-to-front pitch without introducing any screen roll.
       sideTargetY:3.5,
@@ -39,9 +37,9 @@
       // True plate rotation: tip the complete valley back-to-front around the camera's horizontal axis.
       sideScenePitch:0.32,
       sideScenePivot:[0,0,0],
-      // Use the approved B-to-A / white-to-black composition in both directions.
-      // The good positive-side profile was 0.35; the opposite side now mirrors it exactly.
-      sideScreenY:0.35
+      // The whole orbit uses the approved side-view vertical framing. No floor
+      // anchor or front-only offset is allowed to take control during rotation.
+      sideScreenY:0
     }
   });
 
