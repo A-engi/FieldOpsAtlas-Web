@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Identifiers &amp; Decoders | FieldOps Atlas</title>
+<link href="../../../shell.css?v=1.1.21-shell-smoke-controls" rel="stylesheet"/>
+<style>
+  :root {
+    --id-side: 7px;
+    --id-radius: 20px;
+    --id-ink: #102033;
+    --id-muted: #687386;
+    --id-line: rgba(56,75,101,.16);
+    --id-blue: #1857b8;
+    --id-cyan: #0d8587;
+    --id-gold: #d78c00;
+    --id-red: #b5262b;
+    --id-purple: #504097;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  button, input, select, a { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  .id-content {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--safe-top) + var(--top-height) + var(--id-side));
+    right: var(--id-side);
+    bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--id-side));
+    left: var(--id-side);
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border: 2px solid var(--gold-border);
+    border-radius: var(--id-radius);
+    color: var(--id-ink);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(77,170,187,.12), transparent 24%),
+      radial-gradient(circle at 86% 7%, rgba(224,186,82,.15), transparent 21%),
+      radial-gradient(circle at 18% 95%, rgba(74,174,186,.08), transparent 20%),
+      radial-gradient(circle at 86% 96%, rgba(225,189,84,.10), transparent 18%),
+      linear-gradient(180deg, #fcfdfe 0%, #f5f8fb 56%, #eef4f8 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.82), 0 14px 30px rgba(2,9,20,.24);
+  }
+
+  .id-content::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    opacity: .35;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(61,99,137,.13) 0 1px, transparent 1px 17px),
+      repeating-linear-gradient(90deg, rgba(61,99,137,.13) 0 1px, transparent 1px 17px);
+    -webkit-mask-image:
+      radial-gradient(ellipse 68% 112px at 37% 42px, #000 0 46%, transparent 78%),
+      radial-gradient(ellipse 48% 154px at 88% 460px, #000 0 33%, transparent 76%),
+      radial-gradient(ellipse 58% 176px at 14% 1080px, #000 0 29%, transparent 72%);
+    mask-image:
+      radial-gradient(ellipse 68% 112px at 37% 42px, #000 0 46%, transparent 78%),
+      radial-gradient(ellipse 48% 154px at 88% 460px, #000 0 33%, transparent 76%),
+      radial-gradient(ellipse 58% 176px at 14% 1080px, #000 0 29%, transparent 72%);
+  }
+
+  .id-content::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    opacity: .27;
+    background:
+      linear-gradient(180deg, rgba(100,196,210,.18), transparent 88px) top/100% 118px no-repeat,
+      linear-gradient(0deg, rgba(223,188,83,.16), transparent 88px) bottom/100% 118px no-repeat,
+      repeating-linear-gradient(0deg, rgba(82,171,188,.16) 0 1px, transparent 1px 16px) top/100% 118px no-repeat,
+      repeating-linear-gradient(90deg, rgba(82,171,188,.16) 0 1px, transparent 1px 16px) top/100% 118px no-repeat,
+      repeating-linear-gradient(0deg, rgba(223,188,83,.14) 0 1px, transparent 1px 16px) bottom/100% 118px no-repeat,
+      repeating-linear-gradient(90deg, rgba(223,188,83,.14) 0 1px, transparent 1px 16px) bottom/100% 118px no-repeat;
+    -webkit-mask-image: linear-gradient(180deg,#000 0,#000 88px,transparent 132px,transparent calc(100% - 132px),#000 calc(100% - 88px),#000 100%);
+    mask-image: linear-gradient(180deg,#000 0,#000 88px,transparent 132px,transparent calc(100% - 132px),#000 calc(100% - 88px),#000 100%);
+  }
+
+  .id-page {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 8px;
+    display: grid;
+    align-content: start;
+    gap: 7px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .surface {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--id-line);
+    border-radius: 15px;
+    background: rgba(255,255,255,.88);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 5px 14px rgba(25,48,77,.055);
+  }
+
+  .svg-host, .svg-host > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    pointer-events: none;
+  }
+
+  .svg-host { overflow: hidden; }
+  .svg-host.is-missing::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(72,91,116,.08), rgba(72,91,116,.02));
+  }
+
+  .id-hero {
+    position: relative;
+    min-height: 58px;
+    padding: 2px 9px;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 54px;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .hero-copy { min-width: 0; }
+  .hero-copy h1 {
+    margin: 0;
+    font-size: clamp(24px, 6.8vw, 31px);
+    font-weight: 920;
+    line-height: .96;
+    letter-spacing: -.045em;
+  }
+
+  .hero-meta {
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--id-muted);
+    font-size: 8px;
+    font-weight: 780;
+  }
+
+  .hero-meta strong {
+    color: var(--id-gold);
+    font-size: 9px;
+    font-weight: 920;
+  }
+
+  .scan-button {
+    min-width: 0;
+    min-height: 42px;
+    padding: 4px 5px;
+    display: grid;
+    grid-template-rows: 24px auto;
+    place-items: center;
+    gap: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(13,133,135,.22);
+    border-radius: 12px;
+    color: #0b6668;
+    background: rgba(244,252,251,.9);
+    font-size: 7px;
+    font-weight: 880;
+    cursor: pointer;
+  }
+
+  .scan-button .svg-host { width: 24px; height: 24px; }
+
+  .section-bar {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .section-bar h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: -.02em;
+  }
+
+  .section-bar span {
+    color: var(--id-muted);
+    font-size: 8px;
+    font-weight: 720;
+  }
+
+  .recent-section { display: grid; gap: 3px; }
+
+  .recent-grid {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 6px;
+  }
+
+  .recent-card {
+    min-width: 0;
+    min-height: 43px;
+    padding: 4px 6px;
+    display: grid;
+    grid-template-columns: 27px minmax(0,1fr);
+    align-items: center;
+    gap: 5px;
+    color: var(--id-ink);
+    text-decoration: none;
+  }
+
+  .recent-icon {
+    width: 27px;
+    height: 27px;
+    padding: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(56,75,101,.17);
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .recent-copy { min-width: 0; }
+  .recent-copy strong {
+    display: block;
+    overflow: hidden;
+    font-size: 8px;
+    font-weight: 880;
+    line-height: 1.08;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .recent-copy small {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--id-muted);
+    font-size: 6.5px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .category-strip {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(6,minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .category-button {
+    min-width: 0;
+    min-height: 50px;
+    padding: 5px 2px 4px;
+    display: grid;
+    grid-template-rows: 26px auto;
+    place-items: center;
+    gap: 2px;
+    overflow: hidden;
+    border: 1px solid var(--id-line);
+    border-radius: 11px;
+    color: var(--id-ink);
+    background: rgba(255,255,255,.82);
+    font-size: 7px;
+    font-weight: 820;
+    line-height: 1.05;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .category-button[aria-selected="true"] {
+    border-color: rgba(24,87,184,.42);
+    color: #154b9b;
+    background: linear-gradient(180deg,#fff,#eef5ff);
+    box-shadow: inset 0 -2px 0 rgba(24,87,184,.55);
+  }
+
+  .category-mark {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 8px;
+    color: #fff;
+    background: var(--cat,#1857b8);
+    font-size: 12px;
+    font-weight: 920;
+  }
+  .category-mark.svg-host { background: transparent; border-radius: 0; }
+
+  .workspace {
+    min-width: 0;
+    padding: 7px;
+    display: grid;
+    gap: 7px;
+  }
+
+  .workspace-head {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .workspace-title { min-width: 0; }
+  .workspace-title strong {
+    display: block;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: 920;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .workspace-title small {
+    display: block;
+    margin-top: 2px;
+    color: var(--id-muted);
+    font-size: 7px;
+    font-weight: 700;
+  }
+
+  .mode-tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 3px;
+  }
+
+  .mode-tab {
+    min-height: 24px;
+    padding: 0 7px;
+    border: 1px solid rgba(56,75,101,.15);
+    border-radius: 7px;
+    color: #516077;
+    background: #f7f9fb;
+    font-size: 7px;
+    font-weight: 850;
+    cursor: pointer;
+  }
+
+  .mode-tab[aria-selected="true"] {
+    border-color: rgba(24,87,184,.35);
+    color: #fff;
+    background: #1857b8;
+  }
+
+  .tool-panel { min-width: 0; display: grid; gap: 7px; }
+  .tool-panel[hidden] { display: none !important; }
+
+  .identifier-stage {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0,1.06fr) minmax(0,.94fr);
+    gap: 7px;
+  }
+
+  .visual-stage {
+    min-width: 0;
+    min-height: 151px;
+    padding: 7px;
+    display: grid;
+    grid-template-rows: minmax(0,1fr) auto;
+    gap: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(56,75,101,.13);
+    border-radius: 12px;
+    background:
+      linear-gradient(rgba(255,255,255,.76),rgba(255,255,255,.76)),
+      repeating-linear-gradient(0deg,rgba(61,99,137,.10) 0 1px,transparent 1px 15px),
+      repeating-linear-gradient(90deg,rgba(61,99,137,.10) 0 1px,transparent 1px 15px);
+  }
+
+  .component-art {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .band-preview {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .band-preview span {
+    width: 14px;
+    height: 27px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.15);
+    background: var(--band,#72503a);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.35);
+  }
+
+  .control-stack {
+    min-width: 0;
+    display: grid;
+    align-content: start;
+    gap: 5px;
+  }
+
+  .control-row {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 46px minmax(0,1fr);
+    align-items: center;
+    gap: 4px;
+  }
+
+  .control-row label {
+    color: var(--id-muted);
+    font-size: 7px;
+    font-weight: 850;
+  }
+
+  .control-row select,
+  .control-row input {
+    width: 100%;
+    min-width: 0;
+    height: 27px;
+    padding: 0 6px;
+    border: 1px solid rgba(56,75,101,.18);
+    border-radius: 7px;
+    color: var(--id-ink);
+    background: #fff;
+    font-size: 8px;
+    font-weight: 800;
+  }
+
+  .result-card {
+    min-width: 0;
+    padding: 7px;
+    overflow: hidden;
+    border: 1px solid rgba(24,87,184,.16);
+    border-radius: 11px;
+    background: linear-gradient(135deg,#fff,#eef5ff);
+  }
+
+  .result-card small {
+    display: block;
+    color: var(--id-muted);
+    font-size: 7px;
+    font-weight: 820;
+    text-transform: uppercase;
+  }
+
+  .result-card output {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: #1857b8;
+    font-size: 20px;
+    font-weight: 930;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .result-card p {
+    margin: 4px 0 0;
+    color: #46556a;
+    font-size: 7px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .spec-grid {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .spec {
+    min-width: 0;
+    padding: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(56,75,101,.12);
+    border-radius: 9px;
+    background: rgba(255,255,255,.74);
+  }
+
+  .spec small {
+    display: block;
+    overflow: hidden;
+    color: var(--id-muted);
+    font-size: 6.5px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .spec strong {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--id-ink);
+    font-size: 9px;
+    font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .coax-select-grid,
+  .connector-grid {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .choice-card {
+    min-width: 0;
+    min-height: 43px;
+    padding: 5px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 9px;
+    color: var(--id-ink);
+    background: rgba(255,255,255,.8);
+    font-size: 8px;
+    font-weight: 850;
+    cursor: pointer;
+  }
+
+  .choice-card[aria-pressed="true"] {
+    border-color: rgba(13,133,135,.45);
+    color: #075d60;
+    background: #eaf8f7;
+    box-shadow: inset 0 -2px 0 rgba(13,133,135,.5);
+  }
+
+  .smd-stage {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0,.72fr) minmax(0,1.28fr);
+    gap: 7px;
+  }
+
+  .smd-chip {
+    min-height: 106px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    color: #f7f0d9;
+    background:
+      linear-gradient(90deg,#c9b06c 0 7%,#222 7% 93%,#c9b06c 93% 100%);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 5px 12px rgba(16,32,51,.16);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 24px;
+    font-weight: 850;
+    letter-spacing: .08em;
+  }
+
+  .other-tools {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 6px;
+  }
+
+  .other-tool {
+    min-width: 0;
+    min-height: 58px;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: 27px minmax(0,1fr);
+    align-items: center;
+    gap: 5px;
+    color: var(--id-ink);
+    text-decoration: none;
+  }
+
+  .other-icon {
+    width: 27px;
+    height: 27px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    color: #fff;
+    background: var(--tool,#1857b8);
+    font-size: 9px;
+    font-weight: 920;
+  }
+
+  .other-copy { min-width: 0; }
+  .other-copy strong {
+    display: block;
+    overflow: hidden;
+    font-size: 7.5px;
+    font-weight: 880;
+    line-height: 1.06;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .other-copy small {
+    display: -webkit-box;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--id-muted);
+    font-size: 6.3px;
+    font-weight: 690;
+    line-height: 1.1;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .photo-sheet {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    padding: max(18px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));
+    display: grid;
+    place-items: center;
+    background: rgba(7,17,32,.68);
+    backdrop-filter: blur(5px);
+  }
+
+  .photo-sheet[hidden] { display: none; }
+
+  .photo-card {
+    width: min(100%,390px);
+    max-height: 88vh;
+    padding: 11px;
+    display: grid;
+    gap: 8px;
+    overflow: auto;
+    border: 1px solid rgba(222,180,74,.55);
+    border-radius: 17px;
+    background: #f7fafc;
+    box-shadow: 0 22px 50px rgba(0,0,0,.35);
+  }
+
+  .photo-card header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .photo-card h2 { margin: 0; font-size: 15px; }
+  .photo-close {
+    width: 31px;
+    height: 31px;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: #536078;
+    font-size: 17px;
+    font-weight: 850;
+  }
+
+  .photo-card p {
+    margin: 0;
+    color: var(--id-muted);
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .photo-input {
+    min-height: 42px;
+    padding: 7px;
+    border: 1px dashed rgba(13,133,135,.5);
+    border-radius: 10px;
+    background: #effafa;
+    font-size: 9px;
+    font-weight: 760;
+  }
+
+  .photo-preview {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 11px;
+    background: #e8eef3;
+  }
+
+  .photo-preview[hidden] { display: none; }
+
+  @media (max-width: 365px) {
+    .id-page { padding: 7px; gap: 6px; }
+    .id-hero { grid-template-columns: minmax(0,1fr) 50px; padding-inline: 7px; }
+    .hero-copy h1 { font-size: 23px; }
+    .category-strip { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .category-button { min-height: 45px; grid-template-columns: 24px minmax(0,1fr); grid-template-rows: none; text-align: left; }
+    .category-mark { width: 24px; height: 24px; }
+    .identifier-stage, .smd-stage { grid-template-columns: 1fr; }
+    .visual-stage { min-height: 132px; }
+    .other-tools { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  }
+</style>
+</head>
+<body>
+<main class="phone" data-current-page="tools" data-page="tools" data-version="1.0.0-identifiers-decoder">
+<section aria-label="Identifiers and Decoders" class="id-content">
+<article class="id-page">
+
+<header class="id-hero">
+  <div class="hero-copy">
+    <h1>Identifiers &amp; Decoders</h1>
+    <div class="hero-meta"><strong>15 tools</strong><span>Components, cables, connectors and markings</span></div>
+  </div>
+  <button class="scan-button" id="openPhoto" type="button">
+    <span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-scan.svg?v=1.0.0"></span>
+    <span>Photo reference</span>
+  </button>
+</header>
+
+<section class="recent-section" aria-labelledby="recentTitle">
+  <div class="section-bar"><h2 id="recentTitle">Recent</h2><span>Tap to reopen</span></div>
+  <div class="recent-grid">
+    <a class="recent-card surface" href="?tool=coax&amp;item=rg58">
+      <span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></span>
+      <span class="recent-copy"><strong>RG58 coax</strong><small>50 Ω · flexible</small></span>
+    </a>
+    <a class="recent-card surface" href="?tool=resistor">
+      <span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span></span>
+      <span class="recent-copy"><strong>4-band resistor</strong><small>4.7 kΩ ±5%</small></span>
+    </a>
+    <a class="recent-card surface" href="?tool=smd&amp;code=103">
+      <span class="recent-icon"><span class="category-mark" style="--cat:#504097">103</span></span>
+      <span class="recent-copy"><strong>SMD 103</strong><small>10 kΩ</small></span>
+    </a>
+  </div>
+</section>
+
+<nav class="category-strip" aria-label="Identifier types">
+  <button class="category-button" data-tool="resistor" aria-selected="true" type="button">
+    <span class="category-mark svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span><span>Resistor</span>
+  </button>
+  <button class="category-button" data-tool="coax" aria-selected="false" type="button">
+    <span class="category-mark svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span><span>Coax</span>
+  </button>
+  <button class="category-button" data-tool="smd" aria-selected="false" type="button">
+    <span class="category-mark" style="--cat:#504097">103</span><span>SMD</span>
+  </button>
+  <button class="category-button" data-tool="connector" aria-selected="false" type="button">
+    <span class="category-mark" style="--cat:#0d8587">N</span><span>Connectors</span>
+  </button>
+  <button class="category-button" data-tool="markings" aria-selected="false" type="button">
+    <span class="category-mark" style="--cat:#d78c00">µF</span><span>Markings</span>
+  </button>
+  <button class="category-button" data-tool="pinouts" aria-selected="false" type="button">
+    <span class="category-mark" style="--cat:#b5262b">1↔8</span><span>Pinouts</span>
+  </button>
+</nav>
+
+<section class="workspace surface" aria-live="polite">
+  <header class="workspace-head">
+    <div class="workspace-title">
+      <strong id="workspaceTitle">Resistor colour code</strong>
+      <small id="workspaceSubtitle">Select the bands to decode the resistance.</small>
+    </div>
+    <div class="mode-tabs" id="resistorModes">
+      <button class="mode-tab" data-bands="4" aria-selected="true" type="button">4 band</button>
+      <button class="mode-tab" data-bands="5" aria-selected="false" type="button">5 band</button>
+      <button class="mode-tab" data-bands="6" aria-selected="false" type="button">6 band</button>
+    </div>
+  </header>
+
+  <div class="tool-panel" data-panel="resistor">
+    <div class="identifier-stage">
+      <div class="visual-stage">
+        <div class="component-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span></div>
+        <div class="band-preview" id="bandPreview" aria-label="Selected resistor bands"></div>
+      </div>
+      <div class="control-stack">
+        <div class="control-row"><label for="band1">Band 1</label><select id="band1"></select></div>
+        <div class="control-row"><label for="band2">Band 2</label><select id="band2"></select></div>
+        <div class="control-row" id="band3Row" hidden><label for="band3">Band 3</label><select id="band3"></select></div>
+        <div class="control-row"><label for="multiplier">Multiplier</label><select id="multiplier"></select></div>
+        <div class="control-row"><label for="tolerance">Tolerance</label><select id="tolerance"></select></div>
+        <div class="control-row" id="tempcoRow" hidden><label for="tempco">Tempco</label><select id="tempco"></select></div>
+        <div class="result-card">
+          <small>Decoded value</small>
+          <output id="resistorResult">4.7 kΩ ±5%</output>
+          <p id="resistorDetail">Yellow · Violet · Red · Gold</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-panel" data-panel="coax" hidden>
+    <div class="identifier-stage">
+      <div class="visual-stage">
+        <div class="component-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span></div>
+        <div class="band-preview" aria-hidden="true"><span style="--band:#c6a25a"></span><span style="--band:#f1f1e8"></span><span style="--band:#b9c2c9"></span><span style="--band:#303a43"></span></div>
+      </div>
+      <div class="control-stack">
+        <div class="control-row"><label for="coaxFamily">Cable</label>
+          <select id="coaxFamily">
+            <option value="rg58">RG58</option>
+            <option value="rg59">RG59</option>
+            <option value="rg6">RG6</option>
+            <option value="lmr400">LMR-400</option>
+            <option value="wf100">WF100 / CT100</option>
+            <option value="rg213">RG213</option>
+          </select>
+        </div>
+        <div class="spec-grid">
+          <div class="spec"><small>Impedance</small><strong id="coaxImpedance">50 Ω</strong></div>
+          <div class="spec"><small>Velocity factor</small><strong id="coaxVelocity">0.66</strong></div>
+          <div class="spec"><small>Outer diameter</small><strong id="coaxDiameter">4.95 mm</strong></div>
+          <div class="spec"><small>Typical use</small><strong id="coaxUse">Short RF leads</strong></div>
+        </div>
+        <div class="result-card">
+          <small>Identification notes</small>
+          <output id="coaxName">RG58</output>
+          <p id="coaxNotes">Thin flexible 50 Ω coax. Common on short patch leads and mobile installations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-panel" data-panel="smd" hidden>
+    <div class="smd-stage">
+      <div class="smd-chip" id="smdChip">103</div>
+      <div class="control-stack">
+        <div class="control-row"><label for="smdCode">Code</label><input id="smdCode" value="103" maxlength="6" inputmode="text" autocomplete="off"/></div>
+        <div class="result-card">
+          <small>Decoded value</small>
+          <output id="smdResult">10 kΩ</output>
+          <p id="smdDetail">Three-digit code: 10 × 10³ Ω.</p>
+        </div>
+        <div class="spec-grid">
+          <div class="spec"><small>Format</small><strong id="smdFormat">3 digit</strong></div>
+          <div class="spec"><small>Raw ohms</small><strong id="smdOhms">10,000 Ω</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-panel" data-panel="connector" hidden>
+    <div class="connector-grid" id="connectorChoices">
+      <button class="choice-card" data-connector="bnc" aria-pressed="true" type="button">BNC</button>
+      <button class="choice-card" data-connector="n" aria-pressed="false" type="button">N type</button>
+      <button class="choice-card" data-connector="tnc" aria-pressed="false" type="button">TNC</button>
+      <button class="choice-card" data-connector="sma" aria-pressed="false" type="button">SMA</button>
+      <button class="choice-card" data-connector="f" aria-pressed="false" type="button">F type</button>
+      <button class="choice-card" data-connector="uhf" aria-pressed="false" type="button">UHF / PL-259</button>
+    </div>
+    <div class="spec-grid">
+      <div class="spec"><small>Impedance</small><strong id="connectorImpedance">50 or 75 Ω</strong></div>
+      <div class="spec"><small>Coupling</small><strong id="connectorCoupling">Bayonet</strong></div>
+      <div class="spec"><small>Typical ceiling</small><strong id="connectorFrequency">4 GHz</strong></div>
+      <div class="spec"><small>Common use</small><strong id="connectorUse">Test and broadcast</strong></div>
+    </div>
+    <div class="result-card">
+      <small>Selected connector</small>
+      <output id="connectorName">BNC</output>
+      <p id="connectorNotes">Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical.</p>
+    </div>
+  </div>
+
+  <div class="tool-panel" data-panel="markings" hidden>
+    <div class="result-card">
+      <small>Marking tools</small>
+      <output>Components</output>
+      <p>Capacitor, inductor, fuse and semiconductor marking references are available below.</p>
+    </div>
+    <div class="other-tools">
+      <a class="other-tool surface" href="./calculator-library.html?search=capacitor"><span class="other-icon" style="--tool:#d78c00">µF</span><span class="other-copy"><strong>Capacitor markings</strong><small>Three-digit and tolerance codes</small></span></a>
+      <a class="other-tool surface" href="./calculator-library.html?search=inductor"><span class="other-icon" style="--tool:#1857b8">L</span><span class="other-copy"><strong>Inductor codes</strong><small>Colour and printed markings</small></span></a>
+      <a class="other-tool surface" href="./calculator-library.html?search=fuse"><span class="other-icon" style="--tool:#b5262b">F</span><span class="other-copy"><strong>Fuse codes</strong><small>Speed, current and voltage marks</small></span></a>
+    </div>
+  </div>
+
+  <div class="tool-panel" data-panel="pinouts" hidden>
+    <div class="result-card">
+      <small>Pinout references</small>
+      <output>Ports &amp; cables</output>
+      <p>Open a compact wiring reference for common field connectors and data cables.</p>
+    </div>
+    <div class="other-tools">
+      <a class="other-tool surface" href="./calculator-library.html?search=ethernet"><span class="other-icon" style="--tool:#0d8587">RJ</span><span class="other-copy"><strong>Ethernet pinout</strong><small>T568A, T568B and pair colours</small></span></a>
+      <a class="other-tool surface" href="./calculator-library.html?search=usb"><span class="other-icon" style="--tool:#504097">USB</span><span class="other-copy"><strong>USB pinouts</strong><small>A, B, Micro and USB-C basics</small></span></a>
+      <a class="other-tool surface" href="./calculator-library.html?search=d-sub"><span class="other-icon" style="--tool:#1857b8">D</span><span class="other-copy"><strong>D-sub pinouts</strong><small>DE-9, DB-25 and common uses</small></span></a>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="moreToolsTitle">
+  <div class="section-bar"><h2 id="moreToolsTitle">More identifier tools</h2><span>Library shortcuts</span></div>
+  <div class="other-tools">
+    <a class="other-tool surface" href="./calculator-library.html?search=resistor"><span class="other-icon" style="--tool:#d78c00">R↔</span><span class="other-copy"><strong>Reverse resistor code</strong><small>Enter a value and generate bands</small></span></a>
+    <a class="other-tool surface" href="./calculator-library.html?search=package"><span class="other-icon" style="--tool:#504097">IC</span><span class="other-copy"><strong>Package identifier</strong><small>SOT, SOIC, QFN and through-hole</small></span></a>
+    <a class="other-tool surface" href="./calculator-library.html?search=semiconductor"><span class="other-icon" style="--tool:#b5262b">Q</span><span class="other-copy"><strong>Semiconductor marks</strong><small>Device prefixes and top codes</small></span></a>
+    <a class="other-tool surface" href="./calculator-library.html?search=cable-colour"><span class="other-icon" style="--tool:#0d8587">C</span><span class="other-copy"><strong>Cable colour codes</strong><small>RF, mains and multicore references</small></span></a>
+    <a class="other-tool surface" href="./calculator-library.html?search=connector"><span class="other-icon" style="--tool:#1857b8">RF</span><span class="other-copy"><strong>Connector comparison</strong><small>Coupling, impedance and frequency</small></span></a>
+    <a class="other-tool surface" href="./calculator-library.html?search=identifier"><span class="other-icon" style="--tool:#536078">•••</span><span class="other-copy"><strong>All identifiers</strong><small>Open the complete tool library</small></span></a>
+  </div>
+</section>
+
+</article>
+</section>
+</main>
+
+<div class="photo-sheet" id="photoSheet" hidden>
+  <section class="photo-card" role="dialog" aria-modal="true" aria-labelledby="photoTitle">
+    <header><h2 id="photoTitle">Photo reference</h2><button class="photo-close" id="closePhoto" type="button" aria-label="Close">×</button></header>
+    <p>Take or choose a photo, then keep it visible while using the manual identifier. This page does not claim automatic image recognition.</p>
+    <input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"/>
+    <img class="photo-preview" id="photoPreview" alt="Selected component reference" hidden/>
+  </section>
+</div>
+
+<script>
+window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+window.FieldOpsSearchQueue.push({
+  page: "tools",
+  label: "Identifiers & Decoders",
+  placeholder: "Search identifiers...",
+  emptyText: "No identifiers found.",
+  items: [
+    { id: "identifier-resistor", title: "Resistor colour code", subtitle: "4, 5 and 6 band decoding", href: "./identifiers.html?tool=resistor", keywords: ["resistor","colour","color","bands","ohms"] },
+    { id: "identifier-coax", title: "Coax identifier", subtitle: "RG58, RG59, RG6, LMR-400 and more", href: "./identifiers.html?tool=coax", keywords: ["coax","cable","rg58","rg6","lmr400"] },
+    { id: "identifier-smd", title: "SMD resistor code", subtitle: "Three digit, four digit and R notation", href: "./identifiers.html?tool=smd", keywords: ["smd","103","resistor","code"] },
+    { id: "identifier-connectors", title: "RF connector identifier", subtitle: "BNC, N, TNC, SMA, F and UHF", href: "./identifiers.html?tool=connector", keywords: ["connector","bnc","n type","sma","tnc","f type"] },
+    { id: "identifier-markings", title: "Component markings", subtitle: "Capacitor, inductor, fuse and semiconductor", href: "./identifiers.html?tool=markings", keywords: ["markings","capacitor","inductor","fuse","semiconductor"] },
+    { id: "identifier-pinouts", title: "Ports and pinouts", subtitle: "Ethernet, USB and D-sub", href: "./identifiers.html?tool=pinouts", keywords: ["pinout","ethernet","usb","d-sub","rj45"] }
+  ]
+});
+
+(() => {
+  "use strict";
+
+  const loadSvgAssets = () => Promise.all(
+    Array.from(document.querySelectorAll("[data-svg]")).map(async (host) => {
+      try {
+        const response = await fetch(host.dataset.svg, { credentials: "same-origin" });
+        if (!response.ok) throw new Error(`SVG ${response.status}`);
+        const template = document.createElement("template");
+        template.innerHTML = (await response.text()).trim();
+        const svg = template.content.querySelector("svg");
+        if (!svg) throw new Error("Invalid SVG");
+        svg.querySelectorAll("script, foreignObject").forEach((node) => node.remove());
+        svg.setAttribute("aria-hidden","true");
+        svg.setAttribute("focusable","false");
+        svg.removeAttribute("width");
+        svg.removeAttribute("height");
+        host.replaceChildren(svg);
+      } catch (error) {
+        host.classList.add("is-missing");
+        console.warn("Identifier asset failed to load", host.dataset.svg, error);
+      }
+    })
+  );
+  loadSvgAssets();
+
+  const toolNames = {
+    resistor: ["Resistor colour code","Select the bands to decode the resistance."],
+    coax: ["Coax identifier","Compare common cable families and construction clues."],
+    smd: ["SMD resistor code","Decode three-digit, four-digit and R-notation markings."],
+    connector: ["RF connector identifier","Compare coupling, impedance and typical frequency range."],
+    markings: ["Component markings","Open capacitor, inductor, fuse and semiconductor references."],
+    pinouts: ["Ports & pinouts","Open compact wiring references for field connectors."]
+  };
+
+  const categoryButtons = Array.from(document.querySelectorAll("[data-tool]"));
+  const panels = Array.from(document.querySelectorAll("[data-panel]"));
+  const title = document.getElementById("workspaceTitle");
+  const subtitle = document.getElementById("workspaceSubtitle");
+  const resistorModes = document.getElementById("resistorModes");
+
+  const selectTool = (tool, push = false) => {
+    if (!toolNames[tool]) tool = "resistor";
+    categoryButtons.forEach((button) => button.setAttribute("aria-selected", String(button.dataset.tool === tool)));
+    panels.forEach((panel) => panel.hidden = panel.dataset.panel !== tool);
+    title.textContent = toolNames[tool][0];
+    subtitle.textContent = toolNames[tool][1];
+    resistorModes.hidden = tool !== "resistor";
+    if (push) {
+      const url = new URL(location.href);
+      url.searchParams.set("tool", tool);
+      history.replaceState(null, "", url);
+    }
+  };
+
+  categoryButtons.forEach((button) => button.addEventListener("click", () => selectTool(button.dataset.tool, true)));
+
+  const colours = [
+    { name:"Black", digit:0, multiplier:1, hex:"#171717" },
+    { name:"Brown", digit:1, multiplier:10, hex:"#744122" },
+    { name:"Red", digit:2, multiplier:100, hex:"#c52e2e" },
+    { name:"Orange", digit:3, multiplier:1000, hex:"#e77d21" },
+    { name:"Yellow", digit:4, multiplier:10000, hex:"#e7c928" },
+    { name:"Green", digit:5, multiplier:100000, hex:"#27824a" },
+    { name:"Blue", digit:6, multiplier:1000000, hex:"#2259b8" },
+    { name:"Violet", digit:7, multiplier:10000000, hex:"#71429b" },
+    { name:"Grey", digit:8, multiplier:100000000, hex:"#858b91" },
+    { name:"White", digit:9, multiplier:1000000000, hex:"#f4f2e8" }
+  ];
+  const multipliers = [
+    ...colours.map((c) => ({ name:c.name, value:c.multiplier, hex:c.hex })),
+    { name:"Gold", value:.1, hex:"#c9a23b" },
+    { name:"Silver", value:.01, hex:"#bcc3c8" }
+  ];
+  const tolerances = [
+    { name:"Brown ±1%", value:1, hex:"#744122" },
+    { name:"Red ±2%", value:2, hex:"#c52e2e" },
+    { name:"Green ±0.5%", value:.5, hex:"#27824a" },
+    { name:"Blue ±0.25%", value:.25, hex:"#2259b8" },
+    { name:"Violet ±0.1%", value:.1, hex:"#71429b" },
+    { name:"Grey ±0.05%", value:.05, hex:"#858b91" },
+    { name:"Gold ±5%", value:5, hex:"#c9a23b" },
+    { name:"Silver ±10%", value:10, hex:"#bcc3c8" }
+  ];
+  const tempcos = [
+    { name:"Brown 100 ppm/K", value:100, hex:"#744122" },
+    { name:"Red 50 ppm/K", value:50, hex:"#c52e2e" },
+    { name:"Orange 15 ppm/K", value:15, hex:"#e77d21" },
+    { name:"Yellow 25 ppm/K", value:25, hex:"#e7c928" },
+    { name:"Blue 10 ppm/K", value:10, hex:"#2259b8" },
+    { name:"Violet 5 ppm/K", value:5, hex:"#71429b" }
+  ];
+
+  const band1 = document.getElementById("band1");
+  const band2 = document.getElementById("band2");
+  const band3 = document.getElementById("band3");
+  const multiplier = document.getElementById("multiplier");
+  const tolerance = document.getElementById("tolerance");
+  const tempco = document.getElementById("tempco");
+  const band3Row = document.getElementById("band3Row");
+  const tempcoRow = document.getElementById("tempcoRow");
+  const bandPreview = document.getElementById("bandPreview");
+  const resistorResult = document.getElementById("resistorResult");
+  const resistorDetail = document.getElementById("resistorDetail");
+  let bandCount = 4;
+
+  const addOptions = (select, list, valueKey = "digit") => {
+    select.replaceChildren(...list.map((item) => {
+      const option = document.createElement("option");
+      option.value = item[valueKey];
+      option.textContent = item.name;
+      option.dataset.hex = item.hex;
+      return option;
+    }));
+  };
+  addOptions(band1, colours);
+  addOptions(band2, colours);
+  addOptions(band3, colours);
+  addOptions(multiplier, multipliers, "value");
+  addOptions(tolerance, tolerances, "value");
+  addOptions(tempco, tempcos, "value");
+
+  band1.value = "4";
+  band2.value = "7";
+  multiplier.value = "100";
+  tolerance.value = "5";
+
+  const colourByDigit = (digit) => colours.find((item) => item.digit === Number(digit));
+  const itemByValue = (list, value) => list.find((item) => Number(item.value) === Number(value));
+
+  const formatResistance = (ohms) => {
+    if (!Number.isFinite(ohms)) return "—";
+    if (Math.abs(ohms) >= 1e9) return `${(ohms/1e9).toLocaleString(undefined,{maximumFractionDigits:3})} GΩ`;
+    if (Math.abs(ohms) >= 1e6) return `${(ohms/1e6).toLocaleString(undefined,{maximumFractionDigits:3})} MΩ`;
+    if (Math.abs(ohms) >= 1e3) return `${(ohms/1e3).toLocaleString(undefined,{maximumFractionDigits:3})} kΩ`;
+    return `${ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
+  };
+
+  const updateResistor = () => {
+    const digits = bandCount >= 5
+      ? Number(`${band1.value}${band2.value}${band3.value}`)
+      : Number(`${band1.value}${band2.value}`);
+    const ohms = digits * Number(multiplier.value);
+    const tol = itemByValue(tolerances, tolerance.value);
+    const selected = [
+      colourByDigit(band1.value),
+      colourByDigit(band2.value),
+      ...(bandCount >= 5 ? [colourByDigit(band3.value)] : []),
+      itemByValue(multipliers, multiplier.value),
+      tol,
+      ...(bandCount === 6 ? [itemByValue(tempcos, tempco.value)] : [])
+    ];
+    resistorResult.textContent = `${formatResistance(ohms)} ±${tol.value}%`;
+    resistorDetail.textContent = selected.map((item) => item.name.split(" ±")[0].split(" ")[0]).join(" · ");
+    bandPreview.replaceChildren(...selected.map((item) => {
+      const band = document.createElement("span");
+      band.style.setProperty("--band", item.hex);
+      band.title = item.name;
+      return band;
+    }));
+  };
+
+  document.querySelectorAll("[data-bands]").forEach((button) => {
+    button.addEventListener("click", () => {
+      bandCount = Number(button.dataset.bands);
+      document.querySelectorAll("[data-bands]").forEach((tab) => tab.setAttribute("aria-selected", String(tab === button)));
+      band3Row.hidden = bandCount < 5;
+      tempcoRow.hidden = bandCount !== 6;
+      updateResistor();
+    });
+  });
+  [band1,band2,band3,multiplier,tolerance,tempco].forEach((control) => control.addEventListener("change", updateResistor));
+  updateResistor();
+
+  const coaxData = {
+    rg58: { name:"RG58", impedance:"50 Ω", velocity:"0.66", diameter:"4.95 mm", use:"Short RF leads", notes:"Thin flexible 50 Ω coax. Common on short patch leads and mobile installations." },
+    rg59: { name:"RG59", impedance:"75 Ω", velocity:"0.66", diameter:"6.15 mm", use:"Video / legacy RF", notes:"75 Ω cable commonly associated with baseband video and older receive systems." },
+    rg6: { name:"RG6", impedance:"75 Ω", velocity:"0.82", diameter:"6.9 mm", use:"Satellite / TV", notes:"Foam dielectric 75 Ω cable with low loss for television, satellite and receive distribution." },
+    lmr400: { name:"LMR-400", impedance:"50 Ω", velocity:"0.85", diameter:"10.3 mm", use:"Low-loss RF feeder", notes:"Low-loss 50 Ω cable with bonded foil and braid. Often used for VHF, UHF and microwave feeder runs." },
+    wf100: { name:"WF100 / CT100", impedance:"75 Ω", velocity:"0.85", diameter:"6.6 mm", use:"Broadcast receive", notes:"Double-screened 75 Ω cable used in domestic and professional television distribution." },
+    rg213: { name:"RG213", impedance:"50 Ω", velocity:"0.66", diameter:"10.3 mm", use:"HF / VHF feeder", notes:"Heavy flexible 50 Ω coax with solid polyethylene dielectric and robust braid screen." }
+  };
+  const coaxFamily = document.getElementById("coaxFamily");
+  const updateCoax = () => {
+    const item = coaxData[coaxFamily.value];
+    document.getElementById("coaxName").textContent = item.name;
+    document.getElementById("coaxImpedance").textContent = item.impedance;
+    document.getElementById("coaxVelocity").textContent = item.velocity;
+    document.getElementById("coaxDiameter").textContent = item.diameter;
+    document.getElementById("coaxUse").textContent = item.use;
+    document.getElementById("coaxNotes").textContent = item.notes;
+  };
+  coaxFamily.addEventListener("change", updateCoax);
+  updateCoax();
+
+  const smdCode = document.getElementById("smdCode");
+  const smdChip = document.getElementById("smdChip");
+  const smdResult = document.getElementById("smdResult");
+  const smdDetail = document.getElementById("smdDetail");
+  const smdFormat = document.getElementById("smdFormat");
+  const smdOhms = document.getElementById("smdOhms");
+
+  const decodeSmd = (raw) => {
+    const code = raw.trim().toUpperCase();
+    if (/^\d{3}$/.test(code)) {
+      const sig = Number(code.slice(0,2));
+      const power = Number(code[2]);
+      return { ohms:sig * 10 ** power, format:"3 digit", detail:`${sig} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][power]} Ω.` };
+    }
+    if (/^\d{4}$/.test(code)) {
+      const sig = Number(code.slice(0,3));
+      const power = Number(code[3]);
+      return { ohms:sig * 10 ** power, format:"4 digit", detail:`${sig} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][power]} Ω.` };
+    }
+    if (/^\d*R\d*$/.test(code) && code !== "R") {
+      return { ohms:Number(code.replace("R",".")), format:"R notation", detail:"R marks the decimal point in ohms." };
+    }
+    return null;
+  };
+
+  const updateSmd = () => {
+    const code = smdCode.value.trim().toUpperCase().slice(0,6);
+    smdCode.value = code;
+    smdChip.textContent = code || "—";
+    const decoded = decodeSmd(code);
+    if (!decoded || !Number.isFinite(decoded.ohms)) {
+      smdResult.textContent = "Unknown";
+      smdDetail.textContent = "Enter 103, 1002 or an R notation such as 4R7.";
+      smdFormat.textContent = "—";
+      smdOhms.textContent = "—";
+      return;
+    }
+    smdResult.textContent = formatResistance(decoded.ohms);
+    smdDetail.textContent = decoded.detail;
+    smdFormat.textContent = decoded.format;
+    smdOhms.textContent = `${decoded.ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
+  };
+  smdCode.addEventListener("input", updateSmd);
+  updateSmd();
+
+  const connectors = {
+    bnc: { name:"BNC", impedance:"50 or 75 Ω", coupling:"Bayonet", frequency:"4 GHz", use:"Test and broadcast", notes:"Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical." },
+    n: { name:"N type", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz+", use:"Outdoor RF feeders", notes:"Weather-resistant threaded RF connector widely used on base-station, antenna and feeder systems." },
+    tnc: { name:"TNC", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz", use:"Vibration-resistant RF", notes:"Threaded relative of BNC. Used where vibration or environmental sealing matters." },
+    sma: { name:"SMA", impedance:"50 Ω", coupling:"Threaded", frequency:"18 GHz+", use:"Microwave and modules", notes:"Compact precision RF connector. Avoid excessive torque and repeated rough mating." },
+    f: { name:"F type", impedance:"75 Ω", coupling:"Threaded", frequency:"3 GHz", use:"TV and satellite", notes:"Uses the cable centre conductor as the contact. Common on 75 Ω broadcast receive and satellite systems." },
+    uhf: { name:"UHF / PL-259", impedance:"Non-constant", coupling:"Threaded", frequency:"~300 MHz", use:"HF and low VHF", notes:"Robust legacy connector. Not constant impedance, so it is unsuitable for precision microwave work." }
+  };
+
+  document.querySelectorAll("[data-connector]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.connector;
+      const item = connectors[key];
+      document.querySelectorAll("[data-connector]").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+      document.getElementById("connectorName").textContent = item.name;
+      document.getElementById("connectorImpedance").textContent = item.impedance;
+      document.getElementById("connectorCoupling").textContent = item.coupling;
+      document.getElementById("connectorFrequency").textContent = item.frequency;
+      document.getElementById("connectorUse").textContent = item.use;
+      document.getElementById("connectorNotes").textContent = item.notes;
+    });
+  });
+
+  const photoSheet = document.getElementById("photoSheet");
+  const photoInput = document.getElementById("photoInput");
+  const photoPreview = document.getElementById("photoPreview");
+  document.getElementById("openPhoto").addEventListener("click", () => {
+    photoSheet.hidden = false;
+    document.getElementById("closePhoto").focus();
+  });
+  document.getElementById("closePhoto").addEventListener("click", () => {
+    photoSheet.hidden = true;
+    document.getElementById("openPhoto").focus();
+  });
+  photoSheet.addEventListener("click", (event) => {
+    if (event.target === photoSheet) photoSheet.hidden = true;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !photoSheet.hidden) photoSheet.hidden = true;
+  });
+  photoInput.addEventListener("change", () => {
+    const file = photoInput.files && photoInput.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    photoPreview.src = url;
+    photoPreview.hidden = false;
+    photoPreview.onload = () => URL.revokeObjectURL(url);
+  });
+
+  const params = new URLSearchParams(location.search);
+  const initialTool = params.get("tool") || "resistor";
+  if (params.get("code")) smdCode.value = params.get("code").slice(0,6);
+  if (params.get("item") && coaxData[params.get("item")]) coaxFamily.value = params.get("item");
+  updateSmd();
+  updateCoax();
+  selectTool(initialTool);
+})();
+</script>
+<script src="../../../shell.js?v=1.1.21-session-editor-token"></script>
+</body>
+</html>
