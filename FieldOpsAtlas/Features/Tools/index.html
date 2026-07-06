@@ -349,7 +349,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.2.1-coax-calculator-link">
+  <main class="phone" data-page="tools" data-version="1.2.2-calculator-library-usage">
     <section class="content-canvas" aria-label="Field tools content">
       <article class="tools-page">
         <header class="tools-hero">
@@ -382,6 +382,14 @@
           </div>
 
           <div class="calculator-grid">
+            <article class="tool-card wide-card" aria-labelledby="calculatorLibraryTitle">
+              <h3 id="calculatorLibraryTitle">Calculator library</h3>
+              <p class="result-text">RF, electronics, electrical, instruments, broadcast, cable and sensor calculators with local usage counts.</p>
+              <div class="form-actions">
+                <a id="calculatorLibraryLink" class="action-button is-primary" href="./calculator-library.html">Open calculator library</a>
+              </div>
+            </article>
+
             <article class="tool-card" aria-labelledby="dbCalcTitle">
               <h3 id="dbCalcTitle">dB / dBm</h3>
               <div class="form-grid">
@@ -440,7 +448,7 @@
               <h3 id="coaxCalcTitle">Coax mechanical identifier</h3>
               <p class="result-text">Estimate whether an unmarked reel is closest to 50 Ω, 75 Ω or 93 Ω from the centre-conductor and dielectric diameters.</p>
               <div class="form-actions">
-                <a class="action-button is-primary" href="./coax-calculator.html">Open coax calculator</a>
+                <a id="coaxCalculatorLink" class="action-button is-primary" href="./coax-calculator.html">Open coax calculator</a>
               </div>
             </article>
           </div>
@@ -595,6 +603,13 @@
       emptyText: "No field tools matches found.",
       items: [
         {
+          id: "tools-calculator-library",
+          title: "Calculator library",
+          subtitle: "RF, electronics, electrical, instruments, broadcast, cable and sensors",
+          href: "./calculator-library.html",
+          keywords: ["calculator", "rf", "electronics", "electrical", "instrument", "broadcast", "cable", "sensor", "usage"]
+        },
+        {
           id: "tools-db",
           title: "dB / dBm calculator",
           subtitle: "Convert watts and dBm",
@@ -658,7 +673,26 @@
 
       const SIGNAL_KEY = "fieldOpsAtlas.tools.signalLog.v1";
       const BREAK_KEY = "fieldOpsAtlas.tools.breakNote.v1";
+      const CALCULATOR_USAGE_KEY = "fieldOpsAtlas.calculatorUsage.v1";
+      const calculatorUsageCooldown = Object.create(null);
       let currentLocation = null;
+
+      const recordCalculatorUsage = (id, field) => {
+        const now = Date.now();
+        const cooldownKey = id + ":" + field;
+        if (now - (calculatorUsageCooldown[cooldownKey] || 0) < 5000) return;
+        calculatorUsageCooldown[cooldownKey] = now;
+        try {
+          const usage = JSON.parse(localStorage.getItem(CALCULATOR_USAGE_KEY) || "{}");
+          const entry = usage[id] || { opens: 0, calculations: 0, lastUsed: null };
+          entry[field] = (entry[field] || 0) + 1;
+          entry.lastUsed = new Date().toISOString();
+          usage[id] = entry;
+          localStorage.setItem(CALCULATOR_USAGE_KEY, JSON.stringify(usage));
+        } catch {
+          // Local storage can be unavailable in previews or private browsing.
+        }
+      };
 
       const readStored = (key, fallback) => {
         try {
@@ -707,6 +741,7 @@
         const dbm = 10 * Math.log10(watts * 1000);
         dbmInput.value = dbm.toFixed(2);
         dbResult.textContent = watts.toFixed(4) + " W = " + dbm.toFixed(2) + " dBm.";
+        recordCalculatorUsage("rf-power", "calculations");
       });
 
       dbmInput.addEventListener("input", () => {
@@ -718,6 +753,7 @@
         const watts = Math.pow(10, dbm / 10) / 1000;
         wattsInput.value = watts.toFixed(6);
         dbResult.textContent = dbm.toFixed(2) + " dBm = " + watts.toFixed(6) + " W.";
+        recordCalculatorUsage("rf-power", "calculations");
       });
 
       vswrInput.addEventListener("input", () => {
@@ -734,6 +770,15 @@
           "reflection " + gamma.toFixed(4),
           "mismatch " + mismatchLoss.toFixed(3) + " dB"
         ].join(" - ");
+        recordCalculatorUsage("vswr-return-loss", "calculations");
+      });
+
+      document.getElementById("calculatorLibraryLink")?.addEventListener("click", () => {
+        recordCalculatorUsage("calculator-library", "opens");
+      });
+
+      document.getElementById("coaxCalculatorLink")?.addEventListener("click", () => {
+        recordCalculatorUsage("coax-identifier", "opens");
       });
 
       const sunLatInput = document.getElementById("sunLatInput");
