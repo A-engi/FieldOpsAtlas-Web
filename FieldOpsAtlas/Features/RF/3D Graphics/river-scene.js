@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.18-steady-camera-visible-assets
+ * Version: 1.6.19-assembly-only
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.18-steady-camera-visible-assets";
+  const VERSION="1.6.19-assembly-only";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -272,9 +272,9 @@
     const map=format==="full"?fullLayer:compressedLayer;
     const layers={shell:map(capture.data.shell),ridge:map(capture.data.ridge)};
     const sourcePlatform=capture.data.platform||null;
-    if(includePlatform)layers.platform=mount==="B"
-      ?fallbackPlatform("B")
-      :(sourcePlatform?map(sourcePlatform):fallbackPlatform(mount));
+    if(includePlatform)layers.platform=sourcePlatform
+      ?map(sourcePlatform)
+      :fallbackPlatform(mount);
 
     const shellBounds=positionBounds(sourcePositions(capture.data.shell,format));
     const ridgeBounds=positionBounds(sourcePositions(capture.data.ridge,format));
@@ -377,83 +377,6 @@
       }
     });
     return assetId;
-  }
-
-  function mountainATipCoreAsset(){
-    const segments=8;
-    const positions=[];
-    const indices=[];
-    const faceColours=[];
-    const lowerRadius=0.72,shoulderRadius=0.30;
-    const lowerY=-0.72,shoulderY=0.08,apexY=0.50;
-
-    for(let ring=0;ring<2;ring+=1){
-      const radius=ring===0?lowerRadius:shoulderRadius;
-      const y=ring===0?lowerY:shoulderY;
-      for(let index=0;index<segments;index+=1){
-        const angle=index*Math.PI*2/segments;
-        positions.push(Math.cos(angle)*radius,y,Math.sin(angle)*radius);
-      }
-    }
-
-    const apex=positions.length/3;
-    positions.push(0,apexY,0);
-    const base=positions.length/3;
-    positions.push(0,lowerY,0);
-
-    for(let index=0;index<segments;index+=1){
-      const next=(index+1)%segments;
-      const lower=index;
-      const lowerNext=next;
-      const upper=segments+index;
-      const upperNext=segments+next;
-      indices.push(lower,lowerNext,upperNext,lower,upperNext,upper);
-      faceColours.push(index%2,index%2);
-      indices.push(upper,upperNext,apex);
-      faceColours.push(2);
-      indices.push(base,lowerNext,lower);
-      faceColours.push(0);
-    }
-
-    return {
-      centre:[0,0],mirror:false,
-      palettes:{shell:["022b33","044b54","08757f"]},
-      layers:{
-        shell:{
-          format:"raw-indexed",normals:true,
-          positions:new Float32Array(positions),
-          indices:new Uint32Array(indices),
-          faceColours:new Uint8Array(faceColours)
-        }
-      }
-    };
-  }
-
-  function mountainATipCoreObjects(scene){
-    const mountains=(scene.mountains||[]).filter(mountain=>mountain.mount==="A");
-    if(!mountains.length)return [];
-    const assetId="rf-mountain-a-tip-core";
-    if(!globalThis.FieldOps3DAssets.has(assetId)){
-      globalThis.FieldOps3DAssets.register(assetId,mountainATipCoreAsset());
-    }
-
-    return mountains.map(mountain=>{
-      const source=globalThis.FieldOps3DAssets.get(mountain.asset);
-      const peakY=source?.mountPoint?.peakY;
-      if(!Number.isFinite(peakY))return null;
-      const centre=source.centre||DEFAULT_CENTRE;
-      const mountainScale=mountain.transform?.scale||[1,1,1];
-      const position=transformPoint(mountain.transform,[centre[0],peakY-0.43,centre[1]]);
-      return object(assetId,{
-        position,
-        rotation:[...(mountain.transform?.rotation||[0,0,0])],
-        scale:[
-          Math.abs(mountainScale[0]??1)*0.72,
-          Math.abs(mountainScale[1]??1)*0.92,
-          Math.abs(mountainScale[2]??1)*0.72
-        ]
-      },false);
-    }).filter(Boolean);
   }
 
   function transmitterOnMountain(scene,mountain,heightScale){
@@ -647,7 +570,6 @@
     const objects=[];
     if(scene.baseAsset)objects.push({asset:scene.baseAsset,position:[0,0,0],rotation:[0,0,0],scale:[1,1,1],mirror:false});
     objects.push(...(scene.mountains||[]).map(item=>object(item.asset,item.transform,item.transform?.mirror)));
-    objects.push(...mountainATipCoreObjects(scene));
     objects.push(...elevationTagObjects(scene,path));
 
     const transmitterAsset=visibleTransmitterAsset(scene);
