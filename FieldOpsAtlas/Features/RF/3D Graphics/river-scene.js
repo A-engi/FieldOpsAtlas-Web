@@ -1,11 +1,11 @@
 /* FieldOps Atlas — River and standalone RF scenes
- * Version: 1.6.21-mountain-geometry-fix
+ * Version: 1.6.27-clean-heavy-comp-transmitter
  * Owns loading, adapting, positioning and assembling scene objects.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.21-mountain-geometry-fix";
+  const VERSION="1.6.27-clean-heavy-comp-transmitter";
   const MOUNTAIN_BASE="./3D Graphics/";
   const OBJECT_BASE="./3D Graphics/";
   const DEFAULT_CENTRE=[0.131281376,-0.0197811127];
@@ -13,7 +13,7 @@
   const sourceCache=new Map();
   const assetCache=new Map();
   const scriptCache=new Map();
-  const OBJECT_CACHE_VERSION="1.6.21-mountain-geometry-fix";
+  const OBJECT_CACHE_VERSION="1.6.27-clean-heavy-comp-transmitter";
 
   const RIVER_CAMERA=Object.freeze({
     size:[57,23,42],
@@ -155,6 +155,11 @@
       id:"transmitter-scene",label:"Transmitter",quality:"full",
       transmitterFile:"transmitter-gold-full.js",transmitterAsset:"transmitter-gold-full",
       transmitters:Object.freeze([IDENTITY]),mountains:Object.freeze([])
+    }),
+    "transmitter-comp-scene":Object.freeze({
+      id:"transmitter-comp-scene",label:"Compressed transmitter",quality:"compressed",
+      transmitterFile:"transmitter-gold-quarter.js",transmitterAsset:"transmitter-gold-quarter",
+      transmitters:Object.freeze([IDENTITY]),mountains:Object.freeze([])
     })
   });
 
@@ -272,15 +277,28 @@
     const map=format==="full"?fullLayer:compressedLayer;
     const layers={shell:map(capture.data.shell),ridge:map(capture.data.ridge)};
     const sourcePlatform=capture.data.platform||null;
-    if(includePlatform)layers.platform=sourcePlatform
-      ?map(sourcePlatform)
-      :fallbackPlatform(mount);
+
+    // Mount A now explicitly reuses Mount B's block geometry so the visible
+    // mounting block and the transmitter mount are resolved the same way as B.
+    const copiedBlockMount=mount==="A"?"B":mount;
+    const copiedBlock=MOUNT_BLOCKS[copiedBlockMount]||null;
+
+    if(includePlatform){
+      if(mount==="A"&&copiedBlock){
+        layers.platform=fallbackPlatform("B");
+      }else{
+        layers.platform=sourcePlatform
+          ?map(sourcePlatform)
+          :fallbackPlatform(mount);
+      }
+    }
 
     const shellBounds=positionBounds(sourcePositions(capture.data.shell,format));
     const ridgeBounds=positionBounds(sourcePositions(capture.data.ridge,format));
     const peakY=Math.max(shellBounds.max[1],ridgeBounds.max[1]);
-    let block=MOUNT_BLOCKS[mount]||null;
-    if(sourcePlatform){
+
+    let block=copiedBlock||MOUNT_BLOCKS[mount]||null;
+    if(sourcePlatform&&mount!=="A"){
       const bounds=positionBounds(sourcePositions(sourcePlatform,format));
       block={
         centre:[(bounds.min[0]+bounds.max[0])/2,(bounds.min[2]+bounds.max[2])/2],
@@ -297,7 +315,9 @@
   }
 
   async function readMountain(file){
-    const url=new URL(MOUNTAIN_BASE+file,document.baseURI).href;
+    const assetUrl=new URL(MOUNTAIN_BASE+file,document.baseURI);
+    assetUrl.searchParams.set("v",VERSION);
+    const url=assetUrl.href;
     if(!sourceCache.has(url))sourceCache.set(url,fetch(url,{cache:"force-cache"}).then(response=>{
       if(!response.ok)throw new Error(`Unable to fetch ${file}: ${response.status}`);
       return response.text();
@@ -343,9 +363,29 @@
   function assetBounds(asset){
     const layer=asset?.layers?.shell;
     if(!layer)return null;
-    if(layer.positions)return positionBounds(layer.positions);
-    if(layer.format==="raw-expanded")return positionBounds(layer.positions);
-    return null;
+    const positions=layer.positions||(layer.format==="raw-expanded"?layer.positions:null);
+    if(!positions)return null;
+
+    const bounds=positionBounds(positions);
+    if(!asset.mirror)return bounds;
+
+    // Quarter assets are mirrored by the renderer around asset.centre. Their
+    // raw buffer contains only one quadrant, so using the raw min/max makes the
+    // transmitter appear wider and differently aligned than the full asset.
+    const centre=asset.centre||[0,0];
+    const radiusX=Math.max(
+      Math.abs(bounds.min[0]-centre[0]),
+      Math.abs(bounds.max[0]-centre[0])
+    );
+    const radiusZ=Math.max(
+      Math.abs(bounds.min[2]-centre[1]),
+      Math.abs(bounds.max[2]-centre[1])
+    );
+
+    return {
+      min:[centre[0]-radiusX,bounds.min[1],centre[1]-radiusZ],
+      max:[centre[0]+radiusX,bounds.max[1],centre[1]+radiusZ]
+    };
   }
 
   function transmitterOnMountain(scene,mountain,heightScale){

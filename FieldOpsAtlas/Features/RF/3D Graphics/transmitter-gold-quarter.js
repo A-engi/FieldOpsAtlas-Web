@@ -1,9 +1,9 @@
-/* FieldOps Atlas — detailed gold transmitter, quarter geometry mirrored four ways by the renderer
- * Version: 1.6.4-gold-transmitter-high-visibility-quarter
+/* FieldOps Atlas — simplified heavy compressed transmitter, quarter geometry mirrored four ways
+ * Version: 1.6.7-gold-transmitter-clean-heavy-quarter
  */
 (()=>{
   "use strict";
-  const VERSION="1.6.4-gold-transmitter-high-visibility-quarter";
+  const VERSION="1.6.7-gold-transmitter-clean-heavy-quarter";
   const ASSET_ID="transmitter-gold-quarter";
   const positions=[];
   const indices=[];
@@ -15,23 +15,47 @@
 
   function box(cx,cy,cz,sx,sy,sz,colour=1){
     const x0=cx-sx/2,x1=cx+sx/2,y0=cy-sy/2,y1=cy+sy/2,z0=cz-sz/2,z1=cz+sz/2;
-    const v=[vertex(x0,y0,z0),vertex(x1,y0,z0),vertex(x1,y1,z0),vertex(x0,y1,z0),vertex(x0,y0,z1),vertex(x1,y0,z1),vertex(x1,y1,z1),vertex(x0,y1,z1)];
-    quad(v[0],v[1],v[2],v[3],colour);quad(v[5],v[4],v[7],v[6],colour);
-    quad(v[4],v[0],v[3],v[7],colour);quad(v[1],v[5],v[6],v[2],colour);
-    quad(v[3],v[2],v[6],v[7],colour);quad(v[4],v[5],v[1],v[0],colour);
+    const v=[
+      vertex(x0,y0,z0),vertex(x1,y0,z0),vertex(x1,y1,z0),vertex(x0,y1,z0),
+      vertex(x0,y0,z1),vertex(x1,y0,z1),vertex(x1,y1,z1),vertex(x0,y1,z1)
+    ];
+    quad(v[0],v[1],v[2],v[3],colour);
+    quad(v[5],v[4],v[7],v[6],colour);
+    quad(v[4],v[0],v[3],v[7],colour);
+    quad(v[1],v[5],v[6],v[2],colour);
+    quad(v[3],v[2],v[6],v[7],colour);
+    quad(v[4],v[5],v[1],v[0],colour);
   }
 
-  function beam(a,b,width=0.09,colour=1){
+  function beam(a,b,halfWidth=0.12,colour=1){
     const dx=b[0]-a[0],dy=b[1]-a[1],dz=b[2]-a[2];
-    const len=Math.hypot(dx,dy,dz)||1;
-    const d=[dx/len,dy/len,dz/len];
-    let ref=Math.abs(d[1])<0.88?[0,1,0]:[1,0,0];
-    let ux=d[1]*ref[2]-d[2]*ref[1],uy=d[2]*ref[0]-d[0]*ref[2],uz=d[0]*ref[1]-d[1]*ref[0];
-    let ul=Math.hypot(ux,uy,uz)||1;ux/=ul;uy/=ul;uz/=ul;
-    const vx=d[1]*uz-d[2]*uy,vy=d[2]*ux-d[0]*uz,vz=d[0]*uy-d[1]*ux;
-    const w=width*0.69;
+    const length=Math.hypot(dx,dy,dz)||1;
+    const d=[dx/length,dy/length,dz/length];
+    const ref=Math.abs(d[1])<0.88?[0,1,0]:[1,0,0];
+
+    let ux=d[1]*ref[2]-d[2]*ref[1];
+    let uy=d[2]*ref[0]-d[0]*ref[2];
+    let uz=d[0]*ref[1]-d[1]*ref[0];
+    const uLength=Math.hypot(ux,uy,uz)||1;
+    ux/=uLength;uy/=uLength;uz/=uLength;
+
+    const vx=d[1]*uz-d[2]*uy;
+    const vy=d[2]*ux-d[0]*uz;
+    const vz=d[0]*uy-d[1]*ux;
     const corners=[];
-    for(const p of [a,b]) for(const su of [-1,1]) for(const sv of [-1,1]) corners.push(vertex(p[0]+(ux*su+vx*sv)*w,p[1]+(uy*su+vy*sv)*w,p[2]+(uz*su+vz*sv)*w));
+
+    for(const point of [a,b]){
+      for(const su of [-1,1]){
+        for(const sv of [-1,1]){
+          corners.push(vertex(
+            point[0]+(ux*su+vx*sv)*halfWidth,
+            point[1]+(uy*su+vy*sv)*halfWidth,
+            point[2]+(uz*su+vz*sv)*halfWidth
+          ));
+        }
+      }
+    }
+
     quad(corners[0],corners[1],corners[3],corners[2],colour);
     quad(corners[4],corners[6],corners[7],corners[5],colour);
     quad(corners[0],corners[4],corners[5],corners[1],colour);
@@ -40,55 +64,71 @@
     quad(corners[1],corners[5],corners[7],corners[3],colour);
   }
 
-  function radius(y){return 3.25-(2.55*Math.min(y,14.8)/14.8);}
-  const quadrants=[[1,1]];
-  const levels=[0,1.25,2.7,4.15,5.7,7.3,8.9,10.5,12.0,13.35,14.6];
-
-  for(const [sx,sz] of quadrants){
-    for(let i=0;i<levels.length-1;i++){
-      const y0=levels[i],y1=levels[i+1],r0=radius(y0),r1=radius(y1);
-      beam([sx*r0,y0,sz*r0],[sx*r1,y1,sz*r1],0.15,i%3===0?2:1);
-      beam([0,y0,sz*r0],[sx*r0,y0,sz*r0],0.075,0);
-      beam([sx*r0,y0,0],[sx*r0,y0,sz*r0],0.075,0);
-      beam([0,y0,sz*r0],[sx*r1,y1,sz*r1],0.075,2);
-      beam([sx*r0,y0,0],[sx*r1,y1,sz*r1],0.075,2);
-      if(i%2===1){
-        beam([sx*r0,y0,sz*r0],[0,y1,sz*r1],0.065,3);
-        beam([sx*r0,y0,sz*r0],[sx*r1,y1,0],0.065,3);
-      }
-    }
-
-    // Keep the feet and tapered lattice. The three middle service decks,
-    // handrails and projecting panel antennas have been removed.
-    beam([sx*3.7,0,sz*3.7],[sx*radius(2.7),2.7,sz*radius(2.7)],0.22,1);
-    box(sx*1.75,0.18,sz*1.75,3.5,0.28,3.5,0);
+  function radius(y){
+    return 3.25-(2.55*Math.min(y,14.4)/14.4);
   }
 
-  // Axis mast, upper cage and beacon are emitted once for the full asset and
-  // once in the quarter asset; overlapping mirrored copies are depth-identical.
-  beam([0,13.5,0],[0,18.4,0],0.28,2);
-  for(const y of [14.8,15.8,16.8]){
-    box(0,y,0,1.05,0.10,1.05,1);
-    for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
-      const x=Math.cos(a)*0.72,z=Math.sin(a)*0.72;
-      box(x,y+0.42,z,0.18,0.86,0.34,4);
-      beam([0,y,0],[x,y+0.42,z],0.045,3);
+  const levels=[0,2.4,4.8,7.2,9.6,12.0,14.4];
+
+  for(let i=0;i<levels.length-1;i+=1){
+    const y0=levels[i];
+    const y1=levels[i+1];
+    const r0=radius(y0);
+    const r1=radius(y1);
+
+    // Primary corner pole. This is deliberately much heavier than the old mesh.
+    beam([r0,y0,r0],[r1,y1,r1],0.28,3);
+
+    // One horizontal member on each half-face.
+    beam([0,y0,r0],[r0,y0,r0],0.15,2);
+    beam([r0,y0,0],[r0,y0,r0],0.15,2);
+
+    // One alternating diagonal per half-face instead of the previous stacked
+    // diagonal network. This keeps the silhouette readable and removes clutter.
+    if(i%2===0){
+      beam([0,y0,r0],[r1,y1,r1],0.14,1);
+      beam([r0,y0,0],[r1,y1,r1],0.14,1);
+    }else{
+      beam([r0,y0,r0],[0,y1,r1],0.14,1);
+      beam([r0,y0,r0],[r1,y1,0],0.14,1);
     }
   }
-  box(0,18.55,0,0.34,0.34,0.34,5);
-  beam([0,18.45,0],[0,19.15,0],0.13,5);
+
+  // Finish the upper lattice with a single heavy collar.
+  {
+    const y=levels[levels.length-1];
+    const r=radius(y);
+    beam([0,y,r],[r,y,r],0.15,2);
+    beam([r,y,0],[r,y,r],0.15,2);
+  }
+
+  // Heavy foot and base plate.
+  beam([3.72,0,3.72],[radius(2.4),2.4,radius(2.4)],0.36,3);
+  box(1.75,0.20,1.75,3.5,0.40,3.5,0);
+
+  // Clean central mast: two collars and four simple panel antennas.
+  beam([0,13.9,0],[0,18.6,0],0.42,4);
+  box(0,15.15,0,1.35,0.18,1.35,2);
+  box(0,16.95,0,1.18,0.18,1.18,2);
+  box(0.76,16.0,0,0.28,1.34,0.48,4);
+  box(0,16.0,0.76,0.48,1.34,0.28,4);
+
+  // Beacon.
+  box(0,18.72,0,0.44,0.44,0.44,5);
+  beam([0,18.62,0],[0,19.25,0],0.18,5);
 
   const asset={
     centre:[0,0],
     mirror:true,
-    view:{size:[8.4,19.4,8.4],target:[0,9.1,0],lift:2.2,fov:38},
+    view:{size:[8.4,19.5,8.4],target:[0,9.15,0],lift:2.2,fov:38},
     palettes:{
-      shell:["7A3900","B85D00","E58A00","FFB51B","FFD95B","FFF2B8"],
-      ridge:["E58A00","FFB51B","FFD95B","FFF2B8"]
+      shell:["321700","6A3000","A94E00","F28A00","FFC640","FFF0A6"],
+      ridge:["A94E00","F28A00","FFC640","FFF0A6"]
     },
     layers:{
       shell:{
-        format:"raw-indexed",normals:true,
+        format:"raw-indexed",
+        normals:true,
         positions:new Float32Array(positions),
         indices:new Uint32Array(indices),
         faceColours:new Uint8Array(faceColours)
@@ -96,7 +136,11 @@
     }
   };
 
-  if(globalThis.FieldOps3DAssets?.register) globalThis.FieldOps3DAssets.register(ASSET_ID,asset);
-  else (globalThis.FieldOps3DAssetQueue||=[]).push({id:ASSET_ID,...asset});
+  if(globalThis.FieldOps3DAssets?.register){
+    globalThis.FieldOps3DAssets.register(ASSET_ID,asset);
+  }else{
+    (globalThis.FieldOps3DAssetQueue||=[]).push({id:ASSET_ID,...asset});
+  }
+
   globalThis.FieldOpsGoldTransmitterQuarter=Object.freeze({VERSION,ASSET_ID});
 })();
