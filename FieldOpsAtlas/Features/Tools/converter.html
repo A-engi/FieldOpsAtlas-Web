@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FieldOps Atlas Universal Converter</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.21-shell-smoke-controls">
+  <style>
+    :root {
+      --side: 7px;
+      --ink: #102033;
+      --muted: rgba(16, 32, 51, 0.66);
+      --line: rgba(42, 67, 93, 0.18);
+      --panel: rgba(255, 255, 255, 0.78);
+      --blue: #225f86;
+      --green: #17623f;
+      --amber: #866018;
+      --red: #8d2f2f;
+    }
+
+    * { box-sizing: border-box; }
+
+    .content-canvas {
+      position: absolute;
+      z-index: 1;
+      top: calc(var(--safe-top) + var(--top-height) + var(--side));
+      right: var(--side);
+      bottom: calc(var(--safe-bottom) + var(--nav-height) + var(--bottom-lift) + var(--side));
+      left: var(--side);
+      min-height: 0;
+      overflow: hidden;
+      border: 2px solid var(--gold-border);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(34, 95, 134, 0.18), transparent 29%),
+        radial-gradient(circle at 90% 4%, rgba(134, 96, 24, 0.15), transparent 26%),
+        linear-gradient(180deg, #f7f9fa 0%, #e1e9ea 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.6),
+        0 14px 30px rgba(2,9,20,.26);
+    }
+
+    .page {
+      height: 100%;
+      min-height: 0;
+      padding: 9px;
+      display: grid;
+      align-content: start;
+      gap: 9px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      color: var(--ink);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .surface {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--panel);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.64),
+        0 7px 16px rgba(37,50,62,.07);
+    }
+
+    .page-head {
+      padding: 11px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .head-copy { display: grid; gap: 4px; min-width: 0; }
+
+    .kicker {
+      margin: 0;
+      color: rgba(16,32,51,.58);
+      font-size: 9px;
+      font-weight: 850;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    h1, h2, p { margin: 0; }
+    h1 { font-size: 21px; font-weight: 900; line-height: 1.03; }
+    h2 { font-size: 14px; font-weight: 900; line-height: 1.1; }
+
+    .copy,
+    .converter-note,
+    .converter-error,
+    .family-description {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .head-actions,
+    .converter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .button {
+      min-height: 34px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(32,95,134,.22);
+      border-radius: 10px;
+      color: var(--ink);
+      background: rgba(255,255,255,.78);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 900;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .button.is-primary {
+      color: #fff;
+      border-color: rgba(21,74,107,.22);
+      background: linear-gradient(180deg, #2d7398, #1f587d);
+    }
+
+    .converter-card {
+      padding: 10px;
+      display: grid;
+      gap: 9px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.94), rgba(238,243,245,.83)),
+        var(--panel);
+    }
+
+    .converter-title-row {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .converter-title {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .converter-icon {
+      width: 30px;
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(34,95,134,.18);
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(180deg, #163b61, #0d2847);
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .converter-count {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(23,98,63,.10);
+      font-size: 9px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(108px,.42fr);
+      gap: 7px;
+    }
+
+    .converter-filter,
+    .converter-category,
+    .converter-select,
+    .converter-value {
+      width: 100%;
+      min-width: 0;
+      min-height: 40px;
+      border: 1px solid rgba(42,67,93,.22);
+      border-radius: 11px;
+      color: var(--ink);
+      background: rgba(255,255,255,.86);
+      outline: none;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 720;
+    }
+
+    .converter-filter,
+    .converter-value { padding: 0 10px; }
+    .converter-select,
+    .converter-category { padding: 0 28px 0 9px; }
+
+    .converter-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr);
+      gap: 7px;
+      align-items: stretch;
+    }
+
+    .converter-side {
+      min-width: 0;
+      padding: 8px;
+      display: grid;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.68);
+    }
+
+    .converter-side label {
+      color: rgba(16,32,51,.6);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .converter-value {
+      min-height: 52px;
+      font-size: 21px;
+      font-weight: 850;
+    }
+
+    .converter-value[readonly] {
+      color: var(--blue);
+      background: rgba(34,95,134,.065);
+    }
+
+    .swap-button {
+      width: 44px;
+      min-height: 44px;
+      align-self: center;
+      border: 1px solid rgba(170,126,38,.34);
+      border-radius: 50%;
+      color: var(--blue);
+      background: rgba(255,255,255,.86);
+      font: inherit;
+      font-size: 20px;
+      font-weight: 950;
+    }
+
+    .converter-meta {
+      min-height: 30px;
+      padding: 7px 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid rgba(42,67,93,.12);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .converter-meta strong {
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .converter-note[hidden] { display: none; }
+    .converter-error { min-height: 0; color: var(--red); }
+
+    .info-card {
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .info-card a { color: var(--blue); font-weight: 850; }
+
+    .recent-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .converter-recent-button {
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      display: grid;
+      gap: 3px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      text-align: left;
+      font: inherit;
+    }
+
+    .converter-recent-button strong {
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .converter-recent-button span {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .family-groups {
+      display: grid;
+      gap: 8px;
+    }
+
+    .family-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .family-group h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .family-chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .family-chip {
+      min-height: 30px;
+      padding: 0 9px;
+      border: 1px solid rgba(42,67,93,.17);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      font: inherit;
+      font-size: 9px;
+      font-weight: 820;
+    }
+
+    @media (max-width: 350px) {
+      .page-head { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
+      .converter-grid { grid-template-columns: 1fr; }
+      .swap-button { justify-self: center; transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" data-page="tools" data-version="1.0.0-universal-converter">
+    <section class="content-canvas" aria-label="Universal converter">
+      <article class="page">
+        <header class="page-head surface">
+          <div class="head-copy">
+            <p class="kicker">Field tools</p>
+            <h1>Universal Converter</h1>
+            <p class="copy">Direct unit, RF, electrical, broadcast, process and digital conversions.</p>
+          </div>
+          <div class="head-actions">
+            <a class="button" href="./index.html">Tools</a>
+            <a class="button is-primary" href="./calculator-library.html">Calculators</a>
+          </div>
+        </header>
+
+        <section class="converter-card surface" data-converter-widget>
+          <div class="converter-title-row">
+            <div class="converter-title">
+              <span class="converter-icon" aria-hidden="true">⇄</span>
+              <div>
+                <h2>Conversions</h2>
+                <p class="copy">Filter the source list, then choose a compatible target.</p>
+              </div>
+            </div>
+            <span class="converter-count" data-converter-count></span>
+          </div>
+
+          <div class="filter-grid">
+            <input class="converter-filter" data-converter-filter type="search" inputmode="search" autocomplete="off" placeholder="Filter conversions…" aria-label="Filter conversions">
+            <select class="converter-category" data-converter-category aria-label="Conversion category"></select>
+          </div>
+
+          <div class="converter-grid">
+            <div class="converter-side">
+              <label for="converterFromUnit">From</label>
+              <select id="converterFromUnit" class="converter-select" data-converter-from-unit aria-label="Convert from unit"></select>
+              <input class="converter-value" data-converter-from-value type="text" inputmode="decimal" value="23" aria-label="Source value">
+            </div>
+
+            <button class="swap-button" data-converter-swap type="button" aria-label="Swap conversion direction">⇄</button>
+
+            <div class="converter-side">
+              <label for="converterToUnit">To</label>
+              <select id="converterToUnit" class="converter-select" data-converter-to-unit aria-label="Convert to unit"></select>
+              <input class="converter-value" data-converter-to-value type="text" readonly aria-label="Converted value">
+            </div>
+          </div>
+
+          <div class="converter-meta">
+            <strong data-converter-family>RF power level</strong>
+            <span>Bidirectional</span>
+          </div>
+          <p class="converter-note" data-converter-note hidden></p>
+          <p class="converter-error" data-converter-error role="status" aria-live="polite"></p>
+
+          <div class="converter-actions">
+            <button class="button is-primary" data-converter-copy type="button">Copy result</button>
+            <button class="button" data-converter-clear type="button">Clear</button>
+            <a class="button" id="reportConverterError" href="https://github.com/A-engi/FieldOpsAtlas-Web/issues/new" target="_blank" rel="noopener noreferrer">Report error</a>
+          </div>
+        </section>
+
+        <section class="info-card surface">
+          <h2>Recent conversion pairs</h2>
+          <div class="recent-list copy" data-converter-recent></div>
+        </section>
+
+        <section class="info-card surface">
+          <h2>Calculations remain separate</h2>
+          <p class="copy">Operations needing more than one independent input—such as applying a dB reduction to a starting wattage, link budgets, voltage drop or cable loss—stay in the calculator library.</p>
+          <p class="copy"><a href="./calculator-library.html">Open calculator library</a></p>
+        </section>
+
+        <section class="info-card surface">
+          <h2>Browse conversion families</h2>
+          <div id="familyGroups" class="family-groups"></div>
+        </section>
+      </article>
+    </section>
+  </main>
+
+  <script src="./converter-registry.js?v=1.0.0"></script>
+  <script>
+    window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+    window.FieldOpsSearchQueue.push({
+      page: "tools",
+      label: "Universal Converter",
+      placeholder: "Search conversions...",
+      emptyText: "No conversions found.",
+      items: [
+        {
+          id: "tools-universal-converter",
+          title: "Universal Converter",
+          subtitle: "General, RF, electrical, broadcast, process and digital conversions",
+          href: "./converter.html",
+          keywords: ["converter", "units", "dbm", "watts", "temperature", "pressure", "dab", "dtt", "binary", "hex"]
+        }
+      ]
+    });
+
+    (() => {
+      "use strict";
+
+      const root = document.querySelector("[data-converter-widget]");
+      const controller = window.FieldOpsConverter.mount(root, {
+        storageKey: "fieldOpsAtlas.converter.full.v1",
+        defaultFrom: "rf-power::dbm",
+        defaultTo: "mw",
+        defaultValue: "23"
+      });
+
+      const groups = document.getElementById("familyGroups");
+      const byCategory = new Map();
+      window.FieldOpsConverter.families.forEach((entry) => {
+        if (!byCategory.has(entry.category)) byCategory.set(entry.category, []);
+        byCategory.get(entry.category).push(entry);
+      });
+
+      byCategory.forEach((items, category) => {
+        const section = document.createElement("section");
+        section.className = "family-group";
+        const title = document.createElement("h3");
+        title.textContent = category;
+        const grid = document.createElement("div");
+        grid.className = "family-chip-grid";
+        items.forEach((entry) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "family-chip";
+          button.textContent = entry.title + " · " + entry.units.length;
+          button.addEventListener("click", () => {
+            const filter = root.querySelector("[data-converter-filter]");
+            const categorySelect = root.querySelector("[data-converter-category]");
+            filter.value = entry.title;
+            categorySelect.value = "All";
+            controller.rebuildSource(entry.id + "::" + entry.units[0].id, entry.units[1] ? entry.units[1].id : entry.units[0].id);
+            root.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          grid.appendChild(button);
+        });
+        section.append(title, grid);
+        groups.appendChild(section);
+      });
+
+      const issueBody = [
+        "## Universal Converter error",
+        "",
+        "Version: 1.0.0-universal-converter",
+        "URL: " + location.href,
+        "Browser: " + navigator.userAgent,
+        "",
+        "## Conversion",
+        "From unit:",
+        "To unit:",
+        "Input:",
+        "Result:",
+        "",
+        "## What happened",
+        "Describe the problem here."
+      ].join("\n");
+
+      document.getElementById("reportConverterError").href =
+        "https://github.com/A-engi/FieldOpsAtlas-Web/issues/new?title=" +
+        encodeURIComponent("Universal Converter error") +
+        "&body=" + encodeURIComponent(issueBody);
+    })();
+  </script>
+  <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
+</body>
+</html>
