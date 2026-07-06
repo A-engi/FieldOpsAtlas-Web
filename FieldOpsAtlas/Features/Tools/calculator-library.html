@@ -235,7 +235,6 @@
       white-space: nowrap;
     }
 
-    .pill.is-queued { color: var(--amber); background: rgba(134,96,24,.14); }
     .pill.is-external { color: var(--blue); background: rgba(34,95,134,.12); }
     .use-count { color: var(--muted); font-size: 9px; font-weight: 850; white-space: nowrap; }
 
@@ -304,6 +303,87 @@
       font-weight: 750;
     }
 
+
+    .manage-list { display: grid; gap: 10px; }
+
+    .manage-category {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.58);
+    }
+
+    .manage-category-header,
+    .manage-tool-row {
+      padding: 9px;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .manage-category-header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(34,95,134,.07);
+    }
+
+    .manage-category-header strong,
+    .manage-tool-row strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .manage-tool-row {
+      border-top: 1px solid rgba(42,67,93,.10);
+    }
+
+    .manage-tool-row:first-child { border-top: 0; }
+    .manage-tool-row.is-hidden { opacity: .56; }
+
+    .manage-tool-copy {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .manage-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+
+    .manage-mini {
+      min-width: 36px;
+      min-height: 32px;
+      padding: 0 8px;
+      border: 1px solid rgba(32,95,134,.20);
+      border-radius: 9px;
+      color: var(--ink);
+      background: rgba(255,255,255,.80);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .manage-mini.is-hide { color: var(--red); }
+    .manage-mini.is-show { color: var(--green); }
+    .manage-summary {
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,.66);
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
     @media (max-width: 680px) {
       .metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .controls { grid-template-columns: 1fr; }
@@ -312,17 +392,18 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.0.0-calculator-library-usage">
+  <main class="phone" data-page="tools" data-version="1.1.0-all-calculators-layout">
     <section class="content-canvas" aria-label="Calculator library">
       <article class="page">
         <header class="card hero">
           <p class="kicker">Field tools · Calculators</p>
           <h1>Calculator library</h1>
-          <p class="copy">RF, electronics, electrical, instruments, broadcast, cable and sensor tools. Opens and completed calculations are counted only on this phone.</p>
+          <p class="copy">RF, electronics, electrical, instruments, broadcast, cable and sensor tools. Usage, hidden tools and custom order are stored only on this phone.</p>
           <div class="hero-actions">
             <a class="button-link" href="./index.html">Back to field tools</a>
+            <button id="manageButton" class="button is-primary" type="button">Manage tools</button>
             <button id="usageButton" class="button" type="button">View usage</button>
-            <button id="exportButton" class="button" type="button">Export usage</button>
+            <button id="exportButton" class="button" type="button">Export data</button>
           </div>
           <div class="metrics" aria-label="Calculator usage summary">
             <article class="metric"><strong id="totalToolsMetric">0</strong><span>Tools listed</span></article>
@@ -338,17 +419,17 @@
             <select id="statusFilter" aria-label="Filter calculators">
               <option value="all">All tools</option>
               <option value="ready">Ready now</option>
-              <option value="queued">Queued</option>
+              <option value="hidden">Hidden</option>
               <option value="used">Used</option>
               <option value="unused">Unused</option>
             </select>
             <select id="sortSelect" aria-label="Sort calculators">
-              <option value="category">Category order</option>
+              <option value="category">Custom order</option>
               <option value="usage">Most used</option>
               <option value="alpha">A–Z</option>
             </select>
           </div>
-          <p class="help">“Queued” tools are listed now so demand can be measured before the formula screen is built.</p>
+          <p class="help">Use Manage tools to hide items and change category or calculator order. Every listed calculator is now functional.</p>
         </section>
 
         <section id="categoryList" class="category-list" aria-live="polite"></section>
@@ -388,6 +469,27 @@
     </article>
   </section>
 
+
+  <section id="manageModal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="manageTitle">
+    <article class="modal-card">
+      <header class="modal-header">
+        <div class="modal-heading">
+          <small>Phone layout</small>
+          <h2 id="manageTitle">Manage calculators</h2>
+          <p class="copy">Move categories and calculators up or down. Hidden tools remain available through the Hidden filter and can be shown again here.</p>
+        </div>
+        <button id="closeManageButton" class="button" type="button">Close</button>
+      </header>
+      <div id="manageSummary" class="manage-summary"></div>
+      <div class="modal-actions">
+        <button id="showAllToolsButton" class="button" type="button">Show all</button>
+        <button id="hideUnusedToolsButton" class="button" type="button">Hide unused</button>
+        <button id="resetLayoutButton" class="button is-danger" type="button">Reset layout</button>
+      </div>
+      <div id="manageList" class="manage-list"></div>
+    </article>
+  </section>
+
   <script>
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
@@ -404,7 +506,8 @@
       "use strict";
 
       const USAGE_KEY = "fieldOpsAtlas.calculatorUsage.v1";
-      const CATEGORY_ORDER = ["rf", "electronics", "electrical", "instruments", "broadcast", "cable", "sensors"];
+      const LAYOUT_KEY = "fieldOpsAtlas.calculatorLayout.v1";
+      const DEFAULT_CATEGORY_ORDER = ["rf", "electronics", "electrical", "instruments", "broadcast", "cable", "sensors"];
       const categories = {
         rf: { title: "RF", description: "Power, impedance, propagation, matching and link calculations." },
         electronics: { title: "Electronics", description: "Components, analogue circuits, timing and power electronics." },
@@ -421,87 +524,87 @@
         { id: "wavelength", category: "rf", title: "Wavelength", description: "Frequency to full, half and quarter wavelength.", status: "ready" },
         { id: "fspl", category: "rf", title: "Free-space path loss", description: "Frequency and distance to FSPL.", status: "ready" },
         { id: "erp-eirp", category: "rf", title: "ERP / EIRP", description: "TX power, feeder loss and antenna gain.", status: "ready" },
-        { id: "field-strength", category: "rf", title: "Field strength", description: "EIRP, distance and power-density conversions.", status: "queued" },
-        { id: "link-budget", category: "rf", title: "Link budget", description: "TX chain through received level and fade margin.", status: "queued" },
-        { id: "fresnel-zone", category: "rf", title: "Fresnel zone", description: "First-zone radius and clearance.", status: "queued" },
-        { id: "radio-horizon", category: "rf", title: "Radio horizon", description: "Line-of-sight distance from antenna heights.", status: "queued" },
-        { id: "noise-figure-cascade", category: "rf", title: "Cascaded noise figure", description: "Friis gain and noise cascade.", status: "queued" },
-        { id: "attenuator", category: "rf", title: "Attenuator designer", description: "Pi, T and L-pad component values.", status: "queued" },
-        { id: "impedance-match", category: "rf", title: "Impedance matching", description: "L, Pi and T network starting values.", status: "queued" },
+        { id: "field-strength", category: "rf", title: "Field strength", description: "EIRP, distance and power-density conversions.", status: "ready" },
+        { id: "link-budget", category: "rf", title: "Link budget", description: "TX chain through received level and fade margin.", status: "ready" },
+        { id: "fresnel-zone", category: "rf", title: "Fresnel zone", description: "First-zone radius and clearance.", status: "ready" },
+        { id: "radio-horizon", category: "rf", title: "Radio horizon", description: "Line-of-sight distance from antenna heights.", status: "ready" },
+        { id: "noise-figure-cascade", category: "rf", title: "Cascaded noise figure", description: "Friis gain and noise cascade.", status: "ready" },
+        { id: "attenuator", category: "rf", title: "Attenuator designer", description: "Pi, T and L-pad component values.", status: "ready" },
+        { id: "impedance-match", category: "rf", title: "Impedance matching", description: "L, Pi and T network starting values.", status: "ready" },
 
         { id: "ohms-law", category: "electronics", title: "Ohm’s law", description: "Voltage, current, resistance and power.", status: "ready" },
         { id: "voltage-divider", category: "electronics", title: "Voltage divider", description: "Loaded or unloaded divider output.", status: "ready" },
         { id: "rlc-resonance", category: "electronics", title: "LC resonance", description: "Resonant frequency from L and C.", status: "ready" },
-        { id: "reactance", category: "electronics", title: "Reactance", description: "Inductive and capacitive reactance.", status: "queued" },
-        { id: "resistor-networks", category: "electronics", title: "Resistor networks", description: "Series and parallel resistance.", status: "queued" },
-        { id: "rc-time", category: "electronics", title: "RC time constant", description: "Charge, discharge and threshold timing.", status: "queued" },
-        { id: "op-amp", category: "electronics", title: "Op-amp gain", description: "Inverting and non-inverting circuits.", status: "queued" },
-        { id: "led-resistor", category: "electronics", title: "LED resistor", description: "Supply, LED drop and current.", status: "queued" },
-        { id: "555-timer", category: "electronics", title: "555 timer", description: "Astable and monostable timing.", status: "queued" },
-        { id: "filter-design", category: "electronics", title: "RC / LC filters", description: "Low-pass, high-pass and band-pass values.", status: "queued" },
-        { id: "adc-dac", category: "electronics", title: "ADC / DAC", description: "Code, voltage, LSB and ideal SNR.", status: "queued" },
-        { id: "battery-runtime", category: "electronics", title: "Battery runtime", description: "Capacity, load and duty-cycle estimate.", status: "queued" },
-        { id: "thermal", category: "electronics", title: "Thermal rise", description: "Dissipation, thermal resistance and junction temperature.", status: "queued" },
+        { id: "reactance", category: "electronics", title: "Reactance", description: "Inductive and capacitive reactance.", status: "ready" },
+        { id: "resistor-networks", category: "electronics", title: "Resistor networks", description: "Series and parallel resistance.", status: "ready" },
+        { id: "rc-time", category: "electronics", title: "RC time constant", description: "Charge, discharge and threshold timing.", status: "ready" },
+        { id: "op-amp", category: "electronics", title: "Op-amp gain", description: "Inverting and non-inverting circuits.", status: "ready" },
+        { id: "led-resistor", category: "electronics", title: "LED resistor", description: "Supply, LED drop and current.", status: "ready" },
+        { id: "555-timer", category: "electronics", title: "555 timer", description: "Astable and monostable timing.", status: "ready" },
+        { id: "filter-design", category: "electronics", title: "RC / LC filters", description: "Low-pass, high-pass and band-pass values.", status: "ready" },
+        { id: "adc-dac", category: "electronics", title: "ADC / DAC", description: "Code, voltage, LSB and ideal SNR.", status: "ready" },
+        { id: "battery-runtime", category: "electronics", title: "Battery runtime", description: "Capacity, load and duty-cycle estimate.", status: "ready" },
+        { id: "thermal", category: "electronics", title: "Thermal rise", description: "Dissipation, thermal resistance and junction temperature.", status: "ready" },
 
         { id: "single-phase", category: "electrical", title: "Single-phase power", description: "Voltage, current, power factor and kVA.", status: "ready" },
         { id: "three-phase", category: "electrical", title: "Three-phase power", description: "Line voltage, current, PF and kVA.", status: "ready" },
         { id: "voltage-drop", category: "electrical", title: "Voltage drop", description: "Length, current and conductor resistance.", status: "ready" },
-        { id: "power-factor", category: "electrical", title: "Power-factor correction", description: "Required capacitor kvar and capacitance.", status: "queued" },
-        { id: "transformer-current", category: "electrical", title: "Transformer current", description: "VA and voltage to rated current.", status: "queued" },
-        { id: "fault-current", category: "electrical", title: "Fault current", description: "Voltage and loop impedance estimate.", status: "queued" },
-        { id: "ct-burden", category: "electrical", title: "CT ratio and burden", description: "Primary current, secondary current and VA burden.", status: "queued" },
-        { id: "motor", category: "electrical", title: "Motor current and slip", description: "Power, efficiency, PF and speed.", status: "queued" },
-        { id: "energy-cost", category: "electrical", title: "Energy and cost", description: "Power, hours and tariff.", status: "queued" },
-        { id: "awg-mm2", category: "electrical", title: "AWG / mm²", description: "Conductor size conversion.", status: "queued" },
-        { id: "conduit-fill", category: "electrical", title: "Conduit fill", description: "Cable areas and fill percentage.", status: "queued" },
+        { id: "power-factor", category: "electrical", title: "Power-factor correction", description: "Required capacitor kvar and capacitance.", status: "ready" },
+        { id: "transformer-current", category: "electrical", title: "Transformer current", description: "VA and voltage to rated current.", status: "ready" },
+        { id: "fault-current", category: "electrical", title: "Fault current", description: "Voltage and loop impedance estimate.", status: "ready" },
+        { id: "ct-burden", category: "electrical", title: "CT ratio and burden", description: "Primary current, secondary current and VA burden.", status: "ready" },
+        { id: "motor", category: "electrical", title: "Motor current and slip", description: "Power, efficiency, PF and speed.", status: "ready" },
+        { id: "energy-cost", category: "electrical", title: "Energy and cost", description: "Power, hours and tariff.", status: "ready" },
+        { id: "awg-mm2", category: "electrical", title: "AWG / mm²", description: "Conductor size conversion.", status: "ready" },
+        { id: "conduit-fill", category: "electrical", title: "Conduit fill", description: "Cable areas and fill percentage.", status: "ready" },
 
         { id: "scope-bandwidth", category: "instruments", title: "Scope bandwidth", description: "Rise time to minimum bandwidth.", status: "ready" },
         { id: "analyser-noise", category: "instruments", title: "Analyser noise floor", description: "RBW and noise figure to thermal floor.", status: "ready" },
         { id: "phase-delay", category: "instruments", title: "Phase from time delay", description: "Frequency and delay to phase angle.", status: "ready" },
-        { id: "scope-sample-rate", category: "instruments", title: "Scope sample rate", description: "Bandwidth, sample rate and record length.", status: "queued" },
-        { id: "fft-bin", category: "instruments", title: "FFT bin width", description: "Sample rate and record length.", status: "queued" },
-        { id: "rbw-correction", category: "instruments", title: "RBW correction", description: "Noise level conversion between bandwidths.", status: "queued" },
-        { id: "generator-correction", category: "instruments", title: "Generator correction", description: "Cable, pad and fixture losses.", status: "queued" },
-        { id: "probe-loading", category: "instruments", title: "Probe loading", description: "Scope input and probe capacitance error.", status: "queued" },
-        { id: "meter-loading", category: "instruments", title: "DMM loading", description: "Source resistance and meter input error.", status: "queued" },
-        { id: "mismatch-uncertainty", category: "instruments", title: "Mismatch uncertainty", description: "Source and load reflection coefficients.", status: "queued" },
-        { id: "measurement-uncertainty", category: "instruments", title: "Uncertainty RSS", description: "Combine independent uncertainty terms.", status: "queued" },
+        { id: "scope-sample-rate", category: "instruments", title: "Scope sample rate", description: "Bandwidth, sample rate and record length.", status: "ready" },
+        { id: "fft-bin", category: "instruments", title: "FFT bin width", description: "Sample rate and record length.", status: "ready" },
+        { id: "rbw-correction", category: "instruments", title: "RBW correction", description: "Noise level conversion between bandwidths.", status: "ready" },
+        { id: "generator-correction", category: "instruments", title: "Generator correction", description: "Cable, pad and fixture losses.", status: "ready" },
+        { id: "probe-loading", category: "instruments", title: "Probe loading", description: "Scope input and probe capacitance error.", status: "ready" },
+        { id: "meter-loading", category: "instruments", title: "DMM loading", description: "Source resistance and meter input error.", status: "ready" },
+        { id: "mismatch-uncertainty", category: "instruments", title: "Mismatch uncertainty", description: "Source and load reflection coefficients.", status: "ready" },
+        { id: "measurement-uncertainty", category: "instruments", title: "Uncertainty RSS", description: "Combine independent uncertainty terms.", status: "ready" },
 
         { id: "dtt-channel", category: "broadcast", title: "DTT channel / frequency", description: "UK UHF channel centre and edges.", status: "ready" },
         { id: "dab-block", category: "broadcast", title: "DAB block / frequency", description: "Band III block centre frequency.", status: "ready" },
         { id: "fm-bandwidth", category: "broadcast", title: "FM occupied bandwidth", description: "Carson’s rule from deviation and modulation.", status: "ready" },
         { id: "satellite-if", category: "broadcast", title: "Satellite RF / IF", description: "RF and local oscillator conversion.", status: "ready" },
-        { id: "fm-erp", category: "broadcast", title: "FM feeder-corrected ERP", description: "Transmitter output through feeder and antenna.", status: "queued" },
-        { id: "dab-mer-evm", category: "broadcast", title: "DAB MER / EVM", description: "Convert modulation error ratio and EVM.", status: "queued" },
-        { id: "dtt-mer-evm", category: "broadcast", title: "DTT MER / EVM", description: "Convert modulation error ratio and EVM.", status: "queued" },
-        { id: "sfn-delay", category: "broadcast", title: "SFN delay / distance", description: "Propagation delay and path-distance difference.", status: "queued" },
-        { id: "dish-gain", category: "broadcast", title: "Dish gain and beamwidth", description: "Diameter, efficiency and frequency.", status: "queued" },
-        { id: "satellite-pointing", category: "broadcast", title: "Satellite pointing", description: "Azimuth, elevation and skew.", status: "queued" },
-        { id: "waveguide", category: "broadcast", title: "Waveguide cutoff", description: "Rectangular guide cutoff and guide wavelength.", status: "queued" },
-        { id: "intermod", category: "broadcast", title: "Intermodulation products", description: "Two- and three-signal product list.", status: "queued" },
+        { id: "fm-erp", category: "broadcast", title: "FM feeder-corrected ERP", description: "Transmitter output through feeder and antenna.", status: "ready" },
+        { id: "dab-mer-evm", category: "broadcast", title: "DAB MER / EVM", description: "Convert modulation error ratio and EVM.", status: "ready" },
+        { id: "dtt-mer-evm", category: "broadcast", title: "DTT MER / EVM", description: "Convert modulation error ratio and EVM.", status: "ready" },
+        { id: "sfn-delay", category: "broadcast", title: "SFN delay / distance", description: "Propagation delay and path-distance difference.", status: "ready" },
+        { id: "dish-gain", category: "broadcast", title: "Dish gain and beamwidth", description: "Diameter, efficiency and frequency.", status: "ready" },
+        { id: "satellite-pointing", category: "broadcast", title: "Satellite pointing", description: "Azimuth, elevation and skew.", status: "ready" },
+        { id: "waveguide", category: "broadcast", title: "Waveguide cutoff", description: "Rectangular guide cutoff and guide wavelength.", status: "ready" },
+        { id: "intermod", category: "broadcast", title: "Intermodulation products", description: "Two- and three-signal product list.", status: "ready" },
 
         { id: "coax-identifier", category: "cable", title: "Coax mechanical identifier", description: "Dimensions, construction and likely cable family.", status: "external", href: "./coax-calculator.html" },
         { id: "cable-delay", category: "cable", title: "Cable delay", description: "Length and velocity factor to propagation time.", status: "ready" },
         { id: "quarter-wave-cable", category: "cable", title: "Quarter-wave cable", description: "Frequency and velocity factor to cut length.", status: "ready" },
         { id: "reel-length", category: "cable", title: "Reel length estimate", description: "Reel dimensions and cable diameter.", status: "ready" },
         { id: "cable-loss", category: "cable", title: "Cable loss", description: "Loss per 100 m, length and delivered power.", status: "ready" },
-        { id: "coax-capacitance", category: "cable", title: "Coax capacitance", description: "Measured total capacitance and length.", status: "queued" },
-        { id: "velocity-factor", category: "cable", title: "Velocity factor", description: "Measured delay and physical length.", status: "queued" },
-        { id: "connector-fit", category: "cable", title: "Connector fit", description: "Jacket, dielectric and conductor dimensions.", status: "queued" },
-        { id: "bend-radius", category: "cable", title: "Bend radius reference", description: "Cable family and installation bend limit.", status: "queued" },
-        { id: "feeder-id", category: "cable", title: "Corrugated feeder identifier", description: "Outer diameter, corrugation and conductor size.", status: "queued" },
-        { id: "cable-weight", category: "cable", title: "Cable reel weight", description: "Length, mass per metre and reel tare.", status: "queued" },
+        { id: "coax-capacitance", category: "cable", title: "Coax capacitance", description: "Measured total capacitance and length.", status: "ready" },
+        { id: "velocity-factor", category: "cable", title: "Velocity factor", description: "Measured delay and physical length.", status: "ready" },
+        { id: "connector-fit", category: "cable", title: "Connector fit", description: "Jacket, dielectric and conductor dimensions.", status: "ready" },
+        { id: "bend-radius", category: "cable", title: "Bend radius reference", description: "Cable family and installation bend limit.", status: "ready" },
+        { id: "feeder-id", category: "cable", title: "Corrugated feeder identifier", description: "Outer diameter, corrugation and conductor size.", status: "ready" },
+        { id: "cable-weight", category: "cable", title: "Cable reel weight", description: "Length, mass per metre and reel tare.", status: "ready" },
 
         { id: "4-20ma", category: "sensors", title: "4–20 mA scaling", description: "Loop current to engineering units.", status: "ready" },
         { id: "0-10v", category: "sensors", title: "0–10 V scaling", description: "Control voltage to engineering units.", status: "ready" },
         { id: "pt100", category: "sensors", title: "PT100 temperature", description: "Resistance to IEC 60751 temperature estimate.", status: "ready" },
         { id: "two-point-cal", category: "sensors", title: "Two-point calibration", description: "Linear slope, offset and converted value.", status: "ready" },
-        { id: "pt1000", category: "sensors", title: "PT1000 temperature", description: "Resistance to temperature.", status: "queued" },
-        { id: "thermistor", category: "sensors", title: "Thermistor beta", description: "Resistance and beta coefficient to temperature.", status: "queued" },
-        { id: "thermocouple", category: "sensors", title: "Thermocouple", description: "Voltage and cold-junction compensation.", status: "queued" },
-        { id: "pressure", category: "sensors", title: "Pressure units", description: "Pa, bar, psi, mbar and water-column units.", status: "queued" },
-        { id: "sensor-offset", category: "sensors", title: "Sensor offset and span", description: "Expected versus measured calibration error.", status: "queued" },
-        { id: "uncertainty", category: "sensors", title: "Calibration uncertainty", description: "Resolution, repeatability and reference uncertainty.", status: "queued" }
+        { id: "pt1000", category: "sensors", title: "PT1000 temperature", description: "Resistance to temperature.", status: "ready" },
+        { id: "thermistor", category: "sensors", title: "Thermistor beta", description: "Resistance and beta coefficient to temperature.", status: "ready" },
+        { id: "thermocouple", category: "sensors", title: "Thermocouple", description: "Voltage and cold-junction compensation.", status: "ready" },
+        { id: "pressure", category: "sensors", title: "Pressure units", description: "Pa, bar, psi, mbar and water-column units.", status: "ready" },
+        { id: "sensor-offset", category: "sensors", title: "Sensor offset and span", description: "Expected versus measured calibration error.", status: "ready" },
+        { id: "uncertainty", category: "sensors", title: "Calibration uncertainty", description: "Resolution, repeatability and reference uncertainty.", status: "ready" }
       ];
 
       const readyDefinitions = {
@@ -860,8 +963,847 @@
             return ok(y.toFixed(6), "Slope " + slope.toFixed(8) + " · Offset " + offset.toFixed(8));
           }
         }
-      };
+      
+        ,
+        "field-strength": {
+          fields: [
+            { id: "eirp", label: "EIRP (W)", type: "number", min: "0", step: "any" },
+            { id: "distance", label: "Distance (m)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const p = positive(v.eirp), r = positive(v.distance);
+            if (!p || !r) return fail("Enter EIRP and distance above zero.");
+            const e = Math.sqrt(30 * p) / r;
+            const s = p / (4 * Math.PI * r * r);
+            const dbuvm = 20 * Math.log10(e * 1e6);
+            return ok(dbuvm.toFixed(2) + " dBµV/m", e.toPrecision(6) + " V/m · " + s.toExponential(4) + " W/m²");
+          }
+        },
+        "link-budget": {
+          fields: [
+            { id: "tx", label: "TX power (dBm)", type: "number", step: "any" },
+            { id: "txGain", label: "TX antenna gain (dBi)", type: "number", step: "any", value: "0" },
+            { id: "txLoss", label: "TX losses (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "pathLoss", label: "Path loss (dB)", type: "number", min: "0", step: "any" },
+            { id: "rxGain", label: "RX antenna gain (dBi)", type: "number", step: "any", value: "0" },
+            { id: "rxLoss", label: "RX losses (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "sensitivity", label: "Receiver sensitivity (dBm)", type: "number", step: "any" }
+          ],
+          compute: (v) => {
+            const tx = num(v.tx), txGain = num(v.txGain), txLoss = num(v.txLoss), path = positive(v.pathLoss);
+            const rxGain = num(v.rxGain), rxLoss = num(v.rxLoss), sensitivity = num(v.sensitivity);
+            if ([tx, txGain, txLoss, rxGain, rxLoss, sensitivity].some((n) => n === null) || !path) return fail("Enter the complete link chain.");
+            const rx = tx + txGain - txLoss - path + rxGain - rxLoss;
+            const margin = rx - sensitivity;
+            return ok(rx.toFixed(2) + " dBm received", "Fade margin " + margin.toFixed(2) + " dB");
+          }
+        },
+        "fresnel-zone": {
+          fields: [
+            { id: "frequency", label: "Frequency (GHz)", type: "number", min: "0", step: "any" },
+            { id: "d1", label: "Distance to point d1 (km)", type: "number", min: "0", step: "any" },
+            { id: "d2", label: "Distance from point d2 (km)", type: "number", min: "0", step: "any" },
+            { id: "clearance", label: "Required clearance (%)", type: "number", min: "0", max: "100", step: "any", value: "60" }
+          ],
+          compute: (v) => {
+            const f = positive(v.frequency), d1 = positive(v.d1), d2 = positive(v.d2), clearance = num(v.clearance);
+            if (!f || !d1 || !d2 || clearance === null || clearance < 0 || clearance > 100) return fail("Enter frequency, both distances and clearance percentage.");
+            const r = 17.32 * Math.sqrt((d1 * d2) / (f * (d1 + d2)));
+            return ok(r.toFixed(3) + " m radius", (r * clearance / 100).toFixed(3) + " m for " + clearance.toFixed(1) + "% clearance");
+          }
+        },
+        "radio-horizon": {
+          fields: [
+            { id: "h1", label: "Antenna height 1 (m)", type: "number", min: "0", step: "any" },
+            { id: "h2", label: "Antenna height 2 (m)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "k", label: "Earth-radius K factor", type: "number", min: "0", step: "any", value: "1.333333" }
+          ],
+          compute: (v) => {
+            const h1 = positive(v.h1), h2 = num(v.h2), k = positive(v.k);
+            if (!h1 || h2 === null || h2 < 0 || !k) return fail("Enter valid antenna heights and K factor.");
+            const d = 3.57 * Math.sqrt(k) * (Math.sqrt(h1) + Math.sqrt(h2));
+            return ok(d.toFixed(2) + " km", "Geometric radio-horizon estimate");
+          }
+        },
+        "noise-figure-cascade": {
+          fields: [
+            { id: "g1", label: "Stage 1 gain (dB)", type: "number", step: "any" },
+            { id: "nf1", label: "Stage 1 NF (dB)", type: "number", min: "0", step: "any" },
+            { id: "g2", label: "Stage 2 gain (dB)", type: "number", step: "any", value: "0" },
+            { id: "nf2", label: "Stage 2 NF (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "g3", label: "Stage 3 gain (dB)", type: "number", step: "any", value: "0" },
+            { id: "nf3", label: "Stage 3 NF (dB)", type: "number", min: "0", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const values = ["g1","nf1","g2","nf2","g3","nf3"].map((id) => num(v[id]));
+            if (values.some((n) => n === null)) return fail("Enter gain and noise figure for all three stages; use zero where unused.");
+            const [g1d,nf1d,g2d,nf2d,g3d,nf3d] = values;
+            const G1 = Math.pow(10, g1d / 10), G2 = Math.pow(10, g2d / 10);
+            const F1 = Math.pow(10, nf1d / 10), F2 = Math.pow(10, nf2d / 10), F3 = Math.pow(10, nf3d / 10);
+            const F = F1 + (F2 - 1) / G1 + (F3 - 1) / (G1 * G2);
+            const nf = 10 * Math.log10(F);
+            return ok(nf.toFixed(3) + " dB NF", "Total gain " + (g1d + g2d + g3d).toFixed(3) + " dB");
+          }
+        },
+        "attenuator": {
+          fields: [
+            { id: "topology", label: "Topology", type: "select", options: [["t", "Symmetrical T"], ["pi", "Symmetrical Pi"]] },
+            { id: "attenuation", label: "Attenuation (dB)", type: "number", min: "0", step: "any" },
+            { id: "impedance", label: "System impedance (Ω)", type: "number", min: "0", step: "any", value: "50" }
+          ],
+          compute: (v) => {
+            const a = positive(v.attenuation), z = positive(v.impedance);
+            if (!a || !z) return fail("Enter attenuation above zero and system impedance.");
+            const k = Math.pow(10, a / 20);
+            if (v.topology === "t") {
+              const series = z * (k - 1) / (k + 1);
+              const shunt = 2 * z * k / (k * k - 1);
+              return ok(series.toFixed(3) + " Ω each series", shunt.toFixed(3) + " Ω shunt");
+            }
+            const shunt = z * (k + 1) / (k - 1);
+            const series = z * (k * k - 1) / (2 * k);
+            return ok(shunt.toFixed(3) + " Ω each shunt", series.toFixed(3) + " Ω series");
+          }
+        },
+        "impedance-match": {
+          fields: [
+            { id: "source", label: "Source resistance (Ω)", type: "number", min: "0", step: "any" },
+            { id: "load", label: "Load resistance (Ω)", type: "number", min: "0", step: "any" },
+            { id: "frequency", label: "Frequency (MHz)", type: "number", min: "0", step: "any" },
+            { id: "shape", label: "Response", type: "select", options: [["low", "Low-pass L network"], ["high", "High-pass L network"]] }
+          ],
+          compute: (v) => {
+            const rs = positive(v.source), rl = positive(v.load), f = positive(v.frequency);
+            if (!rs || !rl || !f || rs === rl) return fail("Enter unequal positive source and load resistances plus frequency.");
+            const low = Math.min(rs, rl), high = Math.max(rs, rl);
+            const q = Math.sqrt(high / low - 1);
+            const xs = q * low, xp = high / q;
+            const w = 2 * Math.PI * f * 1e6;
+            const shuntSide = rs > rl ? "source/high-resistance side" : "load/high-resistance side";
+            if (v.shape === "low") {
+              const L = xs / w;
+              const C = 1 / (w * xp);
+              return ok((L * 1e9).toFixed(3) + " nH series", (C * 1e12).toFixed(3) + " pF shunt at " + shuntSide + " · Q " + q.toFixed(3));
+            }
+            const C = 1 / (w * xs);
+            const L = xp / w;
+            return ok((C * 1e12).toFixed(3) + " pF series", (L * 1e9).toFixed(3) + " nH shunt at " + shuntSide + " · Q " + q.toFixed(3));
+          }
+        },
+        "reactance": {
+          fields: [
+            { id: "frequency", label: "Frequency (Hz)", type: "number", min: "0", step: "any" },
+            { id: "inductance", label: "Inductance (µH, optional)", type: "number", min: "0", step: "any" },
+            { id: "capacitance", label: "Capacitance (nF, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const f = positive(v.frequency), l = num(v.inductance), c = num(v.capacitance);
+            if (!f || (l === null && c === null) || (l !== null && l < 0) || (c !== null && c < 0)) return fail("Enter frequency and at least one component value.");
+            const xl = l && l > 0 ? 2 * Math.PI * f * l * 1e-6 : null;
+            const xc = c && c > 0 ? 1 / (2 * Math.PI * f * c * 1e-9) : null;
+            if (xl !== null && xc !== null) return ok((xl - xc).toFixed(4) + " Ω net series X", "XL " + xl.toFixed(4) + " Ω · XC " + xc.toFixed(4) + " Ω");
+            if (xl !== null) return ok(xl.toFixed(4) + " Ω", "Inductive reactance");
+            return ok(xc.toFixed(4) + " Ω", "Capacitive reactance");
+          }
+        },
+        "resistor-networks": {
+          fields: [
+            { id: "r1", label: "R1 (Ω)", type: "number", min: "0", step: "any" },
+            { id: "r2", label: "R2 (Ω, optional)", type: "number", min: "0", step: "any" },
+            { id: "r3", label: "R3 (Ω, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const values = [positive(v.r1), positive(v.r2), positive(v.r3)].filter(Boolean);
+            if (!values.length) return fail("Enter at least one resistor.");
+            const series = values.reduce((a, b) => a + b, 0);
+            const parallel = 1 / values.reduce((sum, r) => sum + 1 / r, 0);
+            return ok(series.toFixed(5) + " Ω series", parallel.toFixed(5) + " Ω parallel");
+          }
+        },
+        "rc-time": {
+          fields: [
+            { id: "resistance", label: "Resistance (kΩ)", type: "number", min: "0", step: "any" },
+            { id: "capacitance", label: "Capacitance (µF)", type: "number", min: "0", step: "any" },
+            { id: "target", label: "Target charge (%)", type: "number", min: "0", max: "99.999", step: "any", value: "90" }
+          ],
+          compute: (v) => {
+            const r = positive(v.resistance), c = positive(v.capacitance), target = num(v.target);
+            if (!r || !c || target === null || target <= 0 || target >= 100) return fail("Enter R, C and a target between 0 and 100%.");
+            const tau = r * 1e3 * c * 1e-6;
+            const charge = -tau * Math.log(1 - target / 100);
+            const discharge = -tau * Math.log(target / 100);
+            return ok(formatTimeSeconds(tau) + " τ", "Charge to " + target.toFixed(2) + "%: " + formatTimeSeconds(charge) + " · Discharge to " + target.toFixed(2) + "%: " + formatTimeSeconds(discharge));
+          }
+        },
+        "op-amp": {
+          fields: [
+            { id: "mode", label: "Configuration", type: "select", options: [["non", "Non-inverting"], ["inv", "Inverting"]] },
+            { id: "rin", label: "Input/ground resistor (kΩ)", type: "number", min: "0", step: "any" },
+            { id: "rf", label: "Feedback resistor (kΩ)", type: "number", min: "0", step: "any" },
+            { id: "vin", label: "Input voltage (V)", type: "number", step: "any" }
+          ],
+          compute: (v) => {
+            const rin = positive(v.rin), rf = positive(v.rf), vin = num(v.vin);
+            if (!rin || !rf || vin === null) return fail("Enter both resistors and input voltage.");
+            const gain = v.mode === "inv" ? -rf / rin : 1 + rf / rin;
+            return ok((vin * gain).toFixed(6) + " V output", "Closed-loop gain " + gain.toFixed(6));
+          }
+        },
+        "led-resistor": {
+          fields: [
+            { id: "supply", label: "Supply voltage (V)", type: "number", min: "0", step: "any" },
+            { id: "forward", label: "LED forward voltage (V each)", type: "number", min: "0", step: "any" },
+            { id: "count", label: "LEDs in series", type: "number", min: "1", step: "1", value: "1" },
+            { id: "current", label: "Target current (mA)", type: "number", min: "0", step: "any", value: "10" }
+          ],
+          compute: (v) => {
+            const supply = positive(v.supply), forward = positive(v.forward), count = positive(v.count), current = positive(v.current);
+            if (!supply || !forward || !count || !current) return fail("Enter supply, LED drop, count and current.");
+            const remaining = supply - forward * count;
+            if (remaining <= 0) return fail("LED forward-voltage total must be below the supply.");
+            const amps = current / 1000;
+            const resistance = remaining / amps;
+            const power = amps * amps * resistance;
+            return ok(resistance.toFixed(2) + " Ω", "Resistor dissipation " + power.toFixed(4) + " W; select a suitable higher rating.");
+          }
+        },
+        "555-timer": {
+          fields: [
+            { id: "mode", label: "Mode", type: "select", options: [["astable", "Astable"], ["mono", "Monostable"]] },
+            { id: "ra", label: "RA / R (kΩ)", type: "number", min: "0", step: "any" },
+            { id: "rb", label: "RB (kΩ, astable)", type: "number", min: "0", step: "any", value: "1" },
+            { id: "capacitance", label: "Capacitance (µF)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const ra = positive(v.ra), rb = positive(v.rb), c = positive(v.capacitance);
+            if (!ra || !c || (v.mode === "astable" && !rb)) return fail("Enter the required resistor and capacitor values.");
+            const C = c * 1e-6, RA = ra * 1e3;
+            if (v.mode === "mono") {
+              const t = 1.1 * RA * C;
+              return ok(formatTimeSeconds(t), "Nominal monostable pulse");
+            }
+            const RB = rb * 1e3;
+            const high = 0.693 * (RA + RB) * C;
+            const low = 0.693 * RB * C;
+            const period = high + low;
+            return ok((1 / period).toFixed(5) + " Hz", "High " + formatTimeSeconds(high) + " · Low " + formatTimeSeconds(low) + " · Duty " + (100 * high / period).toFixed(2) + "%");
+          }
+        },
+        "filter-design": {
+          fields: [
+            { id: "topology", label: "Topology", type: "select", options: [["rc", "RC low/high-pass"], ["lc", "LC resonant section"]] },
+            { id: "resistance", label: "Resistance (kΩ, RC)", type: "number", min: "0", step: "any" },
+            { id: "capacitance", label: "Capacitance (nF)", type: "number", min: "0", step: "any" },
+            { id: "inductance", label: "Inductance (mH, LC)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const c = positive(v.capacitance);
+            if (!c) return fail("Enter capacitance.");
+            if (v.topology === "rc") {
+              const r = positive(v.resistance);
+              if (!r) return fail("Enter resistance for the RC filter.");
+              const fc = 1 / (2 * Math.PI * r * 1e3 * c * 1e-9);
+              return ok(formatFrequency(fc), "RC -3 dB corner");
+            }
+            const l = positive(v.inductance);
+            if (!l) return fail("Enter inductance for the LC section.");
+            const L = l * 1e-3, C = c * 1e-9;
+            const f = 1 / (2 * Math.PI * Math.sqrt(L * C));
+            const z = Math.sqrt(L / C);
+            return ok(formatFrequency(f), "Characteristic impedance " + z.toFixed(3) + " Ω");
+          }
+        },
+        "adc-dac": {
+          fields: [
+            { id: "bits", label: "Resolution (bits)", type: "number", min: "1", max: "32", step: "1", value: "12" },
+            { id: "vref", label: "Reference/full-scale voltage (V)", type: "number", min: "0", step: "any", value: "3.3" },
+            { id: "voltage", label: "Analogue voltage (optional)", type: "number", step: "any" },
+            { id: "code", label: "Digital code (optional)", type: "number", min: "0", step: "1" }
+          ],
+          compute: (v) => {
+            const bits = positive(v.bits), vref = positive(v.vref), voltage = num(v.voltage), code = num(v.code);
+            if (!bits || !vref || bits > 32) return fail("Enter valid resolution and reference voltage.");
+            const maxCode = Math.pow(2, bits) - 1;
+            const lsb = vref / maxCode;
+            if (voltage !== null) {
+              const clipped = Math.min(Math.max(voltage, 0), vref);
+              const adc = Math.round(clipped / vref * maxCode);
+              return ok(String(adc) + " counts", "LSB " + (lsb * 1e6).toFixed(3) + " µV · Ideal SNR " + (6.02 * bits + 1.76).toFixed(2) + " dB");
+            }
+            if (code !== null) {
+              if (code < 0 || code > maxCode) return fail("Code is outside the selected resolution.");
+              return ok((code * lsb).toFixed(8) + " V", "LSB " + (lsb * 1e6).toFixed(3) + " µV");
+            }
+            return fail("Enter either analogue voltage or digital code.");
+          }
+        },
+        "battery-runtime": {
+          fields: [
+            { id: "capacity", label: "Capacity (Ah)", type: "number", min: "0", step: "any" },
+            { id: "voltage", label: "Nominal voltage (V)", type: "number", min: "0", step: "any" },
+            { id: "load", label: "Active load (W)", type: "number", min: "0", step: "any" },
+            { id: "duty", label: "Active duty cycle (%)", type: "number", min: "0", max: "100", step: "any", value: "100" },
+            { id: "efficiency", label: "Conversion efficiency (%)", type: "number", min: "0", max: "100", step: "any", value: "90" }
+          ],
+          compute: (v) => {
+            const ah = positive(v.capacity), voltage = positive(v.voltage), load = positive(v.load), duty = positive(v.duty), efficiency = positive(v.efficiency);
+            if (!ah || !voltage || !load || !duty || duty > 100 || !efficiency || efficiency > 100) return fail("Enter valid battery, load, duty and efficiency values.");
+            const usableWh = ah * voltage * efficiency / 100;
+            const averageW = load * duty / 100;
+            const hours = usableWh / averageW;
+            return ok(hours.toFixed(3) + " h", "Usable energy " + usableWh.toFixed(3) + " Wh · average load " + averageW.toFixed(3) + " W");
+          }
+        },
+        "thermal": {
+          fields: [
+            { id: "ambient", label: "Ambient temperature (°C)", type: "number", step: "any", value: "25" },
+            { id: "power", label: "Dissipation (W)", type: "number", min: "0", step: "any" },
+            { id: "theta", label: "Thermal resistance θJA (°C/W)", type: "number", min: "0", step: "any" },
+            { id: "maximum", label: "Maximum junction temperature (°C)", type: "number", step: "any", value: "150" }
+          ],
+          compute: (v) => {
+            const ambient = num(v.ambient), power = positive(v.power), theta = positive(v.theta), maximum = num(v.maximum);
+            if (ambient === null || !power || !theta || maximum === null) return fail("Enter ambient, dissipation, thermal resistance and maximum temperature.");
+            const junction = ambient + power * theta;
+            return ok(junction.toFixed(2) + " °C junction", "Margin to limit " + (maximum - junction).toFixed(2) + " °C");
+          }
+        },
+        "power-factor": {
+          fields: [
+            { id: "power", label: "Real power (kW)", type: "number", min: "0", step: "any" },
+            { id: "initial", label: "Initial power factor", type: "number", min: "0", max: "1", step: "any" },
+            { id: "target", label: "Target power factor", type: "number", min: "0", max: "1", step: "any", value: "0.95" },
+            { id: "voltage", label: "Line voltage (V)", type: "number", min: "0", step: "any", value: "400" },
+            { id: "frequency", label: "Frequency (Hz)", type: "number", min: "0", step: "any", value: "50" },
+            { id: "phase", label: "Connection", type: "select", options: [["single", "Single phase"], ["delta", "Three-phase delta bank"]] }
+          ],
+          compute: (v) => {
+            const p = positive(v.power), pf1 = positive(v.initial), pf2 = positive(v.target), voltage = positive(v.voltage), f = positive(v.frequency);
+            if (!p || !pf1 || !pf2 || pf1 > 1 || pf2 > 1 || pf2 <= pf1 || !voltage || !f) return fail("Target PF must be greater than initial PF and no greater than 1.");
+            const qKvar = p * (Math.tan(Math.acos(pf1)) - Math.tan(Math.acos(pf2)));
+            const qVar = qKvar * 1000, w = 2 * Math.PI * f;
+            const c = v.phase === "single" ? qVar / (w * voltage * voltage) : qVar / (3 * w * voltage * voltage);
+            return ok(qKvar.toFixed(3) + " kVAr", (c * 1e6).toFixed(3) + " µF " + (v.phase === "single" ? "total" : "per delta phase") + " · reference estimate");
+          }
+        },
+        "transformer-current": {
+          fields: [
+            { id: "phase", label: "Supply", type: "select", options: [["single", "Single phase"], ["three", "Three phase"]] },
+            { id: "va", label: "Transformer rating (VA)", type: "number", min: "0", step: "any" },
+            { id: "voltage", label: "Rated voltage (V)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const va = positive(v.va), voltage = positive(v.voltage);
+            if (!va || !voltage) return fail("Enter VA and rated voltage.");
+            const current = v.phase === "three" ? va / (Math.sqrt(3) * voltage) : va / voltage;
+            return ok(current.toFixed(4) + " A", v.phase === "three" ? "Three-phase line current" : "Single-phase current");
+          }
+        },
+        "fault-current": {
+          fields: [
+            { id: "voltage", label: "Voltage to earth/loop (V)", type: "number", min: "0", step: "any", value: "230" },
+            { id: "impedance", label: "Loop impedance (Ω)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const voltage = positive(v.voltage), z = positive(v.impedance);
+            if (!voltage || !z) return fail("Enter voltage and loop impedance.");
+            const current = voltage / z;
+            return ok(current.toFixed(2) + " A", (current / 1000).toFixed(4) + " kA prospective current · reference only");
+          }
+        },
+        "ct-burden": {
+          fields: [
+            { id: "primaryRated", label: "CT primary rating (A)", type: "number", min: "0", step: "any" },
+            { id: "secondaryRated", label: "CT secondary rating (A)", type: "number", min: "0", step: "any", value: "5" },
+            { id: "primaryMeasured", label: "Measured primary current (A)", type: "number", min: "0", step: "any" },
+            { id: "burdenResistance", label: "Total secondary resistance (Ω)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const pr = positive(v.primaryRated), sr = positive(v.secondaryRated), pm = positive(v.primaryMeasured), r = positive(v.burdenResistance);
+            if (!pr || !sr || !pm || !r) return fail("Enter CT ratings, measured current and total burden resistance.");
+            const isec = pm * sr / pr;
+            const va = isec * isec * r;
+            return ok(isec.toFixed(4) + " A secondary", "Actual burden " + va.toFixed(4) + " VA · rated-current burden would be " + (sr * sr * r).toFixed(4) + " VA");
+          }
+        },
+        "motor": {
+          fields: [
+            { id: "phase", label: "Supply", type: "select", options: [["three", "Three phase"], ["single", "Single phase"]] },
+            { id: "power", label: "Mechanical output (kW)", type: "number", min: "0", step: "any" },
+            { id: "voltage", label: "Line voltage (V)", type: "number", min: "0", step: "any" },
+            { id: "efficiency", label: "Efficiency (%)", type: "number", min: "0", max: "100", step: "any", value: "90" },
+            { id: "pf", label: "Power factor", type: "number", min: "0", max: "1", step: "any", value: "0.85" },
+            { id: "frequency", label: "Frequency (Hz)", type: "number", min: "0", step: "any", value: "50" },
+            { id: "poles", label: "Motor poles", type: "number", min: "2", step: "2", value: "4" },
+            { id: "rpm", label: "Measured speed (rpm, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const p = positive(v.power), voltage = positive(v.voltage), eff = positive(v.efficiency), pf = positive(v.pf), f = positive(v.frequency), poles = positive(v.poles), rpm = num(v.rpm);
+            if (!p || !voltage || !eff || eff > 100 || !pf || pf > 1 || !f || !poles) return fail("Enter valid motor and supply data.");
+            const inputW = p * 1000 / (eff / 100);
+            const current = v.phase === "three" ? inputW / (Math.sqrt(3) * voltage * pf) : inputW / (voltage * pf);
+            const sync = 120 * f / poles;
+            const slip = rpm !== null && rpm >= 0 ? (sync - rpm) / sync * 100 : null;
+            return ok(current.toFixed(3) + " A", "Synchronous speed " + sync.toFixed(1) + " rpm" + (slip === null ? "" : " · slip " + slip.toFixed(3) + "%"));
+          }
+        },
+        "energy-cost": {
+          fields: [
+            { id: "power", label: "Power (kW)", type: "number", min: "0", step: "any" },
+            { id: "hours", label: "Hours per day", type: "number", min: "0", step: "any" },
+            { id: "days", label: "Number of days", type: "number", min: "0", step: "any", value: "30" },
+            { id: "tariff", label: "Tariff (pence/kWh)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const p = positive(v.power), hours = positive(v.hours), days = positive(v.days), tariff = num(v.tariff);
+            if (!p || !hours || !days || tariff === null || tariff < 0) return fail("Enter power, time, days and tariff.");
+            const energy = p * hours * days;
+            const cost = energy * tariff / 100;
+            return ok(energy.toFixed(3) + " kWh", "Estimated cost £" + cost.toFixed(2));
+          }
+        },
+        "awg-mm2": {
+          fields: [
+            { id: "awg", label: "AWG number (optional)", type: "number", min: "0", max: "40", step: "any" },
+            { id: "area", label: "Area (mm², optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const awg = num(v.awg), area = num(v.area);
+            if (awg !== null) {
+              if (awg < 0 || awg > 40) return fail("AWG must be between 0 and 40 for this helper.");
+              const diameter = 0.127 * Math.pow(92, (36 - awg) / 39);
+              const mm2 = Math.PI * diameter * diameter / 4;
+              return ok(mm2.toFixed(5) + " mm²", diameter.toFixed(5) + " mm conductor diameter");
+            }
+            if (area !== null && area > 0) {
+              const diameter = Math.sqrt(4 * area / Math.PI);
+              const n = 36 - 39 * Math.log(diameter / 0.127) / Math.log(92);
+              return ok(n.toFixed(2) + " AWG", diameter.toFixed(5) + " mm equivalent solid diameter");
+            }
+            return fail("Enter either AWG or area.");
+          }
+        },
+        "conduit-fill": {
+          fields: [
+            { id: "conduit", label: "Conduit internal diameter (mm)", type: "number", min: "0", step: "any" },
+            { id: "cable", label: "Cable outside diameter (mm)", type: "number", min: "0", step: "any" },
+            { id: "quantity", label: "Cable quantity", type: "number", min: "1", step: "1", value: "3" }
+          ],
+          compute: (v) => {
+            const conduit = positive(v.conduit), cable = positive(v.cable), quantity = positive(v.quantity);
+            if (!conduit || !cable || !quantity) return fail("Enter conduit diameter, cable diameter and quantity.");
+            const fill = quantity * Math.pow(cable / conduit, 2) * 100;
+            const guide = quantity === 1 ? 53 : quantity === 2 ? 31 : 40;
+            return ok(fill.toFixed(2) + "% fill", "Generic reference threshold " + guide + "%; verify the governing installation standard.");
+          }
+        },
+        "scope-sample-rate": {
+          fields: [
+            { id: "bandwidth", label: "Signal bandwidth (MHz)", type: "number", min: "0", step: "any" },
+            { id: "factor", label: "Samples per highest-frequency cycle", type: "number", min: "2", step: "any", value: "5" },
+            { id: "duration", label: "Capture duration (µs)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const bandwidth = positive(v.bandwidth), factor = positive(v.factor), duration = positive(v.duration);
+            if (!bandwidth || !factor || !duration) return fail("Enter bandwidth, sampling factor and capture duration.");
+            const rate = bandwidth * 1e6 * factor;
+            const points = rate * duration * 1e-6;
+            return ok((rate / 1e6).toFixed(3) + " MS/s minimum", Math.ceil(points).toLocaleString() + " sample record");
+          }
+        },
+        "fft-bin": {
+          fields: [
+            { id: "sampleRate", label: "Sample rate (MS/s)", type: "number", min: "0", step: "any" },
+            { id: "points", label: "FFT points", type: "number", min: "1", step: "1" }
+          ],
+          compute: (v) => {
+            const rate = positive(v.sampleRate), points = positive(v.points);
+            if (!rate || !points) return fail("Enter sample rate and FFT points.");
+            const hz = rate * 1e6 / points;
+            const time = points / (rate * 1e6);
+            return ok(formatFrequency(hz) + " per bin", "Record time " + formatTimeSeconds(time));
+          }
+        },
+        "rbw-correction": {
+          fields: [
+            { id: "level", label: "Measured noise level (dBm)", type: "number", step: "any" },
+            { id: "rbw1", label: "Original RBW (Hz)", type: "number", min: "0", step: "any" },
+            { id: "rbw2", label: "Target RBW (Hz)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const level = num(v.level), rbw1 = positive(v.rbw1), rbw2 = positive(v.rbw2);
+            if (level === null || !rbw1 || !rbw2) return fail("Enter measured level and both RBWs.");
+            const correction = 10 * Math.log10(rbw2 / rbw1);
+            return ok((level + correction).toFixed(3) + " dBm", "Bandwidth correction " + correction.toFixed(3) + " dB");
+          }
+        },
+        "generator-correction": {
+          fields: [
+            { id: "dut", label: "Required DUT level (dBm)", type: "number", step: "any" },
+            { id: "cable", label: "Cable loss (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "pad", label: "Pad loss (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "fixture", label: "Fixture/adapter loss (dB)", type: "number", min: "0", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const dut = num(v.dut), cable = num(v.cable), pad = num(v.pad), fixture = num(v.fixture);
+            if ([dut,cable,pad,fixture].some((n) => n === null) || cable < 0 || pad < 0 || fixture < 0) return fail("Enter target level and non-negative losses.");
+            const set = dut + cable + pad + fixture;
+            return ok(set.toFixed(3) + " dBm generator setting", "Total external loss " + (cable + pad + fixture).toFixed(3) + " dB");
+          }
+        },
+        "probe-loading": {
+          fields: [
+            { id: "source", label: "Source resistance (Ω)", type: "number", min: "0", step: "any" },
+            { id: "frequency", label: "Frequency (MHz)", type: "number", min: "0", step: "any" },
+            { id: "probeR", label: "Probe resistance (MΩ)", type: "number", min: "0", step: "any", value: "10" },
+            { id: "probeC", label: "Probe capacitance (pF)", type: "number", min: "0", step: "any", value: "12" }
+          ],
+          compute: (v) => {
+            const rs = positive(v.source), f = positive(v.frequency), rp = positive(v.probeR), cp = positive(v.probeC);
+            if (!rs || !f || !rp || !cp) return fail("Enter source, frequency and probe values.");
+            const G = 1 / (rp * 1e6), B = 2 * Math.PI * f * 1e6 * cp * 1e-12;
+            const denom = G * G + B * B;
+            const zr = G / denom, zi = -B / denom;
+            const zmag = 1 / Math.sqrt(denom);
+            const totalMag = Math.sqrt(Math.pow(rs + zr, 2) + zi * zi);
+            const ratio = zmag / totalMag;
+            return ok((ratio * 100).toFixed(4) + "% amplitude", (20 * Math.log10(ratio)).toFixed(4) + " dB loading · |Zprobe| " + zmag.toFixed(2) + " Ω");
+          }
+        },
+        "meter-loading": {
+          fields: [
+            { id: "sourceVoltage", label: "Open-circuit source voltage (V)", type: "number", step: "any" },
+            { id: "sourceResistance", label: "Source resistance (kΩ)", type: "number", min: "0", step: "any" },
+            { id: "meterResistance", label: "Meter input resistance (MΩ)", type: "number", min: "0", step: "any", value: "10" }
+          ],
+          compute: (v) => {
+            const voltage = num(v.sourceVoltage), rs = positive(v.sourceResistance), rm = positive(v.meterResistance);
+            if (voltage === null || !rs || !rm) return fail("Enter source voltage and both resistances.");
+            const measured = voltage * rm * 1e6 / (rs * 1e3 + rm * 1e6);
+            const error = voltage === 0 ? 0 : (measured - voltage) / voltage * 100;
+            return ok(measured.toFixed(8) + " V measured", "Loading error " + error.toFixed(6) + "%");
+          }
+        },
+        "mismatch-uncertainty": {
+          fields: [
+            { id: "sourceRl", label: "Source return loss (dB)", type: "number", min: "0", step: "any" },
+            { id: "loadRl", label: "Load return loss (dB)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const sr = positive(v.sourceRl), lr = positive(v.loadRl);
+            if (!sr || !lr) return fail("Enter both return-loss values.");
+            const product = Math.pow(10, -sr / 20) * Math.pow(10, -lr / 20);
+            const plus = 20 * Math.log10(1 + product);
+            const minus = 20 * Math.log10(1 - product);
+            return ok("+" + plus.toFixed(4) + " / " + minus.toFixed(4) + " dB", "Worst-case phase-dependent mismatch range");
+          }
+        },
+        "measurement-uncertainty": {
+          fields: [
+            { id: "u1", label: "Uncertainty term 1 (%)", type: "number", min: "0", step: "any" },
+            { id: "u2", label: "Uncertainty term 2 (%)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "u3", label: "Uncertainty term 3 (%)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "u4", label: "Uncertainty term 4 (%)", type: "number", min: "0", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const values = ["u1","u2","u3","u4"].map((id) => num(v[id]));
+            if (values.some((n) => n === null || n < 0)) return fail("Enter non-negative uncertainty terms.");
+            const rss = Math.sqrt(values.reduce((sum, n) => sum + n * n, 0));
+            return ok(rss.toFixed(4) + "% standard RSS", (2 * rss).toFixed(4) + "% expanded uncertainty at k=2");
+          }
+        },
+        "fm-erp": {
+          fields: [
+            { id: "power", label: "Transmitter output (W)", type: "number", min: "0", step: "any" },
+            { id: "loss", label: "Feeder/combiner loss (dB)", type: "number", min: "0", step: "any", value: "0" },
+            { id: "gain", label: "Antenna gain (dBd)", type: "number", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const power = positive(v.power), loss = num(v.loss), gain = num(v.gain);
+            if (!power || loss === null || loss < 0 || gain === null) return fail("Enter power, loss and antenna gain.");
+            const erp = power * Math.pow(10, (gain - loss) / 10);
+            return ok(formatPower(erp) + " ERP", "Net system gain " + (gain - loss).toFixed(3) + " dB");
+          }
+        },
+        "dab-mer-evm": {
+          fields: [
+            { id: "mode", label: "Input", type: "select", options: [["mer", "MER (dB)"], ["evm", "EVM (%)"]] },
+            { id: "value", label: "Value", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => merEvmCompute(v)
+        },
+        "dtt-mer-evm": {
+          fields: [
+            { id: "mode", label: "Input", type: "select", options: [["mer", "MER (dB)"], ["evm", "EVM (%)"]] },
+            { id: "value", label: "Value", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => merEvmCompute(v)
+        },
+        "sfn-delay": {
+          fields: [
+            { id: "delay", label: "Delay (µs, optional)", type: "number", min: "0", step: "any" },
+            { id: "distance", label: "Path difference (km, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const delay = num(v.delay), distance = num(v.distance);
+            if (delay !== null && delay >= 0) {
+              const km = 299792.458 * delay * 1e-6;
+              return ok(km.toFixed(6) + " km", "Free-space path difference");
+            }
+            if (distance !== null && distance >= 0) {
+              const us = distance / 299792.458 * 1e6;
+              return ok(us.toFixed(6) + " µs", "Free-space propagation difference");
+            }
+            return fail("Enter either delay or distance.");
+          }
+        },
+        "dish-gain": {
+          fields: [
+            { id: "diameter", label: "Dish diameter (m)", type: "number", min: "0", step: "any" },
+            { id: "frequency", label: "Frequency (GHz)", type: "number", min: "0", step: "any" },
+            { id: "efficiency", label: "Aperture efficiency (%)", type: "number", min: "0", max: "100", step: "any", value: "60" }
+          ],
+          compute: (v) => {
+            const d = positive(v.diameter), f = positive(v.frequency), efficiency = positive(v.efficiency);
+            if (!d || !f || !efficiency || efficiency > 100) return fail("Enter diameter, frequency and efficiency.");
+            const lambda = 299792458 / (f * 1e9);
+            const gainLinear = efficiency / 100 * Math.pow(Math.PI * d / lambda, 2);
+            const gain = 10 * Math.log10(gainLinear);
+            const beam = 70 * lambda / d;
+            return ok(gain.toFixed(3) + " dBi", "Approximate 3 dB beamwidth " + beam.toFixed(3) + "°");
+          }
+        },
+        "satellite-pointing": {
+          fields: [
+            { id: "latitude", label: "Site latitude (° north)", type: "number", min: "-90", max: "90", step: "any" },
+            { id: "longitude", label: "Site longitude (° east)", type: "number", min: "-180", max: "180", step: "any" },
+            { id: "satellite", label: "Satellite longitude (° east)", type: "number", min: "-180", max: "180", step: "any", value: "28.2" }
+          ],
+          compute: (v) => {
+            const lat = num(v.latitude), lon = num(v.longitude), sat = num(v.satellite);
+            if ([lat,lon,sat].some((n) => n === null) || Math.abs(lat) >= 90) return fail("Enter valid site and satellite longitudes.");
+            const phi = lat * Math.PI / 180, delta = (sat - lon) * Math.PI / 180;
+            const c = Math.cos(phi) * Math.cos(delta);
+            const elevation = Math.atan((c - 0.1512) / Math.sqrt(1 - c * c)) * 180 / Math.PI;
+            let azimuth = Math.atan2(Math.sin(delta), -Math.sin(phi) * Math.cos(delta)) * 180 / Math.PI;
+            azimuth = (azimuth + 360) % 360;
+            const skew = Math.atan(Math.sin(delta) / Math.tan(phi)) * 180 / Math.PI;
+            return ok("Az " + azimuth.toFixed(2) + "° · El " + elevation.toFixed(2) + "°", "Polarisation skew " + skew.toFixed(2) + "°; verify sign convention at the antenna");
+          }
+        },
+        "waveguide": {
+          fields: [
+            { id: "a", label: "Broad wall a (mm)", type: "number", min: "0", step: "any" },
+            { id: "b", label: "Narrow wall b (mm)", type: "number", min: "0", step: "any" },
+            { id: "frequency", label: "Operating frequency (GHz)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const a = positive(v.a), b = positive(v.b), f = positive(v.frequency);
+            if (!a || !b || !f) return fail("Enter waveguide dimensions and frequency.");
+            const c0 = 299792458, aM = a / 1000, bM = b / 1000, hz = f * 1e9;
+            const fc10 = c0 / (2 * aM), fc20 = c0 / aM, fc01 = c0 / (2 * bM);
+            if (hz <= fc10) return ok((fc10 / 1e9).toFixed(4) + " GHz TE10 cutoff", "Operating frequency is below dominant-mode cutoff.");
+            const lambda0 = c0 / hz;
+            const lambdaG = lambda0 / Math.sqrt(1 - Math.pow(fc10 / hz, 2));
+            return ok((fc10 / 1e9).toFixed(4) + " GHz TE10 cutoff", "Guide wavelength " + (lambdaG * 1000).toFixed(3) + " mm · TE20 " + (fc20 / 1e9).toFixed(4) + " GHz · TE01 " + (fc01 / 1e9).toFixed(4) + " GHz");
+          }
+        },
+        "intermod": {
+          fields: [
+            { id: "f1", label: "Frequency 1 (MHz)", type: "number", min: "0", step: "any" },
+            { id: "f2", label: "Frequency 2 (MHz)", type: "number", min: "0", step: "any" },
+            { id: "f3", label: "Frequency 3 (MHz, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const f1 = positive(v.f1), f2 = positive(v.f2), f3 = positive(v.f3);
+            if (!f1 || !f2) return fail("Enter at least two frequencies.");
+            const products = new Set([
+              Math.abs(f1 - f2), f1 + f2, Math.abs(2 * f1 - f2), Math.abs(2 * f2 - f1), 2 * f1 + f2, 2 * f2 + f1
+            ]);
+            if (f3) {
+              [[f1,f3],[f2,f3]].forEach(([a,b]) => {
+                products.add(Math.abs(a-b)); products.add(a+b); products.add(Math.abs(2*a-b)); products.add(Math.abs(2*b-a));
+              });
+            }
+            const list = Array.from(products).filter((n) => n > 0).sort((a,b) => a-b).slice(0, 18);
+            return ok(list.map((n) => n.toFixed(6)).join(", ") + " MHz", "Common second- and third-order products; not a complete spur table");
+          }
+        },
+        "coax-capacitance": {
+          fields: [
+            { id: "capacitance", label: "Measured total capacitance (pF)", type: "number", min: "0", step: "any" },
+            { id: "length", label: "Cable length (m)", type: "number", min: "0", step: "any" },
+            { id: "vf", label: "Velocity factor (optional)", type: "number", min: "0", max: "1", step: "any" }
+          ],
+          compute: (v) => {
+            const total = positive(v.capacitance), length = positive(v.length), vf = num(v.vf);
+            if (!total || !length) return fail("Enter total capacitance and cable length.");
+            const perM = total / length;
+            let detail = "Measured capacitance per unit length";
+            if (vf !== null && vf > 0 && vf <= 1) {
+              const z = 1 / (perM * 1e-12 * 299792458 * vf);
+              detail += " · estimated Z0 " + z.toFixed(2) + " Ω from VF";
+            }
+            return ok(perM.toFixed(4) + " pF/m", detail);
+          }
+        },
+        "velocity-factor": {
+          fields: [
+            { id: "length", label: "Physical length (m)", type: "number", min: "0", step: "any" },
+            { id: "delay", label: "One-way delay (ns)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const length = positive(v.length), delay = positive(v.delay);
+            if (!length || !delay) return fail("Enter physical length and one-way delay.");
+            const vf = length / (299792458 * delay * 1e-9);
+            return ok(vf.toFixed(6), "Equivalent dielectric constant " + (1 / (vf * vf)).toFixed(5) + (vf > 1 ? " · invalid result above 1" : ""));
+          }
+        },
+        "connector-fit": {
+          fields: [
+            { id: "jacket", label: "Jacket OD (mm)", type: "number", min: "0", step: "any" },
+            { id: "dielectric", label: "Dielectric OD (mm)", type: "number", min: "0", step: "any" },
+            { id: "centre", label: "Centre conductor OD (mm)", type: "number", min: "0", step: "any" },
+            { id: "screen", label: "Outer conductor", type: "select", options: [["braid", "Braid"], ["foil", "Foil + braid"], ["double", "Double braid"], ["corrugated", "Corrugated/solid"]] }
+          ],
+          compute: (v) => {
+            const jacket = positive(v.jacket), dielectric = positive(v.dielectric), centre = positive(v.centre);
+            if (!jacket || !dielectric || !centre || dielectric <= centre || jacket <= dielectric) return fail("Enter physically valid jacket, dielectric and conductor diameters.");
+            let family = "custom / uncommon";
+            if (jacket < 3.5) family = "miniature coax connector family";
+            else if (jacket < 5.5) family = "small SMA/SMB/BNC crimp region";
+            else if (jacket < 7.5) family = "RG58/RG59/RG6-size crimp region";
+            else if (jacket < 11.5) family = "RG213/LMR-400-size N/BNC region";
+            else if (jacket < 20) family = "large flexible jumper connector region";
+            else family = "feeder-specific connector system";
+            return ok(family, "Jacket/dielectric/centre: " + jacket.toFixed(2) + " / " + dielectric.toFixed(2) + " / " + centre.toFixed(2) + " mm · " + v.screen + " screen · verify the connector drawing");
+          }
+        },
+        "bend-radius": {
+          fields: [
+            { id: "diameter", label: "Cable outside diameter (mm)", type: "number", min: "0", step: "any" },
+            { id: "multiplier", label: "Minimum bend multiplier", type: "select", options: [["5", "5 × OD flexible"], ["8", "8 × OD"], ["10", "10 × OD"], ["15", "15 × OD foam/low-loss"], ["20", "20 × OD feeder reference"]] }
+          ],
+          compute: (v) => {
+            const d = positive(v.diameter), m = positive(v.multiplier);
+            if (!d || !m) return fail("Enter cable diameter and multiplier.");
+            return ok((d * m).toFixed(2) + " mm minimum radius", "Diameter " + d.toFixed(2) + " mm · verify the manufacturer static and repeated-flex limits");
+          }
+        },
+        "feeder-id": {
+          fields: [
+            { id: "diameter", label: "Measured feeder OD (mm)", type: "number", min: "0", step: "any" },
+            { id: "inner", label: "Inner conductor OD (mm, optional)", type: "number", min: "0", step: "any" },
+            { id: "pitch", label: "Corrugation pitch (mm, optional)", type: "number", min: "0", step: "any" }
+          ],
+          compute: (v) => {
+            const d = positive(v.diameter), inner = num(v.inner), pitch = num(v.pitch);
+            if (!d) return fail("Enter the measured feeder outside diameter.");
+            const sizes = [
+              ["1/4-inch", 7.5], ["3/8-inch", 10.0], ["1/2-inch", 14.5], ["5/8-inch", 19.0],
+              ["7/8-inch", 28.0], ["1-1/4-inch", 40.0], ["1-5/8-inch", 50.0], ["2-1/4-inch", 70.0]
+            ];
+            const nearest = sizes.slice().sort((a,b) => Math.abs(a[1]-d) - Math.abs(b[1]-d))[0];
+            const difference = Math.abs(nearest[1] - d) / nearest[1] * 100;
+            return ok(nearest[0] + " nominal family", difference.toFixed(1) + "% from nominal OD" + (inner && pitch ? " · inner " + inner.toFixed(2) + " mm · pitch " + pitch.toFixed(2) + " mm" : "") + " · confirm manufacturer series");
+          }
+        },
+        "cable-weight": {
+          fields: [
+            { id: "length", label: "Cable length (m)", type: "number", min: "0", step: "any" },
+            { id: "mass", label: "Cable mass (kg/km)", type: "number", min: "0", step: "any" },
+            { id: "tare", label: "Reel tare mass (kg)", type: "number", min: "0", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const length = positive(v.length), mass = positive(v.mass), tare = num(v.tare);
+            if (!length || !mass || tare === null || tare < 0) return fail("Enter length, cable mass and non-negative tare.");
+            const cableMass = length * mass / 1000;
+            return ok((cableMass + tare).toFixed(3) + " kg gross", "Cable " + cableMass.toFixed(3) + " kg · reel tare " + tare.toFixed(3) + " kg");
+          }
+        },
+        "pt1000": {
+          fields: [{ id: "resistance", label: "Measured resistance (Ω)", type: "number", min: "0", step: "any" }],
+          compute: (v) => {
+            const resistance = positive(v.resistance);
+            if (!resistance) return fail("Enter resistance above zero.");
+            const t = rtdTemperature(resistance, 1000);
+            return ok(t.toFixed(3) + " °C", "IEC 60751 nominal PT1000 estimate");
+          }
+        },
+        "thermistor": {
+          fields: [
+            { id: "resistance", label: "Measured resistance (Ω)", type: "number", min: "0", step: "any" },
+            { id: "r0", label: "Rated resistance R0 (Ω)", type: "number", min: "0", step: "any", value: "10000" },
+            { id: "t0", label: "Rated temperature T0 (°C)", type: "number", step: "any", value: "25" },
+            { id: "beta", label: "Beta coefficient (K)", type: "number", min: "0", step: "any", value: "3950" }
+          ],
+          compute: (v) => {
+            const r = positive(v.resistance), r0 = positive(v.r0), t0 = num(v.t0), beta = positive(v.beta);
+            if (!r || !r0 || t0 === null || !beta) return fail("Enter resistance, R0, T0 and beta.");
+            const kelvin = 1 / (1 / (t0 + 273.15) + Math.log(r / r0) / beta);
+            return ok((kelvin - 273.15).toFixed(3) + " °C", "Beta-equation estimate");
+          }
+        },
+        "thermocouple": {
+          fields: [
+            { id: "type", label: "Thermocouple type", type: "select", options: [["K", "Type K"], ["J", "Type J"], ["T", "Type T"]] },
+            { id: "voltage", label: "Measured thermocouple voltage (mV)", type: "number", step: "any" },
+            { id: "cold", label: "Cold-junction temperature (°C)", type: "number", step: "any", value: "25" }
+          ],
+          compute: (v) => {
+            const voltage = num(v.voltage), cold = num(v.cold);
+            if (voltage === null || cold === null) return fail("Enter thermocouple voltage and cold-junction temperature.");
+            const uvPerC = { K: 41.0, J: 55.0, T: 43.0 }[v.type];
+            const temperature = cold + voltage * 1000 / uvPerC;
+            return ok(temperature.toFixed(2) + " °C", "Approximate local linear sensitivity; use an ITS-90 table for calibrated work");
+          }
+        },
+        "pressure": {
+          fields: [
+            { id: "value", label: "Pressure value", type: "number", step: "any" },
+            { id: "unit", label: "Input unit", type: "select", options: [["pa", "Pa"], ["kpa", "kPa"], ["bar", "bar"], ["mbar", "mbar"], ["psi", "psi"], ["mmh2o", "mmH₂O"], ["inh2o", "inH₂O"]] }
+          ],
+          compute: (v) => {
+            const value = num(v.value);
+            if (value === null) return fail("Enter a pressure value.");
+            const toPa = { pa: 1, kpa: 1000, bar: 100000, mbar: 100, psi: 6894.757293, mmh2o: 9.80665, inh2o: 249.08891 };
+            const pa = value * toPa[v.unit];
+            return ok((pa / 100000).toFixed(6) + " bar", (pa / 1000).toFixed(5) + " kPa · " + (pa / 6894.757293).toFixed(5) + " psi · " + (pa / 9.80665).toFixed(3) + " mmH₂O");
+          }
+        },
+        "sensor-offset": {
+          fields: [
+            { id: "expectedLow", label: "Expected low", type: "number", step: "any" },
+            { id: "measuredLow", label: "Measured low", type: "number", step: "any" },
+            { id: "expectedHigh", label: "Expected high", type: "number", step: "any" },
+            { id: "measuredHigh", label: "Measured high", type: "number", step: "any" }
+          ],
+          compute: (v) => {
+            const el = num(v.expectedLow), ml = num(v.measuredLow), eh = num(v.expectedHigh), mh = num(v.measuredHigh);
+            if ([el,ml,eh,mh].some((n) => n === null) || eh === el) return fail("Enter distinct expected points and both measured points.");
+            const expectedSpan = eh - el, measuredSpan = mh - ml;
+            const zeroError = ml - el;
+            const spanError = measuredSpan - expectedSpan;
+            const gain = measuredSpan / expectedSpan;
+            return ok("Zero " + zeroError.toFixed(6), "Span error " + spanError.toFixed(6) + " · measured/expected gain " + gain.toFixed(8));
+          }
+        },
+        "uncertainty": {
+          fields: [
+            { id: "reference", label: "Reference uncertainty", type: "number", min: "0", step: "any" },
+            { id: "resolution", label: "Resolution contribution", type: "number", min: "0", step: "any" },
+            { id: "repeatability", label: "Repeatability contribution", type: "number", min: "0", step: "any" },
+            { id: "drift", label: "Drift/environment contribution", type: "number", min: "0", step: "any", value: "0" }
+          ],
+          compute: (v) => {
+            const values = ["reference","resolution","repeatability","drift"].map((id) => num(v[id]));
+            if (values.some((n) => n === null || n < 0)) return fail("Enter non-negative uncertainty contributions in the same units.");
+            const rss = Math.sqrt(values.reduce((sum, n) => sum + n * n, 0));
+            return ok(rss.toFixed(8) + " standard units", (2 * rss).toFixed(8) + " expanded units at k=2");
+          }
+        }
 
+      };
       const categoryList = document.getElementById("categoryList");
       const searchInput = document.getElementById("searchInput");
       const statusFilter = document.getElementById("statusFilter");
@@ -872,7 +1814,10 @@
       const modalDescription = document.getElementById("modalDescription");
       const modalBody = document.getElementById("modalBody");
       const usageModal = document.getElementById("usageModal");
-      let openCategories = new Set(CATEGORY_ORDER);
+      const manageModal = document.getElementById("manageModal");
+      const manageList = document.getElementById("manageList");
+      let layout = readLayout();
+      let openCategories = new Set(layout.categoryOrder);
 
       function num(value) {
         if (value === "" || value === null || value === undefined) return null;
@@ -888,11 +1833,128 @@
       function ok(main, detail) { return { ok: true, main, detail }; }
       function fail(message) { return { ok: false, main: "Check inputs", detail: message }; }
 
+
+      function formatTimeSeconds(seconds) {
+        const value = Math.abs(seconds);
+        if (value >= 1) return seconds.toFixed(6) + " s";
+        if (value >= 1e-3) return (seconds * 1e3).toFixed(6) + " ms";
+        if (value >= 1e-6) return (seconds * 1e6).toFixed(6) + " µs";
+        return (seconds * 1e9).toFixed(6) + " ns";
+      }
+
+      function formatPower(watts) {
+        if (watts >= 1e6) return (watts / 1e6).toFixed(5) + " MW";
+        if (watts >= 1e3) return (watts / 1e3).toFixed(5) + " kW";
+        if (watts >= 1) return watts.toFixed(5) + " W";
+        if (watts >= 1e-3) return (watts * 1e3).toFixed(5) + " mW";
+        return (watts * 1e6).toFixed(5) + " µW";
+      }
+
+      function merEvmCompute(values) {
+        const value = positive(values.value);
+        if (!value) return fail("Enter a value above zero.");
+        if (values.mode === "mer") {
+          const evm = 100 * Math.pow(10, -value / 20);
+          return ok(evm.toFixed(5) + "% EVM", value.toFixed(3) + " dB MER");
+        }
+        const mer = -20 * Math.log10(value / 100);
+        return ok(mer.toFixed(5) + " dB MER", value.toFixed(5) + "% EVM");
+      }
+
+      function rtdTemperature(resistance, r0) {
+        const A = 3.9083e-3, B = -5.775e-7, C = -4.183e-12;
+        const rAt = (t) => r0 * (1 + A * t + B * t * t + (t < 0 ? C * (t - 100) * t * t * t : 0));
+        let lo = -200, hi = 850;
+        for (let i = 0; i < 80; i += 1) {
+          const mid = (lo + hi) / 2;
+          if (rAt(mid) < resistance) lo = mid; else hi = mid;
+        }
+        return (lo + hi) / 2;
+      }
+
       function formatFrequency(hz) {
         if (hz >= 1e9) return (hz / 1e9).toFixed(5) + " GHz";
         if (hz >= 1e6) return (hz / 1e6).toFixed(5) + " MHz";
         if (hz >= 1e3) return (hz / 1e3).toFixed(5) + " kHz";
         return hz.toFixed(5) + " Hz";
+      }
+
+
+      function defaultLayout() {
+        const toolOrder = {};
+        DEFAULT_CATEGORY_ORDER.forEach((category) => {
+          toolOrder[category] = tools.filter((tool) => tool.category === category).map((tool) => tool.id);
+        });
+        return {
+          categoryOrder: DEFAULT_CATEGORY_ORDER.slice(),
+          toolOrder,
+          hidden: []
+        };
+      }
+
+      function normaliseLayout(candidate) {
+        const fallback = defaultLayout();
+        const result = {
+          categoryOrder: [],
+          toolOrder: {},
+          hidden: []
+        };
+        const requestedCategories = candidate && Array.isArray(candidate.categoryOrder) ? candidate.categoryOrder : [];
+        requestedCategories.forEach((category) => {
+          if (DEFAULT_CATEGORY_ORDER.includes(category) && !result.categoryOrder.includes(category)) result.categoryOrder.push(category);
+        });
+        DEFAULT_CATEGORY_ORDER.forEach((category) => {
+          if (!result.categoryOrder.includes(category)) result.categoryOrder.push(category);
+        });
+
+        result.categoryOrder.forEach((category) => {
+          const validIds = fallback.toolOrder[category];
+          const requested = candidate && candidate.toolOrder && Array.isArray(candidate.toolOrder[category]) ? candidate.toolOrder[category] : [];
+          const order = [];
+          requested.forEach((id) => {
+            if (validIds.includes(id) && !order.includes(id)) order.push(id);
+          });
+          validIds.forEach((id) => {
+            if (!order.includes(id)) order.push(id);
+          });
+          result.toolOrder[category] = order;
+        });
+
+        const allIds = tools.map((tool) => tool.id);
+        const requestedHidden = candidate && Array.isArray(candidate.hidden) ? candidate.hidden : [];
+        result.hidden = requestedHidden.filter((id, index) => allIds.includes(id) && requestedHidden.indexOf(id) === index);
+        return result;
+      }
+
+      function readLayout() {
+        try {
+          return normaliseLayout(JSON.parse(localStorage.getItem(LAYOUT_KEY) || "null"));
+        } catch {
+          return defaultLayout();
+        }
+      }
+
+      function writeLayout() {
+        layout = normaliseLayout(layout);
+        try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); }
+        catch { /* Local storage can be unavailable in previews. */ }
+      }
+
+      function isHidden(id) {
+        return layout.hidden.includes(id);
+      }
+
+      function orderedTools(category) {
+        return layout.toolOrder[category].map((id) => tools.find((tool) => tool.id === id)).filter(Boolean);
+      }
+
+      function moveItem(list, index, direction) {
+        const target = index + direction;
+        if (target < 0 || target >= list.length) return false;
+        const copy = list[index];
+        list[index] = list[target];
+        list[target] = copy;
+        return true;
       }
 
       function readUsage() {
@@ -945,10 +2007,12 @@
         const filter = statusFilter.value;
         const matches = tools.filter((tool) => {
           const usage = usageFor(tool.id);
+          const hidden = isHidden(tool.id);
           const haystack = [tool.title, tool.description, categories[tool.category].title, tool.id].join(" ").toLowerCase();
           if (query && !haystack.includes(query)) return false;
+          if (filter === "hidden") return hidden;
+          if (hidden) return false;
           if (filter === "ready" && !(tool.status === "ready" || tool.status === "external")) return false;
-          if (filter === "queued" && tool.status !== "queued") return false;
           if (filter === "used" && usage.opens + usage.calculations === 0) return false;
           if (filter === "unused" && usage.opens + usage.calculations > 0) return false;
           return true;
@@ -962,18 +2026,22 @@
         } else if (sortSelect.value === "alpha") {
           matches.sort((a, b) => a.title.localeCompare(b.title));
         } else {
-          matches.sort((a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category) || a.title.localeCompare(b.title));
+          matches.sort((a, b) => {
+            const categoryDifference = layout.categoryOrder.indexOf(a.category) - layout.categoryOrder.indexOf(b.category);
+            if (categoryDifference) return categoryDifference;
+            return layout.toolOrder[a.category].indexOf(a.id) - layout.toolOrder[b.category].indexOf(b.id);
+          });
         }
         return matches;
       }
 
       function render() {
         const matches = visibleTools();
-        const grouped = new Map(CATEGORY_ORDER.map((category) => [category, []]));
+        const grouped = new Map(layout.categoryOrder.map((category) => [category, []]));
         matches.forEach((tool) => grouped.get(tool.category).push(tool));
         categoryList.innerHTML = "";
 
-        CATEGORY_ORDER.forEach((category) => {
+        layout.categoryOrder.forEach((category) => {
           const list = grouped.get(category);
           if (!list.length) return;
           const card = document.createElement("section");
@@ -982,7 +2050,7 @@
           card.innerHTML = [
             '<button class="category-toggle" type="button" data-category-toggle="', category, '" aria-expanded="', expanded, '">',
               '<span class="category-title"><strong>', categories[category].title, '</strong><small>', categories[category].description, '</small></span>',
-              '<span class="category-count">', list.length, ' tools · ', categoryUsage(category), ' uses</span>',
+              '<span class="category-count">', list.length, ' shown · ', categoryUsage(category), ' uses</span>',
             '</button>',
             '<div class="tool-list" ', expanded ? '' : 'hidden', '></div>'
           ].join("");
@@ -994,8 +2062,8 @@
             button.type = "button";
             button.className = "tool-button" + (uses === 0 ? " is-unused" : "");
             button.dataset.toolId = tool.id;
-            const pillClass = tool.status === "queued" ? " is-queued" : tool.status === "external" ? " is-external" : "";
-            const label = tool.status === "queued" ? "Queued" : tool.status === "external" ? "Page" : "Ready";
+            const pillClass = tool.status === "external" ? " is-external" : "";
+            const label = tool.status === "external" ? "Page" : "Ready";
             button.innerHTML = [
               '<span class="tool-title"><strong>', tool.title, '</strong><span class="tool-copy">', tool.description, '</span></span>',
               '<span class="tool-side"><span class="pill', pillClass, '">', label, '</span><span class="use-count">', usage.opens, ' open · ', usage.calculations, ' calc</span></span>'
@@ -1031,13 +2099,12 @@
         modalTitle.textContent = tool.title;
         modalDescription.textContent = tool.description;
 
-        if (tool.status === "queued") {
-          modalBody.innerHTML = '<section class="result-panel"><strong>Queued for build</strong><small>This open has been counted. The tool stays in the catalogue so demand can be measured before implementation.</small></section>';
+        const definition = readyDefinitions[id];
+        if (!definition) {
+          modalBody.innerHTML = '<section class="result-panel"><strong>Definition missing</strong><small>This tool has no calculator definition in the current file.</small></section>';
           toolModal.hidden = false;
           return;
         }
-
-        const definition = readyDefinitions[id];
         modalBody.innerHTML = [
           '<form id="calculatorForm" class="form-grid" autocomplete="off">',
             definition.fields.map(inputMarkup).join(""),
@@ -1070,8 +2137,54 @@
         });
         usageTable.innerHTML = sorted.map((tool) => {
           const u = usageFor(tool.id);
-          return '<article class="usage-row"><span>' + tool.title + '</span><span>' + u.opens + ' opens</span><span>' + u.calculations + ' calcs</span></article>';
+          return '<article class="usage-row"><span>' + tool.title + (isHidden(tool.id) ? ' · hidden' : '') + '</span><span>' + u.opens + ' opens</span><span>' + u.calculations + ' calcs</span></article>';
         }).join("");
+      }
+
+
+      function renderManage() {
+        const hiddenCount = layout.hidden.length;
+        document.getElementById("manageSummary").textContent =
+          (tools.length - hiddenCount) + " shown · " + hiddenCount + " hidden · changes are saved on this phone";
+
+        manageList.innerHTML = "";
+        layout.categoryOrder.forEach((category, categoryIndex) => {
+          const section = document.createElement("section");
+          section.className = "manage-category";
+          section.innerHTML = [
+            '<header class="manage-category-header">',
+              '<span><strong>', categories[category].title, '</strong><span class="manage-tool-copy">', orderedTools(category).length, ' calculators</span></span>',
+              '<span class="manage-actions">',
+                '<button class="manage-mini" type="button" data-category-move="up" data-category="', category, '" ', categoryIndex === 0 ? 'disabled' : '', '>↑</button>',
+                '<button class="manage-mini" type="button" data-category-move="down" data-category="', category, '" ', categoryIndex === layout.categoryOrder.length - 1 ? 'disabled' : '', '>↓</button>',
+              '</span>',
+            '</header>',
+            '<div class="manage-tool-list"></div>'
+          ].join("");
+
+          const list = section.querySelector(".manage-tool-list");
+          orderedTools(category).forEach((tool, toolIndex, ordered) => {
+            const hidden = isHidden(tool.id);
+            const row = document.createElement("article");
+            row.className = "manage-tool-row" + (hidden ? " is-hidden" : "");
+            row.innerHTML = [
+              '<span><strong>', tool.title, '</strong><span class="manage-tool-copy">', tool.description, '</span></span>',
+              '<span class="manage-actions">',
+                '<button class="manage-mini" type="button" data-tool-move="up" data-tool-id="', tool.id, '" data-category="', category, '" ', toolIndex === 0 ? 'disabled' : '', '>↑</button>',
+                '<button class="manage-mini" type="button" data-tool-move="down" data-tool-id="', tool.id, '" data-category="', category, '" ', toolIndex === ordered.length - 1 ? 'disabled' : '', '>↓</button>',
+                '<button class="manage-mini ', hidden ? 'is-show' : 'is-hide', '" type="button" data-tool-visibility="', hidden ? 'show' : 'hide', '" data-tool-id="', tool.id, '">', hidden ? 'Show' : 'Hide', '</button>',
+              '</span>'
+            ].join("");
+            list.appendChild(row);
+          });
+          manageList.appendChild(section);
+        });
+      }
+
+      function saveLayoutAndRender() {
+        writeLayout();
+        renderManage();
+        render();
       }
 
       categoryList.addEventListener("click", (event) => {
@@ -1090,6 +2203,62 @@
       document.getElementById("closeModalButton").addEventListener("click", () => closeModal(toolModal));
       toolModal.addEventListener("click", (event) => { if (event.target === toolModal) closeModal(toolModal); });
 
+      document.getElementById("manageButton").addEventListener("click", () => {
+        renderManage();
+        manageModal.hidden = false;
+      });
+      document.getElementById("closeManageButton").addEventListener("click", () => closeModal(manageModal));
+      manageModal.addEventListener("click", (event) => { if (event.target === manageModal) closeModal(manageModal); });
+      manageList.addEventListener("click", (event) => {
+        const categoryButton = event.target.closest("[data-category-move]");
+        if (categoryButton) {
+          const index = layout.categoryOrder.indexOf(categoryButton.dataset.category);
+          const direction = categoryButton.dataset.categoryMove === "up" ? -1 : 1;
+          if (moveItem(layout.categoryOrder, index, direction)) saveLayoutAndRender();
+          return;
+        }
+
+        const moveButton = event.target.closest("[data-tool-move]");
+        if (moveButton) {
+          const category = moveButton.dataset.category;
+          const order = layout.toolOrder[category];
+          const index = order.indexOf(moveButton.dataset.toolId);
+          const direction = moveButton.dataset.toolMove === "up" ? -1 : 1;
+          if (moveItem(order, index, direction)) saveLayoutAndRender();
+          return;
+        }
+
+        const visibilityButton = event.target.closest("[data-tool-visibility]");
+        if (visibilityButton) {
+          const id = visibilityButton.dataset.toolId;
+          if (visibilityButton.dataset.toolVisibility === "hide") {
+            if (!layout.hidden.includes(id)) layout.hidden.push(id);
+          } else {
+            layout.hidden = layout.hidden.filter((hiddenId) => hiddenId !== id);
+          }
+          saveLayoutAndRender();
+        }
+      });
+      document.getElementById("showAllToolsButton").addEventListener("click", () => {
+        layout.hidden = [];
+        saveLayoutAndRender();
+      });
+      document.getElementById("hideUnusedToolsButton").addEventListener("click", () => {
+        layout.hidden = tools.filter((tool) => {
+          const usage = usageFor(tool.id);
+          return usage.opens + usage.calculations === 0;
+        }).map((tool) => tool.id);
+        saveLayoutAndRender();
+      });
+      document.getElementById("resetLayoutButton").addEventListener("click", () => {
+        if (!window.confirm("Restore the original calculator order and show every tool?")) return;
+        layout = defaultLayout();
+        writeLayout();
+        openCategories = new Set(layout.categoryOrder);
+        renderManage();
+        render();
+      });
+
       document.getElementById("usageButton").addEventListener("click", () => {
         renderUsageTable();
         usageModal.hidden = false;
@@ -1103,12 +2272,12 @@
         render();
       });
       document.getElementById("exportButton").addEventListener("click", () => {
-        const payload = JSON.stringify({ exportedAt: new Date().toISOString(), usage: readUsage() }, null, 2);
+        const payload = JSON.stringify({ exportedAt: new Date().toISOString(), usage: readUsage(), layout }, null, 2);
         const blob = new Blob([payload], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "fieldops-calculator-usage.json";
+        link.download = "fieldops-calculator-data.json";
         document.body.appendChild(link);
         link.click();
         link.remove();
