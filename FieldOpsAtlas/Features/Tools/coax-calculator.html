@@ -296,7 +296,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.1.0-coax-construction-matcher">
+  <main class="phone" data-page="tools" data-version="1.1.1-coax-usage-library">
     <section class="content-canvas" aria-label="Coax mechanical identifier">
       <article class="page">
         <header class="card hero">
@@ -305,6 +305,7 @@
           <p class="copy">Enter the measured geometry and visible construction. The result estimates impedance and ranks likely cable families.</p>
           <div class="actions">
             <a class="button" href="./index.html">Back to field tools</a>
+            <a class="button" href="./calculator-library.html">Calculator library</a>
           </div>
         </header>
 
@@ -468,6 +469,21 @@
       "use strict";
 
       const KEY = "fieldOpsAtlas.tools.coaxMechanical.v2";
+      const USAGE_KEY = "fieldOpsAtlas.calculatorUsage.v1";
+      let lastUsageStamp = 0;
+      const recordCalculation = () => {
+        const now = Date.now();
+        if (now - lastUsageStamp < 5000) return;
+        lastUsageStamp = now;
+        try {
+          const usage = JSON.parse(localStorage.getItem(USAGE_KEY) || "{}");
+          const entry = usage["coax-identifier"] || { opens: 0, calculations: 0, lastUsed: null };
+          entry.calculations = (entry.calculations || 0) + 1;
+          entry.lastUsed = new Date().toISOString();
+          usage["coax-identifier"] = entry;
+          localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+        } catch (_) {}
+      };
       const COMMON = [50, 75, 93];
       const MATERIAL_ER = {
         "solid-pe": 2.25,
@@ -746,6 +762,7 @@
           matches.length ? "Likely families: " + matches.map((match) => match.name + " (" + Math.round(match.score) + "%)").join("; ") : "Likely family: Not recognised"
         ].filter(Boolean).join("\n");
 
+        if (d || D || jacketOd || constructionParts.length) recordCalculation();
         save();
       };
 
