@@ -1,12 +1,12 @@
 /* FieldOps Atlas — RF scene selector and selected-path binding
- * Version: 1.8.0-path-distance-elevation
- * Selects scenes, binds scene controls, and maps the active path endpoints to
- * the left and right mountain/transmitter pairs.
+ * Version: 1.9.0-synthetic-elevation-tags
+ * Selects scenes, binds scene controls, maps the active path endpoints to the
+ * left and right mountain/transmitter pairs, and supplies stable demo elevations.
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.8.0-path-distance-elevation";
+  const VERSION="1.9.0-synthetic-elevation-tags";
   const DEFAULT_SCENE="mount-a_b-comp-scene";
   const STYLE_ID="fieldops-rf-scene-endpoint-style";
   const SCENES=Object.freeze([
@@ -44,6 +44,8 @@
 
   let active=null;
   let activePath=null;
+  let scenePathSignature="";
+  let syncingBuilderElevations=false;
 
   function normalise(value){
     const key=String(value||"").trim().toLowerCase();
@@ -60,15 +62,55 @@
     return Number.isFinite(number)?number:null;
   }
 
+  function hashText(value){
+    let hash=2166136261;
+    const text=String(value||"");
+    for(let index=0;index<text.length;index+=1){
+      hash^=text.charCodeAt(index);
+      hash=Math.imul(hash,16777619);
+    }
+    return hash>>>0;
+  }
+
+  function syntheticElevation(source,siteId,name,lat,lng){
+    const supplied=numberOrNull(source?.elevationM??source?.elevation);
+    const suppliedSource=clean(source?.elevationSource,"").toLowerCase();
+    const authoritative=/^(manual|surveyed|authoritative|site-data)$/.test(suppliedSource);
+    if(authoritative&&supplied!==null)return Math.round(supplied);
+
+    const words=clean(name,siteId).toLowerCase();
+    let base=115;
+    let span=285;
+    if(/ridge|hill|moor|shelf|peak|summit|stone/.test(words)){
+      base=265;
+      span=255;
+    }else if(/coast|shore|harbour|cove|river|pool|valley|hollow|cave/.test(words)){
+      base=45;
+      span=220;
+    }
+    const coordinateKey=[
+      Number.isFinite(lat)?lat.toFixed(5):"",
+      Number.isFinite(lng)?lng.toFixed(5):""
+    ].join(",");
+    return base+(hashText(`${siteId}|${words}|${coordinateKey}`)%span);
+  }
+
   function normaliseEndpoint(value,fallback){
     const source=value&&typeof value==="object"?value:{};
+    const siteId=clean(source.siteId||source.id,fallback.siteId);
+    const name=clean(source.name||source.label,fallback.name);
+    const role=clean(source.role||source.siteRole,fallback.role);
+    const lat=numberOrNull(source.lat??source.latitude);
+    const lng=numberOrNull(source.lng??source.lon??source.longitude);
+    const suppliedSource=clean(source.elevationSource,"").toLowerCase();
+    const elevationM=syntheticElevation(source,siteId,name,lat,lng);
+    const elevationSource=/^(manual|surveyed|authoritative|site-data)$/.test(suppliedSource)
+      ? suppliedSource
+      :"synthetic-demo";
     return {
-      siteId:clean(source.siteId||source.id,fallback.siteId),
-      name:clean(source.name||source.label,fallback.name),
-      role:clean(source.role||source.siteRole,fallback.role),
-      elevationM:numberOrNull(source.elevationM??source.elevation),
-      lat:numberOrNull(source.lat??source.latitude),
-      lng:numberOrNull(source.lng??source.lon??source.longitude)
+      siteId,name,role,elevationM,elevationSource,lat,lng,
+      elevationTagLabel:"ELEV",
+      elevationTagText:`${Math.round(elevationM)} M`
     };
   }
 
@@ -88,13 +130,54 @@
     };
   }
 
+  function clone(value){
+    return JSON.parse(JSON.stringify(value||{}));
+  }
+
+  function builderEndpoint(value,direction){
+    if(direction==="from")return value?.from||value?.feeding||{};
+    return value?.to||value?.receiving||{};
+  }
+
+  function needsElevationSync(rawEndpoint,normalisedEndpoint){
+    return numberOrNull(rawEndpoint?.elevationM??rawEndpoint?.elevation)!==normalisedEndpoint.elevationM
+      ||clean(rawEndpoint?.elevationSource,"").toLowerCase()!==normalisedEndpoint.elevationSource;
+  }
+
+  function syncElevationsToPathBuilder(rawPath,normalisedPath){
+    const builder=globalThis.FieldOpsRFPathBuilder;
+    if(syncingBuilderElevations||!builder?.setSelectedPath||!rawPath)return;
+    const rawFrom=builderEndpoint(rawPath,"from");
+    const rawTo=builderEndpoint(rawPath,"to");
+    if(!needsElevationSync(rawFrom,normalisedPath.from)&&!needsElevationSync(rawTo,normalisedPath.to))return;
+
+    const next=clone(rawPath);
+    next.from={...(next.from||next.feeding||{}),elevationM:normalisedPath.from.elevationM,elevationSource:normalisedPath.from.elevationSource};
+    next.to={...(next.to||next.receiving||{}),elevationM:normalisedPath.to.elevationM,elevationSource:normalisedPath.to.elevationSource};
+    delete next.feeding;
+    delete next.receiving;
+
+    syncingBuilderElevations=true;
+    try{
+      builder.setSelectedPath(next,{persist:true,render:true});
+    }finally{
+      syncingBuilderElevations=false;
+    }
+  }
+
+  function pathSignature(path){
+    return [
+      path.id,path.from.siteId,path.from.elevationM,path.to.siteId,path.to.elevationM
+    ].join("|");
+  }
+
   function selectedPath(){
     if(activePath)return activePath;
-    if(globalThis.FieldOpsRFPathBuilder?.getSelectedPath){
-      activePath=normalisePath(globalThis.FieldOpsRFPathBuilder.getSelectedPath());
-      return activePath;
-    }
-    activePath=normalisePath(globalThis.ATLAS_RF_SELECTED_PATH);
+    const raw=globalThis.FieldOpsRFPathBuilder?.getSelectedPath
+      ?globalThis.FieldOpsRFPathBuilder.getSelectedPath()
+      :globalThis.ATLAS_RF_SELECTED_PATH;
+    activePath=normalisePath(raw);
+    syncElevationsToPathBuilder(raw,activePath);
     return activePath;
   }
 
@@ -139,7 +222,7 @@
 
   function elevationText(value){
     const number=numberOrNull(value);
-    return number===null?"Elevation loading…":`Elevation ${Math.round(number)} m`;
+    return number===null?"Elevation unavailable":`Elevation ${Math.round(number)} m`;
   }
 
   function distanceText(value){
@@ -204,6 +287,8 @@
     if(!root)return null;
     const sceneName=forced?normalise(forced):requested(root);
     const path=normalisePath(pathValue||selectedPath());
+    const signature=pathSignature(path);
+    scenePathSignature=signature;
     root.dataset.rfBuilderVersion=VERSION;
     root.dataset.rfSceneRequest=sceneName;
     root.setAttribute("aria-busy","true");
@@ -221,6 +306,7 @@
       }));
       return active;
     }catch(error){
+      if(scenePathSignature===signature)scenePathSignature="";
       root.setAttribute("aria-busy","false");
       root.dataset.rfBuilder3Ready="false";
       root.dataset.rfScene="load-error";
@@ -236,8 +322,14 @@
   }
 
   function bindPath(pathValue,root=document.querySelector("[data-rf-graph]")){
-    activePath=normalisePath(pathValue);
-    if(root&&root.querySelector("canvas"))renderPathBinding(root,activePath,requested(root));
+    const path=normalisePath(pathValue);
+    syncElevationsToPathBuilder(pathValue,path);
+    activePath=path;
+    if(root&&root.querySelector("canvas")){
+      renderPathBinding(root,activePath,requested(root));
+      const signature=pathSignature(activePath);
+      if(signature!==scenePathSignature)build(root,requested(root),activePath);
+    }
     return activePath;
   }
 
