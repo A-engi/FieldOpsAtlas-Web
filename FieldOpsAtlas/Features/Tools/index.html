@@ -46,7 +46,29 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 14px 30px rgba(2, 9, 20, 0.24);
     }
 
+    .tools-content::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      pointer-events: none;
+      opacity: .42;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(61, 99, 137, .13) 0 1px, transparent 1px 17px),
+        repeating-linear-gradient(90deg, rgba(61, 99, 137, .13) 0 1px, transparent 1px 17px);
+      -webkit-mask-image:
+        radial-gradient(ellipse 62% 105px at 35% 42px, #000 0 44%, transparent 76%),
+        radial-gradient(ellipse 47% 150px at 88% 420px, #000 0 34%, transparent 75%),
+        radial-gradient(ellipse 55% 170px at 14% 980px, #000 0 30%, transparent 72%);
+      mask-image:
+        radial-gradient(ellipse 62% 105px at 35% 42px, #000 0 44%, transparent 76%),
+        radial-gradient(ellipse 47% 150px at 88% 420px, #000 0 34%, transparent 75%),
+        radial-gradient(ellipse 55% 170px at 14% 980px, #000 0 30%, transparent 72%);
+    }
+
     .tools-page {
+      position: relative;
+      z-index: 1;
       height: 100%;
       min-width: 0;
       min-height: 0;
@@ -108,8 +130,8 @@
     .tools-hero {
       position: relative;
       min-width: 0;
-      min-height: 68px;
-      padding: 2px 10px 4px;
+      min-height: 62px;
+      padding: 0 10px 2px;
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -135,10 +157,10 @@
     .hero-art {
       position: absolute;
       z-index: 1;
-      top: -4px;
+      top: -6px;
       right: -6px;
       width: 50%;
-      height: calc(100% + 8px);
+      height: calc(100% + 12px);
       overflow: hidden;
       opacity: .95;
     }
@@ -302,6 +324,56 @@
     .tool-card.is-gold { --accent: var(--tools-amber); background: linear-gradient(145deg, #fff, #fffaf4); }
     .tool-card.is-red { --accent: var(--tools-red); background: linear-gradient(145deg, #fff, #fff6f6); }
     .tool-card.is-blue { --accent: var(--tools-blue); background: linear-gradient(145deg, #fff, #f5f9ff); }
+
+    /* The lower cards no longer need space for chip rows. Their section badge is
+       treated as a watermark so the title, count and More link get the full row. */
+    .tool-card.is-compact {
+      position: relative;
+      isolation: isolate;
+      padding: 7px;
+      gap: 5px;
+    }
+
+    .tool-card.is-compact .tool-head {
+      position: relative;
+      z-index: 2;
+      min-height: 29px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 5px;
+    }
+
+    .tool-card.is-compact .tool-icon {
+      position: absolute;
+      z-index: 0;
+      top: -7px;
+      left: -6px;
+      width: 45px;
+      height: 45px;
+      opacity: .16;
+      transform: scale(1.04);
+    }
+
+    .tool-card.is-compact .tool-head h3,
+    .tool-card.is-compact .tool-head-actions {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-card.is-compact .tool-head h3 {
+      padding-left: 3px;
+      display: -webkit-box;
+      overflow: hidden;
+      white-space: normal;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .tool-card.is-compact .tool-head-actions {
+      padding: 2px 3px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .58);
+      backdrop-filter: blur(2px);
+    }
 
     .tool-head {
       min-width: 0;
@@ -548,6 +620,21 @@
       overflow: hidden;
     }
 
+    .tool-card.is-compact .diagnostic-layout {
+      min-height: 78px;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 4px;
+    }
+
+    .tool-card.is-compact .reading-tile {
+      padding: 4px 3px;
+      gap: 2px;
+    }
+
+    .tool-card.is-compact .reading-tile strong { font-size: 8px; }
+    .tool-card.is-compact .reading-tile output { font-size: 14px; }
+    .tool-card.is-compact .reading-tile small { font-size: 6.5px; }
+
     .reading-tile {
       min-width: 0;
       padding: 6px 4px;
@@ -581,6 +668,25 @@
       font-size: 8px;
       font-weight: 650;
       line-height: 1.25;
+    }
+
+    .tool-card.is-compact .reference-copy {
+      position: relative;
+      z-index: 2;
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: 7.5px;
+      line-height: 1.18;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .tool-card.is-compact .reference-box {
+      height: 52px;
+      padding: 0;
+      border-radius: 8px;
+      background: transparent;
+      opacity: .82;
     }
 
 
@@ -718,7 +824,7 @@
   </style>
 </head>
 <body>
-<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.2-tools-header-actions">
+<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.5-sparse-blueprint-background">
 <section aria-label="Field Tools" class="tools-content">
 <article class="tools-page">
 <header class="tools-hero">
@@ -726,7 +832,7 @@
 <h1>Field Tools</h1>
 </div>
 <div aria-hidden="true" class="hero-art">
-<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-header-art.svg?v=2.1.2"></span>
+<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-header-art.svg?v=2.1.5"></span>
 </div>
 </header>
 <section aria-labelledby="recentTitle" class="recent-section">
@@ -746,14 +852,7 @@
 </a>
 </div>
 </section>
-<nav aria-label="Quick calculators" class="quick-launchers">
-<a class="quick-launch" data-searchable="ohms law resistance voltage current" href="./calculator-library.html?tool=ohms-law"><span aria-hidden="true" class="quick-art omega-mark">Ω</span><span>Ohm’s Law</span></a>
-<a class="quick-launch" data-searchable="dbm watts" href="./calculator-library.html?tool=dbm-watts"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.2"></span></span><span>dBm / Watts</span></a>
-<a class="quick-launch" data-searchable="cable loss" href="./calculator-library.html?tool=cable-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.2"></span></span><span>Cable Loss</span></a>
-<a class="quick-launch" data-searchable="antenna gain" href="./calculator-library.html?tool=antenna-gain"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-antenna-gain.svg?v=2.1.2"></span></span><span>Antenna Gain</span></a>
-<a class="quick-launch" data-searchable="vswr return loss" href="./calculator-library.html?tool=vswr-return-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-vswr.svg?v=2.1.2"></span></span><span>VSWR</span></a>
-<a class="quick-launch" href="./calculator-library.html"><span aria-hidden="true" class="quick-art more-mark">•••</span><span>More</span></a>
-</nav>
+
 <section aria-label="Tool categories" class="tools-grid">
 <article class="tool-card surface" data-searchable="calculators ohms law rf electrical electronics cable link budget">
 <header class="tool-head">
@@ -817,7 +916,7 @@
 <a class="visual-box" href="./calculator-library.html?search=frequency"><strong>Frequency response</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-frequency-response.svg?v=2.1.2"></span></span></a>
 </div>
 </article>
-<article class="tool-card is-red surface" data-searchable="diagnostics measurement spectrum analyser oscilloscope power meter rf level rbw vbw">
+<article class="tool-card is-red is-compact surface" data-searchable="diagnostics measurement spectrum analyser oscilloscope power meter rf level rbw vbw">
 <header class="tool-head">
 <span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-measurement.svg?v=2.1.2"></span></span>
 <h3>Diagnostics &amp; Measurement</h3>
@@ -828,7 +927,7 @@
 <a class="spectrum-box" href="./calculator-library.html?search=spectrum"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-spectrum-plot.svg?v=2.1.2"></span></a>
 </div>
 </article>
-<article class="tool-card is-blue surface" data-searchable="references channels blocks connectors tables formulas dab dtt signal chain">
+<article class="tool-card is-blue is-compact surface" data-searchable="references channels blocks connectors tables formulas dab dtt signal chain">
 <header class="tool-head">
 <span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-references.svg?v=2.1.2"></span></span>
 <h3>References</h3>
@@ -843,6 +942,14 @@
 <a class="shortcut-card surface" data-searchable="unit tables prefixes constants" href="./converter.html" style="--shortcut:#d78c00"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-unit-tables.svg?v=2.1.2"></span><strong>Unit Tables</strong><small>Prefixes, units and constants</small></a>
 <a class="shortcut-card surface" data-searchable="signal chain rf chain" href="../Network/index.html" style="--shortcut:#0d8587"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain.svg?v=2.1.2"></span><strong>Signal Chain</strong><small>Build and analyse RF chains</small></a>
 <a class="shortcut-card surface" data-searchable="favourites saved tools" href="./calculator-library.html" style="--shortcut:#504097"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-favourites.svg?v=2.1.2"></span><strong>Favourites</strong><small>Saved tools and shortcuts</small></a>
+</nav>
+<nav aria-label="Quick calculators" class="quick-launchers">
+<a class="quick-launch" data-searchable="ohms law resistance voltage current" href="./calculator-library.html?tool=ohms-law"><span aria-hidden="true" class="quick-art omega-mark">Ω</span><span>Ohm’s Law</span></a>
+<a class="quick-launch" data-searchable="dbm watts" href="./calculator-library.html?tool=dbm-watts"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.2"></span></span><span>dBm / Watts</span></a>
+<a class="quick-launch" data-searchable="cable loss" href="./calculator-library.html?tool=cable-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.2"></span></span><span>Cable Loss</span></a>
+<a class="quick-launch" data-searchable="antenna gain" href="./calculator-library.html?tool=antenna-gain"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-antenna-gain.svg?v=2.1.2"></span></span><span>Antenna Gain</span></a>
+<a class="quick-launch" data-searchable="vswr return loss" href="./calculator-library.html?tool=vswr-return-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-vswr.svg?v=2.1.2"></span></span><span>VSWR</span></a>
+<a class="quick-launch" href="./calculator-library.html"><span aria-hidden="true" class="quick-art more-mark">•••</span><span>More</span></a>
 </nav>
 <section class="packs-card surface" data-searchable="tool packs manage customise">
 <span class="packs-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-tool-packs.svg?v=2.1.2"></span></span>
