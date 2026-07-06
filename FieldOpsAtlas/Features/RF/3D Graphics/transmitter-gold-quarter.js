@@ -1,5 +1,5 @@
 /* FieldOps Atlas — balanced scene transmitter with visible lights
- * Version: 1.6.38-bold-production
+ * Version: 1.6.39-extra-bold-production
  *
  * - full geometry; no quarter mirroring
  * - continuous base-to-apex outer legs
@@ -11,11 +11,12 @@
  * - unshaded ridge flares keep white lamps visible at mountain scale
  * - thicker structural members and bright ridge highlights restore boldness
  * - balanced scene scale is enlarged slightly without reintroducing stretching
+ * - extra-bold production tuning for distant readability in the mountain scene
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.6.38-bold-production";
+  const VERSION="1.6.39-extra-bold-production";
   const ASSET_ID="transmitter-gold-quarter";
 
   const positions=[];
@@ -29,7 +30,7 @@
   const STRUCTURE=3;
   const WHITE_LIGHT=5;
   const WHITE_BEACON=6;
-  const BOLDNESS=1.34;
+  const BOLDNESS=1.52;
 
   const vertex=(x,y,z)=>{
     positions.push(x,y,z);
@@ -234,9 +235,9 @@
     // The production renderer has no bloom pass. These unshaded ridge diamonds
     // create a small gold halo and a white-hot core that remain visible after
     // the transmitter is scaled down onto the mountain.
-    const outer=coreRadius*4.20;
-    const middle=coreRadius*2.35;
-    const core=coreRadius*1.02;
+    const outer=coreRadius*4.85;
+    const middle=coreRadius*2.72;
+    const core=coreRadius*1.18;
 
     ridgeDiamondXY(cx,cy,cz+0.010,outer,0);
     ridgeDiamondYZ(cx,cy,cz,middle,1);
@@ -245,9 +246,9 @@
 
   function visibleBeacon(cx,cy,cz,radius){
     sphere(cx,cy,cz,radius,20,11,WHITE_BEACON,false);
-    ridgeDiamondXY(cx,cy,cz+0.012,radius*2.22,0);
-    ridgeDiamondYZ(cx,cy,cz,radius*1.68,1);
-    ridgeDiamondXY(cx,cy,cz+0.024,radius*1.06,2);
+    ridgeDiamondXY(cx,cy,cz+0.012,radius*2.55,0);
+    ridgeDiamondYZ(cx,cy,cz,radius*1.92,1);
+    ridgeDiamondXY(cx,cy,cz+0.024,radius*1.18,2);
   }
 
   function rectangularSurround(
@@ -413,7 +414,7 @@
   // thin beams at mountain scale, so these smaller ridge overlays preserve the
   // main silhouette, front lattice and deck edges without turning the tower flat.
   for(const sx of [-1,1]){
-    ridgeBeam([sx*BASE_X,BASE_Y,BASE_Z],APEX,0.018,3);
+    ridgeBeam([sx*BASE_X,BASE_Y,BASE_Z],APEX,0.024,3);
   }
 
   for(let bayIndex=0;bayIndex<LEVELS.length-1;bayIndex+=1){
@@ -421,23 +422,23 @@
     const y1=LEVELS[bayIndex+1];
     const x0=legX(y0),x1=legX(y1);
     const z0=legZ(y0),z1=legZ(y1);
-    const width=bayIndex<3?0.0095:0.0080;
-    ridgeBeam([-x0,y0,z0],[ x1,y1,z1],width,3);
-    ridgeBeam([ x0,y0,z0],[-x1,y1,z1],width,3);
+    const width=bayIndex<3?0.0118:0.0102;
+    ridgeBeam([-x0,y0,z0],[ x1,y1,z1],width*1.28,3);
+    ridgeBeam([ x0,y0,z0],[-x1,y1,z1],width*1.28,3);
   }
 
   for(const y of [4.15,7.75,11.05]){
     const x=legX(y),z=legZ(y);
-    ridgeBeam([-x,y,z],[x,y,z],0.013,3);
+    ridgeBeam([-x,y,z],[x,y,z],0.017,3);
   }
 
-  ridgeBeam([-CLAMP_X,CLAMP_Y,CLAMP_Z],[CLAMP_X,CLAMP_Y,CLAMP_Z],0.018,3);
+  ridgeBeam([-CLAMP_X,CLAMP_Y,CLAMP_Z],[CLAMP_X,CLAMP_Y,CLAMP_Z],0.024,3);
   ridgeBeam(
     [-legX(UPPER_RING_Y),UPPER_RING_Y,legZ(UPPER_RING_Y)],
     [ legX(UPPER_RING_Y),UPPER_RING_Y,legZ(UPPER_RING_Y)],
-    0.009,3
+    0.012,3
   );
-  ridgeBeam([0,APEX_Y+0.17,0],[0,16.98,0],0.011,3);
+  ridgeBeam([0,APEX_Y+0.17,0],[0,16.98,0],0.014,3);
   ridgeBeam(
     [-BASE_FRAME_X,0.54,BASE_FRAME_Z],
     [ BASE_FRAME_X,0.54,BASE_FRAME_Z],
@@ -447,14 +448,14 @@
   // Small white lamps fixed to visible surround ends.
   for(const [y,radius] of [[4.15,0.082],[7.75,0.080],[11.05,0.078]]){
     const x=legX(y),z=legZ(y);
-    visibleLamp(-x,y,z,radius*1.56);
-    visibleLamp( x,y,z,radius*1.56);
+    visibleLamp(-x,y,z,radius*1.74);
+    visibleLamp( x,y,z,radius*1.74);
   }
 
-  visibleLamp(-CLAMP_X,CLAMP_Y,CLAMP_Z,0.148);
-  visibleLamp( CLAMP_X,CLAMP_Y,CLAMP_Z,0.148);
-  visibleLamp(-BASE_FRAME_X,0.56,BASE_FRAME_Z,0.164);
-  visibleLamp( BASE_FRAME_X,0.56,BASE_FRAME_Z,0.164);
+  visibleLamp(-CLAMP_X,CLAMP_Y,CLAMP_Z,0.168);
+  visibleLamp( CLAMP_X,CLAMP_Y,CLAMP_Z,0.168);
+  visibleLamp(-BASE_FRAME_X,0.56,BASE_FRAME_Z,0.182);
+  visibleLamp( BASE_FRAME_X,0.56,BASE_FRAME_Z,0.182);
 
   let ASSET_MIN_Y=Infinity;
   for(let index=1;index<positions.length;index+=3){
@@ -474,8 +475,8 @@
       distance:29.2
     },
     palettes:{
-      shell:["351000","7B2A00","C84B00","FFB018","FFE08A","FFFFFF","FFFFFF"],
-      ridge:["FF8700","FFD36A","FFFFFF","FFC43D"]
+      shell:["431500","8C3100","DB5600","FFBA22","FFE79A","FFFFFF","FFFFFF"],
+      ridge:["FF9200","FFDD78","FFFFFF","FFD057"]
     },
     effects:{
       emissive:true,
@@ -549,7 +550,7 @@
         // stretched version while preserving its visual prominence.
         const uniform=Math.min(
           vertical,
-          Math.sqrt(Math.max(0.000001,horizontal*vertical))*1.14
+          Math.sqrt(Math.max(0.000001,horizontal*vertical))*1.22
         );
         const position=[...(definition.position||[0,0,0])];
 
