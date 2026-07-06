@@ -515,17 +515,131 @@
     .other-tools { grid-template-columns: repeat(2,minmax(0,1fr)); }
     .form-grid.two, .comparison-grid { grid-template-columns: 1fr; }
   }
+
+
+  /* Complete identifier suite */
+  .category-strip {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+  }
+  .category-button {
+    flex: 0 0 62px;
+    min-width: 62px;
+    scroll-snap-align: start;
+  }
+  .status-line { display: flex; flex-wrap: wrap; gap: 4px; }
+  .status-chip {
+    padding: 3px 6px;
+    border-radius: 999px;
+    color: #40516b;
+    background: rgba(81,96,119,.09);
+    font-size: 6.5px;
+    font-weight: 850;
+  }
+  .status-chip.decoder { color: #075d60; background: rgba(13,133,135,.11); }
+  .status-chip.reference { color: #6b4b0a; background: rgba(215,140,0,.12); }
+  .status-chip.warning { color: #8d2f2f; background: rgba(181,38,43,.09); }
+  .tool-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 6px; }
+  .tool-card {
+    min-width: 0;
+    padding: 7px;
+    display: grid;
+    gap: 5px;
+    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 10px;
+    background: rgba(255,255,255,.8);
+  }
+  .tool-card h3 { margin: 0; font-size: 9px; font-weight: 920; }
+  .tool-card p { margin: 0; color: var(--id-muted); font-size: 7px; line-height: 1.35; }
+  .compact-note {
+    margin: 0;
+    padding: 6px 7px;
+    border-left: 3px solid rgba(215,140,0,.65);
+    border-radius: 7px;
+    color: #5d4a20;
+    background: rgba(255,248,226,.78);
+    font-size: 7px;
+    line-height: 1.35;
+  }
+  .compact-note.danger { border-left-color: rgba(181,38,43,.72); color: #7d2d31; background: rgba(255,240,241,.82); }
+  .input-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+  .input-actions .action-button { flex: 0 0 auto; }
+  .result-card output.wrap { white-space: normal; overflow-wrap: anywhere; }
+  .result-list { display: grid; gap: 5px; }
+  .result-row {
+    min-width: 0;
+    padding: 6px 7px;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto;
+    align-items: start;
+    gap: 7px;
+    border: 1px solid rgba(56,75,101,.13);
+    border-radius: 9px;
+    background: rgba(255,255,255,.82);
+  }
+  .result-row strong, .result-row small { display: block; }
+  .result-row strong { font-size: 8.5px; font-weight: 900; }
+  .result-row small { margin-top: 2px; color: var(--id-muted); font-size: 6.7px; line-height: 1.3; }
+  .result-row .score-pill { align-self: center; }
+  .pinout-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+  .pinout-tab {
+    flex: 0 0 auto;
+    min-height: 28px;
+    padding: 0 8px;
+    border: 1px solid rgba(56,75,101,.15);
+    border-radius: 8px;
+    color: #516077;
+    background: #f7f9fb;
+    font-size: 7px;
+    font-weight: 850;
+    cursor: pointer;
+  }
+  .pinout-tab[aria-selected="true"] { color: #fff; border-color: #1857b8; background: #1857b8; }
+  .pinout-card { display: grid; gap: 6px; }
+  .pinout-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7px; }
+  .pinout-table th, .pinout-table td { padding: 4px 5px; border-bottom: 1px solid rgba(56,75,101,.12); text-align: left; vertical-align: top; }
+  .pinout-table th { color: #40516b; background: rgba(81,96,119,.055); font-weight: 900; }
+  .pinout-table td:first-child, .pinout-table th:first-child { width: 38px; font-weight: 900; }
+  .package-card {
+    padding: 7px;
+    display: grid;
+    gap: 4px;
+    border: 1px solid rgba(56,75,101,.14);
+    border-radius: 10px;
+    background: rgba(255,255,255,.82);
+  }
+  .package-card strong { font-size: 9px; font-weight: 920; }
+  .package-card p { margin: 0; color: var(--id-muted); font-size: 7px; line-height: 1.35; }
+  .colour-band-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px; }
+  .photo-tool { display: grid; gap: 7px; }
+  .photo-tool input { width: 100%; min-height: 39px; padding: 6px; border: 1px dashed rgba(13,133,135,.45); border-radius: 9px; background: #effafa; font-size: 8px; }
+  .photo-preview { width: 100%; max-height: 280px; object-fit: contain; border-radius: 11px; background: #e8eef3; }
+  .inventory-strip { padding: 7px; display: grid; gap: 5px; }
+  .inventory-strip strong { font-size: 9px; font-weight: 920; }
+  .inventory-strip p { margin: 0; color: var(--id-muted); font-size: 7px; line-height: 1.35; }
+
+  @media (max-width: 365px) {
+    .category-strip { display: flex; grid-template-columns: none; }
+    .category-button { min-height: 48px; grid-template-columns: none; grid-template-rows: 24px auto; text-align: center; }
+    .tool-grid, .colour-band-grid { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
-<main class="phone" data-current-page="tools" data-page="tools" data-version="1.2.0-identifiers-complete-coax">
+<main class="phone" data-current-page="tools" data-page="tools" data-version="1.3.0-identifiers-complete-suite">
 <section aria-label="Identifiers and Decoders" class="id-content">
 <article class="id-page">
 
 <header class="id-hero">
   <div class="hero-copy">
     <h1>Identifiers &amp; Decoders</h1>
-    <div class="hero-meta"><strong>15 tools</strong><span>Components, cables, connectors and markings</span></div>
+    <div class="hero-meta"><strong>12 tools</strong><span>7 decoders · 4 references · photo viewer</span></div>
   </div>
   <button class="scan-button" id="openPhoto" type="button">
     <span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-scan.svg?v=1.0.0"></span>
@@ -552,24 +666,16 @@
 </section>
 
 <nav class="category-strip" aria-label="Identifier types">
-  <button class="category-button" data-tool="resistor" aria-selected="true" type="button">
-    <span class="category-mark svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span><span>Resistor</span>
-  </button>
-  <button class="category-button" data-tool="coax" aria-selected="false" type="button">
-    <span class="category-mark svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span><span>Coax</span>
-  </button>
-  <button class="category-button" data-tool="smd" aria-selected="false" type="button">
-    <span class="category-mark" style="--cat:#504097">103</span><span>SMD</span>
-  </button>
-  <button class="category-button" data-tool="connector" aria-selected="false" type="button">
-    <span class="category-mark" style="--cat:#0d8587">N</span><span>Connectors</span>
-  </button>
-  <button class="category-button" data-tool="markings" aria-selected="false" type="button">
-    <span class="category-mark" style="--cat:#d78c00">µF</span><span>Markings</span>
-  </button>
-  <button class="category-button" data-tool="pinouts" aria-selected="false" type="button">
-    <span class="category-mark" style="--cat:#b5262b">1↔8</span><span>Pinouts</span>
-  </button>
+  <button class="category-button" data-tool="resistor" aria-selected="true" type="button"><span class="category-mark svg-host" data-svg="./assets/icons/tools-resistor.svg?v=1.0.0"></span><span>Resistor</span></button>
+  <button class="category-button" data-tool="coax" aria-selected="false" type="button"><span class="category-mark svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=1.0.0"></span><span>Coax</span></button>
+  <button class="category-button" data-tool="smd" aria-selected="false" type="button"><span class="category-mark" style="--cat:#504097">103</span><span>SMD</span></button>
+  <button class="category-button" data-tool="capacitor" aria-selected="false" type="button"><span class="category-mark" style="--cat:#d78c00">µF</span><span>Capacitor</span></button>
+  <button class="category-button" data-tool="inductor" aria-selected="false" type="button"><span class="category-mark" style="--cat:#1857b8">L</span><span>Inductor</span></button>
+  <button class="category-button" data-tool="fuse" aria-selected="false" type="button"><span class="category-mark" style="--cat:#b5262b">F</span><span>Fuse</span></button>
+  <button class="category-button" data-tool="semiconductor" aria-selected="false" type="button"><span class="category-mark" style="--cat:#536078">Q</span><span>Semiconductor</span></button>
+  <button class="category-button" data-tool="connector" aria-selected="false" type="button"><span class="category-mark" style="--cat:#0d8587">RF</span><span>Connector</span></button>
+  <button class="category-button" data-tool="pinouts" aria-selected="false" type="button"><span class="category-mark" style="--cat:#b5262b">1↔8</span><span>Pinouts</span></button>
+  <button class="category-button" data-tool="photo" aria-selected="false" type="button"><span class="category-mark svg-host" data-svg="./assets/icons/tools-scan.svg?v=1.0.0"></span><span>Photo</span></button>
 </nav>
 
 <section class="workspace surface" aria-live="polite">
@@ -713,63 +819,171 @@
   </div>
 
   <div class="tool-panel" data-panel="smd" hidden>
+    <div class="status-line"><span class="status-chip decoder">Working decoder</span><span class="status-chip">3/4 digit · R · EIA-96</span></div>
     <div class="smd-stage">
       <div class="smd-chip" id="smdChip">103</div>
       <div class="control-stack">
-        <div class="control-row"><label for="smdCode">Code</label><input id="smdCode" value="103" maxlength="6" inputmode="text" autocomplete="off"/></div>
+        <div class="field"><label for="smdCode">Printed code</label><input id="smdCode" value="103" maxlength="8" inputmode="text" autocomplete="off" placeholder="103, 1002, 4R7, 01C"></div>
+        <div class="input-actions"><button class="action-button primary" id="decodeSmdButton" type="button">Decode</button><button class="action-button" id="clearSmdButton" type="button">Clear</button></div>
         <div class="result-card"><small>Decoded value</small><output id="smdResult">10 kΩ</output><p id="smdDetail">Three-digit code: 10 × 10³ Ω.</p></div>
         <div class="spec-grid"><div class="spec"><small>Format</small><strong id="smdFormat">3 digit</strong></div><div class="spec"><small>Raw ohms</small><strong id="smdOhms">10,000 Ω</strong></div></div>
       </div>
     </div>
+    <p class="compact-note">EIA-96 uses a two-digit value code plus a multiplier letter. Ambiguous letters such as O are rejected rather than guessed.</p>
+  </div>
+
+  <div class="tool-panel" data-panel="capacitor" hidden>
+    <div class="status-line"><span class="status-chip decoder">Working decoder</span><span class="status-chip">Value · tolerance · explicit voltage</span></div>
+    <div class="tool-grid">
+      <div class="control-stack">
+        <div class="field"><label for="capacitorCode">Body marking</label><input id="capacitorCode" value="104K 50V" maxlength="28" autocomplete="off" placeholder="104K 50V, 4n7J, 0.1uF"></div>
+        <div class="field"><label for="capacitorType">Construction</label><select id="capacitorType"><option value="unknown">Unknown</option><option value="ceramic">Ceramic</option><option value="film">Film</option><option value="electrolytic">Aluminium electrolytic</option><option value="tantalum">Tantalum electrolytic</option></select></div>
+        <div class="input-actions"><button class="action-button primary" id="decodeCapacitorButton" type="button">Decode</button><button class="action-button" id="clearCapacitorButton" type="button">Clear</button></div>
+      </div>
+      <div class="control-stack">
+        <div class="result-card"><small>Decoded capacitance</small><output class="wrap" id="capacitorResult">100 nF</output><p id="capacitorDetail">104 = 10 × 10⁴ pF.</p></div>
+        <div class="spec-grid"><div class="spec"><small>pF</small><strong id="capacitorPf">100,000 pF</strong></div><div class="spec"><small>nF</small><strong id="capacitorNf">100 nF</strong></div><div class="spec"><small>µF</small><strong id="capacitorUf">0.1 µF</strong></div><div class="spec"><small>Tolerance / voltage</small><strong id="capacitorExtra">±10% · 50 V</strong></div></div>
+      </div>
+    </div>
+    <p class="compact-note" id="capacitorGuidance">Ceramic and film capacitors are normally non-polar. Electrolytic polarity markings must be checked before power is applied.</p>
+  </div>
+
+  <div class="tool-panel" data-panel="inductor" hidden>
+    <div class="status-line"><span class="status-chip decoder">Working decoder</span><span class="status-chip">Printed and colour-band codes</span></div>
+    <div class="tool-grid">
+      <div class="control-stack">
+        <div class="field"><label for="inductorCode">Printed code</label><input id="inductorCode" value="4R7J" maxlength="10" autocomplete="off" placeholder="101, 1001, 4R7J"></div>
+        <div class="input-actions"><button class="action-button primary" id="decodeInductorButton" type="button">Decode printed</button><button class="action-button" id="clearInductorButton" type="button">Clear</button></div>
+        <div class="result-card"><small>Printed-code result</small><output id="inductorResult">4.7 µH ±5%</output><p id="inductorDetail">R marks the decimal point in microhenries.</p></div>
+      </div>
+      <div class="control-stack">
+        <strong style="font-size:9px">Colour-band inductor</strong>
+        <div class="colour-band-grid">
+          <div class="field"><label for="inductorBand1">Band 1</label><select id="inductorBand1"></select></div>
+          <div class="field"><label for="inductorBand2">Band 2</label><select id="inductorBand2"></select></div>
+          <div class="field"><label for="inductorMultiplier">Multiplier</label><select id="inductorMultiplier"></select></div>
+          <div class="field"><label for="inductorTolerance">Tolerance</label><select id="inductorTolerance"></select></div>
+        </div>
+        <div class="result-card"><small>Colour-band result</small><output id="inductorColourResult">47 µH ±10%</output><p id="inductorColourDetail">Yellow · Violet · Black · Silver.</p></div>
+      </div>
+    </div>
+    <div class="spec-grid"><div class="spec"><small>nH</small><strong id="inductorNh">4,700 nH</strong></div><div class="spec"><small>µH</small><strong id="inductorUh">4.7 µH</strong></div><div class="spec"><small>mH</small><strong id="inductorMh">0.0047 mH</strong></div><div class="spec"><small>Convention</small><strong>Printed values default to µH</strong></div></div>
+    <p class="compact-note">Some miniature RF inductors use package-specific or nanohenry conventions. Confirm the datasheet when the physical size conflicts with the decoded value.</p>
+  </div>
+
+  <div class="tool-panel" data-panel="fuse" hidden>
+    <div class="status-line"><span class="status-chip decoder">Practical marking decoder</span><span class="status-chip warning">Unrecognised codes are not guessed</span></div>
+    <div class="tool-grid">
+      <div class="control-stack">
+        <div class="field"><label for="fuseCode">Fuse marking</label><input id="fuseCode" value="T2AH250V" maxlength="32" autocomplete="off" placeholder="T2AH250V, F500mA 250V, FF1A"></div>
+        <div class="field"><label for="fuseConstruction">Visible construction</label><select id="fuseConstruction"><option value="unknown">Unknown</option><option value="glass">Glass body</option><option value="ceramic">Ceramic body</option><option value="other">Other / enclosed</option></select></div>
+        <div class="input-actions"><button class="action-button primary" id="decodeFuseButton" type="button">Decode</button><button class="action-button" id="clearFuseButton" type="button">Clear</button></div>
+      </div>
+      <div class="control-stack">
+        <div class="result-card"><small>Interpreted marking</small><output class="wrap" id="fuseResult">Time-delay · 2 A · 250 V</output><p id="fuseDetail">H indicates high breaking capacity in this standard marking pattern.</p></div>
+        <div class="spec-grid"><div class="spec"><small>Speed</small><strong id="fuseSpeed">Time-delay</strong></div><div class="spec"><small>Current</small><strong id="fuseCurrent">2 A</strong></div><div class="spec"><small>Voltage</small><strong id="fuseVoltage">250 V</strong></div><div class="spec"><small>Breaking capacity</small><strong id="fuseBreaking">High</strong></div></div>
+      </div>
+    </div>
+    <p class="compact-note danger" id="fuseWarning">Never substitute a fuse on current rating alone. Match speed, voltage, breaking capacity, physical size and applicable equipment standard.</p>
+  </div>
+
+  <div class="tool-panel" data-panel="semiconductor" hidden>
+    <div class="status-line"><span class="status-chip reference">Reference only</span><span class="status-chip warning">No universal transistor/regulator pinout</span></div>
+    <div class="field"><label for="semiconductorType">Device or package</label><select id="semiconductorType"><option value="diode">Axial / SMD diode</option><option value="led">LED</option><option value="bridge">Bridge rectifier</option><option value="to92">TO-92</option><option value="to220">TO-220</option><option value="to247">TO-247</option><option value="sot23">SOT-23</option><option value="regulator">Regulator / transistor lookup</option></select></div>
+    <div class="package-card"><strong id="semiconductorTitle">Diode polarity</strong><p id="semiconductorBody">A painted band normally marks the cathode on common rectifier and signal diodes. SMD packages may use a bar, dot or package-specific symbol.</p></div>
+    <div class="tool-grid">
+      <div class="tool-card"><h3>Orientation rule</h3><p id="semiconductorOrientation">Read the body marking with the package drawing. Board silkscreen symbols are not always drawn from the same viewing side.</p></div>
+      <div class="tool-card"><h3>Mandatory check</h3><p id="semiconductorWarning">Confirm the exact part-number datasheet before energising the circuit.</p></div>
+    </div>
   </div>
 
   <div class="tool-panel" data-panel="connector" hidden>
-    <div class="connector-grid" id="connectorChoices">
-      <button class="choice-card" data-connector="bnc" aria-pressed="true" type="button">BNC</button>
-      <button class="choice-card" data-connector="n" aria-pressed="false" type="button">N type</button>
-      <button class="choice-card" data-connector="tnc" aria-pressed="false" type="button">TNC</button>
-      <button class="choice-card" data-connector="sma" aria-pressed="false" type="button">SMA</button>
-      <button class="choice-card" data-connector="f" aria-pressed="false" type="button">F type</button>
-      <button class="choice-card" data-connector="uhf" aria-pressed="false" type="button">UHF / PL-259</button>
+    <div class="status-line"><span class="status-chip decoder">Physical-clue identifier</span><span class="status-chip">Ranked likely matches</span></div>
+    <div class="form-grid two">
+      <div class="field"><label for="connectorCouplingInput">Coupling</label><select id="connectorCouplingInput"><option value="unknown">Unknown</option><option value="threaded">Threaded</option><option value="bayonet">Bayonet</option><option value="push-on">Push-on / friction</option><option value="snap">Snap-on</option></select></div>
+      <div class="field"><label for="connectorDiameterInput">Approx. outer diameter (mm)</label><input id="connectorDiameterInput" type="number" inputmode="decimal" min="0" step="0.1" value="14.5" placeholder="14.5"></div>
+      <div class="field"><label for="connectorBodyInput">Body sex</label><select id="connectorBodyInput"><option value="unknown">Unknown</option><option value="male">Male / plug body</option><option value="female">Female / jack body</option></select></div>
+      <div class="field"><label for="connectorContactInput">Centre contact</label><select id="connectorContactInput"><option value="unknown">Unknown</option><option value="male">Male pin</option><option value="female">Female socket</option></select></div>
+      <div class="field"><label for="connectorImpedanceInput">Geometry</label><select id="connectorImpedanceInput"><option value="unknown">Unknown</option><option value="50">50 Ω</option><option value="75">75 Ω</option></select></div>
+      <div class="field"><label for="connectorMountInput">Mounting</label><select id="connectorMountInput"><option value="unknown">Unknown</option><option value="cable">Cable</option><option value="panel">Panel / bulkhead</option><option value="flange">Flange</option><option value="pcb">PCB</option></select></div>
+      <div class="field"><label for="connectorRpInput">Reverse polarity</label><select id="connectorRpInput"><option value="unknown">Unknown</option><option value="no">No / standard</option><option value="yes">Yes / centre contact reversed</option></select></div>
     </div>
-    <div class="spec-grid">
-      <div class="spec"><small>Impedance</small><strong id="connectorImpedance">50 or 75 Ω</strong></div>
-      <div class="spec"><small>Coupling</small><strong id="connectorCoupling">Bayonet</strong></div>
-      <div class="spec"><small>Typical ceiling</small><strong id="connectorFrequency">4 GHz</strong></div>
-      <div class="spec"><small>Common use</small><strong id="connectorUse">Test and broadcast</strong></div>
-    </div>
-    <div class="result-card"><small>Selected connector</small><output id="connectorName">BNC</output><p id="connectorNotes">Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical.</p></div>
-  </div>
-
-  <div class="tool-panel" data-panel="markings" hidden>
-    <div class="result-card"><small>Marking tools</small><output>Components</output><p>Capacitor, inductor, fuse and semiconductor marking references.</p></div>
-    <div class="other-tools">
-      <a class="other-tool surface" href="./calculator-library.html?search=capacitor"><span class="other-icon" style="--tool:#d78c00">µF</span><span class="other-copy"><strong>Capacitor markings</strong><small>Three-digit and tolerance codes</small></span></a>
-      <a class="other-tool surface" href="./calculator-library.html?search=inductor"><span class="other-icon" style="--tool:#1857b8">L</span><span class="other-copy"><strong>Inductor codes</strong><small>Colour and printed markings</small></span></a>
-      <a class="other-tool surface" href="./calculator-library.html?search=fuse"><span class="other-icon" style="--tool:#b5262b">F</span><span class="other-copy"><strong>Fuse codes</strong><small>Speed, current and voltage marks</small></span></a>
-    </div>
+    <div class="input-actions"><button class="action-button primary" id="identifyConnectorButton" type="button">Rank matches</button><button class="action-button" id="clearConnectorButton" type="button">Clear</button></div>
+    <div class="result-card"><small>Most likely</small><output class="wrap" id="connectorName">BNC</output><p id="connectorNotes">Bayonet coupling and roughly 14.5 mm body diameter are strong BNC clues.</p></div>
+    <div class="spec-grid"><div class="spec"><small>Impedance</small><strong id="connectorImpedance">50 or 75 Ω</strong></div><div class="spec"><small>Coupling</small><strong id="connectorCoupling">Bayonet</strong></div><div class="spec"><small>Typical use</small><strong id="connectorUse">Test and broadcast</strong></div><div class="spec"><small>Key distinction</small><strong id="connectorDistinction">Two bayonet lugs</strong></div></div>
+    <div class="result-list" id="connectorCandidateList"></div>
   </div>
 
   <div class="tool-panel" data-panel="pinouts" hidden>
-    <div class="result-card"><small>Pinout references</small><output>Ports &amp; cables</output><p>Compact wiring references for common field connectors and data cables.</p></div>
-    <div class="other-tools">
-      <a class="other-tool surface" href="./calculator-library.html?search=ethernet"><span class="other-icon" style="--tool:#0d8587">RJ</span><span class="other-copy"><strong>Ethernet pinout</strong><small>T568A, T568B and pair colours</small></span></a>
-      <a class="other-tool surface" href="./calculator-library.html?search=usb"><span class="other-icon" style="--tool:#504097">USB</span><span class="other-copy"><strong>USB pinouts</strong><small>A, B, Micro and USB-C basics</small></span></a>
-      <a class="other-tool surface" href="./calculator-library.html?search=d-sub"><span class="other-icon" style="--tool:#b5262b">D</span><span class="other-copy"><strong>D-sub pinouts</strong><small>Common serial and equipment ports</small></span></a>
+    <div class="status-line"><span class="status-chip reference">Embedded references</span><span class="status-chip">Confirm viewing orientation</span></div>
+    <div class="pinout-tabs" role="tablist" aria-label="Pinout references">
+      <button class="pinout-tab" data-pinout="ethernet" aria-selected="true" type="button">Ethernet</button>
+      <button class="pinout-tab" data-pinout="usb" aria-selected="false" type="button">USB</button>
+      <button class="pinout-tab" data-pinout="serial" aria-selected="false" type="button">RS-232</button>
+    </div>
+    <section class="pinout-card" data-pinout-panel="ethernet">
+      <p class="compact-note">RJ45 plug: with contacts facing you and the cable exiting away, pin 1 is at the left. Jacks and rear punch-down blocks may appear mirrored.</p>
+      <table class="pinout-table"><thead><tr><th>Pin</th><th>T568A</th><th>T568B</th></tr></thead><tbody>
+        <tr><td>1</td><td>White/Green</td><td>White/Orange</td></tr><tr><td>2</td><td>Green</td><td>Orange</td></tr><tr><td>3</td><td>White/Orange</td><td>White/Green</td></tr><tr><td>4</td><td>Blue</td><td>Blue</td></tr><tr><td>5</td><td>White/Blue</td><td>White/Blue</td></tr><tr><td>6</td><td>Orange</td><td>Green</td></tr><tr><td>7</td><td>White/Brown</td><td>White/Brown</td></tr><tr><td>8</td><td>Brown</td><td>Brown</td></tr>
+      </tbody></table>
+    </section>
+    <section class="pinout-card" data-pinout-panel="usb" hidden>
+      <div class="tool-grid">
+        <div class="tool-card"><h3>USB-A / USB-B</h3><p>1 VBUS +5 V · 2 D− · 3 D+ · 4 GND. Shell is shield. Connector drawings must state whether the view is mating face or solder side.</p></div>
+        <div class="tool-card"><h3>Micro-USB</h3><p>1 VBUS · 2 D− · 3 D+ · 4 ID · 5 GND. ID is normally unused on a Micro-B receptacle.</p></div>
+      </div>
+      <div class="tool-card"><h3>USB-C basics</h3><p>VBUS: A4/A9/B4/B9. GND: A1/A12/B1/B12. USB 2 D+: A6/B6; D−: A7/B7. CC1 A5 and CC2 B5 determine orientation and power role. Do not wire higher voltages without USB Power Delivery negotiation.</p></div>
+    </section>
+    <section class="pinout-card" data-pinout-panel="serial" hidden>
+      <div class="tool-grid">
+        <div><strong style="font-size:9px">DE-9 RS-232 DTE</strong><table class="pinout-table"><tbody><tr><td>1</td><td>DCD</td></tr><tr><td>2</td><td>RXD</td></tr><tr><td>3</td><td>TXD</td></tr><tr><td>4</td><td>DTR</td></tr><tr><td>5</td><td>Signal GND</td></tr><tr><td>6</td><td>DSR</td></tr><tr><td>7</td><td>RTS</td></tr><tr><td>8</td><td>CTS</td></tr><tr><td>9</td><td>RI</td></tr></tbody></table></div>
+        <div><strong style="font-size:9px">DB-25 RS-232 DTE common</strong><table class="pinout-table"><tbody><tr><td>1</td><td>Protective GND</td></tr><tr><td>2</td><td>TXD</td></tr><tr><td>3</td><td>RXD</td></tr><tr><td>4</td><td>RTS</td></tr><tr><td>5</td><td>CTS</td></tr><tr><td>6</td><td>DSR</td></tr><tr><td>7</td><td>Signal GND</td></tr><tr><td>8</td><td>DCD</td></tr><tr><td>20</td><td>DTR</td></tr><tr><td>22</td><td>RI</td></tr></tbody></table></div>
+      </div>
+      <p class="compact-note">DTE/DCE direction and connector-view orientation matter. Equipment may use non-standard D-sub wiring; verify the manual before connecting.</p>
+    </section>
+  </div>
+
+  <div class="tool-panel" data-panel="photo" hidden>
+    <div class="status-line"><span class="status-chip reference">Manual photo reference</span><span class="status-chip warning">No automatic recognition</span></div>
+    <div class="photo-tool">
+      <p class="compact-note">Take or choose a photo and keep it visible while using the manual decoders. No model or image-recognition API is used.</p>
+      <input id="photoInput" type="file" accept="image/*" capture="environment">
+      <img id="photoPreview" class="photo-preview" alt="Selected component reference" hidden>
+      <button class="action-button" id="clearPhotoButton" type="button">Clear photo</button>
     </div>
   </div>
 </section>
 
-<section id="photoPanel" class="photo-panel surface" hidden>
-  <div class="section-bar"><h2>Photo reference</h2><button id="closePhoto" class="action-button" type="button">Close</button></div>
-  <input id="photoInput" type="file" accept="image/*" capture="environment"/>
-  <img id="photoPreview" class="photo-preview" alt="Selected component reference" hidden/>
+<section class="inventory-strip surface" aria-label="Implementation status">
+  <strong>Implementation status</strong>
+  <p><b>Decoders/identifiers:</b> resistor bands, coax, SMD resistor, capacitor, inductor, fuse and RF connector. <b>References:</b> semiconductor packages/polarity, Ethernet, USB and RS-232. <b>Viewer:</b> manual photo reference only.</p>
 </section>
 
 </article>
 </section>
 </main>
 
+<script>
+window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
+window.FieldOpsSearchQueue.push({
+  page: "tools",
+  label: "Identifiers & Decoders",
+  placeholder: "Search identifiers...",
+  emptyText: "No identifiers found.",
+  items: [
+    { id:"identifier-resistor", title:"Resistor colour code", subtitle:"4, 5 and 6 band decoder", href:"./identifiers.html?tool=resistor", keywords:["resistor","colour","color","bands","ohms"] },
+    { id:"identifier-coax", title:"Coax cable identifier", subtitle:"Measurements, geometry and ranked candidates", href:"./identifiers.html?tool=coax", keywords:["coax","cable","impedance","triax","twinax","hardline"] },
+    { id:"identifier-smd", title:"SMD resistor code", subtitle:"3/4 digit, R and EIA-96", href:"./identifiers.html?tool=smd", keywords:["smd","eia96","103","resistor"] },
+    { id:"identifier-capacitor", title:"Capacitor markings", subtitle:"Value, tolerance and explicit voltage", href:"./identifiers.html?tool=capacitor", keywords:["capacitor","pf","nf","uf","104"] },
+    { id:"identifier-inductor", title:"Inductor markings", subtitle:"Printed and colour-band codes", href:"./identifiers.html?tool=inductor", keywords:["inductor","uh","mh","colour band"] },
+    { id:"identifier-fuse", title:"Fuse markings", subtitle:"Speed, current, voltage and breaking capacity", href:"./identifiers.html?tool=fuse", keywords:["fuse","fast","time delay","hbc"] },
+    { id:"identifier-semiconductor", title:"Semiconductor reference", subtitle:"Polarity, packages and orientation", href:"./identifiers.html?tool=semiconductor", keywords:["diode","led","bridge","to92","to220","sot23"] },
+    { id:"identifier-connectors", title:"RF connector identifier", subtitle:"Rank by physical clues", href:"./identifiers.html?tool=connector", keywords:["bnc","tnc","n type","sma","rp-sma","din","4.3-10"] },
+    { id:"identifier-pinouts", title:"Pinout references", subtitle:"Ethernet, USB and RS-232", href:"./identifiers.html?tool=pinouts", keywords:["pinout","ethernet","usb","rs232","de9","db25"] },
+    { id:"identifier-photo", title:"Photo reference viewer", subtitle:"Manual visual comparison", href:"./identifiers.html?tool=photo", keywords:["photo","camera","reference"] }
+  ]
+});
+</script>
 <script>
 (() => {
   "use strict";
@@ -795,15 +1009,20 @@
   const resistorModes = document.getElementById("resistorModes");
   const coaxModes = document.getElementById("coaxModes");
   const titles = {
-    resistor: ["Resistor colour code", "Select the bands to decode the resistance."],
-    coax: ["Coax cable identifier", "Identify from measurements or browse known cable families."],
-    smd: ["SMD resistor code", "Decode common three-digit, four-digit and R notation."],
-    connector: ["RF connector reference", "Compare common coupling, impedance and frequency ranges."],
-    markings: ["Component markings", "Open capacitor, inductor and fuse references."],
-    pinouts: ["Pinout references", "Open common port and cable wiring references."]
+    resistor: ["Resistor colour code", "Select 4, 5 or 6 bands to decode resistance."],
+    coax: ["Coax cable identifier", "Identify from measurements or browse the preserved cable database."],
+    smd: ["SMD resistor code", "Decode 3/4 digit, R notation, zero links and EIA-96."],
+    capacitor: ["Capacitor markings", "Decode value, tolerance and safely explicit voltage markings."],
+    inductor: ["Inductor markings", "Decode printed values and colour-band inductors."],
+    fuse: ["Fuse markings", "Interpret common speed, current, voltage and breaking-capacity marks."],
+    semiconductor: ["Semiconductor reference", "Check polarity and package orientation without assuming pinouts."],
+    connector: ["RF connector identifier", "Rank likely families from coupling, size, contacts and mounting."],
+    pinouts: ["Pinout references", "Ethernet, USB and common RS-232 wiring."],
+    photo: ["Photo reference", "Manual image viewer; no automatic recognition is claimed."]
   };
 
   const selectTool = (tool, updateUrl = false) => {
+    if (!titles[tool]) tool = "resistor";
     categoryButtons.forEach((button) => button.setAttribute("aria-selected", String(button.dataset.tool === tool)));
     panels.forEach((panel) => { panel.hidden = panel.dataset.panel !== tool; });
     const title = titles[tool] || titles.resistor;
@@ -886,8 +1105,9 @@
     const digits = bandCount >= 5 ? Number(`${band1.value}${band2.value}${band3.value}`) : Number(`${band1.value}${band2.value}`);
     const ohms = digits * Number(multiplier.value);
     const tol = byValue(tolerances, tolerance.value);
-    const selected = [byDigit(band1.value), byDigit(band2.value), ...(bandCount >= 5 ? [byDigit(band3.value)] : []), byValue(multipliers, multiplier.value), tol, ...(bandCount === 6 ? [byValue(tempcos, tempco.value)] : [])];
-    resistorResult.textContent = `${formatResistance(ohms)} ±${tol.value}%`;
+    const tc = bandCount === 6 ? byValue(tempcos, tempco.value) : null;
+    const selected = [byDigit(band1.value), byDigit(band2.value), ...(bandCount >= 5 ? [byDigit(band3.value)] : []), byValue(multipliers, multiplier.value), tol, ...(tc ? [tc] : [])];
+    resistorResult.textContent = `${formatResistance(ohms)} ±${tol.value}%${tc ? ` · ${tc.value} ppm/K` : ""}`;
     resistorDetail.textContent = selected.map((item) => item.name.split(" ±")[0].split(" ")[0]).join(" · ");
     bandPreview.replaceChildren(...selected.map((item) => {
       const band = document.createElement("span");
@@ -1216,69 +1436,311 @@
   };
   document.querySelectorAll("[data-coax-mode]").forEach((button)=>button.addEventListener("click",()=>setCoaxMode(button.dataset.coaxMode,true)));
 
-  const smdCode = document.getElementById("smdCode");
+  const superscripts = ["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"];
+  const normaliseCode = (value) => String(value || "").trim().toUpperCase().replace(/[µμ]/g,"U").replace(/\s+/g," ");
+
+  const e96Values = [100,102,105,107,110,113,115,118,121,124,127,130,133,137,140,143,147,150,154,158,162,165,169,174,178,182,187,191,196,200,205,210,215,221,226,232,237,243,249,255,261,267,274,280,287,294,301,309,316,324,332,340,348,357,365,374,383,392,402,412,422,432,442,453,464,475,487,499,511,523,536,549,562,576,590,604,619,634,649,665,681,698,715,732,750,768,787,806,825,845,866,887,909,931,953,976];
+  const e96Multipliers = {Z:.001,Y:.01,R:.01,X:.1,S:.1,A:1,B:10,H:10,C:100,D:1000,E:10000,F:100000};
   const decodeSmd = (raw) => {
-    const code = raw.trim().toUpperCase();
-    if (/^\d{3}$/.test(code)) return { ohms:Number(code.slice(0,2)) * 10 ** Number(code[2]), format:"3 digit", detail:`${Number(code.slice(0,2))} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][Number(code[2])]} Ω.` };
-    if (/^\d{4}$/.test(code)) return { ohms:Number(code.slice(0,3)) * 10 ** Number(code[3]), format:"4 digit", detail:`${Number(code.slice(0,3))} × 10${["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"][Number(code[3])]} Ω.` };
-    if (/^\d*R\d*$/.test(code) && code !== "R") return { ohms:Number(code.replace("R",".")), format:"R notation", detail:"R marks the decimal point in ohms." };
-    return null;
+    const code = normaliseCode(raw).replace(/\s/g,"");
+    if (!code) return {error:"Enter an SMD code."};
+    if (/^(?:0|00|000|0000|0R0|R0|0R)$/.test(code)) return {ohms:0,format:"Zero-ohm link",detail:"Zero marking indicates a jumper / zero-ohm link."};
+    if (/^\d{3}$/.test(code)) {
+      const sig = Number(code.slice(0,2)); const power = Number(code[2]);
+      return {ohms:sig * 10 ** power,format:"3 digit",detail:`${sig} × 10${superscripts[power]} Ω.`};
+    }
+    if (/^\d{4}$/.test(code)) {
+      const sig = Number(code.slice(0,3)); const power = Number(code[3]);
+      return {ohms:sig * 10 ** power,format:"4 digit",detail:`${sig} × 10${superscripts[power]} Ω.`};
+    }
+    if (/^(?:\d+R\d*|\d*R\d+)$/.test(code)) {
+      const ohms = Number(code.replace("R","."));
+      return Number.isFinite(ohms) ? {ohms,format:"R notation",detail:"R marks the decimal point in ohms."} : {error:"Invalid R-notation code."};
+    }
+    const eia = code.match(/^(\d{2})([A-Z])$/);
+    if (eia) {
+      const index = Number(eia[1]); const multiplier = e96Multipliers[eia[2]];
+      if (index < 1 || index > 96) return {error:"EIA-96 value must be from 01 to 96."};
+      if (multiplier === undefined) return {error:`${eia[2]} is not a recognised EIA-96 multiplier letter.`};
+      const base = e96Values[index - 1];
+      return {ohms:base * multiplier,format:"EIA-96",detail:`EIA-96 ${eia[1]} = ${base}; ${eia[2]} multiplier = ×${multiplier}.`};
+    }
+    return {error:"Unrecognised or ambiguous code. Use 103, 1002, 4R7, a zero code, or EIA-96 such as 01C."};
   };
+  const smdCode = document.getElementById("smdCode");
   const updateSmd = () => {
-    const code = smdCode.value.trim().toUpperCase().slice(0,6);
+    const code = normaliseCode(smdCode.value).replace(/\s/g,"").slice(0,8);
     smdCode.value = code;
     document.getElementById("smdChip").textContent = code || "—";
     const decoded = decodeSmd(code);
-    if (!decoded || !Number.isFinite(decoded.ohms)) {
-      document.getElementById("smdResult").textContent = "Unknown";
-      document.getElementById("smdDetail").textContent = "Enter 103, 1002 or an R notation such as 4R7.";
+    if (decoded.error || !Number.isFinite(decoded.ohms)) {
+      document.getElementById("smdResult").textContent = code ? "Not identified" : "Enter code";
+      document.getElementById("smdDetail").textContent = decoded.error || "Enter a code.";
       document.getElementById("smdFormat").textContent = "—";
       document.getElementById("smdOhms").textContent = "—";
-      return;
+      return decoded;
     }
     document.getElementById("smdResult").textContent = formatResistance(decoded.ohms);
     document.getElementById("smdDetail").textContent = decoded.detail;
     document.getElementById("smdFormat").textContent = decoded.format;
-    document.getElementById("smdOhms").textContent = `${decoded.ohms.toLocaleString(undefined,{maximumFractionDigits:3})} Ω`;
+    document.getElementById("smdOhms").textContent = `${decoded.ohms.toLocaleString(undefined,{maximumFractionDigits:6})} Ω`;
+    return decoded;
   };
-  smdCode.addEventListener("input", updateSmd);
+  smdCode.addEventListener("input",updateSmd);
+  document.getElementById("decodeSmdButton").addEventListener("click",updateSmd);
+  document.getElementById("clearSmdButton").addEventListener("click",()=>{ smdCode.value=""; updateSmd(); smdCode.focus(); });
   updateSmd();
 
-  const connectors = {
-    bnc: { name:"BNC", impedance:"50 or 75 Ω", coupling:"Bayonet", frequency:"4 GHz", use:"Test and broadcast", notes:"Quick bayonet coupling. Check the centre contact and dielectric because 50 Ω and 75 Ω versions are not identical." },
-    n: { name:"N type", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz+", use:"Outdoor RF feeders", notes:"Weather-resistant threaded RF connector widely used on base-station, antenna and feeder systems." },
-    tnc: { name:"TNC", impedance:"50 Ω", coupling:"Threaded", frequency:"11 GHz", use:"Vibration-resistant RF", notes:"Threaded relative of BNC. Used where vibration or environmental sealing matters." },
-    sma: { name:"SMA", impedance:"50 Ω", coupling:"Threaded", frequency:"18 GHz+", use:"Microwave and modules", notes:"Compact precision RF connector. Avoid excessive torque and repeated rough mating." },
-    f: { name:"F type", impedance:"75 Ω", coupling:"Threaded", frequency:"3 GHz", use:"TV and satellite", notes:"Uses the cable centre conductor as the contact. Common on 75 Ω receive and satellite systems." },
-    uhf: { name:"UHF / PL-259", impedance:"Non-constant", coupling:"Threaded", frequency:"~300 MHz", use:"HF and low VHF", notes:"Robust legacy connector. Not constant impedance, so it is unsuitable for precision microwave work." }
+  const capacitorTolerance = {
+    B:"±0.1 pF", C:"±0.25 pF", D:"±0.5 pF", F:"±1%", G:"±2%", J:"±5%", K:"±10%", M:"±20%", Z:"+80/−20%"
   };
-  document.querySelectorAll("[data-connector]").forEach((button) => button.addEventListener("click", () => {
-    const item = connectors[button.dataset.connector];
-    document.querySelectorAll("[data-connector]").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
-    document.getElementById("connectorName").textContent = item.name;
-    document.getElementById("connectorImpedance").textContent = item.impedance;
-    document.getElementById("connectorCoupling").textContent = item.coupling;
-    document.getElementById("connectorFrequency").textContent = item.frequency;
-    document.getElementById("connectorUse").textContent = item.use;
-    document.getElementById("connectorNotes").textContent = item.notes;
-  }));
-
-  const photoPanel = document.getElementById("photoPanel");
-  document.getElementById("openPhoto").addEventListener("click", () => { photoPanel.hidden = false; photoPanel.scrollIntoView({ behavior:"smooth", block:"start" }); });
-  document.getElementById("closePhoto").addEventListener("click", () => { photoPanel.hidden = true; });
-  document.getElementById("photoInput").addEventListener("change", (event) => {
-    const file = event.target.files && event.target.files[0];
-    const preview = document.getElementById("photoPreview");
-    if (!file) { preview.hidden = true; return; }
-    preview.src = URL.createObjectURL(file);
-    preview.hidden = false;
+  const formatCapacitance = (pf) => ({
+    pf:`${pf.toLocaleString(undefined,{maximumFractionDigits:6})} pF`,
+    nf:`${(pf/1e3).toLocaleString(undefined,{maximumFractionDigits:6})} nF`,
+    uf:`${(pf/1e6).toLocaleString(undefined,{maximumFractionDigits:6})} µF`,
+    primary: pf >= 1e6 ? `${(pf/1e6).toLocaleString(undefined,{maximumFractionDigits:6})} µF` : pf >= 1e3 ? `${(pf/1e3).toLocaleString(undefined,{maximumFractionDigits:6})} nF` : `${pf.toLocaleString(undefined,{maximumFractionDigits:6})} pF`
   });
+  const decodeCapacitor = (raw) => {
+    let code = normaliseCode(raw);
+    if (!code) return {error:"Enter a capacitor marking."};
+    let voltage = null;
+    const voltageMatch = code.match(/(?:^|\s)(\d+(?:\.\d+)?)\s*(K?V(?:DC)?|WV)(?=\s|$)/);
+    if (voltageMatch) {
+      voltage = Number(voltageMatch[1]) * (voltageMatch[2].startsWith("KV") ? 1000 : 1);
+      code = (code.slice(0,voltageMatch.index) + " " + code.slice(voltageMatch.index + voltageMatch[0].length)).trim();
+    }
+    code = code.replace(/\s+/g,"");
+    if (/[PNU]F$/.test(code)) code = code.slice(0,-1);
+    let tolerance = null;
+    const tolMatch = code.match(/([BCDFGJKMZ])$/);
+    if (tolMatch) { tolerance = capacitorTolerance[tolMatch[1]]; code = code.slice(0,-1); }
+    let pf = null; let detail = ""; let confidence = "direct";
+    if (/^\d{3}$/.test(code)) {
+      const sig = Number(code.slice(0,2)); const power = Number(code[2]); pf = sig * 10 ** power;
+      detail = `${code} = ${sig} × 10${superscripts[power]} pF.`;
+    } else {
+      let match = code.match(/^(\d*)?([PNU])(\d+)$/);
+      if (match) {
+        const value = Number(`${match[1] || 0}.${match[3]}`); const factor = {P:1,N:1e3,U:1e6}[match[2]]; pf = value * factor;
+        detail = `${match[2]} is the decimal point and unit.`;
+      } else {
+        match = code.match(/^(\d+(?:\.\d+)?)(P|N|U)$/);
+        if (match) { pf = Number(match[1]) * {P:1,N:1e3,U:1e6}[match[2]]; detail = `Explicit ${match[2] === "P" ? "pF" : match[2] === "N" ? "nF" : "µF"} marking.`; }
+        else if (/^\d*\.\d+$/.test(code)) { pf = Number(code) * 1e6; detail = "Bare decimal interpreted by the common film-capacitor µF convention; verify the component context."; confidence = "context"; }
+      }
+    }
+    if (!Number.isFinite(pf) || pf < 0) return {error:"Unrecognised or ambiguous value. Use 104, 4n7, 0.1uF, 470n or an explicit unit."};
+    return {pf,tolerance,voltage,detail,confidence};
+  };
+  const capacitorCode = document.getElementById("capacitorCode");
+  const capacitorType = document.getElementById("capacitorType");
+  const capacitorGuidanceText = {
+    unknown:"Construction unknown: verify polarity from the body symbol and datasheet before connection.",
+    ceramic:"Ceramic capacitors are normally non-polar. Three-digit pF codes are common; explicit voltage markings are not always present.",
+    film:"Film capacitors are normally non-polar. Bare decimal markings are often in µF, but the series convention should be confirmed.",
+    electrolytic:"Aluminium electrolytics are polarised. The stripe normally marks the negative terminal; confirm the printed polarity and voltage rating.",
+    tantalum:"Tantalum capacitors are polarised. A body mark often identifies the positive terminal, unlike the negative stripe common on aluminium electrolytics; verify the exact package."
+  };
+  const updateCapacitor = () => {
+    const decoded = decodeCapacitor(capacitorCode.value);
+    const result = document.getElementById("capacitorResult");
+    if (decoded.error) {
+      result.textContent = capacitorCode.value.trim() ? "Not identified" : "Enter marking";
+      document.getElementById("capacitorDetail").textContent = decoded.error;
+      ["capacitorPf","capacitorNf","capacitorUf","capacitorExtra"].forEach(id=>document.getElementById(id).textContent="—");
+    } else {
+      const values = formatCapacitance(decoded.pf);
+      result.textContent = values.primary;
+      document.getElementById("capacitorDetail").textContent = decoded.detail;
+      document.getElementById("capacitorPf").textContent = values.pf;
+      document.getElementById("capacitorNf").textContent = values.nf;
+      document.getElementById("capacitorUf").textContent = values.uf;
+      document.getElementById("capacitorExtra").textContent = `${decoded.tolerance || "Tolerance not marked"}${decoded.voltage ? ` · ${decoded.voltage} V` : " · voltage not explicit"}`;
+    }
+    document.getElementById("capacitorGuidance").textContent = capacitorGuidanceText[capacitorType.value];
+    return decoded;
+  };
+  capacitorCode.addEventListener("input",updateCapacitor); capacitorType.addEventListener("change",updateCapacitor);
+  document.getElementById("decodeCapacitorButton").addEventListener("click",updateCapacitor);
+  document.getElementById("clearCapacitorButton").addEventListener("click",()=>{capacitorCode.value="";capacitorType.value="unknown";updateCapacitor();capacitorCode.focus();});
+  updateCapacitor();
+
+  const inductorToleranceLetters = {J:5,K:10,M:20};
+  const formatInductance = (uh) => ({
+    nh:`${(uh*1000).toLocaleString(undefined,{maximumFractionDigits:6})} nH`,
+    uh:`${uh.toLocaleString(undefined,{maximumFractionDigits:6})} µH`,
+    mh:`${(uh/1000).toLocaleString(undefined,{maximumFractionDigits:6})} mH`,
+    primary: uh >= 1000 ? `${(uh/1000).toLocaleString(undefined,{maximumFractionDigits:6})} mH` : uh < 1 ? `${(uh*1000).toLocaleString(undefined,{maximumFractionDigits:6})} nH` : `${uh.toLocaleString(undefined,{maximumFractionDigits:6})} µH`
+  });
+  const decodeInductor = (raw) => {
+    let code = normaliseCode(raw).replace(/\s/g,"");
+    if (!code) return {error:"Enter an inductor marking."};
+    let tolerance = null;
+    const tol = code.match(/([JKM])$/); if (tol) { tolerance = inductorToleranceLetters[tol[1]]; code = code.slice(0,-1); }
+    let uh = null; let detail = ""; let format = "";
+    if (/^\d{3}$/.test(code)) { const sig=Number(code.slice(0,2)); const p=Number(code[2]); uh=sig*10**p; detail=`${sig} × 10${superscripts[p]} µH.`; format="3 digit"; }
+    else if (/^\d{4}$/.test(code)) { const sig=Number(code.slice(0,3)); const p=Number(code[3]); uh=sig*10**p; detail=`${sig} × 10${superscripts[p]} µH.`; format="4 digit"; }
+    else if (/^(?:\d+R\d*|\d*R\d+)$/.test(code)) { uh=Number(code.replace("R",".")); detail="R marks the decimal point in microhenries."; format="R notation"; }
+    if (!Number.isFinite(uh)) return {error:"Unrecognised code. Use 101, 1001 or R notation such as 4R7."};
+    return {uh,tolerance,detail,format};
+  };
+  const inductorCode = document.getElementById("inductorCode");
+  const updateInductor = () => {
+    const decoded = decodeInductor(inductorCode.value);
+    if (decoded.error) {
+      document.getElementById("inductorResult").textContent = inductorCode.value.trim() ? "Not identified" : "Enter marking";
+      document.getElementById("inductorDetail").textContent = decoded.error;
+      ["inductorNh","inductorUh","inductorMh"].forEach(id=>document.getElementById(id).textContent="—");
+    } else {
+      const values = formatInductance(decoded.uh);
+      document.getElementById("inductorResult").textContent = `${values.primary}${decoded.tolerance ? ` ±${decoded.tolerance}%` : ""}`;
+      document.getElementById("inductorDetail").textContent = decoded.detail;
+      document.getElementById("inductorNh").textContent = values.nh;
+      document.getElementById("inductorUh").textContent = values.uh;
+      document.getElementById("inductorMh").textContent = values.mh;
+    }
+    return decoded;
+  };
+  const inductorBand1 = document.getElementById("inductorBand1");
+  const inductorBand2 = document.getElementById("inductorBand2");
+  const inductorMultiplier = document.getElementById("inductorMultiplier");
+  const inductorTolerance = document.getElementById("inductorTolerance");
+  addOptions(inductorBand1,colours); addOptions(inductorBand2,colours); addOptions(inductorMultiplier,multipliers,"value");
+  addOptions(inductorTolerance,[{name:"Gold ±5%",value:5,hex:"#c9a23b"},{name:"Silver ±10%",value:10,hex:"#bcc3c8"},{name:"No band ±20%",value:20,hex:"#f2eee2"}],"value");
+  inductorBand1.value="4"; inductorBand2.value="7"; inductorMultiplier.value="1"; inductorTolerance.value="10";
+  const updateInductorColours = () => {
+    const digits = Number(`${inductorBand1.value}${inductorBand2.value}`); const uh = digits * Number(inductorMultiplier.value); const toleranceValue=Number(inductorTolerance.value);
+    const values = formatInductance(uh); const names=[byDigit(inductorBand1.value).name,byDigit(inductorBand2.value).name,byValue(multipliers,inductorMultiplier.value).name,inductorTolerance.options[inductorTolerance.selectedIndex].text.split(" ")[0]];
+    document.getElementById("inductorColourResult").textContent=`${values.primary} ±${toleranceValue}%`;
+    document.getElementById("inductorColourDetail").textContent=names.join(" · ")+".";
+    return {uh,tolerance:toleranceValue};
+  };
+  [inductorBand1,inductorBand2,inductorMultiplier,inductorTolerance].forEach(control=>control.addEventListener("change",updateInductorColours));
+  inductorCode.addEventListener("input",updateInductor); document.getElementById("decodeInductorButton").addEventListener("click",updateInductor);
+  document.getElementById("clearInductorButton").addEventListener("click",()=>{inductorCode.value="";updateInductor();inductorCode.focus();});
+  updateInductor(); updateInductorColours();
+
+  const decodeFuse = (raw,construction="unknown") => {
+    const original = normaliseCode(raw); const compact = original.replace(/[\s-]+/g,"");
+    if (!compact) return {error:"Enter a fuse marking."};
+    let speed = null; let speedCode = null;
+    if (/^(FF)|ULTRAFAST|VERYFAST/.test(compact)) { speed="Ultra-fast / very fast"; speedCode="FF"; }
+    else if (/^(TT)|VERYSLOW/.test(compact)) { speed="Very slow / long time-delay"; speedCode="TT"; }
+    else if (/^(T)|SLOBLO|SLOWBLOW|TIMEDELAY/.test(compact)) { speed="Time-delay"; speedCode="T"; }
+    else if (/^(M)/.test(compact)) { speed="Medium time-lag"; speedCode="M"; }
+    else if (/^(F)|FAST/.test(compact)) { speed="Fast-acting"; speedCode="F"; }
+    const currentMatch = compact.match(/(\d+(?:[.,]\d+)?|\d+R\d+)\s*(MA|A)/);
+    let currentA = null;
+    if (currentMatch) { const value=Number(currentMatch[1].replace(",",".").replace("R",".")); currentA=currentMatch[2]==="MA"?value/1000:value; }
+    const voltageMatch = compact.match(/(\d+(?:\.\d+)?)V/); const voltage=voltageMatch?Number(voltageMatch[1]):null;
+    let breaking = null;
+    if (/HBC|HRC/.test(compact) || (currentMatch && new RegExp(currentMatch[0]+"H").test(compact))) breaking="High";
+    else if (/LBC/.test(compact) || (currentMatch && new RegExp(currentMatch[0]+"L").test(compact))) breaking="Low";
+    const clues = [];
+    if (construction === "ceramic") clues.push("Ceramic body: often selected where higher breaking capacity is required, but the body alone is not proof.");
+    if (construction === "glass") clues.push("Glass body: the element is visible; breaking capacity still requires an explicit marking or datasheet.");
+    if (!speed && !currentA && !voltage && !breaking) return {error:"The marking cannot be identified reliably. Look for explicit F/FF/T/TT, A/mA, V and HBC/HRC information."};
+    return {speed,speedCode,currentA,voltage,breaking,construction,detail:clues.join(" ")};
+  };
+  const fuseCode = document.getElementById("fuseCode"); const fuseConstruction=document.getElementById("fuseConstruction");
+  const updateFuse = () => {
+    const decoded=decodeFuse(fuseCode.value,fuseConstruction.value);
+    if (decoded.error) {
+      document.getElementById("fuseResult").textContent=fuseCode.value.trim()?"Not reliably identified":"Enter marking";
+      document.getElementById("fuseDetail").textContent=decoded.error;
+      ["fuseSpeed","fuseCurrent","fuseVoltage","fuseBreaking"].forEach(id=>document.getElementById(id).textContent="—");
+      return decoded;
+    }
+    const currentText=decoded.currentA===null?"Current not found":decoded.currentA<1?`${decoded.currentA*1000} mA`:`${decoded.currentA.toLocaleString(undefined,{maximumFractionDigits:4})} A`;
+    const parts=[decoded.speed||"Speed not found",currentText,decoded.voltage?`${decoded.voltage} V`:"Voltage not found"];
+    document.getElementById("fuseResult").textContent=parts.join(" · ");
+    const breakingText=decoded.breaking?`${decoded.breaking} breaking capacity`:`Breaking capacity not explicit`;
+    document.getElementById("fuseDetail").textContent=`${breakingText}. ${decoded.detail || "Construction does not replace the equipment specification."}`;
+    document.getElementById("fuseSpeed").textContent=decoded.speed||"Not identified";
+    document.getElementById("fuseCurrent").textContent=currentText;
+    document.getElementById("fuseVoltage").textContent=decoded.voltage?`${decoded.voltage} V`:"Not identified";
+    document.getElementById("fuseBreaking").textContent=decoded.breaking||"Not identified";
+    return decoded;
+  };
+  fuseCode.addEventListener("input",updateFuse);fuseConstruction.addEventListener("change",updateFuse);document.getElementById("decodeFuseButton").addEventListener("click",updateFuse);
+  document.getElementById("clearFuseButton").addEventListener("click",()=>{fuseCode.value="";fuseConstruction.value="unknown";updateFuse();fuseCode.focus();});
+  updateFuse();
+
+  const semiconductorReferences = {
+    diode:{title:"Diode polarity",body:"A painted band normally marks the cathode on common rectifier and signal diodes. SMD packages may use a bar, dot or package-specific symbol.",orientation:"Read the body marking with the package drawing. Board silkscreen symbols are not always drawn from the same viewing side.",warning:"Confirm the exact diode datasheet where dual diodes, TVS arrays or unusual packages are involved."},
+    led:{title:"LED polarity",body:"For common through-hole LEDs, the longer lead is often the anode and the flat rim / shorter lead often marks the cathode. The larger internal electrode is often the cathode.",orientation:"Lead length is unreliable after trimming. Prefer the flat, body mark, board symbol and datasheet.",warning:"Bi-colour, RGB, addressable and reverse-parallel LEDs do not follow a single two-lead rule."},
+    bridge:{title:"Bridge rectifier terminals",body:"Common bridge packages mark DC output with + and −, and AC inputs with ~ or AC. Some inline packages use a printed pin diagram.",orientation:"Use the markings on the exact package; do not assume left-to-right order from another bridge style.",warning:"Check voltage/current rating and terminal layout before applying mains or transformer power."},
+    to92:{title:"TO-92 package",body:"The flat face provides a repeatable viewing reference, but transistor and regulator lead order varies widely: E-B-C, C-B-E, G-D-S and regulator arrangements all exist.",orientation:"Pin numbers are normally read from a datasheet package drawing, not inferred from the flat face alone.",warning:"No universal TO-92 pinout exists. Exact part number and manufacturer datasheet are required."},
+    to220:{title:"TO-220 package",body:"The front face, metal tab and lead numbers establish orientation. The tab is often electrically connected to one terminal, but which terminal depends on the device.",orientation:"Datasheets usually number leads left-to-right when viewed from the front face, yet the electrical functions remain part-specific.",warning:"Do not assume tab = ground or pin 2 = output. Regulators, MOSFETs, BJTs, triacs and diodes differ."},
+    to247:{title:"TO-247 package",body:"Large power package with three leads and a mounting tab. Lead numbering and tab connection depend on the transistor, diode or module family.",orientation:"Use the manufacturer package drawing and note whether it shows front, bottom or mounting-plane view.",warning:"Gate/source/drain or base/collector/emitter order is not universal."},
+    sot23:{title:"SOT-23 package",body:"Three-lead SMD outline commonly numbered with two pins on one side and one on the other, but the electrical assignment depends entirely on the part.",orientation:"Locate pin 1 from the package drawing and top-code orientation. Top codes are not globally unique.",warning:"Do not identify a SOT-23 device or pinout from the top code alone."},
+    regulator:{title:"Regulator / transistor lookup",body:"Package shape identifies only the mechanical outline. Device function and pinout require the exact part number, suffix and manufacturer.",orientation:"Cross-check the datasheet package drawing with the physical marking and board layout.",warning:"There is no safe universal transistor or regulator pinout."}
+  };
+  const updateSemiconductor=()=>{const item=semiconductorReferences[document.getElementById("semiconductorType").value];document.getElementById("semiconductorTitle").textContent=item.title;document.getElementById("semiconductorBody").textContent=item.body;document.getElementById("semiconductorOrientation").textContent=item.orientation;document.getElementById("semiconductorWarning").textContent=item.warning;};
+  document.getElementById("semiconductorType").addEventListener("change",updateSemiconductor);updateSemiconductor();
+
+  const connectorData = [
+    {key:"bnc",name:"BNC",couplings:["bayonet"],diameter:14.5,impedances:[50,75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Test, broadcast and instrumentation",distinction:"Two bayonet lugs and quarter-turn locking",notes:"50 Ω and 75 Ω versions have visibly different dielectric/contact geometry and should not be mixed casually."},
+    {key:"tnc",name:"TNC",couplings:["threaded"],diameter:15.0,impedances:[50,75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Vibration-resistant RF",distinction:"BNC-sized body with threaded coupling",notes:"Threaded relative of BNC; commonly 50 Ω, with 75 Ω variants also existing."},
+    {key:"n",name:"N type",couplings:["threaded"],diameter:20.3,impedances:[50,75],mounts:["cable","panel","flange"],pairs:[["male","male"],["female","female"]],rp:false,use:"Outdoor feeders and antennas",distinction:"Large threaded weather-resistant RF connector",notes:"Usually 50 Ω in RF plant. 75 Ω versions use different centre geometry and may be mechanically hazardous to mix."},
+    {key:"sma",name:"SMA",couplings:["threaded"],diameter:6.35,impedances:[50],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Microwave modules and test leads",distinction:"Small 1/4-inch threaded coupling",notes:"Standard SMA body sex and centre-contact sex agree."},
+    {key:"rpsma",name:"RP-SMA",couplings:["threaded"],diameter:6.35,impedances:[50],mounts:["cable","panel","pcb"],pairs:[["male","female"],["female","male"]],rp:true,use:"Wi-Fi and radio equipment",distinction:"SMA body with the centre contact sex reversed",notes:"Reverse polarity changes the centre pin/socket, not the basic threaded body size."},
+    {key:"smb",name:"SMB",couplings:["snap"],diameter:6.1,impedances:[50,75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Compact internal RF links",distinction:"Small snap-on coupling",notes:"Smaller and faster-mating than SMA; variants and gender terminology require inspection of the contact."},
+    {key:"smc",name:"SMC",couplings:["threaded"],diameter:6.1,impedances:[50,75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Compact vibration-resistant RF",distinction:"SMB-sized body with threaded coupling",notes:"Do not confuse with snap-on SMB."},
+    {key:"mcx",name:"MCX",couplings:["snap"],diameter:3.6,impedances:[50,75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"GPS, radio modules and compact RF",distinction:"Very small snap-on connector",notes:"Larger than MMCX but substantially smaller than SMB."},
+    {key:"mmcx",name:"MMCX",couplings:["snap"],diameter:2.4,impedances:[50],mounts:["cable","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Miniature modules and antennas",distinction:"Micro snap-on connector with rotational mating",notes:"Often found on very small antenna and RF module leads."},
+    {key:"f",name:"F type",couplings:["threaded"],diameter:9.5,impedances:[75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"TV, satellite and cable distribution",distinction:"Cable centre conductor commonly forms the male contact",notes:"75 Ω threaded connector; the male cable plug often has no separate centre pin."},
+    {key:"uhf",name:"UHF / PL-259 / SO-239",couplings:["threaded"],diameter:18.0,impedances:[],mounts:["cable","panel"],pairs:[["male","male"],["female","female"]],rp:false,use:"HF and low-VHF radio",distinction:"Large coarse thread and non-constant-impedance construction",notes:"Robust legacy family, unsuitable for precision microwave identification by impedance geometry."},
+    {key:"din716",name:"DIN 7/16",couplings:["threaded"],diameter:32.0,impedances:[50],mounts:["cable","panel","flange"],pairs:[["male","male"],["female","female"]],rp:false,use:"High-power cellular and broadcast feeders",distinction:"Very large robust thread and 7 mm / 16 mm contact geometry",notes:"Substantially larger than N type and designed for high power and low intermodulation."},
+    {key:"4310",name:"4.3-10",couplings:["threaded","push-on"],diameter:22.0,impedances:[50],mounts:["cable","panel","flange"],pairs:[["male","male"],["female","female"]],rp:false,use:"Modern cellular and RF infrastructure",distinction:"Smaller low-PIM feeder connector; threaded, hand-screw and push-pull styles exist",notes:"Often replaces DIN 7/16 where lower size and torque are useful."},
+    {key:"qma",name:"QMA",couplings:["snap"],diameter:8.0,impedances:[50],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Quick-lock microwave connections",distinction:"SMA-class contact with snap/quick-lock outer coupling",notes:"Push-to-mate alternative to threaded SMA."},
+    {key:"iec",name:"IEC television connector",couplings:["push-on"],diameter:9.5,impedances:[75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Terrestrial television and radio",distinction:"Smooth push-fit 9.5 mm television connector",notes:"Also called Belling-Lee / IEC 61169-2 in common usage."},
+    {key:"rca",name:"RCA / phono",couplings:["push-on"],diameter:8.3,impedances:[75],mounts:["cable","panel","pcb"],pairs:[["male","male"],["female","female"]],rp:false,use:"Audio and composite/baseband video",distinction:"Single protruding centre pin with outer friction shell",notes:"Not a precision RF connector, but relevant when identifying 75 Ω video interconnects."}
+  ];
+  const connectorInputs={coupling:document.getElementById("connectorCouplingInput"),diameter:document.getElementById("connectorDiameterInput"),body:document.getElementById("connectorBodyInput"),contact:document.getElementById("connectorContactInput"),impedance:document.getElementById("connectorImpedanceInput"),mount:document.getElementById("connectorMountInput"),rp:document.getElementById("connectorRpInput")};
+  const rankConnectors = (values) => connectorData.map(item=>{
+    let score=10; const reasons=[]; const conflicts=[];
+    if(values.coupling!=="unknown"){if(item.couplings.includes(values.coupling)){score+=26;reasons.push(`${values.coupling} coupling`);}else{score-=18;conflicts.push(`not normally ${values.coupling}`);}}
+    if(Number.isFinite(values.diameter)&&values.diameter>0){const diff=Math.abs(values.diameter-item.diameter)/item.diameter;if(diff<=.1){score+=22;reasons.push("diameter very close");}else if(diff<=.2){score+=14;reasons.push("diameter plausible");}else if(diff<=.35){score+=5;}else{score-=10;conflicts.push("diameter differs");}}
+    if(values.impedance!=="unknown"){const imp=Number(values.impedance);if(item.impedances.includes(imp)){score+=15;reasons.push(`${imp} Ω variant exists`);}else if(item.impedances.length){score-=13;conflicts.push(`not normally ${imp} Ω`);}else{score-=4;conflicts.push("not constant impedance");}}
+    if(values.mount!=="unknown"){if(item.mounts.includes(values.mount)){score+=9;reasons.push(`${values.mount} version exists`);}else{score-=7;}}
+    if(values.body!=="unknown"&&values.contact!=="unknown"){const pair=item.pairs.some(([b,c])=>b===values.body&&c===values.contact);if(pair){score+=18;reasons.push("body/contact combination matches");}else{score-=18;conflicts.push("body/contact combination conflicts");}}
+    if(values.rp!=="unknown"){const wants=values.rp==="yes";if(item.rp===wants){score+=wants?30:4;if(wants)reasons.push("reverse-polarity contact relationship");}else{score-=wants?24:12;conflicts.push(wants?"not reverse polarity":"reverse-polarity family");}}
+    return {...item,score:Math.max(0,Math.min(100,Math.round(score))),reasons,conflicts};
+  }).sort((a,b)=>b.score-a.score);
+  const identifyConnector=()=>{
+    const values={coupling:connectorInputs.coupling.value,diameter:Number(connectorInputs.diameter.value),body:connectorInputs.body.value,contact:connectorInputs.contact.value,impedance:connectorInputs.impedance.value,mount:connectorInputs.mount.value,rp:connectorInputs.rp.value};
+    const ranked=rankConnectors(values);const best=ranked[0];
+    document.getElementById("connectorName").textContent=`${best.name} · ${best.score}%`;
+    document.getElementById("connectorNotes").textContent=[...best.reasons.slice(0,3),...best.conflicts.slice(0,1),best.notes].join(". ");
+    document.getElementById("connectorImpedance").textContent=best.impedances.length?best.impedances.map(v=>`${v} Ω`).join(" / "):"Non-constant";
+    document.getElementById("connectorCoupling").textContent=best.couplings.join(" / ");
+    document.getElementById("connectorUse").textContent=best.use;
+    document.getElementById("connectorDistinction").textContent=best.distinction;
+    document.getElementById("connectorCandidateList").replaceChildren(...ranked.slice(0,6).map(item=>{const row=document.createElement("div");row.className="result-row";const copy=document.createElement("span");const strong=document.createElement("strong");strong.textContent=item.name;const small=document.createElement("small");small.textContent=[...item.reasons.slice(0,2),item.distinction].join(" · ");copy.append(strong,small);const pill=document.createElement("span");pill.className="score-pill";pill.textContent=`${item.score}%`;row.append(copy,pill);return row;}));
+    return ranked;
+  };
+  Object.values(connectorInputs).forEach(control=>control.addEventListener(control.tagName==="INPUT"?"input":"change",identifyConnector));
+  document.getElementById("identifyConnectorButton").addEventListener("click",identifyConnector);
+  document.getElementById("clearConnectorButton").addEventListener("click",()=>{Object.values(connectorInputs).forEach(control=>{if(control.tagName==="SELECT")control.value="unknown";else control.value="";});identifyConnector();});
+  identifyConnector();
+
+  const setPinout=(name)=>{document.querySelectorAll("[data-pinout]").forEach(button=>button.setAttribute("aria-selected",String(button.dataset.pinout===name)));document.querySelectorAll("[data-pinout-panel]").forEach(panel=>panel.hidden=panel.dataset.pinoutPanel!==name);};
+  document.querySelectorAll("[data-pinout]").forEach(button=>button.addEventListener("click",()=>setPinout(button.dataset.pinout)));
+
+  let photoObjectUrl=null;
+  const clearPhoto=()=>{const preview=document.getElementById("photoPreview");if(photoObjectUrl){URL.revokeObjectURL(photoObjectUrl);photoObjectUrl=null;}preview.removeAttribute("src");preview.hidden=true;document.getElementById("photoInput").value="";};
+  document.getElementById("openPhoto").addEventListener("click",()=>{selectTool("photo",true);document.querySelector('[data-panel="photo"]').scrollIntoView({behavior:"smooth",block:"nearest"});});
+  document.getElementById("photoInput").addEventListener("change",event=>{const file=event.target.files&&event.target.files[0];if(!file){clearPhoto();return;}if(photoObjectUrl)URL.revokeObjectURL(photoObjectUrl);photoObjectUrl=URL.createObjectURL(file);const preview=document.getElementById("photoPreview");preview.src=photoObjectUrl;preview.hidden=false;});
+  document.getElementById("clearPhotoButton").addEventListener("click",clearPhoto);
+
 
   const params = new URLSearchParams(location.search);
   const initialTool = titles[params.get("tool")] ? params.get("tool") : "resistor";
-  selectTool(initialTool, false);
-  if (initialTool === "coax") setCoaxMode(params.get("mode") === "browse" ? "browse" : "identify", false);
-  if (initialTool === "smd" && params.get("code")) { smdCode.value = params.get("code"); updateSmd(); }
+  selectTool(initialTool,false);
+  if(initialTool==="coax")setCoaxMode(params.get("mode")==="browse"?"browse":"identify",false);
+  if(params.get("item")&&coaxData[params.get("item")]){coaxFamily.value=params.get("item");updateCoaxBrowse();}
+  if(initialTool==="smd"&&params.get("code")){smdCode.value=params.get("code").slice(0,8);updateSmd();}
 })();
 </script>
 <script src="../../../shell.js?v=1.1.21-session-editor-token" defer></script>
