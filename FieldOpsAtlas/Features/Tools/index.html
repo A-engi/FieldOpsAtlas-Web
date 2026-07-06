@@ -107,19 +107,19 @@
 
     .tools-hero {
       position: relative;
-      min-height: 78px;
-      padding: 10px 11px;
+      min-width: 0;
+      min-height: 68px;
+      padding: 2px 10px 4px;
       display: flex;
       align-items: center;
+      overflow: hidden;
       isolation: isolate;
-      background:
-        linear-gradient(100deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.96) 52%, rgba(247,249,252,.76) 100%);
     }
 
     .hero-copy {
       position: relative;
       z-index: 2;
-      width: 57%;
+      width: 58%;
       min-width: 0;
     }
 
@@ -135,10 +135,10 @@
     .hero-art {
       position: absolute;
       z-index: 1;
-      top: 0;
-      right: -4px;
-      width: 49%;
-      height: 100%;
+      top: -4px;
+      right: -6px;
+      width: 50%;
+      height: calc(100% + 8px);
       overflow: hidden;
       opacity: .95;
     }
@@ -311,6 +311,14 @@
       gap: 6px;
     }
 
+    .tool-head-actions {
+      min-width: 0;
+      display: grid;
+      justify-items: end;
+      gap: 1px;
+      line-height: 1;
+    }
+
     .tool-icon {
       width: 28px;
       height: 28px;
@@ -333,6 +341,20 @@
       font-size: 8px;
       font-weight: 900;
       white-space: nowrap;
+    }
+
+    .tool-more {
+      color: var(--accent);
+      font-size: 8px;
+      font-weight: 880;
+      line-height: 1.25;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .tool-more::after {
+      content: " ›";
+      font-size: 9px;
     }
 
     .mini-calc {
@@ -561,34 +583,6 @@
       line-height: 1.25;
     }
 
-    .chip-row {
-      min-width: 0;
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(0, 1fr);
-      gap: 4px;
-      overflow: hidden;
-    }
-
-    .chip {
-      min-width: 0;
-      min-height: 25px;
-      padding: 0 4px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
-      border-radius: 8px;
-      color: color-mix(in srgb, var(--accent) 86%, #182033);
-      background: rgba(255,255,255,.76);
-      font-size: 7px;
-      font-weight: 820;
-      line-height: 1.05;
-      text-align: center;
-      text-decoration: none;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
 
     .open-row {
       min-width: 0;
@@ -709,7 +703,7 @@
 
     @media (max-width: 365px) {
       .tools-page { padding: 8px; gap: 8px; }
-      .tools-hero { min-height: 72px; padding-inline: 9px; }
+      .tools-hero { min-height: 64px; padding-inline: 8px; }
       .hero-copy { width: 59%; }
       .tools-hero h1 { font-size: 28px; }
       .hero-art { width: 47%; }
@@ -724,15 +718,15 @@
   </style>
 </head>
 <body>
-<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.1-tools-top-space">
+<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.2-tools-header-actions">
 <section aria-label="Field Tools" class="tools-content">
 <article class="tools-page">
-<header class="tools-hero surface">
+<header class="tools-hero">
 <div class="hero-copy">
 <h1>Field Tools</h1>
 </div>
 <div aria-hidden="true" class="hero-art">
-<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-header-art.svg?v=2.1.1"></span>
+<span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-header-art.svg?v=2.1.2"></span>
 </div>
 </header>
 <section aria-labelledby="recentTitle" class="recent-section">
@@ -742,30 +736,30 @@
 </div>
 <div class="recent-grid">
 <a class="recent-card surface" data-searchable="cable loss calculator coax attenuation lmr 400" href="./calculator-library.html?tool=cable-loss">
-<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.1"></span></span><span class="recent-name">Cable Loss Calc</span></span>
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.2"></span></span><span class="recent-name">Cable Loss Calc</span></span>
 </a>
 <a class="recent-card surface" data-searchable="dbm watts power conversion" href="./calculator-library.html?tool=dbm-watts">
-<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.1"></span></span><span class="recent-name">dBm to Watts</span></span>
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.2"></span></span><span class="recent-name">dBm to Watts</span></span>
 </a>
 <a class="recent-card surface" data-searchable="rf link budget margin" href="./calculator-library.html?tool=link-budget">
-<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-link-budget.svg?v=2.1.1"></span></span><span class="recent-name">Link Budget</span></span>
+<span class="recent-top"><span class="recent-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-link-budget.svg?v=2.1.2"></span></span><span class="recent-name">Link Budget</span></span>
 </a>
 </div>
 </section>
 <nav aria-label="Quick calculators" class="quick-launchers">
 <a class="quick-launch" data-searchable="ohms law resistance voltage current" href="./calculator-library.html?tool=ohms-law"><span aria-hidden="true" class="quick-art omega-mark">Ω</span><span>Ohm’s Law</span></a>
-<a class="quick-launch" data-searchable="dbm watts" href="./calculator-library.html?tool=dbm-watts"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.1"></span></span><span>dBm / Watts</span></a>
-<a class="quick-launch" data-searchable="cable loss" href="./calculator-library.html?tool=cable-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.1"></span></span><span>Cable Loss</span></a>
-<a class="quick-launch" data-searchable="antenna gain" href="./calculator-library.html?tool=antenna-gain"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-antenna-gain.svg?v=2.1.1"></span></span><span>Antenna Gain</span></a>
-<a class="quick-launch" data-searchable="vswr return loss" href="./calculator-library.html?tool=vswr-return-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-vswr.svg?v=2.1.1"></span></span><span>VSWR</span></a>
+<a class="quick-launch" data-searchable="dbm watts" href="./calculator-library.html?tool=dbm-watts"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-dbm-watts.svg?v=2.1.2"></span></span><span>dBm / Watts</span></a>
+<a class="quick-launch" data-searchable="cable loss" href="./calculator-library.html?tool=cable-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-cable-loss.svg?v=2.1.2"></span></span><span>Cable Loss</span></a>
+<a class="quick-launch" data-searchable="antenna gain" href="./calculator-library.html?tool=antenna-gain"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-antenna-gain.svg?v=2.1.2"></span></span><span>Antenna Gain</span></a>
+<a class="quick-launch" data-searchable="vswr return loss" href="./calculator-library.html?tool=vswr-return-loss"><span class="quick-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-vswr.svg?v=2.1.2"></span></span><span>VSWR</span></a>
 <a class="quick-launch" href="./calculator-library.html"><span aria-hidden="true" class="quick-art more-mark">•••</span><span>More</span></a>
 </nav>
 <section aria-label="Tool categories" class="tools-grid">
 <article class="tool-card surface" data-searchable="calculators ohms law rf electrical electronics cable link budget">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-calculators.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-calculators.svg?v=2.1.2"></span></span>
 <h3>Calculators</h3>
-<span class="tool-count">87 tools</span>
+<span class="tool-head-actions"><span class="tool-count">87 tools</span><a class="tool-more" href="./calculator-library.html">More</a></span>
 </header>
 <div aria-label="Ohm's law quick calculator" class="mini-calc">
 <div class="calc-inputs">
@@ -780,17 +774,12 @@
 <output id="ohmResult">4.80 Ω</output>
 </div>
 </div>
-<div class="chip-row">
-<a class="chip" href="./calculator-library.html?tool=dbm-watts">dBm/W</a>
-<a class="chip" href="./calculator-library.html?tool=vswr-return-loss">VSWR</a>
-<a class="chip" href="./calculator-library.html">More</a>
-</div>
 </article>
 <article class="tool-card is-teal surface" data-searchable="converters units dbm watts voltage temperature pressure">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-converters.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-converters.svg?v=2.1.2"></span></span>
 <h3>Converters</h3>
-<span class="tool-count">77 families</span>
+<span class="tool-head-actions"><span class="tool-count">77 families</span><a class="tool-more" href="./converter.html">More</a></span>
 </header>
 <div aria-label="Power converter" class="converter-panel">
 <div class="convert-side">
@@ -805,85 +794,60 @@
 <output id="convertOutput">199.53</output>
 </div>
 </div>
-<div class="chip-row">
-<a class="chip" href="./converter.html">dBm ↔ W</a>
-<a class="chip" href="./converter.html">dBµV</a>
-<a class="chip" href="./converter.html">More</a>
-</div>
 </article>
 <article class="tool-card is-gold surface" data-searchable="identifiers decoders coax cable resistor smd codes">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-identifiers.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-identifiers.svg?v=2.1.2"></span></span>
 <h3>Identifiers &amp; Decoders</h3>
-<span class="tool-count">15 tools</span>
+<span class="tool-head-actions"><span class="tool-count">15 tools</span><a class="tool-more" href="./calculator-library.html?search=identifier">More</a></span>
 </header>
 <div class="visual-pair">
-<a class="visual-box" href="./coax-calculator.html"><strong>RG58 coax</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=2.1.1"></span></span></a>
-<a class="visual-box" href="./calculator-library.html?search=resistor"><strong>Resistor</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=2.1.1"></span></span></a>
-</div>
-<div class="chip-row">
-<a class="chip" href="./coax-calculator.html">Coax ID</a>
-<a class="chip" href="./calculator-library.html?search=resistor">Resistor</a>
-<a class="chip" href="./calculator-library.html?search=smd">SMD Codes</a>
+<a class="visual-box" href="./coax-calculator.html"><strong>RG58 coax</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-coax-cutaway.svg?v=2.1.2"></span></span></a>
+<a class="visual-box" href="./calculator-library.html?search=resistor"><strong>Resistor</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=2.1.2"></span></span></a>
 </div>
 </article>
 <article class="tool-card is-gold surface" data-searchable="charts visualisers smith chart frequency response polar s parameters">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-charts.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-charts.svg?v=2.1.2"></span></span>
 <h3>Charts &amp; Visualisers</h3>
-<span class="tool-count">14 tools</span>
+<span class="tool-head-actions"><span class="tool-count">14 tools</span><a class="tool-more" href="./calculator-library.html?search=chart">More</a></span>
 </header>
 <div class="visual-pair equal">
-<a class="visual-box" href="./calculator-library.html?search=smith"><strong>Smith chart</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-smith-chart.svg?v=2.1.1"></span></span></a>
-<a class="visual-box" href="./calculator-library.html?search=frequency"><strong>Frequency response</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-frequency-response.svg?v=2.1.1"></span></span></a>
-</div>
-<div class="chip-row">
-<a class="chip" href="./calculator-library.html?search=smith">Smith</a>
-<a class="chip" href="./calculator-library.html?search=polar">Polar</a>
-<a class="chip" href="./calculator-library.html?search=s-parameters">S-Params</a>
+<a class="visual-box" href="./calculator-library.html?search=smith"><strong>Smith chart</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-smith-chart.svg?v=2.1.2"></span></span></a>
+<a class="visual-box" href="./calculator-library.html?search=frequency"><strong>Frequency response</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-frequency-response.svg?v=2.1.2"></span></span></a>
 </div>
 </article>
 <article class="tool-card is-red surface" data-searchable="diagnostics measurement spectrum analyser oscilloscope power meter rf level rbw vbw">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-measurement.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-measurement.svg?v=2.1.2"></span></span>
 <h3>Diagnostics &amp; Measurement</h3>
-<span class="tool-count">20 tools</span>
+<span class="tool-head-actions"><span class="tool-count">20 tools</span><a class="tool-more" href="./calculator-library.html?search=measurement">More</a></span>
 </header>
 <div class="diagnostic-layout">
 <div class="reading-tile"><strong>Spectrum</strong><output>−42.6</output><small>dBm @ 145 MHz</small></div>
-<a class="spectrum-box" href="./calculator-library.html?search=spectrum"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-spectrum-plot.svg?v=2.1.1"></span></a>
-</div>
-<div class="chip-row">
-<a class="chip" href="./calculator-library.html?search=spectrum">Spectrum</a>
-<a class="chip" href="./calculator-library.html?search=oscilloscope">Scope</a>
-<a class="chip" href="./calculator-library.html?search=power%20meter">Power</a>
+<a class="spectrum-box" href="./calculator-library.html?search=spectrum"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-spectrum-plot.svg?v=2.1.2"></span></a>
 </div>
 </article>
 <article class="tool-card is-blue surface" data-searchable="references channels blocks connectors tables formulas dab dtt signal chain">
 <header class="tool-head">
-<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-references.svg?v=2.1.1"></span></span>
+<span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-references.svg?v=2.1.2"></span></span>
 <h3>References</h3>
-<span class="tool-count">36 tools</span>
+<span class="tool-head-actions"><span class="tool-count">36 tools</span><a class="tool-more" href="../Docs/index.html">More</a></span>
 </header>
 <p class="reference-copy">Channels, blocks, connectors, tables, formulas and quick references.</p>
-<a class="reference-box" href="../Network/index.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain-diagram.svg?v=2.1.1"></span></a>
-<div class="chip-row">
-<a class="chip" href="../RF/index.html">DAB Blocks</a>
-<a class="chip" href="../RF/index.html">DTT Channels</a>
-<a class="chip" href="../Docs/index.html">Connectors</a>
-</div>
+<a class="reference-box" href="../Network/index.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain-diagram.svg?v=2.1.2"></span></a>
 </article>
 </section>
 <nav aria-label="Tool shortcuts" class="shortcut-grid">
-<a class="shortcut-card surface" data-searchable="quick formulas" href="./calculator-library.html" style="--shortcut:#1857b8"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-quick-formulas.svg?v=2.1.1"></span><strong>Quick Formulas</strong><small>Ohm’s law, P=VI, attenuation</small></a>
-<a class="shortcut-card surface" data-searchable="unit tables prefixes constants" href="./converter.html" style="--shortcut:#d78c00"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-unit-tables.svg?v=2.1.1"></span><strong>Unit Tables</strong><small>Prefixes, units and constants</small></a>
-<a class="shortcut-card surface" data-searchable="signal chain rf chain" href="../Network/index.html" style="--shortcut:#0d8587"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain.svg?v=2.1.1"></span><strong>Signal Chain</strong><small>Build and analyse RF chains</small></a>
-<a class="shortcut-card surface" data-searchable="favourites saved tools" href="./calculator-library.html" style="--shortcut:#504097"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-favourites.svg?v=2.1.1"></span><strong>Favourites</strong><small>Saved tools and shortcuts</small></a>
+<a class="shortcut-card surface" data-searchable="quick formulas" href="./calculator-library.html" style="--shortcut:#1857b8"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-quick-formulas.svg?v=2.1.2"></span><strong>Quick Formulas</strong><small>Ohm’s law, P=VI, attenuation</small></a>
+<a class="shortcut-card surface" data-searchable="unit tables prefixes constants" href="./converter.html" style="--shortcut:#d78c00"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-unit-tables.svg?v=2.1.2"></span><strong>Unit Tables</strong><small>Prefixes, units and constants</small></a>
+<a class="shortcut-card surface" data-searchable="signal chain rf chain" href="../Network/index.html" style="--shortcut:#0d8587"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-signal-chain.svg?v=2.1.2"></span><strong>Signal Chain</strong><small>Build and analyse RF chains</small></a>
+<a class="shortcut-card surface" data-searchable="favourites saved tools" href="./calculator-library.html" style="--shortcut:#504097"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-favourites.svg?v=2.1.2"></span><strong>Favourites</strong><small>Saved tools and shortcuts</small></a>
 </nav>
 <section class="packs-card surface" data-searchable="tool packs manage customise">
-<span class="packs-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-tool-packs.svg?v=2.1.1"></span></span>
+<span class="packs-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-tool-packs.svg?v=2.1.2"></span></span>
 <span class="packs-copy"><strong>Tool Packs</strong><small>Enable or disable tool packs to customise your toolbox.</small></span>
-<a class="manage-link" href="./calculator-library.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-manage-packs.svg?v=2.1.1"></span><span>Manage</span></a>
+<a class="manage-link" href="./calculator-library.html"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-manage-packs.svg?v=2.1.2"></span><span>Manage</span></a>
 </section>
 </article>
 </section>
