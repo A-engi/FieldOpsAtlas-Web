@@ -75,7 +75,7 @@
       padding: 10px;
       display: grid;
       align-content: start;
-      gap: 9px;
+      gap: 8px;
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -130,8 +130,8 @@
     .tools-hero {
       position: relative;
       min-width: 0;
-      min-height: 62px;
-      padding: 0 10px 2px;
+      min-height: 58px;
+      padding: 0 10px 1px;
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -157,10 +157,10 @@
     .hero-art {
       position: absolute;
       z-index: 1;
-      top: -6px;
+      top: -5px;
       right: -6px;
       width: 50%;
-      height: calc(100% + 12px);
+      height: calc(100% + 10px);
       overflow: hidden;
       opacity: .95;
     }
@@ -189,7 +189,7 @@
       white-space: nowrap;
     }
 
-    .recent-section { display: grid; gap: 7px; min-width: 0; }
+    .recent-section { display: grid; gap: 5px; min-width: 0; }
 
     .recent-grid {
       min-width: 0;
@@ -200,8 +200,8 @@
 
     .recent-card {
       min-width: 0;
-      min-height: 54px;
-      padding: 7px;
+      min-height: 49px;
+      padding: 5px 7px;
       display: grid;
       align-items: center;
       overflow: hidden;
@@ -212,14 +212,14 @@
     .recent-top {
       min-width: 0;
       display: grid;
-      grid-template-columns: 34px minmax(0, 1fr);
+      grid-template-columns: 31px minmax(0, 1fr);
       align-items: center;
       gap: 5px;
     }
 
     .recent-icon {
-      width: 34px;
-      height: 34px;
+      width: 31px;
+      height: 31px;
       padding: 3px;
       overflow: hidden;
       border: 1px solid rgba(56,75,101,.18);
@@ -306,7 +306,7 @@
       min-width: 0;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 7px;
       align-items: stretch;
     }
 
@@ -321,6 +321,20 @@
     }
 
     .tool-card.is-teal { --accent: var(--tools-teal); background: linear-gradient(145deg, #fff, #f2fbfa); }
+
+    .tool-card.is-secondary {
+      padding: 7px;
+      gap: 5px;
+    }
+
+    .tool-card.is-secondary .tool-head { min-height: 26px; gap: 5px; }
+    .tool-card.is-secondary .tool-icon { width: 26px; height: 26px; }
+    .tool-card.is-secondary .visual-pair { min-height: 84px; }
+    .tool-card.is-secondary .visual-box {
+      padding: 3px;
+      grid-template-rows: 11px minmax(0, 1fr);
+      gap: 2px;
+    }
     .tool-card.is-gold { --accent: var(--tools-amber); background: linear-gradient(145deg, #fff, #fffaf4); }
     .tool-card.is-red { --accent: var(--tools-red); background: linear-gradient(145deg, #fff, #fff6f6); }
     .tool-card.is-blue { --accent: var(--tools-blue); background: linear-gradient(145deg, #fff, #f5f9ff); }
@@ -337,7 +351,7 @@
     .tool-card.is-compact .tool-head {
       position: relative;
       z-index: 2;
-      min-height: 29px;
+      min-height: 26px;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 5px;
     }
@@ -345,10 +359,10 @@
     .tool-card.is-compact .tool-icon {
       position: absolute;
       z-index: 0;
-      top: -7px;
-      left: -6px;
-      width: 45px;
-      height: 45px;
+      top: -6px;
+      left: -5px;
+      width: 40px;
+      height: 40px;
       opacity: .16;
       transform: scale(1.04);
     }
@@ -621,8 +635,8 @@
     }
 
     .tool-card.is-compact .diagnostic-layout {
-      min-height: 78px;
-      grid-template-columns: 54px minmax(0, 1fr);
+      min-height: 70px;
+      grid-template-columns: 51px minmax(0, 1fr);
       gap: 4px;
     }
 
@@ -682,7 +696,7 @@
     }
 
     .tool-card.is-compact .reference-box {
-      height: 52px;
+      height: 45px;
       padding: 0;
       border-radius: 8px;
       background: transparent;
@@ -824,7 +838,7 @@
   </style>
 </head>
 <body>
-<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.5-sparse-blueprint-background">
+<main class="phone" data-current-page="tools" data-page="tools" data-version="2.1.6-first-screen-fit">
 <section aria-label="Field Tools" class="tools-content">
 <article class="tools-page">
 <header class="tools-hero">
@@ -894,7 +908,7 @@
 </div>
 </div>
 </article>
-<article class="tool-card is-gold surface" data-searchable="identifiers decoders coax cable resistor smd codes">
+<article class="tool-card is-gold is-secondary surface" data-searchable="identifiers decoders coax cable resistor smd codes">
 <header class="tool-head">
 <span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-identifiers.svg?v=2.1.2"></span></span>
 <h3>Identifiers &amp; Decoders</h3>
@@ -905,7 +919,7 @@
 <a class="visual-box" href="./calculator-library.html?search=resistor"><strong>Resistor</strong><span class="visual-art"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-resistor.svg?v=2.1.2"></span></span></a>
 </div>
 </article>
-<article class="tool-card is-gold surface" data-searchable="charts visualisers smith chart frequency response polar s parameters">
+<article class="tool-card is-gold is-secondary surface" data-searchable="charts visualisers smith chart frequency response polar s parameters">
 <header class="tool-head">
 <span class="tool-icon"><span aria-hidden="true" class="svg-host" data-svg="./assets/icons/tools-charts.svg?v=2.1.2"></span></span>
 <h3>Charts &amp; Visualisers</h3>
