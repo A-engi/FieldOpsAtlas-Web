@@ -298,6 +298,66 @@
       white-space: nowrap;
     }
 
+    .quick-calc-label {
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .quick-calc-select,
+    .quick-calc-field input,
+    .quick-calc-field select {
+      width: 100%;
+      min-width: 0;
+      min-height: 34px;
+      padding: 0 8px;
+      border: 1px solid rgba(42,67,93,.22);
+      border-radius: 9px;
+      color: var(--ink);
+      background: rgba(255,255,255,.86);
+      outline: none;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .quick-calc-fields {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 5px;
+    }
+
+    .quick-calc-field {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+
+    .quick-calc-field span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 8px;
+      font-weight: 850;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .quick-calc-result {
+      min-height: 52px;
+      padding: 8px;
+      border: 1px solid rgba(32,95,134,.16);
+      border-radius: 10px;
+      background: rgba(32,95,134,.07);
+    }
+
+    .quick-calc-result strong,
+    .quick-calc-result small { display:block; }
+    .quick-calc-result strong { color:var(--blue);font-size:15px;line-height:1.1; }
+    .quick-calc-result small { margin-top:4px;color:var(--muted);font-size:9px;line-height:1.25; }
+    .quick-calc-footer { display:flex;align-items:center;justify-content:space-between;gap:6px; }
+    .quick-calc-run { min-height:28px;padding:0 8px;border:1px solid rgba(32,95,134,.2);border-radius:9px;background:rgba(255,255,255,.8); }
+
     .quick-converter-card {
       padding: 9px;
       display: grid;
@@ -733,7 +793,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="tools" data-version="1.4.0-universal-converter-front">
+  <main class="phone" data-page="tools" data-version="2.0.0-modular-calculators-converters">
     <section class="content-canvas" aria-label="Field tools content">
       <article class="tools-page">
         <header class="compact-hero surface">
@@ -764,19 +824,24 @@
           </div>
 
           <div class="quick-tools-grid">
-            <a class="quick-calculator-card" href="./calculator-library.html" data-track-library>
+            <article class="quick-calculator-card" data-quick-calculator>
               <div class="quick-card-head">
                 <span class="quick-card-icon" aria-hidden="true">▦</span>
                 <span class="quick-card-title">Calculators</span>
-                <span class="quick-card-count">87 tools</span>
+                <span class="quick-card-count">151 calculators</span>
               </div>
-              <p class="copy">Multi-input formulas, engineering calculators, identifiers and visual tools.</p>
-              <div class="quick-chip-row" aria-hidden="true">
-                <span class="quick-chip">Ohm’s law</span>
-                <span class="quick-chip">dB gain/loss</span>
-                <span class="quick-chip">Link budget</span>
+              <label class="quick-calc-label" for="quickCalculatorSelect">Formula</label>
+              <select id="quickCalculatorSelect" class="quick-calc-select" data-quick-calc-select aria-label="Quick calculator"></select>
+              <div class="quick-calc-fields" data-quick-calc-fields></div>
+              <div class="quick-calc-result" data-quick-calc-result>
+                <strong>Choose a calculator</strong>
+                <small>Common formulas work here. Complex tools open in the library.</small>
               </div>
-            </a>
+              <div class="quick-calc-footer">
+                <button class="small-action-link quick-calc-run" data-quick-calc-run type="button">Calculate</button>
+                <a class="small-action-link" href="./calculator-library.html" data-track-library>View all calculators ›</a>
+              </div>
+            </article>
 
             <article class="quick-converter-card" data-converter-widget>
               <div class="quick-converter-title-row">
@@ -836,7 +901,7 @@
               <p class="category-copy">Calculators, identifiers, Smith chart and visual tools.</p>
             </div>
             <div class="category-footer">
-              <span class="category-count">87 tools</span>
+              <span class="category-count">151 calculators</span>
               <span id="usageSummary" class="category-count is-usage">0 uses</span>
             </div>
           </a>
@@ -1093,7 +1158,16 @@
     </section>
   </main>
 
-  <script src="./converter-registry.js?v=1.0.0"></script>
+  <script src="./calculators/calculator-helpers.js?v=2.0.0"></script>
+  <script src="./calculators/general.js?v=2.0.0"></script>
+  <script src="./calculators/rf.js?v=2.0.0"></script>
+  <script src="./calculators/electronics.js?v=2.0.0"></script>
+  <script src="./calculators/electrical.js?v=2.0.0"></script>
+  <script src="./calculators/broadcast.js?v=2.0.0"></script>
+  <script src="./calculators/instruments.js?v=2.0.0"></script>
+  <script src="./calculators/cable.js?v=2.0.0"></script>
+  <script src="./calculators/sensors.js?v=2.0.0"></script>
+  <script src="./converters/converter-registry.js?v=2.0.0"></script>
   <script>
     window.FieldOpsSearchQueue = window.FieldOpsSearchQueue || [];
     window.FieldOpsSearchQueue.push({
@@ -1406,6 +1480,67 @@
         const names = Array.from(event.target.files || []).map((file) => file.name).join(", ");
         document.getElementById("cameraStatus").textContent = names ? "Selected: " + names : "";
       });
+
+      (() => {
+        const host = document.querySelector("[data-quick-calculator]");
+        const select = host && host.querySelector("[data-quick-calc-select]");
+        const fieldsHost = host && host.querySelector("[data-quick-calc-fields]");
+        const resultHost = host && host.querySelector("[data-quick-calc-result]");
+        const runButton = host && host.querySelector("[data-quick-calc-run]");
+        if (!host || !window.FieldOpsCalculatorRegistry) return;
+        const preferred = ["ohms-law", "dbm-watts", "db-power-change", "vswr-return-loss", "link-budget", "cable-loss", "voltage-drop-single", "loop-4-20"];
+        const quickTools = preferred.map((id) => window.FieldOpsCalculatorRegistry.find((tool) => tool.id === id)).filter(Boolean);
+        quickTools.forEach((tool) => {
+          const option = document.createElement("option");
+          option.value = tool.id;
+          option.textContent = tool.title;
+          select.append(option);
+        });
+        const renderFields = () => {
+          const tool = quickTools.find((item) => item.id === select.value) || quickTools[0];
+          fieldsHost.innerHTML = "";
+          tool.fields.forEach((field) => {
+            const label = document.createElement("label");
+            label.className = "quick-calc-field";
+            const caption = document.createElement("span");
+            caption.textContent = field.label;
+            let input;
+            if (field.type === "select") {
+              input = document.createElement("select");
+              (field.options || []).forEach(([value, text]) => {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = text;
+                input.append(option);
+              });
+            } else {
+              input = document.createElement("input");
+              input.type = field.type || "number";
+              input.inputMode = field.type === "text" ? "text" : "decimal";
+            }
+            input.name = field.id;
+            input.value = field.value ?? "";
+            label.append(caption, input);
+            fieldsHost.append(label);
+          });
+          resultHost.innerHTML = "<strong>Ready</strong><small>Enter values and calculate.</small>";
+        };
+        const calculate = () => {
+          const tool = quickTools.find((item) => item.id === select.value) || quickTools[0];
+          const values = {};
+          fieldsHost.querySelectorAll("input,select").forEach((input) => { values[input.name] = input.value; });
+          try {
+            const output = tool.compute(values);
+            resultHost.innerHTML = "<strong>" + output.primary + "</strong><small>" + (output.secondary || "") + "</small>";
+            if (window.FieldOpsUsage) window.FieldOpsUsage.calculate(tool.id);
+          } catch (error) {
+            resultHost.innerHTML = "<strong>Calculation error</strong><small>" + error.message + "</small>";
+          }
+        };
+        select.addEventListener("change", renderFields);
+        runButton.addEventListener("click", calculate);
+        renderFields();
+      })();
 
       window.FieldOpsConverter.mount(document.querySelector("[data-converter-widget]"), {
         storageKey: "fieldOpsAtlas.converter.quick.v1",
