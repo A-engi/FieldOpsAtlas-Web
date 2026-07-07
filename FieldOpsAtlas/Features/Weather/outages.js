@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - UK electricity outages
    File: FieldOpsAtlas/Features/Weather/outages.js
-   Version: 0.2.0-provider-switches
+   Version: 0.3.0-layergroups-dedupe
 
    The page requests official provider feeds directly where those feeds permit
    browser access. A failed source remains visible in the provider panel and
@@ -11,7 +11,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.2.0-provider-switches";
+  const VERSION = "0.3.0-layergroups-dedupe";
   const ACTIVE_SOURCES_KEY = "fieldops-outage-active-sources-v1";
   const REFRESH_MS = 5 * 60 * 1000;
   const FETCH_TIMEOUT_MS = 18000;
@@ -80,10 +80,12 @@
 
   const state = {
     map: null,
-    incidentLayer: null,
+    providerLayers: new Map(),
+    sourceIncidents: new Map(),
     incidents: new Map(),
     firstSeen: new Map(),
     sourceState: new Map(),
+    loadingSources: new Set(),
     refreshTimer: null,
     renderTimer: null,
     activeSources: new Set()
@@ -127,6 +129,9 @@
     elements.currentCount = document.getElementById("currentCount");
     elements.plannedCount = document.getElementById("plannedCount");
     elements.providerCount = document.getElementById("providerCount");
+    elements.rawRowCount = document.getElementById("rawRowCount");
+    elements.uniqueIncidentCount = document.getElementById("uniqueIncidentCount");
+    elements.groupedRowCount = document.getElementById("groupedRowCount");
     elements.animationDuration = document.getElementById("newIncidentAnimation");
   }
 
@@ -173,9 +178,76 @@
       attribution: OSM_ATTRIBUTION
     }).addTo(state.map);
 
-    state.incidentLayer = window.L.layerGroup().addTo(state.map);
+    initialiseProviderLayers();
+    syncProviderVisibility();
+    syncCategoryVisibility();
     fitUkView();
     window.setTimeout(() => state.map.invalidateSize(), 160);
+  }
+
+  function initialiseProviderLayers() {
+    SOURCES.forEach((source) => {
+      const current = window.L.layerGroup();
+      const planned = window.L.layerGroup();
+      const restored = window.L.layerGroup();
+      const root = window.L.layerGroup([current, planned, restored]);
+
+      state.providerLayers.set(source.id, {
+        root,
+        current,
+        planned,
+        restored
+      });
+
+      state.sourceIncidents.set(source.id, []);
+    });
+  }
+
+  function syncProviderVisibility() {
+    SOURCES.forEach((source) => {
+      const bundle = state.providerLayers.get(source.id);
+      if (!bundle) return;
+
+      const shouldShow = state.activeSources.has(source.id);
+      const isShown = state.map.hasLayer(bundle.root);
+
+      if (shouldShow && !isShown) {
+        bundle.root.addTo(state.map);
+      } else if (!shouldShow && isShown) {
+        state.map.removeLayer(bundle.root);
+      }
+    });
+  }
+
+  function syncCategoryVisibility() {
+    const categoryState = {
+      current: Boolean(elements.showCurrent?.checked),
+      planned: Boolean(elements.showPlanned?.checked),
+      restored: Boolean(elements.showRestored?.checked)
+    };
+
+    state.providerLayers.forEach((bundle) => {
+      Object.entries(categoryState).forEach(([category, shouldShow]) => {
+        const layer = bundle[category];
+        const isIncluded = bundle.root.hasLayer(layer);
+
+        if (shouldShow && !isIncluded) {
+          bundle.root.addLayer(layer);
+        } else if (!shouldShow && isIncluded) {
+          bundle.root.removeLayer(layer);
+        }
+      });
+    });
+  }
+
+  function allLoadedIncidents() {
+    return Array.from(state.sourceIncidents.values()).flat();
+  }
+
+  function activeIncidents() {
+    return Array.from(state.activeSources).flatMap(
+      (sourceId) => state.sourceIncidents.get(sourceId) || []
+    );
   }
 
   function fitUkView() {
@@ -195,7 +267,10 @@
       elements.showCurrent,
       elements.showPlanned,
       elements.showRestored
-    ].forEach((input) => input?.addEventListener("change", renderIncidents));
+    ].forEach((input) => input?.addEventListener("change", () => {
+      syncCategoryVisibility();
+      updateSummary();
+    }));
 
     elements.animationDuration?.addEventListener("change", refreshAnimatedMarkers);
 
@@ -210,13 +285,19 @@
     elements.activateAllProviders?.addEventListener("click", () => {
       state.activeSources = new Set(SOURCES.map((source) => source.id));
       writeActiveSources();
+      syncProviderVisibility();
+      syncCategoryVisibility();
+      renderSourceList();
+      updateSummary();
       loadAllSources();
     });
 
     elements.deactivateAllProviders?.addEventListener("click", () => {
       state.activeSources.clear();
       writeActiveSources();
-      loadAllSources();
+      syncProviderVisibility();
+      renderSourceList();
+      updateSummary();
     });
   }
 
@@ -253,9 +334,8 @@
   }
 
   function setSourceActive(sourceId, active) {
-    if (!SOURCES.some((source) => source.id === sourceId)) {
-      return;
-    }
+    const source = SOURCES.find((item) => item.id === sourceId);
+    if (!source) return;
 
     if (active) {
       state.activeSources.add(sourceId);
@@ -264,72 +344,115 @@
     }
 
     writeActiveSources();
-    loadAllSources();
+    syncProviderVisibility();
+    syncCategoryVisibility();
+    renderSourceList();
+    updateSummary();
+
+    if (active) {
+      loadSingleSource(source);
+    }
   }
 
   async function loadAllSources() {
+    const activeSources = SOURCES.filter((source) => state.activeSources.has(source.id));
+
     if (elements.refresh) {
       elements.refresh.disabled = true;
       elements.refresh.textContent = "Refreshing";
     }
 
+    if (!activeSources.length) {
+      setHeadline("All outage providers deactivated", "error");
+      elements.refresh.disabled = false;
+      elements.refresh.textContent = "Refresh feeds";
+      return;
+    }
+
     setHeadline("Loading official provider feeds", "loading");
 
-    SOURCES.forEach((source) => {
-      const active = state.activeSources.has(source.id);
-
-      state.sourceState.set(source.id, {
-        status: active ? "loading" : "off",
-        count: 0,
-        skipped: 0,
-        message: active ? "Loading" : "Deactivated"
-      });
-    });
-
-    renderSourceList();
-
-    const activeSources = SOURCES.filter((source) => state.activeSources.has(source.id));
-
-    const settled = await Promise.allSettled(
-      activeSources.map(async (source) => {
-        try {
-          const result = await loadSource(source);
-          state.sourceState.set(source.id, {
-            status: "live",
-            count: result.incidents.length,
-            skipped: result.skipped,
-            message: result.message || `${result.incidents.length} mapped`
-          });
-          return result.incidents;
-        } catch (error) {
-          state.sourceState.set(source.id, {
-            status: "error",
-            count: 0,
-            skipped: 0,
-            message: conciseError(error)
-          });
-          return [];
-        } finally {
-          renderSourceList();
-        }
-      })
-    );
-
-    const nextIncidents = [];
-    settled.forEach((entry) => {
-      if (entry.status === "fulfilled") {
-        nextIncidents.push(...entry.value);
-      }
-    });
-
-    replaceIncidents(nextIncidents);
+    await Promise.allSettled(activeSources.map(loadSingleSource));
 
     if (elements.refresh) {
       elements.refresh.disabled = false;
       elements.refresh.textContent = "Refresh feeds";
     }
 
+    renderIncidents();
+    renderSourceList();
     updateSummary();
+  }
+
+  async function loadSingleSource(source) {
+    if (state.loadingSources.has(source.id)) {
+      return;
+    }
+
+    state.loadingSources.add(source.id);
+
+    const previous = state.sourceIncidents.get(source.id) || [];
+
+    state.sourceState.set(source.id, {
+      status: "loading",
+      rawRows: 0,
+      validRows: 0,
+      uniqueCount: previous.length,
+      groupedRows: 0,
+      skipped: 0,
+      stale: false,
+      message: "Loading"
+    });
+
+    renderSourceList();
+
+    try {
+      const result = await loadSource(source);
+      state.sourceIncidents.set(source.id, result.incidents);
+
+      const status = result.uniqueCount > 0
+        ? "live"
+        : result.rawRows > 0 && result.validRows === 0
+          ? "warning"
+          : "empty";
+
+      const message = result.uniqueCount > 0
+        ? `${result.uniqueCount} unique · ${result.rawRows} rows · ${result.groupedRows} grouped`
+        : result.rawRows > 0
+          ? `${result.rawRows} rows loaded · no usable incidents`
+          : "Feed loaded · no published incidents";
+
+      state.sourceState.set(source.id, {
+        status,
+        rawRows: result.rawRows,
+        validRows: result.validRows,
+        uniqueCount: result.uniqueCount,
+        groupedRows: result.groupedRows,
+        skipped: result.skipped,
+        stale: false,
+        dataset: result.dataset || "",
+        message
+      });
+    } catch (error) {
+      const hasCached = previous.length > 0;
+
+      state.sourceState.set(source.id, {
+        status: "error",
+        rawRows: 0,
+        validRows: 0,
+        uniqueCount: previous.length,
+        groupedRows: 0,
+        skipped: 0,
+        stale: hasCached,
+        message: hasCached
+          ? `${conciseError(error)} · showing ${previous.length} cached`
+          : conciseError(error)
+      });
+    } finally {
+      state.loadingSources.delete(source.id);
+      renderIncidents();
+      renderSourceList();
+      updateSummary();
+    }
   }
 
   async function loadSource(source) {
@@ -421,7 +544,7 @@
     }
 
     const result = normaliseRows(source, allRows.slice(0, MAX_RECORDS_PER_SOURCE));
-    result.message = `${result.incidents.length} mapped from ${dataset}`;
+    result.dataset = dataset;
     return result;
   }
 
@@ -506,20 +629,29 @@
   }
 
   function normaliseRows(source, rows) {
-    const incidents = [];
+    const candidates = [];
     let skipped = 0;
 
     rows.forEach((row, index) => {
       const incident = normaliseIncident(source, row, index);
 
       if (incident) {
-        incidents.push(incident);
+        candidates.push(incident);
       } else {
         skipped += 1;
       }
     });
 
-    return { incidents, skipped };
+    const incidents = deduplicateIncidents(source, candidates);
+
+    return {
+      incidents,
+      rawRows: rows.length,
+      validRows: candidates.length,
+      uniqueCount: incidents.length,
+      groupedRows: Math.max(0, candidates.length - incidents.length),
+      skipped
+    };
   }
 
   function normaliseIncident(source, row, index) {
@@ -561,16 +693,25 @@
       category = "planned";
     }
 
-    const providerReference = String(pick(fields, [
+    const referenceValue = pick(fields, [
       "incidentid",
       "incidentreference",
+      "incidentnumber",
+      "incidentno",
       "eventid",
       "eventreference",
-      "reference",
+      "outageid",
+      "outagereference",
       "faultid",
       "faultreference",
-      "id"
-    ]) || `${coordinate.lat.toFixed(5)}:${coordinate.lon.toFixed(5)}:${index}`);
+      "powercutreference",
+      "jobid",
+      "reference"
+    ]);
+
+    const providerReference = isUsefulReference(referenceValue)
+      ? String(referenceValue).trim()
+      : null;
 
     const area = String(pick(fields, [
       "location",
@@ -617,7 +758,6 @@
     ]));
 
     return {
-      key: `${source.id}:${providerReference}`,
       sourceId: source.id,
       provider: source.name,
       reference: providerReference,
@@ -630,8 +770,264 @@
       startedAt,
       restoreAt,
       updatedAt,
-      officialUrl: source.officialUrl
+      officialUrl: source.officialUrl,
+      rawIndex: index
     };
+  }
+
+  function isUsefulReference(value) {
+    if (value === undefined || value === null) return false;
+
+    const text = String(value).trim();
+    if (!text) return false;
+
+    return !/^(0|unknown|none|null|n\/?a|not available|not published)$/i.test(text);
+  }
+
+  function deduplicateIncidents(source, incidents) {
+    const explicitGroups = new Map();
+    const fallbackGroups = [];
+
+    incidents.forEach((incident) => {
+      if (incident.reference) {
+        const key = [
+          source.id,
+          "ref",
+          normaliseIdentity(incident.reference),
+          incident.category
+        ].join(":");
+
+        if (!explicitGroups.has(key)) {
+          explicitGroups.set(key, createIncidentGroup(incident, key));
+        } else {
+          mergeIncidentGroup(explicitGroups.get(key), incident);
+        }
+
+        return;
+      }
+
+      const matchingGroup = fallbackGroups.find(
+        (group) => canMergeFallback(group, incident)
+      );
+
+      if (matchingGroup) {
+        mergeIncidentGroup(matchingGroup, incident);
+      } else {
+        fallbackGroups.push(createIncidentGroup(incident, null));
+      }
+    });
+
+    const groups = [
+      ...explicitGroups.values(),
+      ...fallbackGroups
+    ];
+
+    return groups.map((group, index) => finaliseIncidentGroup(source, group, index));
+  }
+
+  function createIncidentGroup(incident, explicitKey) {
+    return {
+      explicitKey,
+      sourceId: incident.sourceId,
+      provider: incident.provider,
+      reference: incident.reference,
+      category: incident.category,
+      status: incident.status,
+      type: incident.type,
+      officialUrl: incident.officialUrl,
+      startedAt: incident.startedAt,
+      restoreAt: incident.restoreAt,
+      updatedAt: incident.updatedAt,
+      areas: new Set([incident.area]),
+      coordinates: [[incident.lat, incident.lon]],
+      latSum: incident.lat,
+      lonSum: incident.lon,
+      rawRecordCount: 1
+    };
+  }
+
+  function mergeIncidentGroup(group, incident) {
+    group.rawRecordCount += 1;
+    group.latSum += incident.lat;
+    group.lonSum += incident.lon;
+    group.coordinates.push([incident.lat, incident.lon]);
+    group.areas.add(incident.area);
+
+    group.startedAt = earlierDate(group.startedAt, incident.startedAt);
+    group.restoreAt = laterDate(group.restoreAt, incident.restoreAt);
+    group.updatedAt = laterDate(group.updatedAt, incident.updatedAt);
+
+    if (!group.reference && incident.reference) {
+      group.reference = incident.reference;
+    }
+
+    if ((!group.status || group.status === group.category) && incident.status) {
+      group.status = incident.status;
+    }
+
+    if ((!group.type || group.type === group.category) && incident.type) {
+      group.type = incident.type;
+    }
+  }
+
+  function finaliseIncidentGroup(source, group, index) {
+    const lat = group.latSum / group.rawRecordCount;
+    const lon = group.lonSum / group.rawRecordCount;
+    const areas = Array.from(group.areas).filter(Boolean);
+    const area = areas.length <= 1
+      ? areas[0] || "Published incident location"
+      : `${areas[0]} + ${areas.length - 1} related location${areas.length === 2 ? "" : "s"}`;
+
+    const timeBucket = group.startedAt
+      ? Math.floor(group.startedAt / (30 * 60 * 1000))
+      : "unknown";
+
+    const fallbackKey = [
+      source.id,
+      "geo",
+      group.category,
+      lat.toFixed(3),
+      lon.toFixed(3),
+      timeBucket,
+      normaliseIdentity(areas[0] || "location").slice(0, 40),
+      index
+    ].join(":");
+
+    return {
+      key: group.explicitKey || fallbackKey,
+      sourceId: group.sourceId,
+      provider: group.provider,
+      reference: group.reference,
+      category: group.category,
+      status: group.status || group.category,
+      type: group.type || group.category,
+      area,
+      areas,
+      lat,
+      lon,
+      startedAt: group.startedAt,
+      restoreAt: group.restoreAt,
+      updatedAt: group.updatedAt,
+      officialUrl: group.officialUrl,
+      rawRecordCount: group.rawRecordCount,
+      duplicateCount: Math.max(0, group.rawRecordCount - 1),
+      coordinateSpreadKm: coordinateSpreadKm(group.coordinates)
+    };
+  }
+
+  function canMergeFallback(group, incident) {
+    if (group.category !== incident.category) return false;
+
+    const centre = [
+      group.latSum / group.rawRecordCount,
+      group.lonSum / group.rawRecordCount
+    ];
+
+    const distanceKm = haversineKm(
+      centre[0],
+      centre[1],
+      incident.lat,
+      incident.lon
+    );
+
+    if (distanceKm > 1.5) return false;
+
+    const groupStart = group.startedAt;
+    const incidentStart = incident.startedAt;
+
+    if (
+      groupStart &&
+      incidentStart &&
+      Math.abs(groupStart - incidentStart) > 90 * 60 * 1000
+    ) {
+      return false;
+    }
+
+    const groupArea = Array.from(group.areas)[0] || "";
+    const similarity = areaSimilarity(groupArea, incident.area);
+
+    if (!groupStart || !incidentStart) {
+      return distanceKm <= 0.5 && similarity >= 0.6;
+    }
+
+    return similarity >= 0.35 || isGenericArea(groupArea) || isGenericArea(incident.area);
+  }
+
+  function normaliseIdentity(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function areaSimilarity(first, second) {
+    const a = areaTokens(first);
+    const b = areaTokens(second);
+
+    if (!a.size || !b.size) return 0;
+
+    let shared = 0;
+    a.forEach((token) => {
+      if (b.has(token)) shared += 1;
+    });
+
+    return shared / Math.max(a.size, b.size);
+  }
+
+  function areaTokens(value) {
+    const ignored = new Set([
+      "the", "and", "near", "area", "location", "published",
+      "incident", "outage", "power", "cut", "affected"
+    ]);
+
+    return new Set(
+      String(value || "")
+        .toLowerCase()
+        .match(/[a-z0-9]+/g)
+        ?.filter((token) => token.length > 2 && !ignored.has(token)) || []
+    );
+  }
+
+  function isGenericArea(value) {
+    return /published incident location|unknown|not available/i.test(String(value || ""));
+  }
+
+  function earlierDate(first, second) {
+    if (!first) return second || null;
+    if (!second) return first;
+    return Math.min(first, second);
+  }
+
+  function laterDate(first, second) {
+    if (!first) return second || null;
+    if (!second) return first;
+    return Math.max(first, second);
+  }
+
+  function coordinateSpreadKm(coordinates) {
+    if (!Array.isArray(coordinates) || coordinates.length < 2) return 0;
+
+    const lat = coordinates.reduce((sum, item) => sum + item[0], 0) / coordinates.length;
+    const lon = coordinates.reduce((sum, item) => sum + item[1], 0) / coordinates.length;
+
+    return coordinates.reduce((maximum, item) => {
+      return Math.max(maximum, haversineKm(lat, lon, item[0], item[1]));
+    }, 0);
+  }
+
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    const radiusKm = 6371;
+    const toRadians = (value) => value * Math.PI / 180;
+    const deltaLat = toRadians(lat2 - lat1);
+    const deltaLon = toRadians(lon2 - lon1);
+
+    const a =
+      Math.sin(deltaLat / 2) ** 2 +
+      Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(deltaLon / 2) ** 2;
+
+    return radiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   function flattenObject(value, prefix = "", result = {}) {
@@ -828,17 +1224,15 @@
     return Number.isFinite(parsed) ? parsed : null;
   }
 
-  function replaceIncidents(incidents) {
+  function replaceIncidents() {
     const next = new Map();
     const now = Date.now();
 
-    incidents.forEach((incident) => {
-      if (!next.has(incident.key)) {
-        next.set(incident.key, incident);
+    allLoadedIncidents().forEach((incident) => {
+      next.set(incident.key, incident);
 
-        if (!state.firstSeen.has(incident.key)) {
-          state.firstSeen.set(incident.key, now);
-        }
+      if (!state.firstSeen.has(incident.key)) {
+        state.firstSeen.set(incident.key, now);
       }
     });
 
@@ -849,19 +1243,25 @@
         state.firstSeen.delete(key);
       }
     });
-
-    renderIncidents();
   }
 
   function renderIncidents() {
-    if (!state.incidentLayer) return;
+    replaceIncidents();
 
-    state.incidentLayer.clearLayers();
+    state.providerLayers.forEach((bundle) => {
+      bundle.current.clearLayers();
+      bundle.planned.clearLayers();
+      bundle.restored.clearLayers();
+    });
 
-    const visible = Array.from(state.incidents.values()).filter(isCategoryVisible);
     const now = Date.now();
 
-    visible.forEach((incident) => {
+    state.incidents.forEach((incident) => {
+      const bundle = state.providerLayers.get(incident.sourceId);
+      const targetLayer = bundle?.[incident.category] || bundle?.current;
+
+      if (!targetLayer) return;
+
       const marker = window.L.marker([incident.lat, incident.lon], {
         pane: "outageMarkerPane",
         keyboard: true,
@@ -873,14 +1273,17 @@
         className: "outage-popup-shell"
       });
 
-      marker.addTo(state.incidentLayer);
+      marker.addTo(targetLayer);
       incident.marker = marker;
     });
 
+    syncProviderVisibility();
+    syncCategoryVisibility();
     updateSummary();
   }
 
   function isCategoryVisible(incident) {
+    if (!state.activeSources.has(incident.sourceId)) return false;
     if (incident.category === "planned") return Boolean(elements.showPlanned?.checked);
     if (incident.category === "restored") return Boolean(elements.showRestored?.checked);
     return Boolean(elements.showCurrent?.checked);
@@ -899,6 +1302,10 @@
       ? 0.82
       : Math.max(0, 0.82 * (1 - ((progress - fadeStart) / (1 - fadeStart))));
 
+    const groupedBadge = incident.rawRecordCount > 1
+      ? `<span class="outage-marker-count" aria-label="${incident.rawRecordCount} provider rows grouped">${incident.rawRecordCount}</span>`
+      : "";
+
     return window.L.divIcon({
       className: "outage-marker-shell",
       html: [
@@ -909,7 +1316,8 @@
         '" aria-hidden="true"></span>',
         '<span class="outage-marker-core" style="',
         `--outage-colour:${colour};`,
-        '" aria-hidden="true"></span>'
+        '" aria-hidden="true"></span>',
+        groupedBadge
       ].join(""),
       iconSize: [48, 48],
       iconAnchor: [24, 24]
@@ -936,13 +1344,25 @@
     const status = escapeHtml(humanise(incident.status));
     const type = escapeHtml(humanise(incident.type));
     const area = escapeHtml(incident.area);
-    const reference = escapeHtml(incident.reference);
+    const reference = incident.reference
+      ? escapeHtml(incident.reference)
+      : "Not published";
+
+    const groupingText = incident.rawRecordCount > 1
+      ? [
+          `<span class="outage-popup-grouped">Grouped from ${incident.rawRecordCount} provider rows.</span>`,
+          incident.coordinateSpreadKm > 0.05
+            ? `<span>Published-coordinate spread: ${incident.coordinateSpreadKm.toFixed(1)} km.</span>`
+            : ""
+        ].join("")
+      : "";
 
     return [
       '<div class="outage-popup">',
       `<strong>${escapeHtml(incident.provider)}</strong>`,
       `<span class="outage-popup-status">${type} · ${status}</span>`,
       `<span>${area}</span>`,
+      groupingText,
       incident.startedAt
         ? `<span>Started: ${escapeHtml(formatDateTime(incident.startedAt))}</span>`
         : "",
@@ -960,38 +1380,65 @@
   }
 
   function updateSummary() {
-    const incidents = Array.from(state.incidents.values());
+    const incidents = activeIncidents();
     const current = incidents.filter((item) => item.category === "current").length;
     const planned = incidents.filter((item) => item.category === "planned").length;
-    const liveSources = Array.from(state.sourceState.values())
-      .filter((item) => item.status === "live").length;
-    const errorSources = Array.from(state.sourceState.values())
-      .filter((item) => item.status === "error").length;
+
+    const activeStates = Array.from(state.activeSources)
+      .map((sourceId) => state.sourceState.get(sourceId))
+      .filter(Boolean);
+
+    const loadedSources = activeStates.filter(
+      (item) => ["live", "empty", "warning"].includes(item.status)
+    ).length;
+
+    const errorSources = activeStates.filter((item) => item.status === "error").length;
     const activeSourceCount = state.activeSources.size;
+
+    const rawRows = activeStates.reduce(
+      (sum, item) => sum + Number(item.rawRows || 0),
+      0
+    );
+
+    const groupedRows = activeStates.reduce(
+      (sum, item) => sum + Number(item.groupedRows || 0),
+      0
+    );
 
     elements.currentCount.textContent = String(current);
     elements.plannedCount.textContent = String(planned);
-    elements.providerCount.textContent = `${liveSources}/${activeSourceCount}`;
+    elements.providerCount.textContent = `${loadedSources}/${activeSourceCount}`;
+    elements.rawRowCount.textContent = String(rawRows);
+    elements.uniqueIncidentCount.textContent = String(incidents.length);
+    elements.groupedRowCount.textContent = String(groupedRows);
 
-    const total = incidents.length;
     const summary = `${current} current · ${planned} planned`;
-    elements.headlineStatus.textContent = summary;
     elements.sourceSummary.textContent =
-      `${activeSourceCount}/${SOURCES.length} active · ${liveSources} loaded`;
+      `${activeSourceCount}/${SOURCES.length} active · ${rawRows} rows → ${incidents.length} incidents`;
 
     if (activeSourceCount === 0) {
       setHeadline("All outage providers deactivated", "error");
-    } else if (liveSources === activeSourceCount) {
+    } else if (loadedSources === activeSourceCount) {
       setHeadline(summary, "live");
-    } else if (liveSources > 0) {
-      setHeadline(`${summary} · ${errorSources} feed${errorSources === 1 ? "" : "s"} unavailable`, "partial");
-    } else if (activeSourceCount > 0) {
+    } else if (loadedSources > 0) {
+      setHeadline(
+        `${summary} · ${errorSources} feed${errorSources === 1 ? "" : "s"} unavailable`,
+        "partial"
+      );
+    } else {
       setHeadline("Official feeds could not be loaded", "error");
     }
 
-    elements.statusText.textContent = total
-      ? "All mapped records came from official provider feeds. Marker locations may be approximate."
-      : "No incidents have been mapped yet. Open Provider feeds to inspect source availability.";
+    if (incidents.length) {
+      elements.statusText.textContent =
+        `Showing ${incidents.length} unique incidents from ${rawRows} provider rows. ` +
+        `${groupedRows} repeated rows were grouped.`;
+    } else if (activeSourceCount === 0) {
+      elements.statusText.textContent = "All provider layers are deactivated.";
+    } else {
+      elements.statusText.textContent =
+        "No unique incidents have been mapped. Open Outage providers to inspect each feed.";
+    }
   }
 
   function setHeadline(message, mode) {
@@ -1016,28 +1463,34 @@
     if (!elements.sourceList) return;
 
     elements.sourceList.innerHTML = SOURCES.map((source) => {
+      const active = state.activeSources.has(source.id);
       const sourceState = state.sourceState.get(source.id) || {
-        status: "idle",
-        count: 0,
+        status: active ? "idle" : "off",
+        rawRows: 0,
+        uniqueCount: 0,
+        groupedRows: 0,
         skipped: 0,
-        message: "Waiting"
+        message: active ? "Waiting" : "Deactivated"
       };
 
-      const detail = sourceState.status === "live"
-        ? `${sourceState.count} mapped${sourceState.skipped ? ` · ${sourceState.skipped} without coordinates` : ""}`
-        : sourceState.message;
+      const detail = sourceState.message || "Waiting";
 
-      const active = state.activeSources.has(source.id);
-      const stateText = active
-        ? sourceState.status === "live"
+      const stateText = !active
+        ? "OFF"
+        : sourceState.status === "live"
           ? "ACTIVE"
-          : sourceState.status === "error"
-            ? "ERROR"
-            : "LOADING"
-        : "OFF";
+          : sourceState.status === "empty"
+            ? "EMPTY"
+            : sourceState.status === "warning"
+              ? "CHECK"
+              : sourceState.status === "error"
+                ? "ERROR"
+                : "LOADING";
+
+      const rowStatus = active ? sourceState.status : "off";
 
       return [
-        `<div class="outage-source-row is-${escapeAttribute(sourceState.status)}">`,
+        `<div class="outage-source-row is-${escapeAttribute(rowStatus)}">`,
         `<button class="outage-source-toggle" type="button" data-source-toggle="${escapeAttribute(source.id)}" aria-pressed="${String(active)}">`,
         '<span class="outage-source-dot" aria-hidden="true"></span>',
         '<span class="outage-source-copy">',
@@ -1186,6 +1639,16 @@
   window.FieldOpsOutages = {
     version: VERSION,
     refresh: loadAllSources,
+    diagnostics: () => ({
+      sources: Object.fromEntries(state.sourceState.entries()),
+      incidents: activeIncidents().map((incident) => ({
+        key: incident.key,
+        provider: incident.provider,
+        category: incident.category,
+        rawRecordCount: incident.rawRecordCount,
+        coordinateSpreadKm: incident.coordinateSpreadKm
+      }))
+    }),
     sources: SOURCES.map((source) => ({
       id: source.id,
       name: source.name,
