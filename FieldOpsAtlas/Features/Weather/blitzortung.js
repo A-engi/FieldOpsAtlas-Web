@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - Blitzortung embedded map
    File: FieldOpsAtlas/Features/Weather/blitzortung.js
-   Version: 0.1.0-official-embed
+   Version: 0.1.1-circles-zoomout
    ========================================================================== */
 
 (() => {
@@ -12,17 +12,18 @@
 
   const PARAMS = new URLSearchParams({
     interactive: "0",
-    NavigationControl: "1",
-    FullScreenControl: "1",
+    NavigationControl: "0",
+    FullScreenControl: "0",
     Cookies: "0",
     InfoDiv: "0",
-    MenuButtonDiv: "1",
-    ScaleControl: "1",
+    MenuButtonDiv: "0",
+    ScaleControl: "0",
     LightningCheckboxChecked: "1",
     LightningRangeValue: "23",
     CourseCheckboxChecked: "0",
     CountingCheckboxChecked: "0",
-    CirclesCheckboxChecked: "0",
+    CirclesCheckboxChecked: "1",
+    CirclesRangeValue: "6",
     LinksCheckboxChecked: "0",
     DetectorsCheckboxChecked: "0",
     CoverageCheckboxChecked: "0",
@@ -34,9 +35,9 @@
   });
 
   const VIEWS = {
-    uk: "#5/54.8/-3.5",
-    scandinavia: "#5/59.0/10.0",
-    europe: "#4/50.0/10.0"
+    uk: "#4/54.8/-3.5",
+    scandinavia: "#4/59.0/10.0",
+    europe: "#3/50.0/10.0"
   };
 
   const frame = document.getElementById("blitzortungFrame");
