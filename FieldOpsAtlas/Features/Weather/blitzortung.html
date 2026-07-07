@@ -15,14 +15,14 @@
     class="fieldops-shell-root weather-shell blitzortung-shell"
     data-page="weather"
     data-weather-provider="blitzortung"
-    data-version="0.1.0-official-embed"
+    data-version="0.1.1-circles-zoomout"
   >
     <section class="weather-stage" aria-label="Blitzortung live lightning map">
       <iframe
         id="blitzortungFrame"
         class="blitzortung-frame"
         title="Official Blitzortung live lightning map"
-        src="https://map.blitzortung.org/index.php?interactive=0&amp;NavigationControl=1&amp;FullScreenControl=1&amp;Cookies=0&amp;InfoDiv=0&amp;MenuButtonDiv=1&amp;ScaleControl=1&amp;LightningCheckboxChecked=1&amp;LightningRangeValue=23&amp;CourseCheckboxChecked=0&amp;CountingCheckboxChecked=0&amp;CirclesCheckboxChecked=0&amp;LinksCheckboxChecked=0&amp;DetectorsCheckboxChecked=0&amp;CoverageCheckboxChecked=0&amp;DayNightCheckboxChecked=0&amp;AudioCheckboxChecked=0&amp;MapStyle=0&amp;MapStyleRangeValue=0&amp;Advertisment=0#5/54.8/-3.5"
+        src="https://map.blitzortung.org/index.php?interactive=0&amp;NavigationControl=0&amp;FullScreenControl=0&amp;Cookies=0&amp;InfoDiv=0&amp;MenuButtonDiv=0&amp;ScaleControl=0&amp;LightningCheckboxChecked=1&amp;LightningRangeValue=23&amp;CourseCheckboxChecked=0&amp;CountingCheckboxChecked=0&amp;CirclesCheckboxChecked=1&amp;CirclesRangeValue=6&amp;LinksCheckboxChecked=0&amp;DetectorsCheckboxChecked=0&amp;CoverageCheckboxChecked=0&amp;DayNightCheckboxChecked=0&amp;AudioCheckboxChecked=0&amp;MapStyle=0&amp;MapStyleRangeValue=0&amp;Advertisment=0#4/54.8/-3.5"
         loading="eager"
         referrerpolicy="strict-origin-when-cross-origin"
         allow="fullscreen"
@@ -48,7 +48,7 @@
         <summary>
           <span class="blitzortung-summary-title">
             <strong>Blitzortung live</strong>
-            <small>Official embedded vector map</small>
+            <small>Official embedded vector map with native strike circles</small>
           </span>
 
           <span class="blitzortung-summary-actions">
@@ -100,7 +100,7 @@
           <a
             id="openBlitzortung"
             class="blitzortung-open-link"
-            href="https://map.blitzortung.org/#5/54.8/-3.5"
+            href="https://map.blitzortung.org/#4/54.8/-3.5"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -117,6 +117,6 @@
   </main>
 
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
-  <script src="blitzortung.js?v=0.1.0-official-embed" defer></script>
+  <script src="blitzortung.js?v=0.1.1-circles-zoomout" defer></script>
 </body>
 </html>
