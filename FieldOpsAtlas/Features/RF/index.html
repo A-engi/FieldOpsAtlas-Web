@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.20-asset-owned-visual-fixes" data-rf-scene-default="mount-a_b-comp-scene">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.21-background-mountain-band" data-rf-scene-default="mount-a_b-comp-scene">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -67,13 +67,14 @@
   <script src="./rf-interface.js?v=1.1.123-scene-selector" defer></script>
   <script src="./rf-path-builder.js?v=1.3.0-path-distance-elevation" defer></script>
   <script src="./3d-render.js?v=1.6.6-smooth-side-transition" defer></script>
-  <script src="./3D Graphics/river-scene.js?v=1.6.20-asset-owned-visual-fixes" defer></script>
+  <script src="./3D Graphics/river-scene.js?v=1.6.27-clean-heavy-comp-transmitter" defer></script>
+  <script src="./3D Graphics/background-mountains.js?v=1.0.0-existing-mountain-band" defer></script>
   <script src="./graph-builder.js?v=1.9.1-scene-only-elevation-tags" defer></script>
 
   <script>
     (() => {
       "use strict";
-      const PAGE_VERSION = "1.7.20-asset-owned-visual-fixes";
+      const PAGE_VERSION = "1.7.21-background-mountain-band";
       const TOAST_ID = "rfLoadToast";
       const versionOf = globalName => window[globalName]?.VERSION || window[globalName]?.version || "missing";
       function showToast() {
@@ -86,6 +87,7 @@
         toast.textContent = [
           `index.html ${PAGE_VERSION}`,
           `3d-render.js ${versionOf("FieldOps3DRenderer")}`,
+          `background mountains ${versionOf("FieldOpsBackgroundMountains")}`,
           `graph-builder.js ${versionOf("FieldOpsGraphBuilder")}`,
           `path ${document.querySelector("[data-rf-graph]")?.dataset.rfPathId || "loading"}`,
           `scene ${document.querySelector("[data-rf-graph]")?.dataset.rfScene || "loading"}`
