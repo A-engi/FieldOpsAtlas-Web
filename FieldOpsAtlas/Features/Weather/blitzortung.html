@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Blitzortung Lightning - FieldOps Atlas</title>
+
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
+  <link rel="stylesheet" href="blitzortung.css?v=0.1.0-official-embed" />
+</head>
+
+<body class="weather-page">
+  <main
+    class="fieldops-shell-root weather-shell blitzortung-shell"
+    data-page="weather"
+    data-weather-provider="blitzortung"
+    data-version="0.1.0-official-embed"
+  >
+    <section class="weather-stage" aria-label="Blitzortung live lightning map">
+      <iframe
+        id="blitzortungFrame"
+        class="blitzortung-frame"
+        title="Official Blitzortung live lightning map"
+        src="https://map.blitzortung.org/index.php?interactive=0&amp;NavigationControl=1&amp;FullScreenControl=1&amp;Cookies=0&amp;InfoDiv=0&amp;MenuButtonDiv=1&amp;ScaleControl=1&amp;LightningCheckboxChecked=1&amp;LightningRangeValue=23&amp;CourseCheckboxChecked=0&amp;CountingCheckboxChecked=0&amp;CirclesCheckboxChecked=0&amp;LinksCheckboxChecked=0&amp;DetectorsCheckboxChecked=0&amp;CoverageCheckboxChecked=0&amp;DayNightCheckboxChecked=0&amp;AudioCheckboxChecked=0&amp;MapStyle=0&amp;MapStyleRangeValue=0&amp;Advertisment=0#5/54.8/-3.5"
+        loading="eager"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="fullscreen"
+      ></iframe>
+
+      <details class="blitzortung-panel blitzortung-nav-panel">
+        <summary>
+          <span>Weather pages</span>
+          <span class="blitzortung-summary-state" aria-hidden="true">Show</span>
+        </summary>
+
+        <nav class="blitzortung-provider-links" aria-label="Weather providers">
+          <a class="weather-provider-link" href="index.html">Radar</a>
+          <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+          <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+          <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+          <a class="weather-provider-link" href="lightning.html">EUMETSAT</a>
+          <a class="weather-provider-link is-active" href="blitzortung.html">Blitzortung</a>
+        </nav>
+      </details>
+
+      <details class="weather-dock blitzortung-panel blitzortung-dock">
+        <summary>
+          <span class="blitzortung-summary-title">
+            <strong>Blitzortung live</strong>
+            <small>Official embedded vector map</small>
+          </span>
+
+          <span class="blitzortung-summary-actions">
+            <span class="weather-pill blitzortung-live-pill">LIVE MAP</span>
+            <span class="blitzortung-summary-state" aria-hidden="true">Show</span>
+          </span>
+        </summary>
+
+        <div class="blitzortung-panel-body">
+          <p class="weather-status">
+            This page embeds the official Blitzortung live vector map. FieldOps Atlas does
+            not copy, scrape or re-publish the strike feed.
+          </p>
+
+          <div class="blitzortung-view-grid" aria-label="Map view controls">
+            <button
+              class="weather-button is-primary"
+              type="button"
+              data-blitz-view="uk"
+            >
+              UK
+            </button>
+
+            <button
+              class="weather-button"
+              type="button"
+              data-blitz-view="scandinavia"
+            >
+              Scandinavia
+            </button>
+
+            <button
+              class="weather-button"
+              type="button"
+              data-blitz-view="europe"
+            >
+              Europe
+            </button>
+
+            <button
+              id="reloadBlitzortung"
+              class="weather-button"
+              type="button"
+            >
+              Reload
+            </button>
+          </div>
+
+          <a
+            id="openBlitzortung"
+            class="blitzortung-open-link"
+            href="https://map.blitzortung.org/#5/54.8/-3.5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open full Blitzortung map
+          </a>
+
+          <p class="blitzortung-note">
+            Blitzortung describes this map as an entertainment display and states that it
+            must not be used to protect people or equipment.
+          </p>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="blitzortung.js?v=0.1.0-official-embed" defer></script>
+</body>
+</html>
