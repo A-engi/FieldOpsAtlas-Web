@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.23-round-arc-background" data-rf-scene-default="mount-a_b-comp-scene">
+  <main class="phone" data-page="rf" data-nav="rf" data-version="1.7.24-floor-snapped-background" data-rf-scene-default="mount-a_b-comp-scene">
     <section class="content-canvas" aria-label="RF Atlas content">
       <article class="rf-home" data-rf-interface-root></article>
     </section>
@@ -68,13 +68,13 @@
   <script src="./rf-path-builder.js?v=1.3.0-path-distance-elevation" defer></script>
   <script src="./3d-render.js?v=1.6.6-smooth-side-transition" defer></script>
   <script src="./3D Graphics/river-scene.js?v=1.6.27-clean-heavy-comp-transmitter" defer></script>
-  <script src="./3D Graphics/background-mountains.js?v=1.2.0-round-arc-front" defer></script>
+  <script src="./3D Graphics/background-mountains.js?v=1.2.1-floor-snapped" defer></script>
   <script src="./graph-builder.js?v=1.9.1-scene-only-elevation-tags" defer></script>
 
   <script>
     (() => {
       "use strict";
-      const PAGE_VERSION = "1.7.23-round-arc-background";
+      const PAGE_VERSION = "1.7.24-floor-snapped-background";
       const TOAST_ID = "rfLoadToast";
       const versionOf = globalName => window[globalName]?.VERSION || window[globalName]?.version || "missing";
       function showToast() {
