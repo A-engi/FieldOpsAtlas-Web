@@ -1,13 +1,13 @@
 /* FieldOps Atlas — cinematic RF panorama layer
  * File: FieldOpsAtlas/Features/RF/3D Graphics/background-mountains.js
- * Version: 2.0.1-compass-interior-clip
+ * Version: 2.0.2-no-compass
  * Replaces the three discrete mountain attempts without changing the approved
  * WebGL river plot, its camera, transmitters, geometry or controls.
  */
 (()=>{
   "use strict";
 
-  const VERSION="2.0.1-compass-interior-clip";
+  const VERSION="2.0.2-no-compass";
   const TARGETS=new Set(["mount-a_b-comp-scene","mount-a_a-comp-scene"]);
   const DRAG=0.34,INERTIA=0.05,DECAY=0.92,TAU=Math.PI*2;
   const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -141,32 +141,6 @@
     ctx.quadraticCurveTo(w*.79,h*.61,w*.91,h*.77);ctx.lineTo(w*.96,h);ctx.closePath();ctx.fill();ctx.restore();
   }
 
-  function clipCompassInterior(ctx,w,h){
-    const cx=w*.5,cy=h*.625,rx=w*.465,ry=h*.455;
-    ctx.beginPath();
-    ctx.ellipse(cx,cy,rx*.985,ry*.985,0,0,TAU);
-    ctx.clip();
-  }
-
-  function compass(ctx,w,h,angle){
-    const cx=w*.5,cy=h*.625,rx=w*.465,ry=h*.455;
-    ctx.save();ctx.lineCap="round";ctx.strokeStyle="rgba(73,184,198,.17)";ctx.lineWidth=Math.max(1,w*.0015);
-    ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,TAU);ctx.stroke();
-    ctx.strokeStyle="rgba(218,151,47,.24)";ctx.lineWidth=Math.max(1,w*.001);ctx.beginPath();ctx.ellipse(cx,cy,rx*.91,ry*.91,0,0,TAU);ctx.stroke();
-    const heading=angle*Math.PI/180;
-    for(let i=0;i<36;i+=1){
-      const t=i/36*TAU-heading*.08,major=i%9===0;
-      ctx.strokeStyle=major?"rgba(235,176,76,.44)":"rgba(97,191,201,.20)";ctx.lineWidth=Math.max(1,w*(major?.0015:.00085));
-      ctx.beginPath();ctx.moveTo(cx+Math.cos(t)*rx*(major?.925:.952),cy+Math.sin(t)*ry*(major?.925:.952));
-      ctx.lineTo(cx+Math.cos(t)*rx*.982,cy+Math.sin(t)*ry*.982);ctx.stroke();
-    }
-    const size=Math.max(8,Math.round(w*.025));ctx.font=`800 ${size}px ui-monospace,monospace`;ctx.textAlign="center";ctx.textBaseline="middle";
-    for(const [label,x,y] of [["N",cx,cy-ry*.955],["E",cx+rx*.965,cy],["S",cx,cy+ry*.955],["W",cx-rx*.965,cy]]){
-      ctx.fillStyle=label==="N"?"rgba(239,180,77,.72)":"rgba(129,215,222,.55)";ctx.fillText(label,x,y);
-    }
-    ctx.restore();
-  }
-
   function vignette(ctx,w,h){
     const fill=ctx.createRadialGradient(w*.5,h*.55,w*.1,w*.5,h*.55,w*.72);
     fill.addColorStop(0,"rgba(0,0,0,0)");fill.addColorStop(.67,"rgba(0,0,0,.08)");fill.addColorStop(1,"rgba(0,0,0,.58)");
@@ -193,10 +167,8 @@
     function paint(time=performance.now()){
       resize();const w=state.w,h=state.h;ctx.clearRect(0,0,w,h);
 
-      // Keep all panorama scenery inside the compass boundary. The surrounding
-      // canvas stays transparent, while the compass rim is drawn afterwards.
-      ctx.save();
-      clipCompassInterior(ctx,w,h);
+      // Draw a full-width moving landscape behind the approved centre plot.
+      // There is no compass or instrument overlay in this layer.
       sky(ctx,w,h);
       for(const band of BANDS)ridge(ctx,band,w,h,state.angle);
       fog(ctx,w,h,state.angle,time);
@@ -204,11 +176,9 @@
       signal(ctx,w,h,state.angle,time);
       revealPlot(ctx,w,h);
       vignette(ctx,w,h);
-      ctx.restore();
 
-      compass(ctx,w,h,state.angle);
       root.dataset.rfBackgroundMountains="0";
-      root.dataset.rfBackgroundLayer="cinematic-panorama-compass-clipped";
+      root.dataset.rfBackgroundLayer="cinematic-panorama-no-compass";
       root.dataset.rfBackgroundLayerVersion=VERSION;
     }
     function schedule(){if(!state.frame)state.frame=requestAnimationFrame(tick);}
@@ -245,5 +215,5 @@
   }
 
   if(!install()){document.addEventListener("fieldops3dassetready",install,{once:true});queueMicrotask(install);}
-  globalThis.FieldOpsBackgroundMountains=Object.freeze({VERSION,count:0,mode:"cinematic-panorama-compass-clipped"});
+  globalThis.FieldOpsBackgroundMountains=Object.freeze({VERSION,count:0,mode:"cinematic-panorama-no-compass"});
 })();
