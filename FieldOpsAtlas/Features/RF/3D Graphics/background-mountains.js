@@ -1,13 +1,13 @@
 /* FieldOps Atlas — cinematic RF panorama layer
  * File: FieldOpsAtlas/Features/RF/3D Graphics/background-mountains.js
- * Version: 2.0.0-cinematic-panorama-stage1
+ * Version: 2.0.1-compass-interior-clip
  * Replaces the three discrete mountain attempts without changing the approved
  * WebGL river plot, its camera, transmitters, geometry or controls.
  */
 (()=>{
   "use strict";
 
-  const VERSION="2.0.0-cinematic-panorama-stage1";
+  const VERSION="2.0.1-compass-interior-clip";
   const TARGETS=new Set(["mount-a_b-comp-scene","mount-a_a-comp-scene"]);
   const DRAG=0.34,INERTIA=0.05,DECAY=0.92,TAU=Math.PI*2;
   const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -141,6 +141,13 @@
     ctx.quadraticCurveTo(w*.79,h*.61,w*.91,h*.77);ctx.lineTo(w*.96,h);ctx.closePath();ctx.fill();ctx.restore();
   }
 
+  function clipCompassInterior(ctx,w,h){
+    const cx=w*.5,cy=h*.625,rx=w*.465,ry=h*.455;
+    ctx.beginPath();
+    ctx.ellipse(cx,cy,rx*.985,ry*.985,0,0,TAU);
+    ctx.clip();
+  }
+
   function compass(ctx,w,h,angle){
     const cx=w*.5,cy=h*.625,rx=w*.465,ry=h*.455;
     ctx.save();ctx.lineCap="round";ctx.strokeStyle="rgba(73,184,198,.17)";ctx.lineWidth=Math.max(1,w*.0015);
@@ -184,11 +191,25 @@
       if(w===state.w&&h===state.h)return;state.w=layer.width=w;state.h=layer.height=h;
     }
     function paint(time=performance.now()){
-      resize();const w=state.w,h=state.h;ctx.clearRect(0,0,w,h);sky(ctx,w,h);
-      for(const band of BANDS)ridge(ctx,band,w,h,state.angle);fog(ctx,w,h,state.angle,time);
-      for(const item of MASTS)mast(ctx,item,w,h,state.angle,time);signal(ctx,w,h,state.angle,time);
-      revealPlot(ctx,w,h);compass(ctx,w,h,state.angle);vignette(ctx,w,h);
-      root.dataset.rfBackgroundMountains="0";root.dataset.rfBackgroundLayer="cinematic-panorama";root.dataset.rfBackgroundLayerVersion=VERSION;
+      resize();const w=state.w,h=state.h;ctx.clearRect(0,0,w,h);
+
+      // Keep all panorama scenery inside the compass boundary. The surrounding
+      // canvas stays transparent, while the compass rim is drawn afterwards.
+      ctx.save();
+      clipCompassInterior(ctx,w,h);
+      sky(ctx,w,h);
+      for(const band of BANDS)ridge(ctx,band,w,h,state.angle);
+      fog(ctx,w,h,state.angle,time);
+      for(const item of MASTS)mast(ctx,item,w,h,state.angle,time);
+      signal(ctx,w,h,state.angle,time);
+      revealPlot(ctx,w,h);
+      vignette(ctx,w,h);
+      ctx.restore();
+
+      compass(ctx,w,h,state.angle);
+      root.dataset.rfBackgroundMountains="0";
+      root.dataset.rfBackgroundLayer="cinematic-panorama-compass-clipped";
+      root.dataset.rfBackgroundLayerVersion=VERSION;
     }
     function schedule(){if(!state.frame)state.frame=requestAnimationFrame(tick);}
     function tick(time){
@@ -224,5 +245,5 @@
   }
 
   if(!install()){document.addEventListener("fieldops3dassetready",install,{once:true});queueMicrotask(install);}
-  globalThis.FieldOpsBackgroundMountains=Object.freeze({VERSION,count:0,mode:"cinematic-panorama-stage1"});
+  globalThis.FieldOpsBackgroundMountains=Object.freeze({VERSION,count:0,mode:"cinematic-panorama-compass-clipped"});
 })();
