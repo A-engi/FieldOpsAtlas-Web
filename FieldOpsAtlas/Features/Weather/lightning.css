@@ -1,10 +1,7 @@
 /* ==========================================================================
-   FieldOps Atlas Lightning Lab
+   FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.css
-   Version: 0.1.0-lightning-mock
-   Purpose:
-   - Extends the existing Weather page shell without changing shared weather files.
-   - Styles the lightning age legend, feed state, raw JSON tester and pulse markers.
+   Version: 0.2.0-eumetview-live
    ========================================================================== */
 
 .lightning-feed-strip {
@@ -21,10 +18,16 @@
   white-space: nowrap;
 }
 
-.lightning-feed-pill.is-demo {
+.lightning-feed-pill.is-loading {
   border-color: rgba(252, 202, 21, 0.72);
   background: rgba(252, 202, 21, 0.18);
   color: #fff3b6;
+}
+
+.lightning-feed-pill.is-live {
+  border-color: rgba(53, 220, 164, 0.76);
+  background: rgba(53, 220, 164, 0.18);
+  color: #d8fff2;
 }
 
 .lightning-feed-pill.is-raw {
@@ -33,7 +36,6 @@
   color: #d9f7ff;
 }
 
-.lightning-feed-pill.is-stale,
 .lightning-feed-pill.is-error {
   border-color: rgba(252, 96, 66, 0.76);
   background: rgba(252, 96, 66, 0.2);
@@ -58,6 +60,64 @@
 
 .lightning-metrics {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lightning-opacity-label,
+.lightning-field-label {
+  display: grid;
+  gap: 6px;
+  color: var(--weather-muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.lightning-note,
+.lightning-disclaimer,
+.lightning-raw-help {
+  margin: 0;
+  color: var(--weather-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.lightning-disclaimer {
+  color: rgba(255, 219, 184, 0.82);
+}
+
+.lightning-raw-panel {
+  border: 1px solid var(--weather-line);
+  border-radius: 13px;
+  padding: 9px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.lightning-raw-panel summary {
+  cursor: pointer;
+  color: var(--weather-text);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lightning-raw-panel[open] {
+  display: grid;
+  gap: 9px;
+}
+
+.lightning-raw-input {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  border: 1px solid var(--weather-line);
+  border-radius: 11px;
+  padding: 9px;
+  color: #dff6ff;
+  background: rgba(2, 9, 17, 0.86);
+  font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.lightning-raw-input:focus {
+  border-color: rgba(15, 188, 255, 0.76);
+  outline: 2px solid rgba(15, 188, 255, 0.18);
 }
 
 .lightning-legend {
@@ -97,55 +157,6 @@
 .lightning-legend .age-stale {
   background: #8e1e1e;
   color: #fff;
-}
-
-.lightning-note,
-.lightning-disclaimer,
-.lightning-raw-help {
-  margin: 0;
-  color: var(--weather-muted);
-  font-size: 11px;
-  line-height: 1.35;
-}
-
-.lightning-disclaimer {
-  color: rgba(255, 219, 184, 0.82);
-}
-
-.lightning-raw-panel {
-  border: 1px solid var(--weather-line);
-  border-radius: 13px;
-  padding: 9px;
-  background: rgba(0, 0, 0, 0.22);
-}
-
-.lightning-raw-panel summary {
-  cursor: pointer;
-  color: var(--weather-text);
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.lightning-raw-panel[open] {
-  display: grid;
-  gap: 8px;
-}
-
-.lightning-raw-input {
-  width: 100%;
-  min-height: 112px;
-  resize: vertical;
-  border: 1px solid var(--weather-line);
-  border-radius: 11px;
-  padding: 9px;
-  color: #dff6ff;
-  background: rgba(2, 9, 17, 0.86);
-  font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.lightning-raw-input:focus {
-  border-color: rgba(15, 188, 255, 0.76);
-  outline: 2px solid rgba(15, 188, 255, 0.18);
 }
 
 .lightning-marker-shell {
