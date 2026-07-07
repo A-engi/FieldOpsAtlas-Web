@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maps v1.0.39-path-links-elevation</title>
+  <title>Maps v1.0.40-weather-page-link</title>
 
   <link rel="stylesheet" href="../../../shell.css">
   <link rel="stylesheet" href="./background.css?v=fade-restore-20260612g">
@@ -20,7 +20,7 @@
   <main
     class="osmmaps-page"
     data-osmmaps-page
-    data-version="1.0.39-path-links-elevation"
+    data-version="1.0.40-weather-page-link"
   >
     <div id="OSMmaps" class="osmmaps-canvas" aria-label="UK walk marker map"></div>
 
@@ -245,9 +245,13 @@
       weather-map previews are rendered.
     </p>
 
-    <button class="weather-api-activate" type="button" data-weather-activate>
+    <a
+      class="weather-api-activate"
+      href="../Weather/index.html"
+      aria-label="Open Atlas weather pages"
+    >
       Activate
-    </button>
+    </a>
 
     <section
       class="weather-forecast-slider"
@@ -268,13 +272,13 @@
           class="weather-forecast-card weather-forecast-card-placeholder"
           role="listitem"
         >
-          Tap Activate to load the selected region forecast.
+          Tap Activate to open the Atlas weather pages.
         </article>
       </div>
     </section>
 
     <p class="weather-api-status" data-weather-output>
-      v1.0.27-selected-region-weather
+      v1.0.40-weather-page-link
     </p>
   </aside>
 
