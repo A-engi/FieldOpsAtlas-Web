@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - Blitzortung embedded map
    File: FieldOpsAtlas/Features/Weather/blitzortung.js
-   Version: 0.1.1-circles-zoomout
+   Version: 0.2.0-full-page-toggle
    ========================================================================== */
 
 (() => {
@@ -9,6 +9,7 @@
 
   const BASE_URL = "https://map.blitzortung.org/index.php";
   const OPEN_URL = "https://map.blitzortung.org/";
+  const ACTIVE_STORAGE_KEY = "fieldops-blitzortung-active-v1";
 
   const PARAMS = new URLSearchParams({
     interactive: "0",
@@ -43,8 +44,11 @@
   const frame = document.getElementById("blitzortungFrame");
   const reloadButton = document.getElementById("reloadBlitzortung");
   const openLink = document.getElementById("openBlitzortung");
+  const toggleButton = document.getElementById("toggleBlitzortung");
+  const inactiveState = document.getElementById("blitzortungInactive");
 
   let currentView = "uk";
+  let isActive = readActiveState();
 
   function buildEmbedUrl(viewName) {
     return `${BASE_URL}?${PARAMS.toString()}${VIEWS[viewName] || VIEWS.uk}`;
@@ -63,10 +67,53 @@
       ? viewName
       : "uk";
 
-    frame.src = buildEmbedUrl(currentView);
+    if (isActive) {
+      frame.src = buildEmbedUrl(currentView);
+    }
 
     if (openLink) {
       openLink.href = buildOpenUrl(currentView);
+    }
+  }
+
+  function readActiveState() {
+    try {
+      const stored = window.localStorage.getItem(ACTIVE_STORAGE_KEY);
+      return stored === null ? true : stored === "true";
+    } catch (error) {
+      return true;
+    }
+  }
+
+  function writeActiveState() {
+    try {
+      window.localStorage.setItem(ACTIVE_STORAGE_KEY, String(isActive));
+    } catch (error) {
+      // The page still works if storage is unavailable.
+    }
+  }
+
+  function setActive(active) {
+    isActive = Boolean(active);
+    writeActiveState();
+
+    frame?.classList.toggle("is-deactivated", !isActive);
+
+    if (inactiveState) {
+      inactiveState.hidden = isActive;
+    }
+
+    if (toggleButton) {
+      toggleButton.textContent = isActive
+        ? "Deactivate Blitzortung"
+        : "Activate Blitzortung";
+      toggleButton.setAttribute("aria-pressed", String(isActive));
+    }
+
+    if (isActive) {
+      loadView(currentView);
+    } else if (frame) {
+      frame.src = "about:blank";
     }
   }
 
@@ -77,7 +124,13 @@
   });
 
   reloadButton?.addEventListener("click", () => {
-    loadView(currentView);
+    if (isActive) {
+      loadView(currentView);
+    }
+  });
+
+  toggleButton?.addEventListener("click", () => {
+    setActive(!isActive);
   });
 
   document.querySelectorAll(".blitzortung-panel").forEach((panel) => {
@@ -88,8 +141,11 @@
     });
   });
 
+  setActive(isActive);
+
   window.FieldOpsBlitzortung = {
     loadView,
+    setActive,
     views: { ...VIEWS }
   };
 })();
