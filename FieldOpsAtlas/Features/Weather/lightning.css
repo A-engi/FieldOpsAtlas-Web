@@ -1,244 +1,68 @@
 /* ==========================================================================
    FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.css
-   Version: 0.2.4-rings-zoomout
+   Version: 0.3.0-source-switches
    ========================================================================== */
 
-.lightning-feed-strip {
-  grid-template-columns: auto minmax(0, 1fr) auto;
+.lightning-shell {
+  --lightning-active: #35dca4;
+  --lightning-eumetsat: #fcca15;
+  --lightning-blitz: #35dca4;
 }
 
-.lightning-feed-copy {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--weather-muted);
-  font-size: 12px;
-  font-weight: 800;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.lightning-feed-pill.is-loading {
-  border-color: rgba(252, 202, 21, 0.72);
-  background: rgba(252, 202, 21, 0.18);
-  color: #fff3b6;
-}
-
-.lightning-feed-pill.is-live {
-  border-color: rgba(53, 220, 164, 0.76);
-  background: rgba(53, 220, 164, 0.18);
-  color: #d8fff2;
-}
-
-.lightning-feed-pill.is-raw {
-  border-color: rgba(15, 188, 255, 0.72);
-  background: rgba(15, 188, 255, 0.18);
-  color: #d9f7ff;
-}
-
-.lightning-feed-pill.is-error {
-  border-color: rgba(252, 96, 66, 0.76);
-  background: rgba(252, 96, 66, 0.2);
-  color: #ffe2dc;
-}
-
-.lightning-dock {
-  gap: 9px;
-}
-
-.lightning-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.lightning-actions .weather-button {
-  min-width: 0;
-  padding-inline: 7px;
-  font-size: 12px;
-}
-
-.lightning-metrics {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.lightning-opacity-label,
-.lightning-field-label {
-  display: grid;
-  gap: 6px;
-  color: var(--weather-muted);
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.lightning-note,
-.lightning-disclaimer,
-.lightning-raw-help {
-  margin: 0;
-  color: var(--weather-muted);
-  font-size: 11px;
-  line-height: 1.35;
-}
-
-.lightning-disclaimer {
-  color: rgba(255, 219, 184, 0.82);
-}
-
-.lightning-raw-panel {
-  border: 1px solid var(--weather-line);
-  border-radius: 13px;
-  padding: 9px;
-  background: rgba(0, 0, 0, 0.22);
-}
-
-.lightning-raw-panel summary {
-  cursor: pointer;
-  color: var(--weather-text);
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.lightning-raw-panel[open] {
-  display: grid;
-  gap: 9px;
-}
-
-.lightning-raw-input {
-  width: 100%;
-  min-height: 112px;
-  resize: vertical;
-  border: 1px solid var(--weather-line);
-  border-radius: 11px;
-  padding: 9px;
-  color: #dff6ff;
-  background: rgba(2, 9, 17, 0.86);
-  font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.lightning-raw-input:focus {
-  border-color: rgba(15, 188, 255, 0.76);
-  outline: 2px solid rgba(15, 188, 255, 0.18);
-}
-
-.lightning-legend {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 4px;
-}
-
-.lightning-legend span {
-  min-width: 0;
-  padding: 7px 3px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 9px;
-  color: #07111c;
-  font-size: 9px;
-  font-weight: 900;
-  line-height: 1.05;
-  text-align: center;
-}
-
-.lightning-legend .age-now {
-  background: #ffffff;
-}
-
-.lightning-legend .age-recent {
-  background: #ffe86b;
-}
-
-.lightning-legend .age-warm {
-  background: #ffba3a;
-}
-
-.lightning-legend .age-old {
-  background: #ff6b31;
-}
-
-.lightning-legend .age-stale {
-  background: #8e1e1e;
-  color: #fff;
-}
-
-.lightning-marker-shell {
-  overflow: visible !important;
-  background: transparent;
-  border: 0;
-}
-
-.lightning-flash-dot,
-.lightning-flash-ring {
+.lightning-map-layer {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  display: block;
-  border-radius: 999px;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #d9e2dd;
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 
-.lightning-flash-dot {
-  width: var(--flash-size, 8px);
-  height: var(--flash-size, 8px);
-  border: 1px solid var(--flash-stroke, #ffe86b);
-  background: var(--flash-fill, #fff);
-  box-shadow:
-    0 0 4px var(--flash-glow, rgba(255, 232, 107, 0.92)),
-    0 0 11px var(--flash-glow, rgba(255, 232, 107, 0.72));
+.lightning-map-layer.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
-.lightning-flash-ring {
-  width: var(--ring-size, 10px);
-  height: var(--ring-size, 10px);
-  border: 1.5px solid var(--ring-stroke, rgba(255, 235, 125, 0.9));
-  box-shadow:
-    0 0 7px var(--ring-glow, rgba(255, 235, 125, 0.42)),
-    0 0 14px var(--ring-glow, rgba(255, 235, 125, 0.26));
-  opacity: var(--ring-opacity, 0);
+.lightning-blitz-frame {
+  display: block;
 }
 
-.lightning-marker-shell.has-closing-ring .lightning-flash-ring {
-  opacity: var(--ring-opacity, 0.78);
+.lightning-inactive-state {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  place-content: center;
+  gap: 8px;
+  padding: 32px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(15, 188, 255, 0.12), transparent 34%),
+    #07111c;
+  color: var(--weather-text);
+  text-align: center;
 }
 
-.lightning-popup {
+.lightning-inactive-state:not([hidden]) {
   display: grid;
-  gap: 4px;
-  min-width: 160px;
 }
 
-.lightning-popup strong {
+.lightning-inactive-state strong {
+  font-size: 18px;
+}
+
+.lightning-inactive-state span {
+  color: var(--weather-muted);
   font-size: 13px;
 }
 
-.lightning-popup span {
-  color: #35495b;
-  font-size: 11px;
-}
-
-@media (max-height: 760px) {
-  .lightning-note {
-    display: none;
-  }
-
-  .lightning-dock {
-    max-height: 44vh;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lightning-flash-ring {
-    transition: none;
-  }
-}
-
-
-/* ==========================================================================
-   Collapsible overlay panels
-   ========================================================================== */
-
 .lightning-top-stack {
   position: absolute;
-  z-index: 30;
+  z-index: 34;
   top: calc(var(--safe-top) + 78px);
   right: 12px;
   left: 12px;
@@ -251,88 +75,67 @@
   pointer-events: auto;
 }
 
-.lightning-top-panel {
-  overflow: hidden;
-  padding: 8px;
+.lightning-top-panel,
+.lightning-source-panel,
+.lightning-dock {
   border: 1px solid var(--weather-line);
-  border-radius: 18px;
   background: var(--weather-panel);
   box-shadow: var(--weather-shadow);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.lightning-panel-head {
-  min-height: 34px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 9px;
+.lightning-top-panel {
+  overflow: hidden;
+  border-radius: 18px;
 }
 
-.lightning-panel-title,
-.lightning-dock-caption {
-  color: var(--weather-muted);
-  font-size: 12px;
-  font-weight: 850;
-}
-
-.lightning-panel-head-actions {
+.lightning-top-panel > summary,
+.lightning-dock > summary {
+  min-height: 48px;
   display: flex;
   align-items: center;
-  gap: 7px;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 11px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--weather-text);
+  font-size: 13px;
+  font-weight: 900;
+  user-select: none;
 }
 
-.lightning-panel-toggle {
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
+.lightning-top-panel > summary::-webkit-details-marker,
+.lightning-dock > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lightning-summary-state {
+  flex: 0 0 auto;
   border: 1px solid var(--weather-line);
   border-radius: 999px;
-  padding: 0 10px;
-  color: var(--weather-text);
+  padding: 6px 10px;
   background: rgba(255, 255, 255, 0.08);
-  font: inherit;
+  color: var(--weather-text);
   font-size: 11px;
   font-weight: 900;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.lightning-panel-toggle:focus-visible {
-  outline: 2px solid rgba(15, 188, 255, 0.7);
-  outline-offset: 2px;
+details[open] > summary .lightning-summary-state {
+  font-size: 0;
 }
 
-.lightning-panel-chevron {
-  width: 8px;
-  height: 8px;
-  display: block;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform 160ms ease;
-}
-
-[data-lightning-panel]:not(.is-collapsed) .lightning-panel-chevron {
-  transform: translateY(2px) rotate(225deg);
-}
-
-.lightning-panel-body {
-  margin-top: 8px;
-}
-
-[data-lightning-panel].is-collapsed > .lightning-panel-body {
-  display: none !important;
+details[open] > summary .lightning-summary-state::before {
+  content: "Hide";
+  font-size: 11px;
 }
 
 .lightning-provider-links {
   display: flex;
   gap: 7px;
   overflow-x: auto;
-  padding-bottom: 1px;
+  padding: 0 8px 9px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -341,47 +144,156 @@
   display: none;
 }
 
-.lightning-feed-content {
+.lightning-source-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+  border-radius: 18px;
+  padding: 8px;
+}
+
+.lightning-source-toggle {
+  min-width: 0;
+  min-height: 48px;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid var(--weather-line);
+  border-radius: 14px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--weather-text);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lightning-source-toggle.is-active {
+  border-color: rgba(53, 220, 164, 0.78);
+  background: rgba(53, 220, 164, 0.17);
+  box-shadow:
+    inset 0 0 0 1px rgba(53, 220, 164, 0.15),
+    0 0 18px rgba(53, 220, 164, 0.12);
+}
+
+.lightning-source-toggle:first-child.is-active {
+  border-color: rgba(252, 202, 21, 0.78);
+  background: rgba(252, 202, 21, 0.16);
+  box-shadow:
+    inset 0 0 0 1px rgba(252, 202, 21, 0.13),
+    0 0 18px rgba(252, 202, 21, 0.1);
+}
+
+.lightning-source-name {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightning-source-state {
+  color: var(--weather-muted);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.lightning-source-toggle.is-active .lightning-source-state {
+  color: #e3fff5;
+}
+
+.lightning-source-toggle:first-child.is-active .lightning-source-state {
+  color: #fff1a7;
 }
 
 .lightning-dock {
-  transition: max-height 160ms ease, padding 160ms ease;
+  bottom: calc(var(--safe-bottom) + 92px);
+  display: block;
+  max-height: min(48vh, 410px);
+  overflow: auto;
+  padding: 0;
+  border-radius: 18px;
 }
 
-.lightning-dock.is-collapsed {
-  max-height: none;
-  overflow: hidden;
-  padding: 10px 12px;
-}
-
-.lightning-dock-head h1 {
-  margin: 0 0 2px;
-}
-
-.lightning-dock-content {
+.lightning-summary-title {
+  min-width: 0;
   display: grid;
-  gap: 9px;
+  gap: 2px;
 }
 
-.lightning-raw-panel summary {
-  min-height: 32px;
+.lightning-summary-title strong,
+.lightning-summary-title small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightning-summary-title strong {
+  font-size: 16px;
+}
+
+.lightning-summary-title small {
+  color: var(--weather-muted);
+  font-size: 11px;
+}
+
+.lightning-summary-actions {
   display: flex;
   align-items: center;
+  gap: 7px;
+}
+
+.lightning-live-pill {
+  border-color: rgba(252, 202, 21, 0.58);
+  background: rgba(252, 202, 21, 0.15);
+  color: #fff0aa;
+}
+
+.lightning-live-pill.is-live {
+  border-color: rgba(53, 220, 164, 0.68);
+  background: rgba(53, 220, 164, 0.16);
+  color: #dbfff3;
+}
+
+.lightning-live-pill.is-off {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--weather-muted);
+}
+
+.lightning-live-pill.is-error {
+  border-color: rgba(252, 96, 66, 0.7);
+  background: rgba(252, 96, 66, 0.18);
+  color: #ffe0d9;
+}
+
+.lightning-panel-body {
+  display: grid;
+  gap: 10px;
+  padding: 0 11px 11px;
+}
+
+.lightning-note,
+.lightning-disclaimer {
+  margin: 0;
+  color: var(--weather-muted);
+  font-size: 11px;
+  line-height: 1.38;
+}
+
+.lightning-disclaimer {
+  border-left: 3px solid rgba(246, 183, 60, 0.72);
+  padding-left: 8px;
+  color: #ffe7ab;
 }
 
 @media (max-height: 720px) {
   .lightning-top-stack {
     top: calc(var(--safe-top) + 66px);
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .lightning-panel-chevron,
   .lightning-dock {
-    transition: none;
+    max-height: 42vh;
   }
 }
