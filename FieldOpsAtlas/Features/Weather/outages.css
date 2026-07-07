@@ -1,0 +1,481 @@
+/* ==========================================================================
+   FieldOps Atlas - UK electricity outages
+   File: FieldOpsAtlas/Features/Weather/outages.css
+   Version: 0.2.0-provider-switches
+   ========================================================================== */
+
+:root {
+  --outage-current: #f04438;
+  --outage-planned: #f6b73c;
+  --outage-restored: #8193a4;
+  --outage-investigating: #3fa9f5;
+}
+
+.outage-shell {
+  --weather-panel: rgba(5, 14, 23, 0.9);
+}
+
+.outage-panel {
+  position: absolute;
+  z-index: 32;
+  right: 12px;
+  left: 12px;
+  border: 1px solid var(--weather-line);
+  border-radius: 17px;
+  background: var(--weather-panel);
+  box-shadow: var(--weather-shadow);
+  backdrop-filter: blur(16px);
+  color: var(--weather-text);
+  pointer-events: auto;
+}
+
+.outage-panel > summary {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 11px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.outage-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.outage-panel[open] .outage-summary-state {
+  color: var(--weather-muted);
+}
+
+.outage-panel[open] .outage-summary-state::before {
+  content: "Hide";
+}
+
+.outage-panel[open] .outage-summary-state {
+  font-size: 0;
+}
+
+.outage-panel[open] .outage-summary-state::before {
+  font-size: 11px;
+}
+
+.outage-summary-state {
+  flex: 0 0 auto;
+  border: 1px solid var(--weather-line);
+  border-radius: 999px;
+  padding: 5px 8px;
+  color: #e9f7ff;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.outage-summary-title {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.outage-summary-title strong {
+  font-size: 14px;
+}
+
+.outage-summary-title small {
+  overflow: hidden;
+  color: var(--weather-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outage-summary-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.outage-nav-panel {
+  top: calc(var(--safe-top) + 78px);
+}
+
+.outage-provider-links {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 0 8px 9px;
+}
+
+.outage-source-panel {
+  top: calc(var(--safe-top) + 132px);
+}
+
+.outage-source-list {
+  display: grid;
+  gap: 7px;
+  max-height: min(40vh, 300px);
+  overflow: auto;
+  padding: 0 8px 9px;
+}
+
+.outage-source-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--weather-line);
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.outage-source-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #6f7d89;
+  box-shadow: 0 0 0 3px rgba(111, 125, 137, 0.14);
+}
+
+.outage-source-row.is-loading .outage-source-dot {
+  background: #3fa9f5;
+  box-shadow: 0 0 0 3px rgba(63, 169, 245, 0.18);
+}
+
+.outage-source-row.is-live .outage-source-dot {
+  background: #3ccf91;
+  box-shadow: 0 0 0 3px rgba(60, 207, 145, 0.18);
+}
+
+.outage-source-row.is-error .outage-source-dot {
+  background: #f04438;
+  box-shadow: 0 0 0 3px rgba(240, 68, 56, 0.18);
+}
+
+.outage-source-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.outage-source-copy strong {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outage-source-copy small {
+  overflow: hidden;
+  color: var(--weather-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outage-source-link {
+  color: #ccefff;
+  font-size: 10px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.outage-map-key {
+  position: absolute;
+  z-index: 29;
+  top: calc(var(--safe-top) + 132px);
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  border: 1px solid var(--weather-line);
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: rgba(5, 14, 23, 0.82);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+
+.outage-source-panel[open] ~ .outage-map-key {
+  opacity: 0;
+}
+
+.outage-map-key span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f3f9fd;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.outage-map-key i,
+.outage-filter-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.outage-map-key .is-current,
+.outage-filter-dot.is-current {
+  background: var(--outage-current);
+}
+
+.outage-map-key .is-planned,
+.outage-filter-dot.is-planned {
+  background: var(--outage-planned);
+}
+
+.outage-map-key .is-restored,
+.outage-filter-dot.is-restored {
+  background: var(--outage-restored);
+}
+
+.outage-dock {
+  bottom: calc(var(--safe-bottom) + 92px);
+}
+
+.outage-panel-body {
+  display: grid;
+  gap: 10px;
+  max-height: min(48vh, 420px);
+  overflow: auto;
+  padding: 0 10px 11px;
+}
+
+.outage-live-pill {
+  border-color: rgba(63, 169, 245, 0.5);
+  background: rgba(63, 169, 245, 0.16);
+  color: #d9f3ff;
+}
+
+.outage-live-pill.is-live {
+  border-color: rgba(60, 207, 145, 0.56);
+  background: rgba(60, 207, 145, 0.16);
+  color: #d9ffef;
+}
+
+.outage-live-pill.is-partial {
+  border-color: rgba(246, 183, 60, 0.58);
+  background: rgba(246, 183, 60, 0.16);
+  color: #fff0c7;
+}
+
+.outage-live-pill.is-error {
+  border-color: rgba(240, 68, 56, 0.58);
+  background: rgba(240, 68, 56, 0.16);
+  color: #ffe0dc;
+}
+
+.outage-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.outage-filter {
+  min-height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--weather-line);
+  border-radius: 12px;
+  padding: 0 7px;
+  background: rgba(255, 255, 255, 0.065);
+  color: var(--weather-text);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.outage-filter input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.outage-filter:has(input:not(:checked)) {
+  opacity: 0.48;
+}
+
+.outage-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.outage-note,
+.outage-disclaimer {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.38;
+}
+
+.outage-note {
+  color: var(--weather-muted);
+}
+
+.outage-disclaimer {
+  border-left: 3px solid rgba(246, 183, 60, 0.72);
+  padding-left: 8px;
+  color: #ffe7ab;
+}
+
+.outage-marker-shell {
+  overflow: visible !important;
+  border: 0;
+  background: transparent;
+}
+
+.outage-marker-core,
+.outage-marker-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.outage-marker-core {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.94);
+  background: var(--outage-colour, var(--outage-investigating));
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.24),
+    0 6px 16px rgba(0, 0, 0, 0.32);
+}
+
+.outage-marker-core::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 8px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translate(-48%, -58%) skew(-10deg);
+}
+
+.outage-marker-ring {
+  width: var(--outage-ring-size, 12px);
+  height: var(--outage-ring-size, 12px);
+  border: 2px solid var(--outage-colour, var(--outage-investigating));
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--outage-colour) 65%, transparent),
+    0 0 16px color-mix(in srgb, var(--outage-colour) 35%, transparent);
+  opacity: var(--outage-ring-opacity, 0);
+}
+
+.outage-popup {
+  display: grid;
+  gap: 5px;
+  min-width: 190px;
+}
+
+.outage-popup strong {
+  font-size: 13px;
+}
+
+.outage-popup span,
+.outage-popup a {
+  color: #33495b;
+  font-size: 11px;
+  line-height: 1.28;
+}
+
+.outage-popup a {
+  font-weight: 900;
+}
+
+.outage-popup-status {
+  font-weight: 900;
+}
+
+@media (max-height: 720px) {
+  .outage-nav-panel {
+    top: calc(var(--safe-top) + 66px);
+  }
+
+  .outage-source-panel,
+  .outage-map-key {
+    top: calc(var(--safe-top) + 120px);
+  }
+
+  .outage-panel-body {
+    max-height: 42vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .outage-marker-ring {
+    box-shadow: none;
+  }
+}
+
+
+/* Provider activation switches */
+.outage-provider-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  padding: 0 8px 8px;
+}
+
+.outage-source-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.outage-source-toggle {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.outage-source-switch-state {
+  border: 1px solid var(--weather-line);
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--weather-muted);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.outage-source-row.is-off {
+  opacity: 0.58;
+}
+
+.outage-source-row.is-off .outage-source-dot {
+  background: #6f7d89;
+  box-shadow: 0 0 0 3px rgba(111, 125, 137, 0.14);
+}
+
+.outage-source-row.is-live .outage-source-switch-state {
+  border-color: rgba(60, 207, 145, 0.52);
+  background: rgba(60, 207, 145, 0.14);
+  color: #d9ffef;
+}
+
+.outage-source-row.is-error .outage-source-switch-state {
+  border-color: rgba(240, 68, 56, 0.52);
+  background: rgba(240, 68, 56, 0.14);
+  color: #ffe0dc;
+}
+
+.outage-source-row.is-loading .outage-source-switch-state {
+  border-color: rgba(63, 169, 245, 0.52);
+  background: rgba(63, 169, 245, 0.14);
+  color: #d9f3ff;
+}
