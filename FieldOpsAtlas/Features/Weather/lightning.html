@@ -7,14 +7,14 @@
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="lightning.css?v=0.2.2-collapsible-panels" />
+  <link rel="stylesheet" href="lightning.css?v=0.2.4-rings-zoomout" />
 </head>
 <body class="weather-page">
   <main
     class="fieldops-shell-root weather-shell"
     data-page="weather"
     data-weather-provider="lightning"
-    data-version="0.2.3-source-tabs"
+    data-version="0.2.4-rings-zoomout"
   >
     <section class="weather-stage" aria-label="Lightning map">
       <div
@@ -163,7 +163,8 @@
         <p class="lightning-note">
           This is real near-real-time EUMETSAT MTG Lightning Imager data. The displayed
           layer is the official five-minute accumulated flash-area visualisation, not
-          Blitzortung data and not an exact ground-strike feed.
+          Blitzortung data and not an exact ground-strike feed. If a raw LFL point feed
+          is loaded below, newly arrived flashes get a slow closing halo for one minute.
         </p>
 
         <details class="lightning-raw-panel">
@@ -230,6 +231,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
-  <script src="lightning.js?v=0.2.2-collapsible-panels" defer></script>
+  <script src="lightning.js?v=0.2.4-rings-zoomout" defer></script>
 </body>
 </html>
