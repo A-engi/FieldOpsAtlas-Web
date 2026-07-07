@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - Blitzortung embedded map
    File: FieldOpsAtlas/Features/Weather/blitzortung.css
-   Version: 0.1.0-official-embed
+   Version: 0.2.0-full-page-toggle
    ========================================================================== */
 
 .blitzortung-shell {
@@ -182,4 +182,43 @@
   .blitzortung-live-pill {
     display: none;
   }
+}
+
+
+/* Full-page map activation */
+.blitzortung-inactive {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  place-content: center;
+  gap: 8px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(53, 220, 164, 0.12), transparent 34%),
+    #07111c;
+  color: var(--weather-text);
+  text-align: center;
+}
+
+.blitzortung-inactive:not([hidden]) {
+  display: grid;
+}
+
+.blitzortung-inactive strong {
+  font-size: 18px;
+}
+
+.blitzortung-inactive span {
+  color: var(--weather-muted);
+  font-size: 13px;
+}
+
+.blitzortung-frame.is-deactivated {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blitzortung-activation-button {
+  width: 100%;
 }
