@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.css
-   Version: 0.2.2-collapsible-panels
+   Version: 0.2.4-rings-zoomout
    ========================================================================== */
 
 .lightning-feed-strip {
@@ -187,28 +187,17 @@
 }
 
 .lightning-flash-ring {
-  width: 10px;
-  height: 10px;
-  border: 1px solid rgba(255, 235, 125, 0.9);
-  opacity: 0;
+  width: var(--ring-size, 10px);
+  height: var(--ring-size, 10px);
+  border: 1.5px solid var(--ring-stroke, rgba(255, 235, 125, 0.9));
+  box-shadow:
+    0 0 7px var(--ring-glow, rgba(255, 235, 125, 0.42)),
+    0 0 14px var(--ring-glow, rgba(255, 235, 125, 0.26));
+  opacity: var(--ring-opacity, 0);
 }
 
-.lightning-marker-shell.is-pulsing .lightning-flash-ring {
-  animation: lightning-pulse 1.25s ease-out infinite;
-}
-
-@keyframes lightning-pulse {
-  0% {
-    width: 8px;
-    height: 8px;
-    opacity: 0.88;
-  }
-
-  100% {
-    width: 42px;
-    height: 42px;
-    opacity: 0;
-  }
+.lightning-marker-shell.has-closing-ring .lightning-flash-ring {
+  opacity: var(--ring-opacity, 0.78);
 }
 
 .lightning-popup {
@@ -237,8 +226,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lightning-marker-shell.is-pulsing .lightning-flash-ring {
-    animation: none;
+  .lightning-flash-ring {
+    transition: none;
   }
 }
 
