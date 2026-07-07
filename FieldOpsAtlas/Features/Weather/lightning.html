@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lightning Lab - FieldOps Atlas</title>
+  <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
+  <link rel="stylesheet" href="lightning.css?v=0.1.0-lightning-mock" />
+</head>
+<body class="weather-page">
+  <main
+    class="fieldops-shell-root weather-shell"
+    data-page="weather"
+    data-weather-provider="lightning"
+    data-version="0.1.0-lightning-mock"
+  >
+    <section class="weather-stage" aria-label="Lightning data test map">
+      <div
+        id="weatherMap"
+        class="weather-map"
+        aria-label="Filtered OpenStreetMap with lightning test flashes"
+      ></div>
+
+      <nav class="weather-top-strip" aria-label="Weather providers">
+        <a class="weather-provider-link" href="index.html">Radar</a>
+        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+        <a class="weather-provider-link is-active" href="lightning.html">Lightning</a>
+      </nav>
+
+      <section class="weather-frame-strip lightning-feed-strip" aria-label="Lightning feed state">
+        <span id="feedMode" class="weather-pill lightning-feed-pill is-demo">DEMO</span>
+        <span id="feedFreshness" class="lightning-feed-copy">No feed loaded</span>
+        <span id="feedClock" class="weather-pill">--:--:--</span>
+      </section>
+
+      <section class="weather-dock lightning-dock" aria-live="polite">
+        <div class="weather-dock__header">
+          <div>
+            <h1>Lightning Lab</h1>
+            <p id="statusText" class="weather-status">
+              Safe mock only. No live lightning source is connected.
+            </p>
+          </div>
+          <span id="sourceBadge" class="weather-pill">MTG-LI adapter</span>
+        </div>
+
+        <div class="lightning-actions">
+          <button id="ukViewButton" class="weather-button" type="button">UK view</button>
+          <button id="demoStormButton" class="weather-button is-primary" type="button">
+            Test storm
+          </button>
+          <button id="simulationButton" class="weather-button" type="button" disabled>
+            Start feed
+          </button>
+        </div>
+
+        <div class="weather-metrics lightning-metrics">
+          <div class="weather-metric">
+            <strong id="flashCount">0</strong>
+            <span>Visible flashes</span>
+          </div>
+          <div class="weather-metric">
+            <strong id="newFlashCount">0</strong>
+            <span>Under 2 min</span>
+          </div>
+          <div class="weather-metric">
+            <strong id="rejectedCount">0</strong>
+            <span>Rejected rows</span>
+          </div>
+        </div>
+
+        <div class="lightning-legend" aria-label="Flash age legend">
+          <span class="age-now">0–30 s</span>
+          <span class="age-recent">30 s–2 m</span>
+          <span class="age-warm">2–5 m</span>
+          <span class="age-old">5–10 m</span>
+          <span class="age-stale">10–20 m</span>
+        </div>
+
+        <p class="lightning-note">
+          The test storm is generated around Delhi-NCR so the display can be exercised when
+          the UK is quiet. It is not observed strike data. Production data must be converted
+          from EUMETSAT MTG Lightning Imager NetCDF into a small JSON feed on your own server.
+        </p>
+
+        <details class="lightning-raw-panel">
+          <summary>Raw JSON test input</summary>
+          <p class="lightning-raw-help">
+            Accepts an array, a <code>{ flashes: [...] }</code> object, or GeoJSON point features.
+            Rows without a valid latitude, longitude and timestamp are rejected.
+          </p>
+          <textarea
+            id="rawJsonInput"
+            class="lightning-raw-input"
+            spellcheck="false"
+            aria-label="Raw lightning JSON"
+          ></textarea>
+          <div class="weather-actions">
+            <button id="loadJsonButton" class="weather-button is-primary" type="button">
+              Load JSON
+            </button>
+            <button id="sampleJsonButton" class="weather-button" type="button">
+              Insert sample
+            </button>
+          </div>
+        </details>
+
+        <p class="lightning-disclaimer">
+          Engineering preview only. Do not use this page to protect people, sites or equipment.
+        </p>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
+  <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="lightning.js?v=0.1.0-lightning-mock" defer></script>
+</body>
+</html>
