@@ -1,17 +1,15 @@
 /* FieldOps Atlas — round-plate 2D mountain arc
- * Version: 1.2.0-round-arc-front
+ * Version: 1.2.1-floor-snapped
  *
- * Front-view proof of concept:
- * - the live two-mountain WebGL scene remains untouched and always foreground
- * - a 2D mountain band is drawn around the rear radius of a round scene plate
- * - the silhouettes stay upright; they never rotate
- * - dragging the 3D scene moves the 2D mountains sideways around the arc
- * - only one rear-side group is used for now, so it enters and leaves view
+ * Update:
+ * - keeps the rear 2D mountains snapped to a dedicated floor arc
+ * - avoids the front-view floating effect
+ * - preserves the sideways billboard movement around the rear of the scene
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.2.0-round-arc-front";
+  const VERSION="1.2.1-floor-snapped";
   const TARGET_SCENES=new Set([
     "mount-a_b-comp-scene",
     "mount-a_a-comp-scene"
@@ -28,7 +26,7 @@
       phase:-1.23,
       width:0.205,
       height:0.180,
-      lift:0.006,
+      lift:0.002,
       size:0.95,
       opacity:0.72,
       fillTop:"#0a3441",
@@ -53,7 +51,7 @@
       phase:-0.86,
       width:0.265,
       height:0.255,
-      lift:-0.050,
+      lift:-0.010,
       size:1.22,
       opacity:0.48,
       fillTop:"#071f2a",
@@ -78,7 +76,7 @@
       phase:-0.48,
       width:0.195,
       height:0.172,
-      lift:0.010,
+      lift:0.002,
       size:0.92,
       opacity:0.68,
       fillTop:"#0a303d",
@@ -166,11 +164,7 @@
     context.fillStyle="#01090e";
     context.beginPath();
     context.rect(0,0,width,height);
-    context.ellipse(
-      outer.cx,outer.cy,
-      outer.rx,outer.ry,
-      0,0,Math.PI*2
-    );
+    context.ellipse(outer.cx,outer.cy,outer.rx,outer.ry,0,0,Math.PI*2);
     context.fill("evenodd");
     context.restore();
   }
@@ -179,16 +173,10 @@
     context.save();
     context.globalCompositeOperation="destination-out";
 
-    // Main circular plate opening.
     context.beginPath();
-    context.ellipse(
-      inner.cx,inner.cy,
-      inner.rx,inner.ry,
-      0,0,Math.PI*2
-    );
+    context.ellipse(inner.cx,inner.cy,inner.rx,inner.ry,0,0,Math.PI*2);
     context.fill();
 
-    // Front-view protection for the two real 3D mountain peaks.
     context.beginPath();
     context.moveTo(width*0.10,height*0.79);
     context.lineTo(width*0.14,height*0.65);
@@ -228,27 +216,34 @@
     context.ellipse(outer.cx,outer.cy,outer.rx,outer.ry,0,0,Math.PI*2);
     context.stroke();
 
-    // Only the rear half of the inner disk is marked so the front remains clean.
     context.strokeStyle="rgba(40,175,193,.20)";
     context.lineWidth=Math.max(1,width*0.0018);
     context.beginPath();
-    context.ellipse(
-      inner.cx,inner.cy,
-      inner.rx,inner.ry,
-      0,Math.PI,Math.PI*2
-    );
+    context.ellipse(inner.cx,inner.cy,inner.rx,inner.ry,0,Math.PI,Math.PI*2);
     context.stroke();
 
     context.strokeStyle="rgba(216,149,49,.28)";
     context.lineWidth=Math.max(1,width*0.0012);
     context.beginPath();
-    context.ellipse(
-      inner.cx,inner.cy,
-      inner.rx*1.05,inner.ry*1.04,
-      0,Math.PI,Math.PI*2
-    );
+    context.ellipse(inner.cx,inner.cy,inner.rx*1.05,inner.ry*1.04,0,Math.PI,Math.PI*2);
     context.stroke();
     context.restore();
+  }
+
+  function floorArcFor(width,height,outer){
+    return {
+      cx:outer.cx,
+      cy:height*0.70,
+      rx:outer.rx*0.82,
+      ry:height*0.13
+    };
+  }
+
+  function mountainBasePoint(arc,floorArc,mountain,height){
+    const depth=Math.max(0,Math.cos(arc));
+    const centreX=floorArc.cx+Math.sin(arc)*floorArc.rx;
+    const baseY=floorArc.cy-depth*floorArc.ry+height*mountain.lift;
+    return {centreX,baseY,depth};
   }
 
   function mountRoundArc(root,scene,api){
@@ -290,9 +285,7 @@
       frame:0,
       destroyed:false,
       width:0,
-      height:0,
-      cssWidth:0,
-      cssHeight:0
+      height:0
     };
 
     function resize(){
@@ -301,11 +294,8 @@
       const width=Math.max(1,Math.round(box.width*ratio));
       const height=Math.max(1,Math.round(box.height*ratio));
       if(width===state.width&&height===state.height)return false;
-
       state.width=layer.width=width;
       state.height=layer.height=height;
-      state.cssWidth=Math.max(1,box.width);
-      state.cssHeight=Math.max(1,box.height);
       return true;
     }
 
@@ -327,17 +317,13 @@
         rx:width*0.385,
         ry:height*0.305
       };
+      const floorArc=floorArcFor(width,height,outer);
 
-      // The outer black mask turns the rectangular viewport into a round scene.
       outsideRoundMask(context,width,height,outer);
 
       context.save();
       context.beginPath();
-      context.ellipse(
-        outer.cx,outer.cy,
-        outer.rx,outer.ry,
-        0,0,Math.PI*2
-      );
+      context.ellipse(outer.cx,outer.cy,outer.rx,outer.ry,0,0,Math.PI*2);
       context.clip();
 
       const orbitRadians=state.angle*Math.PI/180*ARC_RESPONSE;
@@ -348,14 +334,8 @@
         if(absolute>=VISIBLE_LIMIT)continue;
 
         const visibility=1-smoothstep(1.15,VISIBLE_LIMIT,absolute);
-        const depth=Math.cos(arc);
-        const centreX=outer.cx+Math.sin(arc)*outer.rx*0.91;
-
-        // The mountain bases follow the rear ellipse radius.
-        const arcY=outer.cy-Math.max(0,depth)*outer.ry*0.57;
-        const baseY=arcY+height*mountain.lift;
-
-        const perspectiveScale=(0.78+Math.max(0,depth)*0.24)*mountain.size;
+        const {centreX,baseY,depth}=mountainBasePoint(arc,floorArc,mountain,height);
+        const perspectiveScale=(0.82+depth*0.20)*mountain.size;
         const mountainWidth=width*mountain.width*perspectiveScale;
         const mountainHeight=height*mountain.height*perspectiveScale;
 
@@ -368,13 +348,11 @@
       }
       context.restore();
 
-      // Punch the middle scene back through the overlay. The real two mountains,
-      // river and transmitters therefore stay in front of every 2D silhouette.
       clearForeground(context,width,height,inner);
       drawPlateRims(context,width,height,outer,inner);
 
       root.dataset.rfBackgroundMountains="3";
-      root.dataset.rfBackgroundMountainMode="round-arc-front";
+      root.dataset.rfBackgroundMountainMode="round-arc-front-floor-snapped";
       root.dataset.rfBackgroundMountainVersion=VERSION;
     }
 
@@ -385,7 +363,6 @@
     function tick(){
       state.frame=0;
       if(state.destroyed)return;
-
       if(!state.dragging&&Math.abs(state.velocity)>0.001){
         state.angle+=state.velocity;
         state.velocity*=0.92;
@@ -491,6 +468,6 @@
   globalThis.FieldOpsBackgroundMountains=Object.freeze({
     VERSION,
     count:3,
-    mode:"round-arc-front"
+    mode:"round-arc-front-floor-snapped"
   });
 })();
