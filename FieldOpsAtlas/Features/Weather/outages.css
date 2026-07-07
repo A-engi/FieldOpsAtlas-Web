@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - UK electricity outages
    File: FieldOpsAtlas/Features/Weather/outages.css
-   Version: 0.2.0-provider-switches
+   Version: 0.3.0-layergroups-dedupe
    ========================================================================== */
 
 :root {
@@ -478,4 +478,68 @@
   border-color: rgba(63, 169, 245, 0.52);
   background: rgba(63, 169, 245, 0.14);
   color: #d9f3ff;
+}
+
+
+/* ==========================================================================
+   Provider LayerGroups and row-deduplication diagnostics
+   ========================================================================== */
+
+.outage-diagnostic-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.outage-source-copy small {
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.outage-source-row.is-empty .outage-source-dot {
+  background: #8193a4;
+  box-shadow: 0 0 0 3px rgba(129, 147, 164, 0.14);
+}
+
+.outage-source-row.is-warning .outage-source-dot {
+  background: #f6b73c;
+  box-shadow: 0 0 0 3px rgba(246, 183, 60, 0.16);
+}
+
+.outage-source-row.is-empty .outage-source-switch-state {
+  border-color: rgba(129, 147, 164, 0.48);
+  background: rgba(129, 147, 164, 0.12);
+  color: #dfe8ef;
+}
+
+.outage-source-row.is-warning .outage-source-switch-state {
+  border-color: rgba(246, 183, 60, 0.52);
+  background: rgba(246, 183, 60, 0.14);
+  color: #fff0c7;
+}
+
+.outage-marker-count {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  min-width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 999px;
+  padding: 0 4px;
+  background: rgba(5, 14, 23, 0.94);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.38);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+  transform: translate(32%, -32%);
+  pointer-events: none;
+}
+
+.outage-popup-grouped {
+  border-left: 3px solid rgba(63, 169, 245, 0.72);
+  padding-left: 7px;
+  color: #25465e !important;
+  font-weight: 800;
 }
