@@ -3,234 +3,139 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>EUMETSAT Lightning - FieldOps Atlas</title>
+  <title>Lightning - FieldOps Atlas</title>
+
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="lightning.css?v=0.2.4-rings-zoomout" />
+  <link rel="stylesheet" href="lightning.css?v=0.3.0-source-switches" />
 </head>
+
 <body class="weather-page">
   <main
-    class="fieldops-shell-root weather-shell"
+    class="fieldops-shell-root weather-shell lightning-shell"
     data-page="weather"
     data-weather-provider="lightning"
-    data-version="0.2.4-rings-zoomout"
+    data-version="0.3.0-source-switches"
   >
-    <section class="weather-stage" aria-label="Lightning map">
+    <section class="weather-stage" aria-label="Live lightning maps">
       <div
-        id="weatherMap"
-        class="weather-map"
-        aria-label="OpenStreetMap with official EUMETSAT lightning overlay"
+        id="eumetsatMap"
+        class="weather-map lightning-map-layer is-active"
+        aria-label="Official EUMETSAT Lightning Imager map"
       ></div>
 
-      <div class="lightning-top-stack">
-        <section
-          class="lightning-top-panel lightning-provider-panel is-collapsed"
-          data-lightning-panel="providers"
-          data-default-collapsed="true"
-          aria-label="Weather providers"
-        >
-          <header class="lightning-panel-head">
-            <strong class="lightning-panel-title">Weather pages</strong>
-            <button
-              class="lightning-panel-toggle"
-              type="button"
-              data-lightning-panel-toggle
-              aria-controls="lightningProviderContent"
-              aria-expanded="false"
-              aria-label="Show weather pages"
-            >
-              <span class="lightning-panel-toggle-text">Show</span>
-              <span class="lightning-panel-chevron" aria-hidden="true"></span>
-            </button>
-          </header>
+      <iframe
+        id="blitzortungFrame"
+        class="lightning-map-layer lightning-blitz-frame"
+        title="Official Blitzortung live lightning map"
+        src="about:blank"
+        loading="eager"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="fullscreen"
+      ></iframe>
 
-          <nav
-            id="lightningProviderContent"
-            class="lightning-panel-body lightning-provider-links"
-            aria-label="Weather providers"
-          >
+      <div id="inactiveMapState" class="lightning-inactive-state" hidden>
+        <strong>Lightning maps deactivated</strong>
+        <span>Activate EUMETSAT or Blitzortung above.</span>
+      </div>
+
+      <div class="lightning-top-stack">
+        <details class="lightning-top-panel lightning-weather-panel">
+          <summary>
+            <span>Weather pages</span>
+            <span class="lightning-summary-state" aria-hidden="true">Show</span>
+          </summary>
+
+          <nav class="lightning-provider-links" aria-label="Weather pages">
             <a class="weather-provider-link" href="index.html">Radar</a>
             <a class="weather-provider-link" href="openmeteo.html">Risk</a>
             <a class="weather-provider-link" href="metoffice.html">Met Office</a>
             <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
-            <a class="weather-provider-link is-active" href="lightning.html">EUMETSAT</a>
-            <a class="weather-provider-link" href="blitzortung.html">Blitzortung</a>
+            <a class="weather-provider-link is-active" href="lightning.html">Lightning</a>
+            <a class="weather-provider-link" href="outages.html">Outages</a>
           </nav>
-        </section>
+        </details>
 
-        <section
-          class="lightning-top-panel lightning-feed-panel is-collapsed"
-          data-lightning-panel="feed"
-          data-default-collapsed="true"
-          aria-label="Lightning feed state"
-        >
-          <header class="lightning-panel-head">
-            <span id="feedMode" class="weather-pill lightning-feed-pill is-loading">LOADING</span>
-            <button
-              class="lightning-panel-toggle"
-              type="button"
-              data-lightning-panel-toggle
-              aria-controls="lightningFeedContent"
-              aria-expanded="false"
-              aria-label="Show lightning feed details"
-            >
-              <span class="lightning-panel-toggle-text">Show</span>
-              <span class="lightning-panel-chevron" aria-hidden="true"></span>
-            </button>
-          </header>
+        <section class="lightning-source-panel" aria-label="Lightning map activation">
+          <button
+            id="eumetsatToggle"
+            class="lightning-source-toggle is-active"
+            type="button"
+            aria-pressed="true"
+          >
+            <span class="lightning-source-name">EUMETSAT</span>
+            <span class="lightning-source-state">ACTIVE</span>
+          </button>
 
-          <div id="lightningFeedContent" class="lightning-panel-body lightning-feed-content">
-            <span id="feedFreshness" class="lightning-feed-copy">Official LI layer not loaded</span>
-            <span id="feedClock" class="weather-pill">--:--:--</span>
-          </div>
+          <button
+            id="blitzortungToggle"
+            class="lightning-source-toggle"
+            type="button"
+            aria-pressed="false"
+          >
+            <span class="lightning-source-name">Blitzortung</span>
+            <span class="lightning-source-state">ACTIVATE</span>
+          </button>
         </section>
       </div>
 
-      <section
-        class="weather-dock lightning-dock is-collapsed"
-        data-lightning-panel="dock"
-        data-default-collapsed="true"
-        aria-live="polite"
-      >
-        <header class="lightning-panel-head lightning-dock-head">
-          <div>
-            <h1>EUMETSAT Lightning</h1>
-            <span class="lightning-dock-caption">Official EUMETSAT layer</span>
-          </div>
+      <details class="weather-dock lightning-dock">
+        <summary>
+          <span class="lightning-summary-title">
+            <strong id="activeMapTitle">EUMETSAT Lightning</strong>
+            <small id="activeMapCaption">Official five-minute accumulated satellite layer</small>
+          </span>
 
-          <div class="lightning-panel-head-actions">
-            <span id="sourceBadge" class="weather-pill">EUMETSAT LI</span>
-            <button
-              class="lightning-panel-toggle"
-              type="button"
-              data-lightning-panel-toggle
-              aria-controls="lightningDockContent"
-              aria-expanded="false"
-              aria-label="Show lightning controls"
-            >
-              <span class="lightning-panel-toggle-text">Show</span>
-              <span class="lightning-panel-chevron" aria-hidden="true"></span>
+          <span class="lightning-summary-actions">
+            <span id="sourceBadge" class="weather-pill lightning-live-pill">LOADING</span>
+            <span class="lightning-summary-state" aria-hidden="true">Show</span>
+          </span>
+        </summary>
+
+        <div class="lightning-panel-body">
+          <p id="statusText" class="weather-status">
+            Loading the official EUMETSAT Lightning Imager layer.
+          </p>
+
+          <div class="weather-actions">
+            <button id="refreshActiveMap" class="weather-button is-primary" type="button">
+              Refresh active map
+            </button>
+            <button id="deactivateAll" class="weather-button" type="button">
+              Deactivate
             </button>
           </div>
-        </header>
 
-        <div id="lightningDockContent" class="lightning-panel-body lightning-dock-content">
-          <p id="statusText" class="weather-status">
-            Loading the latest official EUMETSAT Lightning Imager layer.
-          </p>
-
-          <div class="lightning-actions">
-          <button id="stormViewButton" class="weather-button is-primary" type="button">
-            Skagerrak
-          </button>
-          <button id="ukViewButton" class="weather-button" type="button">
-            UK view
-          </button>
-          <button id="refreshLayerButton" class="weather-button" type="button">
-            Refresh
-          </button>
-        </div>
-
-        <div class="weather-metrics lightning-metrics">
-          <div class="weather-metric">
-            <strong id="layerState">Loading</strong>
-            <span>Official layer</span>
-          </div>
-          <div class="weather-metric">
-            <strong id="rawFlashCount">0</strong>
-            <span>Raw points</span>
-          </div>
-          <div class="weather-metric">
-            <strong id="rejectedCount">0</strong>
-            <span>Rejected rows</span>
-          </div>
-        </div>
-
-        <label class="lightning-opacity-label" for="overlayOpacity">
-          Official layer opacity
-          <input
-            id="overlayOpacity"
-            class="weather-range"
-            type="range"
-            min="0"
-            max="1"
-            value="0.88"
-            step="0.05"
-          />
-        </label>
-
-        <p class="lightning-note">
-          This is real near-real-time EUMETSAT MTG Lightning Imager data. The displayed
-          layer is the official five-minute accumulated flash-area visualisation, not
-          Blitzortung data and not an exact ground-strike feed. If a raw LFL point feed
-          is loaded below, newly arrived flashes get a slow closing halo for one minute.
-        </p>
-
-        <details class="lightning-raw-panel">
-          <summary>Raw LFL point feed</summary>
-          <p class="lightning-raw-help">
-            Exact point flashes require a server to download the EUMETSAT
-            <code>EO:EUM:DAT:0691</code> NetCDF products and convert them to JSON.
-            This panel can load that converted JSON without changing the map page again.
-          </p>
-
-          <label class="lightning-field-label" for="rawFeedUrl">
-            JSON feed URL
+          <label id="opacityControl" class="weather-label" for="overlayOpacity">
+            <span>EUMETSAT overlay opacity</span>
             <input
-              id="rawFeedUrl"
-              class="weather-input"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              placeholder="https://your-api.example/lightning"
+              id="overlayOpacity"
+              class="weather-range"
+              type="range"
+              min="0"
+              max="1"
+              value="0.88"
+              step="0.05"
             />
           </label>
 
-          <div class="weather-actions">
-            <button id="loadFeedUrlButton" class="weather-button is-primary" type="button">
-              Load URL
-            </button>
-            <button id="clearRawButton" class="weather-button" type="button">
-              Clear points
-            </button>
-          </div>
-
-          <label class="lightning-field-label" for="rawJsonInput">
-            Or paste converted JSON
-            <textarea
-              id="rawJsonInput"
-              class="lightning-raw-input"
-              spellcheck="false"
-              aria-label="Converted raw lightning JSON"
-              placeholder='{"source":"EUMETSAT MTG-LI LFL","flashes":[...]}'
-            ></textarea>
-          </label>
-
-          <button id="loadJsonButton" class="weather-button is-primary" type="button">
-            Load pasted JSON
-          </button>
-
-          <div class="lightning-legend" aria-label="Raw point age legend">
-            <span class="age-now">0–30 s</span>
-            <span class="age-recent">30 s–2 m</span>
-            <span class="age-warm">2–5 m</span>
-            <span class="age-old">5–10 m</span>
-            <span class="age-stale">10–20 m</span>
-          </div>
-        </details>
+          <p class="lightning-note">
+            EUMETSAT and Blitzortung are separate live products. Only one map is loaded at a time.
+            Activating one automatically deactivates the other.
+          </p>
 
           <p class="lightning-disclaimer">
-            Engineering preview only. Do not use this page as a safety or protection system.
+            Engineering awareness only. Do not use either map as a safety or protection system.
           </p>
         </div>
-      </section>
+      </details>
     </section>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
-  <script src="lightning.js?v=0.2.4-rings-zoomout" defer></script>
+  <script src="lightning.js?v=0.3.0-source-switches" defer></script>
 </body>
 </html>
