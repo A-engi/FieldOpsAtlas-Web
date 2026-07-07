@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="outages.css?v=0.2.0-provider-switches" />
+  <link rel="stylesheet" href="outages.css?v=0.3.0-layergroups-dedupe" />
 </head>
 
 <body class="weather-page">
@@ -16,7 +16,7 @@
     class="fieldops-shell-root weather-shell outage-shell"
     data-page="weather"
     data-weather-provider="outages"
-    data-version="0.2.0-provider-switches"
+    data-version="0.3.0-layergroups-dedupe"
   >
     <section class="weather-stage" aria-label="UK electricity outage map">
       <div
@@ -131,6 +131,22 @@
             </div>
           </div>
 
+
+          <div class="weather-metrics outage-diagnostic-metrics" aria-label="Feed diagnostics">
+            <div class="weather-metric">
+              <strong id="rawRowCount">0</strong>
+              <span>Provider rows</span>
+            </div>
+            <div class="weather-metric">
+              <strong id="uniqueIncidentCount">0</strong>
+              <span>Unique incidents</span>
+            </div>
+            <div class="weather-metric">
+              <strong id="groupedRowCount">0</strong>
+              <span>Rows grouped</span>
+            </div>
+          </div>
+
           <label class="weather-label" for="newIncidentAnimation">
             <span>Newly loaded incident animation</span>
             <select id="newIncidentAnimation" class="weather-select">
@@ -141,8 +157,14 @@
           </label>
 
           <p class="outage-note">
-            Marker positions are the best location published by each network operator. They may be
-            approximate, aggregated or tied to a network asset rather than the exact affected site.
+            Provider rows sharing an incident reference are combined into one marker. Rows without
+            a reference are grouped only when their location, timing, category and area strongly
+            indicate the same incident.
+          </p>
+
+          <p class="outage-note">
+            Marker positions are the best location published by each network operator. Grouped
+            markers use the centre of the published coordinates and may be approximate.
           </p>
 
           <p class="outage-disclaimer">
@@ -157,6 +179,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
-  <script src="outages.js?v=0.2.0-provider-switches" defer></script>
+  <script src="outages.js?v=0.3.0-layergroups-dedupe" defer></script>
 </body>
 </html>
