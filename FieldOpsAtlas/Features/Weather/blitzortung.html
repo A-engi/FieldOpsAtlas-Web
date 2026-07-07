@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="blitzortung.css?v=0.1.0-official-embed" />
+  <link rel="stylesheet" href="blitzortung.css?v=0.2.0-full-page-toggle" />
 </head>
 
 <body class="weather-page">
@@ -15,7 +15,7 @@
     class="fieldops-shell-root weather-shell blitzortung-shell"
     data-page="weather"
     data-weather-provider="blitzortung"
-    data-version="0.1.1-circles-zoomout"
+    data-version="0.2.0-full-page-toggle"
   >
     <section class="weather-stage" aria-label="Blitzortung live lightning map">
       <iframe
@@ -27,6 +27,11 @@
         referrerpolicy="strict-origin-when-cross-origin"
         allow="fullscreen"
       ></iframe>
+
+      <div id="blitzortungInactive" class="blitzortung-inactive" hidden>
+        <strong>Blitzortung deactivated</strong>
+        <span>Activate the live map from the control panel.</span>
+      </div>
 
       <details class="blitzortung-panel blitzortung-nav-panel">
         <summary>
@@ -62,6 +67,15 @@
             This page embeds the official Blitzortung live vector map. FieldOps Atlas does
             not copy, scrape or re-publish the strike feed.
           </p>
+
+          <button
+            id="toggleBlitzortung"
+            class="weather-button is-primary blitzortung-activation-button"
+            type="button"
+            aria-pressed="true"
+          >
+            Deactivate Blitzortung
+          </button>
 
           <div class="blitzortung-view-grid" aria-label="Map view controls">
             <button
@@ -117,6 +131,6 @@
   </main>
 
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
-  <script src="blitzortung.js?v=0.1.1-circles-zoomout" defer></script>
+  <script src="blitzortung.js?v=0.2.0-full-page-toggle" defer></script>
 </body>
 </html>
