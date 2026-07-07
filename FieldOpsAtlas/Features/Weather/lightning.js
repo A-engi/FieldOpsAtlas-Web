@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.js
-   Version: 0.2.0-eumetview-live
+   Version: 0.2.2-collapsible-panels
 
    The official layer is EUMETSAT EUMETView WMS:
    mtg_fd:li_afa = MTG Lightning Imager accumulated flash area.
@@ -14,9 +14,10 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.2.0-eumetview-live";
+  const VERSION = "0.2.2-collapsible-panels";
   const MAX_VISIBLE_AGE_MS = 20 * 60 * 1000;
   const MAX_IMPORTED_FLASHES = 10000;
+  const PANEL_STATE_KEY = "fieldops-lightning-panels-v1";
   const UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   const SKAGERRAK_BOUNDS = [[56.2, 4.5], [60.4, 13.5]];
   const SKAGERRAK_CENTER = [58.2, 9.0];
@@ -46,6 +47,7 @@
 
   function init() {
     captureElements();
+    initCollapsiblePanels();
 
     if (!window.L || !elements.map) {
       setStatus("Leaflet or the map container is unavailable.", "error");
@@ -79,6 +81,92 @@
     elements.clearRawButton = byId("clearRawButton");
     elements.rawJsonInput = byId("rawJsonInput");
     elements.loadJsonButton = byId("loadJsonButton");
+  }
+
+
+  function initCollapsiblePanels() {
+    const savedState = readPanelState();
+
+    document.querySelectorAll("[data-lightning-panel]").forEach((panel) => {
+      const key = panel.getAttribute("data-lightning-panel");
+      const defaultCollapsed = panel.getAttribute("data-default-collapsed") === "true";
+      const collapsed = Object.prototype.hasOwnProperty.call(savedState, key)
+        ? Boolean(savedState[key])
+        : defaultCollapsed;
+
+      setPanelCollapsed(panel, collapsed, false);
+
+      const toggle = panel.querySelector("[data-lightning-panel-toggle]");
+      toggle?.addEventListener("click", () => {
+        setPanelCollapsed(panel, !panel.classList.contains("is-collapsed"), true);
+      });
+    });
+  }
+
+  function setPanelCollapsed(panel, collapsed, persist) {
+    const toggle = panel.querySelector("[data-lightning-panel-toggle]");
+    const toggleText = toggle?.querySelector(".lightning-panel-toggle-text");
+    const key = panel.getAttribute("data-lightning-panel") || "panel";
+
+    panel.classList.toggle("is-collapsed", collapsed);
+
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+      toggle.setAttribute(
+        "aria-label",
+        `${collapsed ? "Show" : "Hide"} ${panelLabel(key)}`
+      );
+    }
+
+    if (toggleText) {
+      toggleText.textContent = collapsed ? "Show" : "Hide";
+    }
+
+    if (persist) {
+      writePanelState();
+    }
+
+    window.setTimeout(() => {
+      state.map?.invalidateSize({ pan: false });
+    }, 180);
+  }
+
+  function panelLabel(key) {
+    const labels = {
+      providers: "weather pages",
+      feed: "lightning feed details",
+      dock: "lightning controls"
+    };
+
+    return labels[key] || "panel";
+  }
+
+  function readPanelState() {
+    try {
+      const value = window.localStorage.getItem(PANEL_STATE_KEY);
+      const parsed = value ? JSON.parse(value) : {};
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function writePanelState() {
+    const value = {};
+
+    document.querySelectorAll("[data-lightning-panel]").forEach((panel) => {
+      const key = panel.getAttribute("data-lightning-panel");
+
+      if (key) {
+        value[key] = panel.classList.contains("is-collapsed");
+      }
+    });
+
+    try {
+      window.localStorage.setItem(PANEL_STATE_KEY, JSON.stringify(value));
+    } catch (error) {
+      // Storage may be unavailable in private browsing. The controls still work.
+    }
   }
 
   function initMap() {
@@ -175,11 +263,15 @@
     const layer = buildOfficialLayer();
     state.officialLayer = layer;
 
-    layer.once("load", () => {
-      if (state.officialLayer !== layer) {
+    let finished = false;
+    let tileErrors = 0;
+
+    function markLoaded() {
+      if (finished || state.officialLayer !== layer) {
         return;
       }
 
+      finished = true;
       state.layerLoadedAt = new Date();
       elements.layerState.textContent = "Loaded";
       elements.refreshLayerButton.disabled = false;
@@ -188,28 +280,41 @@
         "live"
       );
       updateOfficialFreshness();
-    });
+    }
 
-    layer.on("tileerror", () => {
-      if (state.officialLayer !== layer) {
+    function markError(message) {
+      if (finished || state.officialLayer !== layer) {
         return;
       }
 
+      finished = true;
       elements.layerState.textContent = "Error";
       elements.refreshLayerButton.disabled = false;
-      setStatus(
-        "The EUMETSAT layer could not be loaded. Check the connection and try Refresh.",
-        "error"
-      );
+      setStatus(message, "error");
+    }
+
+    layer.once("tileload", markLoaded);
+    layer.once("load", markLoaded);
+
+    layer.on("tileerror", () => {
+      tileErrors += 1;
+
+      if (tileErrors >= 3) {
+        markError(
+          "The EUMETSAT WMS tiles could not be loaded. The service may be unavailable or blocking this browser request."
+        );
+      }
     });
 
     layer.addTo(state.map);
 
     window.setTimeout(() => {
-      if (state.officialLayer === layer && elements.refreshLayerButton.disabled) {
-        elements.refreshLayerButton.disabled = false;
+      if (!finished && state.officialLayer === layer) {
+        markError(
+          "The EUMETSAT layer did not answer within 20 seconds. Tap Refresh to retry."
+        );
       }
-    }, 15000);
+    }, 20000);
   }
 
   function updateOfficialFreshness() {
@@ -593,7 +698,14 @@
   }
 
   function setStatus(message, mode) {
-    elements.status.textContent = message;
+    if (elements.status) {
+      elements.status.textContent = message;
+    }
+
+    if (!elements.feedMode) {
+      return;
+    }
+
     elements.feedMode.className = "weather-pill lightning-feed-pill";
 
     if (mode === "live") {
@@ -619,6 +731,10 @@
   }
 
   function updateClock() {
+    if (!elements.feedClock) {
+      return;
+    }
+
     elements.feedClock.textContent = new Intl.DateTimeFormat("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
