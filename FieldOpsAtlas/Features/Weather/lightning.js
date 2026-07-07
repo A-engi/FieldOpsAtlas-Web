@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.js
-   Version: 0.2.2-collapsible-panels
+   Version: 0.2.4-rings-zoomout
 
    The official layer is EUMETSAT EUMETView WMS:
    mtg_fd:li_afa = MTG Lightning Imager accumulated flash area.
@@ -14,9 +14,11 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.2.2-collapsible-panels";
+  const VERSION = "0.2.4-rings-zoomout";
   const MAX_VISIBLE_AGE_MS = 20 * 60 * 1000;
   const MAX_IMPORTED_FLASHES = 10000;
+  const NEW_FLASH_RING_MS = 60 * 1000;
+  const RING_FADE_START_MS = 45 * 1000;
   const PANEL_STATE_KEY = "fieldops-lightning-panels-v1";
   const UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
   const SKAGERRAK_BOUNDS = [[56.2, 4.5], [60.4, 13.5]];
@@ -172,7 +174,7 @@
   function initMap() {
     state.map = window.L.map(elements.map, {
       center: SKAGERRAK_CENTER,
-      zoom: 6,
+      zoom: 5,
       minZoom: 3,
       maxZoom: 12,
       zoomControl: false,
@@ -209,17 +211,17 @@
     }).addTo(state.map);
 
     state.rawLayer = window.L.layerGroup().addTo(state.map);
-    state.map.fitBounds(SKAGERRAK_BOUNDS, { padding: [18, 18] });
+    fitBoundsOneStepOut(SKAGERRAK_BOUNDS, { padding: [18, 18] });
     window.setTimeout(() => state.map.invalidateSize(), 160);
   }
 
   function bindControls() {
     elements.stormViewButton?.addEventListener("click", () => {
-      state.map.fitBounds(SKAGERRAK_BOUNDS, { padding: [18, 18] });
+      fitBoundsOneStepOut(SKAGERRAK_BOUNDS, { padding: [18, 18] });
     });
 
     elements.ukViewButton?.addEventListener("click", () => {
-      state.map.fitBounds(UK_BOUNDS, { padding: [18, 18] });
+      fitBoundsOneStepOut(UK_BOUNDS, { padding: [18, 18] });
     });
 
     elements.refreshLayerButton?.addEventListener("click", refreshOfficialLayer);
@@ -233,6 +235,15 @@
     elements.loadFeedUrlButton?.addEventListener("click", loadRawFeedUrl);
     elements.clearRawButton?.addEventListener("click", clearRawPoints);
     elements.loadJsonButton?.addEventListener("click", loadPastedJson);
+  }
+
+  function fitBoundsOneStepOut(bounds, options = {}) {
+    state.map.fitBounds(bounds, options);
+
+    window.requestAnimationFrame(() => {
+      const nextZoom = Math.max(state.map.getMinZoom(), state.map.getZoom() - 1);
+      state.map.setZoom(nextZoom, { animate: false });
+    });
   }
 
   function buildOfficialLayer() {
@@ -565,12 +576,17 @@
   function createFlashIcon(flash, now) {
     const ageMs = Math.max(0, now - flash.time);
     const style = ageStyle(ageMs);
-    const pulsing = ageMs <= 10000 ? " is-pulsing" : "";
+    const ring = ringStyle(ageMs, style);
 
     return window.L.divIcon({
-      className: `lightning-marker-shell${pulsing}`,
+      className: `lightning-marker-shell${ring.visible ? " has-closing-ring" : ""}`,
       html: [
-        '<span class="lightning-flash-ring" aria-hidden="true"></span>',
+        '<span class="lightning-flash-ring" style="',
+        `--ring-size:${ring.size}px;`,
+        `--ring-opacity:${ring.opacity};`,
+        `--ring-stroke:${ring.stroke};`,
+        `--ring-glow:${ring.glow};`,
+        '" aria-hidden="true"></span>',
         '<span class="lightning-flash-dot" style="',
         `--flash-fill:${style.fill};`,
         `--flash-stroke:${style.stroke};`,
@@ -581,6 +597,32 @@
       iconSize: [44, 44],
       iconAnchor: [22, 22]
     });
+  }
+
+  function ringStyle(ageMs, style) {
+    if (ageMs > NEW_FLASH_RING_MS) {
+      return {
+        visible: false,
+        size: 10,
+        opacity: 0,
+        stroke: style.stroke,
+        glow: style.glow
+      };
+    }
+
+    const progress = Math.min(1, ageMs / NEW_FLASH_RING_MS);
+    const size = 40 - (progress * 28);
+    const opacity = ageMs >= RING_FADE_START_MS
+      ? Math.max(0, 0.78 * (1 - ((ageMs - RING_FADE_START_MS) / (NEW_FLASH_RING_MS - RING_FADE_START_MS))))
+      : 0.78;
+
+    return {
+      visible: true,
+      size: Math.max(10, Number(size.toFixed(2))),
+      opacity: Number(opacity.toFixed(3)),
+      stroke: style.stroke,
+      glow: style.glow
+    };
   }
 
   function createPopupHtml(flash, now) {
@@ -685,11 +727,11 @@
     const points = flashes.map((flash) => [flash.lat, flash.lon]);
 
     if (points.length === 1) {
-      state.map.setView(points[0], 8);
+      state.map.setView(points[0], 7);
       return;
     }
 
-    state.map.fitBounds(points, { padding: [26, 26], maxZoom: 8 });
+    fitBoundsOneStepOut(points, { padding: [26, 26], maxZoom: 7 });
   }
 
   function updateMetrics() {
