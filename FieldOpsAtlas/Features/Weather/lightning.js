@@ -1,37 +1,41 @@
 /* ==========================================================================
-   FieldOps Atlas Lightning Lab
+   FieldOps Atlas Lightning
    File: FieldOpsAtlas/Features/Weather/lightning.js
-   Version: 0.1.0-lightning-mock
+   Version: 0.2.0-eumetview-live
 
-   This page deliberately does not call EUMETSAT directly:
-   - MTG Lightning Imager L2 flashes arrive as NetCDF chunks.
-   - A production service should download, validate, UK-filter and convert them.
-   - The browser should receive only compact JSON or GeoJSON.
+   The official layer is EUMETSAT EUMETView WMS:
+   mtg_fd:li_afa = MTG Lightning Imager accumulated flash area.
+
+   Exact LI-2-LFL point data is supplied as 10-second NetCDF products.
+   It must be converted by a server before this static GitHub Pages client
+   can safely consume it.
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const VERSION = "0.1.0-lightning-mock";
+  const VERSION = "0.2.0-eumetview-live";
   const MAX_VISIBLE_AGE_MS = 20 * 60 * 1000;
   const MAX_IMPORTED_FLASHES = 10000;
   const UK_BOUNDS = [[49.75, -8.7], [60.95, 1.95]];
-  const UK_CENTER = [54.55, -3.15];
-  const DEMO_BOUNDS = [[27.8, 76.2], [29.4, 78.4]];
+  const SKAGERRAK_BOUNDS = [[56.2, 4.5], [60.4, 13.5]];
+  const SKAGERRAK_CENTER = [58.2, 9.0];
   const OSM_TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const EUMETVIEW_WMS_URL = "https://view.eumetsat.int/geoserver/wms";
   const OSM_ATTRIBUTION =
     '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
+  const EUMETSAT_ATTRIBUTION =
+    '&copy; <a href="https://view.eumetsat.int/" target="_blank" rel="noopener">EUMETSAT</a>';
 
   const state = {
     map: null,
-    markerLayer: null,
-    flashes: new Map(),
+    officialLayer: null,
+    rawLayer: null,
+    rawFlashes: new Map(),
     rejected: 0,
-    mode: "demo",
-    simulationRunning: false,
-    simulationTimer: null,
-    renderTimer: null,
-    sequence: 0
+    layerLoadedAt: null,
+    refreshTimer: null,
+    renderTimer: null
   };
 
   const elements = {};
@@ -52,9 +56,9 @@
     bindControls();
     updateClock();
     window.setInterval(updateClock, 1000);
-    state.renderTimer = window.setInterval(refreshVisibleFlashes, 1000);
-    insertSampleJson();
-    setStatus("Safe mock only. Load the test storm or paste converted JSON.", "demo");
+    state.renderTimer = window.setInterval(refreshRawPoints, 1000);
+    state.refreshTimer = window.setInterval(refreshOfficialLayer, 5 * 60 * 1000);
+    refreshOfficialLayer();
   }
 
   function captureElements() {
@@ -63,21 +67,23 @@
     elements.feedMode = byId("feedMode");
     elements.feedFreshness = byId("feedFreshness");
     elements.feedClock = byId("feedClock");
-    elements.sourceBadge = byId("sourceBadge");
-    elements.flashCount = byId("flashCount");
-    elements.newFlashCount = byId("newFlashCount");
+    elements.layerState = byId("layerState");
+    elements.rawFlashCount = byId("rawFlashCount");
     elements.rejectedCount = byId("rejectedCount");
+    elements.stormViewButton = byId("stormViewButton");
     elements.ukViewButton = byId("ukViewButton");
-    elements.demoStormButton = byId("demoStormButton");
-    elements.simulationButton = byId("simulationButton");
+    elements.refreshLayerButton = byId("refreshLayerButton");
+    elements.overlayOpacity = byId("overlayOpacity");
+    elements.rawFeedUrl = byId("rawFeedUrl");
+    elements.loadFeedUrlButton = byId("loadFeedUrlButton");
+    elements.clearRawButton = byId("clearRawButton");
     elements.rawJsonInput = byId("rawJsonInput");
     elements.loadJsonButton = byId("loadJsonButton");
-    elements.sampleJsonButton = byId("sampleJsonButton");
   }
 
   function initMap() {
     state.map = window.L.map(elements.map, {
-      center: UK_CENTER,
+      center: SKAGERRAK_CENTER,
       zoom: 6,
       minZoom: 3,
       maxZoom: 12,
@@ -90,6 +96,11 @@
     const basePane = state.map.createPane("lightningBasePane");
     basePane.style.zIndex = "190";
     basePane.classList.add("weather-base-pane");
+
+    const officialPane = state.map.createPane("lightningOfficialPane");
+    officialPane.style.zIndex = "430";
+    officialPane.style.pointerEvents = "none";
+    officialPane.classList.add("weather-overlay-pane");
 
     const markerPane = state.map.createPane("lightningMarkerPane");
     markerPane.style.zIndex = "610";
@@ -109,121 +120,147 @@
       attribution: OSM_ATTRIBUTION
     }).addTo(state.map);
 
-    state.markerLayer = window.L.layerGroup().addTo(state.map);
+    state.rawLayer = window.L.layerGroup().addTo(state.map);
+    state.map.fitBounds(SKAGERRAK_BOUNDS, { padding: [18, 18] });
     window.setTimeout(() => state.map.invalidateSize(), 160);
   }
 
   function bindControls() {
-    elements.ukViewButton?.addEventListener("click", () => {
-      state.map.fitBounds(UK_BOUNDS, { padding: [20, 20] });
-      setStatus("UK view selected. The mock feed remains visible only where its points are located.", state.mode);
+    elements.stormViewButton?.addEventListener("click", () => {
+      state.map.fitBounds(SKAGERRAK_BOUNDS, { padding: [18, 18] });
     });
 
-    elements.demoStormButton?.addEventListener("click", loadDemoStorm);
+    elements.ukViewButton?.addEventListener("click", () => {
+      state.map.fitBounds(UK_BOUNDS, { padding: [18, 18] });
+    });
 
-    elements.simulationButton?.addEventListener("click", () => {
-      if (state.simulationRunning) {
-        stopSimulation();
-      } else {
-        startSimulation();
+    elements.refreshLayerButton?.addEventListener("click", refreshOfficialLayer);
+
+    elements.overlayOpacity?.addEventListener("input", () => {
+      if (state.officialLayer) {
+        state.officialLayer.setOpacity(Number(elements.overlayOpacity.value));
       }
     });
 
+    elements.loadFeedUrlButton?.addEventListener("click", loadRawFeedUrl);
+    elements.clearRawButton?.addEventListener("click", clearRawPoints);
     elements.loadJsonButton?.addEventListener("click", loadPastedJson);
-    elements.sampleJsonButton?.addEventListener("click", insertSampleJson);
   }
 
-  function loadDemoStorm() {
-    stopSimulation();
-    clearFlashes();
-    state.mode = "demo";
-    state.rejected = 0;
+  function buildOfficialLayer() {
+    return window.L.tileLayer.wms(EUMETVIEW_WMS_URL, {
+      pane: "lightningOfficialPane",
+      layers: "mtg_fd:li_afa",
+      styles: "",
+      format: "image/png",
+      transparent: true,
+      version: "1.3.0",
+      opacity: Number(elements.overlayOpacity?.value || 0.88),
+      attribution: EUMETSAT_ATTRIBUTION,
+      uppercase: false,
+      cacheBust: Date.now()
+    });
+  }
 
-    const now = Date.now();
-    const random = seededRandom(7072026);
-    const flashes = [];
+  function refreshOfficialLayer() {
+    setStatus("Loading the latest official EUMETSAT LI layer.", "loading");
+    elements.layerState.textContent = "Loading";
+    elements.refreshLayerButton.disabled = true;
 
-    for (let index = 0; index < 64; index += 1) {
-      const cluster = index % 3;
-      const centre = [
-        [28.61, 77.21],
-        [28.82, 77.02],
-        [28.42, 77.48]
-      ][cluster];
-      const ageMs = Math.floor(random() * MAX_VISIBLE_AGE_MS);
-      const spread = cluster === 1 ? 0.19 : 0.14;
-
-      flashes.push({
-        id: `demo-${index + 1}`,
-        lat: centre[0] + ((random() - 0.5) * spread),
-        lon: centre[1] + ((random() - 0.5) * spread * 1.25),
-        time: now - ageMs,
-        radiance: Number((2 + random() * 13).toFixed(2)),
-        quality: "demo"
-      });
+    if (state.officialLayer) {
+      state.map.removeLayer(state.officialLayer);
+      state.officialLayer = null;
     }
 
-    addFlashes(flashes, { source: "Generated test storm" });
-    state.map.fitBounds(DEMO_BOUNDS, { padding: [24, 24] });
-    elements.simulationButton.disabled = false;
-    elements.sourceBadge.textContent = "DEMO · Delhi-NCR";
-    setStatus(
-      "Generated test points only. Start feed adds synthetic flashes so the live behaviour can be tested.",
-      "demo"
-    );
+    const layer = buildOfficialLayer();
+    state.officialLayer = layer;
+
+    layer.once("load", () => {
+      if (state.officialLayer !== layer) {
+        return;
+      }
+
+      state.layerLoadedAt = new Date();
+      elements.layerState.textContent = "Loaded";
+      elements.refreshLayerButton.disabled = false;
+      setStatus(
+        "Official EUMETSAT MTG-LI accumulated flash-area layer loaded.",
+        "live"
+      );
+      updateOfficialFreshness();
+    });
+
+    layer.on("tileerror", () => {
+      if (state.officialLayer !== layer) {
+        return;
+      }
+
+      elements.layerState.textContent = "Error";
+      elements.refreshLayerButton.disabled = false;
+      setStatus(
+        "The EUMETSAT layer could not be loaded. Check the connection and try Refresh.",
+        "error"
+      );
+    });
+
+    layer.addTo(state.map);
+
+    window.setTimeout(() => {
+      if (state.officialLayer === layer && elements.refreshLayerButton.disabled) {
+        elements.refreshLayerButton.disabled = false;
+      }
+    }, 15000);
   }
 
-  function startSimulation() {
-    if (state.simulationRunning) {
+  function updateOfficialFreshness() {
+    if (!state.layerLoadedAt) {
+      elements.feedFreshness.textContent = "Official LI layer not loaded";
       return;
     }
 
-    if (!state.flashes.size) {
-      loadDemoStorm();
-    }
+    const time = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZone: "UTC"
+    }).format(state.layerLoadedAt);
 
-    state.simulationRunning = true;
-    elements.simulationButton.textContent = "Pause feed";
-
-    state.simulationTimer = window.setInterval(() => {
-      const stormCentres = [
-        [28.61, 77.21],
-        [28.82, 77.02],
-        [28.42, 77.48]
-      ];
-      const centre = stormCentres[state.sequence % stormCentres.length];
-      state.sequence += 1;
-
-      addFlashes([{
-        id: `sim-${Date.now()}-${state.sequence}`,
-        lat: centre[0] + ((Math.random() - 0.5) * 0.16),
-        lon: centre[1] + ((Math.random() - 0.5) * 0.2),
-        time: Date.now(),
-        radiance: Number((3 + Math.random() * 15).toFixed(2)),
-        quality: "demo"
-      }], { source: "Generated test storm" });
-    }, 1500);
-
-    setStatus("Synthetic feed running. These are not observed lightning flashes.", "demo");
+    elements.feedFreshness.textContent = `latest layer requested ${time} UTC`;
   }
 
-  function stopSimulation() {
-    state.simulationRunning = false;
+  async function loadRawFeedUrl() {
+    const url = String(elements.rawFeedUrl.value || "").trim();
 
-    if (state.simulationTimer) {
-      window.clearInterval(state.simulationTimer);
-      state.simulationTimer = null;
+    if (!url) {
+      setStatus("Enter the converted JSON feed URL first.", "error");
+      return;
     }
 
-    if (elements.simulationButton) {
-      elements.simulationButton.textContent = "Start feed";
+    elements.loadFeedUrlButton.disabled = true;
+    elements.loadFeedUrlButton.textContent = "Loading";
+
+    try {
+      const response = await fetch(url, {
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      loadRawPayload(await response.json(), url);
+    } catch (error) {
+      setStatus(`Raw feed unavailable: ${error.message}`, "error");
+    } finally {
+      elements.loadFeedUrlButton.disabled = false;
+      elements.loadFeedUrlButton.textContent = "Load URL";
     }
   }
 
   function loadPastedJson() {
-    stopSimulation();
-
     let payload;
+
     try {
       payload = JSON.parse(elements.rawJsonInput.value);
     } catch (error) {
@@ -231,25 +268,26 @@
       return;
     }
 
+    loadRawPayload(payload, "Pasted JSON");
+  }
+
+  function loadRawPayload(payload, fallbackSource) {
     const result = normalisePayload(payload);
     state.rejected = result.rejected;
 
     if (!result.flashes.length) {
-      clearFlashes();
+      clearRawPoints();
       updateMetrics();
-      setStatus("No valid flashes were found in the pasted payload.", "error");
+      setStatus("No valid raw flashes were found.", "error");
       return;
     }
 
-    clearFlashes();
-    state.mode = "raw";
-    addFlashes(result.flashes, { source: result.source || "Pasted JSON" });
-    fitFlashBounds(result.flashes);
-    elements.simulationButton.disabled = true;
-    elements.sourceBadge.textContent = result.source || "RAW JSON";
+    clearRawPoints(false);
+    addRawFlashes(result.flashes);
+    fitRawBounds(result.flashes);
 
     setStatus(
-      `Loaded ${result.flashes.length} validated flashes; rejected ${result.rejected}.`,
+      `Loaded ${result.flashes.length} raw flashes from ${result.source || fallbackSource}.`,
       "raw"
     );
   }
@@ -264,7 +302,7 @@
       source = String(payload.source || payload.name || "GeoJSON");
       rows = payload.features;
     } else if (Array.isArray(payload?.flashes)) {
-      source = String(payload.source || payload.product || "Converted MTG-LI");
+      source = String(payload.source || payload.product || "EUMETSAT MTG-LI LFL");
       rows = payload.flashes;
     } else if (Array.isArray(payload?.data)) {
       source = String(payload.source || payload.product || "Converted data");
@@ -274,8 +312,8 @@
     }
 
     const flashes = [];
-    let rejected = 0;
     const seen = new Set();
+    let rejected = 0;
 
     rows.slice(0, MAX_IMPORTED_FLASHES).forEach((row, index) => {
       const flash = normaliseRow(row, index);
@@ -358,14 +396,10 @@
       lat,
       lon,
       time,
-      radiance: finiteOrNull(
-        properties.radiance ??
-        properties.flash_radiance ??
-        properties.energy
-      ),
+      radiance: finiteOrNull(properties.radiance ?? properties.flash_radiance),
       quality: String(
         properties.quality ??
-        properties.quality_flag ??
+        properties.flash_filter_confidence ??
         properties.status ??
         "unknown"
       )
@@ -379,6 +413,7 @@
 
     if (typeof value === "string" && value.trim()) {
       const numeric = Number(value);
+
       if (Number.isFinite(numeric)) {
         return numeric > 100000000000 ? numeric : numeric * 1000;
       }
@@ -395,17 +430,12 @@
     return Number.isFinite(number) ? number : null;
   }
 
-  function addFlashes(flashes, options = {}) {
+  function addRawFlashes(flashes) {
     const now = Date.now();
 
     flashes.forEach((flash) => {
-      if (!flash || now - flash.time > MAX_VISIBLE_AGE_MS) {
-        return;
-      }
-
-      const existing = state.flashes.get(flash.id);
-      if (existing) {
-        existing.data = flash;
+      if (now - flash.time > MAX_VISIBLE_AGE_MS) {
+        state.rejected += 1;
         return;
       }
 
@@ -420,15 +450,11 @@
         className: "lightning-popup-shell"
       });
 
-      marker.addTo(state.markerLayer);
-      state.flashes.set(flash.id, {
-        data: flash,
-        marker
-      });
+      marker.addTo(state.rawLayer);
+      state.rawFlashes.set(flash.id, { data: flash, marker });
     });
 
     updateMetrics();
-    updateFreshness(options.source);
   }
 
   function createFlashIcon(flash, now) {
@@ -519,15 +545,15 @@
     };
   }
 
-  function refreshVisibleFlashes() {
+  function refreshRawPoints() {
     const now = Date.now();
 
-    state.flashes.forEach((entry, id) => {
+    state.rawFlashes.forEach((entry, id) => {
       const ageMs = now - entry.data.time;
 
       if (ageMs > MAX_VISIBLE_AGE_MS) {
-        state.markerLayer.removeLayer(entry.marker);
-        state.flashes.delete(id);
+        state.rawLayer.removeLayer(entry.marker);
+        state.rawFlashes.delete(id);
         return;
       }
 
@@ -536,50 +562,21 @@
     });
 
     updateMetrics();
-    updateFreshness();
+    updateOfficialFreshness();
   }
 
-  function updateMetrics() {
-    const now = Date.now();
-    let recent = 0;
+  function clearRawPoints(resetRejected = true) {
+    state.rawLayer.clearLayers();
+    state.rawFlashes.clear();
 
-    state.flashes.forEach((entry) => {
-      if (now - entry.data.time <= 2 * 60 * 1000) {
-        recent += 1;
-      }
-    });
-
-    elements.flashCount.textContent = String(state.flashes.size);
-    elements.newFlashCount.textContent = String(recent);
-    elements.rejectedCount.textContent = String(state.rejected);
-  }
-
-  function updateFreshness(source) {
-    const latest = latestFlash();
-
-    if (!latest) {
-      elements.feedFreshness.textContent = "No feed loaded";
-      return;
+    if (resetRejected) {
+      state.rejected = 0;
     }
 
-    const ageMs = Math.max(0, Date.now() - latest.time);
-    const prefix = source ? `${source} · ` : "";
-    elements.feedFreshness.textContent = `${prefix}newest ${formatAge(ageMs)} ago`;
+    updateMetrics();
   }
 
-  function latestFlash() {
-    let latest = null;
-
-    state.flashes.forEach((entry) => {
-      if (!latest || entry.data.time > latest.time) {
-        latest = entry.data;
-      }
-    });
-
-    return latest;
-  }
-
-  function fitFlashBounds(flashes) {
+  function fitRawBounds(flashes) {
     const points = flashes.map((flash) => [flash.lat, flash.lon]);
 
     if (points.length === 1) {
@@ -590,19 +587,22 @@
     state.map.fitBounds(points, { padding: [26, 26], maxZoom: 8 });
   }
 
-  function clearFlashes() {
-    state.markerLayer.clearLayers();
-    state.flashes.clear();
-    updateMetrics();
-    updateFreshness();
+  function updateMetrics() {
+    elements.rawFlashCount.textContent = String(state.rawFlashes.size);
+    elements.rejectedCount.textContent = String(state.rejected);
   }
 
   function setStatus(message, mode) {
     elements.status.textContent = message;
     elements.feedMode.className = "weather-pill lightning-feed-pill";
 
+    if (mode === "live") {
+      elements.feedMode.textContent = "LIVE";
+      elements.feedMode.classList.add("is-live");
+      return;
+    }
+
     if (mode === "raw") {
-      state.mode = "raw";
       elements.feedMode.textContent = "RAW";
       elements.feedMode.classList.add("is-raw");
       return;
@@ -614,59 +614,17 @@
       return;
     }
 
-    state.mode = "demo";
-    elements.feedMode.textContent = "DEMO";
-    elements.feedMode.classList.add("is-demo");
+    elements.feedMode.textContent = "LOADING";
+    elements.feedMode.classList.add("is-loading");
   }
 
   function updateClock() {
-    if (!elements.feedClock) {
-      return;
-    }
-
     elements.feedClock.textContent = new Intl.DateTimeFormat("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
       timeZone: "UTC"
     }).format(new Date());
-  }
-
-  function insertSampleJson() {
-    const now = Date.now();
-
-    const sample = {
-      source: "Example converted MTG-LI JSON",
-      generatedAt: new Date(now).toISOString(),
-      flashes: [
-        {
-          id: "sample-1",
-          latitude: 51.5074,
-          longitude: -0.1278,
-          timestamp: new Date(now - 12000).toISOString(),
-          radiance: 8.4,
-          quality: "example"
-        },
-        {
-          id: "sample-2",
-          latitude: 52.4862,
-          longitude: -1.8904,
-          timestamp: new Date(now - 92000).toISOString(),
-          radiance: 5.1,
-          quality: "example"
-        },
-        {
-          id: "sample-3",
-          latitude: 53.4808,
-          longitude: -2.2426,
-          timestamp: new Date(now - 225000).toISOString(),
-          radiance: 3.6,
-          quality: "example"
-        }
-      ]
-    };
-
-    elements.rawJsonInput.value = JSON.stringify(sample, null, 2);
   }
 
   function formatAge(ageMs) {
@@ -677,8 +635,7 @@
     }
 
     const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
+    return `${minutes}m ${seconds % 60}s`;
   }
 
   function escapeHtml(value) {
@@ -690,22 +647,10 @@
       .replaceAll("'", "&#039;");
   }
 
-  function seededRandom(seed) {
-    let value = seed >>> 0;
-
-    return function next() {
-      value += 0x6D2B79F5;
-      let result = value;
-      result = Math.imul(result ^ (result >>> 15), result | 1);
-      result ^= result + Math.imul(result ^ (result >>> 7), result | 61);
-      return ((result ^ (result >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  window.FieldOpsLightningLab = {
+  window.FieldOpsLightning = {
     VERSION,
-    normalisePayload,
-    loadDemoStorm
+    refreshOfficialLayer,
+    normalisePayload
   };
 
   if (document.readyState === "loading") {
