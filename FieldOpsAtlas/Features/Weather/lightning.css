@@ -1,0 +1,232 @@
+/* ==========================================================================
+   FieldOps Atlas Lightning Lab
+   File: FieldOpsAtlas/Features/Weather/lightning.css
+   Version: 0.1.0-lightning-mock
+   Purpose:
+   - Extends the existing Weather page shell without changing shared weather files.
+   - Styles the lightning age legend, feed state, raw JSON tester and pulse markers.
+   ========================================================================== */
+
+.lightning-feed-strip {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.lightning-feed-copy {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--weather-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightning-feed-pill.is-demo {
+  border-color: rgba(252, 202, 21, 0.72);
+  background: rgba(252, 202, 21, 0.18);
+  color: #fff3b6;
+}
+
+.lightning-feed-pill.is-raw {
+  border-color: rgba(15, 188, 255, 0.72);
+  background: rgba(15, 188, 255, 0.18);
+  color: #d9f7ff;
+}
+
+.lightning-feed-pill.is-stale,
+.lightning-feed-pill.is-error {
+  border-color: rgba(252, 96, 66, 0.76);
+  background: rgba(252, 96, 66, 0.2);
+  color: #ffe2dc;
+}
+
+.lightning-dock {
+  gap: 9px;
+}
+
+.lightning-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.lightning-actions .weather-button {
+  min-width: 0;
+  padding-inline: 7px;
+  font-size: 12px;
+}
+
+.lightning-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lightning-legend {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.lightning-legend span {
+  min-width: 0;
+  padding: 7px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  color: #07111c;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.lightning-legend .age-now {
+  background: #ffffff;
+}
+
+.lightning-legend .age-recent {
+  background: #ffe86b;
+}
+
+.lightning-legend .age-warm {
+  background: #ffba3a;
+}
+
+.lightning-legend .age-old {
+  background: #ff6b31;
+}
+
+.lightning-legend .age-stale {
+  background: #8e1e1e;
+  color: #fff;
+}
+
+.lightning-note,
+.lightning-disclaimer,
+.lightning-raw-help {
+  margin: 0;
+  color: var(--weather-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.lightning-disclaimer {
+  color: rgba(255, 219, 184, 0.82);
+}
+
+.lightning-raw-panel {
+  border: 1px solid var(--weather-line);
+  border-radius: 13px;
+  padding: 9px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.lightning-raw-panel summary {
+  cursor: pointer;
+  color: var(--weather-text);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lightning-raw-panel[open] {
+  display: grid;
+  gap: 8px;
+}
+
+.lightning-raw-input {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  border: 1px solid var(--weather-line);
+  border-radius: 11px;
+  padding: 9px;
+  color: #dff6ff;
+  background: rgba(2, 9, 17, 0.86);
+  font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.lightning-raw-input:focus {
+  border-color: rgba(15, 188, 255, 0.76);
+  outline: 2px solid rgba(15, 188, 255, 0.18);
+}
+
+.lightning-marker-shell {
+  overflow: visible !important;
+  background: transparent;
+  border: 0;
+}
+
+.lightning-flash-dot,
+.lightning-flash-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.lightning-flash-dot {
+  width: var(--flash-size, 8px);
+  height: var(--flash-size, 8px);
+  border: 1px solid var(--flash-stroke, #ffe86b);
+  background: var(--flash-fill, #fff);
+  box-shadow:
+    0 0 4px var(--flash-glow, rgba(255, 232, 107, 0.92)),
+    0 0 11px var(--flash-glow, rgba(255, 232, 107, 0.72));
+}
+
+.lightning-flash-ring {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(255, 235, 125, 0.9);
+  opacity: 0;
+}
+
+.lightning-marker-shell.is-pulsing .lightning-flash-ring {
+  animation: lightning-pulse 1.25s ease-out infinite;
+}
+
+@keyframes lightning-pulse {
+  0% {
+    width: 8px;
+    height: 8px;
+    opacity: 0.88;
+  }
+
+  100% {
+    width: 42px;
+    height: 42px;
+    opacity: 0;
+  }
+}
+
+.lightning-popup {
+  display: grid;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.lightning-popup strong {
+  font-size: 13px;
+}
+
+.lightning-popup span {
+  color: #35495b;
+  font-size: 11px;
+}
+
+@media (max-height: 760px) {
+  .lightning-note {
+    display: none;
+  }
+
+  .lightning-dock {
+    max-height: 44vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightning-marker-shell.is-pulsing .lightning-flash-ring {
+    animation: none;
+  }
+}
