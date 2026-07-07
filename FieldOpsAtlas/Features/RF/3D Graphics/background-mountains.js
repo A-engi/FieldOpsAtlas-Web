@@ -1,126 +1,133 @@
-/* FieldOps Atlas — 2D parallax background mountain slider
- * Version: 1.1.0-billboard-slider
+/* FieldOps Atlas — round-plate 2D mountain arc
+ * Version: 1.2.0-round-arc-front
  *
- * Three screen-facing 2D mountains sit behind the rotating WebGL scene.
- * They never turn. Dragging the live scene moves the repeated mountain band
- * sideways with matching inertia, like a manual chevron/cluster slider.
- *
- * Layout:
- * - left: broad split-ridge silhouette
- * - centre: larger, taller and farther back
- * - right: narrow twin-peak silhouette
+ * Front-view proof of concept:
+ * - the live two-mountain WebGL scene remains untouched and always foreground
+ * - a 2D mountain band is drawn around the rear radius of a round scene plate
+ * - the silhouettes stay upright; they never rotate
+ * - dragging the 3D scene moves the 2D mountains sideways around the arc
+ * - only one rear-side group is used for now, so it enters and leaves view
  */
 (()=>{
   "use strict";
 
-  const VERSION="1.1.0-billboard-slider";
+  const VERSION="1.2.0-round-arc-front";
   const TARGET_SCENES=new Set([
     "mount-a_b-comp-scene",
     "mount-a_a-comp-scene"
   ]);
 
-  const PARALLAX_PIXELS_PER_DEGREE=1.65;
-  const PATTERN_WIDTH=1.34;
+  const ANGLE_PER_PIXEL=0.34;
+  const INERTIA_PER_PIXEL=0.05;
+  const ARC_RESPONSE=1.0;
+  const VISIBLE_LIMIT=1.46;
 
-  const SHAPES=Object.freeze([
+  const MOUNTAINS=Object.freeze([
     Object.freeze({
-      id:"left-broad-ridge",
-      centre:0.16,
-      width:0.26,
-      baseY:0.615,
-      height:0.185,
+      id:"left-ridge",
+      phase:-1.23,
+      width:0.205,
+      height:0.180,
+      lift:0.006,
+      size:0.95,
       opacity:0.72,
-      depth:0,
+      fillTop:"#0a3441",
+      fillBottom:"#020a10",
+      edge:"rgba(48,191,208,.46)",
+      ridge:"rgba(39,151,172,.34)",
       profile:Object.freeze([
-        [0.00,0.00],[0.06,0.10],[0.13,0.24],[0.20,0.18],
-        [0.28,0.43],[0.36,0.30],[0.45,0.62],[0.53,0.42],
-        [0.61,0.50],[0.69,0.28],[0.79,0.38],[0.88,0.14],
+        [0.00,0.00],[0.07,0.09],[0.14,0.20],[0.22,0.15],
+        [0.30,0.40],[0.38,0.31],[0.46,0.66],[0.53,0.44],
+        [0.60,0.52],[0.68,0.29],[0.78,0.39],[0.87,0.15],
         [0.95,0.19],[1.00,0.00]
       ]),
       ridges:Object.freeze([
-        [[0.45,0.62],[0.35,0.22],[0.16,0.02]],
-        [[0.45,0.62],[0.56,0.24],[0.82,0.03]],
-        [[0.28,0.43],[0.22,0.17],[0.06,0.02]],
-        [[0.79,0.38],[0.72,0.14],[0.94,0.02]]
+        [[0.46,0.66],[0.35,0.25],[0.15,0.03]],
+        [[0.46,0.66],[0.57,0.25],[0.82,0.03]],
+        [[0.30,0.40],[0.24,0.16],[0.07,0.02]],
+        [[0.78,0.39],[0.71,0.14],[0.94,0.02]]
       ])
     }),
     Object.freeze({
-      id:"centre-far-peak",
-      centre:0.50,
-      width:0.34,
-      baseY:0.565,
+      id:"far-centre-peak",
+      phase:-0.86,
+      width:0.265,
       height:0.255,
-      opacity:0.52,
-      depth:1,
+      lift:-0.050,
+      size:1.22,
+      opacity:0.48,
+      fillTop:"#071f2a",
+      fillBottom:"#01080d",
+      edge:"rgba(40,137,159,.30)",
+      ridge:"rgba(33,110,132,.24)",
       profile:Object.freeze([
-        [0.00,0.00],[0.07,0.08],[0.14,0.19],[0.22,0.15],
-        [0.30,0.34],[0.37,0.29],[0.44,0.58],[0.50,1.00],
-        [0.56,0.63],[0.63,0.39],[0.70,0.45],[0.78,0.24],
-        [0.86,0.30],[0.93,0.09],[1.00,0.00]
+        [0.00,0.00],[0.06,0.07],[0.13,0.18],[0.20,0.13],
+        [0.28,0.31],[0.35,0.27],[0.42,0.53],[0.48,0.71],
+        [0.52,1.00],[0.57,0.66],[0.63,0.40],[0.70,0.46],
+        [0.77,0.24],[0.85,0.31],[0.92,0.09],[1.00,0.00]
       ]),
       ridges:Object.freeze([
-        [[0.50,1.00],[0.43,0.46],[0.27,0.05]],
-        [[0.50,1.00],[0.58,0.47],[0.77,0.05]],
-        [[0.44,0.58],[0.34,0.21],[0.13,0.03]],
-        [[0.63,0.39],[0.72,0.17],[0.91,0.02]]
+        [[0.52,1.00],[0.43,0.47],[0.24,0.04]],
+        [[0.52,1.00],[0.60,0.48],[0.78,0.04]],
+        [[0.42,0.53],[0.33,0.20],[0.12,0.02]],
+        [[0.70,0.46],[0.77,0.18],[0.92,0.02]]
       ])
     }),
     Object.freeze({
-      id:"right-twin-peak",
-      centre:0.84,
-      width:0.25,
-      baseY:0.610,
-      height:0.180,
+      id:"right-twin",
+      phase:-0.48,
+      width:0.195,
+      height:0.172,
+      lift:0.010,
+      size:0.92,
       opacity:0.68,
-      depth:0,
+      fillTop:"#0a303d",
+      fillBottom:"#020a10",
+      edge:"rgba(50,185,202,.42)",
+      ridge:"rgba(42,145,164,.31)",
       profile:Object.freeze([
-        [0.00,0.00],[0.08,0.13],[0.16,0.09],[0.25,0.37],
-        [0.34,0.66],[0.43,0.39],[0.51,0.30],[0.59,0.57],
-        [0.67,0.78],[0.75,0.41],[0.84,0.29],[0.92,0.11],
+        [0.00,0.00],[0.08,0.12],[0.16,0.08],[0.25,0.35],
+        [0.34,0.67],[0.43,0.39],[0.51,0.29],[0.59,0.55],
+        [0.67,0.80],[0.75,0.42],[0.84,0.28],[0.93,0.10],
         [1.00,0.00]
       ]),
       ridges:Object.freeze([
-        [[0.34,0.66],[0.26,0.20],[0.07,0.02]],
-        [[0.34,0.66],[0.45,0.19],[0.58,0.03]],
-        [[0.67,0.78],[0.61,0.30],[0.52,0.05]],
-        [[0.67,0.78],[0.76,0.25],[0.94,0.02]]
+        [[0.34,0.67],[0.26,0.20],[0.07,0.02]],
+        [[0.34,0.67],[0.45,0.19],[0.58,0.03]],
+        [[0.67,0.80],[0.61,0.31],[0.52,0.04]],
+        [[0.67,0.80],[0.77,0.24],[0.94,0.02]]
       ])
     })
   ]);
 
-  function wrap(value,size){
-    return ((value%size)+size)%size;
-  }
+  const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+  const smoothstep=(a,b,value)=>{
+    const t=clamp((value-a)/(b-a),0,1);
+    return t*t*(3-2*t);
+  };
 
-  function drawMountain(context,shape,centreX,width,height){
-    const baseY=context.canvas.height*shape.baseY;
+  function drawMountain(context,mountain,centreX,baseY,width,height,visibility){
+    if(visibility<=0.001)return;
+
     const left=centreX-width/2;
-    const topPoints=shape.profile.map(([x,y])=>[
+    const points=mountain.profile.map(([x,y])=>[
       left+x*width,
       baseY-y*height
     ]);
 
     context.save();
-    context.globalAlpha=shape.opacity;
-    context.shadowColor=shape.depth
-      ? "rgba(0,20,28,.80)"
-      : "rgba(0,12,18,.88)";
-    context.shadowBlur=shape.depth?18:10;
+    context.globalAlpha=mountain.opacity*visibility;
+    context.shadowColor="rgba(0,8,12,.86)";
+    context.shadowBlur=Math.max(4,context.canvas.width*0.012);
 
     const fill=context.createLinearGradient(0,baseY-height,0,baseY);
-    if(shape.depth){
-      fill.addColorStop(0,"#08222d");
-      fill.addColorStop(.48,"#061923");
-      fill.addColorStop(1,"#020a10");
-    }else{
-      fill.addColorStop(0,"#0a3441");
-      fill.addColorStop(.52,"#07212c");
-      fill.addColorStop(1,"#020b11");
-    }
+    fill.addColorStop(0,mountain.fillTop);
+    fill.addColorStop(0.55,"#051722");
+    fill.addColorStop(1,mountain.fillBottom);
 
     context.beginPath();
     context.moveTo(left,baseY);
-    for(const point of topPoints)context.lineTo(point[0],point[1]);
+    for(const point of points)context.lineTo(point[0],point[1]);
     context.lineTo(left+width,baseY);
     context.closePath();
     context.fillStyle=fill;
@@ -129,12 +136,10 @@
     context.shadowBlur=0;
     context.lineCap="round";
     context.lineJoin="round";
-    context.lineWidth=Math.max(1,context.canvas.width*0.0016);
-    context.strokeStyle=shape.depth
-      ? "rgba(34,126,146,.30)"
-      : "rgba(48,180,198,.42)";
+    context.lineWidth=Math.max(1,context.canvas.width*0.0017);
+    context.strokeStyle=mountain.ridge;
 
-    for(const ridge of shape.ridges){
+    for(const ridge of mountain.ridges){
       context.beginPath();
       ridge.forEach(([x,y],index)=>{
         const px=left+x*width;
@@ -145,21 +150,108 @@
       context.stroke();
     }
 
-    context.strokeStyle=shape.depth
-      ? "rgba(53,157,176,.22)"
-      : "rgba(69,205,220,.32)";
+    context.strokeStyle=mountain.edge;
     context.lineWidth=Math.max(1,context.canvas.width*0.0011);
     context.beginPath();
-    for(let index=0;index<topPoints.length;index+=1){
-      const point=topPoints[index];
+    points.forEach((point,index)=>{
       if(index===0)context.moveTo(point[0],point[1]);
       else context.lineTo(point[0],point[1]);
-    }
+    });
     context.stroke();
     context.restore();
   }
 
-  function mountBackground(root,scene,api){
+  function outsideRoundMask(context,width,height,outer){
+    context.save();
+    context.fillStyle="#01090e";
+    context.beginPath();
+    context.rect(0,0,width,height);
+    context.ellipse(
+      outer.cx,outer.cy,
+      outer.rx,outer.ry,
+      0,0,Math.PI*2
+    );
+    context.fill("evenodd");
+    context.restore();
+  }
+
+  function clearForeground(context,width,height,inner){
+    context.save();
+    context.globalCompositeOperation="destination-out";
+
+    // Main circular plate opening.
+    context.beginPath();
+    context.ellipse(
+      inner.cx,inner.cy,
+      inner.rx,inner.ry,
+      0,0,Math.PI*2
+    );
+    context.fill();
+
+    // Front-view protection for the two real 3D mountain peaks.
+    context.beginPath();
+    context.moveTo(width*0.10,height*0.79);
+    context.lineTo(width*0.14,height*0.65);
+    context.quadraticCurveTo(width*0.22,height*0.48,width*0.29,height*0.37);
+    context.quadraticCurveTo(width*0.35,height*0.49,width*0.43,height*0.58);
+    context.quadraticCurveTo(width*0.54,height*0.52,width*0.64,height*0.33);
+    context.quadraticCurveTo(width*0.72,height*0.45,width*0.82,height*0.61);
+    context.lineTo(width*0.91,height*0.79);
+    context.lineTo(width*0.91,height);
+    context.lineTo(width*0.10,height);
+    context.closePath();
+    context.fill();
+    context.restore();
+  }
+
+  function drawPlateRims(context,width,height,outer,inner){
+    context.save();
+    context.lineCap="round";
+
+    const outerGlow=context.createLinearGradient(
+      outer.cx-outer.rx,outer.cy,
+      outer.cx+outer.rx,outer.cy
+    );
+    outerGlow.addColorStop(0,"rgba(28,151,170,.18)");
+    outerGlow.addColorStop(0.5,"rgba(219,156,58,.42)");
+    outerGlow.addColorStop(1,"rgba(28,151,170,.18)");
+
+    context.strokeStyle="rgba(3,31,42,.85)";
+    context.lineWidth=Math.max(3,width*0.008);
+    context.beginPath();
+    context.ellipse(outer.cx,outer.cy,outer.rx,outer.ry,0,0,Math.PI*2);
+    context.stroke();
+
+    context.strokeStyle=outerGlow;
+    context.lineWidth=Math.max(1,width*0.0024);
+    context.beginPath();
+    context.ellipse(outer.cx,outer.cy,outer.rx,outer.ry,0,0,Math.PI*2);
+    context.stroke();
+
+    // Only the rear half of the inner disk is marked so the front remains clean.
+    context.strokeStyle="rgba(40,175,193,.20)";
+    context.lineWidth=Math.max(1,width*0.0018);
+    context.beginPath();
+    context.ellipse(
+      inner.cx,inner.cy,
+      inner.rx,inner.ry,
+      0,Math.PI,Math.PI*2
+    );
+    context.stroke();
+
+    context.strokeStyle="rgba(216,149,49,.28)";
+    context.lineWidth=Math.max(1,width*0.0012);
+    context.beginPath();
+    context.ellipse(
+      inner.cx,inner.cy,
+      inner.rx*1.05,inner.ry*1.04,
+      0,Math.PI,Math.PI*2
+    );
+    context.stroke();
+    context.restore();
+  }
+
+  function mountRoundArc(root,scene,api){
     if(!TARGET_SCENES.has(scene?.id))return api;
 
     const webglCanvas=root.querySelector("canvas");
@@ -171,28 +263,24 @@
     root.style.overflow="hidden";
     root.style.background="#01090e";
 
+    webglCanvas.style.position="relative";
+    webglCanvas.style.zIndex="1";
+
     const layer=document.createElement("canvas");
-    layer.className="rf-background-mountain-slider";
+    layer.className="rf-round-background-mountain-arc";
     layer.setAttribute("aria-hidden","true");
     layer.style.cssText=[
       "position:absolute",
       "inset:0",
-      "z-index:0",
+      "z-index:2",
       "width:100%",
       "height:100%",
       "display:block",
-      "pointer-events:none",
-      "background:#01090e"
+      "pointer-events:none"
     ].join(";");
+    root.appendChild(layer);
 
-    webglCanvas.style.position="relative";
-    webglCanvas.style.zIndex="1";
-    webglCanvas.style.background="transparent";
-    webglCanvas.style.mixBlendMode="screen";
-
-    root.insertBefore(layer,webglCanvas);
-
-    const context=layer.getContext("2d",{alpha:false});
+    const context=layer.getContext("2d",{alpha:true});
     const state={
       angle:Number(scene.initialAngle)||0,
       velocity:0,
@@ -213,6 +301,7 @@
       const width=Math.max(1,Math.round(box.width*ratio));
       const height=Math.max(1,Math.round(box.height*ratio));
       if(width===state.width&&height===state.height)return false;
+
       state.width=layer.width=width;
       state.height=layer.height=height;
       state.cssWidth=Math.max(1,box.width);
@@ -224,35 +313,68 @@
       resize();
       const width=state.width;
       const height=state.height;
-      const ratio=width/state.cssWidth;
-      const pattern=width*PATTERN_WIDTH;
-      const slide=state.angle*PARALLAX_PIXELS_PER_DEGREE*ratio;
-      const phase=wrap(slide,pattern);
+      context.clearRect(0,0,width,height);
 
-      const sky=context.createLinearGradient(0,0,0,height);
-      sky.addColorStop(0,"#01070c");
-      sky.addColorStop(.46,"#031018");
-      sky.addColorStop(1,"#01090e");
-      context.fillStyle=sky;
-      context.fillRect(0,0,width,height);
+      const outer={
+        cx:width*0.50,
+        cy:height*0.58,
+        rx:width*0.485,
+        ry:height*0.505
+      };
+      const inner={
+        cx:width*0.50,
+        cy:height*0.69,
+        rx:width*0.385,
+        ry:height*0.305
+      };
 
-      // Draw the farther centre mountain first, then the two nearer side shapes.
-      const ordered=[SHAPES[1],SHAPES[0],SHAPES[2]];
-      for(const shape of ordered){
-        for(const repeat of [-1,0,1]){
-          const centre=(shape.centre*pattern)-phase+(repeat*pattern);
-          drawMountain(
-            context,
-            shape,
-            centre,
-            shape.width*width,
-            shape.height*height
-          );
-        }
+      // The outer black mask turns the rectangular viewport into a round scene.
+      outsideRoundMask(context,width,height,outer);
+
+      context.save();
+      context.beginPath();
+      context.ellipse(
+        outer.cx,outer.cy,
+        outer.rx,outer.ry,
+        0,0,Math.PI*2
+      );
+      context.clip();
+
+      const orbitRadians=state.angle*Math.PI/180*ARC_RESPONSE;
+
+      for(const mountain of MOUNTAINS){
+        const arc=mountain.phase-orbitRadians;
+        const absolute=Math.abs(arc);
+        if(absolute>=VISIBLE_LIMIT)continue;
+
+        const visibility=1-smoothstep(1.15,VISIBLE_LIMIT,absolute);
+        const depth=Math.cos(arc);
+        const centreX=outer.cx+Math.sin(arc)*outer.rx*0.91;
+
+        // The mountain bases follow the rear ellipse radius.
+        const arcY=outer.cy-Math.max(0,depth)*outer.ry*0.57;
+        const baseY=arcY+height*mountain.lift;
+
+        const perspectiveScale=(0.78+Math.max(0,depth)*0.24)*mountain.size;
+        const mountainWidth=width*mountain.width*perspectiveScale;
+        const mountainHeight=height*mountain.height*perspectiveScale;
+
+        drawMountain(
+          context,mountain,
+          centreX,baseY,
+          mountainWidth,mountainHeight,
+          visibility
+        );
       }
+      context.restore();
+
+      // Punch the middle scene back through the overlay. The real two mountains,
+      // river and transmitters therefore stay in front of every 2D silhouette.
+      clearForeground(context,width,height,inner);
+      drawPlateRims(context,width,height,outer,inner);
 
       root.dataset.rfBackgroundMountains="3";
-      root.dataset.rfBackgroundMountainMode="2d-billboard-slider";
+      root.dataset.rfBackgroundMountainMode="round-arc-front";
       root.dataset.rfBackgroundMountainVersion=VERSION;
     }
 
@@ -263,6 +385,7 @@
     function tick(){
       state.frame=0;
       if(state.destroyed)return;
+
       if(!state.dragging&&Math.abs(state.velocity)>0.001){
         state.angle+=state.velocity;
         state.velocity*=0.92;
@@ -283,8 +406,8 @@
       if(!state.dragging||event.pointerId!==state.pointer)return;
       const delta=event.clientX-state.x;
       state.x=event.clientX;
-      state.angle+=delta*0.34;
-      state.velocity=delta*0.05;
+      state.angle+=delta*ANGLE_PER_PIXEL;
+      state.velocity=delta*INERTIA_PER_PIXEL;
       paint();
     }
 
@@ -351,12 +474,12 @@
 
   function install(){
     const renderer=globalThis.FieldOps3DRenderer;
-    if(!renderer?.create||renderer.__backgroundMountainSliderInstalled)return false;
+    if(!renderer?.create||renderer.__roundBackgroundMountainArcInstalled)return false;
 
     const originalCreate=renderer.create.bind(renderer);
-    renderer.create=(root,scene)=>mountBackground(root,scene,originalCreate(root,scene));
-    renderer.__backgroundMountainSliderInstalled=true;
-    renderer.backgroundMountainSliderVersion=VERSION;
+    renderer.create=(root,scene)=>mountRoundArc(root,scene,originalCreate(root,scene));
+    renderer.__roundBackgroundMountainArcInstalled=true;
+    renderer.roundBackgroundMountainArcVersion=VERSION;
     return true;
   }
 
@@ -368,6 +491,6 @@
   globalThis.FieldOpsBackgroundMountains=Object.freeze({
     VERSION,
     count:3,
-    mode:"2d-billboard-slider"
+    mode:"round-arc-front"
   });
 })();
