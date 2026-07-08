@@ -4,10 +4,12 @@ import process from "node:process";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "FieldOpsAtlas", "Features", "Weather", "data", "outages");
-const VERSION = "0.4.1-planned-fallbacks";
+const VERSION = "0.4.3-authenticated-ods";
 const TIMEOUT = 30000;
 const LIMIT = 2500;
-const UA = "FieldOpsAtlas-Outage-Collector/0.4.1 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
+const UA = "FieldOpsAtlas-Outage-Collector/0.4.3 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
+const DEBUG_HTTP = /^(1|true|yes)$/i.test(String(process.env.OUTAGE_DEBUG_HTTP || ""));
+const MAX_ERROR_BODY = 600;
 
 const providers = [
   {
@@ -40,11 +42,11 @@ const providers = [
     officialUrl: "https://www.enwl.co.uk/power-cuts",
     locationQuality: "upstream_switch",
     feeds: [
-      { id: "live", type: "ods", sources: [
+      { id: "live", type: "ods", authEnv: "ENWL_ODS_API_KEY", authOrigins: ["https://electricitynorthwest.opendatasoft.com"], sources: [
         ["https://electricitynorthwest.opendatasoft.com", "live_incidents"],
         ["https://data.opendatasoft.com", "live_incidents@electricitynorthwest"]
       ], discover: ["Electricity North West live incidents", ["electricity","north","west","incident"], ["live_incidents"]] },
-      { id: "planned", type: "ods", forceCategory: "planned", sources: [
+      { id: "planned", type: "ods", authEnv: "ENWL_ODS_API_KEY", authOrigins: ["https://electricitynorthwest.opendatasoft.com"], forceCategory: "planned", sources: [
         ["https://electricitynorthwest.opendatasoft.com", "psi"],
         ["https://data.opendatasoft.com", "psi@electricitynorthwest"]
       ], discover: ["Electricity North West future planned supply interruptions", ["electricity","north","west","planned"], ["psi","planned"]] }
@@ -62,7 +64,7 @@ const providers = [
     id: "spen", name: "SP Energy Networks",
     officialUrl: "https://www.spenergynetworks.co.uk/pages/power_cuts.aspx",
     locationQuality: "published_point",
-    feeds: [{ id: "live", type: "ods", sources: [
+    feeds: [{ id: "live", type: "ods", authEnv: "SPEN_ODS_API_KEY", authOrigins: ["https://spenergynetworks.opendatasoft.com"], sources: [
       ["https://spenergynetworks.opendatasoft.com", "distribution-network-live-outages"],
       ["https://data.opendatasoft.com", "distribution-network-live-outages@spenergynetworks"]
     ], discover: ["SP Energy Networks distribution network live outages", ["energy","networks","outage"], ["distribution-network-live-outages"]] }]
@@ -72,11 +74,11 @@ const providers = [
     officialUrl: "https://powercheck.nienetworks.co.uk/",
     locationQuality: "approximate_area",
     feeds: [
-      { id: "live", type: "ods", sources: [
+      { id: "live", type: "ods", authEnv: "NIE_ODS_API_KEY", authOrigins: ["https://nienetworks.opendatasoft.com"], sources: [
         ["https://nienetworks.opendatasoft.com", "nie-networks-network-faults"],
         ["https://data.opendatasoft.com", "nie-networks-network-faults@nienetworks"]
       ], discover: ["NIE Networks network faults", ["nie","network","fault"], ["nie-networks-network-faults"]] },
-      { id: "planned", type: "ods", forceCategory: "planned", optional: true, sources: [
+      { id: "planned", type: "ods", authEnv: "NIE_ODS_API_KEY", authOrigins: ["https://nienetworks.opendatasoft.com"], forceCategory: "planned", optional: true, sources: [
         ["https://data.opendatasoft.com", "nie-networks-planned-interruptions@nienetworks"],
         ["https://data.opendatasoft.com", "planned-interruptions@nienetworks"]
       ], discover: ["NIE Networks planned interruptions", ["nie","planned","interrupt"], ["nie-networks-planned","planned-interrupt"]] }
@@ -115,11 +117,12 @@ async function collect(provider, generatedAt) {
     try {
       const loaded = await loadFeed(feed);
       loaded.forEach((row, index) => rows.push({ row, feed, index }));
-      feeds.push({ id: feed.id, state: "live", rawRows: loaded.length });
+      feeds.push({ id: feed.id, state: "live", rawRows: loaded.length, authConfigured: hasAuth(feed) });
     } catch (error) {
       feeds.push({
         id: feed.id,
         state: feed.optional ? "optional-error" : "error",
+        authConfigured: hasAuth(feed),
         error: concise(error)
       });
     }
@@ -193,7 +196,7 @@ async function collect(provider, generatedAt) {
       categories,
       feeds,
       message: [
-        `${categories.current} current`,
+        `${categories.current} unplanned`,
         `${categories.planned} planned`,
         `${categories.restored} restored`,
         requiredFailures.length ? `${requiredFailures.length} required feed failed` : "",
@@ -207,7 +210,7 @@ async function loadFeed(feed) {
   if (feed.type === "ods") return loadOds(feed);
   if (feed.type === "ckan") return loadCkan(feed);
   if (feed.type === "json") {
-    const payload = await getJson(feed.url);
+    const payload = await getJson(feed.url, { feed });
     return extractRows(payload).slice(0, LIMIT);
   }
   throw new Error(`Unsupported feed type ${feed.type}`);
@@ -217,15 +220,15 @@ async function loadOds(feed) {
   const failures = [];
   for (const [domain, dataset] of feed.sources || []) {
     try {
-      return await loadOdsDataset(domain, dataset);
+      return await loadOdsDataset(domain, dataset, feed);
     } catch (error) {
       failures.push(`${dataset}: ${concise(error)}`);
     }
   }
   if (feed.discover) {
     try {
-      const dataset = await discoverOds(...feed.discover);
-      return await loadOdsDataset("https://data.opendatasoft.com", dataset);
+      const dataset = await discoverOds(feed, ...feed.discover);
+      return await loadOdsDataset("https://data.opendatasoft.com", dataset, feed);
     } catch (error) {
       failures.push(`discovery: ${concise(error)}`);
     }
@@ -233,14 +236,14 @@ async function loadOds(feed) {
   throw new Error(failures.join(" | ") || "No ODS source available");
 }
 
-async function loadOdsDataset(domain, dataset) {
+async function loadOdsDataset(domain, dataset, feed) {
   const rows = [];
   for (let offset = 0; offset < LIMIT; offset += 100) {
     const url = new URL(`/api/explore/v2.1/catalog/datasets/${encodeURIComponent(dataset)}/records`, domain);
     url.searchParams.set("limit", "100");
     url.searchParams.set("offset", String(offset));
     url.searchParams.set("timezone", "Europe/London");
-    const payload = await getJson(url);
+    const payload = await getJson(url, { feed, dataset, portalDomain: domain });
     const page = Array.isArray(payload?.results) ? payload.results : [];
     rows.push(...page);
     if (page.length < 100 || rows.length >= Number(payload?.total_count ?? rows.length)) break;
@@ -248,11 +251,11 @@ async function loadOdsDataset(domain, dataset) {
   return rows.slice(0, LIMIT);
 }
 
-async function discoverOds(query, required, preferred) {
+async function discoverOds(feed, query, required, preferred) {
   const url = new URL("/api/explore/v2.1/catalog/datasets", "https://data.opendatasoft.com");
   url.searchParams.set("limit", "100");
   url.searchParams.set("q", query);
-  const payload = await getJson(url);
+  const payload = await getJson(url, { feed, dataset: query, portalDomain: "https://data.opendatasoft.com" });
   let best = null;
   let bestScore = -Infinity;
   for (const d of payload?.results || []) {
@@ -280,7 +283,7 @@ async function loadCkan(feed) {
     url.searchParams.set("resource_id", feed.resourceId);
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
-    const payload = await getJson(url);
+    const payload = await getJson(url, { feed });
     const page = payload?.result?.records;
     if (!payload?.success || !Array.isArray(page)) throw new Error("Invalid CKAN response");
     rows.push(...page);
@@ -675,12 +678,14 @@ function km(a,b,c,d) {
   return r * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1-h));
 }
 
-async function getJson(input) {
+async function getJson(input, options = {}) {
   const url = input instanceof URL ? input.toString() : input;
   let last;
+
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT);
+
     try {
       const response = await fetch(url, {
         signal: controller.signal,
@@ -689,19 +694,109 @@ async function getJson(input) {
           Accept: "application/json, text/plain;q=0.9, */*;q=0.8",
           "Accept-Language": "en-GB,en;q=0.9",
           "Cache-Control": "no-cache",
-          "User-Agent": UA
+          "User-Agent": UA,
+          ...authHeaders(url, options.feed)
         }
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
+
+      const text = await response.text();
+
+      if (!response.ok) {
+        throw httpError(url, response, text, options);
+      }
+
+      if (!text.trim()) {
+        throw new Error("Successful response contained no JSON body");
+      }
+
+      return JSON.parse(text);
     } catch (error) {
       last = error;
-      if (!attempt) await new Promise(resolve => setTimeout(resolve, 1500));
+
+      if (DEBUG_HTTP) {
+        console.error(
+          `[http] ${options.feed?.id || "feed"} ${url} -> ${error?.message || error}`
+        );
+      }
+
+      if (!attempt) {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
     } finally {
       clearTimeout(timer);
     }
   }
+
   throw last || new Error("Request failed");
+}
+
+function hasAuth(feed) {
+  return Boolean(feed?.authEnv && process.env[feed.authEnv]);
+}
+
+function authHeaders(url, feed) {
+  if (!hasAuth(feed)) return {};
+
+  let origin = "";
+  try {
+    origin = new URL(url).origin;
+  } catch {
+    return {};
+  }
+
+  const allowedOrigins = Array.isArray(feed.authOrigins)
+    ? feed.authOrigins
+    : [];
+
+  if (allowedOrigins.length && !allowedOrigins.includes(origin)) {
+    return {};
+  }
+
+  return {
+    Authorization: `Apikey ${process.env[feed.authEnv]}`
+  };
+}
+
+function httpError(url, response, body, options = {}) {
+  const interestingHeaders = [
+    "server",
+    "content-type",
+    "cache-control",
+    "cf-ray",
+    "x-request-id",
+    "x-ratelimit-remaining",
+    "retry-after"
+  ];
+
+  const headerSummary = interestingHeaders
+    .map(name => [name, response.headers.get(name)])
+    .filter(([, value]) => value)
+    .map(([name, value]) => `${name}=${value}`)
+    .join(", ");
+
+  const bodySummary = String(body || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, MAX_ERROR_BODY);
+
+  const context = [options.feed?.id, options.dataset]
+    .filter(Boolean)
+    .join("/");
+
+  const authHint =
+    [401, 403].includes(response.status) &&
+    options.feed?.authEnv &&
+    !hasAuth(options.feed)
+      ? `GitHub secret ${options.feed.authEnv} is not configured`
+      : "";
+
+  return new Error([
+    `HTTP ${response.status}${response.statusText ? ` ${response.statusText}` : ""}`,
+    context ? `[${context}]` : "",
+    headerSummary ? `{${headerSummary}}` : "",
+    authHint,
+    bodySummary ? `body=${JSON.stringify(bodySummary)}` : ""
+  ].filter(Boolean).join(" "));
 }
 
 async function read(file) {
@@ -717,7 +812,7 @@ async function write(file, data) {
 function concise(error) {
   return error?.name === "AbortError"
     ? "Timed out"
-    : String(error?.message || "Unavailable").slice(0, 220);
+    : String(error?.message || "Unavailable").slice(0, 700);
 }
 
 function selfTest() {
