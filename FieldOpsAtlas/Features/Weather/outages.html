@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="outages.css?v=0.3.0-layergroups-dedupe" />
+  <link rel="stylesheet" href="outages.css?v=0.4.0-static-collector" />
 </head>
 
 <body class="weather-page">
@@ -16,7 +16,7 @@
     class="fieldops-shell-root weather-shell outage-shell"
     data-page="weather"
     data-weather-provider="outages"
-    data-version="0.3.0-layergroups-dedupe"
+    data-version="0.4.0-static-collector"
   >
     <section class="weather-stage" aria-label="UK electricity outage map">
       <div
@@ -73,7 +73,7 @@
         <summary>
           <span class="outage-summary-title">
             <strong>Power outages</strong>
-            <small id="headlineStatus">Loading official provider feeds</small>
+            <small id="headlineStatus">Loading collected outage datasets</small>
           </span>
 
           <span class="outage-summary-actions">
@@ -84,7 +84,7 @@
 
         <div class="outage-panel-body">
           <p id="statusText" class="weather-status">
-            Published provider incidents are mapped automatically. No postcode entry is required.
+            Collected provider incidents are mapped automatically. No postcode entry is required.
           </p>
 
           <div class="outage-filter-grid" aria-label="Outage filters">
@@ -127,7 +127,7 @@
             </div>
             <div class="weather-metric">
               <strong id="providerCount">0/7</strong>
-              <span>Feeds loaded</span>
+              <span>Datasets loaded</span>
             </div>
           </div>
 
@@ -157,14 +157,13 @@
           </label>
 
           <p class="outage-note">
-            Provider rows sharing an incident reference are combined into one marker. Rows without
-            a reference are grouped only when their location, timing, category and area strongly
-            indicate the same incident.
+            Each provider is collected independently into its own GeoJSON dataset and Leaflet LayerGroup.
+            Provider APIs never initialise, clear or reposition this map.
           </p>
 
           <p class="outage-note">
-            Marker positions are the best location published by each network operator. Grouped
-            markers use the centre of the published coordinates and may be approximate.
+            Rows sharing an incident reference are combined into one marker. Marker positions use the
+            best location published by each network operator and may be approximate.
           </p>
 
           <p class="outage-disclaimer">
@@ -179,6 +178,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
-  <script src="outages.js?v=0.3.0-layergroups-dedupe" defer></script>
+  <script src="outages.js?v=0.4.0-static-collector" defer></script>
 </body>
 </html>
