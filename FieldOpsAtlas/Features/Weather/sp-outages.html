@@ -3,115 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta http-equiv="refresh" content="1;url=https://powercuts.spenergynetworks.co.uk/map" />
-  <title>Opening SP Networks Power Cuts</title>
+  <title>SP Energy Networks Outages - FieldOps Atlas</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-
-  <style>
-    .sp-launch-shell {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding:
-        calc(env(safe-area-inset-top) + 24px)
-        18px
-        calc(env(safe-area-inset-bottom) + 24px);
-      background:
-        radial-gradient(circle at 50% 34%, rgba(0, 158, 78, 0.18), transparent 34%),
-        #07111c;
-      color: #f4fbff;
-    }
-
-    .sp-launch-card {
-      width: min(430px, 100%);
-      display: grid;
-      gap: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 20px;
-      padding: 20px;
-      background: rgba(5, 14, 23, 0.92);
-      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
-      text-align: center;
-    }
-
-    .sp-launch-card h1,
-    .sp-launch-card p {
-      margin: 0;
-    }
-
-    .sp-launch-card h1 {
-      font-size: 21px;
-    }
-
-    .sp-launch-card p {
-      color: rgba(230, 243, 250, 0.72);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .sp-launch-button,
-    .sp-return-link {
-      min-height: 46px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .sp-launch-button {
-      border: 1px solid rgba(0, 190, 94, 0.8);
-      background: rgba(0, 158, 78, 0.24);
-      color: #e5fff1;
-    }
-
-    .sp-return-link {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.06);
-      color: #eaf7ff;
-    }
-
-    .sp-launch-status {
-      font-size: 11px !important;
-    }
-  </style>
+  <link rel="stylesheet" href="sp-outages.css?v=0.3.0-live-spen" />
 </head>
 
-<body>
-  <main class="sp-launch-shell">
-    <section class="sp-launch-card" aria-labelledby="spLaunchTitle">
-      <h1 id="spLaunchTitle">SP Networks power cuts</h1>
+<body class="weather-page">
+  <main
+    class="fieldops-shell-root weather-shell sp-outage-shell"
+    data-page="weather"
+    data-weather-provider="sp-outages"
+    data-version="0.3.0-live-spen"
+  >
+    <section class="weather-stage" aria-label="SP Energy Networks outage map">
+      <div
+        id="spOutageMap"
+        class="weather-map"
+        aria-label="Map of current SP Energy Networks power cuts"
+      ></div>
 
-      <p>
-        Opening the official SP Networks map directly. Their website does not render
-        reliably inside an embedded frame.
-      </p>
+      <details class="sp-outage-panel sp-outage-nav-panel">
+        <summary>
+          <span>Weather pages</span>
+          <span class="sp-outage-summary-state" aria-hidden="true">Show</span>
+        </summary>
 
-      <a
-        id="openSpMap"
-        class="sp-launch-button"
-        href="https://powercuts.spenergynetworks.co.uk/map"
-      >
-        Open official power cuts map
-      </a>
+        <nav class="sp-outage-provider-links" aria-label="Weather pages">
+          <a class="weather-provider-link" href="index.html">Radar</a>
+          <a class="weather-provider-link" href="openmeteo.html">Risk</a>
+          <a class="weather-provider-link" href="metoffice.html">Met Office</a>
+          <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
+          <a class="weather-provider-link" href="lightning.html">EUMETSAT</a>
+          <a class="weather-provider-link" href="blitzortung.html">Blitzortung</a>
+          <a class="weather-provider-link" href="outages.html">Outages</a>
+          <a class="weather-provider-link is-active" href="sp-outages.html">SP outage</a>
+        </nav>
+      </details>
 
-      <a class="sp-return-link" href="outages.html">
-        Return to FieldOps outage map
-      </a>
+      <section class="sp-outage-map-key" aria-label="SP outage map key">
+        <span><i class="is-current"></i>Current</span>
+        <span><i class="is-planned"></i>Planned</span>
+        <span><i class="is-restored"></i>Restored</span>
+      </section>
 
-      <p class="sp-launch-status">
-        Redirecting automatically…
-      </p>
+      <details class="weather-dock sp-outage-panel sp-outage-dock" open>
+        <summary>
+          <span class="sp-outage-summary-title">
+            <strong>SP Energy Networks</strong>
+            <small id="spHeadlineStatus">Loading live outage data</small>
+          </span>
+
+          <span class="sp-outage-summary-actions">
+            <span id="spLivePill" class="weather-live-pill sp-outage-live-pill">Loading</span>
+            <span class="sp-outage-summary-state" aria-hidden="true">Show</span>
+          </span>
+        </summary>
+
+        <div class="sp-outage-panel-body">
+          <div class="weather-metrics sp-outage-metrics" aria-label="SP outage counts">
+            <div class="weather-metric">
+              <span id="spCurrentCount">-</span>
+              <small>Current</small>
+            </div>
+            <div class="weather-metric">
+              <span id="spPlannedCount">-</span>
+              <small>Planned</small>
+            </div>
+            <div class="weather-metric">
+              <span id="spRestoredCount">-</span>
+              <small>Restored</small>
+            </div>
+          </div>
+
+          <div class="sp-outage-actions">
+            <button id="refreshSpOutages" class="weather-button is-primary" type="button">
+              Refresh
+            </button>
+            <a
+              class="weather-button sp-outage-official-link"
+              href="https://powercuts.spenergynetworks.co.uk/map"
+              rel="noopener"
+              target="_blank"
+            >
+              Official map
+            </a>
+          </div>
+
+          <div id="spIncidentList" class="sp-outage-list" aria-live="polite"></div>
+
+          <p id="spOutageNote" class="sp-outage-note">
+            Points are plotted from SPEN incident postcodes collected into this repo.
+          </p>
+        </div>
+      </details>
     </section>
   </main>
 
-  <script>
-    window.setTimeout(() => {
-      window.location.replace("https://powercuts.spenergynetworks.co.uk/map");
-    }, 250);
-  </script>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    defer
+  ></script>
+  <script src="sp-outages.js?v=0.3.0-live-spen" defer></script>
 </body>
 </html>

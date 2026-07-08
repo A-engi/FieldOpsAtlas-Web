@@ -2,8 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-/* ========================================================================== 
-   FieldOps Atlas — SP Energy Networks outage collector
+/* ==========================================================================
+   FieldOps Atlas - SP Energy Networks outage collector
    ========================================================================== */
 
 const ROOT = process.cwd();
@@ -20,22 +20,25 @@ const OUTPUT_FILE = path.join(OUTPUT_DIR, "spen.geojson");
 const STATUS_FILE = path.join(OUTPUT_DIR, "status.json");
 const DIAGNOSTIC_FILE = path.join(OUTPUT_DIR, "spen-diagnostics.json");
 
-const VERSION = "0.1.0-spen-isolation";
-const DATASET = "distribution-network-live-outages";
+const VERSION = "0.2.0-salesforce-lwr";
 const PROVIDER_ID = "spen";
 const PROVIDER_NAME = "SP Energy Networks";
-const OFFICIAL_MAP =
-  "https://www.spenergynetworks.co.uk/pages/power_cuts.aspx";
-const PORTAL = "https://spenergynetworks.opendatasoft.com";
-const GLOBAL_ODS = "https://data.opendatasoft.com";
-const GLOBAL_HUWISE = "https://hub.huwise.com";
-
-const API_KEY = String(process.env.SPEN_ODS_API_KEY || "").trim();
-const TIMEOUT_MS = 30_000;
+const OFFICIAL_MAP = "https://powercuts.spenergynetworks.co.uk/map";
+const API_ROOT =
+  "https://powercuts.spenergynetworks.co.uk/lwr/apex/v67.0/SPEN_PostcodeSearchController";
+const POSTCODES_ROOT = "https://api.postcodes.io/postcodes";
 const PAGE_SIZE = 100;
-const MAX_ROWS = 2_500;
+const TIMEOUT_MS = 30_000;
 const USER_AGENT =
-  "FieldOpsAtlas-SPEN-Collector/0.1 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
+  "FieldOpsAtlas-SPEN-Collector/0.2 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
+
+const LIVE_STATUSES = [
+  "Unplanned Power Cut",
+  "Live Power Cut",
+  "In Progress"
+];
+const PLANNED_STATUSES = ["Planned-Active"];
+const RESTORED_STATUSES = ["Restored", "Power Restored"];
 
 if (process.argv.includes("--self-test")) {
   runSelfTest();
@@ -50,411 +53,282 @@ async function main() {
   const previous = await readJson(OUTPUT_FILE);
   const attempts = [];
 
-  if (!API_KEY) {
-    const error = new Error(
-      "SPEN_ODS_API_KEY is not configured. Add it as a GitHub Actions repository secret."
+  try {
+    const [liveCount, plannedCount, restoredCount] = await Promise.all([
+      getImpactDataCount(LIVE_STATUSES),
+      getImpactDataCount(PLANNED_STATUSES),
+      getImpactDataCount(RESTORED_STATUSES)
+    ]);
+
+    attempts.push({
+      id: "salesforce-lwr-counts",
+      ok: true,
+      liveCount,
+      plannedCount,
+      restoredCount
+    });
+
+    const liveRows = await getImpactData(LIVE_STATUSES, liveCount);
+    const plannedRows = await getImpactData(PLANNED_STATUSES, plannedCount);
+    const restoredRows = await getImpactData(RESTORED_STATUSES, restoredCount);
+
+    attempts.push({
+      id: "salesforce-lwr-pages",
+      ok: true,
+      liveRows: liveRows.length,
+      plannedRows: plannedRows.length,
+      restoredRows: restoredRows.length
+    });
+
+    const rows = [
+      ...liveRows.map((row) => ({ ...row, fieldopsCategory: "current" })),
+      ...plannedRows.map((row) => ({ ...row, fieldopsCategory: "planned" })),
+      ...restoredRows.map((row) => ({ ...row, fieldopsCategory: "restored" }))
+    ];
+    const geocoded = await geocodeIncidents(rows, attempts);
+    const incidents = deduplicate(geocoded);
+    const features = incidents.map(toFeature);
+    const categories = countCategories(incidents);
+
+    await writeJsonAtomic(OUTPUT_FILE, {
+      type: "FeatureCollection",
+      provider: PROVIDER_ID,
+      generatedAt,
+      stale: false,
+      features
+    });
+
+    const status = {
+      state: "live",
+      stale: false,
+      generatedAt,
+      lastGoodAt: generatedAt,
+      rawRows: rows.length,
+      validRows: geocoded.length,
+      uniqueIncidents: incidents.length,
+      groupedRows: Math.max(0, geocoded.length - incidents.length),
+      skippedRows: rows.length - geocoded.length,
+      categories,
+      feeds: [
+        {
+          id: "live",
+          state: "live",
+          rawRows: liveRows.length,
+          selectedSource: "salesforce-lwr",
+          officialCount: liveCount
+        },
+        {
+          id: "planned",
+          state: "live",
+          rawRows: plannedRows.length,
+          selectedSource: "salesforce-lwr",
+          officialCount: plannedCount
+        },
+        {
+          id: "restored",
+          state: "live",
+          rawRows: restoredRows.length,
+          selectedSource: "salesforce-lwr",
+          officialCount: restoredCount
+        }
+      ],
+      message:
+        `${categories.current} unplanned · ` +
+        `${categories.planned} planned · ` +
+        `${categories.restored} restored`
+    };
+
+    await mergeProviderStatus(generatedAt, status);
+    await writeJsonAtomic(DIAGNOSTIC_FILE, {
+      version: VERSION,
+      generatedAt,
+      provider: PROVIDER_ID,
+      attempts,
+      result: {
+        officialLiveCount: liveCount,
+        rawRows: rows.length,
+        validRows: geocoded.length,
+        uniqueIncidents: incidents.length,
+        categories
+      }
+    });
+
+    console.log(
+      `SPEN collection complete: ${incidents.length} mapped incidents; ${liveCount} current faults.`
+    );
+  } catch (error) {
+    attempts.push({
+      id: "salesforce-lwr",
+      ok: false,
+      error: conciseError(error)
+    });
+
+    await writeFailureState(previous, generatedAt, attempts, error);
+    throw error;
+  }
+}
+
+async function getImpactDataCount(statuses) {
+  const payload = { postcode: "", statuses };
+  const count = await fetchSpenJson("getImpactDataCount", payload);
+  const number = Number(count);
+
+  if (!Number.isFinite(number)) {
+    throw new Error(`SPEN count endpoint returned ${JSON.stringify(count)}`);
+  }
+
+  return number;
+}
+
+async function getImpactData(statuses, count) {
+  if (count <= 0) return [];
+
+  const pages = [];
+  const totalPages = Math.ceil(count / PAGE_SIZE);
+
+  for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+    const payload = {
+      paramsJson: JSON.stringify({
+        postcode: "",
+        pageNumber,
+        pageSize: PAGE_SIZE,
+        statuses
+      })
+    };
+    const page = await fetchSpenJson("getImpactData", payload);
+
+    if (!Array.isArray(page)) {
+      throw new Error("SPEN incident endpoint did not return an array.");
+    }
+
+    pages.push(...page);
+  }
+
+  return pages;
+}
+
+async function fetchSpenJson(method, payload) {
+  return fetchJson(`${API_ROOT}/${method}`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: {
+      Accept: "application/json",
+      "Accept-Language": "en-GB,en;q=0.9",
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+      "X-SFDC-Allow-Continuation": "false",
+      "User-Agent": USER_AGENT
+    }
+  });
+}
+
+async function geocodeIncidents(rows, attempts) {
+  const cache = new Map();
+  const output = [];
+
+  for (const row of rows) {
+    const postcode = firstPostcode(row.postcodeList);
+
+    if (!postcode) continue;
+
+    const coordinate = await lookupPostcode(postcode, cache);
+
+    if (!coordinate) continue;
+
+    output.push(normaliseIncident(row, coordinate, postcode));
+  }
+
+  attempts.push({
+    id: "postcodes-io-geocoding",
+    ok: true,
+    lookups: cache.size,
+    mappedRows: output.length
+  });
+
+  return output;
+}
+
+async function lookupPostcode(postcode, cache) {
+  const key = normalisePostcode(postcode);
+
+  if (!key) return null;
+  if (cache.has(key)) return cache.get(key);
+
+  try {
+    const payload = await fetchJson(`${POSTCODES_ROOT}/${encodeURIComponent(key)}`, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": USER_AGENT
+      }
+    });
+    const result = payload?.result;
+    const coordinate = validCoordinate(
+      Number(result?.latitude),
+      Number(result?.longitude)
     );
 
-    await writeFailureState(previous, generatedAt, attempts, error);
-    throw error;
+    cache.set(key, coordinate);
+    return coordinate;
+  } catch {
+    cache.set(key, null);
+    return null;
   }
-
-  let rows = null;
-  let selectedSource = null;
-
-  const sources = [
-    {
-      id: "official-v2.1-records",
-      kind: "records",
-      url: `${PORTAL}/api/explore/v2.1/catalog/datasets/${DATASET}/records`,
-      authenticated: true
-    },
-    {
-      id: "official-v2.0-records",
-      kind: "records",
-      url: `${PORTAL}/api/explore/v2.0/catalog/datasets/${DATASET}/records`,
-      authenticated: true
-    },
-    {
-      id: "official-v2.1-geojson",
-      kind: "geojson",
-      url: `${PORTAL}/api/explore/v2.1/catalog/datasets/${DATASET}/exports/geojson`,
-      authenticated: true
-    },
-    {
-      id: "global-ods-v2.1-records",
-      kind: "records",
-      url: `${GLOBAL_ODS}/api/explore/v2.1/catalog/datasets/${DATASET}@spenergynetworks/records`,
-      authenticated: false
-    },
-    {
-      id: "global-huwise-v2.1-records",
-      kind: "records",
-      url: `${GLOBAL_HUWISE}/api/explore/v2.1/catalog/datasets/${DATASET}@spenergynetworks/records`,
-      authenticated: false
-    }
-  ];
-
-  for (const source of sources) {
-    const started = Date.now();
-
-    try {
-      rows =
-        source.kind === "geojson"
-          ? await loadGeoJsonExport(source)
-          : await loadPagedRecords(source);
-
-      attempts.push({
-        id: source.id,
-        ok: true,
-        authenticated: source.authenticated,
-        rowCount: rows.length,
-        durationMs: Date.now() - started
-      });
-
-      selectedSource = source.id;
-      break;
-    } catch (error) {
-      attempts.push({
-        id: source.id,
-        ok: false,
-        authenticated: source.authenticated,
-        durationMs: Date.now() - started,
-        error: conciseError(error)
-      });
-    }
-  }
-
-  if (!rows) {
-    const error = new Error("Every SP Energy Networks source failed.");
-    await writeFailureState(previous, generatedAt, attempts, error);
-    throw error;
-  }
-
-  const normalised = [];
-  let skippedRows = 0;
-
-  rows.forEach((row, index) => {
-    const incident = normaliseIncident(row, index);
-
-    if (incident) {
-      normalised.push(incident);
-    } else {
-      skippedRows += 1;
-    }
-  });
-
-  const incidents = deduplicate(normalised);
-  const features = incidents.map(toFeature);
-  const categories = countCategories(incidents);
-
-  const collection = {
-    type: "FeatureCollection",
-    provider: PROVIDER_ID,
-    generatedAt,
-    stale: false,
-    features
-  };
-
-  await writeJsonAtomic(OUTPUT_FILE, collection);
-
-  const status = {
-    state: "live",
-    stale: false,
-    generatedAt,
-    lastGoodAt: generatedAt,
-    rawRows: rows.length,
-    validRows: normalised.length,
-    uniqueIncidents: incidents.length,
-    groupedRows: Math.max(0, normalised.length - incidents.length),
-    skippedRows,
-    categories,
-    feeds: [
-      {
-        id: "live",
-        state: "live",
-        rawRows: rows.length,
-        authConfigured: true,
-        selectedSource
-      }
-    ],
-    message:
-      `${categories.current} unplanned · ` +
-      `${categories.planned} planned · ` +
-      `${categories.restored} restored`
-  };
-
-  await mergeProviderStatus(generatedAt, status);
-
-  await writeJsonAtomic(DIAGNOSTIC_FILE, {
-    version: VERSION,
-    generatedAt,
-    provider: PROVIDER_ID,
-    dataset: DATASET,
-    authConfigured: true,
-    selectedSource,
-    attempts,
-    result: {
-      rawRows: rows.length,
-      validRows: normalised.length,
-      uniqueIncidents: incidents.length,
-      skippedRows,
-      categories
-    }
-  });
-
-  console.log(
-    `SPEN collection complete: ${incidents.length} incidents via ${selectedSource}.`
-  );
 }
 
-async function loadPagedRecords(source) {
-  const rows = [];
-
-  for (let offset = 0; offset < MAX_ROWS; offset += PAGE_SIZE) {
-    const url = new URL(source.url);
-    url.searchParams.set("limit", String(PAGE_SIZE));
-    url.searchParams.set("offset", String(offset));
-    url.searchParams.set("timezone", "Europe/London");
-
-    const payload = await fetchJson(url, source);
-    const page = Array.isArray(payload?.results)
-      ? payload.results
-      : Array.isArray(payload?.records)
-        ? payload.records
-        : [];
-
-    rows.push(...page);
-
-    const total = Number(payload?.total_count ?? payload?.nhits ?? rows.length);
-
-    if (page.length < PAGE_SIZE || rows.length >= total) {
-      break;
-    }
-  }
-
-  return rows.slice(0, MAX_ROWS);
-}
-
-async function loadGeoJsonExport(source) {
-  const url = new URL(source.url);
-  url.searchParams.set("timezone", "Europe/London");
-
-  const payload = await fetchJson(url, source);
-
-  if (payload?.type !== "FeatureCollection" || !Array.isArray(payload.features)) {
-    throw new Error("GeoJSON export did not return a FeatureCollection.");
-  }
-
-  return payload.features.slice(0, MAX_ROWS);
-}
-
-async function fetchJson(urlValue, source) {
-  const url = urlValue instanceof URL ? urlValue : new URL(urlValue);
+async function fetchJson(url, options = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const headers = {
-      Accept: "application/json, application/geo+json;q=0.9, */*;q=0.5",
-      "Accept-Language": "en-GB,en;q=0.9",
-      "Cache-Control": "no-cache",
-      "User-Agent": USER_AGENT
-    };
-
-    if (source.authenticated) {
-      headers.Authorization = `Apikey ${API_KEY}`;
-    }
-
     const response = await fetch(url, {
-      method: "GET",
       redirect: "follow",
-      signal: controller.signal,
-      headers
+      ...options,
+      signal: controller.signal
     });
-
     const text = await response.text();
 
     if (!response.ok) {
-      const body = text.replace(/\s+/g, " ").trim().slice(0, 500);
       throw new Error(
         `HTTP ${response.status} ${response.statusText}` +
-          (body ? ` · ${body}` : "")
+          (text ? ` · ${text.replace(/\s+/g, " ").slice(0, 400)}` : "")
       );
     }
 
-    if (!text.trim()) {
-      throw new Error("Response body was empty.");
-    }
-
-    try {
-      return JSON.parse(text);
-    } catch {
-      throw new Error(
-        `Response was not JSON · ${text.replace(/\s+/g, " ").slice(0, 300)}`
-      );
-    }
+    return JSON.parse(text);
   } finally {
     clearTimeout(timeout);
   }
 }
 
-function normaliseIncident(row, index) {
-  const raw =
-    row?.type === "Feature"
-      ? { ...(row.properties || {}), geometry: row.geometry }
-      : row?.record || row?.fields || row;
-
-  if (!raw || typeof raw !== "object") {
-    return null;
-  }
-
-  const fields = flattenObject(raw);
-  const coordinate = findCoordinate(raw, fields);
-
-  if (!coordinate) {
-    return null;
-  }
-
-  const status = textValue(
-    pick(fields, [
-      "status",
-      "outagestatus",
-      "incidentstatus",
-      "eventstatus",
-      "faultstatus",
-      "state"
-    ])
-  );
-
-  const type = textValue(
-    pick(fields, [
-      "type",
-      "outagetype",
-      "incidenttype",
-      "eventtype",
-      "interruptiontype",
-      "natureofoutage",
-      "category",
-      "worktype"
-    ])
-  );
-
-  const plannedValue = pick(fields, [
-    "planned",
-    "isplanned",
-    "plannedoutage",
-    "plannedunplanned",
-    "plannedflag",
-    "isplannedinterruption"
-  ]);
-
-  const startedAt = parseDate(
-    pick(fields, [
-      "starttime",
-      "startdate",
-      "startdatetime",
-      "startedat",
-      "incidentstart",
-      "incidentstarttime",
-      "outagestart",
-      "outagestarttime",
-      "plannedstart",
-      "plannedstarttime",
-      "planneddate",
-      "from"
-    ])
-  );
-
-  const restoreAt = parseDate(
-    pick(fields, [
-      "estimatedrestorationtime",
-      "estimatedrestore",
-      "estimatedend",
-      "restorationtime",
-      "plannedend",
-      "plannedendtime",
-      "endtime",
-      "to",
-      "etr"
-    ])
-  );
-
-  const updatedAt = parseDate(
-    pick(fields, [
-      "updatedat",
-      "updatedtime",
-      "updatedate",
-      "lastupdated",
-      "lastupdate",
-      "modified"
-    ])
-  );
-
-  const combined = scalarText(raw).toLowerCase();
-  let category = "current";
-
-  if (/\b(restored|resolved|closed|completed|cancelled|canceled)\b/.test(combined)) {
-    category = "restored";
-  } else if (
-    truthyPlanned(plannedValue) ||
-    (startedAt && startedAt > Date.now() + 5 * 60 * 1000) ||
-    /\b(planned|scheduled|future|maintenance|essential work|network upgrade)\b/.test(
-      combined
-    )
-  ) {
-    category = "planned";
-  }
-
-  const reference = usefulReference(
-    pick(fields, [
-      "reference",
-      "incidentid",
-      "incidentreference",
-      "incidentnumber",
-      "eventid",
-      "eventreference",
-      "outageid",
-      "outagereference",
-      "faultid",
-      "faultreference",
-      "powercutreference",
-      "jobid",
-      "id"
-    ])
-  );
-
+function normaliseIncident(row, coordinate, postcode) {
+  const category = row.fieldopsCategory || categoryFromStatus(row.status, row.isPlanned);
+  const reference = textValue(row.incidentReference);
+  const affected = Number(row.spenPostCodesPerIncident || 0);
+  const outcodes = Array.isArray(row.outCodes) ? row.outCodes.filter(Boolean) : [];
   const area =
-    textValue(
-      pick(fields, [
-        "area",
-        "location",
-        "locality",
-        "town",
-        "description",
-        "incidentlocation",
-        "outagelocation",
-        "affectedarea",
-        "postcodes",
-        "postcode",
-        "region"
-      ])
-    ) || "Published incident location";
+    textValue(row.ipTown) ||
+    textValue(outcodes.join(", ")) ||
+    textValue(postcode) ||
+    "SPEN incident";
 
   return {
-    key:
-      reference ||
-      `${category}:${coordinate.lat.toFixed(4)}:${coordinate.lon.toFixed(4)}:${index}`,
+    key: reference || `${category}:${postcode}`,
     reference,
     category,
-    status: status || (category === "current" ? "unplanned" : category),
-    type: type || (category === "current" ? "unplanned" : category),
+    status: textValue(row.status) || category,
+    type: row.isPlanned ? "planned" : "unplanned",
     area,
+    postcode,
+    postcodeList: textValue(row.postcodeList),
+    outcodes,
+    affectedPostcodes: Number.isFinite(affected) ? affected : 0,
     lat: coordinate.lat,
     lon: coordinate.lon,
-    startedAt,
-    restoreAt,
-    updatedAt,
+    startedAt: parseSpenDate(row.createdDate || row.arrivalDate),
+    restoreAt: parseSpenDate(row.estimatedFix),
+    restoredAt: parseSpenDate(row.actualRestorationTime),
+    updatedAt: parseSpenDate(row.ivrMessageAssignedTime || row.dispatchedDate),
+    message: textValue(row.mainMessage || row.ivrMessage),
     rawRecordCount: 1
   };
 }
@@ -465,31 +339,19 @@ function deduplicate(incidents) {
   incidents.forEach((incident) => {
     const key = incident.reference
       ? `${incident.category}:${slug(incident.reference)}`
-      : `${incident.category}:${incident.lat.toFixed(3)}:${incident.lon.toFixed(3)}`;
+      : `${incident.category}:${normalisePostcode(incident.postcode)}`;
 
-    const existing = groups.get(key);
-
-    if (!existing) {
+    if (!groups.has(key)) {
       groups.set(key, { ...incident });
       return;
     }
 
-    const count = existing.rawRecordCount + 1;
-    existing.lat =
-      (existing.lat * existing.rawRecordCount + incident.lat) / count;
-    existing.lon =
-      (existing.lon * existing.rawRecordCount + incident.lon) / count;
-    existing.rawRecordCount = count;
+    const existing = groups.get(key);
+    existing.rawRecordCount += incident.rawRecordCount;
+    existing.affectedPostcodes += incident.affectedPostcodes;
     existing.startedAt = earlier(existing.startedAt, incident.startedAt);
     existing.restoreAt = later(existing.restoreAt, incident.restoreAt);
     existing.updatedAt = later(existing.updatedAt, incident.updatedAt);
-
-    if (
-      incident.area &&
-      !existing.area.toLowerCase().includes(incident.area.toLowerCase())
-    ) {
-      existing.area = `${existing.area} + related locations`;
-    }
   });
 
   return [...groups.values()];
@@ -506,230 +368,45 @@ function toFeature(incident) {
     properties: {
       providerId: PROVIDER_ID,
       provider: PROVIDER_NAME,
-      feedIds: ["live"],
+      feedIds: [incident.category === "planned" ? "planned" : "live"],
       reference: incident.reference || null,
       category: incident.category,
       status: incident.status,
       type: incident.type,
       area: incident.area,
+      postcode: incident.postcode,
+      outcodes: incident.outcodes,
+      affectedPostcodes: incident.affectedPostcodes,
+      postcodeList: incident.postcodeList,
       startedAt: toIso(incident.startedAt),
       restoreAt: toIso(incident.restoreAt),
+      restoredAt: toIso(incident.restoredAt),
       updatedAt: toIso(incident.updatedAt),
+      message: incident.message,
       officialUrl: OFFICIAL_MAP,
-      locationQuality: "published_point",
+      locationQuality: "postcode_lookup",
       rawRecordCount: incident.rawRecordCount,
       coordinateSpreadKm: 0
     }
   };
 }
 
-function findCoordinate(raw, fields) {
-  const geometryCandidates = [
-    raw.geometry,
-    raw.geo_shape,
-    raw.geoshape,
-    raw.feature?.geometry
-  ];
-
-  for (const candidate of geometryCandidates) {
-    const result = coordinateFromGeometry(candidate?.geometry || candidate);
-    if (result) return result;
-  }
-
-  const pointCandidates = [
-    raw.geo_point_2d,
-    raw.geopoint,
-    raw.geoPoint,
-    raw.coordinates,
-    raw.coordinate,
-    raw.position,
-    raw.point
-  ];
-
-  for (const candidate of pointCandidates) {
-    const result = coordinateFromValue(candidate);
-    if (result) return result;
-  }
-
-  return validCoordinate(
-    numberValue(
-      pick(fields, [
-        "lat",
-        "latitude",
-        "locationlat",
-        "locationlatitude",
-        "incidentlat",
-        "incidentlatitude",
-        "faultlat",
-        "faultlatitude",
-        "geopoint2dlat",
-        "geopointlat",
-        "y"
-      ])
-    ),
-    numberValue(
-      pick(fields, [
-        "lon",
-        "lng",
-        "long",
-        "longitude",
-        "locationlon",
-        "locationlng",
-        "locationlongitude",
-        "incidentlon",
-        "incidentlng",
-        "incidentlongitude",
-        "faultlon",
-        "faultlng",
-        "faultlongitude",
-        "geopoint2dlon",
-        "geopointlon",
-        "x"
-      ])
-    )
-  );
+function firstPostcode(value) {
+  const text = textValue(value);
+  const match = text.match(/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i);
+  return match ? match[0].toUpperCase().replace(/\s+/, " ") : "";
 }
 
-function coordinateFromGeometry(geometry) {
-  if (!geometry) return null;
-
-  if (typeof geometry === "string") {
-    try {
-      return coordinateFromGeometry(JSON.parse(geometry));
-    } catch {
-      return coordinateFromValue(geometry);
-    }
-  }
-
-  if (geometry.type === "Feature") {
-    return coordinateFromGeometry(geometry.geometry);
-  }
-
-  if (geometry.type === "Point") {
-    return coordinateFromValue(geometry.coordinates);
-  }
-
-  const points = collectPairs(geometry.coordinates || geometry);
-
-  if (!points.length) return null;
-
-  return validCoordinate(
-    points.reduce((sum, point) => sum + point[1], 0) / points.length,
-    points.reduce((sum, point) => sum + point[0], 0) / points.length
-  );
+function normalisePostcode(value) {
+  return textValue(value).toUpperCase().replace(/\s+/g, "");
 }
 
-function collectPairs(value, output = []) {
-  if (
-    Array.isArray(value) &&
-    value.length >= 2 &&
-    Number.isFinite(Number(value[0])) &&
-    Number.isFinite(Number(value[1]))
-  ) {
-    const result = validCoordinate(Number(value[1]), Number(value[0]));
-    if (result) output.push([result.lon, result.lat]);
-    return output;
-  }
+function categoryFromStatus(status, isPlanned) {
+  const text = textValue(status).toLowerCase();
 
-  if (Array.isArray(value)) {
-    value.forEach((item) => collectPairs(item, output));
-  }
-
-  return output;
-}
-
-function coordinateFromValue(value) {
-  if (!value) return null;
-
-  if (Array.isArray(value) && value.length >= 2) {
-    const first = Number(value[0]);
-    const second = Number(value[1]);
-    return validCoordinate(second, first) || validCoordinate(first, second);
-  }
-
-  if (typeof value === "object") {
-    return validCoordinate(
-      numberValue(value.lat ?? value.latitude ?? value.y),
-      numberValue(
-        value.lon ?? value.lng ?? value.long ?? value.longitude ?? value.x
-      )
-    );
-  }
-
-  if (typeof value === "string") {
-    const matches = value.match(/-?\d+(?:\.\d+)?/g);
-
-    if (matches?.length >= 2) {
-      return coordinateFromValue(matches.slice(0, 2).map(Number));
-    }
-  }
-
-  return null;
-}
-
-function validCoordinate(lat, lon) {
-  return Number.isFinite(lat) &&
-    Number.isFinite(lon) &&
-    lat >= 48 &&
-    lat <= 62.5 &&
-    lon >= -12.5 &&
-    lon <= 4
-    ? { lat, lon }
-    : null;
-}
-
-function flattenObject(value, prefix = "", output = {}) {
-  if (!value || typeof value !== "object") return output;
-
-  Object.entries(value).forEach(([key, item]) => {
-    const next = normalKey(prefix ? `${prefix}_${key}` : key);
-
-    if (Array.isArray(item)) {
-      if (
-        item.every((entry) =>
-          ["string", "number", "boolean"].includes(typeof entry)
-        )
-      ) {
-        output[next] = item.join(", ");
-      }
-      return;
-    }
-
-    if (item && typeof item === "object") {
-      flattenObject(item, next, output);
-      return;
-    }
-
-    output[next] = item;
-  });
-
-  return output;
-}
-
-function pick(fields, keys) {
-  for (const key of keys) {
-    const value = fields[normalKey(key)];
-
-    if (value !== undefined && value !== null && String(value).trim() !== "") {
-      return value;
-    }
-  }
-
-  return null;
-}
-
-function scalarText(value, output = []) {
-  if (value === null || value === undefined) return output.join(" ");
-
-  if (["string", "number", "boolean"].includes(typeof value)) {
-    output.push(String(value));
-  } else if (Array.isArray(value)) {
-    value.forEach((item) => scalarText(item, output));
-  } else if (typeof value === "object") {
-    Object.values(value).forEach((item) => scalarText(item, output));
-  }
-
-  return output.join(" ");
+  if (isPlanned || text.includes("planned")) return "planned";
+  if (text.includes("restored")) return "restored";
+  return "current";
 }
 
 function countCategories(incidents) {
@@ -768,7 +445,7 @@ async function writeFailureState(previous, generatedAt, attempts, error) {
       {
         id: "live",
         state: "error",
-        authConfigured: Boolean(API_KEY),
+        selectedSource: "salesforce-lwr",
         error: conciseError(error)
       }
     ],
@@ -778,13 +455,10 @@ async function writeFailureState(previous, generatedAt, attempts, error) {
   };
 
   await mergeProviderStatus(generatedAt, status);
-
   await writeJsonAtomic(DIAGNOSTIC_FILE, {
     version: VERSION,
     generatedAt,
     provider: PROVIDER_ID,
-    dataset: DATASET,
-    authConfigured: Boolean(API_KEY),
     attempts,
     error: conciseError(error)
   });
@@ -834,39 +508,71 @@ async function writeJsonAtomic(file, value) {
   await fs.rename(temporary, file);
 }
 
-function parseDate(value) {
-  if (value === null || value === undefined || value === "") return null;
-
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return value > 1e11 ? value : value * 1000;
-  }
-
-  const text = textValue(value);
-  const numeric = Number(text);
-
-  if (Number.isFinite(numeric) && text !== "") {
-    return numeric > 1e11 ? numeric : numeric * 1000;
-  }
-
-  const parsed = Date.parse(text);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function truthyPlanned(value) {
-  return (
-    value === true ||
-    value === 1 ||
-    /^(true|yes|y|1|planned)$/i.test(textValue(value))
-  );
-}
-
-function usefulReference(value) {
-  const text = textValue(value);
-
-  return text &&
-    !/^(0|unknown|none|null|n\/?a|not available|not published)$/i.test(text)
-    ? text
+function validCoordinate(lat, lon) {
+  return Number.isFinite(lat) &&
+    Number.isFinite(lon) &&
+    lat >= 48 &&
+    lat <= 62.5 &&
+    lon >= -12.5 &&
+    lon <= 4
+    ? { lat, lon }
     : null;
+}
+
+function parseSpenDate(value) {
+  const text = textValue(value);
+
+  if (!text) return null;
+
+  const direct = Date.parse(text);
+
+  if (Number.isFinite(direct)) return direct;
+
+  const match = text.match(
+    /^(\d{2})\/(\d{2})\/(\d{4}),?\s+(\d{2}):(\d{2})$/
+  );
+
+  if (match) {
+    const [, day, month, year, hour, minute] = match;
+    return Date.UTC(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute)
+    );
+  }
+
+  const monthMatch = text.match(
+    /^(\d{2})-([A-Z]{3})-(\d{4})\s+(\d{2}):(\d{2})$/i
+  );
+
+  if (monthMatch) {
+    const months = {
+      JAN: 0,
+      FEB: 1,
+      MAR: 2,
+      APR: 3,
+      MAY: 4,
+      JUN: 5,
+      JUL: 6,
+      AUG: 7,
+      SEP: 8,
+      OCT: 9,
+      NOV: 10,
+      DEC: 11
+    };
+    const [, day, month, year, hour, minute] = monthMatch;
+    return Date.UTC(
+      Number(year),
+      months[month.toUpperCase()],
+      Number(day),
+      Number(hour),
+      Number(minute)
+    );
+  }
+
+  return null;
 }
 
 function textValue(value) {
@@ -874,22 +580,6 @@ function textValue(value) {
   if (Array.isArray(value)) return value.join(", ");
   if (typeof value === "object") return JSON.stringify(value);
   return String(value).trim();
-}
-
-function numberValue(value) {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : NaN;
-}
-
-function normalKey(value) {
-  return String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
-function slug(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 function earlier(first, second) {
@@ -904,6 +594,13 @@ function later(first, second) {
   return Math.max(first, second);
 }
 
+function slug(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function toIso(value) {
   return value ? new Date(value).toISOString() : null;
 }
@@ -914,41 +611,29 @@ function conciseError(error) {
 }
 
 function runSelfTest() {
-  const samples = [
+  const sample = normaliseIncident(
     {
-      incident_id: "SPEN-1",
-      outage_status: "Active",
-      outage_type: "Unplanned",
-      latitude: 55.8642,
-      longitude: -4.2518,
-      location: "Glasgow"
+      incidentReference: "INCD-1",
+      status: "Live Power Cut",
+      fieldopsCategory: "current",
+      ipTown: "RUTHIN",
+      postcodeList: "LL15 1YQ, LL15 1RL",
+      spenPostCodesPerIncident: 2,
+      createdDate: "2026-07-08 21:31:51",
+      estimatedFix: "09/07/2026, 01:46"
     },
-    {
-      incident_id: "SPEN-2",
-      outage_status: "Scheduled",
-      planned: true,
-      start_time: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-      geo_point_2d: { lat: 53.4084, lon: -2.9916 },
-      location: "Liverpool"
-    }
-  ];
+    { lat: 53.107308, lon: -3.300041 },
+    "LL15 1YQ"
+  );
 
-  const incidents = samples
-    .map((sample, index) => normaliseIncident(sample, index))
-    .filter(Boolean);
+  const feature = toFeature(sample);
 
   if (
-    incidents.length !== 2 ||
-    incidents[0].category !== "current" ||
-    incidents[1].category !== "planned"
+    sample.category !== "current" ||
+    feature.geometry.coordinates[0] !== -3.300041 ||
+    firstPostcode("LL15 1YQ, LL15 1RL") !== "LL15 1YQ"
   ) {
     throw new Error("SPEN collector self-test failed.");
-  }
-
-  const features = deduplicate(incidents).map(toFeature);
-
-  if (features.length !== 2) {
-    throw new Error("SPEN feature conversion self-test failed.");
   }
 
   console.log("SPEN collector self-test passed.");

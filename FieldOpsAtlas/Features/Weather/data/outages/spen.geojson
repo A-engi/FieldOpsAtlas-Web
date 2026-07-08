@@ -1,7 +1,2307 @@
 {
   "type": "FeatureCollection",
   "provider": "spen",
-  "generatedAt": "2026-07-09T07:10:53.311Z",
+  "generatedAt": "2026-07-08T22:45:39.482Z",
   "stale": false,
-  "features": []
+  "features": [
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-2482712-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.300041,
+          53.107308
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482712-i",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "LL15",
+        "postcode": "LL15 1YQ",
+        "outcodes": [
+          "LL15"
+        ],
+        "affectedPostcodes": 9,
+        "postcodeList": "LL15 1YQ, LL15 1RL, LL15 1RN, LL15 1RW, LL15 1RP, LL15 1RS, LL15 1RE, LL15 1YP, LL15 1RX",
+        "startedAt": "2026-07-08T20:31:51.000Z",
+        "restoreAt": "2026-09-07T00:46:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-08T21:52:23.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 01:46.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-1387579-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.792824,
+          55.995826
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387579-s",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "FALKIRK",
+        "postcode": "FK1 5QB",
+        "outcodes": [
+          "FK1"
+        ],
+        "affectedPostcodes": 15,
+        "postcodeList": "FK1 5QB, FK1 5AH, FK1 1BJ, FK1 1BL, FK1 1BN, FK1 5AJ, FK1 5QP, FK1 5QW, FK1 5AL, FK1 5QR, FK1 5QS, FK1 5AG, FK1 5AQ, FK1 1BG, FK1 5AA",
+        "startedAt": "2026-07-08T20:22:36.000Z",
+        "restoreAt": "2026-09-07T00:37:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-08T21:15:37.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 01:37.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-2482706-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.512694,
+          53.294684
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482706-i",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "CW9",
+        "postcode": "CW9 6HB",
+        "outcodes": [
+          "CW9"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CW9 6HB",
+        "startedAt": "2026-07-08T20:17:38.000Z",
+        "restoreAt": "2026-09-07T00:32:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-08T20:59:40.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 01:32.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-1387489-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.450514,
+          55.953837
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387489-s",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "EH52",
+        "postcode": "EH52 6RP",
+        "outcodes": [
+          "EH52"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "EH52 6RP",
+        "startedAt": "2026-07-08T15:41:33.000Z",
+        "restoreAt": "2026-09-07T02:00:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-08T17:31:00.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 03:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-2482568-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.151805,
+          53.378984
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482568-i",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "CH48",
+        "postcode": "CH48 1PS",
+        "outcodes": [
+          "CH48"
+        ],
+        "affectedPostcodes": 4,
+        "postcodeList": "CH48 1PS, CH48 1RB, CH48 1PG, CH48 1PQ",
+        "startedAt": "2026-07-08T14:38:20.000Z",
+        "restoreAt": "2026-09-07T00:00:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-08T18:21:17.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 01:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-2482430-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.876916,
+          53.238582
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482430-i",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "CH2",
+        "postcode": "CH2 4FD",
+        "outcodes": [
+          "CH2"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CH2 4FD",
+        "startedAt": "2026-07-08T11:49:56.000Z",
+        "restoreAt": "2026-09-07T01:41:00.000Z",
+        "restoredAt": "2026-08-07T18:58:00.000Z",
+        "updatedAt": "2026-07-08T21:41:52.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area. We are arranging to have engineers investigate the fault, and we hope to have your electricity restored by 09-JUL-2026 02:41. Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-2482088-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.911115,
+          53.20636
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482088-i",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "CH1, CH15BD",
+        "postcode": "CH1 5BB",
+        "outcodes": [
+          "CH1",
+          "CH15BD"
+        ],
+        "affectedPostcodes": 30,
+        "postcodeList": "CH1 5BB, CH1 5BE, CH1 5BJ, CH1 5BG, CH1 5EU, CH1 5LF, CH1 5LE, CH1 5BH, CH1 5LD, CH1 5DR, CH1 5DP, CH1 5DA, CH1 4DB, CH1 4BL, CH1 5BA, CH1 5BD, CH1 5UA, CH1 5UJ, CH1 5UY, CH1 5BL, CH1 5UN, CH1 5UW, CH1 5UB, CH1 5UD, CH1 5UE, CH1 5UF, CH1 5UG, CH1 5UQ, CH1 5WB, CH15BD",
+        "startedAt": "2026-07-08T06:11:42.000Z",
+        "restoreAt": "2026-09-07T11:00:00.000Z",
+        "restoredAt": "2026-08-07T11:38:00.000Z",
+        "updatedAt": "2026-07-08T14:27:44.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  We are arranging to have engineers investigate the fault, and we hope to have your electricity restored by 09-JUL-2026 12:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:current:incd-1383229-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.242013,
+          55.916103
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1383229-s",
+        "category": "current",
+        "status": "Live Power Cut",
+        "type": "unplanned",
+        "area": "EH14",
+        "postcode": "EH14 1EP",
+        "outcodes": [
+          "EH14"
+        ],
+        "affectedPostcodes": 29,
+        "postcodeList": "EH14 1EP, EH14 1EW, EH14 1EL, EH14 1EN, EH14 1HJ, EH14 1HH, EH14 1HF, EH14 1DR, EH14 1DX, EH14 1ER, EH14 1BP, EH14 1HN, EH14 1LX, EH14 1HX, EH14 1HW, EH14 1LT, EH14 1JA, EH14 1HZ, EH14 1HU, EH14 1BR, EH14 1BS, EH14 1BT, EH14 1ND, EH14 1NB, EH14 1LZ, EH14 1LY, EH14 1HT, EH14 1HS, EH14 1NA",
+        "startedAt": "2026-07-01T07:37:16.000Z",
+        "restoreAt": "2026-03-07T12:00:00.000Z",
+        "restoredAt": null,
+        "updatedAt": "2026-07-01T19:52:18.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 03-JUL-2026 12:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:planned:incd-649288-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.981813,
+          52.637091
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "planned"
+        ],
+        "reference": "INCD-649288-r",
+        "category": "planned",
+        "status": "In Progress",
+        "type": "planned",
+        "area": "LL36",
+        "postcode": "LL36 9RL",
+        "outcodes": [
+          "LL36"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "LL36 9RL",
+        "startedAt": "2026-11-06T12:24:00.000Z",
+        "restoreAt": "2026-07-13T16:00:00.000Z",
+        "restoredAt": "2026-07-13T16:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482670-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.937915,
+          53.280421
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482670-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CH66",
+        "postcode": "CH66 3RN",
+        "outcodes": [
+          "CH66"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CH66 3RN",
+        "startedAt": "2026-07-08T17:32:15.000Z",
+        "restoreAt": "2026-09-06T23:00:00.000Z",
+        "restoredAt": "2026-08-07T21:28:00.000Z",
+        "updatedAt": "2026-07-08T21:40:06.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387537-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.195465,
+          55.949702
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387537-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "EH1",
+        "postcode": "EH1 2LU",
+        "outcodes": [
+          "EH1"
+        ],
+        "affectedPostcodes": 6,
+        "postcodeList": "EH1 2LU, EH1 2PB, EH1 2NT, EH1 2PA, EH1 2PE, EH1 2PG",
+        "startedAt": "2026-07-08T16:51:08.000Z",
+        "restoreAt": "2026-08-07T21:10:00.000Z",
+        "restoredAt": "2026-08-07T18:13:00.000Z",
+        "updatedAt": "2026-07-08T18:26:51.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482658-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.55396,
+          53.368358
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482658-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "LL65, LL57",
+        "postcode": "LL65 4HA",
+        "outcodes": [
+          "LL65",
+          "LL57"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "LL65 4HA, LL65 2NX, LL65 2NJ, LL65 3SW, LL65 4ES, LL65 2SJ, LL65 2NQ, LL65 2SQ, LL57 2HQ, LL65 2NZ",
+        "startedAt": "2026-07-08T16:35:05.000Z",
+        "restoreAt": "2026-09-06T23:00:00.000Z",
+        "restoredAt": "2026-08-07T22:43:00.000Z",
+        "updatedAt": "2026-07-08T21:13:24.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 00:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-652942-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.429325,
+          53.183047
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-652942-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "DENBIGH",
+        "postcode": "LL16 3RT",
+        "outcodes": [
+          "LL16"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "LL16 3RT, LL16 3RS, LL16 3NT, LL16 3RN, LL16 3RW, LL16 3NP, LL16 3RA, LL16 3RH, LL16 3RL, LL16 3RG",
+        "startedAt": "2026-07-08T16:17:01.000Z",
+        "restoreAt": "2026-08-07T20:32:00.000Z",
+        "restoredAt": "2026-08-07T18:18:00.000Z",
+        "updatedAt": "2026-07-08T18:32:32.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482640-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.94843,
+          53.300087
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482640-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "ELLESMERE PORT",
+        "postcode": "CH66 5NE",
+        "outcodes": [
+          "CH66"
+        ],
+        "affectedPostcodes": 11,
+        "postcodeList": "CH66 5NE, CH66 1NH, CH66 1NQ, CH66 1NG, CH66 1NJ, CH66 1XX, CH66 1AA, CH66 1AD, CH66 1AE, CH66 1AF, CH66 1JP",
+        "startedAt": "2026-07-08T16:05:41.000Z",
+        "restoreAt": "2026-08-07T19:05:00.000Z",
+        "restoredAt": "2026-08-07T17:58:00.000Z",
+        "updatedAt": "2026-07-08T18:10:14.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387495-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.195128,
+          55.962689
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387495-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "EDINBURGH",
+        "postcode": "EH7 4DZ",
+        "outcodes": [
+          "EH7",
+          "EH3"
+        ],
+        "affectedPostcodes": 6,
+        "postcodeList": "EH7 4DZ, EH7 4DY, EH7 4EB, EH7 4EA, EH7 4LE, EH3 5EY",
+        "startedAt": "2026-07-08T15:45:45.000Z",
+        "restoreAt": "2026-08-07T20:00:00.000Z",
+        "restoredAt": "2026-08-07T17:58:00.000Z",
+        "updatedAt": "2026-07-08T18:12:17.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387459-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.668668,
+          55.607823
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387459-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "TD6",
+        "postcode": "TD6 9DL",
+        "outcodes": [
+          "TD6"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "TD6 9DL",
+        "startedAt": "2026-07-08T14:51:40.000Z",
+        "restoreAt": "2026-08-07T16:51:00.000Z",
+        "restoredAt": "2026-08-07T15:53:00.000Z",
+        "updatedAt": "2026-07-08T15:01:06.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482562-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.35993,
+          52.513101
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482562-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "NEWTOWN",
+        "postcode": "SY16 3HH",
+        "outcodes": [
+          "SY16"
+        ],
+        "affectedPostcodes": 13,
+        "postcodeList": "SY16 3HH, SY16 3HU, SY16 3LT, SY16 3LR, SY16 3LX, SY16 3LW, SY16 3LN, SY16 3LP, SY16 3LY, SY16 3JL, SY16 3LZ, SY16 3LS, SY16 3LU",
+        "startedAt": "2026-07-08T14:28:34.000Z",
+        "restoreAt": "2026-08-07T22:00:00.000Z",
+        "restoredAt": "2026-08-07T20:18:00.000Z",
+        "updatedAt": "2026-07-08T20:29:26.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482544-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.943345,
+          53.41649
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482544-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "L6",
+        "postcode": "L6 8NG",
+        "outcodes": [
+          "L6"
+        ],
+        "affectedPostcodes": 3,
+        "postcodeList": "L6 8NG, L6 8ND, L6 3AF",
+        "startedAt": "2026-07-08T14:08:25.000Z",
+        "restoreAt": "2026-08-07T22:00:00.000Z",
+        "restoredAt": "2026-08-07T22:33:00.000Z",
+        "updatedAt": "2026-07-08T18:06:06.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 08-JUL-2026 23:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-698645-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.794238,
+          55.682578
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-698645-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "KA22, KA24, KA23",
+        "postcode": "KA22 7NU",
+        "outcodes": [
+          "KA22",
+          "KA24",
+          "KA23"
+        ],
+        "affectedPostcodes": 8,
+        "postcodeList": "KA22 7NU, KA24 5HL, KA23 9PG, KA23 9PF, KA24 5HN, KA24 5LG, KA24 5XX, KA24 5",
+        "startedAt": "2026-07-08T13:27:37.000Z",
+        "restoreAt": "2026-08-07T15:27:00.000Z",
+        "restoredAt": "2026-08-07T13:33:00.000Z",
+        "updatedAt": "2026-07-08T13:35:07.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387363-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.181806,
+          55.868047
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387363-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "GLASGOW",
+        "postcode": "G33 2SF",
+        "outcodes": [
+          "G33"
+        ],
+        "affectedPostcodes": 4,
+        "postcodeList": "G33 2SF, G33 2SQ, G33 2SJ, G33 2SL",
+        "startedAt": "2026-07-08T13:18:14.000Z",
+        "restoreAt": "2026-08-07T17:33:00.000Z",
+        "restoredAt": "2026-08-07T13:38:00.000Z",
+        "updatedAt": "2026-07-08T13:50:42.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387357-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.260418,
+          55.449569
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387357-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CUMNOCK",
+        "postcode": "KA18 1JT",
+        "outcodes": [
+          "KA18"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "KA18 1JT, KA18 1LN, KA18 1LL, KA18 1LU, KA18 1LT, KA18 1LX, KA18 1LR, KA18 1LW, KA18 1LP, KA18",
+        "startedAt": "2026-07-08T13:06:11.000Z",
+        "restoreAt": "2026-09-06T23:00:00.000Z",
+        "restoredAt": "2026-08-07T22:23:00.000Z",
+        "updatedAt": "2026-07-08T22:37:14.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 09-JUL-2026 00:00.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-652906-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.795059,
+          53.468526
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-652906-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "WA11",
+        "postcode": "WA11 7HT",
+        "outcodes": [
+          "WA11"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "WA11 7HT, WA11 7HU",
+        "startedAt": "2026-07-08T12:07:35.000Z",
+        "restoreAt": null,
+        "restoredAt": "2026-08-07T14:58:00.000Z",
+        "updatedAt": "2026-07-08T15:14:05.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387309-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.056761,
+          55.758952
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387309-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "HAMILTON",
+        "postcode": "ML3 8AU",
+        "outcodes": [
+          "ML3"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "ML3 8AU, ML3 8AS",
+        "startedAt": "2026-07-08T11:55:52.000Z",
+        "restoreAt": "2026-08-07T17:00:00.000Z",
+        "restoredAt": "2026-08-07T16:48:00.000Z",
+        "updatedAt": "2026-07-08T17:06:19.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482424-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.898804,
+          53.175423
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482424-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CHESTER",
+        "postcode": "CH4 7RQ",
+        "outcodes": [
+          "CH4",
+          "CH3",
+          "CH1",
+          "WA5",
+          "UM5"
+        ],
+        "affectedPostcodes": 156,
+        "postcodeList": "CH4 7RQ, CH4 7QP, CH4 7QQ, CH4 7QR, CH4 7ET, CH4 7EL, CH4 7BJ, CH4 7BL, CH4 7EW, CH4 7EH, CH4 7BS, CH4 7EA, CH3 5SN, CH4 7JN, CH4 7JF, CH4 7JS, CH3 5NY, CH4 7HS, CH4 7JT, CH4 7JU, CH4 7JR, CH4 7LW, CH4 7EJ, CH4 7EN, CH4 7LD, CH4 7HJ, CH4 7HL, CH4 7HN, CH4 7HW, CH4 7LA, CH4 7LG, CH4 7HP, CH4 7HR, CH4 7HT, CH4 7HY, CH4 7LE, CH4 7LF, CH4 7NB, CH4 7LL, CH4 0DE, CH4 7AH, CH4 1AA, CH4 7JJ, CH4 7EX, CH4 7EU, CH4 7ES, CH4 7EP, CH4 7EQ, CH4 7BQ, CH4 7BA, CH4 7AP, CH4 7AT, CH4 7BE, CH4 7AQ, CH4 7AS, CH4 7AY, CH4 7AZ, CH4 7BD, CH4 7AD, CH4 7AR, CH4 7AL, CH4 7AG, CH4 8JQ, CH4 7DB, CH4 7DX, CH4 7DY, CH4 7DZ, CH4 7DU, CH4 7DS, CH4 7DR, CH4 7DT, CH4 7EG, CH4 7EF, CH4 7EE, CH4 7DG, CH4 7DE, CH4 7DF, CH4 7JB, CH4 7DD, CH4 7BX, CH4 7BY, CH4 7BZ, CH4 7JW, CH4 7JP, CH4 7JY, CH4 7JE, CH4 7BN, CH4 7BP, CH4 7BW, CH4 7BR, CH4 7BH, CH4 7ED, CH4 7JH, CH4 7BT, CH4 7EY, CH4 7EZ, CH4 7DN, CH4 7DW, CH4 7DP, CH4 7DH, CH4 7BU, CH4 7JD, CH4 7AE, CH4 7AB, CH4 7AF, CH4 7BB, CH4 7AX, CH4 7AU, CH1 1SF, CH4 7HG, CH4 7HB, CH4 7HH, CH4 7HD, CH4 7ER, CH4 7DL, CH1 1RR, CH1 1RS, CH1 1NE, CH1 1RE, CH1 1SD, CH1 1QS, CH1 1RP, CH1 1SB, CH1 1DF, CH1 1TD, CH1 1RQ, CH1 1RW, CH1 1SA, CH3 5AJ, CH1 1RY, CH1 2DD, CH1 1RD, CH1 1RT, CH1 1RN, CH1 2AF, CH1 1RU, CH1 1RH, CH1 1SZ, CH1 1AG, CH1 1RG, CH1 1DX, CH1 1SJ, CH1 1RJ, CH1 1SN, CH1 1AA, CH1 4HT, CH1 1AF, CH1 1SH, WA5 0FF, CH1 2DQ, CH1 2DS, CH1 1RX, CH1 1RZ, CH1 1RA, CH1 2DN, UM5 0UM",
+        "startedAt": "2026-07-08T11:39:15.000Z",
+        "restoreAt": "2026-08-07T17:30:00.000Z",
+        "restoredAt": "2026-08-07T14:03:00.000Z",
+        "updatedAt": "2026-07-08T22:15:37.000Z",
+        "message": "We are currently experiencing problems with the electricity supply in your area.  Our engineers are now working on the fault and we hope to have your electricity restored by 08-JUL-2026 18:30.  Please accept our sincere apologies for the inconvenience this is causing.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482388-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.302716,
+          53.316086
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482388-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "WA16",
+        "postcode": "WA16 7LF",
+        "outcodes": [
+          "WA16"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "WA16 7LF, WA16 7LE",
+        "startedAt": "2026-07-08T11:23:53.000Z",
+        "restoreAt": "2026-08-07T16:38:00.000Z",
+        "restoredAt": "2026-08-07T17:03:00.000Z",
+        "updatedAt": "2026-07-08T17:17:01.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482250-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.538253,
+          52.920749
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482250-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "LL53",
+        "postcode": "LL53 6YQ",
+        "outcodes": [
+          "LL53"
+        ],
+        "affectedPostcodes": 3,
+        "postcodeList": "LL53 6YQ, LL53 8UR, LL53 8YL",
+        "startedAt": "2026-07-08T09:35:43.000Z",
+        "restoreAt": "2026-08-07T20:00:00.000Z",
+        "restoredAt": "2026-08-07T19:08:00.000Z",
+        "updatedAt": "2026-07-08T19:19:35.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-698633-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.142898,
+          56.192485
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-698633-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "GLENROTHES",
+        "postcode": "KY7 5AJ",
+        "outcodes": [
+          "KY7",
+          "KY6"
+        ],
+        "affectedPostcodes": 35,
+        "postcodeList": "KY7 5AJ, KY7 5AP, KY7 5AR, KY7 5AE, KY7 5AB, KY7 5AA, KY7 5AT, KY7 5AS, KY7 5AU, KY7 5BQ, KY7 5BB, KY7 5BD, KY7 5AZ, KY7 5AX, KY7 5EW, KY7 5DA, KY7 5DD, KY7 5DB, KY7 5DE, KY7 5EF, KY7 5AL, KY7 5AW, KY7 5AN, KY6 2JQ, KY7 5DQ, KY7 5DH, KY7 5AG, KY7 5AQ, KY7 5AH, KY7 5AF, KY7 6HA, KY7 5BG, KY7 5BA, KY7 5AY, KY7 6HB",
+        "startedAt": "2026-07-08T09:05:45.000Z",
+        "restoreAt": "2026-08-07T11:05:00.000Z",
+        "restoredAt": "2026-08-07T09:28:00.000Z",
+        "updatedAt": "2026-07-08T09:52:30.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482226-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.615238,
+          53.06239
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482226-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "NANTWICH",
+        "postcode": "CW5 8JL",
+        "outcodes": [
+          "CW5"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CW5 8JL",
+        "startedAt": "2026-07-08T09:03:55.000Z",
+        "restoreAt": "2026-08-07T12:00:00.000Z",
+        "restoredAt": "2026-08-07T11:33:00.000Z",
+        "updatedAt": "2026-07-08T11:26:39.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387063-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.382649,
+          55.876795
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387063-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "RENFREW",
+        "postcode": "PA4 8UP",
+        "outcodes": [
+          "PA4"
+        ],
+        "affectedPostcodes": 5,
+        "postcodeList": "PA4 8UP, PA4 8UQ, PA4 8QJ, PA4 8UN, PA4 8TR",
+        "startedAt": "2026-07-08T08:51:06.000Z",
+        "restoreAt": "2026-08-07T14:00:00.000Z",
+        "restoredAt": "2026-08-07T12:38:00.000Z",
+        "updatedAt": "2026-07-08T12:51:28.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482172-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.719146,
+          52.884454
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482172-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "SY4, SY13",
+        "postcode": "SY4 5RF",
+        "outcodes": [
+          "SY4",
+          "SY13"
+        ],
+        "affectedPostcodes": 13,
+        "postcodeList": "SY4 5RF, SY4 5QZ, SY13 2PT, SY4 5RN, SY4 5RA, SY4 5RL, SY4 5RG, SY4 5RE, SY4 5RB, SY13 2PU, SY4 5RD, SY4 5QX, SY4 5QU",
+        "startedAt": "2026-07-08T08:25:45.000Z",
+        "restoreAt": "2026-08-07T14:30:00.000Z",
+        "restoredAt": "2026-08-07T14:53:00.000Z",
+        "updatedAt": "2026-07-08T15:11:45.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387027-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.916961,
+          55.672262
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387027-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "BERWICK-UPON-TWEED, BERWICK UPON TWEED and BEAL",
+        "postcode": "TD15 2PD",
+        "outcodes": [
+          "TD15",
+          "ML3"
+        ],
+        "affectedPostcodes": 28,
+        "postcodeList": "TD15 2PD, TD15 2RW, TD15 2PB, TD15 2PA, TD15 2PL, TD15 2SP, TD15 2SJ, TD15 2SW, TD15 2SR, TD15 2SL, ML3 0RP, TD15 2SH, TD15 2SE, TD15 2SQ, TD15 2SF, TD15 2SX, TD15 1AA, TD15 1GL, TD15 2SD, TD15 2SG, TD15 2SB, TD15 2RX, TD15 2RZ, TD15 2RU, TD15 2SA, TD15 2ST, TD15 2SU, TD15 1XG",
+        "startedAt": "2026-07-08T08:17:16.000Z",
+        "restoreAt": "2026-08-07T15:00:00.000Z",
+        "restoredAt": "2026-08-07T13:28:00.000Z",
+        "updatedAt": "2026-07-08T12:36:00.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1387009-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.158399,
+          56.151782
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1387009-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "KIRKCALDY",
+        "postcode": "KY1 3NS",
+        "outcodes": [
+          "KY1"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "KY1 3NS",
+        "startedAt": "2026-07-08T08:06:49.000Z",
+        "restoreAt": "2026-08-07T10:00:00.000Z",
+        "restoredAt": "2026-08-07T10:08:00.000Z",
+        "updatedAt": "2026-07-08T08:15:56.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482106-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.427854,
+          53.181572
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482106-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "DENBIGH",
+        "postcode": "LL16 3RN",
+        "outcodes": [
+          "LL16"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "LL16 3RN, LL16 3RG",
+        "startedAt": "2026-07-08T07:03:06.000Z",
+        "restoreAt": "2026-08-07T11:18:00.000Z",
+        "restoredAt": "2026-08-07T09:38:00.000Z",
+        "updatedAt": "2026-07-08T09:56:37.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482094-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.580035,
+          52.997817
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482094-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CW5",
+        "postcode": "CW5 8DP",
+        "outcodes": [
+          "CW5"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CW5 8DP",
+        "startedAt": "2026-07-08T06:30:23.000Z",
+        "restoreAt": "2026-08-07T09:15:00.000Z",
+        "restoredAt": "2026-08-07T07:33:00.000Z",
+        "updatedAt": "2026-07-08T07:44:59.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482082-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.454494,
+          53.094683
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482082-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CREWE",
+        "postcode": "CW2 7PU",
+        "outcodes": [
+          "CW2"
+        ],
+        "affectedPostcodes": 7,
+        "postcodeList": "CW2 7PU, CW2 7PT, CW2 7RS, CW2 8LT, CW2 7RW, CW2 7PD, CW2 8BG",
+        "startedAt": "2026-07-08T05:57:51.000Z",
+        "restoreAt": "2026-08-07T10:12:00.000Z",
+        "restoredAt": "2026-08-07T13:23:00.000Z",
+        "updatedAt": "2026-07-08T11:10:13.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386937-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.776447,
+          55.940861
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386937-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "FALKIRK",
+        "postcode": "FK1 2JH",
+        "outcodes": [
+          "FK1"
+        ],
+        "affectedPostcodes": 9,
+        "postcodeList": "FK1 2JH, FK1 2JJ, FK1 2JQ, FK1 2JE, FK1 2JL, FK1 2JF, FK1 2JW, FK1 2JG, FK1 2LG",
+        "startedAt": "2026-07-08T03:24:58.000Z",
+        "restoreAt": "2026-08-07T08:30:00.000Z",
+        "restoredAt": "2026-08-07T06:28:00.000Z",
+        "updatedAt": "2026-07-08T06:42:50.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386931-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.154694,
+          55.881379
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386931-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "LOANHEAD",
+        "postcode": "EH20 9EY",
+        "outcodes": [
+          "EH20"
+        ],
+        "affectedPostcodes": 6,
+        "postcodeList": "EH20 9EY, EH20 9EL, EH20 9EU, EH20 9EN, EH20 9ET, EH20 9EX",
+        "startedAt": "2026-07-08T00:38:55.000Z",
+        "restoreAt": "2026-08-07T04:53:00.000Z",
+        "restoredAt": "2026-08-07T03:18:00.000Z",
+        "updatedAt": "2026-07-08T03:31:08.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482070-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.868019,
+          53.41253
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482070-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "L36",
+        "postcode": "L36 4NT",
+        "outcodes": [
+          "L36"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "L36 4NT",
+        "startedAt": "2026-07-08T00:25:11.000Z",
+        "restoreAt": "2026-08-07T05:19:00.000Z",
+        "restoredAt": "2026-08-07T02:18:00.000Z",
+        "updatedAt": "2026-07-08T02:53:51.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-652834-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.322083,
+          53.115326
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-652834-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "RUTHIN",
+        "postcode": "LL15 1PE",
+        "outcodes": [
+          "LL15"
+        ],
+        "affectedPostcodes": 11,
+        "postcodeList": "LL15 1PE, LL15 2PQ, LL15 1PB, LL15 1PD, LL15 1PQ, LL15 1LP, LL15 1LR, LL15 1PL, LL15 1PW, LL15 1LQ, LL15 1LS",
+        "startedAt": "2026-07-07T23:48:04.000Z",
+        "restoreAt": "2026-08-07T04:03:00.000Z",
+        "restoredAt": "2026-08-07T03:43:00.000Z",
+        "updatedAt": "2026-07-08T03:56:41.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386925-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.351664,
+          56.110832
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386925-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "COWDENBEATH",
+        "postcode": "KY4 9DH",
+        "outcodes": [
+          "KY4"
+        ],
+        "affectedPostcodes": 3,
+        "postcodeList": "KY4 9DH, KY4 9DX, KY4 9DQ",
+        "startedAt": "2026-07-07T22:56:21.000Z",
+        "restoreAt": "2026-08-07T03:11:00.000Z",
+        "restoredAt": "2026-08-07T01:13:00.000Z",
+        "updatedAt": "2026-07-08T01:25:01.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-652828-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.041524,
+          52.545067
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-652828-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "ABERDOVEY",
+        "postcode": "LL35 0NF",
+        "outcodes": [
+          "LL35",
+          "LL53"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "LL35 0NF, LL35 0NH, LL35 0LB, LL35 0NL, LL35 0LD, LL35 0LA, LL35 0LE, LL35 0HF, LL35 0TA, LL53 0TA",
+        "startedAt": "2026-07-07T22:38:15.000Z",
+        "restoreAt": "2026-08-07T03:30:00.000Z",
+        "restoredAt": "2026-08-07T02:28:00.000Z",
+        "updatedAt": "2026-07-08T02:55:38.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482064-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.417433,
+          52.888896
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482064-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "PWLLHELI",
+        "postcode": "LL53 5DE",
+        "outcodes": [
+          "LL53",
+          "LL57"
+        ],
+        "affectedPostcodes": 35,
+        "postcodeList": "LL53 5DE, LL53 5RT, LL53 5RR, LL53 5RU, LL53 5DD, LL53 5HG, LL57 1NP, LL53 5HN, LL53 5LF, LL53 5YE, LL53 5DH, LL53 5SG, LL53 5LE, LL53 5EH, LL53 5DU, LL53 5SE, LL53 5DR, LL53 5HB, LL53 5HR, LL53 5HT, LL53 5HP, LL53 5HH, LL53 5DL, LL53 5HS, LL53 5HU, LL53 5LA, LL53 5HY, LL53 5LD, LL53 5LB, LL53 5DP, LL53 7DY, LL53 7UG, LL53 5EJ, LL53 5WY, LL53 5EU",
+        "startedAt": "2026-07-07T20:10:20.000Z",
+        "restoreAt": "2026-08-07T00:00:00.000Z",
+        "restoredAt": "2026-08-07T00:13:00.000Z",
+        "updatedAt": "2026-07-07T20:28:19.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2482052-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.777705,
+          53.409998
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2482052-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "PRESCOT",
+        "postcode": "L35 6ND",
+        "outcodes": [
+          "L35"
+        ],
+        "affectedPostcodes": 3,
+        "postcodeList": "L35 6ND, L35 6NA, L35 6NB",
+        "startedAt": "2026-07-07T19:47:56.000Z",
+        "restoreAt": "2026-08-07T01:00:00.000Z",
+        "restoredAt": "2026-08-06T23:48:00.000Z",
+        "updatedAt": "2026-07-08T00:05:34.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386865-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.762114,
+          55.368693
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386865-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "KA19",
+        "postcode": "KA19 8JT",
+        "outcodes": [
+          "KA19"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "KA19 8JT",
+        "startedAt": "2026-07-07T18:47:20.000Z",
+        "restoreAt": "2026-08-07T00:00:00.000Z",
+        "restoredAt": "2026-08-07T00:08:00.000Z",
+        "updatedAt": "2026-07-07T20:17:16.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386853-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.404922,
+          55.729675
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386853-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "DUNS",
+        "postcode": "TD10 6YL",
+        "outcodes": [
+          "TD10",
+          "TD11",
+          "TD5"
+        ],
+        "affectedPostcodes": 37,
+        "postcodeList": "TD10 6YL, TD11 3RE, TD11 3RB, TD10 6UH, TD10 6UL, TD10 6UN, TD10 6YN, TD10 6UJ, TD5 7QN, TD5 7QG, TD5 7QJ, TD5 7QQ, TD5 7QL, TD5 7QE, TD5 7RG, TD5 1AA, TD5 7TB, TD5 7TD, TD5 7TA, TD5 7TF, TD5 7TJ, TD5 7TG, TD5 7QY, TD5 7ST, TD5 7RA, TD5 7QU, TD5 7PZ, TD5 7QT, TD5 7SZ, TD5 7SU, TD5 7QF, TD5 7QX, TD5 7TE, TD5 7PW, TD5 7QZ, TD5 6QZ, TD11 3HY",
+        "startedAt": "2026-07-07T18:05:03.000Z",
+        "restoreAt": "2026-07-07T22:59:00.000Z",
+        "restoredAt": "2026-08-06T23:23:00.000Z",
+        "updatedAt": "2026-07-07T23:48:37.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-698531-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.876916,
+          53.238582
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-698531-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "CH2",
+        "postcode": "CH2 4FD",
+        "outcodes": [
+          "CH2"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "CH2 4FD",
+        "startedAt": "2026-07-07T16:53:37.000Z",
+        "restoreAt": "2026-08-06T23:30:00.000Z",
+        "restoredAt": "2026-08-06T23:23:00.000Z",
+        "updatedAt": "2026-07-07T18:29:23.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386787-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.806484,
+          55.613347
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386787-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "GALASHIELS",
+        "postcode": "TD1 3JH",
+        "outcodes": [
+          "TD1"
+        ],
+        "affectedPostcodes": 6,
+        "postcodeList": "TD1 3JH, TD1 3JN, TD1 3JL, TD1 3JJ, TD1 3JW, TD1 3JS",
+        "startedAt": "2026-07-07T15:51:22.000Z",
+        "restoreAt": "2026-08-07T02:15:00.000Z",
+        "restoredAt": "2026-08-07T02:13:00.000Z",
+        "updatedAt": "2026-07-08T02:27:37.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1386763-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.678888,
+          55.999633
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1386763-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "unplanned",
+        "area": "FK2",
+        "postcode": "FK2 0YE",
+        "outcodes": [
+          "FK2"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "FK2 0YE, FK2 0YA",
+        "startedAt": "2026-07-07T14:33:33.000Z",
+        "restoreAt": "2026-08-07T15:00:00.000Z",
+        "restoredAt": "2026-08-07T09:48:00.000Z",
+        "updatedAt": "2026-07-07T20:17:57.000Z",
+        "message": "We have repaired the problem with the electricity supply in your area. There may still be some tidying up to do, and any details have been passed to our Maintenance department, who will attend to it as soon as possible.  Please accept our sincere apologies for any inconvenience in the meantime.",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-927225-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.745409,
+          55.937845
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-927225-f",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "FK1",
+        "postcode": "FK1 2NY",
+        "outcodes": [
+          "FK1"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "FK1 2NY, FK1 2JN, FK1 2LU, FK1 2NB, FK1 2LT, FK1 2LZ, FK1 2NA, FK1 2HL, FK1 1AA, FK1 2HJ",
+        "startedAt": "2026-06-24T15:19:00.000Z",
+        "restoreAt": "2026-08-07T17:00:00.000Z",
+        "restoredAt": "2026-08-07T17:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-927201-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.585994,
+          54.766892
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-927201-f",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "DG8",
+        "postcode": "DG8 9QP",
+        "outcodes": [
+          "DG8"
+        ],
+        "affectedPostcodes": 11,
+        "postcodeList": "DG8 9QP, DG8 9JX, DG8 9QE, DG8 9QN, DG8 9QL, DG8 9JZ, DG8 9JY, DG8 9PW, DG8 9QJ, DG8 9LS, DG8 9QH",
+        "startedAt": "2026-06-24T11:48:00.000Z",
+        "restoreAt": "2026-08-07T17:00:00.000Z",
+        "restoredAt": "2026-08-07T17:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-927069-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.164753,
+          55.704364
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-927069-f",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "TD15, TD",
+        "postcode": "TD15 2NL",
+        "outcodes": [
+          "TD15",
+          "TD"
+        ],
+        "affectedPostcodes": 6,
+        "postcodeList": "TD15 2NL, TD15 2NN, TD15 2LW, TD 152, TD15 2NQ, TD15 2NH",
+        "startedAt": "2026-06-22T13:20:00.000Z",
+        "restoreAt": "2026-08-07T14:00:00.000Z",
+        "restoredAt": "2026-08-07T14:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1377013-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.404843,
+          53.172083
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1377013-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "LL16",
+        "postcode": "LL16 4RL",
+        "outcodes": [
+          "LL16"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "LL16 4RL",
+        "startedAt": "2026-06-19T17:00:00.000Z",
+        "restoreAt": "2026-08-07T16:00:00.000Z",
+        "restoredAt": "2026-08-07T16:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1376989-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.974476,
+          53.386217
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1376989-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "L8",
+        "postcode": "L8 6UA",
+        "outcodes": [
+          "L8"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "L8 6UA",
+        "startedAt": "2026-06-19T16:49:00.000Z",
+        "restoreAt": "2026-08-07T15:30:00.000Z",
+        "restoredAt": "2026-08-07T15:30:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-649954-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.464614,
+          53.248426
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-649954-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "LL63, LL65, LL64",
+        "postcode": "LL63 5UH",
+        "outcodes": [
+          "LL63",
+          "LL65",
+          "LL64"
+        ],
+        "affectedPostcodes": 23,
+        "postcodeList": "LL63 5UH, LL65 3SA, LL63 5UE, LL63 5UF, LL63 5YB, LL65 3RT, LL65 3SB, LL63 5UG, LL63 5SA, LL65 3RS, LL65 3RU, LL64 5QF, LL63 5YD, LL63 5SE, LL65 3RY, LL63 5UT, LL65 3RR, LL63 5UN, LL65 3SN, LL63 5UD, LL65 3SL, LL65 3SH, LL63 5UL",
+        "startedAt": "2026-06-18T11:26:00.000Z",
+        "restoreAt": "2026-08-07T17:30:00.000Z",
+        "restoredAt": "2026-08-07T17:30:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-926955-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.667719,
+          53.107709
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-926955-f",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "CW6",
+        "postcode": "CW6 9TG",
+        "outcodes": [
+          "CW6"
+        ],
+        "affectedPostcodes": 8,
+        "postcodeList": "CW6 9TG, CW6 9SB, CW6 9TQ, CW6 9TF, CW6 9RT, CW6 9TB, CW6 9RU, CW6 9TD",
+        "startedAt": "2026-06-17T16:44:00.000Z",
+        "restoreAt": "2026-08-07T17:00:00.000Z",
+        "restoredAt": "2026-08-07T17:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-649864-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.226847,
+          53.069691
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-649864-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "LL11",
+        "postcode": "LL11 3AT",
+        "outcodes": [
+          "LL11"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "LL11 3AT, LL11 3AU",
+        "startedAt": "2026-06-16T10:02:00.000Z",
+        "restoreAt": "2026-08-07T13:00:00.000Z",
+        "restoredAt": "2026-08-07T13:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1373443-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.548914,
+          55.397084
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1373443-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "KA6",
+        "postcode": "KA6 7EB",
+        "outcodes": [
+          "KA6"
+        ],
+        "affectedPostcodes": 10,
+        "postcodeList": "KA6 7EB, KA6 6AN, KA6 6EY, KA6 7EA, KA6 7FN, KA6 6EE, KA6 6AR, KA6 6EB, KA6 6EZ, KA6",
+        "startedAt": "2026-12-06T12:43:00.000Z",
+        "restoreAt": "2026-08-07T17:00:00.000Z",
+        "restoredAt": "2026-08-07T17:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-649138-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.856616,
+          52.616741
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-649138-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "SY20",
+        "postcode": "SY20 9AY",
+        "outcodes": [
+          "SY20"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "SY20 9AY",
+        "startedAt": "2026-10-06T16:10:00.000Z",
+        "restoreAt": "2026-07-13T17:00:00.000Z",
+        "restoredAt": "2026-07-13T17:00:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1372537-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.120396,
+          55.758892
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1372537-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "EH23",
+        "postcode": "EH23 4TF",
+        "outcodes": [
+          "EH23"
+        ],
+        "affectedPostcodes": 1,
+        "postcodeList": "EH23 4TF",
+        "startedAt": "2026-10-06T15:10:00.000Z",
+        "restoreAt": "2026-08-07T12:30:00.000Z",
+        "restoredAt": "2026-08-07T12:30:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-925905-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.39808,
+          55.820787
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-925905-f",
+        "category": "restored",
+        "status": "Restored",
+        "type": "planned",
+        "area": "TD11",
+        "postcode": "TD11 3TU",
+        "outcodes": [
+          "TD11"
+        ],
+        "affectedPostcodes": 2,
+        "postcodeList": "TD11 3TU, TD11 3SE",
+        "startedAt": "2026-05-25T16:57:00.000Z",
+        "restoreAt": "2026-08-07T16:30:00.000Z",
+        "restoredAt": "2026-08-07T16:30:00.000Z",
+        "updatedAt": null,
+        "message": "",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    }
+  ]
 }

@@ -1,126 +1,275 @@
 /* ==========================================================================
-   FieldOps Atlas - SP Networks embedded outage map
+   FieldOps Atlas - SP Energy Networks outage map
    File: FieldOpsAtlas/Features/Weather/sp-outages.js
-   Version: 0.2.0-official-embed
+   Version: 0.3.0-live-spen
    ========================================================================== */
 
 (() => {
   "use strict";
 
-  const ACTIVE_STORAGE_KEY = "fieldops-sp-networks-active-v1";
-
-  const VIEWS = {
-    map: "https://powercuts.spenergynetworks.co.uk/map",
-    list: "https://powercuts.spenergynetworks.co.uk/list"
+  const DATA_URL = "data/outages/spen.geojson";
+  const STATUS_URL = "data/outages/status.json";
+  const SPEN_BOUNDS = L.latLngBounds([
+    [52.8, -5.6],
+    [56.3, -1.7]
+  ]);
+  const CATEGORY_COLOURS = {
+    current: "#f04438",
+    planned: "#f6b73c",
+    restored: "#8193a4"
   };
 
-  const frame = document.getElementById("spNetworksFrame");
-  const reloadButton = document.getElementById("reloadSpNetworks");
-  const openLink = document.getElementById("openSpNetworks");
-  const toggleButton = document.getElementById("toggleSpNetworks");
-  const inactiveState = document.getElementById("spNetworksInactive");
+  const map = L.map("spOutageMap", {
+    zoomControl: false,
+    attributionControl: true
+  });
+  const markerLayer = L.layerGroup().addTo(map);
 
-  let currentView = "map";
-  let isActive = readActiveState();
+  L.control.zoom({ position: "bottomright" }).addTo(map);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+  map.fitBounds(SPEN_BOUNDS, { padding: [20, 20] });
 
-  function viewUrl(viewName) {
-    return VIEWS[viewName] || VIEWS.map;
+  const elements = {
+    headline: document.getElementById("spHeadlineStatus"),
+    livePill: document.getElementById("spLivePill"),
+    current: document.getElementById("spCurrentCount"),
+    planned: document.getElementById("spPlannedCount"),
+    restored: document.getElementById("spRestoredCount"),
+    list: document.getElementById("spIncidentList"),
+    note: document.getElementById("spOutageNote"),
+    refresh: document.getElementById("refreshSpOutages")
+  };
+
+  function setLoading() {
+    elements.livePill.textContent = "Loading";
+    elements.livePill.className = "weather-live-pill sp-outage-live-pill";
+    elements.headline.textContent = "Loading live SPEN outage data";
   }
 
-  function loadView(viewName) {
-    currentView = Object.prototype.hasOwnProperty.call(VIEWS, viewName)
-      ? viewName
-      : "map";
+  async function loadOutages() {
+    setLoading();
 
-    if (isActive && frame) {
-      frame.src = viewUrl(currentView);
-    }
-
-    if (openLink) {
-      openLink.href = viewUrl(currentView);
-      openLink.textContent = currentView === "list"
-        ? "Open full SP Networks list"
-        : "Open full SP Networks map";
-    }
-
-    document.querySelectorAll("[data-sp-view]").forEach((button) => {
-      button.classList.toggle(
-        "is-primary",
-        button.getAttribute("data-sp-view") === currentView
-      );
-    });
-  }
-
-  function readActiveState() {
     try {
-      const stored = window.localStorage.getItem(ACTIVE_STORAGE_KEY);
-      return stored === null ? true : stored === "true";
-    } catch {
-      return true;
+      const [collection, status] = await Promise.all([
+        fetchJson(cacheBust(DATA_URL)),
+        fetchJson(cacheBust(STATUS_URL)).catch(() => null)
+      ]);
+      const features = Array.isArray(collection?.features)
+        ? collection.features.filter(hasPoint)
+        : [];
+      const providerStatus = status?.providers?.spen || null;
+
+      render(features, collection, providerStatus);
+    } catch (error) {
+      elements.livePill.textContent = "Error";
+      elements.livePill.classList.add("is-error");
+      elements.headline.textContent = "SPEN outage data failed to load";
+      elements.note.textContent = error.message || "Unable to load SPEN outage data.";
+      elements.list.innerHTML = "";
+      markerLayer.clearLayers();
+      map.fitBounds(SPEN_BOUNDS, { padding: [20, 20] });
     }
   }
 
-  function writeActiveState() {
-    try {
-      window.localStorage.setItem(ACTIVE_STORAGE_KEY, String(isActive));
-    } catch {
-      // The page remains usable when local storage is unavailable.
-    }
-  }
-
-  function setActive(active) {
-    isActive = Boolean(active);
-    writeActiveState();
-
-    frame?.classList.toggle("is-deactivated", !isActive);
-
-    if (inactiveState) {
-      inactiveState.hidden = isActive;
-    }
-
-    if (toggleButton) {
-      toggleButton.textContent = isActive
-        ? "Deactivate SP Networks"
-        : "Activate SP Networks";
-      toggleButton.setAttribute("aria-pressed", String(isActive));
-    }
-
-    if (isActive) {
-      loadView(currentView);
-    } else if (frame) {
-      frame.src = "about:blank";
-    }
-  }
-
-  document.querySelectorAll("[data-sp-view]").forEach((button) => {
-    button.addEventListener("click", () => {
-      loadView(button.getAttribute("data-sp-view"));
+  async function fetchJson(url) {
+    const response = await fetch(url, {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
     });
-  });
 
-  reloadButton?.addEventListener("click", () => {
-    if (isActive) {
-      loadView(currentView);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} loading ${url}`);
     }
-  });
 
-  toggleButton?.addEventListener("click", () => {
-    setActive(!isActive);
-  });
+    return response.json();
+  }
 
-  document.querySelectorAll(".sp-networks-panel").forEach((panel) => {
-    panel.addEventListener("toggle", () => {
-      window.setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 120);
+  function render(features, collection, providerStatus) {
+    markerLayer.clearLayers();
+
+    const counts = countCategories(features);
+    const officialCurrent =
+      providerStatus?.feeds?.find((feed) => feed.id === "live")?.officialCount;
+    const displayCurrent = Number.isFinite(Number(officialCurrent))
+      ? Number(officialCurrent)
+      : counts.current;
+
+    elements.current.textContent = String(displayCurrent);
+    elements.planned.textContent = String(counts.planned);
+    elements.restored.textContent = String(counts.restored);
+
+    const stale = Boolean(collection?.stale || providerStatus?.stale);
+    const state = providerStatus?.state || (features.length ? "live" : "empty");
+    const generatedAt = collection?.generatedAt || providerStatus?.generatedAt;
+
+    elements.livePill.textContent = stale ? "Stale" : state === "live" ? "Live" : "Empty";
+    elements.livePill.className = `weather-live-pill sp-outage-live-pill is-${stale ? "stale" : state}`;
+    elements.headline.textContent =
+      `${displayCurrent} current SPEN fault${displayCurrent === 1 ? "" : "s"}`;
+    elements.note.textContent = generatedAt
+      ? `Last updated ${formatDate(generatedAt)} from SPEN live outage data.`
+      : "SPEN live outage data loaded.";
+
+    features.forEach((feature) => {
+      markerLayer.addLayer(buildMarker(feature));
     });
+
+    if (features.length) {
+      map.fitBounds(L.geoJSON(features).getBounds(), { padding: [36, 36] });
+    } else {
+      map.fitBounds(SPEN_BOUNDS, { padding: [20, 20] });
+    }
+
+    renderList(features);
+  }
+
+  function buildMarker(feature) {
+    const [lon, lat] = feature.geometry.coordinates;
+    const properties = feature.properties || {};
+    const category = properties.category || "current";
+    const colour = CATEGORY_COLOURS[category] || CATEGORY_COLOURS.current;
+    const affected = Number(properties.affectedPostcodes || properties.rawRecordCount || 1);
+    const ringSize = Math.min(54, 22 + Math.max(0, affected) * 1.4);
+
+    const marker = L.marker([lat, lon], {
+      icon: L.divIcon({
+        className: "sp-outage-marker-shell",
+        iconSize: [44, 44],
+        iconAnchor: [22, 22],
+        html: `<span class="sp-outage-marker-ring" style="--sp-outage-colour:${colour};--sp-outage-ring-size:${ringSize}px"></span><span class="sp-outage-marker-core" style="--sp-outage-colour:${colour}"></span>`
+      })
+    });
+
+    marker.bindPopup(popupHtml(properties));
+    return marker;
+  }
+
+  function popupHtml(properties) {
+    return `
+      <div class="sp-outage-popup">
+        <strong>${escapeHtml(properties.area || "SPEN incident")}</strong>
+        <span class="sp-outage-popup-status">${escapeHtml(properties.status || "Power cut")}</span>
+        <span>${escapeHtml(properties.reference || "No reference published")}</span>
+        <span>${escapeHtml(postcodeSummary(properties))}</span>
+        ${properties.restoreAt ? `<span>Estimated restore ${escapeHtml(formatDate(properties.restoreAt))}</span>` : ""}
+        <a href="${escapeAttribute(properties.officialUrl || "https://powercuts.spenergynetworks.co.uk/map")}" target="_blank" rel="noopener">Open official SPEN map</a>
+      </div>
+    `;
+  }
+
+  function renderList(features) {
+    const sorted = [...features].sort((first, second) =>
+      String(second.properties?.startedAt || "").localeCompare(
+        String(first.properties?.startedAt || "")
+      )
+    );
+
+    if (!sorted.length) {
+      elements.list.innerHTML = `
+        <div class="sp-outage-empty">
+          <strong>No SPEN incidents in the collected dataset</strong>
+          <span>The map is ready and will render markers as soon as the collector publishes them.</span>
+        </div>
+      `;
+      return;
+    }
+
+    elements.list.innerHTML = sorted
+      .map((feature) => {
+        const properties = feature.properties || {};
+        const category = properties.category || "current";
+        return `
+          <article class="sp-outage-row is-${escapeAttribute(category)}">
+            <span class="sp-outage-row-dot"></span>
+            <div>
+              <strong>${escapeHtml(properties.area || "SPEN incident")}</strong>
+              <small>${escapeHtml(properties.reference || "")} ${escapeHtml(postcodeSummary(properties))}</small>
+            </div>
+            <span>${escapeHtml(properties.status || category)}</span>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  function postcodeSummary(properties) {
+    const affected = Number(properties.affectedPostcodes || 0);
+    const postcode = properties.postcode || "";
+
+    if (affected > 0) {
+      return `${affected} postcode${affected === 1 ? "" : "s"} affected${postcode ? ` near ${postcode}` : ""}`;
+    }
+
+    return postcode ? `Near ${postcode}` : "Affected postcodes published by SPEN";
+  }
+
+  function countCategories(features) {
+    return features.reduce(
+      (counts, feature) => {
+        const category = feature?.properties?.category;
+        const key = ["current", "planned", "restored"].includes(category)
+          ? category
+          : "current";
+        counts[key] += 1;
+        return counts;
+      },
+      { current: 0, planned: 0, restored: 0 }
+    );
+  }
+
+  function hasPoint(feature) {
+    const coordinates = feature?.geometry?.coordinates;
+    return (
+      feature?.geometry?.type === "Point" &&
+      Array.isArray(coordinates) &&
+      Number.isFinite(Number(coordinates[0])) &&
+      Number.isFinite(Number(coordinates[1]))
+    );
+  }
+
+  function cacheBust(url) {
+    return `${url}?v=${Date.now()}`;
+  }
+
+  function formatDate(value) {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return String(value || "");
+
+    return new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "short",
+      timeStyle: "short"
+    }).format(date);
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (character) => {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      };
+      return map[character];
+    });
+  }
+
+  function escapeAttribute(value) {
+    return escapeHtml(value).replace(/`/g, "&#96;");
+  }
+
+  elements.refresh.addEventListener("click", loadOutages);
+  window.addEventListener("resize", () => {
+    window.setTimeout(() => map.invalidateSize(), 120);
   });
 
-  setActive(isActive);
+  loadOutages();
 
-  window.FieldOpsSpNetworks = {
-    loadView,
-    setActive,
-    views: { ...VIEWS }
+  window.FieldOpsSpOutages = {
+    loadOutages
   };
 })();

@@ -1,232 +1,374 @@
 /* ==========================================================================
-   FieldOps Atlas - SP Networks embedded outage map
+   FieldOps Atlas - SP Energy Networks outage map
    File: FieldOpsAtlas/Features/Weather/sp-outages.css
-   Version: 0.2.0-official-embed
+   Version: 0.3.0-live-spen
    ========================================================================== */
 
-.sp-networks-shell {
-  background: #07111c;
+:root {
+  --sp-outage-current: #f04438;
+  --sp-outage-planned: #f6b73c;
+  --sp-outage-restored: #8193a4;
 }
 
-.sp-networks-frame {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: #edf2ef;
+.sp-outage-shell {
+  --weather-panel: rgba(5, 14, 23, 0.9);
 }
 
-.sp-networks-panel {
+.sp-outage-panel {
   position: absolute;
-  z-index: 30;
+  z-index: 32;
   right: 12px;
   left: 12px;
   border: 1px solid var(--weather-line);
-  border-radius: 18px;
+  border-radius: 17px;
   background: var(--weather-panel);
   box-shadow: var(--weather-shadow);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  color: var(--weather-text);
+  pointer-events: auto;
 }
 
-.sp-networks-panel > summary {
-  min-height: 44px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+.sp-outage-panel > summary {
+  min-height: 46px;
+  display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 10px;
-  color: var(--weather-text);
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 11px;
   cursor: pointer;
   list-style: none;
-  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-.sp-networks-panel > summary::-webkit-details-marker {
+.sp-outage-panel > summary::-webkit-details-marker {
   display: none;
 }
 
-.sp-networks-nav-panel {
-  top: calc(var(--safe-top) + 78px);
-  overflow: hidden;
-}
-
-.sp-networks-nav-panel > summary > span:first-child {
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.sp-networks-summary-state {
-  min-width: 54px;
-  min-height: 30px;
-  display: inline-grid;
-  place-items: center;
+.sp-outage-summary-state {
+  flex: 0 0 auto;
   border: 1px solid var(--weather-line);
   border-radius: 999px;
-  padding: 0 9px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--weather-text);
+  padding: 5px 8px;
+  color: #e9f7ff;
+  background: rgba(255, 255, 255, 0.07);
   font-size: 11px;
   font-weight: 900;
 }
 
-.sp-networks-panel[open] .sp-networks-summary-state {
+.sp-outage-panel[open] .sp-outage-summary-state {
   font-size: 0;
 }
 
-.sp-networks-panel[open] .sp-networks-summary-state::after {
+.sp-outage-panel[open] .sp-outage-summary-state::before {
   content: "Hide";
+  color: var(--weather-muted);
   font-size: 11px;
 }
 
-.sp-networks-provider-links {
-  display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  padding: 0 8px 8px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.sp-networks-provider-links::-webkit-scrollbar {
-  display: none;
-}
-
-.sp-networks-dock {
-  bottom: calc(var(--safe-bottom) + 92px);
-  display: block;
-  max-height: min(48vh, 400px);
-  overflow: auto;
-  padding: 0;
-}
-
-.sp-networks-summary-title {
+.sp-outage-summary-title {
   min-width: 0;
   display: grid;
   gap: 2px;
 }
 
-.sp-networks-summary-title strong {
-  font-size: 16px;
-  line-height: 1.1;
+.sp-outage-summary-title strong {
+  font-size: 14px;
 }
 
-.sp-networks-summary-title small {
+.sp-outage-summary-title small {
   overflow: hidden;
   color: var(--weather-muted);
   font-size: 11px;
-  font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.sp-networks-summary-actions {
+.sp-outage-summary-actions,
+.sp-outage-actions {
   display: flex;
   align-items: center;
   gap: 7px;
 }
 
-.sp-networks-live-pill {
-  border-color: rgba(0, 158, 78, 0.72);
-  background: rgba(0, 158, 78, 0.18);
-  color: #dcffec;
-  white-space: nowrap;
+.sp-outage-nav-panel {
+  top: calc(var(--safe-top) + 78px);
 }
 
-.sp-networks-panel-body {
-  display: grid;
-  gap: 9px;
-  padding: 0 10px 10px;
+.sp-outage-provider-links {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 0 8px 9px;
 }
 
-.sp-networks-view-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.sp-networks-open-link {
-  min-height: 40px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(0, 158, 78, 0.66);
-  border-radius: 12px;
-  background: rgba(0, 158, 78, 0.2);
-  color: var(--weather-text);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.sp-networks-note {
-  margin: 0;
-  color: var(--weather-muted);
-  font-size: 11px;
-  line-height: 1.35;
-}
-
-.sp-networks-inactive {
+.sp-outage-map-key {
   position: absolute;
-  z-index: 4;
-  inset: 0;
-  place-content: center;
-  gap: 8px;
-  padding: 28px;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(0, 158, 78, 0.13), transparent 34%),
-    #07111c;
-  color: var(--weather-text);
-  text-align: center;
-}
-
-.sp-networks-inactive:not([hidden]) {
-  display: grid;
-}
-
-.sp-networks-inactive strong {
-  font-size: 18px;
-}
-
-.sp-networks-inactive span {
-  color: var(--weather-muted);
-  font-size: 13px;
-}
-
-.sp-networks-frame.is-deactivated {
-  visibility: hidden;
-  opacity: 0;
+  z-index: 29;
+  top: calc(var(--safe-top) + 132px);
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  border: 1px solid var(--weather-line);
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: rgba(5, 14, 23, 0.82);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
   pointer-events: none;
 }
 
-.sp-networks-activation-button {
-  width: 100%;
+.sp-outage-map-key span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f3f9fd;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.sp-outage-map-key i,
+.sp-outage-row-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.sp-outage-map-key .is-current,
+.sp-outage-row.is-current .sp-outage-row-dot {
+  background: var(--sp-outage-current);
+}
+
+.sp-outage-map-key .is-planned,
+.sp-outage-row.is-planned .sp-outage-row-dot {
+  background: var(--sp-outage-planned);
+}
+
+.sp-outage-map-key .is-restored,
+.sp-outage-row.is-restored .sp-outage-row-dot {
+  background: var(--sp-outage-restored);
+}
+
+.sp-outage-dock {
+  bottom: calc(var(--safe-bottom) + 92px);
+}
+
+.sp-outage-panel-body {
+  display: grid;
+  gap: 10px;
+  max-height: min(50vh, 460px);
+  overflow: auto;
+  padding: 0 10px 11px;
+}
+
+.sp-outage-live-pill {
+  border-color: rgba(63, 169, 245, 0.5);
+  background: rgba(63, 169, 245, 0.16);
+  color: #d9f3ff;
+}
+
+.sp-outage-live-pill.is-live {
+  border-color: rgba(60, 207, 145, 0.56);
+  background: rgba(60, 207, 145, 0.16);
+  color: #d9ffef;
+}
+
+.sp-outage-live-pill.is-stale {
+  border-color: rgba(246, 183, 60, 0.58);
+  background: rgba(246, 183, 60, 0.16);
+  color: #fff0c7;
+}
+
+.sp-outage-live-pill.is-error {
+  border-color: rgba(240, 68, 56, 0.58);
+  background: rgba(240, 68, 56, 0.16);
+  color: #ffe0dc;
+}
+
+.sp-outage-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sp-outage-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sp-outage-official-link {
+  text-decoration: none;
+}
+
+.sp-outage-list {
+  display: grid;
+  gap: 7px;
+}
+
+.sp-outage-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--weather-line);
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.sp-outage-row div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.sp-outage-row strong,
+.sp-outage-row small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-outage-row strong {
+  font-size: 12px;
+}
+
+.sp-outage-row small,
+.sp-outage-row > span:last-child {
+  color: var(--weather-muted);
+  font-size: 10px;
+}
+
+.sp-outage-row > span:last-child {
+  justify-self: end;
+  max-width: 110px;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-outage-empty {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--weather-line);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.sp-outage-empty strong {
+  font-size: 12px;
+}
+
+.sp-outage-empty span,
+.sp-outage-note {
+  color: var(--weather-muted);
+  font-size: 11px;
+  line-height: 1.38;
+}
+
+.sp-outage-note {
+  margin: 0;
+}
+
+.sp-outage-marker-shell {
+  overflow: visible !important;
+  border: 0;
+  background: transparent;
+}
+
+.sp-outage-marker-core,
+.sp-outage-marker-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.sp-outage-marker-core {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.94);
+  background: var(--sp-outage-colour, var(--sp-outage-current));
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.24),
+    0 6px 16px rgba(0, 0, 0, 0.32);
+}
+
+.sp-outage-marker-core::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 8px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translate(-48%, -58%) skew(-10deg);
+}
+
+.sp-outage-marker-ring {
+  width: var(--sp-outage-ring-size, 26px);
+  height: var(--sp-outage-ring-size, 26px);
+  border: 2px solid var(--sp-outage-colour, var(--sp-outage-current));
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--sp-outage-colour) 65%, transparent),
+    0 0 16px color-mix(in srgb, var(--sp-outage-colour) 35%, transparent);
+  opacity: 0.68;
+}
+
+.sp-outage-popup {
+  display: grid;
+  gap: 5px;
+  min-width: 190px;
+}
+
+.sp-outage-popup strong {
+  font-size: 13px;
+}
+
+.sp-outage-popup span,
+.sp-outage-popup a {
+  color: #33495b;
+  font-size: 11px;
+  line-height: 1.28;
+}
+
+.sp-outage-popup a,
+.sp-outage-popup-status {
+  font-weight: 900;
 }
 
 @media (max-height: 720px) {
-  .sp-networks-nav-panel {
+  .sp-outage-nav-panel {
     top: calc(var(--safe-top) + 66px);
   }
 
-  .sp-networks-dock {
-    max-height: 43vh;
+  .sp-outage-map-key {
+    top: calc(var(--safe-top) + 120px);
+  }
+
+  .sp-outage-panel-body {
+    max-height: 44vh;
   }
 }
 
 @media (max-width: 420px) {
-  .sp-networks-view-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .sp-outage-row {
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
-  #reloadSpNetworks {
-    grid-column: 1 / -1;
+  .sp-outage-row > span:last-child {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 100%;
+    text-align: left;
   }
 }
 
-@media (max-width: 360px) {
-  .sp-networks-summary-title small,
-  .sp-networks-live-pill {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  .sp-outage-marker-ring {
+    box-shadow: none;
   }
 }
