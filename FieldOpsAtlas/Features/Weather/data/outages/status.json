@@ -1,36 +1,46 @@
 {
-  "version": "0.4.0-static-collector",
-  "generatedAt": "2026-07-08T15:00:44.093Z",
+  "version": "0.4.1-planned-fallbacks",
+  "generatedAt": "2026-07-08T15:08:49.615Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
-      "lastGoodAt": "2026-07-08T15:00:44.093Z",
-      "rawRows": 152,
-      "validRows": 131,
-      "uniqueIncidents": 131,
+      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "lastGoodAt": "2026-07-08T15:08:49.615Z",
+      "rawRows": 147,
+      "validRows": 126,
+      "uniqueIncidents": 126,
       "groupedRows": 0,
       "skippedRows": 21,
+      "categories": {
+        "current": 15,
+        "planned": 111,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 152
+          "rawRows": 147
         }
       ],
-      "message": "131 incidents from 152 provider rows"
+      "message": "15 current · 111 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
-      "lastGoodAt": "2026-07-08T15:00:44.093Z",
+      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "lastGoodAt": "2026-07-08T15:08:49.615Z",
       "rawRows": 435,
       "validRows": 435,
       "uniqueIncidents": 54,
       "groupedRows": 381,
       "skippedRows": 0,
+      "categories": {
+        "current": 35,
+        "planned": 19,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
@@ -38,107 +48,137 @@
           "rawRows": 435
         }
       ],
-      "message": "54 incidents from 435 provider rows"
+      "message": "35 current · 19 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
-      "lastGoodAt": "2026-07-08T15:00:44.093Z",
-      "rawRows": 33,
-      "validRows": 33,
-      "uniqueIncidents": 33,
+      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "lastGoodAt": "2026-07-08T15:08:49.615Z",
+      "rawRows": 32,
+      "validRows": 32,
+      "uniqueIncidents": 32,
       "groupedRows": 0,
       "skippedRows": 0,
+      "categories": {
+        "current": 28,
+        "planned": 4,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 33
+          "rawRows": 32
         }
       ],
-      "message": "33 incidents from 33 provider rows"
+      "message": "28 current · 4 planned · 0 restored"
     },
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "generatedAt": "2026-07-08T15:08:49.615Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
       "groupedRows": 0,
       "skippedRows": 0,
+      "categories": {
+        "current": 0,
+        "planned": 0,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "error",
-          "error": "HTTP 403"
+          "error": "live_incidents: HTTP 403 | live_incidents@electricitynorthwest: HTTP 403 | discovery: No matching ODS mirror dataset found"
         },
         {
           "id": "planned",
           "state": "error",
-          "error": "HTTP 403"
+          "error": "psi: HTTP 403 | psi@electricitynorthwest: HTTP 403 | discovery: No matching ODS mirror dataset found"
         }
       ],
-      "message": "All feeds failed and no last-good data is available"
+      "message": "All required feeds failed and no last-good data is available"
     },
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
-      "lastGoodAt": "2026-07-08T15:00:44.093Z",
-      "rawRows": 34,
-      "validRows": 34,
-      "uniqueIncidents": 34,
+      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "lastGoodAt": "2026-07-08T15:08:49.615Z",
+      "rawRows": 30,
+      "validRows": 30,
+      "uniqueIncidents": 30,
       "groupedRows": 0,
       "skippedRows": 0,
+      "categories": {
+        "current": 30,
+        "planned": 0,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 34
+          "rawRows": 30
         }
       ],
-      "message": "34 incidents from 34 provider rows"
+      "message": "30 current · 0 planned · 0 restored"
     },
     "spen": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "generatedAt": "2026-07-08T15:08:49.615Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
       "groupedRows": 0,
       "skippedRows": 0,
+      "categories": {
+        "current": 0,
+        "planned": 0,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "error",
-          "error": "HTTP 403"
+          "error": "distribution-network-live-outages: Timed out | distribution-network-live-outages@spenergynetworks: HTTP 403 | discovery: No matching ODS mirror dataset found"
         }
       ],
-      "message": "All feeds failed and no last-good data is available"
+      "message": "All required feeds failed and no last-good data is available"
     },
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "generatedAt": "2026-07-08T15:08:49.615Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
       "groupedRows": 0,
       "skippedRows": 0,
+      "categories": {
+        "current": 0,
+        "planned": 0,
+        "restored": 0
+      },
       "feeds": [
         {
           "id": "live",
           "state": "error",
-          "error": "HTTP 403"
+          "error": "nie-networks-network-faults: HTTP 403 | nie-networks-network-faults@nienetworks: HTTP 403 | discovery: No matching ODS mirror dataset found"
+        },
+        {
+          "id": "planned",
+          "state": "optional-error",
+          "error": "nie-networks-planned-interruptions@nienetworks: HTTP 404 | planned-interruptions@nienetworks: HTTP 404 | discovery: No matching ODS mirror dataset found"
         }
       ],
-      "message": "All feeds failed and no last-good data is available"
+      "message": "All required feeds failed and no last-good data is available"
     }
   }
 }

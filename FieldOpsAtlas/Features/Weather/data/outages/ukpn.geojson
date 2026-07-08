@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "ukpn",
-  "generatedAt": "2026-07-08T15:00:44.093Z",
+  "generatedAt": "2026-07-08T15:08:49.615Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-328080-u",
+      "id": "ukpn:planned:incd-109797-c",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.59194,
-          51.21545
+          0.66594,
+          52.38352
         ]
       },
       "properties": {
@@ -20,15 +20,15 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-328080-U",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-109797-C",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
-        "startedAt": null,
+        "startedAt": "2026-07-08T10:00:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
@@ -39,12 +39,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615981-z",
+      "id": "ukpn:planned:incd-411662-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.71051,
-          51.53247
+          -0.13041,
+          51.40104
         ]
       },
       "properties": {
@@ -53,9 +53,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615981-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411662-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -72,139 +72,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616054-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.56898,
-          51.71029
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616054-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-102906-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.28601,
-          50.98049
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-102906-V",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616043-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.27791,
-          51.56883
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616043-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411545-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.1271,
-          51.52345
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411545-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411639-j",
+      "id": "ukpn:planned:incd-411639-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -219,8 +87,8 @@
           "live"
         ],
         "reference": "INCD-411639-J",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -237,12 +105,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452091-g",
+      "id": "ukpn:planned:incd-411545-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.01245,
-          51.24767
+          0.1271,
+          51.52345
         ]
       },
       "properties": {
@@ -251,9 +119,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-452091-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411545-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -270,12 +138,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452010-g",
+      "id": "ukpn:planned:incd-616024-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.10143,
-          50.7703
+          -0.09726,
+          51.84305
         ]
       },
       "properties": {
@@ -284,9 +152,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-452010-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616024-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -303,205 +171,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616128-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.25961,
-          52.00469
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616128-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103594-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.54717,
-          50.85816
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-103594-V",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615993-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.29957,
-          52.07307
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615993-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-94734-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.1042,
-          51.35066
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-94734-V",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-451924-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.32165,
-          51.28175
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-451924-G",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452043-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.18869,
-          50.80704
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452043-G",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616140-z",
+      "id": "ukpn:planned:incd-616140-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -516,8 +186,8 @@
           "live"
         ],
         "reference": "INCD-616140-Z",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -534,12 +204,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616181-z",
+      "id": "ukpn:planned:incd-452043-g",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.0262,
-          51.79986
+          0.18869,
+          50.80704
         ]
       },
       "properties": {
@@ -548,108 +218,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-616181-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615934-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.18478,
-          51.60163
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615934-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615968-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.00438,
-          51.76347
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615968-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-108856-c",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.22217,
-          52.85459
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-108856-C",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-452043-G",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -666,7 +237,40 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616026-z",
+      "id": "ukpn:planned:incd-615864-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.59363,
+          51.97782
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615864-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616026-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -681,8 +285,8 @@
           "live"
         ],
         "reference": "INCD-616026-Z",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "4",
         "area": "Published incident location",
         "areas": [
@@ -699,7 +303,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616170-z",
+      "id": "ukpn:planned:incd-616170-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -714,8 +318,8 @@
           "live"
         ],
         "reference": "INCD-616170-Z",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -732,12 +336,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-103562-v",
+      "id": "ukpn:planned:incd-616181-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.44924,
-          50.8397
+          -0.0262,
+          51.79986
         ]
       },
       "properties": {
@@ -746,9 +350,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-103562-V",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616181-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -765,12 +369,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-79268-n",
+      "id": "ukpn:planned:incd-452091-g",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.00756,
-          51.49409
+          0.01245,
+          51.24767
         ]
       },
       "properties": {
@@ -779,9 +383,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-79268-N",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-452091-G",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -798,7 +402,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-607551-z",
+      "id": "ukpn:planned:incd-607551-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -813,14 +417,14 @@
           "live"
         ],
         "reference": "INCD-607551-Z",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
-        "startedAt": null,
+        "startedAt": "2026-07-08T09:00:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
@@ -831,12 +435,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411662-j",
+      "id": "ukpn:planned:incd-328080-u",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.13041,
-          51.40104
+          0.59194,
+          51.21545
         ]
       },
       "properties": {
@@ -845,114 +449,15 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411662-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615972-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.26737,
-          51.86123
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615972-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-79293-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.19534,
-          51.45851
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-79293-N",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615864-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.59363,
-          51.97782
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615864-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-328080-U",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
-        "startedAt": null,
+        "startedAt": "2026-07-08T13:00:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
@@ -963,12 +468,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-109797-c",
+      "id": "ukpn:planned:incd-94734-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.66594,
-          52.38352
+          0.1042,
+          51.35066
         ]
       },
       "properties": {
@@ -977,42 +482,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-109797-C",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616024-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.09726,
-          51.84305
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616024-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-94734-V",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -1029,7 +501,238 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411665-j",
+      "id": "ukpn:planned:incd-616128-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.25961,
+          52.00469
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616128-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615934-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.18478,
+          51.60163
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615934-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615993-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.29957,
+          52.07307
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615993-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615981-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.71051,
+          51.53247
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615981-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616054-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.56898,
+          51.71029
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616054-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616043-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.27791,
+          51.56883
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616043-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-108856-c",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.22217,
+          52.85459
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-108856-C",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411665-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -1044,8 +747,8 @@
           "live"
         ],
         "reference": "INCD-411665-J",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -1062,7 +765,40 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411682-j",
+      "id": "ukpn:planned:incd-615972-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.26737,
+          51.86123
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615972-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411682-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -1077,8 +813,8 @@
           "live"
         ],
         "reference": "INCD-411682-J",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -1095,7 +831,205 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615919-z",
+      "id": "ukpn:planned:incd-452010-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.10143,
+          50.7703
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452010-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616208-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.84586,
+          52.22388
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616208-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-102906-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.28601,
+          50.98049
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-102906-V",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:30:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-103562-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.44924,
+          50.8397
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-103562-V",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-103594-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.54717,
+          50.85816
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-103594-V",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452105-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.73091,
+          51.22935
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452105-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615919-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -1110,8 +1044,8 @@
           "live"
         ],
         "reference": "INCD-615919-Z",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -1128,12 +1062,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-187fa3e7-780a-419a-b835-13b17e546f8e",
+      "id": "ukpn:planned:incd-79268-n",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.17881,
-          51.49719
+          0.00756,
+          51.49409
         ]
       },
       "properties": {
@@ -1142,7 +1076,106 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-187fa3e7-780a-419a-b835-13b17e546f8e",
+        "reference": "INCD-79268-N",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615968-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.00438,
+          51.76347
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615968-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-79293-n",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.19534,
+          51.45851
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-79293-N",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-ccf97b8c-1b41-4ae1-9302-28308fbfb017",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.21056,
+          51.05085
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-ccf97b8c-1b41-4ae1-9302-28308fbfb017",
         "category": "current",
         "status": "current",
         "type": "0",
@@ -1161,139 +1194,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-914b1459-a542-41b2-8eeb-5bcac8e7342c",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.24015,
-          52.13425
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "MULT-914b1459-a542-41b2-8eeb-5bcac8e7342c",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:mult-d643f5ec-24d8-45c4-97cd-3e2bb25998b6",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.06131,
-          51.28454
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "MULT-d643f5ec-24d8-45c4-97cd-3e2bb25998b6",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:mult-53f8504e-b4a8-4024-8d9b-9be36949290d",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.11134,
-          51.50322
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "MULT-53f8504e-b4a8-4024-8d9b-9be36949290d",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:mult-a4fffa94-5926-4702-937c-77958960965d",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.11552,
-          51.49551
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "MULT-a4fffa94-5926-4702-937c-77958960965d",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:mult-0c21b9dc-5364-497b-9060-d5e899bddd8f",
+      "id": "ukpn:current:mult-9c918881-31f5-4e74-83d8-db9743d628ec",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -1307,7 +1208,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-0c21b9dc-5364-497b-9060-d5e899bddd8f",
+        "reference": "MULT-9c918881-31f5-4e74-83d8-db9743d628ec",
         "category": "current",
         "status": "current",
         "type": "0",
@@ -1326,12 +1227,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-9ee6fd9b-1648-4051-9127-da11d89f87cb",
+      "id": "ukpn:current:mult-a903846f-a5dc-49e0-a8f9-86c2c8e650ea",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.07448,
-          51.57779
+          -0.10053,
+          51.49555
         ]
       },
       "properties": {
@@ -1340,7 +1241,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-9ee6fd9b-1648-4051-9127-da11d89f87cb",
+        "reference": "MULT-a903846f-a5dc-49e0-a8f9-86c2c8e650ea",
         "category": "current",
         "status": "current",
         "type": "0",
@@ -1359,12 +1260,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-21374-i",
+      "id": "ukpn:current:mult-f0330836-8b74-4906-bd92-3f19d67f22d5",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.5452,
-          52.96471
+          0.7821,
+          51.19243
         ]
       },
       "properties": {
@@ -1373,10 +1274,10 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-21374-I",
+        "reference": "MULT-f0330836-8b74-4906-bd92-3f19d67f22d5",
         "category": "current",
         "status": "current",
-        "type": "2",
+        "type": "0",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -1392,1294 +1293,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411676-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.18815,
-          51.49864
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411676-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-109372-c",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.11515,
-          51.91822
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-109372-C",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103548-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.17631,
-          51.38368
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-103548-V",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615804-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.14629,
-          52.22171
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615804-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615911-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.2089,
-          51.57971
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615911-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615942-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.44594,
-          52.72785
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615942-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411679-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.1,
-          51.50622
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411679-J",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-21845-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.16331,
-          52.06411
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-21845-I",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-450719-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.17341,
-          50.87717
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-450719-G",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452069-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.97562,
-          51.15991
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452069-G",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103551-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.33603,
-          51.38851
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-103551-V",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-328029-u",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.65911,
-          51.12688
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-328029-U",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-79291-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.04595,
-          51.43069
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-79291-N",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-328021-u",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.6562,
-          51.2908
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-328021-U",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-109664-c",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.64363,
-          52.22291
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-109664-C",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-79276-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.07508,
-          51.52132
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-79276-N",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452083-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.20938,
-          50.86258
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452083-G",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616116-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.15358,
-          52.29197
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616116-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411607-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.22679,
-          51.46001
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411607-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616005-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.12021,
-          52.56771
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616005-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-328239-u",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.15658,
-          51.26586
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-328239-U",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-102861-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.28145,
-          51.22086
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-102861-V",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615958-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.65268,
-          52.72617
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615958-Z",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616211-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.39423,
-          52.58632
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616211-Z",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452048-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.52273,
-          51.2178
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452048-G",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411631-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.18488,
-          51.495
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411631-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616204-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.05999,
-          52.63569
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616204-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-21385-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.9995,
-          52.24541
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-21385-I",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616088-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.16332,
-          51.54309
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616088-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411685-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.18703,
-          51.26098
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411685-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615970-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.43101,
-          52.3453
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615970-Z",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615963-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.55396,
-          51.87781
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615963-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616208-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.94492,
-          52.20398
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616208-Z",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-328247-u",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.2856,
-          51.37882
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-328247-U",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-21869-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.24443,
-          51.83
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-21869-I",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616036-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.65474,
-          52.33119
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616036-Z",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-79317-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.26945,
-          51.39158
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-79317-N",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411627-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.11655,
-          51.4556
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411627-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103553-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.49997,
-          51.28273
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-103553-V",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103557-v",
+      "id": "ukpn:planned:incd-103557-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -2694,8 +1308,8 @@
           "live"
         ],
         "reference": "INCD-103557-V",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -2712,40 +1326,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411555-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.15908,
-          51.38977
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411555-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-102854-v",
+      "id": "ukpn:planned:incd-102854-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -2760,8 +1341,74 @@
           "live"
         ],
         "reference": "INCD-102854-V",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-21385-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.9995,
+          52.24541
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-21385-I",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:30:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-79291-n",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.04595,
+          51.43069
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-79291-N",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -2778,12 +1425,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-79271-n",
+      "id": "ukpn:planned:incd-411555-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.20595,
-          51.44855
+          -0.15908,
+          51.38977
         ]
       },
       "properties": {
@@ -2792,9 +1439,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-79271-N",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411555-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -2811,12 +1458,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-edc256d8-6372-42e7-b6b2-b93586b71172",
+      "id": "ukpn:planned:incd-615942-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.21056,
-          51.05085
+          1.44594,
+          52.72785
         ]
       },
       "properties": {
@@ -2825,75 +1472,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-edc256d8-6372-42e7-b6b2-b93586b71172",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:mult-326bb1cd-17f1-4518-b259-8fc065563855",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.10053,
-          51.49555
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "MULT-326bb1cd-17f1-4518-b259-8fc065563855",
-        "category": "current",
-        "status": "current",
-        "type": "0",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616084-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.22039,
-          51.92795
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616084-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-615942-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -2910,12 +1491,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-26008-o",
+      "id": "ukpn:planned:incd-102861-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          1.18589,
-          52.20729
+          0.28145,
+          51.22086
         ]
       },
       "properties": {
@@ -2924,9 +1505,42 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-26008-O",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-102861-V",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:30:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452069-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.97562,
+          51.15991
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452069-G",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -2943,12 +1557,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411625-j",
+      "id": "ukpn:planned:incd-616005-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.24067,
-          51.55543
+          -0.12021,
+          52.56771
         ]
       },
       "properties": {
@@ -2957,9 +1571,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411625-J",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616005-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -2976,12 +1590,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616070-z",
+      "id": "ukpn:planned:incd-615804-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.36344,
-          52.15047
+          0.14629,
+          52.22171
         ]
       },
       "properties": {
@@ -2990,9 +1604,75 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-616070-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-615804-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615911-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.2089,
+          51.57971
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615911-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616036-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.65474,
+          52.33119
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616036-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3009,12 +1689,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452030-g",
+      "id": "ukpn:planned:incd-328021-u",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.29389,
-          51.31821
+          -0.6562,
+          51.2908
         ]
       },
       "properties": {
@@ -3023,9 +1703,75 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-452030-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-328021-U",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T07:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-109664-c",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.64363,
+          52.22291
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-109664-C",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-328239-u",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.15658,
+          51.26586
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-328239-U",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3042,12 +1788,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615866-z",
+      "id": "ukpn:planned:incd-411676-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.41474,
-          51.60431
+          -0.18815,
+          51.49864
         ]
       },
       "properties": {
@@ -3056,9 +1802,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615866-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411676-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3075,12 +1821,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615994-z",
+      "id": "ukpn:planned:incd-109372-c",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.39695,
-          51.66052
+          -0.11515,
+          51.91822
         ]
       },
       "properties": {
@@ -3089,9 +1835,42 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615994-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-109372-C",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-103548-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17631,
+          51.38368
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-103548-V",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3108,12 +1887,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-328092-u",
+      "id": "ukpn:planned:incd-79276-n",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.79164,
-          51.39785
+          -0.07508,
+          51.52132
         ]
       },
       "properties": {
@@ -3122,9 +1901,42 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-328092-U",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-79276-N",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452083-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.20938,
+          50.86258
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452083-G",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3141,12 +1953,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616021-z",
+      "id": "ukpn:planned:incd-615958-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.87155,
-          52.69515
+          1.65268,
+          52.72617
         ]
       },
       "properties": {
@@ -3155,108 +1967,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-616021-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616057-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.26353,
-          51.61523
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616057-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452053-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.17591,
-          50.93634
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452053-G",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-103559-v",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.02457,
-          51.08456
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-103559-V",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-615958-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3273,12 +1986,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411635-j",
+      "id": "ukpn:planned:incd-616088-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.01708,
-          51.4559
+          0.16332,
+          51.54309
         ]
       },
       "properties": {
@@ -3287,9 +2000,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411635-J",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616088-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3306,12 +2019,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-103585-v",
+      "id": "ukpn:planned:incd-411631-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.44808,
-          51.15442
+          -0.18488,
+          51.495
         ]
       },
       "properties": {
@@ -3320,9 +2033,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-103585-V",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411631-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3339,12 +2052,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615329-z",
+      "id": "ukpn:planned:incd-616204-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.22945,
-          52.01794
+          0.05999,
+          52.63569
         ]
       },
       "properties": {
@@ -3353,9 +2066,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615329-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616204-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3372,12 +2085,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452106-g",
+      "id": "ukpn:planned:incd-616116-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.1349,
-          51.33844
+          1.15358,
+          52.29197
         ]
       },
       "properties": {
@@ -3386,9 +2099,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-452106-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616116-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3405,12 +2118,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-451973-g",
+      "id": "ukpn:planned:incd-103551-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.2134,
-          51.24738
+          -0.33603,
+          51.38851
         ]
       },
       "properties": {
@@ -3419,9 +2132,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-451973-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-103551-V",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3438,12 +2151,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615962-z",
+      "id": "ukpn:planned:incd-21374-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.32254,
-          52.10196
+          0.5452,
+          52.96471
         ]
       },
       "properties": {
@@ -3452,15 +2165,15 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615962-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-21374-I",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
-        "startedAt": null,
+        "startedAt": "2026-07-08T09:00:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
@@ -3471,12 +2184,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-103532-v",
+      "id": "ukpn:planned:incd-411679-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.57375,
-          50.85852
+          -0.1,
+          51.50622
         ]
       },
       "properties": {
@@ -3485,108 +2198,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-103532-V",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-411659-j",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.06761,
-          51.55716
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-411659-J",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616078-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.06522,
-          52.04173
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-616078-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-451891-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.18515,
-          51.37539
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-451891-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411679-J",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3603,12 +2217,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615730-z",
+      "id": "ukpn:planned:incd-615970-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.26522,
-          51.57869
+          1.43101,
+          52.3453
         ]
       },
       "properties": {
@@ -3617,42 +2231,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615730-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-615984-z",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.17513,
-          52.03669
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-615984-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-615970-Z",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3669,12 +2250,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452090-g",
+      "id": "ukpn:planned:incd-328247-u",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.38255,
-          51.41957
+          0.2856,
+          51.37882
         ]
       },
       "properties": {
@@ -3683,9 +2264,42 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-452090-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-328247-U",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452048-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.52273,
+          51.2178
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452048-G",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3702,12 +2316,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411633-j",
+      "id": "ukpn:planned:incd-21869-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.09054,
-          51.49184
+          1.24443,
+          51.83
         ]
       },
       "properties": {
@@ -3716,9 +2330,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411633-J",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-21869-I",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3735,12 +2349,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615966-z",
+      "id": "ukpn:planned:incd-328029-u",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.08954,
-          52.45094
+          0.65911,
+          51.12688
         ]
       },
       "properties": {
@@ -3749,9 +2363,75 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615966-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-328029-U",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-450719-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17341,
+          50.87717
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-450719-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-21845-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.16331,
+          52.06411
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-21845-I",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3768,12 +2448,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411644-j",
+      "id": "ukpn:planned:incd-616211-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.16857,
-          51.48388
+          1.39423,
+          52.58632
         ]
       },
       "properties": {
@@ -3782,9 +2462,42 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411644-J",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-616211-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411685-j",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.18703,
+          51.26098
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-411685-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3801,12 +2514,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-615206-z",
+      "id": "ukpn:planned:incd-79317-n",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.15391,
-          51.87754
+          -0.26945,
+          51.39158
         ]
       },
       "properties": {
@@ -3815,9 +2528,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-615206-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-79317-N",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -3834,40 +2547,7 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-452067-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.04207,
-          51.37214
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452067-G",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-616201-z",
+      "id": "ukpn:planned:incd-616201-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -3882,41 +2562,8 @@
           "live"
         ],
         "reference": "INCD-616201-Z",
-        "category": "current",
-        "status": "current",
-        "type": "2",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452089-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.15071,
-          51.10964
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452089-G",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3933,12 +2580,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-21375-i",
+      "id": "ukpn:planned:incd-103553-v",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.22209,
-          51.82686
+          0.49997,
+          51.28273
         ]
       },
       "properties": {
@@ -3947,9 +2594,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-21375-I",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-103553-V",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -3966,12 +2613,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-109641-c",
+      "id": "ukpn:planned:incd-411607-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.73651,
-          51.72417
+          -0.22679,
+          51.46001
         ]
       },
       "properties": {
@@ -3980,42 +2627,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-109641-C",
-        "category": "current",
-        "status": "current",
-        "type": "3",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
-        "locationQuality": "postcode_aggregate",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ukpn:current:incd-452107-g",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.09961,
-          51.28154
-        ]
-      },
-      "properties": {
-        "providerId": "ukpn",
-        "provider": "UK Power Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-452107-G",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411607-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -4032,12 +2646,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411623-j",
+      "id": "ukpn:current:mult-5059e8dd-bfdc-468b-a1ac-7ea5e8503a12",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.06823,
-          51.39821
+          0.94715,
+          52.0682
         ]
       },
       "properties": {
@@ -4046,10 +2660,10 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-411623-J",
+        "reference": "MULT-5059e8dd-bfdc-468b-a1ac-7ea5e8503a12",
         "category": "current",
         "status": "current",
-        "type": "2",
+        "type": "0",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -4065,7 +2679,205 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-411612-j",
+      "id": "ukpn:current:mult-ff23a622-4ccd-465a-9a79-3bca9f2e5d9d",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.87668,
+          51.1995
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-ff23a622-4ccd-465a-9a79-3bca9f2e5d9d",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-3403233d-31e1-448b-8a09-5f6c1a7dd1ce",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.04299,
+          51.92719
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-3403233d-31e1-448b-8a09-5f6c1a7dd1ce",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-ceb9b3b1-7914-4214-83be-f1c0853c41d9",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17881,
+          51.49719
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-ceb9b3b1-7914-4214-83be-f1c0853c41d9",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-90f7dd86-0d6a-4f72-b233-bed52da61ada",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.24015,
+          52.13425
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-90f7dd86-0d6a-4f72-b233-bed52da61ada",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-da62115d-e6d5-4ff1-afa0-eb646b2fc96a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.06131,
+          51.28454
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-da62115d-e6d5-4ff1-afa0-eb646b2fc96a",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-52f2a81a-6211-48fb-9679-2862117e53ab",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.28037,
+          51.03872
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-52f2a81a-6211-48fb-9679-2862117e53ab",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411612-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -4080,8 +2892,8 @@
           "live"
         ],
         "reference": "INCD-411612-J",
-        "category": "current",
-        "status": "current",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -4098,12 +2910,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-616173-z",
+      "id": "ukpn:planned:incd-411635-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.6265,
-          51.5914
+          0.01708,
+          51.4559
         ]
       },
       "properties": {
@@ -4112,9 +2924,9 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-616173-Z",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411635-J",
+        "category": "planned",
+        "status": "planned",
         "type": "2",
         "area": "Published incident location",
         "areas": [
@@ -4131,12 +2943,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:incd-21867-i",
+      "id": "ukpn:planned:incd-411659-j",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.73342,
-          51.88409
+          -0.06761,
+          51.55716
         ]
       },
       "properties": {
@@ -4145,9 +2957,273 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-21867-I",
-        "category": "current",
-        "status": "current",
+        "reference": "INCD-411659-J",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452090-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.38255,
+          51.41957
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452090-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452107-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.09961,
+          51.28154
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452107-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452030-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.29389,
+          51.31821
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452030-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452053-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.17591,
+          50.93634
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452053-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615962-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.32254,
+          52.10196
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615962-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616084-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.22039,
+          51.92795
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616084-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616078-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.06522,
+          52.04173
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616078-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-103559-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.02457,
+          51.08456
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-103559-V",
+        "category": "planned",
+        "status": "planned",
         "type": "3",
         "area": "Published incident location",
         "areas": [
@@ -4164,12 +3240,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-3c6b0cf9-5567-4c26-a313-65d487694cd8",
+      "id": "ukpn:planned:incd-616070-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.04299,
-          51.92719
+          -0.36344,
+          52.15047
         ]
       },
       "properties": {
@@ -4178,10 +3254,10 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-3c6b0cf9-5567-4c26-a313-65d487694cd8",
-        "category": "current",
-        "status": "current",
-        "type": "0",
+        "reference": "INCD-616070-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -4197,12 +3273,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-6da6c46c-9a8e-40ec-a8a0-afdd16aec3d0",
+      "id": "ukpn:planned:incd-616021-z",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.28037,
-          51.03872
+          0.87155,
+          52.69515
         ]
       },
       "properties": {
@@ -4211,10 +3287,10 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-6da6c46c-9a8e-40ec-a8a0-afdd16aec3d0",
-        "category": "current",
-        "status": "current",
-        "type": "0",
+        "reference": "INCD-616021-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -4230,7 +3306,733 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-763e8862-a9ad-4beb-b92a-d14d92b6bb2f",
+      "id": "ukpn:planned:incd-615994-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.39695,
+          51.66052
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615994-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616057-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.26353,
+          51.61523
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616057-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411633-j",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.09054,
+          51.49184
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-411633-J",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-26008-o",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.18589,
+          52.20729
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-26008-O",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-109641-c",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.73651,
+          51.72417
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-109641-C",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T07:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615966-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.08954,
+          52.45094
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615966-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411644-j",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.16857,
+          51.48388
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-411644-J",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-616173-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.6265,
+          51.5914
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-616173-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-21867-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.73342,
+          51.88409
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-21867-I",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452067-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.04207,
+          51.37214
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452067-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-328092-u",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.79164,
+          51.39785
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-328092-U",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615984-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.17513,
+          52.03669
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615984-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615206-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.15391,
+          51.87754
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615206-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-411623-j",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.06823,
+          51.39821
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-411623-J",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452106-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1349,
+          51.33844
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452106-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615329-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.22945,
+          52.01794
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615329-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-21375-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.22209,
+          51.82686
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-21375-I",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-103585-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.44808,
+          51.15442
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-103585-V",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-615866-z",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.41474,
+          51.60431
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-615866-Z",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-451973-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.2134,
+          51.24738
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-451973-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "2",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-452089-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.15071,
+          51.10964
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-452089-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:planned:incd-451891-g",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.18515,
+          51.37539
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-451891-G",
+        "category": "planned",
+        "status": "planned",
+        "type": "3",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-b551c3cc-ac64-49dd-ac8d-5c08e1670fdc",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -4244,7 +4046,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-763e8862-a9ad-4beb-b92a-d14d92b6bb2f",
+        "reference": "MULT-b551c3cc-ac64-49dd-ac8d-5c08e1670fdc",
         "category": "current",
         "status": "current",
         "type": "0",
@@ -4263,12 +4065,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-b17ac0d7-f131-4704-b38b-963a1d1dc1be",
+      "id": "ukpn:current:mult-bbe64fae-3814-468f-add1-15332c15c323",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.87668,
-          51.1995
+          -0.07448,
+          51.57779
         ]
       },
       "properties": {
@@ -4277,7 +4079,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-b17ac0d7-f131-4704-b38b-963a1d1dc1be",
+        "reference": "MULT-bbe64fae-3814-468f-add1-15332c15c323",
         "category": "current",
         "status": "current",
         "type": "0",
@@ -4296,12 +4098,12 @@
     },
     {
       "type": "Feature",
-      "id": "ukpn:current:mult-22516c61-2f86-411a-a107-900f7013dfba",
+      "id": "ukpn:current:mult-69bbc53e-8501-4325-8bf6-6843a117fa06",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0.94715,
-          52.0682
+          -0.11134,
+          51.50322
         ]
       },
       "properties": {
@@ -4310,7 +4112,40 @@
         "feedIds": [
           "live"
         ],
-        "reference": "MULT-22516c61-2f86-411a-a107-900f7013dfba",
+        "reference": "MULT-69bbc53e-8501-4325-8bf6-6843a117fa06",
+        "category": "current",
+        "status": "current",
+        "type": "0",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.ukpowernetworks.co.uk/power-cut/map",
+        "locationQuality": "postcode_aggregate",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ukpn:current:mult-93499e22-2e61-4f53-a721-27f2f53dce1d",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.11552,
+          51.49551
+        ]
+      },
+      "properties": {
+        "providerId": "ukpn",
+        "provider": "UK Power Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "MULT-93499e22-2e61-4f53-a721-27f2f53dce1d",
         "category": "current",
         "status": "current",
         "type": "0",
