@@ -37,7 +37,7 @@
     },
     {
       id: "enwl",
-      name: "SP Electricity North West",
+      name: "Electricity North West",
       officialUrl: "https://www.enwl.co.uk/power-cuts"
     },
     {
@@ -48,7 +48,7 @@
     {
       id: "spen",
       name: "SP Energy Networks",
-      officialUrl: "https://www.spenergynetworks.co.uk/pages/power_cuts.aspx"
+      officialUrl: "https://powercuts.spenergynetworks.co.uk/map"
     },
     {
       id: "nie",

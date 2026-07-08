@@ -1,89 +1,89 @@
 {
-  "version": "0.2.0-salesforce-lwr",
-  "generatedAt": "2026-07-08T22:45:39.482Z",
+  "version": "0.4.4-spen-source-fallbacks",
+  "generatedAt": "2026-07-09T07:59:06.436Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
-      "lastGoodAt": "2026-07-08T21:31:20.201Z",
-      "rawRows": 168,
-      "validRows": 133,
-      "uniqueIncidents": 133,
+      "generatedAt": "2026-07-09T07:59:06.436Z",
+      "lastGoodAt": "2026-07-09T07:59:06.436Z",
+      "rawRows": 136,
+      "validRows": 105,
+      "uniqueIncidents": 105,
       "groupedRows": 0,
-      "skippedRows": 35,
+      "skippedRows": 31,
       "categories": {
-        "current": 23,
-        "planned": 110,
+        "current": 22,
+        "planned": 83,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 168,
+          "rawRows": 136,
           "authConfigured": false,
           "selectedSource": "https://ukpowernetworks.opendatasoft.com:ukpn-live-faults"
         }
       ],
-      "message": "23 unplanned · 110 planned · 0 restored"
+      "message": "22 unplanned · 83 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
-      "lastGoodAt": "2026-07-08T21:31:20.201Z",
-      "rawRows": 765,
-      "validRows": 765,
-      "uniqueIncidents": 50,
-      "groupedRows": 715,
+      "generatedAt": "2026-07-09T07:59:06.436Z",
+      "lastGoodAt": "2026-07-09T07:59:06.436Z",
+      "rawRows": 500,
+      "validRows": 500,
+      "uniqueIncidents": 51,
+      "groupedRows": 449,
       "skippedRows": 0,
       "categories": {
-        "current": 28,
-        "planned": 22,
+        "current": 15,
+        "planned": 36,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 765,
+          "rawRows": 500,
           "authConfigured": false,
           "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "28 unplanned · 22 planned · 0 restored"
+      "message": "15 unplanned · 36 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
-      "lastGoodAt": "2026-07-08T21:31:20.201Z",
-      "rawRows": 37,
-      "validRows": 37,
-      "uniqueIncidents": 37,
+      "generatedAt": "2026-07-09T07:59:06.436Z",
+      "lastGoodAt": "2026-07-09T07:59:06.436Z",
+      "rawRows": 32,
+      "validRows": 32,
+      "uniqueIncidents": 32,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 35,
-        "planned": 2,
+        "current": 32,
+        "planned": 0,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 37,
+          "rawRows": 32,
           "authConfigured": false,
           "selectedSource": "ckan"
         }
       ],
-      "message": "35 unplanned · 2 planned · 0 restored"
+      "message": "32 unplanned · 0 planned · 0 restored"
     },
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
+      "generatedAt": "2026-07-09T07:59:06.436Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -114,15 +114,15 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
-      "lastGoodAt": "2026-07-08T21:31:20.201Z",
-      "rawRows": 21,
-      "validRows": 21,
-      "uniqueIncidents": 21,
+      "generatedAt": "2026-07-09T07:59:06.436Z",
+      "lastGoodAt": "2026-07-09T07:59:06.436Z",
+      "rawRows": 13,
+      "validRows": 13,
+      "uniqueIncidents": 13,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 21,
+        "current": 13,
         "planned": 0,
         "restored": 0
       },
@@ -130,57 +130,43 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 21,
+          "rawRows": 13,
           "authConfigured": false,
           "selectedSource": "json"
         }
       ],
-      "message": "21 unplanned · 0 planned · 0 restored"
+      "message": "13 unplanned · 0 planned · 0 restored"
     },
     "spen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T22:45:39.482Z",
-      "lastGoodAt": "2026-07-08T22:45:39.482Z",
-      "rawRows": 62,
-      "validRows": 60,
-      "uniqueIncidents": 60,
+      "generatedAt": "2026-07-09T07:59:06.436Z",
+      "lastGoodAt": "2026-07-09T07:59:06.436Z",
+      "rawRows": 54,
+      "validRows": 54,
+      "uniqueIncidents": 54,
       "groupedRows": 0,
-      "skippedRows": 2,
+      "skippedRows": 0,
       "categories": {
-        "current": 8,
-        "planned": 1,
-        "restored": 51
+        "current": 5,
+        "planned": 14,
+        "restored": 35
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 8,
-          "selectedSource": "salesforce-lwr",
-          "officialCount": 8
-        },
-        {
-          "id": "planned",
-          "state": "live",
-          "rawRows": 2,
-          "selectedSource": "salesforce-lwr",
-          "officialCount": 2
-        },
-        {
-          "id": "restored",
-          "state": "live",
-          "rawRows": 52,
-          "selectedSource": "salesforce-lwr",
-          "officialCount": 52
+          "rawRows": 54,
+          "authConfigured": false,
+          "selectedSource": "salesforce-lwr current=5 planned=15 restored=35"
         }
       ],
-      "message": "8 unplanned · 1 planned · 51 restored"
+      "message": "5 unplanned · 14 planned · 35 restored"
     },
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T21:31:20.201Z",
+      "generatedAt": "2026-07-09T07:59:06.436Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,

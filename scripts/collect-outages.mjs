@@ -22,6 +22,23 @@ const DEBUG_HTTP = /^(1|true|yes)$/i.test(
   String(process.env.OUTAGE_DEBUG_HTTP || "")
 );
 const MAX_ERROR_BODY = 600;
+const SPEN_API_ROOT =
+  "https://powercuts.spenergynetworks.co.uk/lwr/apex/v67.0/SPEN_PostcodeSearchController";
+const SPEN_POSTCODES_ROOT = "https://api.postcodes.io/postcodes";
+const SPEN_STATUS_GROUPS = [
+  {
+    category: "current",
+    statuses: ["Unplanned Power Cut", "Live Power Cut", "In Progress"]
+  },
+  {
+    category: "planned",
+    statuses: ["Planned-Active"]
+  },
+  {
+    category: "restored",
+    statuses: ["Restored", "Power Restored"]
+  }
+];
 
 const providers = [
   {
@@ -70,7 +87,7 @@ const providers = [
   },
   {
     id: "enwl",
-    name: "SP Electricity North West",
+    name: "Electricity North West",
     officialUrl: "https://www.enwl.co.uk/power-cuts",
     locationQuality: "upstream_switch",
     feeds: [
@@ -123,56 +140,12 @@ const providers = [
   {
     id: "spen",
     name: "SP Energy Networks",
-    officialUrl: "https://www.spenergynetworks.co.uk/pages/power_cuts.aspx",
-    locationQuality: "published_point",
+    officialUrl: "https://powercuts.spenergynetworks.co.uk/map",
+    locationQuality: "postcode_lookup",
     feeds: [
       {
         id: "live",
-        type: "ods",
-        authEnv: "SPEN_ODS_API_KEY",
-        authOrigins: ["https://spenergynetworks.opendatasoft.com"],
-        sources: [
-          {
-            id: "official-v2.1-records",
-            domain: "https://spenergynetworks.opendatasoft.com",
-            dataset: "distribution-network-live-outages",
-            apiVersion: "v2.1",
-            kind: "records"
-          },
-          {
-            id: "official-v2.0-records",
-            domain: "https://spenergynetworks.opendatasoft.com",
-            dataset: "distribution-network-live-outages",
-            apiVersion: "v2.0",
-            kind: "records"
-          },
-          {
-            id: "official-v2.1-geojson",
-            domain: "https://spenergynetworks.opendatasoft.com",
-            dataset: "distribution-network-live-outages",
-            apiVersion: "v2.1",
-            kind: "geojson"
-          },
-          {
-            id: "global-ods-v2.1-records",
-            domain: "https://data.opendatasoft.com",
-            dataset: "distribution-network-live-outages@spenergynetworks",
-            apiVersion: "v2.1",
-            kind: "records"
-          },
-          {
-            id: "global-huwise-v2.1-records",
-            domain: "https://hub.huwise.com",
-            dataset: "distribution-network-live-outages@spenergynetworks",
-            apiVersion: "v2.1",
-            kind: "records"
-          }
-        ],
-        discover: [
-          "SP Energy Networks distribution network live outages",
-          ["energy", "networks", "outage"],
-          ["distribution-network-live-outages"]
-        ]
+        type: "spen-lwr"
       }
     ]
   },
@@ -376,6 +349,8 @@ async function collect(provider, generatedAt) {
 }
 
 async function loadFeed(feed) {
+  if (feed.type === "spen-lwr") return loadSpenLwr();
+
   if (feed.type === "ods") return loadOds(feed);
 
   if (feed.type === "ckan") {
@@ -394,6 +369,186 @@ async function loadFeed(feed) {
   }
 
   throw new Error(`Unsupported feed type ${feed.type}`);
+}
+
+async function loadSpenLwr() {
+  const postcodeCache = new Map();
+  const rows = [];
+  const counts = {};
+
+  for (const group of SPEN_STATUS_GROUPS) {
+    const count = await spenApex("getImpactDataCount", {
+      postcode: "",
+      statuses: group.statuses
+    });
+    const total = Number(count);
+
+    if (!Number.isFinite(total)) {
+      throw new Error(`SPEN count was not numeric for ${group.category}`);
+    }
+
+    counts[group.category] = total;
+
+    for (let pageNumber = 1; pageNumber <= Math.ceil(total / PAGE_SIZE); pageNumber += 1) {
+      const page = await spenApex("getImpactData", {
+        paramsJson: JSON.stringify({
+          postcode: "",
+          pageNumber,
+          pageSize: PAGE_SIZE,
+          statuses: group.statuses
+        })
+      });
+
+      if (!Array.isArray(page)) {
+        throw new Error(`SPEN ${group.category} page was not an array`);
+      }
+
+      for (const incident of page) {
+        const postcode = firstSpenPostcode(incident.postcodeList);
+        const coordinate = await lookupSpenPostcode(postcode, postcodeCache);
+
+        if (!coordinate) continue;
+
+        rows.push(toSpenCollectorRow(incident, group.category, postcode, coordinate));
+      }
+    }
+  }
+
+  return {
+    rows,
+    selectedSource:
+      `salesforce-lwr current=${counts.current || 0} planned=${counts.planned || 0} restored=${counts.restored || 0}`
+  };
+}
+
+async function spenApex(method, body) {
+  return postJson(`${SPEN_API_ROOT}/${method}`, body, {
+    "X-SFDC-Allow-Continuation": "false"
+  });
+}
+
+async function postJson(url, body, headers = {}) {
+  let lastError;
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        signal: controller.signal,
+        redirect: "follow",
+        body: JSON.stringify(body),
+        headers: {
+          Accept: "application/json",
+          "Accept-Language": "en-GB,en;q=0.9",
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/json",
+          "User-Agent": UA,
+          ...headers
+        }
+      });
+      const textValue = await response.text();
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP ${response.status}${response.statusText ? ` ${response.statusText}` : ""}` +
+            (textValue ? ` ${textValue.replace(/\s+/g, " ").slice(0, MAX_ERROR_BODY)}` : "")
+        );
+      }
+
+      return JSON.parse(textValue);
+    } catch (error) {
+      lastError = error;
+
+      if (!attempt) {
+        await new Promise((resolve) => setTimeout(resolve, 1_500));
+      }
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  throw lastError || new Error("POST request failed");
+}
+
+async function lookupSpenPostcode(postcode, cache) {
+  const key = String(postcode || "").toUpperCase().replace(/\s+/g, "");
+
+  if (!key) return null;
+  if (cache.has(key)) return cache.get(key);
+
+  try {
+    const payload = await getJson(`${SPEN_POSTCODES_ROOT}/${encodeURIComponent(key)}`);
+    const coordinate = valid(
+      Number(payload?.result?.latitude),
+      Number(payload?.result?.longitude)
+    );
+
+    cache.set(key, coordinate);
+    return coordinate;
+  } catch {
+    cache.set(key, null);
+    return null;
+  }
+}
+
+function toSpenCollectorRow(incident, category, postcode, coordinate) {
+  const outcodes = Array.isArray(incident.outCodes)
+    ? incident.outCodes.filter(Boolean).join(", ")
+    : "";
+
+  return {
+    incidentReference: incident.incidentReference,
+    status: incident.status,
+    planned: category === "planned",
+    category,
+    latitude: coordinate.lat,
+    longitude: coordinate.lon,
+    location: value(incident.ipTown) || outcodes || postcode,
+    postcode,
+    postcodes: incident.postcodeList,
+    affectedPostcodes: incident.spenPostCodesPerIncident,
+    startTime: toIsoDate(parseSpenDate(incident.createdDate || incident.arrivalDate)),
+    estimatedRestorationTime: toIsoDate(parseSpenDate(incident.estimatedFix)),
+    actualRestorationTime: toIsoDate(parseSpenDate(incident.actualRestorationTime)),
+    updatedAt: toIsoDate(parseSpenDate(incident.ivrMessageAssignedTime || incident.dispatchedDate)),
+    message: incident.mainMessage || incident.ivrMessage
+  };
+}
+
+function firstSpenPostcode(input) {
+  const match = value(input).match(/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i);
+  return match ? match[0].toUpperCase().replace(/\s+/, " ") : "";
+}
+
+function parseSpenDate(input) {
+  const textValue = value(input);
+
+  if (!textValue) return null;
+
+  const slashMatch = textValue.match(
+    /^(\d{2})\/(\d{2})\/(\d{4}),?\s+(\d{2}):(\d{2})$/
+  );
+
+  if (slashMatch) {
+    const [, day, month, year, hour, minute] = slashMatch;
+    return Date.UTC(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute)
+    );
+  }
+
+  const parsed = Date.parse(textValue);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toIsoDate(timestamp) {
+  return timestamp ? new Date(timestamp).toISOString() : "";
 }
 
 async function loadOds(feed) {
@@ -1531,16 +1686,14 @@ function selfTest() {
   );
 
   const spen = providers.find((provider) => provider.id === "spen");
-  const spenSources = spen.feeds[0].sources.map(normaliseOdsSource);
 
   if (
     grouped.length !== 1 ||
     grouped[0].rawRecordCount !== 2 ||
     byText?.category !== "planned" ||
     byDate?.category !== "planned" ||
-    spenSources.length !== 5 ||
-    spenSources[1].apiVersion !== "v2.0" ||
-    spenSources[2].kind !== "geojson"
+    spen?.feeds?.[0]?.type !== "spen-lwr" ||
+    spen?.locationQuality !== "postcode_lookup"
   ) {
     throw new Error("Collector self-test failed");
   }
