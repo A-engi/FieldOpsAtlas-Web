@@ -1,11 +1,11 @@
 /* FieldOps Atlas — reusable WebGL scene renderer
- * Version: 1.6.6-smooth-side-transition
+ * Version: 1.6.7-square-edge-orbit
  * Supports packed/full mountains, indexed scene objects, shared GPU assets and orbit-linked camera motion.
  */
 (() => {
   "use strict";
 
-  const VERSION = "1.6.6-smooth-side-transition";
+  const VERSION = "1.6.7-square-edge-orbit";
   const assets = new Map();
   const instances = new WeakMap();
 
@@ -602,11 +602,19 @@
         view.target[2] + Math.cos(phase) * (Number(motion.targetZ) || 0)
           + sideWave * sideValue("sideTargetZ")
       ];
+      // A square orbit follows the perimeter of an imaginary box instead
+      // of a circular rail. The midpoint distance remains the scene's normal
+      // fitted distance; the diagonal sections extend smoothly to the corners.
+      const orbitShape = view.orbitShape === "square" ? "square" : "circle";
+      const squareFactor = orbitShape === "square"
+        ? 1 / Math.max(Math.abs(Math.sin(angle)), Math.abs(Math.cos(angle)), 0.0001)
+        : 1;
+      const orbitDistance = distance * squareFactor;
       const eye = [
-        target[0] + Math.sin(angle) * distance,
+        target[0] + Math.sin(angle) * orbitDistance,
         target[1] + (view.lift || 0) + Math.sin(phase) * (Number(motion.lift) || 0)
           + sideWave * sideValue("sideLift"),
-        target[2] + Math.cos(angle) * distance
+        target[2] + Math.cos(angle) * orbitDistance
       ];
       const sideRoll = sideSign * sideWave * sideValue("sideRoll");
       state.viewMatrix = rollView(lookAt(eye, target), sideRoll);
@@ -684,6 +692,7 @@
 
       root.dataset.rfBuilder3Ready = "true";
       root.dataset.rfScene = scene.id || "scene";
+      root.dataset.rfCameraPath = view.orbitShape === "square" ? "square-edge" : "circular";
       document.dispatchEvent(new CustomEvent("fieldops3dready", {
         detail: { scene: scene.id, root }
       }));
@@ -800,6 +809,7 @@
         root.replaceChildren();
         delete root.dataset.rfBuilder3Ready;
         delete root.dataset.rfScene;
+        delete root.dataset.rfCameraPath;
         instances.delete(root);
       }
     };
