@@ -1,240 +1,25 @@
-/* FieldOps Atlas — scene-owned old-mountain box walls
+/* FieldOps Atlas — Builder 2 repeated background wall
  * File: FieldOpsAtlas/Features/RF/3D Graphics/background-mountains.js
- * Version: 2.2.0-scene-owned-box-wall
+ * Version: 2.3.0-builder2-repeated-background
  *
- * Registers the earlier single-centre-peak RF mountain as a normal renderer
- * asset, adds one shallow-relief copy to each inner wall, extends the dark
- * floor underneath the approved river plot, and supplies the raised square-edge
- * camera profile. Everything is rendered in the main WebGL scene and therefore
- * shares its camera and depth buffer. The river geometry and transmitters are
- * not rebuilt or repositioned here.
+ * Preserves the approved river scene, transmitters, and foreground geometry,
+ * keeps the dark floor extension and square-edge camera profile, and replaces
+ * the old scene-owned mountain wall relief with a repeated background layer
+ * derived from the RF Builder 2 front-facing preview.
  */
 (() => {
   "use strict";
 
-  const VERSION = "2.2.0-scene-owned-box-wall";
-  const WALL_ASSET = "rf-old-mountain-box-wall";
+  const VERSION = "2.3.0-builder2-repeated-background";
   const FLOOR_ASSET = "rf-box-floor-extension";
   const TARGETS = new Set(["mount-a_b-comp-scene", "mount-a_a-comp-scene"]);
-
-  const GRID_W = 56;
-  const GRID_H = 36;
-  const DEPTH_B64 = "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";
-  const MASK_B64 = "AAAAAAAAAP7//////3/+//////8//P//////P/z//////x/4//////8f8P//////D+D//////weA//////8BAPj///8fAADw////DwAA8P///wcAAOD///8HAADg////AwAAwP///wMAAMD///8BAAAA////AAAAAPz/HwAAAAD4/x8AAAAA+P8PAAAAAPD/DwAAAADw/w8AAAAA4P8DAAAAAMD/AQAAAACA/wAAAAAAgP8AAAAAAAD/AAAAAAAA/wAAAAAAAH4AAAAAAAA+AAAAAAAAPgAAAAAAABwAAAAAAAAcAAAAAAAAHAAAAAAAAAwAAAAAAAAAAAAA";
-
-  const MOUNTAIN_WIDTH = 30.47511292;
-  const MOUNTAIN_HEIGHT = 17.73700333;
-  const MOUNTAIN_RELIEF = 3.89257908;
+  const STYLE_ID = "fieldops-rf-builder2-repeated-background";
+  const BACKGROUND_CLASS = "rf-map-builder2-background";
+  const PREVIEW_TILE = "data:image/webp;base64,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";
 
   const WALL_HALF = 31.5;
-  const WALL_SCALE_X = 2.067;
-  const WALL_SCALE_Y = 1.16;
-  const WALL_SCALE_Z = 0.92;
 
   let assetsRegistered = false;
-
-  const decodeBytes = text => {
-    const binary = atob(text);
-    const output = new Uint8Array(binary.length);
-    for (let index = 0; index < binary.length; index += 1) {
-      output[index] = binary.charCodeAt(index);
-    }
-    return output;
-  };
-
-  const decodeDepth = () => {
-    const bytes = decodeBytes(DEPTH_B64);
-    return new Uint16Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 2);
-  };
-
-  const decodeMask = () => {
-    const packed = decodeBytes(MASK_B64);
-    const mask = new Uint8Array(GRID_W * GRID_H);
-    for (let index = 0; index < mask.length; index += 1) {
-      mask[index] = (packed[index >> 3] >> (index & 7)) & 1;
-    }
-    return mask;
-  };
-
-  const pushColour = (target, height, relief, boost = 0) => {
-    const h = Math.max(0, Math.min(1, height));
-    const d = Math.max(0, Math.min(1, relief));
-    target.push(
-      0.0025 + h * 0.010 + d * 0.004 + boost,
-      0.0240 + h * 0.104 + d * 0.048 + boost * 1.6,
-      0.0340 + h * 0.126 + d * 0.060 + boost * 1.8
-    );
-  };
-
-  const addTriangle = (positions, colours, normals, a, b, c) => {
-    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
-    const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
-    let nx = uy * vz - uz * vy;
-    let ny = uz * vx - ux * vz;
-    let nz = ux * vy - uy * vx;
-    const length = Math.hypot(nx, ny, nz) || 1;
-    nx /= length; ny /= length; nz /= length;
-
-    for (const point of [a, b, c]) {
-      positions.push(...point);
-      pushColour(
-        colours,
-        point[1] / MOUNTAIN_HEIGHT,
-        point[2] / MOUNTAIN_RELIEF
-      );
-      normals.push(nx, ny, nz);
-    }
-  };
-
-  const addRibbon = (positions, colours, a, b, width = 0.021, lift = 0.045) => {
-    const dx = b[0] - a[0];
-    const dy = b[1] - a[1];
-    const length = Math.hypot(dx, dy) || 1;
-    const ox = -dy / length * width;
-    const oy = dx / length * width;
-    const az = a[2] + lift;
-    const bz = b[2] + lift;
-    const p0 = [a[0] - ox, a[1] - oy, az];
-    const p1 = [a[0] + ox, a[1] + oy, az];
-    const p2 = [b[0] + ox, b[1] + oy, bz];
-    const p3 = [b[0] - ox, b[1] - oy, bz];
-    const colour = point => {
-      const h = Math.max(0, Math.min(1, point[1] / MOUNTAIN_HEIGHT));
-      colours.push(0.035 + h * 0.05, 0.30 + h * 0.36, 0.34 + h * 0.38);
-    };
-    positions.push(...p0, ...p1, ...p2, ...p0, ...p2, ...p3);
-    for (const point of [p0, p1, p2, p0, p2, p3]) colour(point);
-  };
-
-  const addRib = (positions, colours, point, length, width = 0.025) => {
-    const start = [point[0], point[1], point[2] + 0.05];
-    const end = [point[0], point[1], point[2] + length];
-    const quads = [
-      [
-        [start[0] - width, start[1], start[2]],
-        [start[0] + width, start[1], start[2]],
-        [end[0] + width, end[1], end[2]],
-        [end[0] - width, end[1], end[2]]
-      ],
-      [
-        [start[0], start[1] - width, start[2]],
-        [start[0], start[1] + width, start[2]],
-        [end[0], end[1] + width, end[2]],
-        [end[0], end[1] - width, end[2]]
-      ]
-    ];
-    for (const [a, b, c, d] of quads) {
-      positions.push(...a, ...b, ...c, ...a, ...c, ...d);
-      for (let index = 0; index < 6; index += 1) {
-        const h = Math.max(0, Math.min(1, point[1] / MOUNTAIN_HEIGHT));
-        colours.push(0.045 + h * 0.05, 0.34 + h * 0.34, 0.38 + h * 0.38);
-      }
-    }
-  };
-
-  function buildMountainAsset() {
-    const depth = decodeDepth();
-    const mask = decodeMask();
-    const pointCache = new Array(GRID_W * GRID_H);
-    const point = (x, y) => {
-      const index = y * GRID_W + x;
-      if (!pointCache[index]) {
-        pointCache[index] = [
-          (x / (GRID_W - 1) - 0.5) * MOUNTAIN_WIDTH,
-          y / (GRID_H - 1) * MOUNTAIN_HEIGHT,
-          depth[index] / 65535 * MOUNTAIN_RELIEF
-        ];
-      }
-      return pointCache[index];
-    };
-
-    const shellPositions = [];
-    const shellColours = [];
-    const shellNormals = [];
-    const ridgePositions = [];
-    const ridgeColours = [];
-    const edgeKeys = new Set();
-
-    const addEdge = (ax, ay, bx, by) => {
-      const first = ay * GRID_W + ax;
-      const second = by * GRID_W + bx;
-      const low = Math.min(first, second);
-      const high = Math.max(first, second);
-      const key = `${low}:${high}`;
-      if (edgeKeys.has(key)) return;
-      edgeKeys.add(key);
-      addRibbon(ridgePositions, ridgeColours, point(ax, ay), point(bx, by));
-    };
-
-    for (let y = 0; y < GRID_H - 1; y += 1) {
-      for (let x = 0; x < GRID_W - 1; x += 1) {
-        const i0 = y * GRID_W + x;
-        const i1 = i0 + 1;
-        const i2 = i0 + GRID_W;
-        const i3 = i2 + 1;
-        if (!(mask[i0] && mask[i1] && mask[i2] && mask[i3])) continue;
-
-        const a = point(x, y);
-        const b = point(x + 1, y);
-        const c = point(x + 1, y + 1);
-        const d = point(x, y + 1);
-
-        if ((x + y) & 1) {
-          addTriangle(shellPositions, shellColours, shellNormals, a, b, d);
-          addTriangle(shellPositions, shellColours, shellNormals, b, c, d);
-          addEdge(x, y, x + 1, y);
-          addEdge(x + 1, y, x, y + 1);
-          addEdge(x, y + 1, x, y);
-          addEdge(x + 1, y, x + 1, y + 1);
-          addEdge(x + 1, y + 1, x, y + 1);
-        } else {
-          addTriangle(shellPositions, shellColours, shellNormals, a, b, c);
-          addTriangle(shellPositions, shellColours, shellNormals, a, c, d);
-          addEdge(x, y, x + 1, y);
-          addEdge(x + 1, y, x + 1, y + 1);
-          addEdge(x + 1, y + 1, x, y);
-          addEdge(x + 1, y + 1, x, y + 1);
-          addEdge(x, y + 1, x, y);
-        }
-      }
-    }
-
-    for (let y = 1; y < GRID_H - 1; y += 2) {
-      for (let x = 1; x < GRID_W - 1; x += 2) {
-        const index = y * GRID_W + x;
-        if (!mask[index]) continue;
-        const hash = ((x * 73856093) ^ (y * 19349663)) >>> 0;
-        const height = y / (GRID_H - 1);
-        if ((hash % 1000) / 1000 > 0.25 + 0.18 * height) continue;
-        const length = 0.22 + 0.24 * height + ((hash >>> 10) % 1000) / 1000 * 0.42;
-        addRib(ridgePositions, ridgeColours, point(x, y), length);
-      }
-    }
-
-    return Object.freeze({
-      centre: [0, 0],
-      mirror: false,
-      palettes: {
-        shell: new Float32Array([1, 1, 1]),
-        ridge: new Float32Array([1, 1, 1])
-      },
-      layers: {
-        shell: {
-          format: "raw-expanded",
-          positions: new Float32Array(shellPositions),
-          colours: new Float32Array(shellColours),
-          normals: new Float32Array(shellNormals),
-          count: shellPositions.length / 3
-        },
-        ridge: {
-          format: "raw-expanded",
-          positions: new Float32Array(ridgePositions),
-          colours: new Float32Array(ridgeColours),
-          count: ridgePositions.length / 3
-        }
-      }
-    });
-  }
 
   function buildFloorAsset() {
     const half = WALL_HALF;
@@ -270,38 +55,85 @@
     if (assetsRegistered) return true;
     const registry = globalThis.FieldOps3DAssets;
     if (!registry?.register) return false;
-    if (!registry.has?.(WALL_ASSET)) registry.register(WALL_ASSET, buildMountainAsset());
     if (!registry.has?.(FLOOR_ASSET)) registry.register(FLOOR_ASSET, buildFloorAsset());
     assetsRegistered = true;
     return true;
   }
 
-  const wallObjects = () => Object.freeze([
-    Object.freeze({
-      asset: WALL_ASSET,
-      position: [0, 0, -WALL_HALF],
-      rotation: [0, 0, 0],
-      scale: [WALL_SCALE_X, WALL_SCALE_Y, WALL_SCALE_Z]
-    }),
-    Object.freeze({
-      asset: WALL_ASSET,
-      position: [0, 0, WALL_HALF],
-      rotation: [0, Math.PI, 0],
-      scale: [WALL_SCALE_X, WALL_SCALE_Y, WALL_SCALE_Z]
-    }),
-    Object.freeze({
-      asset: WALL_ASSET,
-      position: [WALL_HALF, 0, 0],
-      rotation: [0, -Math.PI / 2, 0],
-      scale: [WALL_SCALE_X, WALL_SCALE_Y, WALL_SCALE_Z]
-    }),
-    Object.freeze({
-      asset: WALL_ASSET,
-      position: [-WALL_HALF, 0, 0],
-      rotation: [0, Math.PI / 2, 0],
-      scale: [WALL_SCALE_X, WALL_SCALE_Y, WALL_SCALE_Z]
-    })
-  ]);
+  function ensureStyles() {
+    if (document.getElementById(STYLE_ID)) return;
+
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+    style.textContent = `
+      .rf-map-paper .${BACKGROUND_CLASS} {
+        position: absolute;
+        top: 0;
+        right: var(--path-handle-width);
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        overflow: hidden;
+        border-radius: 12px 0 0 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 50% 10%, rgba(46, 240, 255, 0.06), transparent 34%),
+          linear-gradient(180deg, rgba(0, 10, 17, 0.04) 0%, rgba(0, 8, 14, 0.28) 100%),
+          #021019;
+      }
+
+      .rf-map-paper .${BACKGROUND_CLASS}::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("${PREVIEW_TILE}");
+        background-repeat: repeat-x;
+        background-position: center calc(100% + 8px);
+        background-size: auto 74%;
+        opacity: 0.84;
+        filter: saturate(0.92) brightness(0.84);
+      }
+
+      .rf-map-paper .${BACKGROUND_CLASS}::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(0, 7, 12, 0.78) 0%, rgba(0, 7, 12, 0.16) 26%, rgba(0, 7, 12, 0) 46%, rgba(0, 7, 12, 0.34) 100%);
+      }
+
+      .rf-map-stage {
+        z-index: 3;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function removeBackground(root) {
+    const paper = root?.closest?.(".rf-map-paper");
+    if (!paper) return;
+    paper.querySelector(`:scope > .${BACKGROUND_CLASS}`)?.remove();
+    delete root.dataset.rfBackgroundLayer;
+    delete root.dataset.rfBackgroundLayerVersion;
+    delete root.dataset.rfBackgroundMountains;
+  }
+
+  function ensureBackground(root) {
+    const paper = root?.closest?.(".rf-map-paper");
+    if (!paper) return;
+
+    let layer = paper.querySelector(`:scope > .${BACKGROUND_CLASS}`);
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = BACKGROUND_CLASS;
+      root.insertAdjacentElement("beforebegin", layer);
+    }
+
+    layer.dataset.rfBackgroundLayer = "builder2-repeated-preview";
+    layer.dataset.rfBackgroundLayerVersion = VERSION;
+    root.dataset.rfBackgroundLayer = "builder2-repeated-preview";
+    root.dataset.rfBackgroundLayerVersion = VERSION;
+  }
 
   function enhancedCamera(camera = {}) {
     return Object.freeze({
@@ -345,9 +177,9 @@
         rotation: [0, 0, 0],
         scale: [1, 1, 1]
       }),
-      ...(scene.objects || []),
-      ...wallObjects()
+      ...(scene.objects || [])
     ];
+
     return Object.freeze({
       ...scene,
       camera: enhancedCamera(scene.camera),
@@ -357,21 +189,24 @@
 
   function install() {
     const renderer = globalThis.FieldOps3DRenderer;
-    if (!renderer?.create || renderer.__sceneOwnedBoxWallInstalled) return false;
+    if (!renderer?.create || renderer.__builder2RepeatedBackgroundInstalled) return false;
     if (!registerAssets()) return false;
 
     const originalCreate = renderer.create.bind(renderer);
     renderer.create = (root, scene) => {
-      if (!TARGETS.has(scene?.id)) return originalCreate(root, scene);
+      if (!TARGETS.has(scene?.id)) {
+        removeBackground(root);
+        return originalCreate(root, scene);
+      }
+      ensureStyles();
       const api = originalCreate(root, enhanceScene(scene));
-      root.dataset.rfBackgroundMountains = "4";
-      root.dataset.rfBackgroundLayer = "scene-owned-exact-box-wall-relief";
-      root.dataset.rfBackgroundLayerVersion = VERSION;
+      ensureBackground(root);
+      root.dataset.rfBackgroundMountains = "builder2-repeated";
       return api;
     };
 
-    renderer.__sceneOwnedBoxWallInstalled = true;
-    renderer.sceneOwnedBoxWallVersion = VERSION;
+    renderer.__builder2RepeatedBackgroundInstalled = true;
+    renderer.builder2RepeatedBackgroundVersion = VERSION;
     return true;
   }
 
@@ -382,7 +217,7 @@
 
   globalThis.FieldOpsBackgroundMountains = Object.freeze({
     VERSION,
-    count: 4,
-    mode: "scene-owned-exact-box-wall-relief"
+    count: 1,
+    mode: "builder2-repeated-background"
   });
 })();
