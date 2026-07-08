@@ -1,0 +1,61 @@
+name: Update SP Networks outage test data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  push:
+    paths:
+      - ".github/workflows/update-sp-outage-test.yml"
+      - "scripts/collect-sp-outages-test.mjs"
+      - "FieldOpsAtlas/Features/Weather/sp-outages.html"
+      - "FieldOpsAtlas/Features/Weather/sp-outages.js"
+      - "FieldOpsAtlas/Features/Weather/sp-outages.css"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sp-networks-outage-test
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      SPEN_ODS_API_KEY: ${{ secrets.SPEN_ODS_API_KEY }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate SP Networks test collector
+        run: node scripts/collect-sp-outages-test.mjs --self-test
+
+      - name: Collect SP Networks test sources
+        run: node scripts/collect-sp-outages-test.mjs
+
+      - name: Commit updated SP Networks test data
+        shell: bash
+        run: |
+          git config user.name "fieldops-outage-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add FieldOpsAtlas/Features/Weather/data/sp-outages-test
+
+          if git diff --cached --quiet; then
+            echo "No SP Networks test-data changes to commit."
+            exit 0
+          fi
+
+          git commit -m "data: refresh SP Networks outage tests"
+          git pull --rebase origin main
+          git push
