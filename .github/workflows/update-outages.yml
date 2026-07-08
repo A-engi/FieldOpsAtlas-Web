@@ -21,6 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
+    env:
+      ENWL_ODS_API_KEY: ${{ secrets.ENWL_ODS_API_KEY }}
+      SPEN_ODS_API_KEY: ${{ secrets.SPEN_ODS_API_KEY }}
+      NIE_ODS_API_KEY: ${{ secrets.NIE_ODS_API_KEY }}
+      OUTAGE_DEBUG_HTTP: ${{ vars.OUTAGE_DEBUG_HTTP }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -34,6 +40,14 @@ jobs:
 
       - name: Validate collector
         run: node scripts/collect-outages.mjs --self-test
+
+      - name: Optional network diagnostics
+        if: ${{ vars.OUTAGE_DEBUG_HTTP == 'true' }}
+        shell: bash
+        run: |
+          echo "Runner egress IP:"
+          curl -fsSL https://api.ipify.org || true
+          echo
 
       - name: Collect official outage feeds
         run: node scripts/collect-outages.mjs
