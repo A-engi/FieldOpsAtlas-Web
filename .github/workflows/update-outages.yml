@@ -1,0 +1,54 @@
+name: Update electricity outage data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+  push:
+    paths:
+      - ".github/workflows/update-outages.yml"
+      - "scripts/collect-outages.mjs"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-electricity-outages
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate collector
+        run: node scripts/collect-outages.mjs --self-test
+
+      - name: Collect official outage feeds
+        run: node scripts/collect-outages.mjs
+
+      - name: Commit updated outage data
+        shell: bash
+        run: |
+          git config user.name "fieldops-outage-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add FieldOpsAtlas/Features/Weather/data/outages
+
+          if git diff --cached --quiet; then
+            echo "No outage-data changes to commit."
+            exit 0
+          fi
+
+          git commit -m "data: refresh electricity outages"
+          git push
