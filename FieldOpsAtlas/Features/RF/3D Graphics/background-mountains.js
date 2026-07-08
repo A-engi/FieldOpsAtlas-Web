@@ -1,6 +1,6 @@
 /* FieldOps Atlas — Builder 2 repeated background wall
  * File: FieldOpsAtlas/Features/RF/3D Graphics/background-mountains.js
- * Version: 2.3.0-builder2-repeated-background
+ * Version: 2.3.1-builder2-visible-colour
  *
  * Preserves the approved river scene, transmitters, and foreground geometry,
  * keeps the dark floor extension and square-edge camera profile, and replaces
@@ -10,7 +10,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "2.3.0-builder2-repeated-background";
+  const VERSION = "2.3.1-builder2-visible-colour";
   const FLOOR_ASSET = "rf-box-floor-extension";
   const TARGETS = new Set(["mount-a_b-comp-scene", "mount-a_a-comp-scene"]);
   const STYLE_ID = "fieldops-rf-builder2-repeated-background";
@@ -72,14 +72,11 @@
         right: var(--path-handle-width);
         bottom: 0;
         left: 0;
-        z-index: 2;
+        z-index: 4;
         overflow: hidden;
         border-radius: 12px 0 0 0;
         pointer-events: none;
-        background:
-          radial-gradient(circle at 50% 10%, rgba(46, 240, 255, 0.06), transparent 34%),
-          linear-gradient(180deg, rgba(0, 10, 17, 0.04) 0%, rgba(0, 8, 14, 0.28) 100%),
-          #021019;
+        background: transparent;
       }
 
       .rf-map-paper .${BACKGROUND_CLASS}::before {
@@ -88,10 +85,13 @@
         inset: 0;
         background-image: url("${PREVIEW_TILE}");
         background-repeat: repeat-x;
-        background-position: center calc(100% + 8px);
-        background-size: auto 74%;
-        opacity: 0.84;
-        filter: saturate(0.92) brightness(0.84);
+        background-position: center calc(100% + 5px);
+        background-size: auto 68%;
+        opacity: 0.68;
+        filter: saturate(1.18) brightness(1.08) contrast(1.06);
+        mix-blend-mode: screen;
+        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
       }
 
       .rf-map-paper .${BACKGROUND_CLASS}::after {
@@ -99,7 +99,8 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(180deg, rgba(0, 7, 12, 0.78) 0%, rgba(0, 7, 12, 0.16) 26%, rgba(0, 7, 12, 0) 46%, rgba(0, 7, 12, 0.34) 100%);
+          radial-gradient(circle at 50% 18%, rgba(31, 221, 230, 0.07), transparent 38%),
+          linear-gradient(180deg, rgba(0, 8, 14, 0.10), transparent 35%, rgba(0, 8, 14, 0.08));
       }
 
       .rf-map-stage {
@@ -129,9 +130,9 @@
       root.insertAdjacentElement("beforebegin", layer);
     }
 
-    layer.dataset.rfBackgroundLayer = "builder2-repeated-preview";
+    layer.dataset.rfBackgroundLayer = "builder2-visible-colour";
     layer.dataset.rfBackgroundLayerVersion = VERSION;
-    root.dataset.rfBackgroundLayer = "builder2-repeated-preview";
+    root.dataset.rfBackgroundLayer = "builder2-visible-colour";
     root.dataset.rfBackgroundLayerVersion = VERSION;
   }
 
@@ -218,6 +219,6 @@
   globalThis.FieldOpsBackgroundMountains = Object.freeze({
     VERSION,
     count: 1,
-    mode: "builder2-repeated-background"
+    mode: "builder2-visible-colour"
   });
 })();
