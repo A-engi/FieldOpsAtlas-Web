@@ -1,0 +1,144 @@
+{
+  "version": "0.4.0-static-collector",
+  "generatedAt": "2026-07-08T12:40:46.184Z",
+  "providers": {
+    "ukpn": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
+      "rawRows": 135,
+      "validRows": 123,
+      "uniqueIncidents": 123,
+      "groupedRows": 0,
+      "skippedRows": 12,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 135
+        }
+      ],
+      "message": "123 incidents from 135 provider rows"
+    },
+    "npg": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
+      "rawRows": 282,
+      "validRows": 282,
+      "uniqueIncidents": 50,
+      "groupedRows": 232,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 282
+        }
+      ],
+      "message": "50 incidents from 282 provider rows"
+    },
+    "nged": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
+      "rawRows": 30,
+      "validRows": 30,
+      "uniqueIncidents": 30,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 30
+        }
+      ],
+      "message": "30 incidents from 30 provider rows"
+    },
+    "enwl": {
+      "state": "error",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": null,
+      "rawRows": 0,
+      "validRows": 0,
+      "uniqueIncidents": 0,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "error",
+          "error": "HTTP 403"
+        },
+        {
+          "id": "planned",
+          "state": "error",
+          "error": "HTTP 403"
+        }
+      ],
+      "message": "All feeds failed and no last-good data is available"
+    },
+    "ssen": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
+      "rawRows": 62,
+      "validRows": 62,
+      "uniqueIncidents": 62,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 62
+        }
+      ],
+      "message": "62 incidents from 62 provider rows"
+    },
+    "spen": {
+      "state": "error",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": null,
+      "rawRows": 0,
+      "validRows": 0,
+      "uniqueIncidents": 0,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "error",
+          "error": "HTTP 403"
+        }
+      ],
+      "message": "All feeds failed and no last-good data is available"
+    },
+    "nie": {
+      "state": "error",
+      "stale": false,
+      "generatedAt": "2026-07-08T12:40:46.184Z",
+      "lastGoodAt": null,
+      "rawRows": 0,
+      "validRows": 0,
+      "uniqueIncidents": 0,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "feeds": [
+        {
+          "id": "live",
+          "state": "error",
+          "error": "HTTP 403"
+        }
+      ],
+      "message": "All feeds failed and no last-good data is available"
+    }
+  }
+}
