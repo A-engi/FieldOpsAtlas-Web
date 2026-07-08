@@ -3,36 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>SP Networks Outage Test - FieldOps Atlas</title>
+  <title>SP Networks Power Cuts - FieldOps Atlas</title>
 
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="outages.css?v=0.4.0-static-collector" />
-  <link rel="stylesheet" href="sp-outages.css?v=0.1.0-sp-test-map" />
+  <link rel="stylesheet" href="sp-outages.css?v=0.2.0-official-embed" />
 </head>
 
 <body class="weather-page">
   <main
-    class="fieldops-shell-root weather-shell outage-shell sp-outage-shell"
+    class="fieldops-shell-root weather-shell sp-networks-shell"
     data-page="weather"
     data-weather-provider="sp-outages"
-    data-version="0.1.0-sp-test-map"
+    data-version="0.2.0-official-embed"
   >
-    <section class="weather-stage" aria-label="SP Networks outage source test map">
-      <div
-        id="spOutageMap"
-        class="weather-map"
-        aria-label="Map comparing SP Networks outage data sources"
-      ></div>
+    <section class="weather-stage" aria-label="Official SP Networks live power cuts map">
+      <iframe
+        id="spNetworksFrame"
+        class="sp-networks-frame"
+        title="Official SP Networks live power cuts map"
+        src="https://powercuts.spenergynetworks.co.uk/map"
+        loading="eager"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="geolocation; fullscreen"
+      ></iframe>
 
-      <details class="outage-panel outage-nav-panel">
+      <div id="spNetworksInactive" class="sp-networks-inactive" hidden>
+        <strong>SP Networks map deactivated</strong>
+        <span>Activate the official live map from the control panel.</span>
+      </div>
+
+      <details class="sp-networks-panel sp-networks-nav-panel">
         <summary>
           <span>Weather pages</span>
-          <span class="outage-summary-state" aria-hidden="true">Show</span>
+          <span class="sp-networks-summary-state" aria-hidden="true">Show</span>
         </summary>
 
-        <nav class="outage-provider-links" aria-label="Weather pages">
+        <nav class="sp-networks-provider-links" aria-label="Weather pages">
           <a class="weather-provider-link" href="index.html">Radar</a>
           <a class="weather-provider-link" href="openmeteo.html">Risk</a>
           <a class="weather-provider-link" href="metoffice.html">Met Office</a>
@@ -44,165 +51,80 @@
         </nav>
       </details>
 
-      <details class="outage-panel outage-source-panel sp-source-panel">
+      <details class="weather-dock sp-networks-panel sp-networks-dock">
         <summary>
-          <span class="outage-summary-title">
-            <strong>SP Networks source tests</strong>
-            <small id="sourceSummary">Loading source comparison</small>
-          </span>
-          <span class="outage-summary-state" aria-hidden="true">Show</span>
-        </summary>
-
-        <div class="outage-provider-actions">
-          <button id="useSelectedSource" class="weather-button is-primary" type="button">
-            Selected source only
-          </button>
-          <button id="deactivateAllSources" class="weather-button" type="button">
-            Hide all
-          </button>
-        </div>
-
-        <div class="outage-source-list sp-source-list" id="sourceList" aria-live="polite"></div>
-      </details>
-
-      <section class="outage-map-key" aria-label="Outage map key">
-        <span><i class="is-current"></i>Current</span>
-        <span><i class="is-planned"></i>Planned</span>
-        <span><i class="is-restored"></i>Restored</span>
-      </section>
-
-      <details class="weather-dock outage-panel outage-dock sp-outage-dock" open>
-        <summary>
-          <span class="outage-summary-title">
-            <strong>SP Networks outage test</strong>
-            <small id="headlineStatus">Loading test datasets</small>
+          <span class="sp-networks-summary-title">
+            <strong>SP Networks live</strong>
+            <small>Official embedded power cuts map</small>
           </span>
 
-          <span class="outage-summary-actions">
-            <span id="liveBadge" class="weather-pill outage-live-pill">LOADING</span>
-            <span class="outage-summary-state" aria-hidden="true">Show</span>
+          <span class="sp-networks-summary-actions">
+            <span class="weather-pill sp-networks-live-pill">LIVE MAP</span>
+            <span class="sp-networks-summary-state" aria-hidden="true">Show</span>
           </span>
         </summary>
 
-        <div class="outage-panel-body">
-          <p id="statusText" class="weather-status">
-            Comparing independently collected SP Networks outage sources.
+        <div class="sp-networks-panel-body">
+          <p class="weather-status">
+            This page embeds the official SP Networks power cuts service. FieldOps Atlas does
+            not copy, scrape or re-publish the outage feed.
           </p>
 
-          <div class="outage-filter-grid" aria-label="Outage filters">
-            <label class="outage-filter">
-              <input id="showCurrent" type="checkbox" checked />
-              <span class="outage-filter-dot is-current"></span>
-              Current
-            </label>
+          <button
+            id="toggleSpNetworks"
+            class="weather-button is-primary sp-networks-activation-button"
+            type="button"
+            aria-pressed="true"
+          >
+            Deactivate SP Networks
+          </button>
 
-            <label class="outage-filter">
-              <input id="showPlanned" type="checkbox" checked />
-              <span class="outage-filter-dot is-planned"></span>
-              Planned
-            </label>
-
-            <label class="outage-filter">
-              <input id="showRestored" type="checkbox" />
-              <span class="outage-filter-dot is-restored"></span>
-              Restored
-            </label>
-          </div>
-
-          <div class="weather-actions">
-            <button id="refreshSpOutages" class="weather-button is-primary" type="button">
-              Refresh test data
-            </button>
-            <button id="fitSpCoverage" class="weather-button" type="button">
-              Fit incidents
-            </button>
-            <a
-              class="weather-button sp-official-link"
-              href="https://www.spenergynetworks.co.uk/pages/power_cuts.aspx"
-              target="_blank"
-              rel="noopener noreferrer"
+          <div class="sp-networks-view-grid" aria-label="Official service views">
+            <button
+              class="weather-button is-primary"
+              type="button"
+              data-sp-view="map"
             >
-              Official map
-            </a>
+              Power cuts map
+            </button>
+
+            <button
+              class="weather-button"
+              type="button"
+              data-sp-view="list"
+            >
+              Power cuts list
+            </button>
+
+            <button
+              id="reloadSpNetworks"
+              class="weather-button"
+              type="button"
+            >
+              Reload
+            </button>
           </div>
 
-          <div class="weather-metrics outage-metrics">
-            <div class="weather-metric">
-              <strong id="currentCount">0</strong>
-              <span>Current</span>
-            </div>
-            <div class="weather-metric">
-              <strong id="plannedCount">0</strong>
-              <span>Planned</span>
-            </div>
-            <div class="weather-metric">
-              <strong id="incidentCount">0</strong>
-              <span>Visible incidents</span>
-            </div>
-          </div>
+          <a
+            id="openSpNetworks"
+            class="sp-networks-open-link"
+            href="https://powercuts.spenergynetworks.co.uk/map"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open full SP Networks map
+          </a>
 
-          <div class="weather-metrics outage-diagnostic-metrics">
-            <div class="weather-metric">
-              <strong id="rawRowCount">0</strong>
-              <span>Selected raw rows</span>
-            </div>
-            <div class="weather-metric">
-              <strong id="validRowCount">0</strong>
-              <span>Selected valid rows</span>
-            </div>
-            <div class="weather-metric">
-              <strong id="skippedRowCount">0</strong>
-              <span>Selected skipped</span>
-            </div>
-          </div>
-
-          <section class="sp-collector-card" aria-label="SP Networks collector details">
-            <div>
-              <span>Selected source</span>
-              <strong id="selectedSourceName">Not selected</strong>
-            </div>
-            <div>
-              <span>API key</span>
-              <strong id="authStatus">Unknown</strong>
-            </div>
-            <div>
-              <span>Generated</span>
-              <strong id="generatedAt">Unknown</strong>
-            </div>
-            <div>
-              <span>Collector</span>
-              <strong id="collectorVersion">Unknown</strong>
-            </div>
-          </section>
-
-          <div class="sp-data-links" aria-label="Test data files">
-            <a href="data/sp-outages-test/summary.json" target="_blank" rel="noopener">Summary JSON</a>
-            <a href="data/sp-outages-test/selected.geojson" target="_blank" rel="noopener">Selected GeoJSON</a>
-            <a href="data/outages/spen.geojson" target="_blank" rel="noopener">Existing map output</a>
-          </div>
-
-          <p class="outage-note">
-            This page is isolated from the seven-provider outage map. It compares each available
-            SP Networks collection route and can overlay more than one source for verification.
-          </p>
-
-          <p class="outage-note">
-            An empty successful source means the endpoint responded but published no incidents.
-            It is kept separate from a failed or skipped source.
-          </p>
-
-          <p class="outage-disclaimer">
-            Test data may be incomplete, delayed or approximate. Use the official SP Networks
-            service for operational decisions.
+          <p class="sp-networks-note">
+            Search, location controls, outage clusters and incident details come directly from
+            the official SP Networks service.
           </p>
         </div>
       </details>
     </section>
   </main>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
-  <script src="weather-display-style.js?v=0.1.2" defer></script>
-  <script src="sp-outages.js?v=0.1.0-sp-test-map" defer></script>
+  <script src="sp-outages.js?v=0.2.0-official-embed" defer></script>
 </body>
 </html>
