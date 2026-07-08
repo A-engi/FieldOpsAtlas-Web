@@ -1,69 +1,69 @@
 {
   "version": "0.4.0-static-collector",
-  "generatedAt": "2026-07-08T12:40:46.184Z",
+  "generatedAt": "2026-07-08T15:00:44.093Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 135,
-      "validRows": 123,
-      "uniqueIncidents": 123,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T15:00:44.093Z",
+      "rawRows": 152,
+      "validRows": 131,
+      "uniqueIncidents": 131,
       "groupedRows": 0,
-      "skippedRows": 12,
+      "skippedRows": 21,
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 135
+          "rawRows": 152
         }
       ],
-      "message": "123 incidents from 135 provider rows"
+      "message": "131 incidents from 152 provider rows"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 282,
-      "validRows": 282,
-      "uniqueIncidents": 50,
-      "groupedRows": 232,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T15:00:44.093Z",
+      "rawRows": 435,
+      "validRows": 435,
+      "uniqueIncidents": 54,
+      "groupedRows": 381,
       "skippedRows": 0,
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 282
+          "rawRows": 435
         }
       ],
-      "message": "50 incidents from 282 provider rows"
+      "message": "54 incidents from 435 provider rows"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 30,
-      "validRows": 30,
-      "uniqueIncidents": 30,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T15:00:44.093Z",
+      "rawRows": 33,
+      "validRows": 33,
+      "uniqueIncidents": 33,
       "groupedRows": 0,
       "skippedRows": 0,
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 30
+          "rawRows": 33
         }
       ],
-      "message": "30 incidents from 30 provider rows"
+      "message": "33 incidents from 33 provider rows"
     },
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": null,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
@@ -86,27 +86,27 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 62,
-      "validRows": 62,
-      "uniqueIncidents": 62,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T15:00:44.093Z",
+      "rawRows": 34,
+      "validRows": 34,
+      "uniqueIncidents": 34,
       "groupedRows": 0,
       "skippedRows": 0,
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 62
+          "rawRows": 34
         }
       ],
-      "message": "62 incidents from 62 provider rows"
+      "message": "34 incidents from 34 provider rows"
     },
     "spen": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": null,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
@@ -124,8 +124,8 @@
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T12:40:46.184Z",
-      "lastGoodAt": null,
+      "generatedAt": "2026-07-08T15:00:44.093Z",
+      "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
