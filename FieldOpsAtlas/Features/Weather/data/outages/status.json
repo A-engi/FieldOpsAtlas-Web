@@ -1,69 +1,71 @@
 {
-  "version": "0.4.3-authenticated-ods",
-  "generatedAt": "2026-07-08T18:17:08.112Z",
+  "version": "0.4.4-spen-source-fallbacks",
+  "generatedAt": "2026-07-08T19:20:25.400Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
-      "lastGoodAt": "2026-07-08T18:17:08.112Z",
-      "rawRows": 168,
-      "validRows": 139,
-      "uniqueIncidents": 139,
+      "generatedAt": "2026-07-08T19:20:25.400Z",
+      "lastGoodAt": "2026-07-08T19:20:25.400Z",
+      "rawRows": 166,
+      "validRows": 137,
+      "uniqueIncidents": 137,
       "groupedRows": 0,
       "skippedRows": 29,
       "categories": {
-        "current": 25,
-        "planned": 114,
+        "current": 22,
+        "planned": 115,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 168,
-          "authConfigured": false
+          "rawRows": 166,
+          "authConfigured": false,
+          "selectedSource": "https://ukpowernetworks.opendatasoft.com:ukpn-live-faults"
         }
       ],
-      "message": "25 unplanned · 114 planned · 0 restored"
+      "message": "22 unplanned · 115 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
-      "lastGoodAt": "2026-07-08T18:17:08.112Z",
-      "rawRows": 736,
-      "validRows": 736,
-      "uniqueIncidents": 52,
-      "groupedRows": 684,
+      "generatedAt": "2026-07-08T19:20:25.400Z",
+      "lastGoodAt": "2026-07-08T19:20:25.400Z",
+      "rawRows": 573,
+      "validRows": 573,
+      "uniqueIncidents": 50,
+      "groupedRows": 523,
       "skippedRows": 0,
       "categories": {
-        "current": 32,
-        "planned": 20,
+        "current": 31,
+        "planned": 19,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 736,
-          "authConfigured": false
+          "rawRows": 573,
+          "authConfigured": false,
+          "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "32 unplanned · 20 planned · 0 restored"
+      "message": "31 unplanned · 19 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
-      "lastGoodAt": "2026-07-08T18:17:08.112Z",
-      "rawRows": 42,
-      "validRows": 42,
-      "uniqueIncidents": 42,
+      "generatedAt": "2026-07-08T19:20:25.400Z",
+      "lastGoodAt": "2026-07-08T19:20:25.400Z",
+      "rawRows": 36,
+      "validRows": 36,
+      "uniqueIncidents": 36,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 40,
+        "current": 34,
         "planned": 2,
         "restored": 0
       },
@@ -71,16 +73,17 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 42,
-          "authConfigured": false
+          "rawRows": 36,
+          "authConfigured": false,
+          "selectedSource": "ckan"
         }
       ],
-      "message": "40 unplanned · 2 planned · 0 restored"
+      "message": "34 unplanned · 2 planned · 0 restored"
     },
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
+      "generatedAt": "2026-07-08T19:20:25.400Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -97,13 +100,13 @@
           "id": "live",
           "state": "error",
           "authConfigured": false,
-          "error": "live_incidents: HTTP 403 Forbidden [live/live_incidents] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | live_incidents@electricitynorthwest: HTTP 403 Forbidden [live/live_incidents@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" "
+          "error": "https://electricitynorthwest.opendatasoft.com:live_incidents: HTTP 403 Forbidden [live/https://electricitynorthwest.opendatasoft.com:live_incidents] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:live_incidents@electricitynorthwest: HTTP 403 Forbidden [live/https://data.opendatasoft.com:live_incidents@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_OD"
         },
         {
           "id": "planned",
           "state": "error",
           "authConfigured": false,
-          "error": "psi: HTTP 403 Forbidden [planned/psi] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | psi@electricitynorthwest: HTTP 403 Forbidden [planned/psi@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | discovery: No matching ODS mirror da"
+          "error": "https://electricitynorthwest.opendatasoft.com:psi: HTTP 403 Forbidden [planned/https://electricitynorthwest.opendatasoft.com:psi] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:psi@electricitynorthwest: HTTP 403 Forbidden [planned/https://data.opendatasoft.com:psi@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\""
         }
       ],
       "message": "All required feeds failed and no last-good data is available"
@@ -111,8 +114,8 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
-      "lastGoodAt": "2026-07-08T18:17:08.112Z",
+      "generatedAt": "2026-07-08T19:20:25.400Z",
+      "lastGoodAt": "2026-07-08T19:20:25.400Z",
       "rawRows": 27,
       "validRows": 27,
       "uniqueIncidents": 27,
@@ -128,16 +131,17 @@
           "id": "live",
           "state": "live",
           "rawRows": 27,
-          "authConfigured": false
+          "authConfigured": false,
+          "selectedSource": "json"
         }
       ],
       "message": "27 unplanned · 0 planned · 0 restored"
     },
     "spen": {
-      "state": "error",
+      "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
+      "generatedAt": "2026-07-08T19:20:25.400Z",
+      "lastGoodAt": "2026-07-08T19:20:25.400Z",
       "rawRows": 0,
       "validRows": 0,
       "uniqueIncidents": 0,
@@ -151,17 +155,18 @@
       "feeds": [
         {
           "id": "live",
-          "state": "error",
+          "state": "live",
+          "rawRows": 0,
           "authConfigured": false,
-          "error": "distribution-network-live-outages: HTTP 403 Forbidden [live/distribution-network-live-outages] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret SPEN_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | distribution-network-live-outages@spenergynetworks: HTTP 403 Forbidden [live/distribution-network-live-outages@spenergynetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret SPEN_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\""
+          "selectedSource": "official-v2.1-geojson"
         }
       ],
-      "message": "All required feeds failed and no last-good data is available"
+      "message": "0 unplanned · 0 planned · 0 restored"
     },
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T18:17:08.112Z",
+      "generatedAt": "2026-07-08T19:20:25.400Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -178,13 +183,13 @@
           "id": "live",
           "state": "error",
           "authConfigured": false,
-          "error": "nie-networks-network-faults: HTTP 403 Forbidden [live/nie-networks-network-faults] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | nie-networks-network-faults@nienetworks: HTTP 403 Forbidden [live/nie-networks-network-faults@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to acc"
+          "error": "https://nienetworks.opendatasoft.com:nie-networks-network-faults: HTTP 403 Forbidden [live/https://nienetworks.opendatasoft.com:nie-networks-network-faults] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:nie-networks-network-faults@nienetworks: HTTP 403 Forbidden [live/https://data.opendatasoft.com:nie-networks-network-faults@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub"
         },
         {
           "id": "planned",
           "state": "optional-error",
           "authConfigured": false,
-          "error": "nie-networks-planned-interruptions@nienetworks: HTTP 404 Not Found [planned/nie-networks-planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset nie-networks-planned-interruptions does not exist.\\\" }\" | planned-interruptions@nienetworks: HTTP 404 Not Found [planned/planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset planned-interruptions does not exist.\\\" }\" | discovery: No matching ODS mirror dataset"
+          "error": "https://data.opendatasoft.com:nie-networks-planned-interruptions@nienetworks: HTTP 404 Not Found [planned/https://data.opendatasoft.com:nie-networks-planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset nie-networks-planned-interruptions does not exist.\\\" }\" | https://data.opendatasoft.com:planned-interruptions@nienetworks: HTTP 404 Not Found [planned/https://data.opendatasoft.com:planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"m"
         }
       ],
       "message": "All required feeds failed and no last-good data is available"

@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "ssen",
-  "generatedAt": "2026-07-08T18:17:08.112Z",
+  "generatedAt": "2026-07-08T19:20:25.400Z",
   "stale": false,
   "features": [
     {
@@ -39,12 +39,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tp6173",
+      "id": "ssen:current:tp6254",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.6783003999999999,
-          51.40344630000001
+          -0.6943191999999999,
+          51.2223509
         ]
       },
       "properties": {
@@ -53,7 +53,139 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TP6173",
+        "reference": "TP6254",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp6241",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.0431933,
+          56.4775441
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP6241",
+        "category": "current",
+        "status": "current",
+        "type": "LV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp6235",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.5064134,
+          51.72347
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP6235",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp6212",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.1351932,
+          51.4211129
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP6212",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp6211",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.6989255999999999,
+          51.6332956
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP6211",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -76,8 +208,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.9371271000000001,
-          51.2516402
+          -0.9719872,
+          51.2568792
         ]
       },
       "properties": {
@@ -105,78 +237,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tp5956",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.0523201,
-          51.1056244
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TP5956",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:tp6156",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.8036416,
-          51.5798436
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TP6156",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "ssen:current:tp6151",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.5313917,
-          51.1913596
+          -1.5331849,
+          51.19091720000001
         ]
       },
       "properties": {
@@ -270,45 +336,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:252185",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.800433700000001,
-          57.4180673
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "252185",
-        "category": "current",
-        "status": "current",
-        "type": "PSI",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "ssen:current:252192",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.5119176,
-          51.4331407
+          -0.4995005,
+          51.4246472
         ]
       },
       "properties": {
@@ -336,45 +369,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tp6016",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.5116211,
-          58.5910643
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TP6016",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "ssen:current:tp5975",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.9506648,
-          51.7172034
+          -1.9495934,
+          51.7174817
         ]
       },
       "properties": {
@@ -402,45 +402,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tp5964",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.3158949,
-          51.4657016
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TP5964",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "ssen:current:tp5870",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.2269056,
-          57.370767
+          -2.2268491,
+          57.3696891
         ]
       },
       "properties": {
@@ -472,8 +439,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.427067,
-          58.2556293
+          -3.4533468,
+          58.22736980000001
         ]
       },
       "properties": {
@@ -501,12 +468,45 @@
     },
     {
       "type": "Feature",
+      "id": "ssen:current:tp5926",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.0384679,
+          50.74162390000001
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP5926",
+        "category": "current",
+        "status": "current",
+        "type": "LV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
       "id": "ssen:current:tp5880",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.6875662,
-          50.795814
+          -0.6902574,
+          50.7975079
         ]
       },
       "properties": {
@@ -538,8 +538,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.2964321,
-          51.2357474
+          -2.2969403,
+          51.2368251
         ]
       },
       "properties": {
@@ -571,8 +571,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.3144445,
-          50.9107017
+          -1.3145514,
+          50.9092366
         ]
       },
       "properties": {
@@ -604,8 +604,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.4172003,
-          51.8183858
+          -1.4219179,
+          51.8079705
         ]
       },
       "properties": {
@@ -736,8 +736,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2387068,
-          51.7514967
+          -1.2403766,
+          51.7512647
         ]
       },
       "properties": {
@@ -769,8 +769,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.8848079999999999,
-          51.4305007
+          -0.8890286,
+          51.4314489
         ]
       },
       "properties": {
@@ -802,8 +802,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.7659741,
-          51.5688861
+          -1.7657505,
+          51.567474
         ]
       },
       "properties": {
