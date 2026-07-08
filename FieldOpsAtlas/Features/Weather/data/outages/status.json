@@ -1,83 +1,86 @@
 {
-  "version": "0.4.1-planned-fallbacks",
-  "generatedAt": "2026-07-08T15:08:49.615Z",
+  "version": "0.4.3-authenticated-ods",
+  "generatedAt": "2026-07-08T16:18:19.786Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
-      "lastGoodAt": "2026-07-08T15:08:49.615Z",
-      "rawRows": 147,
-      "validRows": 126,
-      "uniqueIncidents": 126,
+      "generatedAt": "2026-07-08T16:18:19.786Z",
+      "lastGoodAt": "2026-07-08T16:18:19.786Z",
+      "rawRows": 152,
+      "validRows": 129,
+      "uniqueIncidents": 129,
       "groupedRows": 0,
-      "skippedRows": 21,
+      "skippedRows": 23,
       "categories": {
-        "current": 15,
-        "planned": 111,
+        "current": 16,
+        "planned": 113,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 147
+          "rawRows": 152,
+          "authConfigured": false
         }
       ],
-      "message": "15 current · 111 planned · 0 restored"
+      "message": "16 unplanned · 113 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
-      "lastGoodAt": "2026-07-08T15:08:49.615Z",
-      "rawRows": 435,
-      "validRows": 435,
-      "uniqueIncidents": 54,
-      "groupedRows": 381,
+      "generatedAt": "2026-07-08T16:18:19.786Z",
+      "lastGoodAt": "2026-07-08T16:18:19.786Z",
+      "rawRows": 513,
+      "validRows": 513,
+      "uniqueIncidents": 55,
+      "groupedRows": 458,
       "skippedRows": 0,
       "categories": {
-        "current": 35,
-        "planned": 19,
+        "current": 30,
+        "planned": 25,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 435
+          "rawRows": 513,
+          "authConfigured": false
         }
       ],
-      "message": "35 current · 19 planned · 0 restored"
+      "message": "30 unplanned · 25 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
-      "lastGoodAt": "2026-07-08T15:08:49.615Z",
-      "rawRows": 32,
-      "validRows": 32,
-      "uniqueIncidents": 32,
+      "generatedAt": "2026-07-08T16:18:19.786Z",
+      "lastGoodAt": "2026-07-08T16:18:19.786Z",
+      "rawRows": 40,
+      "validRows": 40,
+      "uniqueIncidents": 40,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 28,
-        "planned": 4,
+        "current": 35,
+        "planned": 5,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 32
+          "rawRows": 40,
+          "authConfigured": false
         }
       ],
-      "message": "28 current · 4 planned · 0 restored"
+      "message": "35 unplanned · 5 planned · 0 restored"
     },
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "generatedAt": "2026-07-08T16:18:19.786Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -93,12 +96,14 @@
         {
           "id": "live",
           "state": "error",
-          "error": "live_incidents: HTTP 403 | live_incidents@electricitynorthwest: HTTP 403 | discovery: No matching ODS mirror dataset found"
+          "authConfigured": false,
+          "error": "live_incidents: HTTP 403 Forbidden [live/live_incidents] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | live_incidents@electricitynorthwest: HTTP 403 Forbidden [live/live_incidents@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" "
         },
         {
           "id": "planned",
           "state": "error",
-          "error": "psi: HTTP 403 | psi@electricitynorthwest: HTTP 403 | discovery: No matching ODS mirror dataset found"
+          "authConfigured": false,
+          "error": "psi: HTTP 403 Forbidden [planned/psi] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | psi@electricitynorthwest: HTTP 403 Forbidden [planned/psi@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | discovery: No matching ODS mirror da"
         }
       ],
       "message": "All required feeds failed and no last-good data is available"
@@ -106,15 +111,15 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
-      "lastGoodAt": "2026-07-08T15:08:49.615Z",
-      "rawRows": 30,
-      "validRows": 30,
-      "uniqueIncidents": 30,
+      "generatedAt": "2026-07-08T16:18:19.786Z",
+      "lastGoodAt": "2026-07-08T16:18:19.786Z",
+      "rawRows": 26,
+      "validRows": 26,
+      "uniqueIncidents": 26,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 30,
+        "current": 26,
         "planned": 0,
         "restored": 0
       },
@@ -122,15 +127,16 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 30
+          "rawRows": 26,
+          "authConfigured": false
         }
       ],
-      "message": "30 current · 0 planned · 0 restored"
+      "message": "26 unplanned · 0 planned · 0 restored"
     },
     "spen": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "generatedAt": "2026-07-08T16:18:19.786Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -146,7 +152,8 @@
         {
           "id": "live",
           "state": "error",
-          "error": "distribution-network-live-outages: Timed out | distribution-network-live-outages@spenergynetworks: HTTP 403 | discovery: No matching ODS mirror dataset found"
+          "authConfigured": false,
+          "error": "distribution-network-live-outages: HTTP 403 Forbidden [live/distribution-network-live-outages] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret SPEN_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | distribution-network-live-outages@spenergynetworks: HTTP 403 Forbidden [live/distribution-network-live-outages@spenergynetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret SPEN_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\""
         }
       ],
       "message": "All required feeds failed and no last-good data is available"
@@ -154,7 +161,7 @@
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-08T15:08:49.615Z",
+      "generatedAt": "2026-07-08T16:18:19.786Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -170,12 +177,14 @@
         {
           "id": "live",
           "state": "error",
-          "error": "nie-networks-network-faults: HTTP 403 | nie-networks-network-faults@nienetworks: HTTP 403 | discovery: No matching ODS mirror dataset found"
+          "authConfigured": false,
+          "error": "nie-networks-network-faults: HTTP 403 Forbidden [live/nie-networks-network-faults] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | nie-networks-network-faults@nienetworks: HTTP 403 Forbidden [live/nie-networks-network-faults@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to acc"
         },
         {
           "id": "planned",
           "state": "optional-error",
-          "error": "nie-networks-planned-interruptions@nienetworks: HTTP 404 | planned-interruptions@nienetworks: HTTP 404 | discovery: No matching ODS mirror dataset found"
+          "authConfigured": false,
+          "error": "nie-networks-planned-interruptions@nienetworks: HTTP 404 Not Found [planned/nie-networks-planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset nie-networks-planned-interruptions does not exist.\\\" }\" | planned-interruptions@nienetworks: HTTP 404 Not Found [planned/planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset planned-interruptions does not exist.\\\" }\" | discovery: No matching ODS mirror dataset"
         }
       ],
       "message": "All required feeds failed and no last-good data is available"
