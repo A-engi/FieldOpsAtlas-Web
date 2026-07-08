@@ -1,7 +1,7 @@
 /* ==========================================================================
    FieldOps Atlas - UK electricity outages
    File: FieldOpsAtlas/Features/Weather/outages.css
-   Version: 0.3.0-layergroups-dedupe
+   Version: 0.4.0-static-collector
    ========================================================================== */
 
 :root {
@@ -542,4 +542,30 @@
   padding-left: 7px;
   color: #25465e !important;
   font-weight: 800;
+}
+
+
+/* Same-origin collector states */
+.outage-source-row.is-waiting .outage-source-dot {
+  background: #8193a4;
+  box-shadow: 0 0 0 3px rgba(129, 147, 164, 0.14);
+}
+
+.outage-source-row.is-partial .outage-source-dot,
+.outage-source-row.is-stale .outage-source-dot {
+  background: #f6b73c;
+  box-shadow: 0 0 0 3px rgba(246, 183, 60, 0.16);
+}
+
+.outage-source-row.is-partial .outage-source-switch-state,
+.outage-source-row.is-stale .outage-source-switch-state {
+  border-color: rgba(246, 183, 60, 0.52);
+  background: rgba(246, 183, 60, 0.14);
+  color: #fff0c7;
+}
+
+.outage-source-row.is-waiting .outage-source-switch-state {
+  border-color: rgba(129, 147, 164, 0.48);
+  background: rgba(129, 147, 164, 0.12);
+  color: #dfe8ef;
 }
