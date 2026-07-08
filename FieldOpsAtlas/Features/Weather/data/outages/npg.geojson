@@ -1,50 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "npg",
-  "generatedAt": "2026-07-08T16:19:45.356Z",
+  "generatedAt": "2026-07-08T16:50:05.504Z",
   "stale": false,
   "features": [
-    {
-      "type": "Feature",
-      "id": "npg:planned:incd-791740-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6628341176470585,
-          54.161651764705866
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791740-A",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T16:44:00.000Z",
-        "restoreAt": "2026-07-08T18:14:00.000Z",
-        "updatedAt": "2026-07-08T16:50:16.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 85,
-        "coordinateSpreadKm": 6.708
-      }
-    },
     {
       "type": "Feature",
       "id": "npg:current:incd-791658-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.6628341176470576,
-          54.1616517647059
+          -1.6628341176470582,
+          54.16165176470589
         ]
       },
       "properties": {
@@ -72,111 +39,11 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-790575-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2872928571428572,
-          54.62321428571429
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-790575-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-06T13:04:00.000Z",
-        "restoreAt": "2026-07-08T14:30:00.000Z",
-        "updatedAt": "2026-07-08T14:40:18.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 7,
-        "coordinateSpreadKm": 0.125
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-789416-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.9228844444444443,
-          53.91598888888889
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-789416-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire + 1 related locations",
-        "areas": [
-          "Yorkshire",
-          "North East"
-        ],
-        "startedAt": "2026-07-03T07:51:00.000Z",
-        "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T16:00:24.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 9,
-        "coordinateSpreadKm": 2.742
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-765810-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.29857,
-          53.6991
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-765810-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-05-02T19:40:00.000Z",
-        "restoreAt": "2026-07-08T13:30:00.000Z",
-        "updatedAt": "2026-07-08T15:25:10.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "npg:current:incd-791621-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.8814399999999998,
+          -1.8814400000000002,
           53.88067777777778
         ]
       },
@@ -196,44 +63,11 @@
         ],
         "startedAt": "2026-07-08T12:48:00.000Z",
         "restoreAt": "2026-07-08T19:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 18,
         "coordinateSpreadKm": 0.855
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:incd-791733-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6469008333333333,
-          54.948925
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791733-A",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T16:27:00.000Z",
-        "restoreAt": "2026-07-08T19:34:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 12,
-        "coordinateSpreadKm": 0.17
       }
     },
     {
@@ -261,8 +95,8 @@
           "Yorkshire"
         ],
         "startedAt": "2026-07-08T12:25:00.000Z",
-        "restoreAt": "2026-07-08T17:14:00.000Z",
-        "updatedAt": "2026-07-08T17:10:18.000Z",
+        "restoreAt": "2026-07-08T22:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:09.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 3,
@@ -275,8 +109,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.5555641428571428,
-          53.3926163265306
+          -0.555564142857143,
+          53.392616326530586
         ]
       },
       "properties": {
@@ -295,7 +129,7 @@
         ],
         "startedAt": "2026-07-08T12:27:00.000Z",
         "restoreAt": "2026-07-08T22:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 49,
@@ -304,12 +138,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-791731-a",
+      "id": "npg:current:incd-791691-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.520265,
-          53.798500000000004
+          -0.8334779074074071,
+          53.89110925925928
         ]
       },
       "properties": {
@@ -318,7 +152,40 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-791731-A",
+        "reference": "INCD-791691-A",
+        "category": "current",
+        "status": "5",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T14:46:00.000Z",
+        "restoreAt": "2026-07-08T20:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 54,
+        "coordinateSpreadKm": 7.407
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791694-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.8248783333333334,
+          53.66099166666666
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791694-A",
         "category": "current",
         "status": "5",
         "type": "LV",
@@ -326,18 +193,84 @@
         "areas": [
           "Yorkshire"
         ],
-        "startedAt": "2026-07-08T16:24:00.000Z",
-        "restoreAt": "2026-07-08T19:28:00.000Z",
-        "updatedAt": "2026-07-08T17:10:19.000Z",
+        "startedAt": "2026-07-08T14:48:00.000Z",
+        "restoreAt": "2026-07-08T22:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.027
+        "rawRecordCount": 12,
+        "coordinateSpreadKm": 0.182
       }
     },
     {
       "type": "Feature",
-      "id": "npg:planned:incd-69173-b",
+      "id": "npg:current:incd-791740-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.6628341176470585,
+          54.161651764705866
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791740-A",
+        "category": "current",
+        "status": "6",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T16:44:00.000Z",
+        "restoreAt": "2026-07-08T18:14:00.000Z",
+        "updatedAt": "2026-07-08T16:50:16.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 85,
+        "coordinateSpreadKm": 6.708
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791733-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.6469008333333335,
+          54.948925
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791733-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T16:27:00.000Z",
+        "restoreAt": "2026-07-08T19:34:00.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 12,
+        "coordinateSpreadKm": 0.17
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-69173-b",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -352,7 +285,7 @@
           "live"
         ],
         "reference": "INCD-69173-B",
-        "category": "planned",
+        "category": "current",
         "status": "5",
         "type": "HV_N",
         "area": "Yorkshire",
@@ -360,8 +293,8 @@
           "Yorkshire"
         ],
         "startedAt": "2026-07-08T16:28:00.000Z",
-        "restoreAt": "2026-07-08T17:58:00.000Z",
-        "updatedAt": "2026-07-08T17:10:19.000Z",
+        "restoreAt": "2026-07-08T22:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:10.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 2,
@@ -394,7 +327,7 @@
         ],
         "startedAt": "2026-07-08T15:00:00.000Z",
         "restoreAt": "2026-07-08T18:24:00.000Z",
-        "updatedAt": "2026-07-08T17:10:20.000Z",
+        "updatedAt": "2026-07-08T17:45:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 6,
@@ -403,12 +336,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-791691-a",
+      "id": "npg:planned:ppcr77993",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.8334779074074073,
-          53.89110925925926
+          -0.9057662857142856,
+          53.99217142857143
         ]
       },
       "properties": {
@@ -417,31 +350,97 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-791691-A",
-        "category": "current",
-        "status": "5",
+        "reference": "PPCR77993",
+        "category": "planned",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T09:30:00.000Z",
+        "restoreAt": "2026-07-08T14:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.147
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77892",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.605556,
+          55.05788000000001
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77892",
+        "category": "planned",
+        "status": "6",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T16:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 1.203
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77813",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.4708012499999998,
+          53.38138749999999
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77813",
+        "category": "planned",
+        "status": "4",
         "type": "HV_N",
         "area": "Yorkshire",
         "areas": [
           "Yorkshire"
         ],
-        "startedAt": "2026-07-08T14:46:00.000Z",
-        "restoreAt": "2026-07-08T20:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "startedAt": "2026-07-08T22:00:00.000Z",
+        "restoreAt": "2026-07-09T02:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 54,
-        "coordinateSpreadKm": 7.407
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.104
       }
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-791582-a",
+      "id": "npg:planned:ppcr77769",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.50798525,
-          53.651825
+          -1.6203860000000003,
+          55.24034
         ]
       },
       "properties": {
@@ -450,21 +449,285 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-791582-A",
-        "category": "current",
+        "reference": "PPCR77769",
+        "category": "planned",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T10:00:00.000Z",
+        "restoreAt": "2026-07-08T16:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.212
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77763",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.15735,
+          54.2733
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77763",
+        "category": "planned",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T14:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77720",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.62625125,
+          55.244275
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77720",
+        "category": "planned",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T15:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.414
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77719",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.4856449999999999,
+          53.578025
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77719",
+        "category": "planned",
         "status": "6",
         "type": "LV",
         "area": "Yorkshire",
         "areas": [
           "Yorkshire"
         ],
-        "startedAt": "2026-07-08T11:33:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-08T14:40:18.000Z",
+        "startedAt": "2026-07-08T10:00:00.000Z",
+        "restoreAt": "2026-07-08T14:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.384
+        "coordinateSpreadKm": 0.17
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77650",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.349578,
+          53.62935
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77650",
+        "category": "planned",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T16:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.134
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77602",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.8517763333333334,
+          54.1491
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77602",
+        "category": "planned",
+        "status": "6",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T10:00:00.000Z",
+        "restoreAt": "2026-07-08T16:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.172
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77451",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1947383333333335,
+          53.50833333333333
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77451",
+        "category": "planned",
+        "status": "6",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T16:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.715
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:incd-791761-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.4988685714285717,
+          53.364442857142855
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791761-A",
+        "category": "planned",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T17:15:00.000Z",
+        "restoreAt": "2026-07-08T20:17:00.000Z",
+        "updatedAt": "2026-07-08T17:45:09.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.492
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:incd-791754-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.7907905000000001,
+          53.496125
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791754-A",
+        "category": "planned",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T16:57:00.000Z",
+        "restoreAt": "2026-07-08T19:58:00.000Z",
+        "updatedAt": "2026-07-08T17:45:09.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 3.763
       }
     },
     {
@@ -473,7 +736,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.4371574999999999,
+          -1.4371575,
           53.499775
         ]
       },
@@ -493,7 +756,7 @@
         ],
         "startedAt": "2026-07-08T11:13:00.000Z",
         "restoreAt": "2026-07-08T20:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:18.000Z",
+        "updatedAt": "2026-07-08T17:45:09.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
@@ -526,7 +789,7 @@
         ],
         "startedAt": "2026-07-08T11:10:00.000Z",
         "restoreAt": "2026-07-08T20:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 14,
@@ -539,7 +802,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.3746114285714286,
+          -1.3746114285714288,
           53.50548571428572
         ]
       },
@@ -551,7 +814,7 @@
         ],
         "reference": "INCD-69163-B",
         "category": "current",
-        "status": "5",
+        "status": "6",
         "type": "LV",
         "area": "Yorkshire",
         "areas": [
@@ -559,176 +822,11 @@
         ],
         "startedAt": "2026-07-08T11:15:00.000Z",
         "restoreAt": "2026-07-08T17:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:18.000Z",
+        "updatedAt": "2026-07-08T17:30:18.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 7,
         "coordinateSpreadKm": 0.344
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77993",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.9057662857142857,
-          53.99217142857142
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77993",
-        "category": "planned",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T09:30:00.000Z",
-        "restoreAt": "2026-07-08T14:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 7,
-        "coordinateSpreadKm": 0.147
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77892",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.605556,
-          55.05788
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77892",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 5,
-        "coordinateSpreadKm": 1.203
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77813",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.47080125,
-          53.381387499999995
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77813",
-        "category": "planned",
-        "status": "4",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T22:00:00.000Z",
-        "restoreAt": "2026-07-09T02:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 0.104
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-791694-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.8248783333333336,
-          53.66099166666666
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791694-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T14:48:00.000Z",
-        "restoreAt": "2026-07-08T22:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 12,
-        "coordinateSpreadKm": 0.182
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-791531-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.24578,
-          53.7713
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791531-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T10:11:00.000Z",
-        "restoreAt": "2026-07-08T17:05:00.000Z",
-        "updatedAt": "2026-07-08T17:10:19.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
       }
     },
     {
@@ -822,8 +920,8 @@
           "Yorkshire"
         ],
         "startedAt": "2026-07-08T07:50:00.000Z",
-        "restoreAt": "2026-07-08T19:15:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "restoreAt": "2026-07-08T18:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 6,
@@ -856,7 +954,7 @@
         ],
         "startedAt": "2026-07-08T09:04:00.000Z",
         "restoreAt": "2026-07-08T21:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:20.000Z",
+        "updatedAt": "2026-07-08T17:45:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
@@ -865,177 +963,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:planned:ppcr77769",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6203859999999999,
-          55.24034
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77769",
-        "category": "planned",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T10:00:00.000Z",
-        "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 5,
-        "coordinateSpreadKm": 0.212
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77720",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6262512500000001,
-          55.244275
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77720",
-        "category": "planned",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T15:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 0.414
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77719",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.4856449999999999,
-          53.578025
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77719",
-        "category": "planned",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T10:00:00.000Z",
-        "restoreAt": "2026-07-08T14:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.17
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77675",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6988066666666664,
-          54.770716666666665
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77675",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T16:45:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.31
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-69157-b",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.67652,
-          53.809
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-69157-B",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T08:55:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-08T14:40:18.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.072
-      }
-    },
-    {
-      "type": "Feature",
       "id": "npg:current:incd-791484-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.066075,
-          53.5064
+          -1.0660749999999999,
+          53.506400000000006
         ]
       },
       "properties": {
@@ -1053,45 +986,12 @@
           "Yorkshire"
         ],
         "startedAt": "2026-07-08T08:28:00.000Z",
-        "restoreAt": "2026-07-08T18:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:17.000Z",
+        "restoreAt": "2026-07-08T19:30:00.000Z",
+        "updatedAt": "2026-07-08T17:45:08.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 10,
         "coordinateSpreadKm": 0.323
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77602",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.8517763333333334,
-          54.1491
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77602",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T10:00:00.000Z",
-        "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.172
       }
     },
     {
@@ -1120,44 +1020,11 @@
         ],
         "startedAt": "2026-07-08T06:25:00.000Z",
         "restoreAt": "2026-07-08T18:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:20.000Z",
+        "updatedAt": "2026-07-08T17:45:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 7,
         "coordinateSpreadKm": 0.166
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:incd-791754-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.7907905000000002,
-          53.49612499999999
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791754-A",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T16:57:00.000Z",
-        "restoreAt": "2026-07-08T19:58:00.000Z",
-        "updatedAt": "2026-07-08T17:10:18.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 3.763
       }
     },
     {
@@ -1199,7 +1066,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.6935833333333334,
+          -1.693583333333333,
           53.7135
         ]
       },
@@ -1232,7 +1099,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.470665,
+          -1.4706650000000001,
           53.81505
         ]
       },
@@ -1252,11 +1119,78 @@
         ],
         "startedAt": "2026-07-07T17:36:00.000Z",
         "restoreAt": "2026-07-08T17:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:20.000Z",
+        "updatedAt": "2026-07-08T17:45:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
         "coordinateSpreadKm": 0.179
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-789416-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.9228844444444443,
+          53.91598888888889
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-789416-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire + 1 related locations",
+        "areas": [
+          "Yorkshire",
+          "North East"
+        ],
+        "startedAt": "2026-07-03T07:51:00.000Z",
+        "restoreAt": "2026-07-08T16:00:00.000Z",
+        "updatedAt": "2026-07-08T16:00:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 9,
+        "coordinateSpreadKm": 2.742
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-765810-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.29857,
+          53.6991
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-765810-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-05-02T19:40:00.000Z",
+        "restoreAt": "2026-07-08T13:30:00.000Z",
+        "updatedAt": "2026-07-08T15:25:10.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
       }
     },
     {
@@ -1294,12 +1228,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-791566-a",
+      "id": "npg:current:incd-791690-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.52325,
-          55.1148
+          -1.48127,
+          53.5813
         ]
       },
       "properties": {
@@ -1308,17 +1242,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-791566-A",
+        "reference": "INCD-791690-A",
         "category": "current",
         "status": "5",
         "type": "LV",
-        "area": "North East",
+        "area": "Yorkshire",
         "areas": [
-          "North East"
+          "Yorkshire"
         ],
-        "startedAt": "2026-07-08T11:09:00.000Z",
-        "restoreAt": "2026-07-08T18:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:21.000Z",
+        "startedAt": "2026-07-08T14:46:00.000Z",
+        "restoreAt": null,
+        "updatedAt": "2026-07-08T17:45:08.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
@@ -1327,12 +1261,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:planned:ppcr77829",
+      "id": "npg:current:incd-791731-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.4261,
-          55.3294
+          -1.520265,
+          53.798500000000004
         ]
       },
       "properties": {
@@ -1341,21 +1275,21 @@
         "feedIds": [
           "live"
         ],
-        "reference": "PPCR77829",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "North East",
+        "reference": "INCD-791731-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
         "areas": [
-          "North East"
+          "Yorkshire"
         ],
-        "startedAt": "2026-07-08T12:30:00.000Z",
-        "restoreAt": "2026-07-08T13:45:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "startedAt": "2026-07-08T16:24:00.000Z",
+        "restoreAt": "2026-07-08T19:28:00.000Z",
+        "updatedAt": "2026-07-08T17:45:10.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.027
       }
     },
     {
@@ -1384,7 +1318,7 @@
         ],
         "startedAt": "2026-07-08T09:30:00.000Z",
         "restoreAt": "2026-07-08T10:45:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
@@ -1393,12 +1327,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:planned:ppcr77763",
+      "id": "npg:planned:ppcr77675",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.15735,
-          54.2733
+          -1.6988066666666664,
+          54.770716666666665
         ]
       },
       "properties": {
@@ -1407,7 +1341,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "PPCR77763",
+        "reference": "PPCR77675",
         "category": "planned",
         "status": "6",
         "type": "LV",
@@ -1416,45 +1350,12 @@
           "North East"
         ],
         "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T14:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "restoreAt": "2026-07-08T16:45:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-69168-b",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1958525,
-          54.120799999999996
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-69168-B",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T14:34:00.000Z",
-        "restoreAt": "2026-07-08T17:34:00.000Z",
-        "updatedAt": "2026-07-08T14:40:18.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.498
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.31
       }
     },
     {
@@ -1475,7 +1376,7 @@
         ],
         "reference": "PPCR77655",
         "category": "planned",
-        "status": "5",
+        "status": "6",
         "type": "HV_N",
         "area": "North East",
         "areas": [
@@ -1483,242 +1384,11 @@
         ],
         "startedAt": "2026-07-08T09:07:00.000Z",
         "restoreAt": "2026-07-08T16:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
         "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77524",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.539085,
-          53.70484999999999
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77524",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:08.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.716
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77451",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.1947383333333332,
-          53.508333333333326
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77451",
-        "category": "planned",
-        "status": "5",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T16:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:08.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.715
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-791427-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.5754180000000002,
-          54.79459999999999
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791427-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-08T04:09:00.000Z",
-        "restoreAt": "2026-07-08T17:00:00.000Z",
-        "updatedAt": "2026-07-08T17:00:26.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 5,
-        "coordinateSpreadKm": 0.1
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:incd-791751-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.4285,
-          53.8242
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791751-A",
-        "category": "planned",
-        "status": "5",
-        "type": "HV_S",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T16:55:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-08T17:10:20.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr78022",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.772931,
-          53.4925
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR78022",
-        "category": "planned",
-        "status": "4",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T18:00:00.000Z",
-        "restoreAt": "2026-07-08T19:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-791690-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.48127,
-          53.5813
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-791690-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T14:46:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-08T17:10:17.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr77650",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.349578,
-          53.62935
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR77650",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-08T09:00:00.000Z",
-        "restoreAt": "2026-07-08T16:30:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.134
       }
     },
     {
@@ -1747,7 +1417,7 @@
         ],
         "startedAt": "2026-07-08T09:30:00.000Z",
         "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
@@ -1780,7 +1450,172 @@
         ],
         "startedAt": "2026-07-08T09:30:00.000Z",
         "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77524",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.539085,
+          53.70485
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77524",
+        "category": "planned",
+        "status": "6",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T09:00:00.000Z",
+        "restoreAt": "2026-07-08T16:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.716
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791566-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.52325,
+          55.1148
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791566-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T11:09:00.000Z",
+        "restoreAt": "2026-07-08T18:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:11.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791427-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.5754180000000002,
+          54.7946
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791427-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T04:09:00.000Z",
+        "restoreAt": "2026-07-08T17:00:00.000Z",
+        "updatedAt": "2026-07-08T17:00:26.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr78022",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.772931,
+          53.4925
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR78022",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T18:00:00.000Z",
+        "restoreAt": "2026-07-08T19:00:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr77829",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.4261,
+          55.3294
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR77829",
+        "category": "planned",
+        "status": "6",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "startedAt": "2026-07-08T12:30:00.000Z",
+        "restoreAt": "2026-07-08T13:45:00.000Z",
+        "updatedAt": "2026-07-08T17:45:06.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
@@ -1813,7 +1648,73 @@
         ],
         "startedAt": "2026-07-08T13:00:00.000Z",
         "restoreAt": "2026-07-08T16:00:00.000Z",
-        "updatedAt": "2026-07-08T17:10:09.000Z",
+        "updatedAt": "2026-07-08T17:45:05.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791751-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.4285,
+          53.8242
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791751-A",
+        "category": "current",
+        "status": "5",
+        "type": "HV_S",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T16:55:00.000Z",
+        "restoreAt": null,
+        "updatedAt": "2026-07-08T17:45:10.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-791531-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.24578,
+          53.7713
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-791531-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "startedAt": "2026-07-08T10:11:00.000Z",
+        "restoreAt": "2026-07-08T17:05:00.000Z",
+        "updatedAt": "2026-07-08T17:25:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
