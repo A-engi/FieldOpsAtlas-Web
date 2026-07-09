@@ -1,8 +1,8 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-07-09T19:21:11.807Z",
-  "stale": true,
+  "generatedAt": "2026-07-09T19:24:41.273Z",
+  "stale": false,
   "features": [
     {
       "type": "Feature",
@@ -39,39 +39,6 @@
     },
     {
       "type": "Feature",
-      "id": "enwl:current:inc-125353056",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.170248,
-          53.476636
-        ]
-      },
-      "properties": {
-        "providerId": "enwl",
-        "provider": "Electricity North West",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INC 125353056",
-        "category": "current",
-        "status": "We're on site",
-        "type": "CurrentFault",
-        "area": "Clayton & Openshaw, Manchester",
-        "areas": [
-          "Clayton & Openshaw, Manchester"
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.enwl.co.uk/power-cuts",
-        "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
       "id": "enwl:current:inc-125353147",
       "geometry": {
         "type": "Point",
@@ -88,7 +55,7 @@
         ],
         "reference": "INC 125353147",
         "category": "current",
-        "status": "Preparing to send team",
+        "status": "Team on their way",
         "type": "CurrentFault",
         "area": "Morecambe, Lancaster",
         "areas": [
@@ -175,8 +142,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.170245,
-          53.47647
+          -2.170277,
+          53.47654
         ]
       },
       "properties": {
@@ -187,7 +154,7 @@
         ],
         "reference": "INC 125353153",
         "category": "current",
-        "status": "Preparing to send team",
+        "status": "We're on site",
         "type": "CurrentFault",
         "area": "Clayton & Openshaw, Manchester",
         "areas": [

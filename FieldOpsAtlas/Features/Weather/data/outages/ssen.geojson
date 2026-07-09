@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "ssen",
-  "generatedAt": "2026-07-09T19:21:56.859Z",
+  "generatedAt": "2026-07-09T19:24:41.273Z",
   "stale": false,
   "features": [
     {
@@ -24,6 +24,72 @@
         "category": "current",
         "status": "current",
         "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp8021",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1193481,
+          51.614898
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP8021",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tp8012",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.6930935,
+          51.3505382
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TP8012",
+        "category": "current",
+        "status": "current",
+        "type": "LV",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -142,8 +208,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.9674964,
-          50.7374174
+          -1.9637701,
+          50.73654399999999
         ]
       },
       "properties": {
@@ -175,8 +241,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.5181992,
-          50.92850869999999
+          -1.5169907,
+          50.9270469
         ]
       },
       "properties": {
@@ -274,8 +340,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.3856247,
-          51.5113391
+          -0.3845846,
+          51.512224
         ]
       },
       "properties": {
@@ -307,8 +373,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -6.2047656,
-          57.6212891
+          -6.2044146,
+          57.625932
         ]
       },
       "properties": {
@@ -340,8 +406,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.6157228,
-          50.9168477
+          -0.6075678999999999,
+          50.9293497
         ]
       },
       "properties": {
@@ -373,8 +439,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.7105268,
-          51.6002169
+          -0.7088177999999999,
+          51.59989239999999
         ]
       },
       "properties": {
@@ -406,8 +472,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.7378693,
-          51.5461235
+          -1.7358499,
+          51.5462089
         ]
       },
       "properties": {
@@ -439,8 +505,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.6976958,
-          51.5242826
+          -0.6991071,
+          51.5233181
         ]
       },
       "properties": {

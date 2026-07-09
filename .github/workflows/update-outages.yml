@@ -59,6 +59,11 @@ jobs:
         run: |
           git config user.name "fieldops-outage-bot"
           git config user.email "actions@users.noreply.github.com"
+
+          if ! node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('FieldOpsAtlas/Features/Weather/data/outages/status.json','utf8')); const bad=Object.entries(s.providers || {}).filter(([, provider]) => provider.state !== 'live'); if (bad.length) { console.log('Not committing non-live provider refresh:', bad.map(([id, provider]) => id + '=' + provider.state).join(', ')); process.exit(1); }"; then
+            exit 0
+          fi
+
           git add FieldOpsAtlas/Features/Weather/data/outages
 
           if git diff --cached --quiet; then

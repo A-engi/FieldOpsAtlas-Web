@@ -1,12 +1,12 @@
 {
   "version": "0.5.0-public-provider-fallbacks",
-  "generatedAt": "2026-07-09T19:21:56.859Z",
+  "generatedAt": "2026-07-09T19:24:41.273Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
       "rawRows": 152,
       "validRows": 116,
       "uniqueIncidents": 116,
@@ -31,8 +31,8 @@
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
       "rawRows": 713,
       "validRows": 713,
       "uniqueIncidents": 70,
@@ -57,72 +57,15 @@
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
-      "rawRows": 37,
-      "validRows": 37,
-      "uniqueIncidents": 37,
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
+      "rawRows": 35,
+      "validRows": 35,
+      "uniqueIncidents": 35,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 33,
-        "planned": 4,
-        "restored": 0
-      },
-      "feeds": [
-        {
-          "id": "live",
-          "state": "live",
-          "rawRows": 37,
-          "authConfigured": false,
-          "selectedSource": "ckan"
-        }
-      ],
-      "message": "33 unplanned · 4 planned · 0 restored"
-    },
-    "enwl": {
-      "state": "stale",
-      "stale": true,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
-      "rawRows": 0,
-      "validRows": 0,
-      "uniqueIncidents": 86,
-      "groupedRows": 0,
-      "skippedRows": 0,
-      "categories": {
-        "current": 7,
-        "planned": 79,
-        "restored": 0
-      },
-      "feeds": [
-        {
-          "id": "live",
-          "state": "authentication required",
-          "authConfigured": false,
-          "error": "HTTP 403 Forbidden [live] {server=cloudflare, content-type=text/html; charset=UTF-8, cf-ray=a189b1dfd94968d7-ORD} body=\"<!DOCTYPE html><html lang=\\\"en-US\\\"><head><title>Just a moment...</title><meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\"><meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"IE=Edge\\\"><meta name=\\\"robots\\\" content=\\\"noindex,nofollow\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"content-security-policy\\\" content=\\\"default-src &#39;none&#39;; script-src &#39;nonce-4ReaHX4OqSL4nFo3yESkFK&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; "
-        },
-        {
-          "id": "planned",
-          "state": "authentication required",
-          "authConfigured": false,
-          "error": "HTTP 403 Forbidden [planned] {server=cloudflare, content-type=text/html; charset=UTF-8, cf-ray=a189b1e9ae98eadc-ORD} body=\"<!DOCTYPE html><html lang=\\\"en-US\\\"><head><title>Just a moment...</title><meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\"><meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"IE=Edge\\\"><meta name=\\\"robots\\\" content=\\\"noindex,nofollow\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"content-security-policy\\\" content=\\\"default-src &#39;none&#39;; script-src &#39;nonce-vNkz2vQhZ9ry6nDtl9HaUg&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39"
-        }
-      ],
-      "message": "All required feeds failed; preserving 86 last-good incidents"
-    },
-    "ssen": {
-      "state": "live",
-      "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
-      "rawRows": 22,
-      "validRows": 22,
-      "uniqueIncidents": 22,
-      "groupedRows": 0,
-      "skippedRows": 0,
-      "categories": {
-        "current": 22,
+        "current": 35,
         "planned": 0,
         "restored": 0
       },
@@ -130,52 +73,111 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 22,
+          "rawRows": 35,
           "authConfigured": false,
-          "selectedSource": "json"
+          "selectedSource": "ckan"
         }
       ],
-      "message": "22 unplanned · 0 planned · 0 restored"
+      "message": "35 unplanned · 0 planned · 0 restored"
     },
-    "spen": {
+    "enwl": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
-      "rawRows": 59,
-      "validRows": 59,
-      "uniqueIncidents": 59,
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
+      "rawRows": 85,
+      "validRows": 85,
+      "uniqueIncidents": 85,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 8,
-        "planned": 4,
-        "restored": 47
+        "current": 6,
+        "planned": 79,
+        "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 59,
+          "rawRows": 6,
           "authConfigured": false,
-          "selectedSource": "salesforce-lwr current=11 planned=2 restored=48"
+          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
+        },
+        {
+          "id": "planned",
+          "state": "live",
+          "rawRows": 79,
+          "authConfigured": false,
+          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
         }
       ],
-      "message": "8 unplanned · 4 planned · 47 restored"
+      "message": "6 unplanned · 79 planned · 0 restored"
+    },
+    "ssen": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
+      "rawRows": 24,
+      "validRows": 24,
+      "uniqueIncidents": 24,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "categories": {
+        "current": 24,
+        "planned": 0,
+        "restored": 0
+      },
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 24,
+          "authConfigured": false,
+          "selectedSource": "json"
+        }
+      ],
+      "message": "24 unplanned · 0 planned · 0 restored"
+    },
+    "spen": {
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
+      "rawRows": 58,
+      "validRows": 58,
+      "uniqueIncidents": 58,
+      "groupedRows": 0,
+      "skippedRows": 0,
+      "categories": {
+        "current": 9,
+        "planned": 1,
+        "restored": 48
+      },
+      "feeds": [
+        {
+          "id": "live",
+          "state": "live",
+          "rawRows": 58,
+          "authConfigured": false,
+          "selectedSource": "salesforce-lwr current=9 planned=2 restored=49"
+        }
+      ],
+      "message": "9 unplanned · 1 planned · 48 restored"
     },
     "nie": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:56.859Z",
-      "lastGoodAt": "2026-07-09T19:21:56.859Z",
+      "generatedAt": "2026-07-09T19:24:41.273Z",
+      "lastGoodAt": "2026-07-09T19:24:41.273Z",
       "rawRows": 8,
       "validRows": 8,
       "uniqueIncidents": 8,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 4,
-        "planned": 4,
+        "current": 8,
+        "planned": 0,
         "restored": 0
       },
       "feeds": [
@@ -187,7 +189,7 @@
           "selectedSource": "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults"
         }
       ],
-      "message": "4 unplanned · 4 planned · 0 restored"
+      "message": "8 unplanned · 0 planned · 0 restored"
     }
   }
 }
