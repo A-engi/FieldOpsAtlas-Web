@@ -1,12 +1,12 @@
 {
   "version": "0.5.0-public-provider-fallbacks",
-  "generatedAt": "2026-07-09T19:21:11.807Z",
+  "generatedAt": "2026-07-09T19:21:56.859Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 152,
       "validRows": 116,
       "uniqueIncidents": 116,
@@ -31,8 +31,8 @@
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 713,
       "validRows": 713,
       "uniqueIncidents": 70,
@@ -57,16 +57,16 @@
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 37,
       "validRows": 37,
       "uniqueIncidents": 37,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 37,
-        "planned": 0,
+        "current": 33,
+        "planned": 4,
         "restored": 0
       },
       "feeds": [
@@ -78,15 +78,15 @@
           "selectedSource": "ckan"
         }
       ],
-      "message": "37 unplanned · 0 planned · 0 restored"
+      "message": "33 unplanned · 4 planned · 0 restored"
     },
     "enwl": {
-      "state": "live",
-      "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
+      "state": "stale",
+      "stale": true,
+      "generatedAt": "2026-07-09T19:21:56.859Z",
       "lastGoodAt": "2026-07-09T19:21:11.807Z",
-      "rawRows": 86,
-      "validRows": 86,
+      "rawRows": 0,
+      "validRows": 0,
       "uniqueIncidents": 86,
       "groupedRows": 0,
       "skippedRows": 0,
@@ -98,26 +98,24 @@
       "feeds": [
         {
           "id": "live",
-          "state": "live",
-          "rawRows": 7,
+          "state": "authentication required",
           "authConfigured": false,
-          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
+          "error": "HTTP 403 Forbidden [live] {server=cloudflare, content-type=text/html; charset=UTF-8, cf-ray=a189b1dfd94968d7-ORD} body=\"<!DOCTYPE html><html lang=\\\"en-US\\\"><head><title>Just a moment...</title><meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\"><meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"IE=Edge\\\"><meta name=\\\"robots\\\" content=\\\"noindex,nofollow\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"content-security-policy\\\" content=\\\"default-src &#39;none&#39;; script-src &#39;nonce-4ReaHX4OqSL4nFo3yESkFK&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; "
         },
         {
           "id": "planned",
-          "state": "live",
-          "rawRows": 79,
+          "state": "authentication required",
           "authConfigured": false,
-          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
+          "error": "HTTP 403 Forbidden [planned] {server=cloudflare, content-type=text/html; charset=UTF-8, cf-ray=a189b1e9ae98eadc-ORD} body=\"<!DOCTYPE html><html lang=\\\"en-US\\\"><head><title>Just a moment...</title><meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\"><meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"IE=Edge\\\"><meta name=\\\"robots\\\" content=\\\"noindex,nofollow\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"content-security-policy\\\" content=\\\"default-src &#39;none&#39;; script-src &#39;nonce-vNkz2vQhZ9ry6nDtl9HaUg&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39"
         }
       ],
-      "message": "7 unplanned · 79 planned · 0 restored"
+      "message": "All required feeds failed; preserving 86 last-good incidents"
     },
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 22,
       "validRows": 22,
       "uniqueIncidents": 22,
@@ -142,16 +140,16 @@
     "spen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 59,
       "validRows": 59,
       "uniqueIncidents": 59,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 11,
-        "planned": 1,
+        "current": 8,
+        "planned": 4,
         "restored": 47
       },
       "feeds": [
@@ -163,21 +161,21 @@
           "selectedSource": "salesforce-lwr current=11 planned=2 restored=48"
         }
       ],
-      "message": "11 unplanned · 1 planned · 47 restored"
+      "message": "8 unplanned · 4 planned · 47 restored"
     },
     "nie": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T19:21:11.807Z",
-      "lastGoodAt": "2026-07-09T19:21:11.807Z",
+      "generatedAt": "2026-07-09T19:21:56.859Z",
+      "lastGoodAt": "2026-07-09T19:21:56.859Z",
       "rawRows": 8,
       "validRows": 8,
       "uniqueIncidents": 8,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 8,
-        "planned": 0,
+        "current": 4,
+        "planned": 4,
         "restored": 0
       },
       "feeds": [
@@ -189,7 +187,7 @@
           "selectedSource": "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults"
         }
       ],
-      "message": "8 unplanned · 0 planned · 0 restored"
+      "message": "4 unplanned · 4 planned · 0 restored"
     }
   }
 }
