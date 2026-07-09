@@ -12,6 +12,7 @@
 
   const VERSION = "0.4.0-static-collector";
   const ACTIVE_SOURCES_KEY = "fieldops-outage-active-sources-v2";
+  const MAP_VIEW_KEY = "fieldops-weather-map-view-v1";
   const REFRESH_MS = 5 * 60 * 1000;
   const DATA_ROOT = "data/outages";
   const UK_BOUNDS = [[49.5, -11.0], [61.2, 2.7]];
@@ -123,9 +124,10 @@
   }
 
   function initMap() {
+    const storedView = readMapView();
     state.map = window.L.map(elements.map, {
-      center: [54.7, -3.2],
-      zoom: 5,
+      center: storedView?.center || [54.7, -3.2],
+      zoom: storedView?.zoom || 5,
       minZoom: 3,
       maxZoom: 14,
       zoomControl: false,
@@ -156,10 +158,52 @@
     }).addTo(state.map);
 
     initialiseProviderLayers();
+    exposeWeatherMapHooks();
+    state.map.on("moveend zoomend", () => rememberMapView());
     syncProviderVisibility();
     syncCategoryVisibility();
-    fitUkView();
+    if (!storedView) fitUkView();
     window.setTimeout(() => state.map.invalidateSize(), 160);
+  }
+
+  function exposeWeatherMapHooks() {
+    window.FieldOpsWeatherMap = {
+      remember: rememberMapView,
+      invalidate: () => window.setTimeout(() => state.map?.invalidateSize({ pan: false }), 80)
+    };
+    window.addEventListener("fieldops:weather-shell-resize", window.FieldOpsWeatherMap.invalidate);
+  }
+
+  function readMapView() {
+    try {
+      const parsed = JSON.parse(window.sessionStorage.getItem(MAP_VIEW_KEY) || "null");
+      if (
+        Array.isArray(parsed?.center) &&
+        parsed.center.length === 2 &&
+        parsed.center.every(Number.isFinite) &&
+        Number.isFinite(parsed.zoom)
+      ) {
+        return parsed;
+      }
+    } catch {
+      // Default map view remains available.
+    }
+
+    return null;
+  }
+
+  function rememberMapView() {
+    if (!state.map?.getCenter) return;
+
+    try {
+      const center = state.map.getCenter();
+      window.sessionStorage.setItem(MAP_VIEW_KEY, JSON.stringify({
+        center: [center.lat, center.lng],
+        zoom: state.map.getZoom()
+      }));
+    } catch {
+      // Session storage is optional.
+    }
   }
 
   function initialiseProviderLayers() {
@@ -606,7 +650,7 @@
       const active = state.activeSources.has(provider.id);
       const sourceState = state.providerStatus.get(provider.id) || {};
       const stateName = active ? sourceState.state || "waiting" : "off";
-      const rowClass = ["partial", "stale"].includes(stateName) ? "warning" : stateName;
+      const rowClass = sourceStateClass(stateName);
       const stateText = sourceStateLabel(stateName, active);
       const detail = active
         ? sourceState.message || "Waiting for collected data"
@@ -630,13 +674,24 @@
 
   function sourceStateLabel(stateName, active) {
     if (!active) return "OFF";
-    if (stateName === "live") return "ACTIVE";
+    if (stateName === "live") return "LIVE";
+    if (stateName === "stale") return "STALE";
+    if (stateName === "unavailable") return "UNAVAILABLE";
+    if (stateName === "authentication required") return "AUTH";
+    if (stateName === "source failure") return "SOURCE";
     if (stateName === "partial") return "PARTIAL";
     if (stateName === "empty") return "EMPTY";
-    if (stateName === "stale") return "STALE";
     if (stateName === "error") return "ERROR";
     if (stateName === "loading") return "LOADING";
     return "WAITING";
+  }
+
+  function sourceStateClass(stateName) {
+    if (["stale", "partial"].includes(stateName)) return "warning";
+    if (["unavailable", "authentication required", "source failure", "error"].includes(stateName)) {
+      return "error";
+    }
+    return String(stateName || "waiting").replace(/\s+/g, "-");
   }
 
   function updateSummary() {
@@ -648,7 +703,9 @@
       .filter(Boolean);
 
     const loaded = activeStatuses.filter((item) => item.loaded).length;
-    const errors = activeStatuses.filter((item) => item.state === "error").length;
+    const errors = activeStatuses.filter((item) =>
+      ["error", "unavailable", "authentication required", "source failure"].includes(item.state)
+    ).length;
     const stale = activeStatuses.filter((item) => item.state === "stale" || item.stale).length;
     const rawRows = activeStatuses.reduce((sum, item) => sum + Number(item.rawRows || 0), 0);
     const groupedRows = activeStatuses.reduce((sum, item) => sum + Number(item.groupedRows || 0), 0);

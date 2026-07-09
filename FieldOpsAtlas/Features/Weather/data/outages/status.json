@@ -1,128 +1,130 @@
 {
-  "version": "0.4.4-spen-source-fallbacks",
-  "generatedAt": "2026-07-09T18:17:12.864Z",
+  "version": "0.5.0-public-provider-fallbacks",
+  "generatedAt": "2026-07-09T19:16:31.685Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-09T18:17:12.864Z",
-      "rawRows": 163,
-      "validRows": 120,
-      "uniqueIncidents": 120,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 151,
+      "validRows": 115,
+      "uniqueIncidents": 115,
       "groupedRows": 0,
-      "skippedRows": 43,
+      "skippedRows": 36,
       "categories": {
-        "current": 25,
-        "planned": 95,
+        "current": 22,
+        "planned": 93,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 163,
+          "rawRows": 151,
           "authConfigured": false,
           "selectedSource": "https://ukpowernetworks.opendatasoft.com:ukpn-live-faults"
         }
       ],
-      "message": "25 unplanned · 95 planned · 0 restored"
+      "message": "22 unplanned · 93 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-09T18:17:12.864Z",
-      "rawRows": 1186,
-      "validRows": 1186,
-      "uniqueIncidents": 72,
-      "groupedRows": 1114,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 706,
+      "validRows": 706,
+      "uniqueIncidents": 70,
+      "groupedRows": 636,
       "skippedRows": 0,
       "categories": {
-        "current": 37,
-        "planned": 35,
+        "current": 33,
+        "planned": 37,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 1186,
+          "rawRows": 706,
           "authConfigured": false,
           "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "37 unplanned · 35 planned · 0 restored"
+      "message": "33 unplanned · 37 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-09T18:17:12.864Z",
-      "rawRows": 32,
-      "validRows": 32,
-      "uniqueIncidents": 32,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 37,
+      "validRows": 37,
+      "uniqueIncidents": 37,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 29,
-        "planned": 3,
+        "current": 37,
+        "planned": 0,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 32,
+          "rawRows": 37,
           "authConfigured": false,
           "selectedSource": "ckan"
         }
       ],
-      "message": "29 unplanned · 3 planned · 0 restored"
+      "message": "37 unplanned · 0 planned · 0 restored"
     },
     "enwl": {
-      "state": "error",
+      "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 0,
-      "validRows": 0,
-      "uniqueIncidents": 0,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 86,
+      "validRows": 86,
+      "uniqueIncidents": 86,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 0,
-        "planned": 0,
+        "current": 7,
+        "planned": 79,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
-          "state": "error",
+          "state": "live",
+          "rawRows": 7,
           "authConfigured": false,
-          "error": "https://electricitynorthwest.opendatasoft.com:live_incidents: HTTP 403 Forbidden [live/https://electricitynorthwest.opendatasoft.com:live_incidents] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:live_incidents@electricitynorthwest: HTTP 403 Forbidden [live/https://data.opendatasoft.com:live_incidents@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_OD"
+          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
         },
         {
           "id": "planned",
-          "state": "error",
+          "state": "live",
+          "rawRows": 79,
           "authConfigured": false,
-          "error": "https://electricitynorthwest.opendatasoft.com:psi: HTTP 403 Forbidden [planned/https://electricitynorthwest.opendatasoft.com:psi] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:psi@electricitynorthwest: HTTP 403 Forbidden [planned/https://data.opendatasoft.com:psi@electricitynorthwest] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub secret ENWL_ODS_API_KEY is not configured body=\"{ \\\""
+          "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
         }
       ],
-      "message": "All required feeds failed and no last-good data is available"
+      "message": "7 unplanned · 79 planned · 0 restored"
     },
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-09T18:17:12.864Z",
-      "rawRows": 19,
-      "validRows": 19,
-      "uniqueIncidents": 19,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 21,
+      "validRows": 21,
+      "uniqueIncidents": 21,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 19,
+        "current": 21,
         "planned": 0,
         "restored": 0
       },
@@ -130,68 +132,64 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 19,
+          "rawRows": 21,
           "authConfigured": false,
           "selectedSource": "json"
         }
       ],
-      "message": "19 unplanned · 0 planned · 0 restored"
+      "message": "21 unplanned · 0 planned · 0 restored"
     },
     "spen": {
-      "state": "error",
-      "stale": true,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-09T08:14:57.203Z",
-      "rawRows": 0,
-      "validRows": 0,
-      "uniqueIncidents": 54,
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 59,
+      "validRows": 59,
+      "uniqueIncidents": 59,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 3,
-        "planned": 14,
-        "restored": 37
+        "current": 11,
+        "planned": 1,
+        "restored": 47
       },
       "feeds": [
         {
           "id": "live",
-          "state": "error",
+          "state": "live",
+          "rawRows": 59,
           "authConfigured": false,
-          "error": "fetch failed"
+          "selectedSource": "salesforce-lwr current=11 planned=2 restored=48"
         }
       ],
-      "message": "All required feeds failed; preserving 54 last-good incidents"
+      "message": "11 unplanned · 1 planned · 47 restored"
     },
     "nie": {
-      "state": "error",
+      "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T18:17:12.864Z",
-      "lastGoodAt": "2026-07-08T12:40:46.184Z",
-      "rawRows": 0,
-      "validRows": 0,
-      "uniqueIncidents": 0,
+      "generatedAt": "2026-07-09T19:16:31.685Z",
+      "lastGoodAt": "2026-07-09T19:16:31.685Z",
+      "rawRows": 7,
+      "validRows": 7,
+      "uniqueIncidents": 7,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 0,
+        "current": 7,
         "planned": 0,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
-          "state": "error",
+          "state": "live",
+          "rawRows": 7,
           "authConfigured": false,
-          "error": "https://nienetworks.opendatasoft.com:nie-networks-network-faults: HTTP 403 Forbidden [live/https://nienetworks.opendatasoft.com:nie-networks-network-faults] {server=openresty, content-type=application/json, cache-control=no-cache, no-store, max-age=0, must-revalidate} GitHub secret NIE_ODS_API_KEY is not configured body=\"{ \\\"error_code\\\": \\\"ForbiddenAccess\\\", \\\"message\\\": \\\"You don't have permission to access the requested resource\\\" }\" | https://data.opendatasoft.com:nie-networks-network-faults@nienetworks: HTTP 403 Forbidden [live/https://data.opendatasoft.com:nie-networks-network-faults@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} GitHub"
-        },
-        {
-          "id": "planned",
-          "state": "optional-error",
-          "authConfigured": false,
-          "error": "https://data.opendatasoft.com:nie-networks-planned-interruptions@nienetworks: HTTP 404 Not Found [planned/https://data.opendatasoft.com:nie-networks-planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"message\\\": \\\"The requested dataset nie-networks-planned-interruptions does not exist.\\\" }\" | https://data.opendatasoft.com:planned-interruptions@nienetworks: HTTP 404 Not Found [planned/https://data.opendatasoft.com:planned-interruptions@nienetworks] {server=openresty, content-type=application/json, cache-control=public, max-age=60} body=\"{ \\\"error_code\\\": \\\"NotFoundResource\\\", \\\"m"
+          "selectedSource": "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults"
         }
       ],
-      "message": "All required feeds failed and no last-good data is available"
+      "message": "7 unplanned · 0 planned · 0 restored"
     }
   }
 }

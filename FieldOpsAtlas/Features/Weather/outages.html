@@ -25,24 +25,6 @@
         aria-label="Map of published current and planned electricity outages"
       ></div>
 
-      <details class="outage-panel outage-nav-panel">
-        <summary>
-          <span>Weather pages</span>
-          <span class="outage-summary-state" aria-hidden="true">Show</span>
-        </summary>
-
-        <nav class="outage-provider-links" aria-label="Weather pages">
-          <a class="weather-provider-link" href="index.html">Radar</a>
-          <a class="weather-provider-link" href="openmeteo.html">Risk</a>
-          <a class="weather-provider-link" href="metoffice.html">Met Office</a>
-          <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
-          <a class="weather-provider-link" href="lightning.html">EUMETSAT</a>
-          <a class="weather-provider-link" href="blitzortung.html">Blitzortung</a>
-          <a class="weather-provider-link is-active" href="outages.html">Outages</a>
-          <a class="weather-provider-link" href="sp-outages.html">SP outage</a>
-        </nav>
-      </details>
-
       <details class="outage-panel outage-source-panel">
         <summary>
           <span class="outage-summary-title">
@@ -178,6 +160,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="weather-pages.js?v=0.1.0-shared-weather-shell" defer></script>
+  <script src="weather-shell.js?v=0.1.0-shared-weather-shell" defer></script>
   <script src="outages.js?v=0.4.0-static-collector" defer></script>
 </body>
 </html>

@@ -13,14 +13,6 @@
     <section class="weather-stage" aria-label="Met Office map">
       <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with Met Office image overlay"></div>
 
-      <nav class="weather-top-strip" aria-label="Weather providers">
-        <a class="weather-provider-link" href="rainviewer.html">Radar</a>
-        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
-        <a class="weather-provider-link is-active" href="metoffice.html">Met Office</a>
-        <a class="weather-provider-link" href="ea-rainfall.html">EA rainfall</a>
-        <a class="weather-provider-link" href="lightning.html">Lightning</a>
-      </nav>
-
       <section class="weather-frame-strip" aria-label="Met Office frame">
         <button id="moPrevFrame" class="weather-button" type="button">Prev</button>
         <input id="moFrameSlider" class="weather-range" type="range" min="0" max="0" value="0" />
@@ -65,6 +57,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="weather-pages.js?v=0.1.0-shared-weather-shell" defer></script>
+  <script src="weather-shell.js?v=0.1.0-shared-weather-shell" defer></script>
   <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
   <script src="metoffice.js?v=1.0.0-weather-map-shell" defer></script>
 </body>

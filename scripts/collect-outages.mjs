@@ -12,12 +12,12 @@ const OUT = path.join(
   "outages"
 );
 
-const VERSION = "0.4.4-spen-source-fallbacks";
+const VERSION = "0.5.0-public-provider-fallbacks";
 const TIMEOUT = 30_000;
 const LIMIT = 2_500;
 const PAGE_SIZE = 100;
 const UA =
-  "FieldOpsAtlas-Outage-Collector/0.4.4 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
+  "FieldOpsAtlas-Outage-Collector/0.5.0 (+https://github.com/A-engi/FieldOpsAtlas-Web)";
 const DEBUG_HTTP = /^(1|true|yes)$/i.test(
   String(process.env.OUTAGE_DEBUG_HTTP || "")
 );
@@ -93,34 +93,18 @@ const providers = [
     feeds: [
       {
         id: "live",
-        type: "ods",
-        authEnv: "ENWL_ODS_API_KEY",
-        authOrigins: ["https://electricitynorthwest.opendatasoft.com"],
-        sources: [
-          ["https://electricitynorthwest.opendatasoft.com", "live_incidents"],
-          ["https://data.opendatasoft.com", "live_incidents@electricitynorthwest"]
-        ],
-        discover: [
-          "Electricity North West live incidents",
-          ["electricity", "north", "west", "incident"],
-          ["live_incidents"]
-        ]
+        type: "enwl-power-outages",
+        includeCurrent: true,
+        includeTodaysPlanned: false,
+        includeFuturePlanned: false
       },
       {
         id: "planned",
-        type: "ods",
-        authEnv: "ENWL_ODS_API_KEY",
-        authOrigins: ["https://electricitynorthwest.opendatasoft.com"],
+        type: "enwl-power-outages",
         forceCategory: "planned",
-        sources: [
-          ["https://electricitynorthwest.opendatasoft.com", "psi"],
-          ["https://data.opendatasoft.com", "psi@electricitynorthwest"]
-        ],
-        discover: [
-          "Electricity North West future planned supply interruptions",
-          ["electricity", "north", "west", "planned"],
-          ["psi", "planned"]
-        ]
+        includeCurrent: false,
+        includeTodaysPlanned: true,
+        includeFuturePlanned: true
       }
     ]
   },
@@ -157,35 +141,7 @@ const providers = [
     feeds: [
       {
         id: "live",
-        type: "ods",
-        authEnv: "NIE_ODS_API_KEY",
-        authOrigins: ["https://nienetworks.opendatasoft.com"],
-        sources: [
-          ["https://nienetworks.opendatasoft.com", "nie-networks-network-faults"],
-          ["https://data.opendatasoft.com", "nie-networks-network-faults@nienetworks"]
-        ],
-        discover: [
-          "NIE Networks network faults",
-          ["nie", "network", "fault"],
-          ["nie-networks-network-faults"]
-        ]
-      },
-      {
-        id: "planned",
-        type: "ods",
-        authEnv: "NIE_ODS_API_KEY",
-        authOrigins: ["https://nienetworks.opendatasoft.com"],
-        forceCategory: "planned",
-        optional: true,
-        sources: [
-          ["https://data.opendatasoft.com", "nie-networks-planned-interruptions@nienetworks"],
-          ["https://data.opendatasoft.com", "planned-interruptions@nienetworks"]
-        ],
-        discover: [
-          "NIE Networks planned interruptions",
-          ["nie", "planned", "interrupt"],
-          ["nie-networks-planned", "planned-interrupt"]
-        ]
+        type: "nie-powercheck"
       }
     ]
   }
@@ -214,7 +170,7 @@ async function main() {
   await write(path.join(OUT, "status.json"), status);
 
   const good = results.filter((result) =>
-    ["live", "partial"].includes(result.status.state)
+    ["live", "stale"].includes(result.status.state)
   ).length;
 
   console.log(
@@ -243,9 +199,10 @@ async function collect(provider, generatedAt) {
         ...(result.selectedSource ? { selectedSource: result.selectedSource } : {})
       });
     } catch (error) {
+      const failureState = classifyFailure(error, feed);
       feeds.push({
         id: feed.id,
-        state: feed.optional ? "optional-error" : "error",
+        state: feed.optional ? "unavailable" : failureState,
         authConfigured: hasAuth(feed),
         error: concise(error)
       });
@@ -273,7 +230,7 @@ async function collect(provider, generatedAt) {
     return {
       id: provider.id,
       status: {
-        state: "error",
+        state: features.length > 0 ? "stale" : providerFailureState(feeds),
         stale: features.length > 0,
         generatedAt,
         lastGoodAt: previous?.generatedAt || null,
@@ -311,16 +268,18 @@ async function collect(provider, generatedAt) {
     features
   });
 
-  const requiredFailures = feeds.filter((feed) => feed.state === "error");
+  const requiredFailures = feeds.filter((feed) =>
+    ["authentication required", "source failure", "unavailable"].includes(feed.state)
+  );
   const optionalFailures = feeds.filter(
-    (feed) => feed.state === "optional-error"
+    (feed) => feed.state === "unavailable"
   );
   const categories = countCategories(incidents);
 
   return {
     id: provider.id,
     status: {
-      state: requiredFailures.length ? "partial" : "live",
+      state: "live",
       stale: false,
       generatedAt,
       lastGoodAt: generatedAt,
@@ -351,6 +310,10 @@ async function collect(provider, generatedAt) {
 async function loadFeed(feed) {
   if (feed.type === "spen-lwr") return loadSpenLwr();
 
+  if (feed.type === "enwl-power-outages") return loadEnwlPowerOutages(feed);
+
+  if (feed.type === "nie-powercheck") return loadNiePowercheck(feed);
+
   if (feed.type === "ods") return loadOds(feed);
 
   if (feed.type === "ckan") {
@@ -369,6 +332,188 @@ async function loadFeed(feed) {
   }
 
   throw new Error(`Unsupported feed type ${feed.type}`);
+}
+
+async function loadEnwlPowerOutages(feed) {
+  const url = new URL("https://www.enwl.co.uk/api/power-outages/search");
+  url.searchParams.set("pageSize", String(LIMIT));
+  url.searchParams.set("pageNumber", "1");
+  url.searchParams.set("includeCurrent", String(Boolean(feed.includeCurrent)));
+  url.searchParams.set("includeResolved", "false");
+  url.searchParams.set("includeTodaysPlanned", String(Boolean(feed.includeTodaysPlanned)));
+  url.searchParams.set("includeFuturePlanned", String(Boolean(feed.includeFuturePlanned)));
+  url.searchParams.set("includeCancelledPlanned", "false");
+
+  const payload = await getJson(url, {
+    feed,
+    method: "POST",
+    selectedSource: "enwl-public-power-outages"
+  });
+  const rows = Array.isArray(payload?.Items) ? payload.Items : [];
+
+  return {
+    rows,
+    selectedSource: "https://www.enwl.co.uk/api/power-outages/search"
+  };
+}
+
+async function loadNiePowercheck(feed) {
+  const url = "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults";
+  const payload = await getJson(url, {
+    feed,
+    selectedSource: "nie-public-powercheck"
+  });
+  const rows = Array.isArray(payload?.outageMessage)
+    ? payload.outageMessage.map(toNieRow).filter(Boolean)
+    : [];
+
+  return {
+    rows,
+    selectedSource: url
+  };
+}
+
+function toNieRow(outage) {
+  const coordinate = irishGridToWgs84(outage?.point?.coordinates);
+  if (!coordinate) return null;
+
+  const isPlanned = /planned/i.test(value(outage.outageType));
+
+  return {
+    outageId: outage.outageId,
+    outageType: outage.outageType,
+    status: outage.statusMessage || outage.outageType,
+    type: outage.outageType,
+    planned: isPlanned,
+    startTime: parseNieDate(outage.startTime),
+    estimatedRestorationTime: parseNieDate(outage.estRestoreFullDateTime || outage.estRestoreTime),
+    updatedAt: parseNieDate(outage.updatedTimeStamp),
+    postCode: outage.postCode,
+    fullPostCodes: outage.fullPostCodes,
+    customersAffected: outage.numCustAffected,
+    causeMessage: outage.causeMessage,
+    lat: coordinate.lat,
+    lon: coordinate.lon
+  };
+}
+
+function parseNieDate(input) {
+  const text = value(input);
+  if (!text || /not available/i.test(text)) return "";
+  const hasYear = /\b\d{4}\b/.test(text);
+  const year = new Date().getFullYear();
+  const parsed = Date.parse(hasYear ? text : `${text} ${year}`);
+  return Number.isFinite(parsed) ? new Date(parsed).toISOString() : "";
+}
+
+function irishGridToWgs84(input) {
+  const parts = value(input).match(/-?\d+(?:\.\d+)?/g);
+  if (!parts || parts.length < 2) return null;
+
+  const easting = Number(parts[0]);
+  const northing = Number(parts[1]);
+  if (!Number.isFinite(easting) || !Number.isFinite(northing)) return null;
+
+  const a = 6377340.189;
+  const b = 6356034.447;
+  const f0 = 1.000035;
+  const lat0 = degToRad(53.5);
+  const lon0 = degToRad(-8);
+  const n0 = 250000;
+  const e0 = 200000;
+  const e2 = 1 - (b * b) / (a * a);
+  const n = (a - b) / (a + b);
+
+  let lat = lat0;
+  let m = 0;
+  do {
+    lat = (northing - n0 - m) / (a * f0) + lat;
+    const ma = (1 + n + (5 / 4) * n ** 2 + (5 / 4) * n ** 3) * (lat - lat0);
+    const mb = (3 * n + 3 * n ** 2 + (21 / 8) * n ** 3) *
+      Math.sin(lat - lat0) * Math.cos(lat + lat0);
+    const mc = ((15 / 8) * n ** 2 + (15 / 8) * n ** 3) *
+      Math.sin(2 * (lat - lat0)) * Math.cos(2 * (lat + lat0));
+    const md = (35 / 24) * n ** 3 *
+      Math.sin(3 * (lat - lat0)) * Math.cos(3 * (lat + lat0));
+    m = b * f0 * (ma - mb + mc - md);
+  } while (Math.abs(northing - n0 - m) >= 0.00001);
+
+  const cosLat = Math.cos(lat);
+  const sinLat = Math.sin(lat);
+  const nu = a * f0 / Math.sqrt(1 - e2 * sinLat ** 2);
+  const rho = a * f0 * (1 - e2) / (1 - e2 * sinLat ** 2) ** 1.5;
+  const eta2 = nu / rho - 1;
+  const tanLat = Math.tan(lat);
+  const secLat = 1 / cosLat;
+  const dE = easting - e0;
+
+  const vii = tanLat / (2 * rho * nu);
+  const viii = tanLat / (24 * rho * nu ** 3) *
+    (5 + 3 * tanLat ** 2 + eta2 - 9 * tanLat ** 2 * eta2);
+  const ix = tanLat / (720 * rho * nu ** 5) *
+    (61 + 90 * tanLat ** 2 + 45 * tanLat ** 4);
+  const x = secLat / nu;
+  const xi = secLat / (6 * nu ** 3) * (nu / rho + 2 * tanLat ** 2);
+  const xii = secLat / (120 * nu ** 5) *
+    (5 + 28 * tanLat ** 2 + 24 * tanLat ** 4);
+  const xiia = secLat / (5040 * nu ** 7) *
+    (61 + 662 * tanLat ** 2 + 1320 * tanLat ** 4 + 720 * tanLat ** 6);
+
+  const latAiry = lat - vii * dE ** 2 + viii * dE ** 4 - ix * dE ** 6;
+  const lonAiry = lon0 + x * dE - xi * dE ** 3 + xii * dE ** 5 - xiia * dE ** 7;
+
+  return helmertIrishToWgs84(radToDeg(latAiry), radToDeg(lonAiry), 0);
+}
+
+function helmertIrishToWgs84(lat, lon, height) {
+  const source = toCartesian(lat, lon, height, 6377340.189, 6356034.447);
+  const tx = 482.53;
+  const ty = -130.596;
+  const tz = 564.557;
+  const s = -8.15e-6;
+  const rx = degToRad(-1.042 / 3600);
+  const ry = degToRad(-0.214 / 3600);
+  const rz = degToRad(-0.631 / 3600);
+
+  const x = tx + (1 + s) * source.x - rz * source.y + ry * source.z;
+  const y = ty + rz * source.x + (1 + s) * source.y - rx * source.z;
+  const z = tz - ry * source.x + rx * source.y + (1 + s) * source.z;
+  return fromCartesian(x, y, z, 6378137, 6356752.314245);
+}
+
+function toCartesian(lat, lon, height, a, b) {
+  const phi = degToRad(lat);
+  const lambda = degToRad(lon);
+  const e2 = 1 - (b * b) / (a * a);
+  const nu = a / Math.sqrt(1 - e2 * Math.sin(phi) ** 2);
+  return {
+    x: (nu + height) * Math.cos(phi) * Math.cos(lambda),
+    y: (nu + height) * Math.cos(phi) * Math.sin(lambda),
+    z: ((1 - e2) * nu + height) * Math.sin(phi)
+  };
+}
+
+function fromCartesian(x, y, z, a, b) {
+  const e2 = 1 - (b * b) / (a * a);
+  const p = Math.sqrt(x * x + y * y);
+  let phi = Math.atan2(z, p * (1 - e2));
+  let previous;
+
+  do {
+    previous = phi;
+    const nu = a / Math.sqrt(1 - e2 * Math.sin(phi) ** 2);
+    phi = Math.atan2(z + e2 * nu * Math.sin(phi), p);
+  } while (Math.abs(phi - previous) > 1e-12);
+
+  return valid(radToDeg(phi), radToDeg(Math.atan2(y, x)));
+}
+
+function degToRad(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function radToDeg(radians) {
+  return radians * 180 / Math.PI;
 }
 
 async function loadSpenLwr() {
@@ -907,6 +1052,7 @@ function normalise(provider, feed, row, index) {
     "outagereference",
     "faultid",
     "faultreference",
+    "faultnumber",
     "powercutreference",
     "jobid",
     "id"
@@ -1180,6 +1326,7 @@ function findCoordinate(raw, fields) {
     raw.coordinate,
     raw.position,
     raw.point,
+    raw.outageCentrePoint,
     raw.location
   ]) {
     const result = coordinate(candidate);
@@ -1199,6 +1346,7 @@ function findCoordinate(raw, fields) {
         "faultlatitude",
         "geopoint2dlat",
         "geopointlat",
+        "outagecentrepointlat",
         "y"
       ])
     ),
@@ -1220,6 +1368,8 @@ function findCoordinate(raw, fields) {
         "faultlongitude",
         "geopoint2dlon",
         "geopointlon",
+        "outagecentrepointlng",
+        "outagecentrepointlon",
         "x"
       ])
     )
@@ -1496,6 +1646,7 @@ async function getJson(input, options = {}) {
 
     try {
       const response = await fetch(url, {
+        method: options.method || "GET",
         signal: controller.signal,
         redirect: "follow",
         headers: {
@@ -1605,7 +1756,7 @@ function httpError(url, response, body, options = {}) {
       ? `GitHub secret ${options.feed.authEnv} is not configured`
       : "";
 
-  return new Error(
+  const error = new Error(
     [
       `HTTP ${response.status}${response.statusText ? ` ${response.statusText}` : ""}`,
       context ? `[${context}]` : "",
@@ -1616,6 +1767,38 @@ function httpError(url, response, body, options = {}) {
       .filter(Boolean)
       .join(" ")
   );
+  error.status = response.status;
+  error.authRequired = [401, 403].includes(response.status) && Boolean(options.feed?.authEnv);
+  error.sourceFailure = response.status >= 500 || response.status === 429;
+  return error;
+}
+
+function classifyFailure(error, feed) {
+  if (error?.authRequired || /GitHub secret .* is not configured|HTTP (401|403)\b/i.test(concise(error))) {
+    return "authentication required";
+  }
+
+  if (error?.name === "AbortError" || error?.sourceFailure || /HTTP (429|5\d\d)\b|timed out/i.test(concise(error))) {
+    return "source failure";
+  }
+
+  if (feed?.authEnv && !hasAuth(feed) && /HTTP (401|403)\b/i.test(concise(error))) {
+    return "authentication required";
+  }
+
+  return "unavailable";
+}
+
+function providerFailureState(feeds) {
+  if (feeds.some((feed) => feed.state === "authentication required")) {
+    return "authentication required";
+  }
+
+  if (feeds.some((feed) => feed.state === "source failure")) {
+    return "source failure";
+  }
+
+  return "unavailable";
 }
 
 async function read(file) {

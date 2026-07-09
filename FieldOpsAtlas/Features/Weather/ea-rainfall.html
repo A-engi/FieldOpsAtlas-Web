@@ -13,14 +13,6 @@
     <section class="weather-stage" aria-label="EA rainfall map">
       <div id="weatherMap" class="weather-map" aria-label="Filtered OSM map with rainfall gauges"></div>
 
-      <nav class="weather-top-strip" aria-label="Weather providers">
-        <a class="weather-provider-link" href="rainviewer.html">Radar</a>
-        <a class="weather-provider-link" href="openmeteo.html">Risk</a>
-        <a class="weather-provider-link" href="metoffice.html">Met Office</a>
-        <a class="weather-provider-link is-active" href="ea-rainfall.html">EA rainfall</a>
-        <a class="weather-provider-link" href="lightning.html">Lightning</a>
-      </nav>
-
       <section class="weather-dock" aria-live="polite">
         <div class="weather-dock__header">
           <div>
@@ -51,6 +43,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="../../../shell.js?v=1.1.22-weather-nav" defer></script>
   <script src="weather-display-style.js?v=0.1.2" defer></script>
+  <script src="weather-pages.js?v=0.1.0-shared-weather-shell" defer></script>
+  <script src="weather-shell.js?v=0.1.0-shared-weather-shell" defer></script>
   <script src="app.js?v=1.0.0-weather-map-shell" defer></script>
   <script src="ea-rainfall.js?v=1.0.0-weather-map-shell" defer></script>
 </body>

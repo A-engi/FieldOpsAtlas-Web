@@ -9,6 +9,7 @@
 
   const DATA_URL = "data/outages/spen.geojson";
   const STATUS_URL = "data/outages/status.json";
+  const MAP_VIEW_KEY = "fieldops-weather-map-view-v1";
   const SPEN_BOUNDS = L.latLngBounds([
     [52.8, -5.6],
     [56.3, -1.7]
@@ -19,7 +20,10 @@
     restored: "#8193a4"
   };
 
+  const storedView = readMapView();
   const map = L.map("spOutageMap", {
+    center: storedView?.center || [54.55, -3.15],
+    zoom: storedView?.zoom || 6,
     zoomControl: false,
     attributionControl: true
   });
@@ -30,7 +34,13 @@
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
-  map.fitBounds(SPEN_BOUNDS, { padding: [20, 20] });
+  if (!storedView) map.fitBounds(SPEN_BOUNDS, { padding: [20, 20] });
+  map.on("moveend zoomend", rememberMapView);
+  window.FieldOpsWeatherMap = {
+    remember: rememberMapView,
+    invalidate: () => window.setTimeout(() => map.invalidateSize({ pan: false }), 80)
+  };
+  window.addEventListener("fieldops:weather-shell-resize", window.FieldOpsWeatherMap.invalidate);
 
   const elements = {
     headline: document.getElementById("spHeadlineStatus"),
@@ -47,6 +57,36 @@
     elements.livePill.textContent = "Loading";
     elements.livePill.className = "weather-live-pill sp-outage-live-pill";
     elements.headline.textContent = "Loading live SPEN outage data";
+  }
+
+  function readMapView() {
+    try {
+      const parsed = JSON.parse(window.sessionStorage.getItem(MAP_VIEW_KEY) || "null");
+      if (
+        Array.isArray(parsed?.center) &&
+        parsed.center.length === 2 &&
+        parsed.center.every(Number.isFinite) &&
+        Number.isFinite(parsed.zoom)
+      ) {
+        return parsed;
+      }
+    } catch {
+      // Default bounds remain available.
+    }
+
+    return null;
+  }
+
+  function rememberMapView() {
+    try {
+      const center = map.getCenter();
+      window.sessionStorage.setItem(MAP_VIEW_KEY, JSON.stringify({
+        center: [center.lat, center.lng],
+        zoom: map.getZoom()
+      }));
+    } catch {
+      // Session storage is optional.
+    }
   }
 
   async function loadOutages() {
@@ -105,8 +145,12 @@
     const state = providerStatus?.state || (features.length ? "live" : "empty");
     const generatedAt = collection?.generatedAt || providerStatus?.generatedAt;
 
-    elements.livePill.textContent = stale ? "Stale" : state === "live" ? "Live" : "Empty";
-    elements.livePill.className = `weather-live-pill sp-outage-live-pill is-${stale ? "stale" : state}`;
+    elements.livePill.textContent = stale
+      ? "Stale"
+      : state === "live"
+        ? "Live"
+        : humaniseState(state);
+    elements.livePill.className = `weather-live-pill sp-outage-live-pill is-${statusClass(stale ? "stale" : state)}`;
     elements.headline.textContent =
       `${displayCurrent} current SPEN fault${displayCurrent === 1 ? "" : "s"}`;
     elements.note.textContent = generatedAt
@@ -218,6 +262,18 @@
       },
       { current: 0, planned: 0, restored: 0 }
     );
+  }
+
+  function statusClass(state) {
+    if (["source failure", "authentication required", "unavailable", "error"].includes(state)) {
+      return "error";
+    }
+    return String(state || "empty").replace(/\s+/g, "-");
+  }
+
+  function humaniseState(state) {
+    return String(state || "empty")
+      .replace(/(^|\s)\w/g, (match) => match.toUpperCase());
   }
 
   function hasPoint(feature) {

@@ -125,6 +125,85 @@ select:disabled {
   color: #fff5c9;
 }
 
+.weather-nav-panel {
+  position: absolute;
+  z-index: 34;
+  right: 10px;
+  left: 10px;
+  top: calc(var(--safe-top) + 76px);
+  border: 1px solid var(--weather-line);
+  border-radius: 8px;
+  background: rgba(9, 18, 29, 0.9);
+  box-shadow: var(--weather-shadow);
+  color: var(--weather-text);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+
+.weather-nav-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.weather-nav-summary::-webkit-details-marker {
+  display: none;
+}
+
+.weather-nav-title {
+  color: var(--weather-muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.weather-nav-active {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.weather-nav-state {
+  border: 1px solid var(--weather-line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--weather-muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.weather-nav-panel[open] .weather-nav-state {
+  font-size: 0;
+}
+
+.weather-nav-panel[open] .weather-nav-state::before {
+  content: "Hide";
+  font-size: 11px;
+}
+
+.weather-nav-links {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 0 10px 10px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.weather-nav-links .weather-provider-link {
+  min-width: max-content;
+}
+
 .weather-dock {
   bottom: calc(var(--safe-bottom) + 92px);
   display: grid;

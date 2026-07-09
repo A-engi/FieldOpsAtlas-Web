@@ -7,6 +7,8 @@ window.AtlasWeatherLab = (() => {
   const UK_CENTER = [54.55, -3.15];
   const OSM_TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
+  const MAP_VIEW_KEY = "fieldops-weather-map-view-v1";
+  let activeMap = null;
 
   const fallbackRegions = [
     { id: "west-wales", name: "West Wales", bounds: null, sites: [] }
@@ -16,9 +18,10 @@ window.AtlasWeatherLab = (() => {
     const element = document.getElementById(options.mapId || "weatherMap");
     if (!window.L || !element) return null;
 
+    const storedView = readMapView();
     const map = window.L.map(element, {
-      center: options.center || UK_CENTER,
-      zoom: options.zoom || 6,
+      center: options.center || storedView?.center || UK_CENTER,
+      zoom: options.zoom || storedView?.zoom || 6,
       minZoom: 5,
       maxZoom: 11,
       maxBounds: UK_BOUNDS,
@@ -45,8 +48,47 @@ window.AtlasWeatherLab = (() => {
       attribution: OSM_ATTRIBUTION
     }).addTo(map);
 
+    activeMap = map;
+    rememberMapView(map);
+    map.on("moveend zoomend", () => rememberMapView(map));
     window.setTimeout(() => map.invalidateSize(), 160);
     return map;
+  }
+
+  function readMapView() {
+    try {
+      const parsed = JSON.parse(window.sessionStorage.getItem(MAP_VIEW_KEY) || "null");
+      if (
+        Array.isArray(parsed?.center) &&
+        parsed.center.length === 2 &&
+        parsed.center.every(Number.isFinite) &&
+        Number.isFinite(parsed.zoom)
+      ) {
+        return parsed;
+      }
+    } catch {
+      // Ignore storage errors; the default UK view is still valid.
+    }
+
+    return null;
+  }
+
+  function rememberMapView(map = activeMap) {
+    if (!map?.getCenter) return;
+
+    try {
+      const center = map.getCenter();
+      window.sessionStorage.setItem(MAP_VIEW_KEY, JSON.stringify({
+        center: [center.lat, center.lng],
+        zoom: map.getZoom()
+      }));
+    } catch {
+      // Map navigation still works without session storage.
+    }
+  }
+
+  function invalidateActiveMap() {
+    window.setTimeout(() => activeMap?.invalidateSize?.({ pan: false }), 80);
   }
 
   function createPane(map, name, zIndex, pointerEvents, className) {
@@ -196,6 +238,10 @@ window.AtlasWeatherLab = (() => {
     UK_BOUNDS,
     UK_CENTER,
     initMap,
+    readMapView,
+    rememberMapView,
+    rememberCurrentMapView: rememberMapView,
+    invalidateActiveMap,
     loadRegions,
     allSites,
     fitSites,
