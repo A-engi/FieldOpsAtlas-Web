@@ -50,6 +50,8 @@ jobs:
           echo
 
       - name: Collect official outage feeds
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: "0"
         run: node scripts/collect-outages.mjs
 
       - name: Commit updated outage data
