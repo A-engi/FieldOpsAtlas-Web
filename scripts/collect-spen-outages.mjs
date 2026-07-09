@@ -471,8 +471,8 @@ async function mergeProviderStatus(generatedAt, providerStatus) {
     providers: {}
   };
 
-  existing.version = VERSION;
-  existing.generatedAt = generatedAt;
+  existing.version = existing.version || VERSION;
+  existing.generatedAt = existing.generatedAt || generatedAt;
   existing.providers = existing.providers || {};
   existing.providers[PROVIDER_ID] = providerStatus;
 

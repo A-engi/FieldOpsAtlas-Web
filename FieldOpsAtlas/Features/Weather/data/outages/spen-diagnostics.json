@@ -1,38 +1,38 @@
 {
   "version": "0.2.0-salesforce-lwr",
-  "generatedAt": "2026-07-08T22:45:39.482Z",
+  "generatedAt": "2026-07-09T08:14:57.203Z",
   "provider": "spen",
   "attempts": [
     {
       "id": "salesforce-lwr-counts",
       "ok": true,
-      "liveCount": 8,
-      "plannedCount": 2,
-      "restoredCount": 52
+      "liveCount": 3,
+      "plannedCount": 15,
+      "restoredCount": 37
     },
     {
       "id": "salesforce-lwr-pages",
       "ok": true,
-      "liveRows": 8,
-      "plannedRows": 2,
-      "restoredRows": 52
+      "liveRows": 3,
+      "plannedRows": 15,
+      "restoredRows": 37
     },
     {
       "id": "postcodes-io-geocoding",
       "ok": true,
-      "lookups": 61,
-      "mappedRows": 60
+      "lookups": 54,
+      "mappedRows": 54
     }
   ],
   "result": {
-    "officialLiveCount": 8,
-    "rawRows": 62,
-    "validRows": 60,
-    "uniqueIncidents": 60,
+    "officialLiveCount": 3,
+    "rawRows": 55,
+    "validRows": 54,
+    "uniqueIncidents": 54,
     "categories": {
-      "current": 8,
-      "planned": 1,
-      "restored": 51
+      "current": 3,
+      "planned": 14,
+      "restored": 37
     }
   }
 }

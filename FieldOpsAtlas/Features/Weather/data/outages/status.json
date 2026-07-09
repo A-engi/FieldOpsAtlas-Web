@@ -138,29 +138,44 @@
       "message": "13 unplanned · 0 planned · 0 restored"
     },
     "spen": {
-      "state": "error",
-      "stale": true,
-      "generatedAt": "2026-07-09T08:00:13.950Z",
-      "lastGoodAt": "2026-07-09T07:59:06.436Z",
-      "rawRows": 0,
-      "validRows": 0,
+      "state": "live",
+      "stale": false,
+      "generatedAt": "2026-07-09T08:14:57.203Z",
+      "lastGoodAt": "2026-07-09T08:14:57.203Z",
+      "rawRows": 55,
+      "validRows": 54,
       "uniqueIncidents": 54,
       "groupedRows": 0,
-      "skippedRows": 0,
+      "skippedRows": 1,
       "categories": {
-        "current": 5,
+        "current": 3,
         "planned": 14,
-        "restored": 35
+        "restored": 37
       },
       "feeds": [
         {
           "id": "live",
-          "state": "error",
-          "authConfigured": false,
-          "error": "fetch failed"
+          "state": "live",
+          "rawRows": 3,
+          "selectedSource": "salesforce-lwr",
+          "officialCount": 3
+        },
+        {
+          "id": "planned",
+          "state": "live",
+          "rawRows": 15,
+          "selectedSource": "salesforce-lwr",
+          "officialCount": 15
+        },
+        {
+          "id": "restored",
+          "state": "live",
+          "rawRows": 37,
+          "selectedSource": "salesforce-lwr",
+          "officialCount": 37
         }
       ],
-      "message": "All required feeds failed; preserving 54 last-good incidents"
+      "message": "3 unplanned · 14 planned · 37 restored"
     },
     "nie": {
       "state": "error",
