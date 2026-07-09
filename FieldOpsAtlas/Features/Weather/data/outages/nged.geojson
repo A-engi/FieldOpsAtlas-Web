@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "nged",
-  "generatedAt": "2026-07-09T07:59:06.436Z",
+  "generatedAt": "2026-07-09T08:00:13.950Z",
   "stale": false,
   "features": [
     {
@@ -28,7 +28,7 @@
         "areas": [
           "TA11 6SB, TA11 6FW"
         ],
-        "startedAt": "2026-07-09T06:57:00.000Z",
+        "startedAt": "2026-07-09T07:57:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -39,7 +39,7 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-98210-l",
+      "id": "nged:planned:incd-98210-l",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -54,14 +54,47 @@
           "live"
         ],
         "reference": "INCD-98210-l",
-        "category": "current",
+        "category": "planned",
         "status": "In Progress",
         "type": "LV GENERIC",
         "area": "EX2 4AN, EX1 1DX, EX2 4AP, EX1 1DE, EX1 1FF, EX2 4AL, EX1 1BB",
         "areas": [
           "EX2 4AN, EX1 1DX, EX2 4AP, EX1 1DE, EX1 1FF, EX2 4AL, EX1 1BB"
         ],
-        "startedAt": "2026-07-09T07:10:00.000Z",
+        "startedAt": "2026-07-09T08:10:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:planned:incd-22921-t",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.975461,
+          51.35554
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-22921-t",
+        "category": "planned",
+        "status": "Awaiting",
+        "type": "LV UNDERGROUND",
+        "area": "BS23 2NG, BS23 2NR, BS23 2NQ, BS23 2NS, BS23 2NF, BS23 2NN, BS23 2NP, BS23 2NW, BS23 2NT",
+        "areas": [
+          "BS23 2NG, BS23 2NR, BS23 2NQ, BS23 2NS, BS23 2NF, BS23 2NN, BS23 2NP, BS23 2NW, BS23 2NT"
+        ],
+        "startedAt": "2026-07-09T08:52:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -94,7 +127,7 @@
         "areas": [
           "TQ2 6DZ"
         ],
-        "startedAt": "2026-07-09T06:48:00.000Z",
+        "startedAt": "2026-07-09T07:48:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -127,7 +160,7 @@
         "areas": [
           "EX4 9EF, EX4 9EG, EX4 9EQ"
         ],
-        "startedAt": "2026-07-07T12:14:00.000Z",
+        "startedAt": "2026-07-07T13:14:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -160,8 +193,8 @@
         "areas": [
           "EX23 9JW, EX23 9HT, EX23 9JN, EX23 9JL, EX23 9HW"
         ],
-        "startedAt": "2026-07-09T04:46:00.000Z",
-        "restoreAt": "2026-07-09T09:30:00.000Z",
+        "startedAt": "2026-07-09T05:46:00.000Z",
+        "restoreAt": "2026-07-09T10:30:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -193,7 +226,7 @@
         "areas": [
           "DT6 4EY, DT6 4HA, DT6 4GD, DT6 4EZ, DT6 4EU, DT6 4EN, DT6 4EW, DT6 4HD, DT6 4EL, DT6 4EP"
         ],
-        "startedAt": "2026-07-09T05:59:00.000Z",
+        "startedAt": "2026-07-09T06:59:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -226,8 +259,8 @@
         "areas": [
           "BA2 9AX, BA2 9BY, BA2 9AS, BA2 9DA"
         ],
-        "startedAt": "2026-07-09T06:21:00.000Z",
-        "restoreAt": "2026-07-09T15:00:00.000Z",
+        "startedAt": "2026-07-09T07:21:00.000Z",
+        "restoreAt": "2026-07-09T16:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -259,7 +292,7 @@
         "areas": [
           "TR26 1RN, TR26 1EP, TR26 3AA, TR26 1EW, TR26 1EQ, TR26 1FB, TR26 1EH, TR26 1EN, TR26 1EL, TR26 1EF, TR26 1EJ, TR26 1FN, TR26 1RH, TR26 1FD"
         ],
-        "startedAt": "2026-07-09T05:46:00.000Z",
+        "startedAt": "2026-07-09T06:46:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -292,7 +325,7 @@
         "areas": [
           "EX4 2JA, EX4 2EW, EX4 2EP, EX4 2AW"
         ],
-        "startedAt": "2026-07-08T22:23:00.000Z",
+        "startedAt": "2026-07-08T23:23:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -325,7 +358,7 @@
         "areas": [
           "TA7 8DU, TA7 8HB, TA7 8DX, TA7 8DT"
         ],
-        "startedAt": "2026-07-08T22:59:00.000Z",
+        "startedAt": "2026-07-08T23:59:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -336,7 +369,7 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-98212-l",
+      "id": "nged:planned:incd-98212-l",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -351,14 +384,14 @@
           "live"
         ],
         "reference": "INCD-98212-l",
-        "category": "current",
+        "category": "planned",
         "status": "Awaiting",
         "type": "HV GENERIC",
         "area": "BS26 2TL",
         "areas": [
           "BS26 2TL"
         ],
-        "startedAt": "2026-07-09T07:12:00.000Z",
+        "startedAt": "2026-07-09T08:12:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -391,8 +424,8 @@
         "areas": [
           "SA66 7JA, SA63 4RE, SA63 4SB, SA63 4SD"
         ],
-        "startedAt": "2026-07-09T04:24:00.000Z",
-        "restoreAt": "2026-07-09T12:00:00.000Z",
+        "startedAt": "2026-07-09T05:24:00.000Z",
+        "restoreAt": "2026-07-09T13:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -402,7 +435,7 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-362646-f",
+      "id": "nged:planned:incd-362646-f",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -417,15 +450,15 @@
           "live"
         ],
         "reference": "INCD-362646-f",
-        "category": "current",
+        "category": "planned",
         "status": "In Progress",
         "type": "LV ISOLATION",
         "area": "ST1 5LA, ST1 1LW, ST1 1PQ, ST1 1PF, ST1 1PS, ST1 5RW",
         "areas": [
           "ST1 5LA, ST1 1LW, ST1 1PQ, ST1 1PF, ST1 1PS, ST1 5RW"
         ],
-        "startedAt": "2026-07-09T07:20:00.000Z",
-        "restoreAt": "2026-07-09T14:00:00.000Z",
+        "startedAt": "2026-07-09T08:20:00.000Z",
+        "restoreAt": "2026-07-09T15:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -457,7 +490,7 @@
         "areas": [
           "TF3 3BJ, TF3 3DN"
         ],
-        "startedAt": "2026-07-09T06:28:00.000Z",
+        "startedAt": "2026-07-09T07:28:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -468,7 +501,7 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-69005-p",
+      "id": "nged:planned:incd-69005-p",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -483,15 +516,15 @@
           "live"
         ],
         "reference": "INCD-69005-p",
-        "category": "current",
+        "category": "planned",
         "status": "In Progress",
         "type": "LV UNDERGROUND",
         "area": "WV10 0HH, WV10 0HF",
         "areas": [
           "WV10 0HH, WV10 0HF"
         ],
-        "startedAt": "2026-07-09T07:08:00.000Z",
-        "restoreAt": "2026-07-09T11:00:00.000Z",
+        "startedAt": "2026-07-09T08:08:00.000Z",
+        "restoreAt": "2026-07-09T12:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -523,7 +556,7 @@
         "areas": [
           "DY4 9AH, DY4 7UJ, DY4 9EB"
         ],
-        "startedAt": "2026-07-09T05:38:00.000Z",
+        "startedAt": "2026-07-09T06:38:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -556,7 +589,7 @@
         "areas": [
           "GL55 6PW"
         ],
-        "startedAt": "2026-07-09T06:19:00.000Z",
+        "startedAt": "2026-07-09T07:19:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -589,7 +622,7 @@
         "areas": [
           "B74 4NX, B74 4PB, B74 4NU, B74 4GA, B74 4PA, B74 4NA, B74 4HN, B74 4NY"
         ],
-        "startedAt": "2026-07-09T05:08:00.000Z",
+        "startedAt": "2026-07-09T06:08:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -622,7 +655,7 @@
         "areas": [
           "DY9 9AE, DY9 9AD, DY9 9AA, DY9 8XH"
         ],
-        "startedAt": "2026-07-09T05:30:00.000Z",
+        "startedAt": "2026-07-09T06:30:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -655,7 +688,7 @@
         "areas": [
           "WR11 2LQ, WR11 2LG, WR11 1LD, WR11 2LB, WR11 1LE, WR11 2LP"
         ],
-        "startedAt": "2026-07-09T06:54:00.000Z",
+        "startedAt": "2026-07-09T07:54:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -688,7 +721,40 @@
         "areas": [
           "B24 9FF"
         ],
-        "startedAt": "2026-05-21T11:20:00.000Z",
+        "startedAt": "2026-05-21T12:20:00.000Z",
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-9380-n",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.2283,
+          52.52906
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-9380-n",
+        "category": "current",
+        "status": "In Progress",
+        "type": "LV UNDERGROUND",
+        "area": "LE9 6PP, LE9 6PF, LE9 6PG, LE9 6ES, LE9 3BF",
+        "areas": [
+          "LE9 6PP, LE9 6PF, LE9 6PG, LE9 6ES, LE9 3BF"
+        ],
+        "startedAt": "2026-07-09T06:18:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -721,7 +787,7 @@
         "areas": [
           "DE23 8GL"
         ],
-        "startedAt": "2026-07-08T22:07:00.000Z",
+        "startedAt": "2026-07-08T23:07:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -754,7 +820,7 @@
         "areas": [
           "CV35 9RU"
         ],
-        "startedAt": "2026-07-09T06:41:00.000Z",
+        "startedAt": "2026-07-09T07:41:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -787,73 +853,7 @@
         "areas": [
           "LE1 3YR, LE1 3YT, LE1 3HP, LE1 3GD"
         ],
-        "startedAt": "2026-07-07T21:48:00.000Z",
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-9380-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2283,
-          52.52906
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-9380-n",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV GENERIC",
-        "area": "LE9 6PP, LE9 6PF, LE9 6PG, LE9 6ES, LE9 3BF",
-        "areas": [
-          "LE9 6PP, LE9 6PF, LE9 6PG, LE9 6ES, LE9 3BF"
-        ],
-        "startedAt": "2026-07-09T05:18:00.000Z",
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-9381-n",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.4347847,
-          52.92412
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-9381-n",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV GENERIC",
-        "area": "NG34 0DX",
-        "areas": [
-          "NG34 0DX"
-        ],
-        "startedAt": "2026-07-09T06:12:00.000Z",
+        "startedAt": "2026-07-07T22:48:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -886,7 +886,7 @@
         "areas": [
           "NG19 9BW, NG19 9BN, NG19 9BD, NG19 9DD, NG19 9BE, NG19 9LF, NG19 9BL, NG19 9BU, NG19 9BX"
         ],
-        "startedAt": "2026-07-09T06:24:00.000Z",
+        "startedAt": "2026-07-09T07:24:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -919,7 +919,7 @@
         "areas": [
           "NG17 9HJ, NG17 9HU, NG17 9HH"
         ],
-        "startedAt": "2026-07-09T04:17:00.000Z",
+        "startedAt": "2026-07-09T05:17:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -952,7 +952,7 @@
         "areas": [
           "DE4 3JX, DE4 3HX, DE4 3HS, DE4 3HW"
         ],
-        "startedAt": "2026-07-09T04:34:00.000Z",
+        "startedAt": "2026-07-09T05:34:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -985,8 +985,8 @@
         "areas": [
           "CV33 9BE, CV33 9BQ, CV31 1XN, CV33 9BG, CV31 1TQ, CV31 1TX, CV31 1XG, CV31 1XE, CV31 1XF"
         ],
-        "startedAt": "2026-07-09T06:26:00.000Z",
-        "restoreAt": "2026-07-09T14:00:00.000Z",
+        "startedAt": "2026-07-09T07:26:00.000Z",
+        "restoreAt": "2026-07-09T15:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
@@ -1018,7 +1018,7 @@
         "areas": [
           "NN5 6LF, NN5 6LG, NN5 6LB"
         ],
-        "startedAt": "2026-07-09T04:46:00.000Z",
+        "startedAt": "2026-07-09T05:46:00.000Z",
         "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
@@ -1051,8 +1051,41 @@
         "areas": [
           "S81 0FD, S81 0FE, S81 0FG, S81 0FH, S81 0FF, S81 0PG, S81 0TN"
         ],
-        "startedAt": "2026-07-09T04:02:00.000Z",
-        "restoreAt": "2026-07-09T11:30:00.000Z",
+        "startedAt": "2026-07-09T05:02:00.000Z",
+        "restoreAt": "2026-07-09T12:30:00.000Z",
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-9381-n",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.4347847,
+          52.92412
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-9381-n",
+        "category": "current",
+        "status": "In Progress",
+        "type": "LV UNDERGROUND",
+        "area": "NG34 0DX",
+        "areas": [
+          "NG34 0DX"
+        ],
+        "startedAt": "2026-07-09T07:12:00.000Z",
+        "restoreAt": null,
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
