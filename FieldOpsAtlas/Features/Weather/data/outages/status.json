@@ -1,64 +1,64 @@
 {
   "version": "0.4.4-spen-source-fallbacks",
-  "generatedAt": "2026-07-09T10:36:53.598Z",
+  "generatedAt": "2026-07-09T13:37:00.438Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
-      "lastGoodAt": "2026-07-09T10:36:53.598Z",
-      "rawRows": 141,
-      "validRows": 105,
-      "uniqueIncidents": 105,
+      "generatedAt": "2026-07-09T13:37:00.438Z",
+      "lastGoodAt": "2026-07-09T13:37:00.438Z",
+      "rawRows": 156,
+      "validRows": 111,
+      "uniqueIncidents": 111,
       "groupedRows": 0,
-      "skippedRows": 36,
+      "skippedRows": 45,
       "categories": {
         "current": 27,
-        "planned": 78,
+        "planned": 84,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 141,
+          "rawRows": 156,
           "authConfigured": false,
           "selectedSource": "https://ukpowernetworks.opendatasoft.com:ukpn-live-faults"
         }
       ],
-      "message": "27 unplanned · 78 planned · 0 restored"
+      "message": "27 unplanned · 84 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
-      "lastGoodAt": "2026-07-09T10:36:53.598Z",
-      "rawRows": 498,
-      "validRows": 498,
-      "uniqueIncidents": 62,
-      "groupedRows": 436,
+      "generatedAt": "2026-07-09T13:37:00.438Z",
+      "lastGoodAt": "2026-07-09T13:37:00.438Z",
+      "rawRows": 512,
+      "validRows": 512,
+      "uniqueIncidents": 72,
+      "groupedRows": 440,
       "skippedRows": 0,
       "categories": {
-        "current": 25,
-        "planned": 37,
+        "current": 36,
+        "planned": 36,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 498,
+          "rawRows": 512,
           "authConfigured": false,
           "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "25 unplanned · 37 planned · 0 restored"
+      "message": "36 unplanned · 36 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
-      "lastGoodAt": "2026-07-09T10:36:53.598Z",
+      "generatedAt": "2026-07-09T13:37:00.438Z",
+      "lastGoodAt": "2026-07-09T13:37:00.438Z",
       "rawRows": 34,
       "validRows": 34,
       "uniqueIncidents": 34,
@@ -83,7 +83,7 @@
     "enwl": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
+      "generatedAt": "2026-07-09T13:37:00.438Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
@@ -114,15 +114,15 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
-      "lastGoodAt": "2026-07-09T10:36:53.598Z",
-      "rawRows": 46,
-      "validRows": 46,
-      "uniqueIncidents": 46,
+      "generatedAt": "2026-07-09T13:37:00.438Z",
+      "lastGoodAt": "2026-07-09T13:37:00.438Z",
+      "rawRows": 38,
+      "validRows": 38,
+      "uniqueIncidents": 38,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 46,
+        "current": 38,
         "planned": 0,
         "restored": 0
       },
@@ -130,17 +130,17 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 46,
+          "rawRows": 38,
           "authConfigured": false,
           "selectedSource": "json"
         }
       ],
-      "message": "46 unplanned · 0 planned · 0 restored"
+      "message": "38 unplanned · 0 planned · 0 restored"
     },
     "spen": {
       "state": "error",
       "stale": true,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
+      "generatedAt": "2026-07-09T13:37:00.438Z",
       "lastGoodAt": "2026-07-09T08:14:57.203Z",
       "rawRows": 0,
       "validRows": 0,
@@ -165,7 +165,7 @@
     "nie": {
       "state": "error",
       "stale": false,
-      "generatedAt": "2026-07-09T10:36:53.598Z",
+      "generatedAt": "2026-07-09T13:37:00.438Z",
       "lastGoodAt": "2026-07-08T12:40:46.184Z",
       "rawRows": 0,
       "validRows": 0,
