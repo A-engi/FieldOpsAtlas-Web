@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "ssen",
-  "generatedAt": "2026-07-11T17:11:11.308Z",
+  "generatedAt": "2026-07-11T17:25:38.556Z",
   "stale": false,
   "features": [
     {
@@ -10,8 +10,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.8648387,
-          51.6453505
+          -1.8636684,
+          51.6452413
         ]
       },
       "properties": {
@@ -31,8 +31,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 51.6453505,
-            "lon": -1.8648387,
+            "lat": 51.6452413,
+            "lon": -1.8636684,
             "reference": "TQ1115",
             "status": "current",
             "type": "LV"
@@ -96,8 +96,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.6213972,
-          51.1773975
+          -0.6226688000000001,
+          51.17793409999999
         ]
       },
       "properties": {
@@ -117,8 +117,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 51.1773975,
-            "lon": -0.6213972,
+            "lat": 51.17793409999999,
+            "lon": -0.6226688000000001,
             "reference": "TQ1097",
             "status": "current",
             "type": "LV"
@@ -225,8 +225,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2507667,
-          51.4025144
+          -1.2530866,
+          51.4030687
         ]
       },
       "properties": {
@@ -246,8 +246,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 51.4025144,
-            "lon": -1.2507667,
+            "lat": 51.4030687,
+            "lon": -1.2530866,
             "reference": "TQ1069",
             "status": "current",
             "type": "LV"
@@ -264,7 +264,7 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tq1078",
+      "id": "ssen:current:tq1123",
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -278,10 +278,10 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TQ1078",
+        "reference": "TQ1123",
         "category": "current",
         "status": "current",
-        "type": "LV",
+        "type": "HV",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
@@ -291,9 +291,9 @@
             "area": "Published incident location",
             "lat": 57.49826400000001,
             "lon": -4.4547918,
-            "reference": "TQ1078",
+            "reference": "TQ1123",
             "status": "current",
-            "type": "LV"
+            "type": "HV"
           }
         ],
         "startedAt": null,
@@ -311,8 +311,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.121342,
-          50.7904894
+          -1.1205809,
+          50.7909783
         ]
       },
       "properties": {
@@ -332,8 +332,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 50.7904894,
-            "lon": -1.121342,
+            "lat": 50.7909783,
+            "lon": -1.1205809,
             "reference": "TQ0912",
             "status": "current",
             "type": "LV"
@@ -354,8 +354,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.5738601,
-          60.2255219
+          -1.5202607,
+          60.244455
         ]
       },
       "properties": {
@@ -375,11 +375,54 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 60.2255219,
-            "lon": -1.5738601,
+            "lat": 60.244455,
+            "lon": -1.5202607,
             "reference": "TQ1040",
             "status": "current",
             "type": "HV"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tq1099",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.2383782,
+          51.4014454
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TQ1099",
+        "category": "current",
+        "status": "current",
+        "type": "LV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Published incident location",
+            "lat": 51.4014454,
+            "lon": -1.2383782,
+            "reference": "TQ1099",
+            "status": "current",
+            "type": "LV"
           }
         ],
         "startedAt": null,
@@ -440,8 +483,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.5059848,
-          51.1933503
+          -1.5033237,
+          51.1932941
         ]
       },
       "properties": {
@@ -461,8 +504,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 51.1933503,
-            "lon": -1.5059848,
+            "lat": 51.1932941,
+            "lon": -1.5033237,
             "reference": "TQ0877",
             "status": "current",
             "type": "LV"
@@ -526,8 +569,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.7445904,
-          51.5335788
+          -0.7439589,
+          51.53347309999999
         ]
       },
       "properties": {
@@ -547,8 +590,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 51.5335788,
-            "lon": -0.7445904,
+            "lat": 51.53347309999999,
+            "lon": -0.7439589,
             "reference": "TQ0474",
             "status": "current",
             "type": "LV"
@@ -569,8 +612,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.7151102,
-          57.5915371
+          -3.837796,
+          57.5835677
         ]
       },
       "properties": {
@@ -590,8 +633,8 @@
         "groupedLocations": [
           {
             "area": "Published incident location",
-            "lat": 57.5915371,
-            "lon": -3.7151102,
+            "lat": 57.5835677,
+            "lon": -3.837796,
             "reference": "TQ0287",
             "status": "current",
             "type": "HV"

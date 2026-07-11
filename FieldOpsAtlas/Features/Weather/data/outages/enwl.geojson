@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-07-11T17:11:11.308Z",
+  "generatedAt": "2026-07-11T17:25:38.556Z",
   "stale": false,
   "features": [
     {
@@ -49,6 +49,49 @@
     },
     {
       "type": "Feature",
+      "id": "enwl:current:inc-125354936",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.055364,
+          53.795931
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 125354936",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Waterloo, Blackpool",
+        "areas": [
+          "Waterloo, Blackpool"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Waterloo, Blackpool",
+            "lat": 53.795931,
+            "lon": -3.055364,
+            "reference": "INC 125354936",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
       "id": "enwl:current:inc-125354732",
       "geometry": {
         "type": "Point",
@@ -78,49 +121,6 @@
             "lon": -3.002774,
             "reference": "INC 125354732",
             "status": "We're on site",
-            "type": "CurrentFault"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.enwl.co.uk/power-cuts",
-        "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "enwl:current:inc-125354936",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.055364,
-          53.795931
-        ]
-      },
-      "properties": {
-        "providerId": "enwl",
-        "provider": "Electricity North West",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INC 125354936",
-        "category": "current",
-        "status": "Preparing to send team",
-        "type": "CurrentFault",
-        "area": "Waterloo, Blackpool",
-        "areas": [
-          "Waterloo, Blackpool"
-        ],
-        "groupedLocations": [
-          {
-            "area": "Waterloo, Blackpool",
-            "lat": 53.795931,
-            "lon": -3.055364,
-            "reference": "INC 125354936",
-            "status": "Preparing to send team",
             "type": "CurrentFault"
           }
         ],

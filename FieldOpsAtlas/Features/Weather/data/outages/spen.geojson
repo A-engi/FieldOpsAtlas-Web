@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "spen",
-  "generatedAt": "2026-07-11T17:11:11.308Z",
+  "generatedAt": "2026-07-11T17:25:38.556Z",
   "stale": false,
   "features": [
     {
@@ -170,6 +170,49 @@
         "startedAt": "2026-06-11T12:24:00.000Z",
         "restoreAt": "2026-07-13T16:00:00.000Z",
         "updatedAt": null,
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483930-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.38709,
+          55.248754
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483930-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DG10",
+        "areas": [
+          "DG10"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DG10",
+            "lat": 55.248754,
+            "lon": -3.38709,
+            "reference": "INCD-2483930-i",
+            "status": "Restored",
+            "type": "restored"
+          }
+        ],
+        "startedAt": "2026-07-11T17:11:42.000Z",
+        "restoreAt": "2026-07-11T20:11:00.000Z",
+        "updatedAt": "2026-07-11T17:12:05.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,

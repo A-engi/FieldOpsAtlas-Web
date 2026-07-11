@@ -379,21 +379,54 @@ async function loadNiePowercheck(feed) {
 
 async function loadNgedPowercuts(feed) {
   try {
-    const payload = await getJson(feed.url, {
-      feed,
-      selectedSource: "nged-public-powercuts"
-    });
-    const rows = Array.isArray(payload?.incidents)
-      ? payload.incidents.map((incident) => toNgedPowercutRow(incident, payload.lastUpdated))
-      : [];
+    const [mapPayload, tabularPayload] = await Promise.all([
+      getJson(feed.url, {
+        feed,
+        selectedSource: "nged-public-powercuts"
+      }),
+      getJson("https://powercuts.nationalgrid.co.uk/__powercuts/getTabularView", {
+        feed,
+        selectedSource: "nged-public-tabular"
+      })
+    ]);
 
-    if (!Array.isArray(payload?.incidents)) {
+    if (!Array.isArray(mapPayload?.incidents)) {
       throw new Error("Invalid NGED power-cut response");
     }
 
+    const mapById = new Map(
+      mapPayload.incidents.map((incident) => [String(incident?.id || ""), incident])
+    );
+    const tabularRows = Array.isArray(tabularPayload?.incidents)
+      ? tabularPayload.incidents
+      : [];
+    const merged = [];
+
+    for (const incident of tabularRows) {
+      const mapIncident = mapById.get(String(incident?.id || ""));
+      const detailIncident = mapIncident?.loc
+        ? null
+        : await loadNgedPostcodeIncident(incident, feed);
+
+      merged.push(toNgedPowercutRow(
+        {
+          ...mapIncident,
+          ...incident,
+          loc: mapIncident?.loc || detailIncident?.loc || incident?.loc
+        },
+        tabularPayload.lastUpdated || mapPayload.lastUpdated
+      ));
+    }
+
+    for (const incident of mapPayload.incidents) {
+      if (!merged.some((row) => row.incidentId === incident?.id)) {
+        merged.push(toNgedPowercutRow(incident, mapPayload.lastUpdated));
+      }
+    }
+
     return {
-      rows,
-      selectedSource: feed.url
+      rows: merged,
+      selectedSource: `${feed.url} + https://powercuts.nationalgrid.co.uk/__powercuts/getTabularView`
     };
   } catch (error) {
     if (!feed.fallbackUrl || feed.fallbackType !== "ckan") throw error;
@@ -411,20 +444,61 @@ async function loadNgedPowercuts(feed) {
   }
 }
 
+async function loadNgedPostcodeIncident(incident, feed) {
+  const postcode = Array.isArray(incident?.postcodes) ? incident.postcodes[0] : "";
+  if (!postcode) return null;
+
+  try {
+    const url = new URL("https://powercuts.nationalgrid.co.uk/__powercuts/getIncidentsByPostcode");
+    url.searchParams.set("postcode", String(postcode).replace(/\s+/g, ""));
+    const payload = await getJson(url, {
+      feed,
+      selectedSource: "nged-public-postcode"
+    });
+
+    return Array.isArray(payload?.incidents)
+      ? payload.incidents.find((item) => item?.id === incident?.id) || payload.incidents[0] || null
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 function toNgedPowercutRow(incident, lastUpdated) {
   const coordinate = coordinateFromNgedLoc(incident?.loc);
+  const postcodes = Array.isArray(incident?.postcodes)
+    ? incident.postcodes.filter(Boolean)
+    : [];
+  const areas = Array.isArray(incident?.areas)
+    ? incident.areas.filter(Boolean)
+    : [];
+  const area = [
+    areas.join(", "),
+    postcodes.slice(0, 8).join(", "),
+    postcodes.length > 8 ? `+${postcodes.length - 8} postcodes` : ""
+  ].filter(Boolean).join(" · ");
 
   return {
     id: incident?.id,
     incidentId: incident?.id,
     reference: incident?.id,
     region: incident?.region,
-    status: "current",
-    type: "current",
-    area: incident?.region || "Published incident location",
+    status: incident?.status || "current",
+    type: incident?.category || incident?.type || "current",
+    totalOff: incident?.totalOff,
+    confirmedOff: incident?.confirmedOff,
+    postcodes,
+    areas,
+    area: area || incident?.region || "Published incident location",
     location: coordinate,
-    updatedAt: lastUpdated
+    startedAt: incident?.startTime,
+    restoreAt: isPlaceholderNgedDate(incident?.etr) ? "" : incident?.etr,
+    updatedAt: incident?.lastUpdated || lastUpdated
   };
+}
+
+function isPlaceholderNgedDate(input) {
+  return /^1900-01-01\b/.test(String(input || ""));
 }
 
 function coordinateFromNgedLoc(loc) {
