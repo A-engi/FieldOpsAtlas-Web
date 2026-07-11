@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-07-11T17:25:38.556Z",
+  "generatedAt": "2026-07-11T17:42:43.937Z",
   "stale": false,
   "features": [
     {
@@ -28,11 +28,50 @@
         "areas": [
           "Alderley Edge, Cheshire East"
         ],
+        "postcodes": [
+          "SK9 7LT",
+          "SK9 7LS",
+          "SK9 7LZ",
+          "SK9 7LU",
+          "SK9 7PN"
+        ],
         "groupedLocations": [
           {
-            "area": "Alderley Edge, Cheshire East",
-            "lat": 53.308221,
-            "lon": -2.229009,
+            "area": "SK9 7LT",
+            "lat": 53.308972,
+            "lon": -2.228017,
+            "reference": "INC 125354930",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK9 7LS",
+            "lat": 53.308441,
+            "lon": -2.227984,
+            "reference": "INC 125354930",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK9 7LZ",
+            "lat": 53.307728,
+            "lon": -2.229646,
+            "reference": "INC 125354930",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK9 7LU",
+            "lat": 53.309158,
+            "lon": -2.229128,
+            "reference": "INC 125354930",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK9 7PN",
+            "lat": 53.307277,
+            "lon": -2.230724,
             "reference": "INC 125354930",
             "status": "Team on their way",
             "type": "CurrentFault"
@@ -40,11 +79,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.158
       }
     },
     {
@@ -71,11 +111,50 @@
         "areas": [
           "Waterloo, Blackpool"
         ],
+        "postcodes": [
+          "FY4 1HS",
+          "FY4 1BE",
+          "FY4 1AZ",
+          "FY4 1AU",
+          "FY4 1AX"
+        ],
         "groupedLocations": [
           {
-            "area": "Waterloo, Blackpool",
-            "lat": 53.795931,
-            "lon": -3.055364,
+            "area": "FY4 1HS",
+            "lat": 53.795018,
+            "lon": -3.055249,
+            "reference": "INC 125354936",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY4 1BE",
+            "lat": 53.795432,
+            "lon": -3.054166,
+            "reference": "INC 125354936",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY4 1AZ",
+            "lat": 53.795753,
+            "lon": -3.055495,
+            "reference": "INC 125354936",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY4 1AU",
+            "lat": 53.79601,
+            "lon": -3.054803,
+            "reference": "INC 125354936",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY4 1AX",
+            "lat": 53.796641,
+            "lon": -3.055624,
             "reference": "INC 125354936",
             "status": "We're on site",
             "type": "CurrentFault"
@@ -83,54 +162,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "enwl:current:inc-125354732",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.002774,
-          53.876576
-        ]
-      },
-      "properties": {
-        "providerId": "enwl",
-        "provider": "Electricity North West",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INC 125354732",
-        "category": "current",
-        "status": "We're on site",
-        "type": "CurrentFault",
-        "area": "Bourne, Wyre",
-        "areas": [
-          "Bourne, Wyre"
-        ],
-        "groupedLocations": [
-          {
-            "area": "Bourne, Wyre",
-            "lat": 53.876576,
-            "lon": -3.002774,
-            "reference": "INC 125354732",
-            "status": "We're on site",
-            "type": "CurrentFault"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.enwl.co.uk/power-cuts",
-        "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.103
       }
     },
     {
@@ -157,11 +194,32 @@
         "areas": [
           "Lowton East, Wigan"
         ],
+        "postcodes": [
+          "WA3 2AP",
+          "WA3 2BF",
+          "WA3 2BP"
+        ],
         "groupedLocations": [
           {
-            "area": "Lowton East, Wigan",
-            "lat": 53.472524,
-            "lon": -2.557365,
+            "area": "WA3 2AP",
+            "lat": 53.472556,
+            "lon": -2.555967,
+            "reference": "04731N2026",
+            "status": "Under review",
+            "type": "TodaysPlannedWorks"
+          },
+          {
+            "area": "WA3 2BF",
+            "lat": 53.472143,
+            "lon": -2.557859,
+            "reference": "04731N2026",
+            "status": "Under review",
+            "type": "TodaysPlannedWorks"
+          },
+          {
+            "area": "WA3 2BP",
+            "lat": 53.4722,
+            "lon": -2.557167,
             "reference": "04731N2026",
             "status": "Under review",
             "type": "TodaysPlannedWorks"
@@ -169,11 +227,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.074
       }
     },
     {
@@ -200,11 +259,41 @@
         "areas": [
           "Swinton Park, Salford"
         ],
+        "postcodes": [
+          "M6 5HG",
+          "M27 5AP",
+          "M27 5BW",
+          "M27 4BR"
+        ],
         "groupedLocations": [
           {
-            "area": "Swinton Park, Salford",
-            "lat": 53.50552,
-            "lon": -2.326166,
+            "area": "M6 5HG",
+            "lat": 53.488146,
+            "lon": -2.288207,
+            "reference": "04045N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "M27 5AP",
+            "lat": 53.510849,
+            "lon": -2.340202,
+            "reference": "04045N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "M27 5BW",
+            "lat": 53.511066,
+            "lon": -2.339706,
+            "reference": "04045N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "M27 4BR",
+            "lat": 53.511586,
+            "lon": -2.337087,
             "reference": "04045N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -212,11 +301,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 3.168
       }
     },
     {
@@ -243,11 +333,14 @@
         "areas": [
           "Skelton, Eden"
         ],
+        "postcodes": [
+          "CA7 8HY"
+        ],
         "groupedLocations": [
           {
-            "area": "Skelton, Eden",
-            "lat": 54.731316,
-            "lon": -2.961562,
+            "area": "CA7 8HY",
+            "lat": 54.731324,
+            "lon": -2.961567,
             "reference": "05189N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -255,6 +348,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -286,11 +380,23 @@
         "areas": [
           "Skelton, Eden"
         ],
+        "postcodes": [
+          "CA7 8HR",
+          "CA7 8JW"
+        ],
         "groupedLocations": [
           {
-            "area": "Skelton, Eden",
-            "lat": 54.72951,
-            "lon": -3.00142,
+            "area": "CA7 8HR",
+            "lat": 54.729593,
+            "lon": -2.993438,
+            "reference": "05190N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8JW",
+            "lat": 54.729299,
+            "lon": -3.009409,
             "reference": "05190N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -298,11 +404,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.513
       }
     },
     {
@@ -329,11 +436,14 @@
         "areas": [
           "Clitheroe, Ribble Valley"
         ],
+        "postcodes": [
+          "BB7 1LP"
+        ],
         "groupedLocations": [
           {
-            "area": "Clitheroe, Ribble Valley",
-            "lat": 53.872464,
-            "lon": -2.38799,
+            "area": "BB7 1LP",
+            "lat": 53.872276,
+            "lon": -2.388197,
             "reference": "05207N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -341,6 +451,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -372,11 +483,14 @@
         "areas": [
           "Siddington, Cheshire East"
         ],
+        "postcodes": [
+          "SK11 9LH"
+        ],
         "groupedLocations": [
           {
-            "area": "Siddington, Cheshire East",
-            "lat": 53.226468,
-            "lon": -2.263239,
+            "area": "SK11 9LH",
+            "lat": 53.231777,
+            "lon": -2.245837,
             "reference": "05368N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -384,6 +498,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -415,11 +530,15 @@
         "areas": [
           "New Mills, High Peak"
         ],
+        "postcodes": [
+          "SK23 7PJ",
+          "SK23 7PH"
+        ],
         "groupedLocations": [
           {
-            "area": "New Mills, High Peak",
-            "lat": 53.342404,
-            "lon": -1.987299,
+            "area": "SK23 7PH",
+            "lat": 53.349207,
+            "lon": -1.991503,
             "reference": "00664F2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -427,6 +546,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -458,11 +578,23 @@
         "areas": [
           "Nether Staveley, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9NG",
+          "LA8 9NN"
+        ],
         "groupedLocations": [
           {
-            "area": "Nether Staveley, South Lakeland",
-            "lat": 54.36956,
-            "lon": -2.820378,
+            "area": "LA8 9NG",
+            "lat": 54.373518,
+            "lon": -2.818748,
+            "reference": "05378N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9NN",
+            "lat": 54.366728,
+            "lon": -2.827339,
             "reference": "05378N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -470,11 +602,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.469
       }
     },
     {
@@ -501,11 +634,23 @@
         "areas": [
           "Windermere, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9LP",
+          "LA8 9LW"
+        ],
         "groupedLocations": [
           {
-            "area": "Windermere, South Lakeland",
-            "lat": 54.373605,
-            "lon": -2.81173,
+            "area": "LA8 9LP",
+            "lat": 54.373341,
+            "lon": -2.813095,
+            "reference": "05379N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9LW",
+            "lat": 54.375243,
+            "lon": -2.814918,
             "reference": "05379N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -513,11 +658,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.121
       }
     },
     {
@@ -544,11 +690,59 @@
         "areas": [
           "Dunnerdale-With-Seathwaite, South Lakeland"
         ],
+        "postcodes": [
+          "LA20 6AY",
+          "LA20 6AX",
+          "LA20 6AU",
+          "LA20 6AZ",
+          "LA20 6BA",
+          "LA20 6BB"
+        ],
         "groupedLocations": [
           {
-            "area": "Dunnerdale-With-Seathwaite, South Lakeland",
-            "lat": 54.305428,
-            "lon": -3.199033,
+            "area": "LA20 6AY",
+            "lat": 54.307212,
+            "lon": -3.195085,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA20 6AX",
+            "lat": 54.303488,
+            "lon": -3.198973,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA20 6AU",
+            "lat": 54.307123,
+            "lon": -3.188597,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA20 6AZ",
+            "lat": 54.313592,
+            "lon": -3.196131,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA20 6BA",
+            "lat": 54.324093,
+            "lon": -3.205738,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA20 6BB",
+            "lat": 54.321195,
+            "lon": -3.187035,
             "reference": "05562N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -556,11 +750,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 1.429
       }
     },
     {
@@ -587,11 +782,23 @@
         "areas": [
           "Ravenstonedale, Eden"
         ],
+        "postcodes": [
+          "CA17 4NZ",
+          "CA17 4LY"
+        ],
         "groupedLocations": [
           {
-            "area": "Ravenstonedale, Eden",
-            "lat": 54.433347,
-            "lon": -2.460682,
+            "area": "CA17 4NZ",
+            "lat": 54.433235,
+            "lon": -2.454997,
+            "reference": "05322N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA17 4LY",
+            "lat": 54.432441,
+            "lon": -2.472177,
             "reference": "05322N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -599,11 +806,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.557
       }
     },
     {
@@ -630,11 +838,32 @@
         "areas": [
           "Ravenstonedale, Eden"
         ],
+        "postcodes": [
+          "CA17 4NG",
+          "CA17 4NL",
+          "CA17 4NH"
+        ],
         "groupedLocations": [
           {
-            "area": "Ravenstonedale, Eden",
-            "lat": 54.430659,
-            "lon": -2.421555,
+            "area": "CA17 4NG",
+            "lat": 54.429602,
+            "lon": -2.428614,
+            "reference": "05577N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA17 4NL",
+            "lat": 54.428713,
+            "lon": -2.407688,
+            "reference": "05577N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA17 4NH",
+            "lat": 54.433703,
+            "lon": -2.427809,
             "reference": "05577N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -642,11 +871,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.911
       }
     },
     {
@@ -673,11 +903,23 @@
         "areas": [
           "Woodplumpton, Preston"
         ],
+        "postcodes": [
+          "PR4 0BH",
+          "PR3 5AH"
+        ],
         "groupedLocations": [
           {
-            "area": "Woodplumpton, Preston",
-            "lat": 53.83258,
-            "lon": -2.758754,
+            "area": "PR4 0BH",
+            "lat": 53.827422,
+            "lon": -2.763629,
+            "reference": "05222N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 5AH",
+            "lat": 53.837425,
+            "lon": -2.752383,
             "reference": "05222N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -685,11 +927,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.667
       }
     },
     {
@@ -716,11 +959,32 @@
         "areas": [
           "Woodside, Allerdale"
         ],
+        "postcodes": [
+          "CA7 0BZ",
+          "CA7 0DF",
+          "CA7 0DE"
+        ],
         "groupedLocations": [
           {
-            "area": "Woodside, Allerdale",
-            "lat": 54.808952,
-            "lon": -3.231134,
+            "area": "CA7 0BZ",
+            "lat": 54.82048,
+            "lon": -3.250694,
+            "reference": "04977N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 0DF",
+            "lat": 54.819597,
+            "lon": -3.2535,
+            "reference": "04977N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 0DE",
+            "lat": 54.818728,
+            "lon": -3.252399,
             "reference": "04977N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -728,11 +992,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.137
       }
     },
     {
@@ -759,11 +1024,122 @@
         "areas": [
           "Whinfell, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9DT",
+          "LA8 9DX",
+          "LA8 9DU",
+          "LA8 9DY",
+          "LA8 9DZ",
+          "LA8 9EG",
+          "LA8 9EL",
+          "LA8 9EW",
+          "LA8 9EN",
+          "LA8 9EJ",
+          "LA8 9EQ",
+          "LA8 9EH",
+          "LA8 9EF"
+        ],
         "groupedLocations": [
           {
-            "area": "Whinfell, South Lakeland",
-            "lat": 54.37886,
-            "lon": -2.68159,
+            "area": "LA8 9DT",
+            "lat": 54.360896,
+            "lon": -2.690122,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9DX",
+            "lat": 54.369735,
+            "lon": -2.68299,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9DU",
+            "lat": 54.367503,
+            "lon": -2.681906,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9DY",
+            "lat": 54.372063,
+            "lon": -2.686138,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9DZ",
+            "lat": 54.371718,
+            "lon": -2.696183,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EG",
+            "lat": 54.379958,
+            "lon": -2.683745,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EL",
+            "lat": 54.393296,
+            "lon": -2.682088,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EW",
+            "lat": 54.39155,
+            "lon": -2.691946,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EN",
+            "lat": 54.3983,
+            "lon": -2.687023,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EJ",
+            "lat": 54.388613,
+            "lon": -2.66601,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EQ",
+            "lat": 54.377015,
+            "lon": -2.674905,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EH",
+            "lat": 54.377576,
+            "lon": -2.6646,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9EF",
+            "lat": 54.368547,
+            "lon": -2.672103,
             "reference": "05492N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -771,11 +1147,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 13,
+        "coordinateSpreadKm": 2.262
       }
     },
     {
@@ -802,11 +1179,50 @@
         "areas": [
           "Kendal, South Lakeland"
         ],
+        "postcodes": [
+          "LA9 6LJ",
+          "LA9 6NT",
+          "LA9 6NY",
+          "LA9 6PJ",
+          "LA9 6NX"
+        ],
         "groupedLocations": [
           {
-            "area": "Kendal, South Lakeland",
-            "lat": 54.348055,
-            "lon": -2.735087,
+            "area": "LA9 6LJ",
+            "lat": 54.351982,
+            "lon": -2.745745,
+            "reference": "05360N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA9 6NT",
+            "lat": 54.345142,
+            "lon": -2.738514,
+            "reference": "05360N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA9 6NY",
+            "lat": 54.345589,
+            "lon": -2.731584,
+            "reference": "05360N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA9 6PJ",
+            "lat": 54.338936,
+            "lon": -2.734927,
+            "reference": "05360N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA9 6NX",
+            "lat": 54.353568,
+            "lon": -2.72731,
             "reference": "05360N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -814,11 +1230,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.903
       }
     },
     {
@@ -845,11 +1262,14 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "postcodes": [
+          "WN2 5QS"
+        ],
         "groupedLocations": [
           {
-            "area": "Golborne And Lowton West, Wigan",
-            "lat": 53.511957,
-            "lon": -2.589166,
+            "area": "WN2 5QS",
+            "lat": 53.512119,
+            "lon": -2.588815,
             "reference": "05434N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -857,6 +1277,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -888,11 +1309,68 @@
         "areas": [
           "Waterhead, Carlisle"
         ],
+        "postcodes": [
+          "CA8 7AZ",
+          "CA8 7AS",
+          "CA8 7DD",
+          "CA8 7DA",
+          "CA8 7DB",
+          "CA8 7AN",
+          "CA8 7AJ"
+        ],
         "groupedLocations": [
           {
-            "area": "Waterhead, Carlisle",
-            "lat": 55.002097,
-            "lon": -2.592942,
+            "area": "CA8 7AZ",
+            "lat": 55.02624,
+            "lon": -2.618294,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7AS",
+            "lat": 55.011426,
+            "lon": -2.588576,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DD",
+            "lat": 54.989751,
+            "lon": -2.60323,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DA",
+            "lat": 54.993142,
+            "lon": -2.582322,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DB",
+            "lat": 54.99589,
+            "lon": -2.603041,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7AN",
+            "lat": 55.003284,
+            "lon": -2.579389,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7AJ",
+            "lat": 54.994743,
+            "lon": -2.576374,
             "reference": "04833N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -900,11 +1378,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 3.133
       }
     },
     {
@@ -931,11 +1410,23 @@
         "areas": [
           "Davyhulme East, Trafford"
         ],
+        "postcodes": [
+          "M41 9LH",
+          "M41 9WL"
+        ],
         "groupedLocations": [
           {
-            "area": "Davyhulme East, Trafford",
-            "lat": 53.444019,
-            "lon": -2.340708,
+            "area": "M41 9LH",
+            "lat": 53.445918,
+            "lon": -2.34262,
+            "reference": "04033N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "M41 9WL",
+            "lat": 53.441624,
+            "lon": -2.338581,
             "reference": "04033N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -943,11 +1434,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.274
       }
     },
     {
@@ -974,11 +1466,14 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "postcodes": [
+          "WN2 5TD"
+        ],
         "groupedLocations": [
           {
-            "area": "Golborne And Lowton West, Wigan",
-            "lat": 53.513945,
-            "lon": -2.57065,
+            "area": "WN2 5TD",
+            "lat": 53.511574,
+            "lon": -2.5789,
             "reference": "04996N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -986,6 +1481,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -1017,11 +1513,23 @@
         "areas": [
           "Wrightington, West Lancashire"
         ],
+        "postcodes": [
+          "WN6 9SH",
+          "PR7 5HG"
+        ],
         "groupedLocations": [
           {
-            "area": "Wrightington, West Lancashire",
-            "lat": 53.619542,
-            "lon": -2.693782,
+            "area": "WN6 9SH",
+            "lat": 53.619555,
+            "lon": -2.701184,
+            "reference": "00652F2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 5HG",
+            "lat": 53.622453,
+            "lon": -2.689756,
             "reference": "00652F2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1029,11 +1537,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.41
       }
     },
     {
@@ -1060,11 +1569,23 @@
         "areas": [
           "Distington, Copeland"
         ],
+        "postcodes": [
+          "CA14 4QH",
+          "CA14 4QQ"
+        ],
         "groupedLocations": [
           {
-            "area": "Distington, Copeland",
-            "lat": 54.590033,
-            "lon": -3.511057,
+            "area": "CA14 4QH",
+            "lat": 54.590771,
+            "lon": -3.50806,
+            "reference": "05003N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA14 4QQ",
+            "lat": 54.590019,
+            "lon": -3.514315,
             "reference": "05003N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1072,11 +1593,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.206
       }
     },
     {
@@ -1103,11 +1625,14 @@
         "areas": [
           "St. Ambrose, South Ribble"
         ],
+        "postcodes": [
+          "PR25 4JX"
+        ],
         "groupedLocations": [
           {
-            "area": "St. Ambrose, South Ribble",
-            "lat": 53.695675,
-            "lon": -2.680322,
+            "area": "PR25 4JX",
+            "lat": 53.695097,
+            "lon": -2.680341,
             "reference": "04329N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1115,6 +1640,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -1146,11 +1672,23 @@
         "areas": [
           "Sedbergh, South Lakeland"
         ],
+        "postcodes": [
+          "LA6 2NF",
+          "LA6 2NE"
+        ],
         "groupedLocations": [
           {
-            "area": "Sedbergh, South Lakeland",
-            "lat": 54.292002,
-            "lon": -2.571775,
+            "area": "LA6 2NF",
+            "lat": 54.292213,
+            "lon": -2.57023,
+            "reference": "05101N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA6 2NE",
+            "lat": 54.291709,
+            "lon": -2.572174,
             "reference": "05101N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1158,11 +1696,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.069
       }
     },
     {
@@ -1189,11 +1728,50 @@
         "areas": [
           "Douglas, Wigan"
         ],
+        "postcodes": [
+          "WN5 7XX",
+          "WN3 6DL",
+          "WN5 7YB",
+          "WN5 7XS",
+          "WN5 7XZ"
+        ],
         "groupedLocations": [
           {
-            "area": "Douglas, Wigan",
-            "lat": 53.506394,
-            "lon": -2.671984,
+            "area": "WN5 7XX",
+            "lat": 53.509373,
+            "lon": -2.68578,
+            "reference": "05518N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN3 6DL",
+            "lat": 53.514378,
+            "lon": -2.684503,
+            "reference": "05518N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN5 7YB",
+            "lat": 53.512219,
+            "lon": -2.689475,
+            "reference": "05518N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN5 7XS",
+            "lat": 53.509148,
+            "lon": -2.692124,
+            "reference": "05518N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN5 7XZ",
+            "lat": 53.510812,
+            "lon": -2.68247,
             "reference": "05518N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1201,11 +1779,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.415
       }
     },
     {
@@ -1232,11 +1811,14 @@
         "areas": [
           "Helsington, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 8AG"
+        ],
         "groupedLocations": [
           {
-            "area": "Helsington, South Lakeland",
-            "lat": 54.297579,
-            "lon": -2.775873,
+            "area": "LA8 8AG",
+            "lat": 54.297821,
+            "lon": -2.776156,
             "reference": "05453N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1244,6 +1826,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -1275,11 +1858,23 @@
         "areas": [
           "Skelsmergh And Scalthwaiterigg, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9AT",
+          "LA8 9JU"
+        ],
         "groupedLocations": [
           {
-            "area": "Skelsmergh And Scalthwaiterigg, South Lakeland",
-            "lat": 54.370923,
-            "lon": -2.728645,
+            "area": "LA8 9AT",
+            "lat": 54.370889,
+            "lon": -2.72991,
+            "reference": "05454N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9JU",
+            "lat": 54.370977,
+            "lon": -2.727233,
             "reference": "05454N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1287,11 +1882,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.087
       }
     },
     {
@@ -1318,11 +1914,41 @@
         "areas": [
           "Harraby South & Parklands, Carlisle"
         ],
+        "postcodes": [
+          "CA4 8HZ",
+          "CA4 8JB",
+          "CA4 8JA",
+          "CA4 8HR"
+        ],
         "groupedLocations": [
           {
-            "area": "Harraby South & Parklands, Carlisle",
-            "lat": 54.86413,
-            "lon": -2.832308,
+            "area": "CA4 8HZ",
+            "lat": 54.859137,
+            "lon": -2.815101,
+            "reference": "05323N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8JB",
+            "lat": 54.862671,
+            "lon": -2.833385,
+            "reference": "05323N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8JA",
+            "lat": 54.864056,
+            "lon": -2.838337,
+            "reference": "05323N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8HR",
+            "lat": 54.87073,
+            "lon": -2.842698,
             "reference": "05323N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1330,11 +1956,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 1.238
       }
     },
     {
@@ -1361,11 +1988,68 @@
         "areas": [
           "Harraby South & Parklands, Carlisle"
         ],
+        "postcodes": [
+          "CA4 8BT",
+          "CA4 8BS",
+          "CA4 8EE",
+          "CA4 8ED",
+          "CA4 8EB",
+          "CA7 4JL",
+          "CA4 8EQ"
+        ],
         "groupedLocations": [
           {
-            "area": "Harraby South & Parklands, Carlisle",
-            "lat": 54.879412,
-            "lon": -2.938881,
+            "area": "CA4 8BT",
+            "lat": 54.883369,
+            "lon": -2.868915,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8BS",
+            "lat": 54.885073,
+            "lon": -2.872038,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8EE",
+            "lat": 54.886773,
+            "lon": -2.860461,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8ED",
+            "lat": 54.883355,
+            "lon": -2.855821,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8EB",
+            "lat": 54.87851,
+            "lon": -2.854721,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 4JL",
+            "lat": 54.856154,
+            "lon": -3.389132,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 8EQ",
+            "lat": 54.884314,
+            "lon": -2.870011,
             "reference": "05324N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1373,11 +2057,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 28.939
       }
     },
     {
@@ -1404,11 +2089,23 @@
         "areas": [
           "Crosby Ravensworth, Eden"
         ],
+        "postcodes": [
+          "CA10 3ER",
+          "CA10 3EP"
+        ],
         "groupedLocations": [
           {
-            "area": "Crosby Ravensworth, Eden",
-            "lat": 54.547229,
-            "lon": -2.622419,
+            "area": "CA10 3ER",
+            "lat": 54.551935,
+            "lon": -2.61346,
+            "reference": "04358N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA10 3EP",
+            "lat": 54.542273,
+            "lon": -2.63123,
             "reference": "04358N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1416,11 +2113,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.785
       }
     },
     {
@@ -1447,11 +2145,50 @@
         "areas": [
           "Bewcastle, Carlisle"
         ],
+        "postcodes": [
+          "CA6 6PD",
+          "CA6 6NU",
+          "CA6 6PA",
+          "CA6 6PB",
+          "CA6 6NQ"
+        ],
         "groupedLocations": [
           {
-            "area": "Bewcastle, Carlisle",
-            "lat": 55.08196,
-            "lon": -2.781166,
+            "area": "CA6 6PD",
+            "lat": 55.093329,
+            "lon": -2.791028,
+            "reference": "04289N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA6 6NU",
+            "lat": 55.08438,
+            "lon": -2.766852,
+            "reference": "04289N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA6 6PA",
+            "lat": 55.082847,
+            "lon": -2.78042,
+            "reference": "04289N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA6 6PB",
+            "lat": 55.077576,
+            "lon": -2.78688,
+            "reference": "04289N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA6 6NQ",
+            "lat": 55.071819,
+            "lon": -2.780785,
             "reference": "04289N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1459,11 +2196,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 1.408
       }
     },
     {
@@ -1490,11 +2228,68 @@
         "areas": [
           "Windermere, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9HG",
+          "LA8 9HJ",
+          "LA8 9HF",
+          "LA8 9HA",
+          "LA8 9HE",
+          "LA8 9HD",
+          "LA8 9HB"
+        ],
         "groupedLocations": [
           {
-            "area": "Windermere, South Lakeland",
-            "lat": 54.362733,
-            "lon": -2.775164,
+            "area": "LA8 9HG",
+            "lat": 54.363889,
+            "lon": -2.775818,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HJ",
+            "lat": 54.363392,
+            "lon": -2.7749,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HF",
+            "lat": 54.362904,
+            "lon": -2.775337,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HA",
+            "lat": 54.362083,
+            "lon": -2.774445,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HE",
+            "lat": 54.362662,
+            "lon": -2.773794,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HD",
+            "lat": 54.362334,
+            "lon": -2.773049,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 9HB",
+            "lat": 54.361971,
+            "lon": -2.779136,
             "reference": "05214N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1502,11 +2297,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.269
       }
     },
     {
@@ -1533,11 +2329,77 @@
         "areas": [
           "Farington, South Ribble"
         ],
+        "postcodes": [
+          "PR5 5XR",
+          "PR5 5XQ",
+          "PR5 5XP",
+          "PR5 5DD",
+          "PR5 5XS",
+          "PR5 5XT",
+          "PR25 3RJ",
+          "PR26 6RL"
+        ],
         "groupedLocations": [
           {
-            "area": "Farington, South Ribble",
-            "lat": 53.716517,
-            "lon": -2.686182,
+            "area": "PR5 5XR",
+            "lat": 53.716434,
+            "lon": -2.682125,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR5 5XQ",
+            "lat": 53.716211,
+            "lon": -2.680166,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR5 5XP",
+            "lat": 53.718468,
+            "lon": -2.679976,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR5 5DD",
+            "lat": 53.71612,
+            "lon": -2.681983,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR5 5XS",
+            "lat": 53.71796,
+            "lon": -2.683983,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR5 5XT",
+            "lat": 53.715913,
+            "lon": -2.685238,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR25 3RJ",
+            "lat": 53.713802,
+            "lon": -2.689582,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR26 6RL",
+            "lat": 53.717375,
+            "lon": -2.690459,
             "reference": "05073N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1545,11 +2407,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.467
       }
     },
     {
@@ -1576,11 +2439,50 @@
         "areas": [
           "Lakes, South Lakeland"
         ],
+        "postcodes": [
+          "LA22 0HU",
+          "LA22 0NF",
+          "LA22 0HT",
+          "LA22 0HX",
+          "LA22 9NW"
+        ],
         "groupedLocations": [
           {
-            "area": "Lakes, South Lakeland",
-            "lat": 54.415025,
-            "lon": -3.003096,
+            "area": "LA22 0HU",
+            "lat": 54.413626,
+            "lon": -3.007876,
+            "reference": "05224N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA22 0NF",
+            "lat": 54.408459,
+            "lon": -2.995932,
+            "reference": "05224N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA22 0HT",
+            "lat": 54.41706,
+            "lon": -3.002397,
+            "reference": "05224N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA22 0HX",
+            "lat": 54.416035,
+            "lon": -2.997025,
+            "reference": "05224N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA22 9NW",
+            "lat": 54.420518,
+            "lon": -3.012407,
             "reference": "05224N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1588,11 +2490,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.877
       }
     },
     {
@@ -1619,11 +2522,86 @@
         "areas": [
           "Woodplumpton, Preston"
         ],
+        "postcodes": [
+          "PR4 0RU",
+          "PR4 0RX",
+          "PR4 0RR",
+          "PR4 0FX",
+          "PR4 0FW",
+          "PR4 0BU",
+          "PR4 0YY",
+          "PR4 0HD",
+          "PR4 0HB"
+        ],
         "groupedLocations": [
           {
-            "area": "Woodplumpton, Preston",
-            "lat": 53.77133,
-            "lon": -2.743659,
+            "area": "PR4 0RU",
+            "lat": 53.794815,
+            "lon": -2.770429,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0RX",
+            "lat": 53.80013,
+            "lon": -2.764423,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0RR",
+            "lat": 53.793599,
+            "lon": -2.772274,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0FX",
+            "lat": 53.795774,
+            "lon": -2.768109,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0FW",
+            "lat": 53.795263,
+            "lon": -2.769269,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0BU",
+            "lat": 53.795594,
+            "lon": -2.770944,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0YY",
+            "lat": 53.793162,
+            "lon": -2.77597,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0HD",
+            "lat": 53.80477,
+            "lon": -2.780755,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0HB",
+            "lat": 53.800777,
+            "lon": -2.783854,
             "reference": "05232N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1631,11 +2609,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 9,
+        "coordinateSpreadKm": 0.997
       }
     },
     {
@@ -1662,11 +2641,41 @@
         "areas": [
           "Lower Withington, Cheshire East"
         ],
+        "postcodes": [
+          "SK11 9DB",
+          "SK11 9DD",
+          "SK11 9DF",
+          "SK11 9AA"
+        ],
         "groupedLocations": [
           {
-            "area": "Lower Withington, Cheshire East",
-            "lat": 53.239144,
-            "lon": -2.264257,
+            "area": "SK11 9DB",
+            "lat": 53.238199,
+            "lon": -2.256947,
+            "reference": "04986N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK11 9DD",
+            "lat": 53.238641,
+            "lon": -2.260066,
+            "reference": "04986N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK11 9DF",
+            "lat": 53.237398,
+            "lon": -2.273588,
+            "reference": "04986N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK11 9AA",
+            "lat": 53.240413,
+            "lon": -2.263613,
             "reference": "04986N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1674,11 +2683,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.682
       }
     },
     {
@@ -1705,11 +2715,141 @@
         "areas": [
           "Clifton, Blackpool"
         ],
+        "postcodes": [
+          "FY4 4NY",
+          "FY4 4PA",
+          "FY4 4PF",
+          "FY4 4PS",
+          "FY4 4NS",
+          "FY4 4QA",
+          "FY4 4RB",
+          "FY4 4PU",
+          "FY4 4QJ",
+          "FY4 4RA",
+          "FY4 4NT",
+          "FY4 4NA",
+          "FY4 4NU",
+          "FY4 4NX",
+          "FY4 4QL",
+          "FY4 4NZ"
+        ],
         "groupedLocations": [
           {
-            "area": "Clifton, Blackpool",
-            "lat": 53.798645,
-            "lon": -3.012292,
+            "area": "FY4 4NY",
+            "lat": 53.801234,
+            "lon": -3.010825,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4PA",
+            "lat": 53.801771,
+            "lon": -3.014315,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4PF",
+            "lat": 53.800722,
+            "lon": -3.012938,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4PS",
+            "lat": 53.800883,
+            "lon": -3.014111,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NS",
+            "lat": 53.800071,
+            "lon": -3.013469,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4QA",
+            "lat": 53.798948,
+            "lon": -3.006913,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4RB",
+            "lat": 53.8005,
+            "lon": -3.010549,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4PU",
+            "lat": 53.800312,
+            "lon": -3.009391,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4QJ",
+            "lat": 53.797936,
+            "lon": -3.003321,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NT",
+            "lat": 53.801043,
+            "lon": -3.010061,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NA",
+            "lat": 53.802025,
+            "lon": -3.009857,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NU",
+            "lat": 53.801078,
+            "lon": -3.00909,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NX",
+            "lat": 53.800612,
+            "lon": -3.010005,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4QL",
+            "lat": 53.796247,
+            "lon": -3.014971,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "FY4 4NZ",
+            "lat": 53.801923,
+            "lon": -3.012269,
             "reference": "02971N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1717,11 +2857,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 15,
+        "coordinateSpreadKm": 0.56
       }
     },
     {
@@ -1748,11 +2889,149 @@
         "areas": [
           "Matterdale, Eden"
         ],
+        "postcodes": [
+          "CA11 0LP",
+          "CA11 0LT",
+          "CA11 0JP",
+          "CA11 0JJ",
+          "CA11 0LS",
+          "CA11 0JS",
+          "CA11 0LR",
+          "CA11 0NA",
+          "CA11 0LZ",
+          "CA11 0RY",
+          "CA11 0JN",
+          "CA11 0JR",
+          "CA11 0NB",
+          "CA11 0JW",
+          "CA11 0JH",
+          "CA11 0JL"
+        ],
         "groupedLocations": [
           {
-            "area": "Matterdale, Eden",
-            "lat": 54.599932,
-            "lon": -2.87492,
+            "area": "CA11 0LP",
+            "lat": 54.601268,
+            "lon": -2.850542,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0LT",
+            "lat": 54.606982,
+            "lon": -2.865957,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JP",
+            "lat": 54.584865,
+            "lon": -2.874602,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JJ",
+            "lat": 54.587725,
+            "lon": -2.865579,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0LS",
+            "lat": 54.6047,
+            "lon": -2.882071,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JS",
+            "lat": 54.576723,
+            "lon": -2.90034,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0LR",
+            "lat": 54.597814,
+            "lon": -2.874802,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0NA",
+            "lat": 54.621648,
+            "lon": -2.879743,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0LZ",
+            "lat": 54.631835,
+            "lon": -2.876663,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0RY",
+            "lat": 54.63024,
+            "lon": -2.902978,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JN",
+            "lat": 54.583931,
+            "lon": -2.870775,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JR",
+            "lat": 54.589217,
+            "lon": -2.875654,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0NB",
+            "lat": 54.619268,
+            "lon": -2.873419,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JW",
+            "lat": 54.583928,
+            "lon": -2.873777,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JH",
+            "lat": 54.593828,
+            "lon": -2.85924,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JL",
+            "lat": 54.58232,
+            "lon": -2.871128,
             "reference": "04630N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1760,11 +3039,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 16,
+        "coordinateSpreadKm": 3.843
       }
     },
     {
@@ -1791,11 +3071,23 @@
         "areas": [
           "Kendal, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 8DD",
+          "LA8 8DB"
+        ],
         "groupedLocations": [
           {
-            "area": "Kendal, South Lakeland",
-            "lat": 54.299351,
-            "lon": -2.845698,
+            "area": "LA8 8DD",
+            "lat": 54.295823,
+            "lon": -2.844691,
+            "reference": "05013N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA8 8DB",
+            "lat": 54.301416,
+            "lon": -2.846834,
             "reference": "05013N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1803,11 +3095,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.319
       }
     },
     {
@@ -1834,11 +3127,14 @@
         "areas": [
           "Catterall, Wyre"
         ],
+        "postcodes": [
+          "PR3 1QB"
+        ],
         "groupedLocations": [
           {
-            "area": "Catterall, Wyre",
-            "lat": 53.8871,
-            "lon": -2.754632,
+            "area": "PR3 1QB",
+            "lat": 53.887123,
+            "lon": -2.754615,
             "reference": "03782N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1846,6 +3142,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -1877,11 +3174,68 @@
         "areas": [
           "Longridge, Ribble Valley"
         ],
+        "postcodes": [
+          "PR3 2TY",
+          "PR3 2TX",
+          "PR3 2YX",
+          "PR3 2TU",
+          "PR3 2TA",
+          "PR3 2TD",
+          "PR3 2NL"
+        ],
         "groupedLocations": [
           {
-            "area": "Longridge, Ribble Valley",
-            "lat": 53.844309,
-            "lon": -2.599148,
+            "area": "PR3 2TY",
+            "lat": 53.842011,
+            "lon": -2.5857,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2TX",
+            "lat": 53.846485,
+            "lon": -2.584349,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2YX",
+            "lat": 53.845281,
+            "lon": -2.563586,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2TU",
+            "lat": 53.850792,
+            "lon": -2.561395,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2TA",
+            "lat": 53.840906,
+            "lon": -2.591095,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2TD",
+            "lat": 53.853236,
+            "lon": -2.572859,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2NL",
+            "lat": 53.87498,
+            "lon": -2.636688,
             "reference": "05198N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1889,11 +3243,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 4.34
       }
     },
     {
@@ -1920,11 +3275,23 @@
         "areas": [
           "Cleator Moor, Copeland"
         ],
+        "postcodes": [
+          "CA25 5RJ",
+          "CA25 5QR"
+        ],
         "groupedLocations": [
           {
-            "area": "Cleator Moor, Copeland",
-            "lat": 54.526865,
-            "lon": -3.532684,
+            "area": "CA25 5RJ",
+            "lat": 54.529141,
+            "lon": -3.536756,
+            "reference": "04281N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA25 5QR",
+            "lat": 54.526904,
+            "lon": -3.53454,
             "reference": "04281N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1932,11 +3299,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.143
       }
     },
     {
@@ -1963,11 +3331,113 @@
         "areas": [
           "Birchwood, Warrington"
         ],
+        "postcodes": [
+          "WA3 6PQ",
+          "WA3 6PG",
+          "WA3 6PB",
+          "WA3 6PF",
+          "WA3 2GN",
+          "WA3 6PE",
+          "WA3 6PA",
+          "WA3 6NZ",
+          "WA3 6QE",
+          "WA3 6QF",
+          "WA3 6QG",
+          "WA3 6US"
+        ],
         "groupedLocations": [
           {
-            "area": "Birchwood, Warrington",
-            "lat": 53.423082,
-            "lon": -2.522078,
+            "area": "WA3 6PQ",
+            "lat": 53.418438,
+            "lon": -2.51769,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6PG",
+            "lat": 53.418625,
+            "lon": -2.518159,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6PB",
+            "lat": 53.418876,
+            "lon": -2.518267,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6PF",
+            "lat": 53.419881,
+            "lon": -2.516729,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 2GN",
+            "lat": 53.476678,
+            "lon": -2.575909,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6PE",
+            "lat": 53.419732,
+            "lon": -2.517841,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6PA",
+            "lat": 53.417521,
+            "lon": -2.517874,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6NZ",
+            "lat": 53.418122,
+            "lon": -2.518017,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6QE",
+            "lat": 53.41653,
+            "lon": -2.516328,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6QF",
+            "lat": 53.416918,
+            "lon": -2.516016,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6QG",
+            "lat": 53.418302,
+            "lon": -2.516063,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WA3 6US",
+            "lat": 53.417618,
+            "lon": -2.516145,
             "reference": "04583N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -1975,11 +3445,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 12,
+        "coordinateSpreadKm": 6.942
       }
     },
     {
@@ -2006,11 +3477,41 @@
         "areas": [
           "Bootle, Copeland"
         ],
+        "postcodes": [
+          "LA19 5YR",
+          "LA19 5YB",
+          "LA19 5YA",
+          "LA19 5XZ"
+        ],
         "groupedLocations": [
           {
-            "area": "Bootle, Copeland",
-            "lat": 54.309327,
-            "lon": -3.405303,
+            "area": "LA19 5YR",
+            "lat": 54.321512,
+            "lon": -3.409797,
+            "reference": "05202N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA19 5YB",
+            "lat": 54.305529,
+            "lon": -3.41463,
+            "reference": "05202N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA19 5YA",
+            "lat": 54.303235,
+            "lon": -3.412446,
+            "reference": "05202N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA19 5XZ",
+            "lat": 54.30804,
+            "lon": -3.389601,
             "reference": "05202N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2018,11 +3519,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 1.343
       }
     },
     {
@@ -2049,11 +3551,23 @@
         "areas": [
           "Nateby, Wyre"
         ],
+        "postcodes": [
+          "PR3 1GN",
+          "PR3 1GL"
+        ],
         "groupedLocations": [
           {
-            "area": "Nateby, Wyre",
-            "lat": 53.910582,
-            "lon": -2.749909,
+            "area": "PR3 1GN",
+            "lat": 53.915059,
+            "lon": -2.741416,
+            "reference": "05203N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 1GL",
+            "lat": 53.907271,
+            "lon": -2.759346,
             "reference": "05203N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2061,11 +3575,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.73
       }
     },
     {
@@ -2092,11 +3607,50 @@
         "areas": [
           "Horwich, Bolton"
         ],
+        "postcodes": [
+          "BL6 5JY",
+          "BL6 5LQ",
+          "BL6 5LF",
+          "BL6 5LE",
+          "BL6 5LG"
+        ],
         "groupedLocations": [
           {
-            "area": "Horwich, Bolton",
-            "lat": 53.603429,
-            "lon": -2.595476,
+            "area": "BL6 5JY",
+            "lat": 53.600193,
+            "lon": -2.591475,
+            "reference": "03793N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BL6 5LQ",
+            "lat": 53.608113,
+            "lon": -2.598537,
+            "reference": "03793N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BL6 5LF",
+            "lat": 53.60713,
+            "lon": -2.598992,
+            "reference": "03793N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BL6 5LE",
+            "lat": 53.604576,
+            "lon": -2.597505,
+            "reference": "03793N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BL6 5LG",
+            "lat": 53.604596,
+            "lon": -2.600785,
             "reference": "03793N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2104,11 +3658,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.658
       }
     },
     {
@@ -2135,11 +3690,95 @@
         "areas": [
           "Matterdale, Eden"
         ],
+        "postcodes": [
+          "CA11 0LR",
+          "CA11 0JJ",
+          "CA11 0JL",
+          "CA11 0JH",
+          "CA11 0JR",
+          "CA11 0JN",
+          "CA11 0JP",
+          "CA11 0JW",
+          "CA11 0JS",
+          "CA11 0LS"
+        ],
         "groupedLocations": [
           {
-            "area": "Matterdale, Eden",
-            "lat": 54.588463,
-            "lon": -2.874909,
+            "area": "CA11 0LR",
+            "lat": 54.597814,
+            "lon": -2.874802,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JJ",
+            "lat": 54.587725,
+            "lon": -2.865579,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JL",
+            "lat": 54.58232,
+            "lon": -2.871128,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JH",
+            "lat": 54.593828,
+            "lon": -2.85924,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JR",
+            "lat": 54.589217,
+            "lon": -2.875654,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JN",
+            "lat": 54.583931,
+            "lon": -2.870775,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JP",
+            "lat": 54.584865,
+            "lon": -2.874602,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JW",
+            "lat": 54.583928,
+            "lon": -2.873777,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0JS",
+            "lat": 54.576723,
+            "lon": -2.90034,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0LS",
+            "lat": 54.6047,
+            "lon": -2.882071,
             "reference": "05348N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2147,11 +3786,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 2.104
       }
     },
     {
@@ -2178,11 +3818,14 @@
         "areas": [
           "Horwich, Bolton"
         ],
+        "postcodes": [
+          "BL6 5LA"
+        ],
         "groupedLocations": [
           {
-            "area": "Horwich, Bolton",
-            "lat": 53.601677,
-            "lon": -2.593597,
+            "area": "BL6 5LA",
+            "lat": 53.601692,
+            "lon": -2.593596,
             "reference": "04169N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2190,6 +3833,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -2221,11 +3865,158 @@
         "areas": [
           "Buckshaw & Worden, South Ribble"
         ],
+        "postcodes": [
+          "PR7 7AE",
+          "PR7 7BG",
+          "PR7 7EN",
+          "PR7 7AH",
+          "PR7 7HB",
+          "PR7 7AN",
+          "PR7 7BQ",
+          "PR7 7BJ",
+          "PR7 7BL",
+          "PR7 7BN",
+          "PR7 1BJ",
+          "PR7 1BN",
+          "PR7 7BT",
+          "PR7 7BS",
+          "PR7 7DG",
+          "PR7 7EF",
+          "PR7 7BA"
+        ],
         "groupedLocations": [
           {
-            "area": "Buckshaw & Worden, South Ribble",
-            "lat": 53.682744,
-            "lon": -2.656949,
+            "area": "PR7 7AE",
+            "lat": 53.683488,
+            "lon": -2.658729,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BG",
+            "lat": 53.682512,
+            "lon": -2.658154,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7EN",
+            "lat": 53.682284,
+            "lon": -2.65706,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AH",
+            "lat": 53.681843,
+            "lon": -2.658749,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7HB",
+            "lat": 53.680604,
+            "lon": -2.656958,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AN",
+            "lat": 53.681256,
+            "lon": -2.659361,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BQ",
+            "lat": 53.681957,
+            "lon": -2.65598,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BJ",
+            "lat": 53.682566,
+            "lon": -2.654794,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BL",
+            "lat": 53.683264,
+            "lon": -2.655274,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BN",
+            "lat": 53.682369,
+            "lon": -2.656214,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 1BJ",
+            "lat": 53.653458,
+            "lon": -2.632177,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 1BN",
+            "lat": 53.652752,
+            "lon": -2.631259,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BT",
+            "lat": 53.68392,
+            "lon": -2.65698,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BS",
+            "lat": 53.683023,
+            "lon": -2.654998,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7DG",
+            "lat": 53.681874,
+            "lon": -2.653148,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7EF",
+            "lat": 53.683298,
+            "lon": -2.657394,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BA",
+            "lat": 53.685487,
+            "lon": -2.662909,
             "reference": "05159N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2233,11 +4024,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 17,
+        "coordinateSpreadKm": 3.302
       }
     },
     {
@@ -2264,11 +4056,203 @@
         "areas": [
           "Buckshaw & Worden, South Ribble"
         ],
+        "postcodes": [
+          "PR7 7AH",
+          "PR7 7AE",
+          "PR7 7AG",
+          "PR7 7AL",
+          "PR7 7AP",
+          "PR7 7AN",
+          "PR7 7AD",
+          "PR7 7AA",
+          "PR7 7AB",
+          "PR7 7AJ",
+          "PR7 7BF",
+          "PR7 7AU",
+          "PR7 7BA",
+          "PR7 7BB",
+          "PR7 7BE",
+          "PR7 7BD",
+          "PR7 7AX",
+          "PR7 7BU",
+          "PR7 7AY",
+          "PR7 7DG",
+          "PR7 7GU",
+          "PR7 7DH"
+        ],
         "groupedLocations": [
           {
-            "area": "Buckshaw & Worden, South Ribble",
-            "lat": 53.683229,
-            "lon": -2.66084,
+            "area": "PR7 7AH",
+            "lat": 53.681843,
+            "lon": -2.658749,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AE",
+            "lat": 53.683488,
+            "lon": -2.658729,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AG",
+            "lat": 53.683009,
+            "lon": -2.659146,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AL",
+            "lat": 53.682349,
+            "lon": -2.659908,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AP",
+            "lat": 53.681775,
+            "lon": -2.659762,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AN",
+            "lat": 53.681256,
+            "lon": -2.659361,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AD",
+            "lat": 53.682497,
+            "lon": -2.660879,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AA",
+            "lat": 53.682906,
+            "lon": -2.661627,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AB",
+            "lat": 53.682273,
+            "lon": -2.660603,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AJ",
+            "lat": 53.68178,
+            "lon": -2.660489,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BF",
+            "lat": 53.685004,
+            "lon": -2.659328,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AU",
+            "lat": 53.682061,
+            "lon": -2.663325,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BA",
+            "lat": 53.685487,
+            "lon": -2.662909,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BB",
+            "lat": 53.685152,
+            "lon": -2.661859,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BE",
+            "lat": 53.684878,
+            "lon": -2.660931,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BD",
+            "lat": 53.685033,
+            "lon": -2.662145,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AX",
+            "lat": 53.681342,
+            "lon": -2.664797,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7BU",
+            "lat": 53.681038,
+            "lon": -2.666246,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7AY",
+            "lat": 53.683628,
+            "lon": -2.662698,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7DG",
+            "lat": 53.681874,
+            "lon": -2.653148,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7GU",
+            "lat": 53.683877,
+            "lon": -2.655026,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR7 7DH",
+            "lat": 53.684251,
+            "lon": -2.663738,
             "reference": "05160N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2276,11 +4260,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 22,
+        "coordinateSpreadKm": 0.514
       }
     },
     {
@@ -2307,11 +4292,104 @@
         "areas": [
           "Woodplumpton, Preston"
         ],
+        "postcodes": [
+          "PR3 0UA",
+          "PR3 0NB",
+          "PR3 0XB",
+          "PR3 0XN",
+          "PR3 0XA",
+          "PR4 0TX",
+          "PR4 0TY",
+          "PR3 0XE",
+          "PR3 0XD",
+          "PR3 0US",
+          "PR3 0XH"
+        ],
         "groupedLocations": [
           {
-            "area": "Woodplumpton, Preston",
-            "lat": 53.830222,
-            "lon": -2.821224,
+            "area": "PR3 0UA",
+            "lat": 53.86183,
+            "lon": -2.824452,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0NB",
+            "lat": 53.857365,
+            "lon": -2.84603,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XB",
+            "lat": 53.851459,
+            "lon": -2.852554,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XN",
+            "lat": 53.850794,
+            "lon": -2.868851,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XA",
+            "lat": 53.856265,
+            "lon": -2.861636,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0TX",
+            "lat": 53.845695,
+            "lon": -2.836416,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR4 0TY",
+            "lat": 53.845808,
+            "lon": -2.83309,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XE",
+            "lat": 53.84831,
+            "lon": -2.840284,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XD",
+            "lat": 53.848816,
+            "lon": -2.85139,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0US",
+            "lat": 53.853527,
+            "lon": -2.846043,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0XH",
+            "lat": 53.843904,
+            "lon": -2.857021,
             "reference": "05437N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2319,11 +4397,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 11,
+        "coordinateSpreadKm": 1.893
       }
     },
     {
@@ -2350,11 +4429,41 @@
         "areas": [
           "Chelford, Cheshire East"
         ],
+        "postcodes": [
+          "SK11 9LB",
+          "SK10 4LF",
+          "SK11 9JU",
+          "SK11 7NN"
+        ],
         "groupedLocations": [
           {
-            "area": "Chelford, Cheshire East",
-            "lat": 53.265845,
-            "lon": -2.194919,
+            "area": "SK11 9LB",
+            "lat": 53.248431,
+            "lon": -2.242651,
+            "reference": "05696N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK10 4LF",
+            "lat": 53.320826,
+            "lon": -2.143338,
+            "reference": "05696N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK11 9JU",
+            "lat": 53.242993,
+            "lon": -2.233539,
+            "reference": "05696N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK11 7NN",
+            "lat": 53.25489,
+            "lon": -2.122176,
             "reference": "05696N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2362,11 +4471,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 6.628
       }
     },
     {
@@ -2393,11 +4503,23 @@
         "areas": [
           "Daneshouse With Stoneyholme, Burnley"
         ],
+        "postcodes": [
+          "BB12 0RU",
+          "BB12 0RP"
+        ],
         "groupedLocations": [
           {
-            "area": "Daneshouse With Stoneyholme, Burnley",
-            "lat": 53.796875,
-            "lon": -2.259457,
+            "area": "BB12 0RU",
+            "lat": 53.806755,
+            "lon": -2.257683,
+            "reference": "05555N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BB12 0RP",
+            "lat": 53.801654,
+            "lon": -2.272045,
             "reference": "05555N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2405,11 +4527,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.55
       }
     },
     {
@@ -2436,11 +4559,25 @@
         "areas": [
           "Horton In Ribblesdale, Craven"
         ],
+        "postcodes": [
+          "BD24 9ND",
+          "BD24 9NP",
+          "BD24 9PA",
+          "BD24 9NX"
+        ],
         "groupedLocations": [
           {
-            "area": "Horton In Ribblesdale, Craven",
-            "lat": 54.075928,
-            "lon": -2.294755,
+            "area": "BD24 9ND",
+            "lat": 54.080817,
+            "lon": -2.27404,
+            "reference": "04187N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "BD24 9NP",
+            "lat": 54.085686,
+            "lon": -2.27528,
             "reference": "04187N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2448,11 +4585,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.274
       }
     },
     {
@@ -2479,11 +4617,95 @@
         "areas": [
           "Nateby, Wyre"
         ],
+        "postcodes": [
+          "PR3 6AT",
+          "LA2 0ER",
+          "PR3 0LD",
+          "LA2 0EW",
+          "LA2 0EP",
+          "LA2 0EN",
+          "LA2 0EG",
+          "LA2 0EL",
+          "LA2 0ES",
+          "LA2 0ET"
+        ],
         "groupedLocations": [
           {
-            "area": "Nateby, Wyre",
-            "lat": 53.942829,
-            "lon": -2.845131,
+            "area": "PR3 6AT",
+            "lat": 53.938646,
+            "lon": -2.876921,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0ER",
+            "lat": 53.93643,
+            "lon": -2.856433,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 0LD",
+            "lat": 53.920745,
+            "lon": -2.860391,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0EW",
+            "lat": 53.949807,
+            "lon": -2.858596,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0EP",
+            "lat": 53.943887,
+            "lon": -2.863152,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0EN",
+            "lat": 53.952565,
+            "lon": -2.853762,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0EG",
+            "lat": 53.958932,
+            "lon": -2.813062,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0EL",
+            "lat": 53.952947,
+            "lon": -2.849213,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0ES",
+            "lat": 53.936581,
+            "lon": -2.829947,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 0ET",
+            "lat": 53.946546,
+            "lon": -2.82891,
             "reference": "05382N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2491,11 +4713,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 2.9
       }
     },
     {
@@ -2522,11 +4745,14 @@
         "areas": [
           "Offerton, Stockport"
         ],
+        "postcodes": [
+          "SK2 5HB"
+        ],
         "groupedLocations": [
           {
-            "area": "Offerton, Stockport",
-            "lat": 53.397572,
-            "lon": -2.101156,
+            "area": "SK2 5HB",
+            "lat": 53.398554,
+            "lon": -2.104347,
             "reference": "05105N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2534,6 +4760,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -2565,11 +4792,23 @@
         "areas": [
           "Chinley, Buxworth And Brownside, High Peak"
         ],
+        "postcodes": [
+          "SK23 6EE",
+          "SK23 6EB"
+        ],
         "groupedLocations": [
           {
-            "area": "Chinley, Buxworth And Brownside, High Peak",
-            "lat": 53.342203,
-            "lon": -1.946318,
+            "area": "SK23 6EE",
+            "lat": 53.343245,
+            "lon": -1.948036,
+            "reference": "05574N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "SK23 6EB",
+            "lat": 53.341122,
+            "lon": -1.9446,
             "reference": "05574N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2577,11 +4816,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.164
       }
     },
     {
@@ -2608,11 +4848,77 @@
         "areas": [
           "Askerton, Carlisle"
         ],
+        "postcodes": [
+          "CA8 2BP",
+          "CA8 2ET",
+          "CA8 7DF",
+          "CA8 7DG",
+          "CA8 7DQ",
+          "CA8 2ES",
+          "CA8 2BS",
+          "CA8 7DE"
+        ],
         "groupedLocations": [
           {
-            "area": "Askerton, Carlisle",
-            "lat": 55.001599,
-            "lon": -2.641327,
+            "area": "CA8 2BP",
+            "lat": 55.002058,
+            "lon": -2.654394,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 2ET",
+            "lat": 55.007826,
+            "lon": -2.642777,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DF",
+            "lat": 54.997416,
+            "lon": -2.650364,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DG",
+            "lat": 54.994041,
+            "lon": -2.636039,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DQ",
+            "lat": 55.010915,
+            "lon": -2.622531,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 2ES",
+            "lat": 55.015985,
+            "lon": -2.627379,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 2BS",
+            "lat": 54.994619,
+            "lon": -2.655899,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA8 7DE",
+            "lat": 54.989907,
+            "lon": -2.64135,
             "reference": "04650N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2620,11 +4926,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 1.831
       }
     },
     {
@@ -2651,11 +4958,32 @@
         "areas": [
           "Milnthorpe, South Lakeland"
         ],
+        "postcodes": [
+          "LA7 7ER",
+          "LA7 7ET",
+          "LA7 7ES"
+        ],
         "groupedLocations": [
           {
-            "area": "Milnthorpe, South Lakeland",
-            "lat": 54.247825,
-            "lon": -2.77435,
+            "area": "LA7 7ER",
+            "lat": 54.244451,
+            "lon": -2.775137,
+            "reference": "05332N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA7 7ET",
+            "lat": 54.248823,
+            "lon": -2.774575,
+            "reference": "05332N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA7 7ES",
+            "lat": 54.245942,
+            "lon": -2.773861,
             "reference": "05332N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2663,11 +4991,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.269
       }
     },
     {
@@ -2694,11 +5023,32 @@
         "areas": [
           "Beetham, South Lakeland"
         ],
+        "postcodes": [
+          "LA7 7JR",
+          "LA7 7LH",
+          "LA7 7JT"
+        ],
         "groupedLocations": [
           {
-            "area": "Beetham, South Lakeland",
-            "lat": 54.207829,
-            "lon": -2.807113,
+            "area": "LA7 7JR",
+            "lat": 54.210032,
+            "lon": -2.807519,
+            "reference": "05333N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA7 7LH",
+            "lat": 54.208354,
+            "lon": -2.808391,
+            "reference": "05333N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA7 7JT",
+            "lat": 54.20704,
+            "lon": -2.807323,
             "reference": "05333N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2706,11 +5056,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.174
       }
     },
     {
@@ -2737,11 +5088,14 @@
         "areas": [
           "Whittingham, Preston"
         ],
+        "postcodes": [
+          "PR3 2JH"
+        ],
         "groupedLocations": [
           {
-            "area": "Whittingham, Preston",
-            "lat": 53.816481,
-            "lon": -2.658341,
+            "area": "PR3 2JH",
+            "lat": 53.817666,
+            "lon": -2.654728,
             "reference": "04963N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2749,6 +5103,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -2780,11 +5135,68 @@
         "areas": [
           "Matterdale, Eden"
         ],
+        "postcodes": [
+          "CA11 0SG",
+          "CA11 0SS",
+          "CA11 0SJ",
+          "CA11 0SH",
+          "CA11 0SL",
+          "CA11 0ST",
+          "CA11 0SZ"
+        ],
         "groupedLocations": [
           {
-            "area": "Matterdale, Eden",
-            "lat": 54.63567,
-            "lon": -2.956607,
+            "area": "CA11 0SG",
+            "lat": 54.642941,
+            "lon": -2.922893,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0SS",
+            "lat": 54.622467,
+            "lon": -2.953157,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0SJ",
+            "lat": 54.634921,
+            "lon": -2.94657,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0SH",
+            "lat": 54.640552,
+            "lon": -2.965294,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0SL",
+            "lat": 54.634143,
+            "lon": -2.947311,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0ST",
+            "lat": 54.630443,
+            "lon": -2.97517,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA11 0SZ",
+            "lat": 54.644144,
+            "lon": -2.984595,
             "reference": "05343N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2792,11 +5204,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 2.305
       }
     },
     {
@@ -2823,11 +5236,59 @@
         "areas": [
           "Tatham, Lancaster"
         ],
+        "postcodes": [
+          "LA2 8PE",
+          "LA2 8PQ",
+          "LA2 8NF",
+          "LA2 8PF",
+          "LA2 8PG",
+          "LA2 8PN"
+        ],
         "groupedLocations": [
           {
-            "area": "Tatham, Lancaster",
-            "lat": 54.114013,
-            "lon": -2.57419,
+            "area": "LA2 8PE",
+            "lat": 54.119119,
+            "lon": -2.576998,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 8PQ",
+            "lat": 54.111936,
+            "lon": -2.584837,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 8NF",
+            "lat": 54.103285,
+            "lon": -2.5821,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 8PF",
+            "lat": 54.116783,
+            "lon": -2.571152,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 8PG",
+            "lat": 54.111831,
+            "lon": -2.571069,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "LA2 8PN",
+            "lat": 54.111353,
+            "lon": -2.552355,
             "reference": "05280N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2835,11 +5296,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 1.356
       }
     },
     {
@@ -2866,11 +5328,32 @@
         "areas": [
           "Longridge, Ribble Valley"
         ],
+        "postcodes": [
+          "PR3 2QB",
+          "PR3 2TS",
+          "PR3 2QF"
+        ],
         "groupedLocations": [
           {
-            "area": "Longridge, Ribble Valley",
-            "lat": 53.876929,
-            "lon": -2.563291,
+            "area": "PR3 2QB",
+            "lat": 53.875802,
+            "lon": -2.577275,
+            "reference": "05608N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2TS",
+            "lat": 53.878555,
+            "lon": -2.539939,
+            "reference": "05608N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "PR3 2QF",
+            "lat": 53.876208,
+            "lon": -2.574953,
             "reference": "05608N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2878,11 +5361,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 1.592
       }
     },
     {
@@ -2909,11 +5393,14 @@
         "areas": [
           "Selside And Fawcett Forest, South Lakeland"
         ],
+        "postcodes": [
+          "LA8 9LE"
+        ],
         "groupedLocations": [
           {
-            "area": "Selside And Fawcett Forest, South Lakeland",
-            "lat": 54.403793,
-            "lon": -2.706953,
+            "area": "LA8 9LE",
+            "lat": 54.403802,
+            "lon": -2.706956,
             "reference": "04536N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2921,6 +5408,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -2952,11 +5440,14 @@
         "areas": [
           "Austwick, Craven"
         ],
+        "postcodes": [
+          "LA2 8BZ"
+        ],
         "groupedLocations": [
           {
-            "area": "Austwick, Craven",
-            "lat": 54.10878,
-            "lon": -2.341825,
+            "area": "LA2 8BZ",
+            "lat": 54.108792,
+            "lon": -2.341829,
             "reference": "05303N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -2964,6 +5455,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -2995,11 +5487,41 @@
         "areas": [
           "Workington, Allerdale"
         ],
+        "postcodes": [
+          "CA14 5QB",
+          "CA14 5QX",
+          "CA14 5QD",
+          "CA14 5QA"
+        ],
         "groupedLocations": [
           {
-            "area": "Workington, Allerdale",
-            "lat": 54.613641,
-            "lon": -3.564712,
+            "area": "CA14 5QB",
+            "lat": 54.613785,
+            "lon": -3.564303,
+            "reference": "05519N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA14 5QX",
+            "lat": 54.614651,
+            "lon": -3.564785,
+            "reference": "05519N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA14 5QD",
+            "lat": 54.613356,
+            "lon": -3.564859,
+            "reference": "05519N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA14 5QA",
+            "lat": 54.613364,
+            "lon": -3.564256,
             "reference": "05519N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3007,11 +5529,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.097
       }
     },
     {
@@ -3038,11 +5561,14 @@
         "areas": [
           "Prestbury, Cheshire East"
         ],
+        "postcodes": [
+          "SK10 4AR"
+        ],
         "groupedLocations": [
           {
-            "area": "Prestbury, Cheshire East",
-            "lat": 53.289834,
-            "lon": -2.156991,
+            "area": "SK10 4AR",
+            "lat": 53.289851,
+            "lon": -2.156989,
             "reference": "05110N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3050,6 +5576,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -3081,11 +5608,59 @@
         "areas": [
           "Woodside, Allerdale"
         ],
+        "postcodes": [
+          "CA7 8NE",
+          "CA7 8ND",
+          "CA7 8NB",
+          "CA7 8NJ",
+          "CA7 8NH",
+          "CA7 8LX"
+        ],
         "groupedLocations": [
           {
-            "area": "Woodside, Allerdale",
-            "lat": 54.789052,
-            "lon": -3.167141,
+            "area": "CA7 8NE",
+            "lat": 54.786072,
+            "lon": -3.159936,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8ND",
+            "lat": 54.790541,
+            "lon": -3.153003,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8NB",
+            "lat": 54.79198,
+            "lon": -3.15855,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8NJ",
+            "lat": 54.790658,
+            "lon": -3.16338,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8NH",
+            "lat": 54.786066,
+            "lon": -3.170868,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA7 8LX",
+            "lat": 54.792731,
+            "lon": -3.150515,
             "reference": "04928N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3093,11 +5668,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.839
       }
     },
     {
@@ -3124,11 +5700,23 @@
         "areas": [
           "Hesket, Eden"
         ],
+        "postcodes": [
+          "CA4 0LN",
+          "CA4 0EW"
+        ],
         "groupedLocations": [
           {
-            "area": "Hesket, Eden",
-            "lat": 54.796304,
-            "lon": -2.856099,
+            "area": "CA4 0LN",
+            "lat": 54.794503,
+            "lon": -2.863462,
+            "reference": "00683F2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "CA4 0EW",
+            "lat": 54.79812,
+            "lon": -2.848747,
             "reference": "00683F2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3136,11 +5724,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.513
       }
     },
     {
@@ -3167,11 +5756,14 @@
         "areas": [
           "Macclesfield, Cheshire East"
         ],
+        "postcodes": [
+          "SK11 0BD"
+        ],
         "groupedLocations": [
           {
-            "area": "Macclesfield, Cheshire East",
-            "lat": 53.217467,
-            "lon": -2.025583,
+            "area": "SK11 0BD",
+            "lat": 53.217513,
+            "lon": -2.025595,
             "reference": "05598N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3179,6 +5771,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -3210,11 +5803,41 @@
         "areas": [
           "Greensclough, Rossendale"
         ],
+        "postcodes": [
+          "OL13 8PX",
+          "OL13 8RQ",
+          "OL13 8PF",
+          "OL13 8PA"
+        ],
         "groupedLocations": [
           {
-            "area": "Greensclough, Rossendale",
-            "lat": 53.714006,
-            "lon": -2.201305,
+            "area": "OL13 8PX",
+            "lat": 53.713977,
+            "lon": -2.198917,
+            "reference": "04980N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "OL13 8RQ",
+            "lat": 53.713581,
+            "lon": -2.209566,
+            "reference": "04980N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "OL13 8PF",
+            "lat": 53.712395,
+            "lon": -2.20397,
+            "reference": "04980N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "OL13 8PA",
+            "lat": 53.711945,
+            "lon": -2.20424,
             "reference": "04980N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3222,11 +5845,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.363
       }
     },
     {
@@ -3253,11 +5877,77 @@
         "areas": [
           "Moorside, West Lancashire"
         ],
+        "postcodes": [
+          "WN8 9DT",
+          "WN8 9DU",
+          "WN8 9FT",
+          "WN8 9DS",
+          "WN8 9DX",
+          "WN8 9DR",
+          "WN8 9DN",
+          "WN8 9DL"
+        ],
         "groupedLocations": [
           {
-            "area": "Moorside, West Lancashire",
-            "lat": 53.539864,
-            "lon": -2.759875,
+            "area": "WN8 9DT",
+            "lat": 53.536552,
+            "lon": -2.750646,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DU",
+            "lat": 53.537244,
+            "lon": -2.749255,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9FT",
+            "lat": 53.536348,
+            "lon": -2.748756,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DS",
+            "lat": 53.537244,
+            "lon": -2.750613,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DX",
+            "lat": 53.537939,
+            "lon": -2.750127,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DR",
+            "lat": 53.53693,
+            "lon": -2.751995,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DN",
+            "lat": 53.536486,
+            "lon": -2.753964,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          },
+          {
+            "area": "WN8 9DL",
+            "lat": 53.536797,
+            "lon": -2.754603,
             "reference": "05443N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3265,11 +5955,12 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.223
       }
     },
     {
@@ -3296,11 +5987,14 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "postcodes": [
+          "WN2 5TD"
+        ],
         "groupedLocations": [
           {
-            "area": "Golborne And Lowton West, Wigan",
-            "lat": 53.513945,
-            "lon": -2.57065,
+            "area": "WN2 5TD",
+            "lat": 53.511574,
+            "lon": -2.5789,
             "reference": "05433N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3308,6 +6002,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
@@ -3339,11 +6034,14 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "postcodes": [
+          "WN2 5QS"
+        ],
         "groupedLocations": [
           {
-            "area": "Golborne And Lowton West, Wigan",
-            "lat": 53.511957,
-            "lon": -2.589166,
+            "area": "WN2 5QS",
+            "lat": 53.512119,
+            "lon": -2.588815,
             "reference": "05435N2026",
             "status": "Under review",
             "type": "FuturePlannedWorks"
@@ -3351,6 +6049,7 @@
         ],
         "startedAt": null,
         "restoreAt": null,
+        "restoreAtText": "We appreciate your patience while our engineers carry out a planned power cut in your area, this is to improve the reliability of your electricity supply and so our engineers can safely work on the cables that provide...",
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",

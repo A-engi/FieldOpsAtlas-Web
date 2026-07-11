@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "nged",
-  "generatedAt": "2026-07-11T17:25:38.556Z",
+  "generatedAt": "2026-07-11T17:42:43.937Z",
   "stale": false,
   "features": [
     {
@@ -28,6 +28,9 @@
         "areas": [
           "B24 · B24 9FF"
         ],
+        "postcodes": [
+          "B24 9FF"
+        ],
         "groupedLocations": [
           {
             "area": "B24 · B24 9FF",
@@ -40,7 +43,8 @@
         ],
         "startedAt": "2026-05-21T11:20:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 1,
@@ -71,11 +75,23 @@
         "areas": [
           "DY11 · DY11 5XA, DY11 5XD"
         ],
+        "postcodes": [
+          "DY11 5XA",
+          "DY11 5XD"
+        ],
         "groupedLocations": [
           {
-            "area": "DY11 · DY11 5XA, DY11 5XD",
-            "lat": 52.4123,
-            "lon": -2.253763,
+            "area": "DY11 5XA",
+            "lat": 52.411894,
+            "lon": -2.252831,
+            "reference": "INCD-69130-p",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "DY11 5XD",
+            "lat": 52.41308,
+            "lon": -2.25319,
             "reference": "INCD-69130-p",
             "status": "current",
             "type": "current"
@@ -83,11 +99,12 @@
         ],
         "startedAt": "2026-07-10T23:17:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.067
       }
     },
     {
@@ -114,11 +131,32 @@
         "areas": [
           "NG31 · NG31 7DT, NG31 7DU, NG31 7DY"
         ],
+        "postcodes": [
+          "NG31 7DT",
+          "NG31 7DU",
+          "NG31 7DY"
+        ],
         "groupedLocations": [
           {
-            "area": "NG31 · NG31 7DT, NG31 7DU, NG31 7DY",
-            "lat": 52.90933,
-            "lon": -0.6626,
+            "area": "NG31 7DT",
+            "lat": 52.91083,
+            "lon": -0.659456,
+            "reference": "INCD-131653-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "NG31 7DU",
+            "lat": 52.910108,
+            "lon": -0.659999,
+            "reference": "INCD-131653-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "NG31 7DY",
+            "lat": 52.910695,
+            "lon": -0.660278,
             "reference": "INCD-131653-h",
             "status": "current",
             "type": "current"
@@ -126,11 +164,12 @@
         ],
         "startedAt": "2026-07-11T06:51:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.049
       }
     },
     {
@@ -157,11 +196,113 @@
         "areas": [
           "BA1 · BA1 7DR, BA1 7ED, BA1 7EE, BA1 7EF, BA1 7EN, BA1 7EP, BA1 7ER, BA1 7ES · +4 postcodes"
         ],
+        "postcodes": [
+          "BA1 7DR",
+          "BA1 7ED",
+          "BA1 7EE",
+          "BA1 7EF",
+          "BA1 7EN",
+          "BA1 7EP",
+          "BA1 7ER",
+          "BA1 7ES",
+          "BA1 7HB",
+          "BA1 7NA",
+          "BA1 7NG",
+          "BA1 7NQ"
+        ],
         "groupedLocations": [
           {
-            "area": "BA1 · BA1 7DR, BA1 7ED, BA1 7EE, BA1 7EF, BA1 7EN, BA1 7EP, BA1 7ER, BA1 7ES · +4 postcodes",
-            "lat": 51.40608,
-            "lon": -2.320176,
+            "area": "BA1 7DR",
+            "lat": 51.405912,
+            "lon": -2.320993,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7ED",
+            "lat": 51.407774,
+            "lon": -2.320819,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7EE",
+            "lat": 51.408817,
+            "lon": -2.320797,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7EF",
+            "lat": 51.409909,
+            "lon": -2.322415,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7EN",
+            "lat": 51.407434,
+            "lon": -2.320112,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7EP",
+            "lat": 51.408973,
+            "lon": -2.319735,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7ER",
+            "lat": 51.409856,
+            "lon": -2.319036,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7ES",
+            "lat": 51.411021,
+            "lon": -2.32031,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7HB",
+            "lat": 51.406889,
+            "lon": -2.32192,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7NA",
+            "lat": 51.406527,
+            "lon": -2.319531,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7NG",
+            "lat": 51.406277,
+            "lon": -2.319184,
+            "reference": "INCD-98503-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "BA1 7NQ",
+            "lat": 51.406194,
+            "lon": -2.319686,
             "reference": "INCD-98503-l",
             "status": "current",
             "type": "current"
@@ -169,11 +310,12 @@
         ],
         "startedAt": "2026-07-11T07:57:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 12,
+        "coordinateSpreadKm": 0.34
       }
     },
     {
@@ -200,11 +342,338 @@
         "areas": [
           "S21 · S21 1AB, S21 1AD, S21 1AN, S21 1AS, S21 1AU, S21 1BS, S21 1BT, S21 1BZ · +29 postcodes"
         ],
+        "postcodes": [
+          "S21 1AB",
+          "S21 1AD",
+          "S21 1AN",
+          "S21 1AS",
+          "S21 1AU",
+          "S21 1BS",
+          "S21 1BT",
+          "S21 1BZ",
+          "S21 1EQ",
+          "S21 1JQ",
+          "S21 1JY",
+          "S21 1JZ",
+          "S21 2AT",
+          "S21 2BB",
+          "S21 2BU",
+          "S21 2BX",
+          "S21 2BY",
+          "S21 2DD",
+          "S21 2DE",
+          "S21 2DF",
+          "S21 2DJ",
+          "S21 2DL",
+          "S21 2DR",
+          "S21 2DS",
+          "S21 2DT",
+          "S21 2DX",
+          "S21 2EA",
+          "S21 2EG",
+          "S21 2EH",
+          "S21 2EX",
+          "S21 2HB",
+          "S21 2JF",
+          "S21 2JG",
+          "S21 2JH",
+          "S21 2JU",
+          "S21 2JW",
+          "S21 4FH"
+        ],
         "groupedLocations": [
           {
-            "area": "S21 · S21 1AB, S21 1AD, S21 1AN, S21 1AS, S21 1AU, S21 1BS, S21 1BT, S21 1BZ · +29 postcodes",
-            "lat": 53.30887,
-            "lon": -1.31655,
+            "area": "S21 1AB",
+            "lat": 53.321355,
+            "lon": -1.311082,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1AD",
+            "lat": 53.328341,
+            "lon": -1.31139,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1AN",
+            "lat": 53.32293,
+            "lon": -1.309916,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1AS",
+            "lat": 53.324118,
+            "lon": -1.307074,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1AU",
+            "lat": 53.321615,
+            "lon": -1.304743,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1BS",
+            "lat": 53.323145,
+            "lon": -1.31287,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1BT",
+            "lat": 53.322954,
+            "lon": -1.304751,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1BZ",
+            "lat": 53.325167,
+            "lon": -1.311306,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1EQ",
+            "lat": 53.316849,
+            "lon": -1.312251,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1JQ",
+            "lat": 53.328251,
+            "lon": -1.308299,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1JY",
+            "lat": 53.324265,
+            "lon": -1.307492,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 1JZ",
+            "lat": 53.321682,
+            "lon": -1.311783,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2AT",
+            "lat": 53.32579,
+            "lon": -1.29936,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2BB",
+            "lat": 53.325422,
+            "lon": -1.302489,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2BU",
+            "lat": 53.326189,
+            "lon": -1.302957,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2BX",
+            "lat": 53.317261,
+            "lon": -1.298044,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2BY",
+            "lat": 53.325812,
+            "lon": -1.303188,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DD",
+            "lat": 53.329025,
+            "lon": -1.303797,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DE",
+            "lat": 53.327144,
+            "lon": -1.301935,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DF",
+            "lat": 53.326672,
+            "lon": -1.299541,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DJ",
+            "lat": 53.327666,
+            "lon": -1.30038,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DL",
+            "lat": 53.328447,
+            "lon": -1.309527,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DR",
+            "lat": 53.328002,
+            "lon": -1.302582,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DS",
+            "lat": 53.328468,
+            "lon": -1.300743,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DT",
+            "lat": 53.328048,
+            "lon": -1.305809,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2DX",
+            "lat": 53.326369,
+            "lon": -1.306122,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2EA",
+            "lat": 53.326776,
+            "lon": -1.306536,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2EG",
+            "lat": 53.328175,
+            "lon": -1.304516,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2EH",
+            "lat": 53.326904,
+            "lon": -1.305318,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2EX",
+            "lat": 53.32745,
+            "lon": -1.298792,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2HB",
+            "lat": 53.331347,
+            "lon": -1.301176,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2JF",
+            "lat": 53.330905,
+            "lon": -1.304051,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2JG",
+            "lat": 53.331765,
+            "lon": -1.303617,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2JH",
+            "lat": 53.331293,
+            "lon": -1.30427,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2JU",
+            "lat": 53.32977,
+            "lon": -1.302043,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 2JW",
+            "lat": 53.329546,
+            "lon": -1.303683,
+            "reference": "INCD-131670-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "S21 4FH",
+            "lat": 53.315054,
+            "lon": -1.348183,
             "reference": "INCD-131670-h",
             "status": "current",
             "type": "current"
@@ -212,11 +681,12 @@
         ],
         "startedAt": "2026-07-11T09:25:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 37,
+        "coordinateSpreadKm": 3.037
       }
     },
     {
@@ -243,11 +713,14 @@
         "areas": [
           "B64 · B64 5PA"
         ],
+        "postcodes": [
+          "B64 5PA"
+        ],
         "groupedLocations": [
           {
-            "area": "B64 · B64 5PA",
-            "lat": 52.47804,
-            "lon": -2.061662,
+            "area": "B64 5PA",
+            "lat": 52.479141,
+            "lon": -2.065796,
             "reference": "INCD-69301-m",
             "status": "current",
             "type": "current"
@@ -255,7 +728,8 @@
         ],
         "startedAt": "2026-07-11T06:59:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 1,
@@ -282,15 +756,63 @@
         "category": "current",
         "status": "current",
         "type": "current",
-        "area": "LE8 · LE8 5QH, LE8 5RN",
+        "area": "LE8 · LE8 5QH, LE8 5QU, LE8 5QZ, LE8 5RL, LE8 5RN, LE8 5RQ",
         "areas": [
-          "LE8 · LE8 5QH, LE8 5RN"
+          "LE8 · LE8 5QH, LE8 5QU, LE8 5QZ, LE8 5RL, LE8 5RN, LE8 5RQ"
+        ],
+        "postcodes": [
+          "LE8 5QH",
+          "LE8 5QU",
+          "LE8 5QZ",
+          "LE8 5RL",
+          "LE8 5RN",
+          "LE8 5RQ"
         ],
         "groupedLocations": [
           {
-            "area": "LE8 · LE8 5QH, LE8 5RN",
-            "lat": 52.55493,
-            "lon": -1.135499,
+            "area": "LE8 5QH",
+            "lat": 52.554066,
+            "lon": -1.136496,
+            "reference": "INCD-131662-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "LE8 5QU",
+            "lat": 52.556954,
+            "lon": -1.135569,
+            "reference": "INCD-131662-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "LE8 5QZ",
+            "lat": 52.552379,
+            "lon": -1.134464,
+            "reference": "INCD-131662-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "LE8 5RL",
+            "lat": 52.554359,
+            "lon": -1.135974,
+            "reference": "INCD-131662-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "LE8 5RN",
+            "lat": 52.55438,
+            "lon": -1.137581,
+            "reference": "INCD-131662-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "LE8 5RQ",
+            "lat": 52.555273,
+            "lon": -1.135587,
             "reference": "INCD-131662-h",
             "status": "current",
             "type": "current"
@@ -298,11 +820,12 @@
         ],
         "startedAt": "2026-07-11T07:57:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.266
       }
     },
     {
@@ -329,11 +852,59 @@
         "areas": [
           "SA39 · SA39 9AX, SA39 9BA, SA39 9BB, SA39 9BD, SA39 9BE, SA39 9BQ"
         ],
+        "postcodes": [
+          "SA39 9AX",
+          "SA39 9BA",
+          "SA39 9BB",
+          "SA39 9BD",
+          "SA39 9BE",
+          "SA39 9BQ"
+        ],
         "groupedLocations": [
           {
-            "area": "SA39 · SA39 9AX, SA39 9BA, SA39 9BB, SA39 9BD, SA39 9BE, SA39 9BQ",
-            "lat": 52.04713,
-            "lon": -4.235554,
+            "area": "SA39 9AX",
+            "lat": 51.998861,
+            "lon": -4.23844,
+            "reference": "INCD-57265-f",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "SA39 9BA",
+            "lat": 52.009413,
+            "lon": -4.230617,
+            "reference": "INCD-57265-f",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "SA39 9BB",
+            "lat": 52.012175,
+            "lon": -4.248548,
+            "reference": "INCD-57265-f",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "SA39 9BD",
+            "lat": 52.01067,
+            "lon": -4.25385,
+            "reference": "INCD-57265-f",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "SA39 9BE",
+            "lat": 52.01515,
+            "lon": -4.219214,
+            "reference": "INCD-57265-f",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "SA39 9BQ",
+            "lat": 52.000191,
+            "lon": -4.236102,
             "reference": "INCD-57265-f",
             "status": "current",
             "type": "current"
@@ -341,11 +912,131 @@
         ],
         "startedAt": "2026-07-11T12:10:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 1.515
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-98529-l",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.496526,
+          50.71769
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-98529-l",
+        "category": "current",
+        "status": "current",
+        "type": "current",
+        "area": "EX2 · EX2 5JE, EX2 5LD, EX2 5LE, EX2 5LF, EX2 5LG, EX2 5LH, EX2 5LJ, EX2 5LL · +1 postcodes",
+        "areas": [
+          "EX2 · EX2 5JE, EX2 5LD, EX2 5LE, EX2 5LF, EX2 5LG, EX2 5LH, EX2 5LJ, EX2 5LL · +1 postcodes"
+        ],
+        "postcodes": [
+          "EX2 5JE",
+          "EX2 5LD",
+          "EX2 5LE",
+          "EX2 5LF",
+          "EX2 5LG",
+          "EX2 5LH",
+          "EX2 5LJ",
+          "EX2 5LL",
+          "EX2 5LQ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "EX2 5JE",
+            "lat": 50.717085,
+            "lon": -3.497116,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LD",
+            "lat": 50.718767,
+            "lon": -3.494337,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LE",
+            "lat": 50.718161,
+            "lon": -3.495281,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LF",
+            "lat": 50.71785,
+            "lon": -3.494945,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LG",
+            "lat": 50.717639,
+            "lon": -3.495321,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LH",
+            "lat": 50.717094,
+            "lon": -3.496437,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LJ",
+            "lat": 50.716411,
+            "lon": -3.497081,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LL",
+            "lat": 50.716755,
+            "lon": -3.495505,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "EX2 5LQ",
+            "lat": 50.717372,
+            "lon": -3.496516,
+            "reference": "INCD-98529-l",
+            "status": "current",
+            "type": "current"
+          }
+        ],
+        "startedAt": "2026-07-11T13:14:00.000Z",
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 9,
+        "coordinateSpreadKm": 0.18
       }
     },
     {
@@ -372,11 +1063,23 @@
         "areas": [
           "TA19 · TA19 9AH, TA19 9PL"
         ],
+        "postcodes": [
+          "TA19 9AH",
+          "TA19 9PL"
+        ],
         "groupedLocations": [
           {
-            "area": "TA19 · TA19 9AH, TA19 9PL",
-            "lat": 50.93311,
-            "lon": -2.915735,
+            "area": "TA19 9AH",
+            "lat": 50.931924,
+            "lon": -2.915945,
+            "reference": "INCD-98530-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "TA19 9PL",
+            "lat": 50.9331,
+            "lon": -2.917391,
             "reference": "INCD-98530-l",
             "status": "current",
             "type": "current"
@@ -384,11 +1087,12 @@
         ],
         "startedAt": "2026-07-11T13:02:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.083
       }
     },
     {
@@ -415,11 +1119,14 @@
         "areas": [
           "NP16 · NP16 6EU"
         ],
+        "postcodes": [
+          "NP16 6EU"
+        ],
         "groupedLocations": [
           {
-            "area": "NP16 · NP16 6EU",
-            "lat": 51.66664,
-            "lon": -2.71673,
+            "area": "NP16 6EU",
+            "lat": 51.666135,
+            "lon": -2.715022,
             "reference": "INCD-57266-f",
             "status": "current",
             "type": "current"
@@ -427,7 +1134,8 @@
         ],
         "startedAt": "2026-07-11T13:29:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 1,
@@ -458,11 +1166,14 @@
         "areas": [
           "HR6 · HR6 8RS"
         ],
+        "postcodes": [
+          "HR6 8RS"
+        ],
         "groupedLocations": [
           {
-            "area": "HR6 · HR6 8RS",
-            "lat": 52.21995,
-            "lon": -2.762232,
+            "area": "HR6 8RS",
+            "lat": 52.222172,
+            "lon": -2.760821,
             "reference": "INCD-69344-m",
             "status": "current",
             "type": "current"
@@ -470,7 +1181,8 @@
         ],
         "startedAt": "2026-07-11T13:58:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 1,
@@ -501,11 +1213,68 @@
         "areas": [
           "PL30 · PL30 4BX, PL30 4HH, PL30 4HJ, PL30 4HR, PL30 4HS, PL30 4LB, PL30 4QZ"
         ],
+        "postcodes": [
+          "PL30 4BX",
+          "PL30 4HH",
+          "PL30 4HJ",
+          "PL30 4HR",
+          "PL30 4HS",
+          "PL30 4LB",
+          "PL30 4QZ"
+        ],
         "groupedLocations": [
           {
-            "area": "PL30 · PL30 4BX, PL30 4HH, PL30 4HJ, PL30 4HR, PL30 4HS, PL30 4LB, PL30 4QZ",
-            "lat": 50.53541,
-            "lon": -4.722405,
+            "area": "PL30 4BX",
+            "lat": 50.503989,
+            "lon": -4.661611,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4HH",
+            "lat": 50.507808,
+            "lon": -4.664901,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4HJ",
+            "lat": 50.510182,
+            "lon": -4.652734,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4HR",
+            "lat": 50.515014,
+            "lon": -4.66841,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4HS",
+            "lat": 50.509223,
+            "lon": -4.67343,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4LB",
+            "lat": 50.535115,
+            "lon": -4.662615,
+            "reference": "INCD-98547-l",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "PL30 4QZ",
+            "lat": 50.518885,
+            "lon": -4.682723,
             "reference": "INCD-98547-l",
             "status": "current",
             "type": "current"
@@ -513,11 +1282,12 @@
         ],
         "startedAt": "2026-07-11T15:36:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 2.33
       }
     },
     {
@@ -544,11 +1314,23 @@
         "areas": [
           "B11 · B11 2BA, B11 2BH"
         ],
+        "postcodes": [
+          "B11 2BA",
+          "B11 2BH"
+        ],
         "groupedLocations": [
           {
-            "area": "B11 · B11 2BA, B11 2BH",
-            "lat": 52.46119,
-            "lon": -1.858798,
+            "area": "B11 2BA",
+            "lat": 52.459731,
+            "lon": -1.8399,
+            "reference": "INCD-69351-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "B11 2BH",
+            "lat": 52.45524,
+            "lon": -1.835751,
             "reference": "INCD-69351-m",
             "status": "current",
             "type": "current"
@@ -556,97 +1338,12 @@
         ],
         "startedAt": "2026-07-11T16:38:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-131721-h",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.464227,
-          52.40285
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-131721-h",
-        "category": "current",
-        "status": "current",
-        "type": "current",
-        "area": "CV3 · CV3 2DG, CV3 2DH, CV3 2DJ, CV3 2DL, CV3 2DN, CV3 2DQ, CV3 2DR, CV3 2DS · +32 postcodes",
-        "areas": [
-          "CV3 · CV3 2DG, CV3 2DH, CV3 2DJ, CV3 2DL, CV3 2DN, CV3 2DQ, CV3 2DR, CV3 2DS · +32 postcodes"
-        ],
-        "groupedLocations": [
-          {
-            "area": "CV3 · CV3 2DG, CV3 2DH, CV3 2DJ, CV3 2DL, CV3 2DN, CV3 2DQ, CV3 2DR, CV3 2DS · +32 postcodes",
-            "lat": 52.40285,
-            "lon": -1.464227,
-            "reference": "INCD-131721-h",
-            "status": "current",
-            "type": "current"
-          }
-        ],
-        "startedAt": "2026-07-11T16:41:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-69353-m",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.150309,
-          52.59354
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-69353-m",
-        "category": "current",
-        "status": "current",
-        "type": "current",
-        "area": "WV6 · WV6 0DN, WV6 0DW, WV6 0ED, WV6 0EE, WV6 0EH, WV6 0EQ, WV6 0RJ, WV6 0RU",
-        "areas": [
-          "WV6 · WV6 0DN, WV6 0DW, WV6 0ED, WV6 0EE, WV6 0EH, WV6 0EQ, WV6 0RJ, WV6 0RU"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WV6 · WV6 0DN, WV6 0DW, WV6 0ED, WV6 0EE, WV6 0EH, WV6 0EQ, WV6 0RJ, WV6 0RU",
-            "lat": 52.59354,
-            "lon": -2.150309,
-            "reference": "INCD-69353-m",
-            "status": "current",
-            "type": "current"
-          }
-        ],
-        "startedAt": "2026-07-11T17:00:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.287
       }
     },
     {
@@ -673,11 +1370,68 @@
         "areas": [
           "WV14 · WV14 7LH, WV14 7LS, WV14 7LU, WV14 7LY, WV14 7LZ, WV14 7NE, WV14 7NH"
         ],
+        "postcodes": [
+          "WV14 7LH",
+          "WV14 7LS",
+          "WV14 7LU",
+          "WV14 7LY",
+          "WV14 7LZ",
+          "WV14 7NE",
+          "WV14 7NH"
+        ],
         "groupedLocations": [
           {
-            "area": "WV14 · WV14 7LH, WV14 7LS, WV14 7LU, WV14 7LY, WV14 7LZ, WV14 7NE, WV14 7NH",
-            "lat": 52.57017,
-            "lon": -2.068652,
+            "area": "WV14 7LH",
+            "lat": 52.570952,
+            "lon": -2.071393,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7LS",
+            "lat": 52.567633,
+            "lon": -2.073364,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7LU",
+            "lat": 52.568147,
+            "lon": -2.071477,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7LY",
+            "lat": 52.568237,
+            "lon": -2.070474,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7LZ",
+            "lat": 52.567374,
+            "lon": -2.071239,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7NE",
+            "lat": 52.569046,
+            "lon": -2.070711,
+            "reference": "INCD-69356-m",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "WV14 7NH",
+            "lat": 52.569126,
+            "lon": -2.073308,
             "reference": "INCD-69356-m",
             "status": "current",
             "type": "current"
@@ -685,11 +1439,115 @@
         ],
         "startedAt": "2026-07-11T15:18:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:24:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.257
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-131711-h",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.639898,
+          52.38937
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-131711-h",
+        "category": "current",
+        "status": "current",
+        "type": "current",
+        "area": "NN14 · NN14 4AD",
+        "areas": [
+          "NN14 · NN14 4AD"
+        ],
+        "postcodes": [
+          "NN14 4AD"
+        ],
+        "groupedLocations": [
+          {
+            "area": "NN14 4AD",
+            "lat": 52.386198,
+            "lon": -0.63801,
+            "reference": "INCD-131711-h",
+            "status": "current",
+            "type": "current"
+          }
+        ],
+        "startedAt": "2026-07-11T14:35:00.000Z",
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 1,
         "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-131720-h",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.597124,
+          52.29835
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-131720-h",
+        "category": "current",
+        "status": "current",
+        "type": "current",
+        "area": "NN10 · NN10 6DD, NN10 6DE",
+        "areas": [
+          "NN10 · NN10 6DD, NN10 6DE"
+        ],
+        "postcodes": [
+          "NN10 6DD",
+          "NN10 6DE"
+        ],
+        "groupedLocations": [
+          {
+            "area": "NN10 6DD",
+            "lat": 52.298083,
+            "lon": -0.598451,
+            "reference": "INCD-131720-h",
+            "status": "current",
+            "type": "current"
+          },
+          {
+            "area": "NN10 6DE",
+            "lat": 52.298289,
+            "lon": -0.597668,
+            "reference": "INCD-131720-h",
+            "status": "current",
+            "type": "current"
+          }
+        ],
+        "startedAt": "2026-07-11T15:55:00.000Z",
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": "2026-07-11T17:40:00.000Z",
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.029
       }
     }
   ]

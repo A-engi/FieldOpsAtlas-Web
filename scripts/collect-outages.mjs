@@ -24,7 +24,8 @@ const DEBUG_HTTP = /^(1|true|yes)$/i.test(
 const MAX_ERROR_BODY = 600;
 const SPEN_API_ROOT =
   "https://powercuts.spenergynetworks.co.uk/lwr/apex/v67.0/SPEN_PostcodeSearchController";
-const SPEN_POSTCODES_ROOT = "https://api.postcodes.io/postcodes";
+const POSTCODES_ROOT = "https://api.postcodes.io";
+const POSTCODE_RE = /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/gi;
 const SPEN_STATUS_GROUPS = [
   {
     category: "current",
@@ -149,10 +150,12 @@ const providers = [
   }
 ];
 
+const postcodeCache = new Map();
+
 await fs.mkdir(OUT, { recursive: true });
 
 if (process.argv.includes("--self-test")) {
-  selfTest();
+  await selfTest();
 } else {
   await main();
 }
@@ -254,7 +257,7 @@ async function collect(provider, generatedAt) {
   let skippedRows = 0;
 
   for (const item of rows) {
-    const incident = normalise(provider, item.feed, item.row, item.index);
+    const incident = await normalise(provider, item.feed, item.row, item.index);
     if (incident) candidates.push(incident);
     else skippedRows += 1;
   }
@@ -464,8 +467,123 @@ async function loadNgedPostcodeIncident(incident, feed) {
   }
 }
 
+function extractPostcodes(...values) {
+  const seen = new Set();
+  const postcodes = [];
+
+  for (const input of values) {
+    const text = scalarText(input);
+    for (const match of text.matchAll(POSTCODE_RE)) {
+      const postcode = formatPostcode(match[0]);
+      const key = postcode.replace(/\s+/g, "");
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      postcodes.push(postcode);
+    }
+  }
+
+  return postcodes;
+}
+
+async function lookupPostcodeLocations(postcodes, knownLocations = []) {
+  const fromKnown = normalisePostcodeLocations(knownLocations);
+  if (fromKnown.length) return fromKnown;
+
+  const keys = [...new Set(
+    postcodes
+      .map((postcode) => formatPostcode(postcode).replace(/\s+/g, ""))
+      .filter(Boolean)
+  )];
+  const missing = keys.filter((key) => !postcodeCache.has(key));
+
+  for (let index = 0; index < missing.length; index += 100) {
+    const chunk = missing.slice(index, index + 100);
+
+    try {
+      const payload = await postJson(`${POSTCODES_ROOT}/postcodes`, {
+        postcodes: chunk
+      });
+      const results = Array.isArray(payload?.result) ? payload.result : [];
+      const received = new Set();
+
+      for (const item of results) {
+        const key = formatPostcode(item?.query).replace(/\s+/g, "");
+        const coordinate = postcodeCoordinate(item?.result);
+        received.add(key);
+        postcodeCache.set(key, coordinate);
+      }
+
+      chunk
+        .filter((key) => !received.has(key))
+        .forEach((key) => postcodeCache.set(key, null));
+    } catch {
+      await Promise.all(chunk.map(async (key) => {
+        if (postcodeCache.has(key)) return;
+
+        try {
+          const payload = await getJson(`${POSTCODES_ROOT}/postcodes/${encodeURIComponent(key)}`);
+          postcodeCache.set(key, postcodeCoordinate(payload?.result));
+        } catch {
+          postcodeCache.set(key, null);
+        }
+      }));
+    }
+  }
+
+  return keys
+    .map((key) => postcodeCache.get(key))
+    .filter(Boolean);
+}
+
+function normalisePostcodeLocations(locations) {
+  if (!Array.isArray(locations)) return [];
+
+  return locations
+    .map((location) => {
+      const coordinate = valid(Number(location?.lat), Number(location?.lon));
+      if (!coordinate) return null;
+      return {
+        postcode: formatPostcode(location.postcode || location.area || ""),
+        lat: coordinate.lat,
+        lon: coordinate.lon
+      };
+    })
+    .filter(Boolean);
+}
+
+function postcodeCoordinate(result) {
+  const coordinate = valid(Number(result?.latitude), Number(result?.longitude));
+  return coordinate
+    ? {
+        postcode: formatPostcode(result?.postcode || ""),
+        lat: coordinate.lat,
+        lon: coordinate.lon
+      }
+    : null;
+}
+
+function centroid(locations) {
+  const coordinates = normalisePostcodeLocations(locations);
+  if (!coordinates.length) return null;
+
+  return valid(
+    coordinates.reduce((sum, item) => sum + item.lat, 0) / coordinates.length,
+    coordinates.reduce((sum, item) => sum + item.lon, 0) / coordinates.length
+  );
+}
+
+function formatPostcode(input) {
+  const compact = String(input || "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
+
+  if (compact.length <= 3) return compact;
+  return `${compact.slice(0, -3)} ${compact.slice(-3)}`.trim();
+}
+
 function toNgedPowercutRow(incident, lastUpdated) {
   const coordinate = coordinateFromNgedLoc(incident?.loc);
+  const hasPlaceholderEtr = isPlaceholderNgedDate(incident?.etr);
   const postcodes = Array.isArray(incident?.postcodes)
     ? incident.postcodes.filter(Boolean)
     : [];
@@ -492,7 +610,8 @@ function toNgedPowercutRow(incident, lastUpdated) {
     area: area || incident?.region || "Published incident location",
     location: coordinate,
     startedAt: incident?.startTime,
-    restoreAt: isPlaceholderNgedDate(incident?.etr) ? "" : incident?.etr,
+    restoreAt: hasPlaceholderEtr ? "" : incident?.etr,
+    restoreAtText: hasPlaceholderEtr ? "Unknown" : value(incident?.etr),
     updatedAt: incident?.lastUpdated || lastUpdated
   };
 }
@@ -515,6 +634,7 @@ function toNieRow(outage) {
   if (!coordinate) return null;
 
   const isPlanned = /planned/i.test(value(outage.outageType));
+  const restoreText = value(outage.estRestoreFullDateTime || outage.estRestoreTime);
 
   return {
     outageId: outage.outageId,
@@ -524,6 +644,7 @@ function toNieRow(outage) {
     planned: isPlanned,
     startTime: parseNieDate(outage.startTime),
     estimatedRestorationTime: parseNieDate(outage.estRestoreFullDateTime || outage.estRestoreTime),
+    estimatedRestorationTimeText: /not available/i.test(restoreText) ? restoreText : "",
     updatedAt: parseNieDate(outage.updatedTimeStamp),
     postCode: outage.postCode,
     fullPostCodes: outage.fullPostCodes,
@@ -654,7 +775,6 @@ function radToDeg(radians) {
 }
 
 async function loadSpenLwr() {
-  const postcodeCache = new Map();
   const rows = [];
   const counts = {};
 
@@ -686,12 +806,25 @@ async function loadSpenLwr() {
       }
 
       for (const incident of page) {
-        const postcode = firstSpenPostcode(incident.postcodeList);
-        const coordinate = await lookupSpenPostcode(postcode, postcodeCache);
+        const postcodes = extractPostcodes(
+          incident.postcodeList,
+          incident.spenPostCodesPerIncident,
+          incident.outCodes
+        );
+        const postcodeLocations = await lookupPostcodeLocations(postcodes);
+        const postcode = postcodes[0] || firstSpenPostcode(incident.postcodeList);
+        const coordinate = centroid(postcodeLocations);
 
         if (!coordinate) continue;
 
-        rows.push(toSpenCollectorRow(incident, group.category, postcode, coordinate));
+        rows.push(toSpenCollectorRow(
+          incident,
+          group.category,
+          postcode,
+          coordinate,
+          postcodes,
+          postcodeLocations
+        ));
       }
     }
   }
@@ -755,31 +888,18 @@ async function postJson(url, body, headers = {}) {
   throw lastError || new Error("POST request failed");
 }
 
-async function lookupSpenPostcode(postcode, cache) {
-  const key = String(postcode || "").toUpperCase().replace(/\s+/g, "");
-
-  if (!key) return null;
-  if (cache.has(key)) return cache.get(key);
-
-  try {
-    const payload = await getJson(`${SPEN_POSTCODES_ROOT}/${encodeURIComponent(key)}`);
-    const coordinate = valid(
-      Number(payload?.result?.latitude),
-      Number(payload?.result?.longitude)
-    );
-
-    cache.set(key, coordinate);
-    return coordinate;
-  } catch {
-    cache.set(key, null);
-    return null;
-  }
-}
-
-function toSpenCollectorRow(incident, category, postcode, coordinate) {
+function toSpenCollectorRow(
+  incident,
+  category,
+  postcode,
+  coordinate,
+  postcodes,
+  postcodeLocations
+) {
   const outcodes = Array.isArray(incident.outCodes)
     ? incident.outCodes.filter(Boolean).join(", ")
     : "";
+  const estimatedFix = toIsoDate(parseSpenDate(incident.estimatedFix));
 
   return {
     incidentReference: incident.incidentReference,
@@ -790,10 +910,12 @@ function toSpenCollectorRow(incident, category, postcode, coordinate) {
     longitude: coordinate.lon,
     location: value(incident.ipTown) || outcodes || postcode,
     postcode,
-    postcodes: incident.postcodeList,
+    postcodes: postcodes.length ? postcodes : incident.postcodeList,
+    postcodeLocations,
     affectedPostcodes: incident.spenPostCodesPerIncident,
     startTime: toIsoDate(parseSpenDate(incident.createdDate || incident.arrivalDate)),
-    estimatedRestorationTime: toIsoDate(parseSpenDate(incident.estimatedFix)),
+    estimatedRestorationTime: estimatedFix,
+    estimatedRestorationTimeText: estimatedFix ? value(incident.estimatedFix) : "",
     actualRestorationTime: toIsoDate(parseSpenDate(incident.actualRestorationTime)),
     updatedAt: toIsoDate(parseSpenDate(incident.ivrMessageAssignedTime || incident.dispatchedDate)),
     message: incident.mainMessage || incident.ivrMessage
@@ -1052,7 +1174,7 @@ async function loadCkan(feed) {
   return rows.slice(0, LIMIT);
 }
 
-function normalise(provider, feed, row, index) {
+async function normalise(provider, feed, row, index) {
   const raw = row?.type === "Feature"
     ? { ...(row.properties || {}), geometry: row.geometry }
     : row?.record || row?.fields || row;
@@ -1060,7 +1182,9 @@ function normalise(provider, feed, row, index) {
   if (!raw || typeof raw !== "object") return null;
 
   const fields = flatten(raw);
-  const coordinateValue = findCoordinate(raw, fields);
+  const postcodes = extractPostcodes(raw);
+  const postcodeLocations = await lookupPostcodeLocations(postcodes, raw.postcodeLocations);
+  const coordinateValue = findCoordinate(raw, fields) || centroid(postcodeLocations);
   if (!coordinateValue) return null;
 
   const status = value(
@@ -1125,8 +1249,7 @@ function normalise(provider, feed, row, index) {
     ])
   );
 
-  const restoreAt = date(
-    pick(fields, [
+  const restoreAtValue = pick(fields, [
       "estimatedrestorationtime",
       "estimatedtimetillresolution",
       "estimatedrestore",
@@ -1138,8 +1261,9 @@ function normalise(provider, feed, row, index) {
       "etr",
       "endtime",
       "to"
-    ])
-  );
+    ]);
+  const restoreAt = date(restoreAtValue);
+  const restoreAtText = restoreDisplayText(raw, fields, restoreAtValue, restoreAt);
 
   const updatedAt = date(
     pick(fields, [
@@ -1224,10 +1348,17 @@ function normalise(provider, feed, row, index) {
     status: status || category,
     type: type || category,
     area,
+    postcodes,
+    postcodeLocations: postcodeLocations.map((location) => ({
+      area: location.postcode,
+      lat: location.lat,
+      lon: location.lon
+    })),
     lat: coordinateValue.lat,
     lon: coordinateValue.lon,
     startedAt,
     restoreAt,
+    restoreAtText,
     updatedAt,
     officialUrl: provider.officialUrl,
     locationQuality: provider.locationQuality,
@@ -1266,19 +1397,14 @@ function group(incident, key) {
     status: incident.status,
     type: incident.type,
     areas: new Set([incident.area]),
-    locations: [{
-      area: incident.area,
-      lat: incident.lat,
-      lon: incident.lon,
-      reference: incident.reference,
-      status: incident.status,
-      type: incident.type
-    }],
-    coords: [[incident.lat, incident.lon]],
+    postcodes: new Set(incident.postcodes || []),
+    locations: incidentLocations(incident),
+    coords: incidentLocations(incident).map((location) => [location.lat, location.lon]),
     lat: incident.lat,
     lon: incident.lon,
     startedAt: incident.startedAt,
     restoreAt: incident.restoreAt,
+    restoreAtText: incident.restoreAtText,
     updatedAt: incident.updatedAt,
     officialUrl: incident.officialUrl,
     locationQuality: incident.locationQuality,
@@ -1289,21 +1415,49 @@ function group(incident, key) {
 function merge(target, incident) {
   target.feedIds.add(incident.feedId);
   target.areas.add(incident.area);
-  target.locations.push({
+  (incident.postcodes || []).forEach((postcode) => target.postcodes.add(postcode));
+  const locations = incidentLocations(incident);
+  target.locations.push(...locations);
+  target.coords.push(...locations.map((location) => [location.lat, location.lon]));
+  target.lat += incident.lat;
+  target.lon += incident.lon;
+  target.count += 1;
+  target.startedAt = earlier(target.startedAt, incident.startedAt);
+  target.restoreAt = later(target.restoreAt, incident.restoreAt);
+  if (!target.restoreAtText && incident.restoreAtText) target.restoreAtText = incident.restoreAtText;
+  target.updatedAt = later(target.updatedAt, incident.updatedAt);
+}
+
+function incidentLocations(incident) {
+  const seen = new Set();
+  const locations = (incident.postcodeLocations || [])
+    .map((location) => {
+      const coordinate = valid(Number(location.lat), Number(location.lon));
+      const area = location.area || location.postcode || incident.area;
+      const key = `${area}:${coordinate?.lat.toFixed(6)}:${coordinate?.lon.toFixed(6)}`;
+      if (!coordinate || seen.has(key)) return null;
+      seen.add(key);
+      return {
+        area,
+        lat: coordinate.lat,
+        lon: coordinate.lon,
+        reference: incident.reference,
+        status: incident.status,
+        type: incident.type
+      };
+    })
+    .filter(Boolean);
+
+  if (locations.length) return locations;
+
+  return [{
     area: incident.area,
     lat: incident.lat,
     lon: incident.lon,
     reference: incident.reference,
     status: incident.status,
     type: incident.type
-  });
-  target.coords.push([incident.lat, incident.lon]);
-  target.lat += incident.lat;
-  target.lon += incident.lon;
-  target.count += 1;
-  target.startedAt = earlier(target.startedAt, incident.startedAt);
-  target.restoreAt = later(target.restoreAt, incident.restoreAt);
-  target.updatedAt = later(target.updatedAt, incident.updatedAt);
+  }];
 }
 
 function finish(provider, target) {
@@ -1332,15 +1486,17 @@ function finish(provider, target) {
       ? areas[0] || "Published incident location"
       : `${areas[0]} + ${areas.length - 1} related locations`,
     areas,
+    postcodes: [...target.postcodes],
     groupedLocations: target.locations,
     lat,
     lon,
     startedAt: target.startedAt,
     restoreAt: target.restoreAt,
+    restoreAtText: target.restoreAtText,
     updatedAt: target.updatedAt,
     officialUrl: target.officialUrl,
     locationQuality: target.locationQuality,
-    rawRecordCount: target.count,
+    rawRecordCount: Math.max(target.count, target.locations.length),
     coordinateSpreadKm: spread(target.coords)
   };
 }
@@ -1386,9 +1542,11 @@ function toFeature(incident) {
       type: incident.type,
       area: incident.area,
       areas: incident.areas,
+      postcodes: incident.postcodes,
       groupedLocations: incident.groupedLocations,
       startedAt: iso(incident.startedAt),
       restoreAt: iso(incident.restoreAt),
+      restoreAtText: incident.restoreAtText || "",
       updatedAt: iso(incident.updatedAt),
       officialUrl: incident.officialUrl,
       locationQuality: incident.locationQuality,
@@ -1663,6 +1821,54 @@ function value(input) {
   if (Array.isArray(input)) return input.join(", ");
   if (typeof input === "object") return JSON.stringify(input);
   return String(input).trim();
+}
+
+function cleanText(input) {
+  return value(input)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function restoreDisplayText(raw, fields, restoreAtValue, restoreAt) {
+  const direct = cleanText(restoreAtValue);
+
+  if (
+    direct &&
+    !restoreAt &&
+    !/^(0|1900-01-01|unknown|null|none|n\/?a)$/i.test(direct)
+  ) {
+    return direct;
+  }
+
+  const note = cleanText(
+    pick(fields, [
+      "estimatedrestorationtimetext",
+      "estimatedrestorationtext",
+      "estimatedfix",
+      "etrtext",
+      "estrestoretime",
+      "estrestorefulldatetime",
+      "custometrmessage",
+      "custometrmessagepa",
+      "incidenttypetbcestimatedfriendlydescription",
+      "mainmessage",
+      "message",
+      "additionalfaultinfo",
+      "updateinfo",
+      "information",
+      "notes"
+    ])
+  );
+
+  if (!note) return "";
+
+  const sentence = note
+    .split(/(?<=[.!?])\s+/)
+    .find((item) => /\b(restore|restoration|power back|back on|estimate|estimated|etr)\b/i.test(item));
+
+  const text = sentence || note;
+  return text.length > 220 ? `${text.slice(0, 217).trim()}...` : text;
 }
 
 function date(input) {
@@ -1976,31 +2182,31 @@ function concise(error) {
     : String(error?.message || "Unavailable").slice(0, 700);
 }
 
-function selfTest() {
+async function selfTest() {
   const nged = providers.find((provider) => provider.id === "nged");
   const ngedFeed = nged.feeds[0];
 
-  const duplicate = [
-    {
-      "Incident ID": "X",
-      Status: "Awaiting",
-      Planned: false,
-      "Location Latitude": 51.5,
-      "Location Longitude": -2.5
-    },
-    {
-      "Incident ID": "X",
-      Status: "Awaiting",
-      Planned: false,
-      "Location Latitude": 51.5002,
-      "Location Longitude": -2.5002
-    }
-  ]
-    .map((row, index) => normalise(nged, ngedFeed, row, index))
-    .filter(Boolean);
+  const duplicate = (
+    await Promise.all([
+      {
+        "Incident ID": "X",
+        Status: "Awaiting",
+        Planned: false,
+        "Location Latitude": 51.5,
+        "Location Longitude": -2.5
+      },
+      {
+        "Incident ID": "X",
+        Status: "Awaiting",
+        Planned: false,
+        "Location Latitude": 51.5002,
+        "Location Longitude": -2.5002
+      }
+    ].map((row, index) => normalise(nged, ngedFeed, row, index)))
+  ).filter(Boolean);
 
   const grouped = dedupe(nged, duplicate);
-  const byText = normalise(
+  const byText = await normalise(
     nged,
     ngedFeed,
     {
@@ -2011,7 +2217,7 @@ function selfTest() {
     },
     0
   );
-  const byDate = normalise(
+  const byDate = await normalise(
     nged,
     ngedFeed,
     {
