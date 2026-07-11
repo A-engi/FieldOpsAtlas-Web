@@ -13,6 +13,7 @@
   const VERSION = "0.4.1-region-selector";
   const ACTIVE_SOURCES_KEY = "fieldops-outage-active-sources-v2";
   const VISIBLE_REGIONS_KEY = "fieldops-outage-visible-regions-v1";
+  const SELECTOR_COMPLETE_KEY = "fieldops-outage-selector-complete-v2";
   const MAP_VIEW_KEY = "fieldops-weather-map-view-v1";
   const REFRESH_MS = 5 * 60 * 1000;
   const DATA_ROOT = "data/outages";
@@ -60,13 +61,13 @@
   ];
 
   const OUTAGE_REGIONS = [
-    { id: "scotland", label: "Scotland", bounds: [[55.0, -8.7], [61.1, -0.7]], x: 48, y: 16 },
-    { id: "north", label: "North", bounds: [[53.0, -4.2], [55.25, -0.7]], x: 65, y: 34 },
-    { id: "midlands", label: "Midlands", bounds: [[51.75, -3.45], [53.35, -0.5]], x: 70, y: 50 },
-    { id: "london", label: "London", bounds: [[51.05, -0.7], [51.9, 0.45]], x: 79, y: 64 },
-    { id: "south-east", label: "South East", bounds: [[50.65, -1.25], [51.75, 1.75]], x: 76, y: 82 },
-    { id: "south-west", label: "South West", bounds: [[49.85, -6.35], [51.75, -1.75]], x: 30, y: 87 },
-    { id: "wales-west", label: "Wales & West", bounds: [[51.3, -5.75], [53.65, -2.2]], x: 16, y: 64, featured: true }
+    { id: "scotland", label: "Scotland", bounds: [[55.0, -8.7], [61.1, -0.7]], x: 48, y: 16, colour: "#3fa9f5" },
+    { id: "north", label: "North", bounds: [[53.0, -4.2], [55.25, -0.7]], x: 65, y: 34, colour: "#3fa9f5" },
+    { id: "midlands", label: "Midlands", bounds: [[51.75, -3.45], [53.35, -0.5]], x: 70, y: 50, colour: "#3fa9f5" },
+    { id: "london", label: "London", bounds: [[51.05, -0.7], [51.9, 0.45]], x: 79, y: 64, colour: "#3fa9f5" },
+    { id: "south-east", label: "South East", bounds: [[50.65, -1.25], [51.75, 1.75]], x: 76, y: 82, colour: "#3fa9f5" },
+    { id: "south-west", label: "South West", bounds: [[49.85, -6.35], [51.75, -1.75]], x: 30, y: 87, colour: "#3fa9f5" },
+    { id: "wales-west", label: "Wales & West", bounds: [[51.3, -5.75], [53.65, -2.2]], x: 16, y: 64, colour: "#58dd72", featured: true }
   ];
 
   const state = {
@@ -79,6 +80,7 @@
     activeSources: new Set(),
     visibleRegions: new Set(),
     pendingRegions: new Set(),
+    selectorComplete: false,
     refreshSequence: 0,
     refreshTimer: null,
     renderTimer: null,
@@ -92,6 +94,7 @@
     state.activeSources = readActiveSources();
     state.visibleRegions = readVisibleRegions();
     state.pendingRegions = new Set(state.visibleRegions);
+    state.selectorComplete = readSelectorComplete();
     initPanels();
 
     if (!window.L || !elements.map) {
@@ -118,6 +121,7 @@
     elements.regionList = document.getElementById("regionList");
     elements.regionOk = document.getElementById("regionOk");
     elements.regionReset = document.getElementById("regionReset");
+    elements.selectorOverlay = document.getElementById("outageRegionSelector");
     elements.headlineStatus = document.getElementById("headlineStatus");
     elements.liveBadge = document.getElementById("liveBadge");
     elements.statusText = document.getElementById("statusText");
@@ -126,8 +130,10 @@
     elements.showRestored = document.getElementById("showRestored");
     elements.refresh = document.getElementById("refreshOutages");
     elements.ukView = document.getElementById("ukView");
+    elements.changeRegions = document.getElementById("changeRegions");
     elements.currentCount = document.getElementById("currentCount");
     elements.plannedCount = document.getElementById("plannedCount");
+    elements.restoredCount = document.getElementById("restoredCount");
     elements.providerCount = document.getElementById("providerCount");
     elements.rawRowCount = document.getElementById("rawRowCount");
     elements.uniqueIncidentCount = document.getElementById("uniqueIncidentCount");
@@ -316,7 +322,10 @@
 
     elements.regionOk?.addEventListener("click", () => {
       state.visibleRegions = new Set(state.pendingRegions);
+      state.selectorComplete = state.visibleRegions.size > 0;
       writeVisibleRegions();
+      writeSelectorComplete();
+      syncSelectorOverlay();
       syncMarkerVisibility();
       syncRegionHighlights();
       renderSourceList();
@@ -330,6 +339,17 @@
       syncRegionHighlights();
       renderRegionList();
     });
+
+    elements.changeRegions?.addEventListener("click", () => {
+      state.pendingRegions = new Set(state.visibleRegions);
+      state.selectorComplete = false;
+      writeSelectorComplete();
+      syncSelectorOverlay();
+      syncRegionHighlights();
+      renderRegionList();
+    });
+
+    syncSelectorOverlay();
   }
 
   function initialiseRegionLayers() {
@@ -389,6 +409,14 @@
     }
   }
 
+  function readSelectorComplete() {
+    try {
+      return window.localStorage.getItem(SELECTOR_COMPLETE_KEY) === "true";
+    } catch {
+      return false;
+    }
+  }
+
   function writeActiveSources() {
     try {
       window.localStorage.setItem(
@@ -409,6 +437,22 @@
     } catch {
       // The region selector remains usable without storage.
     }
+  }
+
+  function writeSelectorComplete() {
+    try {
+      window.localStorage.setItem(SELECTOR_COMPLETE_KEY, state.selectorComplete ? "true" : "false");
+    } catch {
+      // The selector still works without storage.
+    }
+  }
+
+  function syncSelectorOverlay() {
+    if (!elements.selectorOverlay) return;
+
+    elements.selectorOverlay.hidden = Boolean(state.selectorComplete);
+    document.body.classList.toggle("outage-selector-active", !state.selectorComplete);
+    window.setTimeout(() => state.map?.invalidateSize({ pan: false }), 120);
   }
 
   function setSourceActive(sourceId, active) {
@@ -482,6 +526,7 @@
   }
 
   function isRecordInVisibleRegion(record) {
+    if (!state.selectorComplete) return false;
     if (state.visibleRegions.size === OUTAGE_REGIONS.length) return true;
 
     return OUTAGE_REGIONS.some((region) =>
@@ -687,24 +732,25 @@
     const records = [];
 
     features.forEach((feature, index) => {
-      const record = featureToRecord(provider, feature, index);
-      if (!record) return;
+      featureToRecords(provider, feature, index).forEach((record) => {
+        if (!record) return;
 
-      if (!state.firstSeen.has(record.key)) state.firstSeen.set(record.key, now);
+        if (!state.firstSeen.has(record.key)) state.firstSeen.set(record.key, now);
 
-      const marker = window.L.marker([record.lat, record.lon], {
-        pane: "outageMarkerPane",
-        keyboard: true,
-        icon: createIncidentIcon(record, now)
+        const marker = window.L.marker([record.lat, record.lon], {
+          pane: "outageMarkerPane",
+          keyboard: true,
+          icon: createIncidentIcon(record, now)
+        });
+
+        marker.bindPopup(createPopupHtml(record), {
+          closeButton: true,
+          className: "outage-popup-shell"
+        });
+
+        record.marker = marker;
+        records.push(record);
       });
-
-      marker.bindPopup(createPopupHtml(record), {
-        closeButton: true,
-        className: "outage-popup-shell"
-      });
-
-      record.marker = marker;
-      records.push(record);
     });
 
     state.providerRecords.set(provider.id, records);
@@ -745,6 +791,42 @@
       locationQuality: properties.locationQuality || "approximate",
       rawRecordCount: Math.max(1, Number(properties.rawRecordCount || 1)),
       coordinateSpreadKm: Math.max(0, Number(properties.coordinateSpreadKm || 0))
+    };
+  }
+
+  function featureToRecords(provider, feature, index) {
+    const primary = featureToRecord(provider, feature, index);
+    if (!primary) return [];
+
+    const grouped = Array.isArray(feature?.properties?.groupedLocations)
+      ? feature.properties.groupedLocations
+      : [];
+
+    if (grouped.length <= 1) return [primary];
+
+    return grouped
+      .map((location, childIndex) => childLocationRecord(primary, location, childIndex))
+      .filter(Boolean);
+  }
+
+  function childLocationRecord(primary, location, index) {
+    const lat = Number(location?.lat);
+    const lon = Number(location?.lon);
+    if (!validCoordinate(lat, lon)) return null;
+
+    return {
+      ...primary,
+      key: `${primary.key}:location:${index}`,
+      reference: location.reference || primary.reference,
+      status: location.status || primary.status,
+      type: location.type || primary.type,
+      area: location.area || primary.area,
+      lat,
+      lon,
+      rawRecordCount: 1,
+      coordinateSpreadKm: 0,
+      groupedChild: true,
+      groupedParentCount: primary.rawRecordCount
     };
   }
 
@@ -909,6 +991,7 @@
     const loadedRecords = activeRecords();
     const current = records.filter((item) => item.category === "current").length;
     const planned = records.filter((item) => item.category === "planned").length;
+    const restored = records.filter((item) => item.category === "restored").length;
     const activeStatuses = [...state.activeSources]
       .map((id) => state.providerStatus.get(id))
       .filter(Boolean);
@@ -923,6 +1006,7 @@
 
     elements.currentCount.textContent = String(current);
     elements.plannedCount.textContent = String(planned);
+    elements.restoredCount.textContent = String(restored);
     elements.providerCount.textContent = `${loaded}/${state.activeSources.size}`;
     elements.rawRowCount.textContent = String(rawRows);
     elements.uniqueIncidentCount.textContent = String(records.length);

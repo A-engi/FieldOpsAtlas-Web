@@ -111,8 +111,23 @@
   top: calc(var(--safe-top) + 132px);
 }
 
-.outage-region-panel {
-  top: calc(var(--safe-top) + 186px);
+.outage-region-selector {
+  position: absolute;
+  z-index: 70;
+  inset: 0;
+  display: grid;
+  align-items: start;
+  padding: calc(var(--safe-top) + 74px) 12px calc(var(--safe-bottom) + 18px);
+  overflow: auto;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(32, 61, 90, 0.28), transparent 46%),
+    rgba(5, 14, 23, 0.92);
+  color: var(--weather-text);
+  backdrop-filter: blur(10px);
+}
+
+.outage-region-selector[hidden] {
+  display: none;
 }
 
 .outage-source-list {
@@ -205,10 +220,16 @@
   opacity: 0;
 }
 
-.outage-source-panel[open] ~ .outage-region-panel,
-.outage-region-panel[open] ~ .outage-map-key {
+.outage-source-panel[open] ~ .outage-map-key {
   opacity: 0;
   pointer-events: none;
+}
+
+body.outage-selector-active .outage-source-panel,
+body.outage-selector-active .outage-map-key,
+body.outage-selector-active .outage-dock {
+  pointer-events: none;
+  opacity: 0;
 }
 
 .outage-map-key span {
@@ -310,7 +331,7 @@
 }
 
 .outage-metrics {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .outage-note,
@@ -410,13 +431,8 @@
   }
 
   .outage-source-panel,
-  .outage-region-panel,
   .outage-map-key {
     top: calc(var(--safe-top) + 120px);
-  }
-
-  .outage-region-panel {
-    top: calc(var(--safe-top) + 174px);
   }
 
   .outage-panel-body {
@@ -502,7 +518,13 @@
 .outage-region-card {
   display: grid;
   gap: 12px;
-  padding: 8px 10px 12px;
+  width: min(100%, 580px);
+  margin: 0 auto;
+  border: 1px solid rgba(122, 153, 186, 0.18);
+  border-radius: 16px;
+  padding: 20px 20px 22px;
+  background: rgba(8, 19, 32, 0.72);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
 }
 
 .outage-region-card h2,
@@ -599,6 +621,21 @@
   height: 28%;
   border-radius: 48% 42% 46% 54%;
   transform: rotate(-18deg);
+}
+
+.outage-region-map:has([data-region-toggle="scotland"].is-pending) .outage-uk-shape.is-scotland,
+.outage-region-map:has([data-region-toggle="scotland"].is-selected) .outage-uk-shape.is-scotland,
+.outage-region-map:has([data-region-toggle="north"].is-pending) .outage-uk-shape.is-north,
+.outage-region-map:has([data-region-toggle="north"].is-selected) .outage-uk-shape.is-north,
+.outage-region-map:has([data-region-toggle="midlands"].is-pending) .outage-uk-shape.is-midlands,
+.outage-region-map:has([data-region-toggle="midlands"].is-selected) .outage-uk-shape.is-midlands,
+.outage-region-map:has([data-region-toggle="london"].is-pending) .outage-uk-shape.is-south,
+.outage-region-map:has([data-region-toggle="london"].is-selected) .outage-uk-shape.is-south,
+.outage-region-map:has([data-region-toggle="south-east"].is-pending) .outage-uk-shape.is-south,
+.outage-region-map:has([data-region-toggle="south-east"].is-selected) .outage-uk-shape.is-south,
+.outage-region-map:has([data-region-toggle="south-west"].is-pending) .outage-uk-shape.is-south,
+.outage-region-map:has([data-region-toggle="south-west"].is-selected) .outage-uk-shape.is-south {
+  background: linear-gradient(135deg, #58dd72, #32b85a);
 }
 
 .outage-region-map:has([data-region-toggle="wales-west"].is-pending) .outage-uk-shape.is-wales,

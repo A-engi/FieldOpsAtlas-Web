@@ -1,12 +1,12 @@
 {
   "version": "0.5.0-public-provider-fallbacks",
-  "generatedAt": "2026-07-11T16:48:40.088Z",
+  "generatedAt": "2026-07-11T17:11:11.308Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
       "rawRows": 96,
       "validRows": 82,
       "uniqueIncidents": 82,
@@ -31,41 +31,41 @@
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
-      "rawRows": 436,
-      "validRows": 436,
-      "uniqueIncidents": 16,
-      "groupedRows": 420,
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
+      "rawRows": 447,
+      "validRows": 447,
+      "uniqueIncidents": 19,
+      "groupedRows": 428,
       "skippedRows": 0,
       "categories": {
-        "current": 14,
-        "planned": 2,
+        "current": 15,
+        "planned": 4,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 436,
+          "rawRows": 447,
           "authConfigured": false,
           "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "14 unplanned · 2 planned · 0 restored"
+      "message": "15 unplanned · 4 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
-      "rawRows": 15,
-      "validRows": 15,
-      "uniqueIncidents": 15,
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
+      "rawRows": 16,
+      "validRows": 16,
+      "uniqueIncidents": 16,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 15,
+        "current": 16,
         "planned": 0,
         "restored": 0
       },
@@ -73,18 +73,18 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 15,
+          "rawRows": 16,
           "authConfigured": false,
           "selectedSource": "https://powercuts.nationalgrid.co.uk/__powercuts/getIncidentsAndAlertSummary"
         }
       ],
-      "message": "15 unplanned · 0 planned · 0 restored"
+      "message": "16 unplanned · 0 planned · 0 restored"
     },
     "enwl": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
       "rawRows": 78,
       "validRows": 78,
       "uniqueIncidents": 78,
@@ -116,15 +116,15 @@
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
-      "rawRows": 14,
-      "validRows": 14,
-      "uniqueIncidents": 14,
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
+      "rawRows": 15,
+      "validRows": 15,
+      "uniqueIncidents": 15,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 14,
+        "current": 15,
         "planned": 0,
         "restored": 0
       },
@@ -132,27 +132,27 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 14,
+          "rawRows": 15,
           "authConfigured": false,
           "selectedSource": "https://external.distribution.prd.ssen.co.uk/opendataportal-prd/v4/api/getallfaults"
         }
       ],
-      "message": "14 unplanned · 0 planned · 0 restored"
+      "message": "15 unplanned · 0 planned · 0 restored"
     },
     "spen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
       "rawRows": 50,
       "validRows": 50,
       "uniqueIncidents": 50,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 4,
+        "current": 3,
         "planned": 1,
-        "restored": 45
+        "restored": 46
       },
       "feeds": [
         {
@@ -160,23 +160,23 @@
           "state": "live",
           "rawRows": 50,
           "authConfigured": false,
-          "selectedSource": "salesforce-lwr current=4 planned=1 restored=45"
+          "selectedSource": "salesforce-lwr current=3 planned=1 restored=46"
         }
       ],
-      "message": "4 unplanned · 1 planned · 45 restored"
+      "message": "3 unplanned · 1 planned · 46 restored"
     },
     "nie": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T16:48:40.088Z",
-      "lastGoodAt": "2026-07-11T16:48:40.088Z",
-      "rawRows": 4,
-      "validRows": 4,
-      "uniqueIncidents": 4,
+      "generatedAt": "2026-07-11T17:11:11.308Z",
+      "lastGoodAt": "2026-07-11T17:11:11.308Z",
+      "rawRows": 3,
+      "validRows": 3,
+      "uniqueIncidents": 3,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 4,
+        "current": 3,
         "planned": 0,
         "restored": 0
       },
@@ -184,12 +184,12 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 4,
+          "rawRows": 3,
           "authConfigured": false,
           "selectedSource": "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults"
         }
       ],
-      "message": "4 unplanned · 0 planned · 0 restored"
+      "message": "3 unplanned · 0 planned · 0 restored"
     }
   }
 }

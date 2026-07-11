@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-07-11T16:48:40.088Z",
+  "generatedAt": "2026-07-11T17:11:11.308Z",
   "stale": false,
   "features": [
     {
@@ -28,38 +28,15 @@
         "areas": [
           "Alderley Edge, Cheshire East"
         ],
-        "startedAt": null,
-        "restoreAt": null,
-        "updatedAt": null,
-        "officialUrl": "https://www.enwl.co.uk/power-cuts",
-        "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "enwl:current:inc-125354936",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.055364,
-          53.795931
-        ]
-      },
-      "properties": {
-        "providerId": "enwl",
-        "provider": "Electricity North West",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INC 125354936",
-        "category": "current",
-        "status": "Preparing to send team",
-        "type": "CurrentFault",
-        "area": "Waterloo, Blackpool",
-        "areas": [
-          "Waterloo, Blackpool"
+        "groupedLocations": [
+          {
+            "area": "Alderley Edge, Cheshire East",
+            "lat": 53.308221,
+            "lon": -2.229009,
+            "reference": "INC 125354930",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -94,6 +71,59 @@
         "areas": [
           "Bourne, Wyre"
         ],
+        "groupedLocations": [
+          {
+            "area": "Bourne, Wyre",
+            "lat": 53.876576,
+            "lon": -3.002774,
+            "reference": "INC 125354732",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-125354936",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.055364,
+          53.795931
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 125354936",
+        "category": "current",
+        "status": "Preparing to send team",
+        "type": "CurrentFault",
+        "area": "Waterloo, Blackpool",
+        "areas": [
+          "Waterloo, Blackpool"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Waterloo, Blackpool",
+            "lat": 53.795931,
+            "lon": -3.055364,
+            "reference": "INC 125354936",
+            "status": "Preparing to send team",
+            "type": "CurrentFault"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -126,6 +156,16 @@
         "area": "Lowton East, Wigan",
         "areas": [
           "Lowton East, Wigan"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Lowton East, Wigan",
+            "lat": 53.472524,
+            "lon": -2.557365,
+            "reference": "04731N2026",
+            "status": "Under review",
+            "type": "TodaysPlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -160,6 +200,16 @@
         "areas": [
           "Swinton Park, Salford"
         ],
+        "groupedLocations": [
+          {
+            "area": "Swinton Park, Salford",
+            "lat": 53.50552,
+            "lon": -2.326166,
+            "reference": "04045N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -192,6 +242,16 @@
         "area": "Skelton, Eden",
         "areas": [
           "Skelton, Eden"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Skelton, Eden",
+            "lat": 54.731316,
+            "lon": -2.961562,
+            "reference": "05189N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -226,6 +286,16 @@
         "areas": [
           "Skelton, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Skelton, Eden",
+            "lat": 54.72951,
+            "lon": -3.00142,
+            "reference": "05190N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -258,6 +328,16 @@
         "area": "Clitheroe, Ribble Valley",
         "areas": [
           "Clitheroe, Ribble Valley"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Clitheroe, Ribble Valley",
+            "lat": 53.872464,
+            "lon": -2.38799,
+            "reference": "05207N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -292,6 +372,16 @@
         "areas": [
           "Siddington, Cheshire East"
         ],
+        "groupedLocations": [
+          {
+            "area": "Siddington, Cheshire East",
+            "lat": 53.226468,
+            "lon": -2.263239,
+            "reference": "05368N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -324,6 +414,16 @@
         "area": "New Mills, High Peak",
         "areas": [
           "New Mills, High Peak"
+        ],
+        "groupedLocations": [
+          {
+            "area": "New Mills, High Peak",
+            "lat": 53.342404,
+            "lon": -1.987299,
+            "reference": "00664F2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -358,6 +458,16 @@
         "areas": [
           "Nether Staveley, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Nether Staveley, South Lakeland",
+            "lat": 54.36956,
+            "lon": -2.820378,
+            "reference": "05378N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -390,6 +500,16 @@
         "area": "Windermere, South Lakeland",
         "areas": [
           "Windermere, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Windermere, South Lakeland",
+            "lat": 54.373605,
+            "lon": -2.81173,
+            "reference": "05379N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -424,6 +544,16 @@
         "areas": [
           "Dunnerdale-With-Seathwaite, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Dunnerdale-With-Seathwaite, South Lakeland",
+            "lat": 54.305428,
+            "lon": -3.199033,
+            "reference": "05562N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -456,6 +586,16 @@
         "area": "Ravenstonedale, Eden",
         "areas": [
           "Ravenstonedale, Eden"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Ravenstonedale, Eden",
+            "lat": 54.433347,
+            "lon": -2.460682,
+            "reference": "05322N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -490,6 +630,16 @@
         "areas": [
           "Ravenstonedale, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Ravenstonedale, Eden",
+            "lat": 54.430659,
+            "lon": -2.421555,
+            "reference": "05577N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -522,6 +672,16 @@
         "area": "Woodplumpton, Preston",
         "areas": [
           "Woodplumpton, Preston"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Woodplumpton, Preston",
+            "lat": 53.83258,
+            "lon": -2.758754,
+            "reference": "05222N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -556,6 +716,16 @@
         "areas": [
           "Woodside, Allerdale"
         ],
+        "groupedLocations": [
+          {
+            "area": "Woodside, Allerdale",
+            "lat": 54.808952,
+            "lon": -3.231134,
+            "reference": "04977N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -588,6 +758,16 @@
         "area": "Whinfell, South Lakeland",
         "areas": [
           "Whinfell, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Whinfell, South Lakeland",
+            "lat": 54.37886,
+            "lon": -2.68159,
+            "reference": "05492N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -622,6 +802,16 @@
         "areas": [
           "Kendal, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Kendal, South Lakeland",
+            "lat": 54.348055,
+            "lon": -2.735087,
+            "reference": "05360N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -654,6 +844,16 @@
         "area": "Golborne And Lowton West, Wigan",
         "areas": [
           "Golborne And Lowton West, Wigan"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Golborne And Lowton West, Wigan",
+            "lat": 53.511957,
+            "lon": -2.589166,
+            "reference": "05434N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -688,6 +888,16 @@
         "areas": [
           "Waterhead, Carlisle"
         ],
+        "groupedLocations": [
+          {
+            "area": "Waterhead, Carlisle",
+            "lat": 55.002097,
+            "lon": -2.592942,
+            "reference": "04833N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -720,6 +930,16 @@
         "area": "Davyhulme East, Trafford",
         "areas": [
           "Davyhulme East, Trafford"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Davyhulme East, Trafford",
+            "lat": 53.444019,
+            "lon": -2.340708,
+            "reference": "04033N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -754,6 +974,16 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "groupedLocations": [
+          {
+            "area": "Golborne And Lowton West, Wigan",
+            "lat": 53.513945,
+            "lon": -2.57065,
+            "reference": "04996N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -786,6 +1016,16 @@
         "area": "Wrightington, West Lancashire",
         "areas": [
           "Wrightington, West Lancashire"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Wrightington, West Lancashire",
+            "lat": 53.619542,
+            "lon": -2.693782,
+            "reference": "00652F2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -820,6 +1060,16 @@
         "areas": [
           "Distington, Copeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Distington, Copeland",
+            "lat": 54.590033,
+            "lon": -3.511057,
+            "reference": "05003N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -852,6 +1102,16 @@
         "area": "St. Ambrose, South Ribble",
         "areas": [
           "St. Ambrose, South Ribble"
+        ],
+        "groupedLocations": [
+          {
+            "area": "St. Ambrose, South Ribble",
+            "lat": 53.695675,
+            "lon": -2.680322,
+            "reference": "04329N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -886,6 +1146,16 @@
         "areas": [
           "Sedbergh, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Sedbergh, South Lakeland",
+            "lat": 54.292002,
+            "lon": -2.571775,
+            "reference": "05101N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -918,6 +1188,16 @@
         "area": "Douglas, Wigan",
         "areas": [
           "Douglas, Wigan"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Douglas, Wigan",
+            "lat": 53.506394,
+            "lon": -2.671984,
+            "reference": "05518N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -952,6 +1232,16 @@
         "areas": [
           "Helsington, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Helsington, South Lakeland",
+            "lat": 54.297579,
+            "lon": -2.775873,
+            "reference": "05453N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -984,6 +1274,16 @@
         "area": "Skelsmergh And Scalthwaiterigg, South Lakeland",
         "areas": [
           "Skelsmergh And Scalthwaiterigg, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Skelsmergh And Scalthwaiterigg, South Lakeland",
+            "lat": 54.370923,
+            "lon": -2.728645,
+            "reference": "05454N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1018,6 +1318,16 @@
         "areas": [
           "Harraby South & Parklands, Carlisle"
         ],
+        "groupedLocations": [
+          {
+            "area": "Harraby South & Parklands, Carlisle",
+            "lat": 54.86413,
+            "lon": -2.832308,
+            "reference": "05323N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1050,6 +1360,16 @@
         "area": "Harraby South & Parklands, Carlisle",
         "areas": [
           "Harraby South & Parklands, Carlisle"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Harraby South & Parklands, Carlisle",
+            "lat": 54.879412,
+            "lon": -2.938881,
+            "reference": "05324N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1084,6 +1404,16 @@
         "areas": [
           "Crosby Ravensworth, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Crosby Ravensworth, Eden",
+            "lat": 54.547229,
+            "lon": -2.622419,
+            "reference": "04358N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1116,6 +1446,16 @@
         "area": "Bewcastle, Carlisle",
         "areas": [
           "Bewcastle, Carlisle"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Bewcastle, Carlisle",
+            "lat": 55.08196,
+            "lon": -2.781166,
+            "reference": "04289N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1150,6 +1490,16 @@
         "areas": [
           "Windermere, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Windermere, South Lakeland",
+            "lat": 54.362733,
+            "lon": -2.775164,
+            "reference": "05214N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1182,6 +1532,16 @@
         "area": "Farington, South Ribble",
         "areas": [
           "Farington, South Ribble"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Farington, South Ribble",
+            "lat": 53.716517,
+            "lon": -2.686182,
+            "reference": "05073N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1216,6 +1576,16 @@
         "areas": [
           "Lakes, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Lakes, South Lakeland",
+            "lat": 54.415025,
+            "lon": -3.003096,
+            "reference": "05224N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1248,6 +1618,16 @@
         "area": "Woodplumpton, Preston",
         "areas": [
           "Woodplumpton, Preston"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Woodplumpton, Preston",
+            "lat": 53.77133,
+            "lon": -2.743659,
+            "reference": "05232N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1282,6 +1662,16 @@
         "areas": [
           "Lower Withington, Cheshire East"
         ],
+        "groupedLocations": [
+          {
+            "area": "Lower Withington, Cheshire East",
+            "lat": 53.239144,
+            "lon": -2.264257,
+            "reference": "04986N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1314,6 +1704,16 @@
         "area": "Clifton, Blackpool",
         "areas": [
           "Clifton, Blackpool"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Clifton, Blackpool",
+            "lat": 53.798645,
+            "lon": -3.012292,
+            "reference": "02971N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1348,6 +1748,16 @@
         "areas": [
           "Matterdale, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Matterdale, Eden",
+            "lat": 54.599932,
+            "lon": -2.87492,
+            "reference": "04630N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1380,6 +1790,16 @@
         "area": "Kendal, South Lakeland",
         "areas": [
           "Kendal, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Kendal, South Lakeland",
+            "lat": 54.299351,
+            "lon": -2.845698,
+            "reference": "05013N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1414,6 +1834,16 @@
         "areas": [
           "Catterall, Wyre"
         ],
+        "groupedLocations": [
+          {
+            "area": "Catterall, Wyre",
+            "lat": 53.8871,
+            "lon": -2.754632,
+            "reference": "03782N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1446,6 +1876,16 @@
         "area": "Longridge, Ribble Valley",
         "areas": [
           "Longridge, Ribble Valley"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Longridge, Ribble Valley",
+            "lat": 53.844309,
+            "lon": -2.599148,
+            "reference": "05198N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1480,6 +1920,16 @@
         "areas": [
           "Cleator Moor, Copeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Cleator Moor, Copeland",
+            "lat": 54.526865,
+            "lon": -3.532684,
+            "reference": "04281N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1512,6 +1962,16 @@
         "area": "Birchwood, Warrington",
         "areas": [
           "Birchwood, Warrington"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Birchwood, Warrington",
+            "lat": 53.423082,
+            "lon": -2.522078,
+            "reference": "04583N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1546,6 +2006,16 @@
         "areas": [
           "Bootle, Copeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Bootle, Copeland",
+            "lat": 54.309327,
+            "lon": -3.405303,
+            "reference": "05202N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1578,6 +2048,16 @@
         "area": "Nateby, Wyre",
         "areas": [
           "Nateby, Wyre"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Nateby, Wyre",
+            "lat": 53.910582,
+            "lon": -2.749909,
+            "reference": "05203N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1612,6 +2092,16 @@
         "areas": [
           "Horwich, Bolton"
         ],
+        "groupedLocations": [
+          {
+            "area": "Horwich, Bolton",
+            "lat": 53.603429,
+            "lon": -2.595476,
+            "reference": "03793N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1644,6 +2134,16 @@
         "area": "Matterdale, Eden",
         "areas": [
           "Matterdale, Eden"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Matterdale, Eden",
+            "lat": 54.588463,
+            "lon": -2.874909,
+            "reference": "05348N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1678,6 +2178,16 @@
         "areas": [
           "Horwich, Bolton"
         ],
+        "groupedLocations": [
+          {
+            "area": "Horwich, Bolton",
+            "lat": 53.601677,
+            "lon": -2.593597,
+            "reference": "04169N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1710,6 +2220,16 @@
         "area": "Buckshaw & Worden, South Ribble",
         "areas": [
           "Buckshaw & Worden, South Ribble"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Buckshaw & Worden, South Ribble",
+            "lat": 53.682744,
+            "lon": -2.656949,
+            "reference": "05159N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1744,6 +2264,16 @@
         "areas": [
           "Buckshaw & Worden, South Ribble"
         ],
+        "groupedLocations": [
+          {
+            "area": "Buckshaw & Worden, South Ribble",
+            "lat": 53.683229,
+            "lon": -2.66084,
+            "reference": "05160N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1776,6 +2306,16 @@
         "area": "Woodplumpton, Preston",
         "areas": [
           "Woodplumpton, Preston"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Woodplumpton, Preston",
+            "lat": 53.830222,
+            "lon": -2.821224,
+            "reference": "05437N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1810,6 +2350,16 @@
         "areas": [
           "Chelford, Cheshire East"
         ],
+        "groupedLocations": [
+          {
+            "area": "Chelford, Cheshire East",
+            "lat": 53.265845,
+            "lon": -2.194919,
+            "reference": "05696N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1842,6 +2392,16 @@
         "area": "Daneshouse With Stoneyholme, Burnley",
         "areas": [
           "Daneshouse With Stoneyholme, Burnley"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Daneshouse With Stoneyholme, Burnley",
+            "lat": 53.796875,
+            "lon": -2.259457,
+            "reference": "05555N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1876,6 +2436,16 @@
         "areas": [
           "Horton In Ribblesdale, Craven"
         ],
+        "groupedLocations": [
+          {
+            "area": "Horton In Ribblesdale, Craven",
+            "lat": 54.075928,
+            "lon": -2.294755,
+            "reference": "04187N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1908,6 +2478,16 @@
         "area": "Nateby, Wyre",
         "areas": [
           "Nateby, Wyre"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Nateby, Wyre",
+            "lat": 53.942829,
+            "lon": -2.845131,
+            "reference": "05382N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -1942,6 +2522,16 @@
         "areas": [
           "Offerton, Stockport"
         ],
+        "groupedLocations": [
+          {
+            "area": "Offerton, Stockport",
+            "lat": 53.397572,
+            "lon": -2.101156,
+            "reference": "05105N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -1974,6 +2564,16 @@
         "area": "Chinley, Buxworth And Brownside, High Peak",
         "areas": [
           "Chinley, Buxworth And Brownside, High Peak"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Chinley, Buxworth And Brownside, High Peak",
+            "lat": 53.342203,
+            "lon": -1.946318,
+            "reference": "05574N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2008,6 +2608,16 @@
         "areas": [
           "Askerton, Carlisle"
         ],
+        "groupedLocations": [
+          {
+            "area": "Askerton, Carlisle",
+            "lat": 55.001599,
+            "lon": -2.641327,
+            "reference": "04650N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2040,6 +2650,16 @@
         "area": "Milnthorpe, South Lakeland",
         "areas": [
           "Milnthorpe, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Milnthorpe, South Lakeland",
+            "lat": 54.247825,
+            "lon": -2.77435,
+            "reference": "05332N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2074,6 +2694,16 @@
         "areas": [
           "Beetham, South Lakeland"
         ],
+        "groupedLocations": [
+          {
+            "area": "Beetham, South Lakeland",
+            "lat": 54.207829,
+            "lon": -2.807113,
+            "reference": "05333N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2106,6 +2736,16 @@
         "area": "Whittingham, Preston",
         "areas": [
           "Whittingham, Preston"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Whittingham, Preston",
+            "lat": 53.816481,
+            "lon": -2.658341,
+            "reference": "04963N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2140,6 +2780,16 @@
         "areas": [
           "Matterdale, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Matterdale, Eden",
+            "lat": 54.63567,
+            "lon": -2.956607,
+            "reference": "05343N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2172,6 +2822,16 @@
         "area": "Tatham, Lancaster",
         "areas": [
           "Tatham, Lancaster"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Tatham, Lancaster",
+            "lat": 54.114013,
+            "lon": -2.57419,
+            "reference": "05280N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2206,6 +2866,16 @@
         "areas": [
           "Longridge, Ribble Valley"
         ],
+        "groupedLocations": [
+          {
+            "area": "Longridge, Ribble Valley",
+            "lat": 53.876929,
+            "lon": -2.563291,
+            "reference": "05608N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2238,6 +2908,16 @@
         "area": "Selside And Fawcett Forest, South Lakeland",
         "areas": [
           "Selside And Fawcett Forest, South Lakeland"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Selside And Fawcett Forest, South Lakeland",
+            "lat": 54.403793,
+            "lon": -2.706953,
+            "reference": "04536N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2272,6 +2952,16 @@
         "areas": [
           "Austwick, Craven"
         ],
+        "groupedLocations": [
+          {
+            "area": "Austwick, Craven",
+            "lat": 54.10878,
+            "lon": -2.341825,
+            "reference": "05303N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2304,6 +2994,16 @@
         "area": "Workington, Allerdale",
         "areas": [
           "Workington, Allerdale"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Workington, Allerdale",
+            "lat": 54.613641,
+            "lon": -3.564712,
+            "reference": "05519N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2338,6 +3038,16 @@
         "areas": [
           "Prestbury, Cheshire East"
         ],
+        "groupedLocations": [
+          {
+            "area": "Prestbury, Cheshire East",
+            "lat": 53.289834,
+            "lon": -2.156991,
+            "reference": "05110N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2370,6 +3080,16 @@
         "area": "Woodside, Allerdale",
         "areas": [
           "Woodside, Allerdale"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Woodside, Allerdale",
+            "lat": 54.789052,
+            "lon": -3.167141,
+            "reference": "04928N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2404,6 +3124,16 @@
         "areas": [
           "Hesket, Eden"
         ],
+        "groupedLocations": [
+          {
+            "area": "Hesket, Eden",
+            "lat": 54.796304,
+            "lon": -2.856099,
+            "reference": "00683F2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2436,6 +3166,16 @@
         "area": "Macclesfield, Cheshire East",
         "areas": [
           "Macclesfield, Cheshire East"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Macclesfield, Cheshire East",
+            "lat": 53.217467,
+            "lon": -2.025583,
+            "reference": "05598N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2470,6 +3210,16 @@
         "areas": [
           "Greensclough, Rossendale"
         ],
+        "groupedLocations": [
+          {
+            "area": "Greensclough, Rossendale",
+            "lat": 53.714006,
+            "lon": -2.201305,
+            "reference": "04980N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2502,6 +3252,16 @@
         "area": "Moorside, West Lancashire",
         "areas": [
           "Moorside, West Lancashire"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Moorside, West Lancashire",
+            "lat": 53.539864,
+            "lon": -2.759875,
+            "reference": "05443N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,
@@ -2536,6 +3296,16 @@
         "areas": [
           "Golborne And Lowton West, Wigan"
         ],
+        "groupedLocations": [
+          {
+            "area": "Golborne And Lowton West, Wigan",
+            "lat": 53.513945,
+            "lon": -2.57065,
+            "reference": "05433N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
+        ],
         "startedAt": null,
         "restoreAt": null,
         "updatedAt": null,
@@ -2568,6 +3338,16 @@
         "area": "Golborne And Lowton West, Wigan",
         "areas": [
           "Golborne And Lowton West, Wigan"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Golborne And Lowton West, Wigan",
+            "lat": 53.511957,
+            "lon": -2.589166,
+            "reference": "05435N2026",
+            "status": "Under review",
+            "type": "FuturePlannedWorks"
+          }
         ],
         "startedAt": null,
         "restoreAt": null,

@@ -1192,6 +1192,14 @@ function group(incident, key) {
     status: incident.status,
     type: incident.type,
     areas: new Set([incident.area]),
+    locations: [{
+      area: incident.area,
+      lat: incident.lat,
+      lon: incident.lon,
+      reference: incident.reference,
+      status: incident.status,
+      type: incident.type
+    }],
     coords: [[incident.lat, incident.lon]],
     lat: incident.lat,
     lon: incident.lon,
@@ -1207,6 +1215,14 @@ function group(incident, key) {
 function merge(target, incident) {
   target.feedIds.add(incident.feedId);
   target.areas.add(incident.area);
+  target.locations.push({
+    area: incident.area,
+    lat: incident.lat,
+    lon: incident.lon,
+    reference: incident.reference,
+    status: incident.status,
+    type: incident.type
+  });
   target.coords.push([incident.lat, incident.lon]);
   target.lat += incident.lat;
   target.lon += incident.lon;
@@ -1242,6 +1258,7 @@ function finish(provider, target) {
       ? areas[0] || "Published incident location"
       : `${areas[0]} + ${areas.length - 1} related locations`,
     areas,
+    groupedLocations: target.locations,
     lat,
     lon,
     startedAt: target.startedAt,
@@ -1295,6 +1312,7 @@ function toFeature(incident) {
       type: incident.type,
       area: incident.area,
       areas: incident.areas,
+      groupedLocations: incident.groupedLocations,
       startedAt: iso(incident.startedAt),
       restoreAt: iso(incident.restoreAt),
       updatedAt: iso(incident.updatedAt),

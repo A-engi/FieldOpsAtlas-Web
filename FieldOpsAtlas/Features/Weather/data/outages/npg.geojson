@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "npg",
-  "generatedAt": "2026-07-11T16:48:40.088Z",
+  "generatedAt": "2026-07-11T17:11:11.308Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "npg:current:incd-792912-a",
+      "id": "npg:current:incd-792976-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.7033591364902496,
-          54.86491030640676
+          -2.06318,
+          54.8546
         ]
       },
       "properties": {
@@ -20,116 +20,27 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-792912-A",
+        "reference": "INCD-792976-A",
         "category": "current",
-        "status": "6",
-        "type": "HV_N",
+        "status": "5",
+        "type": "LV",
         "area": "North East",
         "areas": [
           "North East"
         ],
-        "startedAt": "2026-07-11T12:06:00.000Z",
-        "restoreAt": "2026-07-11T17:10:00.000Z",
-        "updatedAt": "2026-07-11T16:40:27.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 359,
-        "coordinateSpreadKm": 7.581
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-792850-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.21295675,
-          53.40885833333332
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.8546,
+            "lon": -2.06318,
+            "reference": "INCD-792976-A",
+            "status": "5",
+            "type": "LV"
+          }
         ],
-        "reference": "INCD-792850-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "startedAt": "2026-07-11T08:17:00.000Z",
+        "startedAt": "2026-07-11T14:47:00.000Z",
         "restoreAt": "2026-07-11T19:00:00.000Z",
-        "updatedAt": "2026-07-11T17:40:17.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 12,
-        "coordinateSpreadKm": 84.966
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-792843-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.3036214285714287,
-          54.557514285714284
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-792843-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-11T07:35:00.000Z",
-        "restoreAt": "2026-07-11T19:34:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 7,
-        "coordinateSpreadKm": 0.152
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-793016-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.13311,
-          55.0751
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-793016-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "startedAt": "2026-07-11T15:39:00.000Z",
-        "restoreAt": "2026-07-11T19:13:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
@@ -143,7 +54,7 @@
         "type": "Point",
         "coordinates": [
           -1.3747987499999998,
-          54.897225000000006
+          54.897225
         ]
       },
       "properties": {
@@ -160,13 +71,3053 @@
         "areas": [
           "North East"
         ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.8985,
+            "lon": -1.37489,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8974,
+            "lon": -1.37517,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8962,
+            "lon": -1.37508,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8972,
+            "lon": -1.37443,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8971,
+            "lon": -1.37337,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8981,
+            "lon": -1.37562,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8956,
+            "lon": -1.37397,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8977,
+            "lon": -1.37586,
+            "reference": "INCD-792968-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T14:21:00.000Z",
         "restoreAt": null,
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 8,
         "coordinateSpreadKm": 0.188
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-792912-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7033591364902507,
+          54.86491030640677
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-792912-A",
+        "category": "current",
+        "status": "6",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.8542,
+            "lon": -1.70355,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8777,
+            "lon": -1.69729,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8521,
+            "lon": -1.70744,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8769,
+            "lon": -1.71429,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8584,
+            "lon": -1.73131,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8597,
+            "lon": -1.709,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.864,
+            "lon": -1.69201,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8602,
+            "lon": -1.72388,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8653,
+            "lon": -1.69673,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8722,
+            "lon": -1.69702,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8612,
+            "lon": -1.72093,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8665,
+            "lon": -1.70372,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8774,
+            "lon": -1.71623,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8598,
+            "lon": -1.72412,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8614,
+            "lon": -1.72325,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8646,
+            "lon": -1.69436,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8597,
+            "lon": -1.70648,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8666,
+            "lon": -1.68622,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.866,
+            "lon": -1.68713,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8752,
+            "lon": -1.69761,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.70046,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8507,
+            "lon": -1.71374,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.867,
+            "lon": -1.68653,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.854,
+            "lon": -1.7049,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8647,
+            "lon": -1.69537,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8627,
+            "lon": -1.72006,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8599,
+            "lon": -1.69463,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8607,
+            "lon": -1.6968,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8614,
+            "lon": -1.70697,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8593,
+            "lon": -1.73043,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8768,
+            "lon": -1.69736,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8608,
+            "lon": -1.6978,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8684,
+            "lon": -1.70573,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.863,
+            "lon": -1.68686,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.882,
+            "lon": -1.71375,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8608,
+            "lon": -1.70432,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8603,
+            "lon": -1.70945,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8689,
+            "lon": -1.69747,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.70716,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8612,
+            "lon": -1.69949,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8663,
+            "lon": -1.70921,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8605,
+            "lon": -1.72512,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8645,
+            "lon": -1.70624,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8564,
+            "lon": -1.73099,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.69399,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.861,
+            "lon": -1.72287,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8609,
+            "lon": -1.72261,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8603,
+            "lon": -1.70121,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8536,
+            "lon": -1.73286,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8612,
+            "lon": -1.7086,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8706,
+            "lon": -1.69518,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8586,
+            "lon": -1.70769,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.6854,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8618,
+            "lon": -1.7095,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8788,
+            "lon": -1.71432,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8669,
+            "lon": -1.70682,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.6999,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8669,
+            "lon": -1.69823,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8687,
+            "lon": -1.69638,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8509,
+            "lon": -1.7127,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8591,
+            "lon": -1.72565,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8618,
+            "lon": -1.70495,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8624,
+            "lon": -1.70549,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8631,
+            "lon": -1.70818,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8655,
+            "lon": -1.69089,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8669,
+            "lon": -1.69237,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8577,
+            "lon": -1.72944,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.68938,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8675,
+            "lon": -1.70457,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8633,
+            "lon": -1.70621,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8675,
+            "lon": -1.7085,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.69535,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8616,
+            "lon": -1.70221,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8552,
+            "lon": -1.70273,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8817,
+            "lon": -1.71201,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8629,
+            "lon": -1.71012,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.855,
+            "lon": -1.70379,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8634,
+            "lon": -1.69232,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8618,
+            "lon": -1.72183,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8679,
+            "lon": -1.70134,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.871,
+            "lon": -1.69772,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8717,
+            "lon": -1.69666,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8815,
+            "lon": -1.71332,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8794,
+            "lon": -1.71818,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8605,
+            "lon": -1.70724,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8586,
+            "lon": -1.72929,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.866,
+            "lon": -1.70696,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8589,
+            "lon": -1.72792,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8623,
+            "lon": -1.69342,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.876,
+            "lon": -1.64825,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8602,
+            "lon": -1.69615,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8764,
+            "lon": -1.69727,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.69784,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8518,
+            "lon": -1.71066,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8723,
+            "lon": -1.69804,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8598,
+            "lon": -1.69536,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8712,
+            "lon": -1.69814,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8595,
+            "lon": -1.7253,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.70619,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8714,
+            "lon": -1.6991,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8742,
+            "lon": -1.69675,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8626,
+            "lon": -1.70166,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8641,
+            "lon": -1.69208,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8512,
+            "lon": -1.71083,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8682,
+            "lon": -1.70785,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8602,
+            "lon": -1.70364,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.863,
+            "lon": -1.70702,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.69834,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8602,
+            "lon": -1.69883,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8781,
+            "lon": -1.71176,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8622,
+            "lon": -1.7026,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8826,
+            "lon": -1.71465,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8601,
+            "lon": -1.70928,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8665,
+            "lon": -1.68982,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8608,
+            "lon": -1.69392,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8645,
+            "lon": -1.6844,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8598,
+            "lon": -1.70031,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8599,
+            "lon": -1.7093,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.873,
+            "lon": -1.69691,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8591,
+            "lon": -1.73116,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8633,
+            "lon": -1.69022,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.68841,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8664,
+            "lon": -1.70991,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.69564,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8823,
+            "lon": -1.70886,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8663,
+            "lon": -1.69699,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8793,
+            "lon": -1.71644,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8699,
+            "lon": -1.70137,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8752,
+            "lon": -1.69854,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8692,
+            "lon": -1.7003,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8585,
+            "lon": -1.73155,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8666,
+            "lon": -1.70844,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8715,
+            "lon": -1.69782,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.70252,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8815,
+            "lon": -1.71013,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8642,
+            "lon": -1.68984,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8641,
+            "lon": -1.68955,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8662,
+            "lon": -1.69353,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8693,
+            "lon": -1.69772,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8634,
+            "lon": -1.70549,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8623,
+            "lon": -1.72168,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8617,
+            "lon": -1.69793,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.859,
+            "lon": -1.70755,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.864,
+            "lon": -1.68624,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8666,
+            "lon": -1.69676,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8625,
+            "lon": -1.69534,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8626,
+            "lon": -1.70373,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8639,
+            "lon": -1.69623,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8685,
+            "lon": -1.69325,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8631,
+            "lon": -1.69337,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8611,
+            "lon": -1.70638,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.859,
+            "lon": -1.71071,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8632,
+            "lon": -1.69449,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8617,
+            "lon": -1.7012,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8616,
+            "lon": -1.70936,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.70273,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.862,
+            "lon": -1.68764,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8665,
+            "lon": -1.69732,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8637,
+            "lon": -1.69614,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8587,
+            "lon": -1.72761,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8507,
+            "lon": -1.71247,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8611,
+            "lon": -1.70557,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.69663,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8705,
+            "lon": -1.69593,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8649,
+            "lon": -1.70454,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8661,
+            "lon": -1.70534,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8667,
+            "lon": -1.69608,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.69764,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8626,
+            "lon": -1.69378,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8611,
+            "lon": -1.69602,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8655,
+            "lon": -1.70789,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.68547,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8616,
+            "lon": -1.70072,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8601,
+            "lon": -1.72463,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.69371,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8631,
+            "lon": -1.70666,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8679,
+            "lon": -1.70264,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8663,
+            "lon": -1.68799,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.69778,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8665,
+            "lon": -1.68777,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8618,
+            "lon": -1.70625,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8664,
+            "lon": -1.70202,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8513,
+            "lon": -1.71114,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8613,
+            "lon": -1.69556,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8619,
+            "lon": -1.72077,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8659,
+            "lon": -1.69436,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8633,
+            "lon": -1.68643,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8565,
+            "lon": -1.73316,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.87,
+            "lon": -1.69807,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8612,
+            "lon": -1.72314,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8525,
+            "lon": -1.70432,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8672,
+            "lon": -1.69638,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8712,
+            "lon": -1.69825,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8604,
+            "lon": -1.69493,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8476,
+            "lon": -1.70182,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8646,
+            "lon": -1.70665,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8731,
+            "lon": -1.68801,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8585,
+            "lon": -1.72754,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8582,
+            "lon": -1.73031,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8643,
+            "lon": -1.70794,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8786,
+            "lon": -1.69618,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8637,
+            "lon": -1.71916,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8934,
+            "lon": -1.71135,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8622,
+            "lon": -1.69925,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8618,
+            "lon": -1.70667,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.71132,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8648,
+            "lon": -1.71545,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8634,
+            "lon": -1.6913,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8672,
+            "lon": -1.70449,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.69178,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8628,
+            "lon": -1.69387,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8735,
+            "lon": -1.69837,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8661,
+            "lon": -1.70391,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.863,
+            "lon": -1.69579,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8634,
+            "lon": -1.71928,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8615,
+            "lon": -1.69416,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8794,
+            "lon": -1.71454,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.69519,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8612,
+            "lon": -1.70092,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8676,
+            "lon": -1.70306,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8643,
+            "lon": -1.69378,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8752,
+            "lon": -1.69968,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8662,
+            "lon": -1.69844,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.69943,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8573,
+            "lon": -1.68894,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8647,
+            "lon": -1.69065,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.70368,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8605,
+            "lon": -1.69258,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8695,
+            "lon": -1.69905,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8596,
+            "lon": -1.72659,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8606,
+            "lon": -1.7071,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8677,
+            "lon": -1.70747,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.875,
+            "lon": -1.69928,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8684,
+            "lon": -1.70439,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8549,
+            "lon": -1.70282,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8712,
+            "lon": -1.69892,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.70825,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8625,
+            "lon": -1.70993,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.868,
+            "lon": -1.70707,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8641,
+            "lon": -1.71323,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8658,
+            "lon": -1.70982,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8597,
+            "lon": -1.70184,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8648,
+            "lon": -1.70219,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8611,
+            "lon": -1.70853,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8647,
+            "lon": -1.68864,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8534,
+            "lon": -1.70335,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8623,
+            "lon": -1.6952,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.70659,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.865,
+            "lon": -1.69164,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.69664,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8637,
+            "lon": -1.68836,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8784,
+            "lon": -1.71758,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8784,
+            "lon": -1.71863,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8754,
+            "lon": -1.58629,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8781,
+            "lon": -1.71261,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8623,
+            "lon": -1.69624,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8634,
+            "lon": -1.69457,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.869,
+            "lon": -1.69775,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.70869,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8761,
+            "lon": -1.6995,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8613,
+            "lon": -1.70354,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8616,
+            "lon": -1.70566,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8609,
+            "lon": -1.72207,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8676,
+            "lon": -1.69449,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8616,
+            "lon": -1.68235,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8597,
+            "lon": -1.6935,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8613,
+            "lon": -1.69704,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8644,
+            "lon": -1.71709,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8696,
+            "lon": -1.69792,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8674,
+            "lon": -1.69243,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8623,
+            "lon": -1.70981,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8788,
+            "lon": -1.71063,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8629,
+            "lon": -1.6904,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8578,
+            "lon": -1.72977,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8591,
+            "lon": -1.72374,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8655,
+            "lon": -1.70755,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8636,
+            "lon": -1.69137,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8664,
+            "lon": -1.69944,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8668,
+            "lon": -1.69954,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8691,
+            "lon": -1.70513,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8661,
+            "lon": -1.70026,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8607,
+            "lon": -1.69926,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8588,
+            "lon": -1.72524,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8628,
+            "lon": -1.6831,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8663,
+            "lon": -1.70285,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8629,
+            "lon": -1.69667,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8595,
+            "lon": -1.70887,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8663,
+            "lon": -1.70547,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8659,
+            "lon": -1.69914,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8617,
+            "lon": -1.69195,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8656,
+            "lon": -1.69299,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8626,
+            "lon": -1.68384,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8659,
+            "lon": -1.70372,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8578,
+            "lon": -1.70751,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8655,
+            "lon": -1.68818,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8609,
+            "lon": -1.70591,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8629,
+            "lon": -1.72029,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8603,
+            "lon": -1.72492,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8552,
+            "lon": -1.73123,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8809,
+            "lon": -1.71117,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8784,
+            "lon": -1.71442,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8651,
+            "lon": -1.71288,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8715,
+            "lon": -1.71077,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.866,
+            "lon": -1.69209,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8635,
+            "lon": -1.68361,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8606,
+            "lon": -1.70252,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8648,
+            "lon": -1.71578,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8645,
+            "lon": -1.68376,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8592,
+            "lon": -1.70868,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.69679,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.86,
+            "lon": -1.70508,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8646,
+            "lon": -1.69049,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8774,
+            "lon": -1.7136,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8828,
+            "lon": -1.71275,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8621,
+            "lon": -1.70358,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8659,
+            "lon": -1.68609,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8777,
+            "lon": -1.71751,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8595,
+            "lon": -1.72608,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8686,
+            "lon": -1.70053,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8607,
+            "lon": -1.70099,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8658,
+            "lon": -1.70313,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.863,
+            "lon": -1.68893,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8767,
+            "lon": -1.71504,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8592,
+            "lon": -1.70759,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8582,
+            "lon": -1.73067,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8607,
+            "lon": -1.70725,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8657,
+            "lon": -1.68581,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8757,
+            "lon": -1.70172,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8631,
+            "lon": -1.69583,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8665,
+            "lon": -1.69269,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8642,
+            "lon": -1.69358,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8565,
+            "lon": -1.73054,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8687,
+            "lon": -1.69077,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8686,
+            "lon": -1.70246,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8613,
+            "lon": -1.7051,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8649,
+            "lon": -1.69463,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8567,
+            "lon": -1.73038,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8784,
+            "lon": -1.69478,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8654,
+            "lon": -1.70533,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8652,
+            "lon": -1.69871,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.868,
+            "lon": -1.69579,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8787,
+            "lon": -1.71671,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8694,
+            "lon": -1.70027,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.872,
+            "lon": -1.69737,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8588,
+            "lon": -1.69513,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8583,
+            "lon": -1.73821,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8619,
+            "lon": -1.6909,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8637,
+            "lon": -1.69823,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.859,
+            "lon": -1.72482,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8708,
+            "lon": -1.69685,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8629,
+            "lon": -1.70482,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8609,
+            "lon": -1.69987,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8523,
+            "lon": -1.70753,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8655,
+            "lon": -1.69264,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8605,
+            "lon": -1.69799,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8624,
+            "lon": -1.7059,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8646,
+            "lon": -1.69665,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8717,
+            "lon": -1.69757,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8596,
+            "lon": -1.69936,
+            "reference": "INCD-792912-A",
+            "status": "6",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-07-11T12:06:00.000Z",
+        "restoreAt": "2026-07-11T17:10:00.000Z",
+        "updatedAt": "2026-07-11T16:40:27.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 359,
+        "coordinateSpreadKm": 7.581
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-792894-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.8238325,
+          53.845675
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-792894-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.8451,
+            "lon": -1.8229,
+            "reference": "INCD-792894-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8466,
+            "lon": -1.82476,
+            "reference": "INCD-792894-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8456,
+            "lon": -1.82493,
+            "reference": "INCD-792894-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8454,
+            "lon": -1.82274,
+            "reference": "INCD-792894-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T10:36:00.000Z",
+        "restoreAt": null,
+        "updatedAt": "2026-07-11T18:05:11.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.12
       }
     },
     {
@@ -176,7 +3127,7 @@
         "type": "Point",
         "coordinates": [
           -1.6776360000000001,
-          55.014419999999994
+          55.01442000000001
         ]
       },
       "properties": {
@@ -193,9 +3144,51 @@
         "areas": [
           "North East"
         ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 55.0144,
+            "lon": -1.67627,
+            "reference": "INCD-792957-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 55.0139,
+            "lon": -1.67958,
+            "reference": "INCD-792957-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 55.0157,
+            "lon": -1.67646,
+            "reference": "INCD-792957-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 55.0147,
+            "lon": -1.67756,
+            "reference": "INCD-792957-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 55.0134,
+            "lon": -1.67831,
+            "reference": "INCD-792957-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T13:55:00.000Z",
         "restoreAt": "2026-07-11T23:59:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 5,
@@ -225,6 +3218,32 @@
         "area": "Yorkshire",
         "areas": [
           "Yorkshire"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.419,
+            "lon": -1.18602,
+            "reference": "INCD-792943-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.4193,
+            "lon": -1.18672,
+            "reference": "INCD-792943-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.4196,
+            "lon": -1.18826,
+            "reference": "INCD-792943-A",
+            "status": "6",
+            "type": "LV"
+          }
         ],
         "startedAt": "2026-07-11T12:21:00.000Z",
         "restoreAt": "2026-07-12T00:20:00.000Z",
@@ -259,9 +3278,27 @@
         "areas": [
           "Yorkshire"
         ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.6435,
+            "lon": -1.74282,
+            "reference": "INCD-792934-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.6437,
+            "lon": -1.74377,
+            "reference": "INCD-792934-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T12:27:00.000Z",
         "restoreAt": "2026-07-11T21:00:00.000Z",
-        "updatedAt": "2026-07-11T17:40:17.000Z",
+        "updatedAt": "2026-07-11T18:05:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 2,
@@ -292,13 +3329,293 @@
         "areas": [
           "Yorkshire"
         ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.5031,
+            "lon": -1.09925,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5021,
+            "lon": -1.09718,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5051,
+            "lon": -1.09692,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5062,
+            "lon": -1.09901,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5025,
+            "lon": -1.09783,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.505,
+            "lon": -1.09831,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5036,
+            "lon": -1.09792,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5036,
+            "lon": -1.09686,
+            "reference": "INCD-792933-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T12:16:00.000Z",
         "restoreAt": "2026-07-12T00:15:00.000Z",
-        "updatedAt": "2026-07-11T17:40:17.000Z",
+        "updatedAt": "2026-07-11T18:05:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 8,
         "coordinateSpreadKm": 0.266
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-792885-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.615616,
+          54.97294000000001
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-792885-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.9744,
+            "lon": -1.61674,
+            "reference": "INCD-792885-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.9729,
+            "lon": -1.61494,
+            "reference": "INCD-792885-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.9729,
+            "lon": -1.61494,
+            "reference": "INCD-792885-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.9721,
+            "lon": -1.6162,
+            "reference": "INCD-792885-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.9724,
+            "lon": -1.61526,
+            "reference": "INCD-792885-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T10:16:00.000Z",
+        "restoreAt": "2026-07-11T22:00:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.177
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-792859-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7419592307692306,
+          54.404892307692315
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-792859-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.4042,
+            "lon": -1.73875,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4045,
+            "lon": -1.74332,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4059,
+            "lon": -1.74194,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.405,
+            "lon": -1.74349,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4042,
+            "lon": -1.74118,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4051,
+            "lon": -1.73654,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.406,
+            "lon": -1.74424,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.404,
+            "lon": -1.74366,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4064,
+            "lon": -1.74169,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4056,
+            "lon": -1.74241,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4042,
+            "lon": -1.74291,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4041,
+            "lon": -1.74345,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.4044,
+            "lon": -1.74189,
+            "reference": "INCD-792859-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T08:13:00.000Z",
+        "restoreAt": "2026-07-11T19:45:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 13,
+        "coordinateSpreadKm": 0.351
       }
     },
     {
@@ -325,6 +3642,40 @@
         "areas": [
           "Yorkshire"
         ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.3847,
+            "lon": -1.5025,
+            "reference": "INCD-792914-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3846,
+            "lon": -1.50177,
+            "reference": "INCD-792914-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3873,
+            "lon": -1.50564,
+            "reference": "INCD-792914-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3858,
+            "lon": -1.50377,
+            "reference": "INCD-792914-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T12:11:00.000Z",
         "restoreAt": "2026-07-12T00:10:00.000Z",
         "updatedAt": "2026-07-11T16:15:14.000Z",
@@ -336,12 +3687,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-792885-a",
+      "id": "npg:current:incd-792850-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.615616,
-          54.972939999999994
+          -1.21295675,
+          53.40885833333334
         ]
       },
       "properties": {
@@ -350,31 +3701,129 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-792885-A",
+        "reference": "INCD-792850-A",
         "category": "current",
         "status": "5",
         "type": "LV",
-        "area": "North East",
+        "area": "Yorkshire",
         "areas": [
-          "North East"
+          "Yorkshire"
         ],
-        "startedAt": "2026-07-11T10:16:00.000Z",
-        "restoreAt": "2026-07-11T22:00:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.3645,
+            "lon": -1.29979,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3649,
+            "lon": -1.29909,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.363,
+            "lon": -1.30233,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.9052,
+            "lon": -0.232591,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3637,
+            "lon": -1.29917,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3634,
+            "lon": -1.31659,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3641,
+            "lon": -1.30089,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3638,
+            "lon": -1.3033,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3645,
+            "lon": -1.30199,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3634,
+            "lon": -1.30307,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3631,
+            "lon": -1.29804,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3627,
+            "lon": -1.29863,
+            "reference": "INCD-792850-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T08:17:00.000Z",
+        "restoreAt": "2026-07-11T19:00:00.000Z",
+        "updatedAt": "2026-07-11T18:05:11.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 5,
-        "coordinateSpreadKm": 0.177
+        "rawRecordCount": 12,
+        "coordinateSpreadKm": 84.966
       }
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-792859-a",
+      "id": "npg:current:incd-792843-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.741959230769231,
-          54.40489230769231
+          -1.3036214285714285,
+          54.557514285714284
         ]
       },
       "properties": {
@@ -383,7 +3832,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-792859-A",
+        "reference": "INCD-792843-A",
         "category": "current",
         "status": "5",
         "type": "LV",
@@ -391,13 +3840,71 @@
         "areas": [
           "North East"
         ],
-        "startedAt": "2026-07-11T08:13:00.000Z",
-        "restoreAt": null,
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.5585,
+            "lon": -1.30198,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5571,
+            "lon": -1.30307,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5577,
+            "lon": -1.30138,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5579,
+            "lon": -1.30539,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5574,
+            "lon": -1.3043,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5565,
+            "lon": -1.30327,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5575,
+            "lon": -1.30596,
+            "reference": "INCD-792843-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T07:35:00.000Z",
+        "restoreAt": "2026-07-11T19:34:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 13,
-        "coordinateSpreadKm": 0.351
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.152
       }
     },
     {
@@ -406,7 +3913,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.9568255,
+          -0.9568254999999999,
           54.557575
         ]
       },
@@ -424,9 +3931,43 @@
         "areas": [
           "North East"
         ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.5575,
+            "lon": -0.957404,
+            "reference": "PPCR77746",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5575,
+            "lon": -0.955842,
+            "reference": "PPCR77746",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.557,
+            "lon": -0.95672,
+            "reference": "PPCR77746",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.5583,
+            "lon": -0.957336,
+            "reference": "PPCR77746",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T09:00:00.000Z",
         "restoreAt": "2026-07-11T15:00:00.000Z",
-        "updatedAt": "2026-07-11T17:40:13.000Z",
+        "updatedAt": "2026-07-11T18:05:06.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
@@ -435,12 +3976,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:planned:incd-116773-c",
+      "id": "npg:planned:incd-116774-c",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.23255,
-          55.0571
+          -1.919805,
+          55.247175
         ]
       },
       "properties": {
@@ -449,7 +3990,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-116773-C",
+        "reference": "INCD-116774-C",
         "category": "planned",
         "status": "5",
         "type": "HV_N",
@@ -457,13 +3998,47 @@
         "areas": [
           "North East"
         ],
-        "startedAt": "2026-07-11T17:25:00.000Z",
-        "restoreAt": "2026-07-11T18:55:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 55.2431,
+            "lon": -1.92244,
+            "reference": "INCD-116774-C",
+            "status": "5",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 55.2439,
+            "lon": -1.91536,
+            "reference": "INCD-116774-C",
+            "status": "5",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 55.2606,
+            "lon": -1.89674,
+            "reference": "INCD-116774-C",
+            "status": "5",
+            "type": "HV_N"
+          },
+          {
+            "area": "North East",
+            "lat": 55.2411,
+            "lon": -1.94468,
+            "reference": "INCD-116774-C",
+            "status": "5",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-07-11T17:54:00.000Z",
+        "restoreAt": "2026-07-11T19:24:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 2.089
       }
     },
     {
@@ -490,9 +4065,35 @@
         "areas": [
           "North East"
         ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 54.8289,
+            "lon": -1.36717,
+            "reference": "INCD-793021-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.831,
+            "lon": -1.36632,
+            "reference": "INCD-793021-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.8306,
+            "lon": -1.36531,
+            "reference": "INCD-793021-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
         "startedAt": "2026-07-11T16:19:00.000Z",
         "restoreAt": "2026-07-11T19:27:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 3,
@@ -501,12 +4102,12 @@
     },
     {
       "type": "Feature",
-      "id": "npg:current:incd-792976-a",
+      "id": "npg:current:incd-793016-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.06318,
-          54.8546
+          -2.13311,
+          55.0751
         ]
       },
       "properties": {
@@ -515,7 +4116,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-792976-A",
+        "reference": "INCD-793016-A",
         "category": "current",
         "status": "5",
         "type": "LV",
@@ -523,9 +4124,121 @@
         "areas": [
           "North East"
         ],
-        "startedAt": "2026-07-11T14:47:00.000Z",
-        "restoreAt": "2026-07-11T19:00:00.000Z",
-        "updatedAt": "2026-07-11T17:40:18.000Z",
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 55.0751,
+            "lon": -2.13311,
+            "reference": "INCD-793016-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T15:39:00.000Z",
+        "restoreAt": "2026-07-11T22:00:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:incd-793032-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.5502799999999999,
+          53.56843333333333
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-793032-A",
+        "category": "planned",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "groupedLocations": [
+          {
+            "area": "Yorkshire",
+            "lat": 53.5684,
+            "lon": -1.54654,
+            "reference": "INCD-793032-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5683,
+            "lon": -1.54544,
+            "reference": "INCD-793032-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5686,
+            "lon": -1.55886,
+            "reference": "INCD-793032-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-07-11T17:44:00.000Z",
+        "restoreAt": null,
+        "updatedAt": "2026-07-11T18:05:11.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.567
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:incd-116773-c",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.23255,
+          55.0571
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-116773-C",
+        "category": "planned",
+        "status": "5",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "groupedLocations": [
+          {
+            "area": "North East",
+            "lat": 55.0571,
+            "lon": -2.23255,
+            "reference": "INCD-116773-C",
+            "status": "5",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-07-11T17:25:00.000Z",
+        "restoreAt": "2026-07-11T18:55:00.000Z",
+        "updatedAt": "2026-07-11T18:05:12.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,
