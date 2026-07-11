@@ -111,6 +111,10 @@
   top: calc(var(--safe-top) + 132px);
 }
 
+.outage-region-panel {
+  top: calc(var(--safe-top) + 186px);
+}
+
 .outage-source-list {
   display: grid;
   gap: 7px;
@@ -199,6 +203,12 @@
 
 .outage-source-panel[open] ~ .outage-map-key {
   opacity: 0;
+}
+
+.outage-source-panel[open] ~ .outage-region-panel,
+.outage-region-panel[open] ~ .outage-map-key {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .outage-map-key span {
@@ -400,8 +410,13 @@
   }
 
   .outage-source-panel,
+  .outage-region-panel,
   .outage-map-key {
     top: calc(var(--safe-top) + 120px);
+  }
+
+  .outage-region-panel {
+    top: calc(var(--safe-top) + 174px);
   }
 
   .outage-panel-body {
@@ -478,6 +493,75 @@
   border-color: rgba(63, 169, 245, 0.52);
   background: rgba(63, 169, 245, 0.14);
   color: #d9f3ff;
+}
+
+.outage-region-pane {
+  pointer-events: none;
+}
+
+.outage-region-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  max-height: min(34vh, 260px);
+  overflow: auto;
+  padding: 0 8px 8px;
+}
+
+.outage-region-button {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--weather-line);
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--weather-text);
+  text-align: left;
+}
+
+.outage-region-button.is-selected {
+  border-color: color-mix(in srgb, var(--outage-region-colour) 62%, var(--weather-line));
+  background: color-mix(in srgb, var(--outage-region-colour) 22%, rgba(255, 255, 255, 0.05));
+}
+
+.outage-region-swatch {
+  width: 12px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--outage-region-colour);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--outage-region-colour) 24%, transparent);
+}
+
+.outage-region-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.outage-region-copy strong,
+.outage-region-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outage-region-copy strong {
+  font-size: 11px;
+}
+
+.outage-region-copy small {
+  color: var(--weather-muted);
+  font-size: 9px;
+}
+
+.outage-region-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  padding: 0 8px 8px;
 }
 
 

@@ -79,8 +79,10 @@ const providers = [
     feeds: [
       {
         id: "live",
-        type: "ckan",
-        url: "https://connecteddata.nationalgrid.co.uk/api/3/action/datastore_search",
+        type: "nged-powercuts",
+        url: "https://powercuts.nationalgrid.co.uk/__powercuts/getIncidentsAndAlertSummary",
+        fallbackType: "ckan",
+        fallbackUrl: "https://connecteddata.nationalgrid.co.uk/api/3/action/datastore_search",
         resourceId: "292f788f-4339-455b-8cc0-153e14509d4d"
       }
     ]
@@ -314,6 +316,8 @@ async function loadFeed(feed) {
 
   if (feed.type === "nie-powercheck") return loadNiePowercheck(feed);
 
+  if (feed.type === "nged-powercuts") return loadNgedPowercuts(feed);
+
   if (feed.type === "ods") return loadOds(feed);
 
   if (feed.type === "ckan") {
@@ -327,7 +331,7 @@ async function loadFeed(feed) {
     const payload = await getJson(feed.url, { feed });
     return {
       rows: extractRows(payload).slice(0, LIMIT),
-      selectedSource: "json"
+      selectedSource: feed.url
     };
   }
 
@@ -370,6 +374,65 @@ async function loadNiePowercheck(feed) {
   return {
     rows,
     selectedSource: url
+  };
+}
+
+async function loadNgedPowercuts(feed) {
+  try {
+    const payload = await getJson(feed.url, {
+      feed,
+      selectedSource: "nged-public-powercuts"
+    });
+    const rows = Array.isArray(payload?.incidents)
+      ? payload.incidents.map((incident) => toNgedPowercutRow(incident, payload.lastUpdated))
+      : [];
+
+    if (!Array.isArray(payload?.incidents)) {
+      throw new Error("Invalid NGED power-cut response");
+    }
+
+    return {
+      rows,
+      selectedSource: feed.url
+    };
+  } catch (error) {
+    if (!feed.fallbackUrl || feed.fallbackType !== "ckan") throw error;
+
+    const rows = await loadCkan({
+      ...feed,
+      type: "ckan",
+      url: feed.fallbackUrl
+    });
+
+    return {
+      rows,
+      selectedSource: `${feed.fallbackUrl} (fallback after ${concise(error)})`
+    };
+  }
+}
+
+function toNgedPowercutRow(incident, lastUpdated) {
+  const coordinate = coordinateFromNgedLoc(incident?.loc);
+
+  return {
+    id: incident?.id,
+    incidentId: incident?.id,
+    reference: incident?.id,
+    region: incident?.region,
+    status: "current",
+    type: "current",
+    area: incident?.region || "Published incident location",
+    location: coordinate,
+    updatedAt: lastUpdated
+  };
+}
+
+function coordinateFromNgedLoc(loc) {
+  if (!Array.isArray(loc) || loc.length < 2) return null;
+
+  return {
+    lat: Number(loc[0]),
+    lon: Number(loc[1])
   };
 }
 

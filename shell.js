@@ -12,7 +12,7 @@
 (function fieldOpsSharedShell() {
   "use strict";
 
-  var VERSION = "1.1.23-weather-feature-link";
+  var VERSION = "1.1.24-weather-map-subpage";
   var ROOT_SELECTOR = ".phone, .app-shell, .fieldops-shell-root";
   var CHROME_SELECTOR = [
     ":scope > .top-shell",
@@ -64,7 +64,8 @@
     }
   };
 
-  var pageOrder = ["map", "weather", "rf", "network", "docs", "tools"];
+  var pageOrder = ["map", "rf", "network", "docs", "tools"];
+  var mapSubpageOrder = ["weather"];
   var searchProviders = Object.create(null);
   var editorProviders = Object.create(null);
 
@@ -222,6 +223,34 @@
     ].join("");
   }
 
+  function subpageOption(pageKey, activePage) {
+    var page = pages[pageKey];
+    var active = pageKey === activePage;
+
+    return [
+      '<a class="drawer-page-option drawer-row',
+      active ? ' is-current' : '',
+      '" data-page-button data-page="',
+      escapeHtml(pageKey),
+      '" href="',
+      escapeHtml(pageHref(pageKey)),
+      '"',
+      active ? ' aria-current="page"' : '',
+      '>',
+      icon(page.icon),
+      '<span class="drawer-row__copy">',
+      '<span class="drawer-row__eyebrow">Map subpage</span>',
+      '<span class="drawer-row__title">',
+      escapeHtml(page.label),
+      '</span>',
+      '</span>',
+      '<span class="drawer-row__chevron">',
+      chevron(),
+      '</span>',
+      '</a>'
+    ].join("");
+  }
+
   function navButton(pageKey, activePage, activeIndex, index) {
     var page = pages[pageKey];
     var classes = ["nav-button"];
@@ -259,7 +288,8 @@
   function shellMarkup(activePage) {
     var active = normalisePage(activePage);
     var page = pages[active];
-    var activeIndex = Math.max(0, pageOrder.indexOf(active));
+    var navActive = pageOrder.indexOf(active) >= 0 ? active : active === "weather" ? "map" : active;
+    var activeIndex = Math.max(0, pageOrder.indexOf(navActive));
 
     return [
       '<header class="top-shell" data-fieldops-shell-chrome>',
@@ -324,6 +354,15 @@
       '<div class="drawer-pages">',
       pageOrder.map(function mapOption(pageKey) {
         return pageOption(pageKey, active);
+      }).join(""),
+      '</div>',
+      '</section>',
+
+      '<section class="drawer-section">',
+      '<h3 class="drawer-section__title">Map tools</h3>',
+      '<div class="drawer-pages is-subpages">',
+      mapSubpageOrder.map(function mapSubpage(pageKey) {
+        return subpageOption(pageKey, active);
       }).join(""),
       '</div>',
       '</section>',
@@ -403,7 +442,7 @@
 
       '<nav class="bottom-shell" data-fieldops-shell-chrome aria-label="Primary navigation">',
       pageOrder.map(function mapNav(pageKey, index) {
-        return navButton(pageKey, active, activeIndex, index);
+        return navButton(pageKey, navActive, activeIndex, index);
       }).join(""),
       '</nav>'
     ].join("");

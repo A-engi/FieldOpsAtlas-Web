@@ -46,6 +46,27 @@
         <div class="outage-source-list" id="sourceList" aria-live="polite"></div>
       </details>
 
+      <details class="outage-panel outage-region-panel">
+        <summary>
+          <span class="outage-summary-title">
+            <strong>Regions</strong>
+            <small id="regionSummary">All licence regions highlighted</small>
+          </span>
+          <span class="outage-summary-state" aria-hidden="true">Show</span>
+        </summary>
+
+        <div class="outage-region-list" id="regionList" aria-label="Outage licence regions"></div>
+
+        <div class="outage-region-actions">
+          <button id="regionReset" class="weather-button" type="button">
+            All regions
+          </button>
+          <button id="regionOk" class="weather-button is-primary" type="button">
+            OK
+          </button>
+        </div>
+      </details>
+
       <section class="outage-map-key" aria-label="Outage map key">
         <span><i class="is-current"></i>Current</span>
         <span><i class="is-planned"></i>Planned</span>
@@ -97,6 +118,9 @@
             <button id="ukView" class="weather-button" type="button">
               UK view
             </button>
+            <a class="weather-button" href="sp-outages.html">
+              SPEN page
+            </a>
           </div>
 
           <div class="weather-metrics outage-metrics">

@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "spen",
-  "generatedAt": "2026-07-09T19:24:41.273Z",
+  "generatedAt": "2026-07-11T16:48:40.088Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "spen:current:incd-1388185-s",
+      "id": "spen:current:incd-2483840-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.306124,
-          55.762397
+          -4.204295,
+          53.186878
         ]
       },
       "properties": {
@@ -20,17 +20,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1388185-s",
+        "reference": "INCD-2483840-i",
         "category": "current",
         "status": "Live Power Cut",
         "type": "current",
-        "area": "TD11",
+        "area": "LL56",
         "areas": [
-          "TD11"
+          "LL56"
         ],
-        "startedAt": "2026-07-09T19:04:40.000Z",
-        "restoreAt": "2026-07-09T22:04:00.000Z",
-        "updatedAt": "2026-07-09T19:05:49.000Z",
+        "startedAt": "2026-07-11T09:48:43.000Z",
+        "restoreAt": "2026-07-11T22:00:00.000Z",
+        "updatedAt": "2026-07-11T14:19:42.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -39,12 +39,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:current:incd-698879-k",
+      "id": "spen:current:incd-653182-r",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.504368,
-          55.517785
+          -2.95611,
+          53.425449
         ]
       },
       "properties": {
@@ -53,17 +53,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-698879-k",
+        "reference": "INCD-653182-r",
         "category": "current",
         "status": "Live Power Cut",
         "type": "current",
-        "area": "KELSO and JEDBURGH",
+        "area": "L4, L5",
         "areas": [
-          "KELSO and JEDBURGH"
+          "L4, L5"
         ],
-        "startedAt": "2026-07-09T18:52:05.000Z",
-        "restoreAt": "2026-07-09T21:52:00.000Z",
-        "updatedAt": "2026-07-09T19:02:25.000Z",
+        "startedAt": "2026-07-10T22:48:16.000Z",
+        "restoreAt": "2026-07-11T22:00:00.000Z",
+        "updatedAt": "2026-07-11T10:38:46.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -72,12 +72,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:current:incd-1388179-s",
+      "id": "spen:current:incd-1388695-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.238594,
-          55.80079
+          -4.123321,
+          54.846416
         ]
       },
       "properties": {
@@ -86,182 +86,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1388179-s",
+        "reference": "INCD-1388695-s",
         "category": "current",
         "status": "Live Power Cut",
         "type": "current",
-        "area": "GLASGOW",
+        "area": "DG6",
         "areas": [
-          "GLASGOW"
+          "DG6"
         ],
-        "startedAt": "2026-07-09T18:35:09.000Z",
-        "restoreAt": "2026-07-09T23:50:00.000Z",
-        "updatedAt": "2026-07-09T19:22:47.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:current:incd-698873-k",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.291136,
-          55.927242
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-698873-k",
-        "category": "current",
-        "status": "Live Power Cut",
-        "type": "current",
-        "area": "EDINBURGH",
-        "areas": [
-          "EDINBURGH"
-        ],
-        "startedAt": "2026-07-09T18:25:51.000Z",
-        "restoreAt": "2026-07-09T21:25:00.000Z",
-        "updatedAt": "2026-07-09T19:07:50.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:current:incd-1388089-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.624494,
-          55.878357
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1388089-s",
-        "category": "current",
-        "status": "Live Power Cut",
-        "type": "current",
-        "area": "BATHGATE",
-        "areas": [
-          "BATHGATE"
-        ],
-        "startedAt": "2026-07-09T14:52:43.000Z",
-        "restoreAt": "2026-07-09T23:00:00.000Z",
-        "updatedAt": "2026-07-09T16:57:12.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:current:incd-2483096-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.838018,
-          53.41705
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2483096-i",
-        "category": "current",
-        "status": "Live Power Cut",
-        "type": "current",
-        "area": "L36",
-        "areas": [
-          "L36"
-        ],
-        "startedAt": "2026-07-09T14:02:59.000Z",
-        "restoreAt": "2026-07-09T21:00:00.000Z",
-        "updatedAt": "2026-07-09T18:18:32.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:current:incd-1388005-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.056799,
-          56.35708
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1388005-s",
-        "category": "current",
-        "status": "Live Power Cut",
-        "type": "current",
-        "area": "KY15",
-        "areas": [
-          "KY15"
-        ],
-        "startedAt": "2026-07-09T13:11:22.000Z",
-        "restoreAt": "2026-07-09T23:00:00.000Z",
-        "updatedAt": "2026-07-09T18:07:07.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:current:incd-652966-r",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.79112,
-          53.400058
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-652966-r",
-        "category": "current",
-        "status": "Live Power Cut",
-        "type": "current",
-        "area": "L35, WA8",
-        "areas": [
-          "L35, WA8"
-        ],
-        "startedAt": "2026-07-09T09:28:13.000Z",
-        "restoreAt": "2026-07-09T22:00:00.000Z",
-        "updatedAt": "2026-07-09T16:12:53.000Z",
+        "startedAt": "2026-07-10T14:23:11.000Z",
+        "restoreAt": "2026-07-11T18:30:00.000Z",
+        "updatedAt": "2026-07-11T15:06:12.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -336,12 +171,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-653020-r",
+      "id": "spen:restored:incd-1389103-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.30835,
-          53.256672
+          -4.414162,
+          55.786133
         ]
       },
       "properties": {
@@ -350,337 +185,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-653020-r",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL77",
-        "areas": [
-          "LL77"
-        ],
-        "startedAt": "2026-07-09T15:33:24.000Z",
-        "restoreAt": "2026-07-09T20:45:00.000Z",
-        "updatedAt": "2026-07-09T18:03:13.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-698861-k",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.059841,
-          52.959923
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-698861-k",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "WREXHAM",
-        "areas": [
-          "WREXHAM"
-        ],
-        "startedAt": "2026-07-09T15:30:30.000Z",
-        "restoreAt": "2026-07-09T18:30:00.000Z",
-        "updatedAt": "2026-07-09T17:14:29.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-698855-k",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.28753,
-          55.546116
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-698855-k",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "TD5",
-        "areas": [
-          "TD5"
-        ],
-        "startedAt": "2026-07-09T14:02:56.000Z",
-        "restoreAt": "2026-07-09T21:30:00.000Z",
-        "updatedAt": "2026-07-09T17:38:54.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1388041-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.025414,
-          55.757441
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1388041-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "HAMILTON",
-        "areas": [
-          "HAMILTON"
-        ],
-        "startedAt": "2026-07-09T13:55:10.000Z",
-        "restoreAt": "2026-07-09T18:30:00.000Z",
-        "updatedAt": "2026-07-09T16:57:19.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2483090-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.024252,
-          53.413523
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2483090-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH44",
-        "areas": [
-          "CH44"
-        ],
-        "startedAt": "2026-07-09T13:44:54.000Z",
-        "restoreAt": "2026-07-09T18:59:00.000Z",
-        "updatedAt": "2026-07-09T14:55:55.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1388029-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.178933,
-          55.933714
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1388029-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "EDINBURGH",
-        "areas": [
-          "EDINBURGH"
-        ],
-        "startedAt": "2026-07-09T13:38:20.000Z",
-        "restoreAt": "2026-07-09T18:53:00.000Z",
-        "updatedAt": "2026-07-09T15:05:11.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387969-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.200494,
-          55.924028
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387969-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "G64, G66",
-        "areas": [
-          "G64, G66"
-        ],
-        "startedAt": "2026-07-09T12:40:08.000Z",
-        "restoreAt": "2026-07-09T19:00:00.000Z",
-        "updatedAt": "2026-07-09T14:59:49.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2483030-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.543842,
-          53.411491
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2483030-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "WARRINGTON",
-        "areas": [
-          "WARRINGTON"
-        ],
-        "startedAt": "2026-07-09T12:18:52.000Z",
-        "restoreAt": "2026-07-09T17:33:00.000Z",
-        "updatedAt": "2026-07-09T14:17:01.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2483024-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.837121,
-          52.408783
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2483024-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "SY23",
-        "areas": [
-          "SY23"
-        ],
-        "startedAt": "2026-07-09T12:18:14.000Z",
-        "restoreAt": "2026-07-09T15:20:00.000Z",
-        "updatedAt": "2026-07-09T13:37:27.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387813-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.784778,
-          55.669083
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387813-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "BERWICK-UPON-TWEED, HOLY ISLAND and HOLY ISLAND BERWICK",
-        "areas": [
-          "BERWICK-UPON-TWEED, HOLY ISLAND and HOLY ISLAND BERWICK"
-        ],
-        "startedAt": "2026-07-09T09:57:44.000Z",
-        "restoreAt": "2026-07-09T14:00:00.000Z",
-        "updatedAt": "2026-07-09T12:13:10.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387795-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.202045,
-          55.861342
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387795-s",
+        "reference": "INCD-1389103-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
@@ -688,9 +193,9 @@
         "areas": [
           "GLASGOW"
         ],
-        "startedAt": "2026-07-09T09:42:54.000Z",
-        "restoreAt": "2026-07-09T17:56:00.000Z",
-        "updatedAt": "2026-07-09T14:25:33.000Z",
+        "startedAt": "2026-07-11T15:09:12.000Z",
+        "restoreAt": "2026-07-11T19:00:00.000Z",
+        "updatedAt": "2026-07-11T15:15:26.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -699,12 +204,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482856-i",
+      "id": "spen:restored:incd-2483894-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.059555,
-          53.009082
+          -3.298717,
+          53.330219
         ]
       },
       "properties": {
@@ -713,17 +218,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482856-i",
+        "reference": "INCD-2483894-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "LL14, LL13",
+        "area": "CH8",
         "areas": [
-          "LL14, LL13"
+          "CH8"
         ],
-        "startedAt": "2026-07-09T09:23:40.000Z",
-        "restoreAt": "2026-07-09T12:23:00.000Z",
-        "updatedAt": "2026-07-09T11:00:22.000Z",
+        "startedAt": "2026-07-11T14:31:53.000Z",
+        "restoreAt": "2026-07-11T19:46:00.000Z",
+        "updatedAt": "2026-07-11T16:11:50.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -732,12 +237,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482832-i",
+      "id": "spen:restored:incd-1389043-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.378901,
-          53.33079
+          -4.270361,
+          55.801861
         ]
       },
       "properties": {
@@ -746,17 +251,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482832-i",
+        "reference": "INCD-1389043-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "LLANNERCH-Y-MEDD",
+        "area": "GLASGOW",
         "areas": [
-          "LLANNERCH-Y-MEDD"
+          "GLASGOW"
         ],
-        "startedAt": "2026-07-09T08:50:26.000Z",
-        "restoreAt": "2026-07-09T14:58:00.000Z",
-        "updatedAt": "2026-07-09T14:26:44.000Z",
+        "startedAt": "2026-07-11T12:00:31.000Z",
+        "restoreAt": "2026-07-11T17:15:00.000Z",
+        "updatedAt": "2026-07-11T14:40:15.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -765,12 +270,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-1387675-s",
+      "id": "spen:restored:incd-2483834-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.140256,
-          56.196858
+          -4.074032,
+          52.627978
         ]
       },
       "properties": {
@@ -779,17 +284,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1387675-s",
+        "reference": "INCD-2483834-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "GLENROTHES",
+        "area": "TYWYN",
         "areas": [
-          "GLENROTHES"
+          "TYWYN"
         ],
-        "startedAt": "2026-07-09T08:23:20.000Z",
-        "restoreAt": "2026-07-09T13:30:00.000Z",
-        "updatedAt": "2026-07-09T11:34:45.000Z",
+        "startedAt": "2026-07-11T09:34:51.000Z",
+        "restoreAt": "2026-07-11T12:30:00.000Z",
+        "updatedAt": "2026-07-11T09:39:59.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -798,12 +303,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-698783-k",
+      "id": "spen:restored:incd-1389019-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.059555,
-          53.009082
+          -3.260285,
+          55.896877
         ]
       },
       "properties": {
@@ -812,7 +317,997 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-698783-k",
+        "reference": "INCD-1389019-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "EH13",
+        "areas": [
+          "EH13"
+        ],
+        "startedAt": "2026-07-11T09:14:54.000Z",
+        "restoreAt": "2026-07-11T14:00:00.000Z",
+        "updatedAt": "2026-07-11T13:47:41.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388995-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.205929,
+          55.947857
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388995-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "EH1, EH2, EH3",
+        "areas": [
+          "EH1, EH2, EH3"
+        ],
+        "startedAt": "2026-07-11T08:15:21.000Z",
+        "restoreAt": null,
+        "updatedAt": "2026-07-11T12:05:06.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483822-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.430751,
+          52.993977
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483822-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "CAERNARFON",
+        "areas": [
+          "CAERNARFON"
+        ],
+        "startedAt": "2026-07-11T07:58:47.000Z",
+        "restoreAt": "2026-07-11T16:00:00.000Z",
+        "updatedAt": "2026-07-11T11:40:52.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483792-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.236982,
+          55.753482
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483792-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "G75",
+        "areas": [
+          "G75"
+        ],
+        "startedAt": "2026-07-11T07:19:04.000Z",
+        "restoreAt": "2026-07-11T10:19:00.000Z",
+        "updatedAt": "2026-07-11T07:20:21.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699125-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.107118,
+          55.877279
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699125-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "BONNYRIGG",
+        "areas": [
+          "BONNYRIGG"
+        ],
+        "startedAt": "2026-07-11T06:55:07.000Z",
+        "restoreAt": "2026-07-11T14:00:00.000Z",
+        "updatedAt": "2026-07-11T11:27:17.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653236-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.021792,
+          53.352301
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653236-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "CH63",
+        "areas": [
+          "CH63"
+        ],
+        "startedAt": "2026-07-11T06:15:12.000Z",
+        "restoreAt": "2026-07-11T17:30:00.000Z",
+        "updatedAt": "2026-07-11T10:41:09.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653230-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.601273,
+          53.424905
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653230-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "WARRINGTON",
+        "areas": [
+          "WARRINGTON"
+        ],
+        "startedAt": "2026-07-11T06:06:12.000Z",
+        "restoreAt": "2026-07-11T12:00:00.000Z",
+        "updatedAt": "2026-07-11T08:33:23.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653224-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.310935,
+          53.256514
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653224-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "LL77",
+        "areas": [
+          "LL77"
+        ],
+        "startedAt": "2026-07-11T05:55:24.000Z",
+        "restoreAt": "2026-07-11T14:00:00.000Z",
+        "updatedAt": "2026-07-11T12:32:12.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388941-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.967287,
+          55.873741
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388941-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "ML6",
+        "areas": [
+          "ML6"
+        ],
+        "startedAt": "2026-07-11T05:31:16.000Z",
+        "restoreAt": "2026-07-11T11:30:00.000Z",
+        "updatedAt": "2026-07-11T10:48:21.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699089-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.186116,
+          52.921504
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699089-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "PORTHMADOG",
+        "areas": [
+          "PORTHMADOG"
+        ],
+        "startedAt": "2026-07-11T05:00:28.000Z",
+        "restoreAt": "2026-07-11T11:30:00.000Z",
+        "updatedAt": "2026-07-11T10:06:21.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388935-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.416279,
+          56.041262
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388935-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "KY11",
+        "areas": [
+          "KY11"
+        ],
+        "startedAt": "2026-07-11T03:00:07.000Z",
+        "restoreAt": "2026-07-11T19:30:00.000Z",
+        "updatedAt": "2026-07-11T16:21:17.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653206-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.715831,
+          53.449459
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653206-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "WA9",
+        "areas": [
+          "WA9"
+        ],
+        "startedAt": "2026-07-11T02:40:59.000Z",
+        "restoreAt": "2026-07-11T18:00:00.000Z",
+        "updatedAt": "2026-07-11T15:51:03.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388929-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.167948,
+          55.973983
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388929-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "EH6",
+        "areas": [
+          "EH6"
+        ],
+        "startedAt": "2026-07-11T02:17:33.000Z",
+        "restoreAt": "2026-07-11T10:00:00.000Z",
+        "updatedAt": "2026-07-11T09:44:46.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388923-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.188383,
+          55.813045
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388923-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "G72, G73",
+        "areas": [
+          "G72, G73"
+        ],
+        "startedAt": "2026-07-11T01:51:48.000Z",
+        "restoreAt": "2026-07-11T12:00:00.000Z",
+        "updatedAt": "2026-07-11T10:58:56.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653188-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.074113,
+          53.219942
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653188-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "CH5",
+        "areas": [
+          "CH5"
+        ],
+        "startedAt": "2026-07-10T23:12:39.000Z",
+        "restoreAt": "2026-07-11T16:00:00.000Z",
+        "updatedAt": "2026-07-11T14:46:56.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388905-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.095017,
+          55.896787
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388905-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "GLASGOW",
+        "areas": [
+          "GLASGOW"
+        ],
+        "startedAt": "2026-07-10T22:24:42.000Z",
+        "restoreAt": "2026-07-11T07:00:00.000Z",
+        "updatedAt": "2026-07-11T04:39:40.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699071-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.529852,
+          55.299503
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699071-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DG10, DG11",
+        "areas": [
+          "DG10, DG11"
+        ],
+        "startedAt": "2026-07-10T22:21:54.000Z",
+        "restoreAt": "2026-07-11T01:21:00.000Z",
+        "updatedAt": "2026-07-10T22:56:22.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388893-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.38709,
+          55.248754
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388893-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DG10",
+        "areas": [
+          "DG10"
+        ],
+        "startedAt": "2026-07-10T21:59:23.000Z",
+        "restoreAt": "2026-07-11T00:59:00.000Z",
+        "updatedAt": "2026-07-11T00:53:22.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388887-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.117701,
+          55.890706
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388887-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DALKEITH and LASSWADE",
+        "areas": [
+          "DALKEITH and LASSWADE"
+        ],
+        "startedAt": "2026-07-10T21:52:30.000Z",
+        "restoreAt": "2026-07-11T00:47:00.000Z",
+        "updatedAt": "2026-07-10T23:00:35.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653152-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.098672,
+          52.780269
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653152-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "LLANYMYNECH",
+        "areas": [
+          "LLANYMYNECH"
+        ],
+        "startedAt": "2026-07-10T21:18:36.000Z",
+        "restoreAt": "2026-07-11T02:33:00.000Z",
+        "updatedAt": "2026-07-10T21:23:29.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-653140-r",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.134176,
+          53.227058
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-653140-r",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "BANGOR",
+        "areas": [
+          "BANGOR"
+        ],
+        "startedAt": "2026-07-10T21:00:30.000Z",
+        "restoreAt": "2026-07-11T09:00:00.000Z",
+        "updatedAt": "2026-07-11T08:14:37.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483756-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.591334,
+          53.319264
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483756-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "WA4",
+        "areas": [
+          "WA4"
+        ],
+        "startedAt": "2026-07-10T19:57:02.000Z",
+        "restoreAt": "2026-07-11T01:12:00.000Z",
+        "updatedAt": "2026-07-10T21:46:17.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388845-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.503493,
+          55.872365
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388845-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "LIVINGSTON",
+        "areas": [
+          "LIVINGSTON"
+        ],
+        "startedAt": "2026-07-10T18:50:23.000Z",
+        "restoreAt": "2026-07-11T00:05:00.000Z",
+        "updatedAt": "2026-07-10T21:39:49.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388827-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.071359,
+          55.841522
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388827-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "G71",
+        "areas": [
+          "G71"
+        ],
+        "startedAt": "2026-07-10T18:05:31.000Z",
+        "restoreAt": "2026-07-10T21:05:00.000Z",
+        "updatedAt": "2026-07-10T18:06:08.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388821-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.261815,
+          55.854235
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388821-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "GLASGOW",
+        "areas": [
+          "GLASGOW"
+        ],
+        "startedAt": "2026-07-10T18:02:25.000Z",
+        "restoreAt": "2026-07-10T23:17:00.000Z",
+        "updatedAt": "2026-07-10T20:25:05.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-1388809-s",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.969216,
+          55.872695
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-1388809-s",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "AIRDRIE",
+        "areas": [
+          "AIRDRIE"
+        ],
+        "startedAt": "2026-07-10T17:27:50.000Z",
+        "restoreAt": "2026-07-10T20:00:00.000Z",
+        "updatedAt": "2026-07-10T18:54:55.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699059-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.288329,
+          55.609984
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699059-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DARVEL",
+        "areas": [
+          "DARVEL"
+        ],
+        "startedAt": "2026-07-10T17:19:01.000Z",
+        "restoreAt": "2026-07-10T20:19:00.000Z",
+        "updatedAt": "2026-07-10T17:55:39.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699053-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.20921,
+          55.054811
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699053-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "LOCKERBIE",
+        "areas": [
+          "LOCKERBIE"
+        ],
+        "startedAt": "2026-07-10T17:01:08.000Z",
+        "restoreAt": "2026-07-10T23:00:00.000Z",
+        "updatedAt": "2026-07-10T21:29:41.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-699041-k",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.102156,
+          55.05139
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-699041-k",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "DG7",
+        "areas": [
+          "DG7"
+        ],
+        "startedAt": "2026-07-10T16:17:42.000Z",
+        "restoreAt": "2026-07-11T14:30:00.000Z",
+        "updatedAt": "2026-07-11T12:32:05.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483672-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.256005,
+          53.251165
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483672-i",
+        "category": "restored",
+        "status": "Restored",
+        "type": "restored",
+        "area": "LLANGEFNI",
+        "areas": [
+          "LLANGEFNI"
+        ],
+        "startedAt": "2026-07-10T16:07:43.000Z",
+        "restoreAt": "2026-07-10T21:22:00.000Z",
+        "updatedAt": "2026-07-10T17:51:55.000Z",
+        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
+        "locationQuality": "postcode_lookup",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "spen:restored:incd-2483660-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.188586,
+          53.066142
+        ]
+      },
+      "properties": {
+        "providerId": "spen",
+        "provider": "SP Energy Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-2483660-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
@@ -820,9 +1315,9 @@
         "areas": [
           "WREXHAM"
         ],
-        "startedAt": "2026-07-09T08:19:16.000Z",
-        "restoreAt": "2026-07-09T11:19:00.000Z",
-        "updatedAt": "2026-07-09T09:09:28.000Z",
+        "startedAt": "2026-07-10T15:56:17.000Z",
+        "restoreAt": "2026-07-10T19:30:00.000Z",
+        "updatedAt": "2026-07-10T19:00:26.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -831,12 +1326,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482778-i",
+      "id": "spen:restored:incd-1388767-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.898804,
-          53.175423
+          -3.92115,
+          56.028427
         ]
       },
       "properties": {
@@ -845,17 +1340,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482778-i",
+        "reference": "INCD-1388767-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "CH4",
+        "area": "DENNY",
         "areas": [
-          "CH4"
+          "DENNY"
         ],
-        "startedAt": "2026-07-09T07:27:36.000Z",
-        "restoreAt": "2026-07-09T10:27:00.000Z",
-        "updatedAt": "2026-07-09T07:30:54.000Z",
+        "startedAt": "2026-07-10T15:51:07.000Z",
+        "restoreAt": "2026-07-10T21:06:00.000Z",
+        "updatedAt": "2026-07-10T19:00:13.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -864,12 +1359,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482766-i",
+      "id": "spen:restored:incd-1388737-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.056321,
-          53.193754
+          -4.079962,
+          55.884451
         ]
       },
       "properties": {
@@ -878,17 +1373,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482766-i",
+        "reference": "INCD-1388737-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "DEESIDE",
+        "area": "GLASGOW and COATBRIDGE",
         "areas": [
-          "DEESIDE"
+          "GLASGOW and COATBRIDGE"
         ],
-        "startedAt": "2026-07-09T06:49:17.000Z",
-        "restoreAt": "2026-07-09T12:04:00.000Z",
-        "updatedAt": "2026-07-09T08:59:56.000Z",
+        "startedAt": "2026-07-10T15:28:38.000Z",
+        "restoreAt": "2026-07-10T21:00:00.000Z",
+        "updatedAt": "2026-07-10T19:40:29.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -897,12 +1392,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-1387621-s",
+      "id": "spen:restored:incd-1388719-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.191208,
-          55.658378
+          -3.182321,
+          55.959793
         ]
       },
       "properties": {
@@ -911,17 +1406,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1387621-s",
+        "reference": "INCD-1388719-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "PEEBLES",
+        "area": "EH7",
         "areas": [
-          "PEEBLES"
+          "EH7"
         ],
-        "startedAt": "2026-07-09T06:36:39.000Z",
-        "restoreAt": "2026-07-09T09:08:00.000Z",
-        "updatedAt": "2026-07-09T08:20:06.000Z",
+        "startedAt": "2026-07-10T15:12:14.000Z",
+        "restoreAt": "2026-07-10T20:27:00.000Z",
+        "updatedAt": "2026-07-10T19:51:08.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -930,12 +1425,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482748-i",
+      "id": "spen:restored:incd-699023-k",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.614999,
-          53.186213
+          -4.096203,
+          55.867478
         ]
       },
       "properties": {
@@ -944,17 +1439,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482748-i",
+        "reference": "INCD-699023-k",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "ABERGELE",
+        "area": "GLASGOW",
         "areas": [
-          "ABERGELE"
+          "GLASGOW"
         ],
-        "startedAt": "2026-07-09T06:15:06.000Z",
-        "restoreAt": "2026-07-09T12:15:00.000Z",
-        "updatedAt": "2026-07-09T08:00:58.000Z",
+        "startedAt": "2026-07-10T13:17:32.000Z",
+        "restoreAt": "2026-07-10T21:00:00.000Z",
+        "updatedAt": "2026-07-11T16:07:41.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -963,12 +1458,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-1387603-s",
+      "id": "spen:restored:incd-2483546-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.787599,
-          56.006194
+          -3.303705,
+          53.039747
         ]
       },
       "properties": {
@@ -977,17 +1472,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1387603-s",
+        "reference": "INCD-2483546-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "NORTH BERWICK",
+        "area": "RUTHIN",
         "areas": [
-          "NORTH BERWICK"
+          "RUTHIN"
         ],
-        "startedAt": "2026-07-09T03:51:01.000Z",
-        "restoreAt": "2026-07-09T10:00:00.000Z",
-        "updatedAt": "2026-07-09T08:15:35.000Z",
+        "startedAt": "2026-07-10T13:14:19.000Z",
+        "restoreAt": "2026-07-10T19:00:00.000Z",
+        "updatedAt": "2026-07-10T17:52:17.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -996,12 +1491,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-2482712-i",
+      "id": "spen:restored:incd-2483408-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.300041,
-          53.107308
+          -4.444757,
+          52.96097
         ]
       },
       "properties": {
@@ -1010,700 +1505,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-2482712-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL15",
-        "areas": [
-          "LL15"
-        ],
-        "startedAt": "2026-07-08T20:31:51.000Z",
-        "restoreAt": "2026-07-09T10:00:00.000Z",
-        "updatedAt": "2026-07-09T07:21:30.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387579-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.792824,
-          55.995826
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387579-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "FALKIRK",
-        "areas": [
-          "FALKIRK"
-        ],
-        "startedAt": "2026-07-08T20:22:36.000Z",
-        "restoreAt": "2026-07-09T01:37:00.000Z",
-        "updatedAt": "2026-07-09T00:00:20.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482706-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.512694,
-          53.294684
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482706-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CW9",
-        "areas": [
-          "CW9"
-        ],
-        "startedAt": "2026-07-08T20:17:38.000Z",
-        "restoreAt": "2026-07-09T02:09:00.000Z",
-        "updatedAt": "2026-07-09T01:28:25.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482670-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.937915,
-          53.280421
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482670-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH66",
-        "areas": [
-          "CH66"
-        ],
-        "startedAt": "2026-07-08T17:32:15.000Z",
-        "restoreAt": "2026-07-09T00:00:00.000Z",
-        "updatedAt": "2026-07-08T21:40:06.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482658-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.55396,
-          53.368358
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482658-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL65, LL57",
-        "areas": [
-          "LL65, LL57"
-        ],
-        "startedAt": "2026-07-08T16:35:05.000Z",
-        "restoreAt": "2026-07-09T00:00:00.000Z",
-        "updatedAt": "2026-07-08T22:55:17.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387489-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.450514,
-          55.953837
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387489-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "EH52",
-        "areas": [
-          "EH52"
-        ],
-        "startedAt": "2026-07-08T15:41:33.000Z",
-        "restoreAt": "2026-07-09T03:00:00.000Z",
-        "updatedAt": "2026-07-08T17:31:00.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482568-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.151805,
-          53.378984
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482568-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH48, CH47",
-        "areas": [
-          "CH48, CH47"
-        ],
-        "startedAt": "2026-07-08T14:38:20.000Z",
-        "restoreAt": "2026-07-09T01:00:00.000Z",
-        "updatedAt": "2026-07-09T00:21:39.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482562-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.35993,
-          52.513101
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482562-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "NEWTOWN",
-        "areas": [
-          "NEWTOWN"
-        ],
-        "startedAt": "2026-07-08T14:28:34.000Z",
-        "restoreAt": "2026-07-08T23:00:00.000Z",
-        "updatedAt": "2026-07-08T20:29:26.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482544-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.943345,
-          53.41649
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482544-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "L6",
-        "areas": [
-          "L6"
-        ],
-        "startedAt": "2026-07-08T14:08:25.000Z",
-        "restoreAt": "2026-07-08T23:00:00.000Z",
-        "updatedAt": "2026-07-08T22:46:13.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1387357-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.260418,
-          55.449569
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1387357-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CUMNOCK",
-        "areas": [
-          "CUMNOCK"
-        ],
-        "startedAt": "2026-07-08T13:06:11.000Z",
-        "restoreAt": "2026-07-09T00:00:00.000Z",
-        "updatedAt": "2026-07-08T22:37:14.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482430-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.876916,
-          53.238582
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482430-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH2",
-        "areas": [
-          "CH2"
-        ],
-        "startedAt": "2026-07-08T11:49:56.000Z",
-        "restoreAt": "2026-07-09T02:41:00.000Z",
-        "updatedAt": "2026-07-09T05:29:42.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482178-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.734536,
-          53.286181
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482178-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL29",
-        "areas": [
-          "LL29"
-        ],
-        "startedAt": "2026-07-08T08:32:20.000Z",
-        "restoreAt": "2026-07-09T16:15:00.000Z",
-        "updatedAt": "2026-07-09T15:01:33.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-2482088-i",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.911115,
-          53.20636
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-2482088-i",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH1, CH15BD",
-        "areas": [
-          "CH1, CH15BD"
-        ],
-        "startedAt": "2026-07-08T06:11:42.000Z",
-        "restoreAt": "2026-07-09T17:00:00.000Z",
-        "updatedAt": "2026-07-08T14:27:44.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1382251-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.613314,
-          55.900197
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1382251-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "BATHGATE",
-        "areas": [
-          "BATHGATE"
-        ],
-        "startedAt": "2026-06-29T11:04:39.000Z",
-        "restoreAt": "2026-07-09T15:00:00.000Z",
-        "updatedAt": "2026-07-09T08:10:57.000Z",
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-927171-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.575546,
-          55.401991
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-927171-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "KA6, K",
-        "areas": [
-          "KA6, K"
-        ],
-        "startedAt": "2026-06-23T11:59:00.000Z",
-        "restoreAt": "2026-07-09T17:30:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-926961-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.691027,
-          53.108034
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-926961-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CW6",
-        "areas": [
-          "CW6"
-        ],
-        "startedAt": "2026-06-17T16:57:00.000Z",
-        "restoreAt": "2026-07-09T18:00:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1375729-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.338594,
-          53.342377
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1375729-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL71",
-        "areas": [
-          "LL71"
-        ],
-        "startedAt": "2026-06-17T15:12:00.000Z",
-        "restoreAt": "2026-07-09T17:30:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-1375075-s",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.51363,
-          54.764252
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-1375075-s",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "DG8",
-        "areas": [
-          "DG8"
-        ],
-        "startedAt": "2026-06-16T13:52:00.000Z",
-        "restoreAt": "2026-07-09T18:00:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-926835-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.431968,
-          55.835624
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-926835-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "TD11",
-        "areas": [
-          "TD11"
-        ],
-        "startedAt": "2026-06-15T16:28:00.000Z",
-        "restoreAt": "2026-07-09T18:00:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-649822-r",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.402348,
-          53.17908
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-649822-r",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL16",
-        "areas": [
-          "LL16"
-        ],
-        "startedAt": "2026-06-15T13:22:00.000Z",
-        "restoreAt": "2026-07-09T16:00:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-926709-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.466447,
-          52.990941
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-926709-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "LL21",
-        "areas": [
-          "LL21"
-        ],
-        "startedAt": "2026-06-15T11:34:00.000Z",
-        "restoreAt": "2026-07-09T17:30:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-649762-r",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.519869,
-          52.877774
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-649762-r",
+        "reference": "INCD-2483408-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
@@ -1711,9 +1513,9 @@
         "areas": [
           "LL53"
         ],
-        "startedAt": "2026-06-15T10:04:00.000Z",
-        "restoreAt": "2026-07-09T18:00:00.000Z",
-        "updatedAt": null,
+        "startedAt": "2026-07-10T11:15:23.000Z",
+        "restoreAt": "2026-07-10T20:30:00.000Z",
+        "updatedAt": "2026-07-10T19:22:02.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -1722,12 +1524,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-649504-r",
+      "id": "spen:restored:incd-2483330-i",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.969789,
-          53.447927
+          -2.816799,
+          53.176948
         ]
       },
       "properties": {
@@ -1736,17 +1538,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-649504-r",
+        "reference": "INCD-2483330-i",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "L9",
+        "area": "CH3",
         "areas": [
-          "L9"
+          "CH3"
         ],
-        "startedAt": "2026-06-12T16:32:00.000Z",
-        "restoreAt": "2026-07-09T16:30:00.000Z",
-        "updatedAt": null,
+        "startedAt": "2026-07-10T10:13:21.000Z",
+        "restoreAt": "2026-07-10T18:30:00.000Z",
+        "updatedAt": "2026-07-10T17:50:24.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -1755,12 +1557,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-649486-r",
+      "id": "spen:restored:incd-1388281-s",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.883683,
-          53.23757
+          -4.260388,
+          55.451816
         ]
       },
       "properties": {
@@ -1769,17 +1571,17 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-649486-r",
+        "reference": "INCD-1388281-s",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "CH2",
+        "area": "KA18",
         "areas": [
-          "CH2"
+          "KA18"
         ],
-        "startedAt": "2026-06-12T15:09:00.000Z",
-        "restoreAt": "2026-07-09T17:00:00.000Z",
-        "updatedAt": null,
+        "startedAt": "2026-07-10T03:26:55.000Z",
+        "restoreAt": "2026-07-10T16:00:00.000Z",
+        "updatedAt": "2026-07-10T14:37:53.000Z",
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
         "rawRecordCount": 1,
@@ -1788,12 +1590,12 @@
     },
     {
       "type": "Feature",
-      "id": "spen:restored:incd-1373449-s",
+      "id": "spen:restored:incd-650938-r",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.561569,
-          55.409844
+          -2.390136,
+          53.152927
         ]
       },
       "properties": {
@@ -1802,49 +1604,16 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-1373449-s",
+        "reference": "INCD-650938-r",
         "category": "restored",
         "status": "Restored",
         "type": "restored",
-        "area": "KA6",
+        "area": "CW11",
         "areas": [
-          "KA6"
+          "CW11"
         ],
-        "startedAt": "2026-06-12T12:46:00.000Z",
-        "restoreAt": "2026-07-09T17:30:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-926595-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.057965,
-          55.650457
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-926595-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "ML10",
-        "areas": [
-          "ML10"
-        ],
-        "startedAt": "2026-06-11T13:24:00.000Z",
-        "restoreAt": "2026-07-09T16:00:00.000Z",
+        "startedAt": "2026-06-24T15:49:00.000Z",
+        "restoreAt": "2026-07-11T09:13:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",
@@ -1878,39 +1647,6 @@
         ],
         "startedAt": "2026-06-10T17:10:00.000Z",
         "restoreAt": "2026-07-13T17:00:00.000Z",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
-        "locationQuality": "postcode_lookup",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "spen:restored:incd-925665-f",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.189344,
-          53.24721
-        ]
-      },
-      "properties": {
-        "providerId": "spen",
-        "provider": "SP Energy Networks",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-925665-f",
-        "category": "restored",
-        "status": "Restored",
-        "type": "restored",
-        "area": "CH8, CH6",
-        "areas": [
-          "CH8, CH6"
-        ],
-        "startedAt": "2026-05-21T10:45:00.000Z",
-        "restoreAt": "2026-07-09T13:00:00.000Z",
         "updatedAt": null,
         "officialUrl": "https://powercuts.spenergynetworks.co.uk/map",
         "locationQuality": "postcode_lookup",

@@ -58,13 +58,25 @@
     }
   ];
 
+  const PROVIDER_REGIONS = [
+    { id: "ukpn", label: "UKPN", bounds: [[50.68, -0.95], [52.15, 1.78]], colour: "#f04438" },
+    { id: "npg", label: "Northern Powergrid", bounds: [[53.05, -2.85], [55.85, -0.72]], colour: "#3fa9f5" },
+    { id: "nged", label: "National Grid ED", bounds: [[50.0, -5.95], [53.55, -0.58]], colour: "#7bd88f" },
+    { id: "enwl", label: "Electricity North West", bounds: [[53.0, -3.35], [55.0, -1.82]], colour: "#f6b73c" },
+    { id: "ssen", label: "SSEN", bounds: [[49.85, -7.0], [61.1, 0.35]], colour: "#b488ff" },
+    { id: "spen", label: "SPEN", bounds: [[52.75, -5.95], [56.25, -2.0]], colour: "#ff6b81" },
+    { id: "nie", label: "NIE Networks", bounds: [[54.0, -8.35], [55.45, -5.25]], colour: "#24c6dc" }
+  ];
+
   const state = {
     map: null,
     providerLayers: new Map(),
     providerRecords: new Map(),
     providerStatus: new Map(),
+    regionLayers: new Map(),
     firstSeen: new Map(),
     activeSources: new Set(),
+    pendingRegions: new Set(),
     refreshSequence: 0,
     refreshTimer: null,
     renderTimer: null,
@@ -98,6 +110,10 @@
     elements.sourceList = document.getElementById("sourceList");
     elements.activateAllProviders = document.getElementById("activateAllProviders");
     elements.deactivateAllProviders = document.getElementById("deactivateAllProviders");
+    elements.regionSummary = document.getElementById("regionSummary");
+    elements.regionList = document.getElementById("regionList");
+    elements.regionOk = document.getElementById("regionOk");
+    elements.regionReset = document.getElementById("regionReset");
     elements.headlineStatus = document.getElementById("headlineStatus");
     elements.liveBadge = document.getElementById("liveBadge");
     elements.statusText = document.getElementById("statusText");
@@ -144,6 +160,10 @@
     markerPane.style.zIndex = "620";
     markerPane.classList.add("weather-marker-pane");
 
+    const regionPane = state.map.createPane("outageRegionPane");
+    regionPane.style.zIndex = "360";
+    regionPane.classList.add("outage-region-pane");
+
     window.L.control.zoom({ position: "topright" }).addTo(state.map);
 
     window.L.tileLayer(OSM_TILE_URL, {
@@ -158,10 +178,12 @@
     }).addTo(state.map);
 
     initialiseProviderLayers();
+    initialiseRegionLayers();
     exposeWeatherMapHooks();
     state.map.on("moveend zoomend", () => rememberMapView());
     syncProviderVisibility();
     syncCategoryVisibility();
+    syncRegionHighlights();
     if (!storedView) fitUkView();
     window.setTimeout(() => state.map.invalidateSize(), 160);
   }
@@ -259,9 +281,12 @@
 
     elements.activateAllProviders?.addEventListener("click", () => {
       state.activeSources = new Set(PROVIDERS.map((provider) => provider.id));
+      state.pendingRegions = new Set(state.activeSources);
       writeActiveSources();
       syncProviderVisibility();
       syncCategoryVisibility();
+      syncRegionHighlights();
+      renderRegionList();
       renderSourceList();
       updateSummary();
       refreshAll();
@@ -269,11 +294,71 @@
 
     elements.deactivateAllProviders?.addEventListener("click", () => {
       state.activeSources.clear();
+      state.pendingRegions.clear();
       writeActiveSources();
       syncProviderVisibility();
+      syncRegionHighlights();
+      renderRegionList();
       renderSourceList();
       updateSummary();
     });
+
+    elements.regionList?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-region-toggle]");
+      if (!button) return;
+
+      const regionId = button.getAttribute("data-region-toggle");
+      if (state.pendingRegions.has(regionId)) state.pendingRegions.delete(regionId);
+      else state.pendingRegions.add(regionId);
+
+      syncRegionHighlights();
+      renderRegionList();
+    });
+
+    elements.regionOk?.addEventListener("click", () => {
+      state.activeSources = new Set(state.pendingRegions);
+      writeActiveSources();
+      syncProviderVisibility();
+      syncCategoryVisibility();
+      syncRegionHighlights();
+      renderSourceList();
+      updateSummary();
+      fitActiveRegions();
+
+      PROVIDERS
+        .filter((provider) => state.activeSources.has(provider.id))
+        .forEach((provider) => {
+          const status = state.providerStatus.get(provider.id);
+          if (!status?.loaded) loadProvider(provider, state.refreshSequence);
+        });
+    });
+
+    elements.regionReset?.addEventListener("click", () => {
+      state.pendingRegions = new Set(PROVIDERS.map((provider) => provider.id));
+      syncRegionHighlights();
+      renderRegionList();
+    });
+  }
+
+  function initialiseRegionLayers() {
+    PROVIDER_REGIONS.forEach((region) => {
+      const rectangle = window.L.rectangle(region.bounds, {
+        pane: "outageRegionPane",
+        interactive: false,
+        color: region.colour,
+        weight: 2,
+        opacity: 0.42,
+        fillColor: region.colour,
+        fillOpacity: 0.05,
+        dashArray: "5 5"
+      });
+
+      rectangle.addTo(state.map);
+      state.regionLayers.set(region.id, rectangle);
+    });
+
+    state.pendingRegions = new Set(state.activeSources);
+    renderRegionList();
   }
 
   function fitUkView() {
@@ -316,10 +401,13 @@
 
     if (active) state.activeSources.add(sourceId);
     else state.activeSources.delete(sourceId);
+    state.pendingRegions = new Set(state.activeSources);
 
     writeActiveSources();
     syncProviderVisibility();
     syncCategoryVisibility();
+    syncRegionHighlights();
+    renderRegionList();
     renderSourceList();
     updateSummary();
 
@@ -356,6 +444,64 @@
         if (!visible && included) bundle.root.removeLayer(layer);
       });
     });
+  }
+
+  function syncRegionHighlights() {
+    PROVIDER_REGIONS.forEach((region) => {
+      const layer = state.regionLayers.get(region.id);
+      if (!layer) return;
+
+      const active = state.pendingRegions.has(region.id);
+      layer.setStyle({
+        color: region.colour,
+        weight: active ? 3 : 1,
+        opacity: active ? 0.86 : 0.18,
+        fillColor: region.colour,
+        fillOpacity: active ? 0.16 : 0.025,
+        dashArray: active ? "" : "5 6"
+      });
+
+      if (active) layer.bringToFront();
+    });
+
+    if (elements.regionSummary) {
+      const count = state.pendingRegions.size;
+      elements.regionSummary.textContent = count === PROVIDERS.length
+        ? "All licence regions highlighted"
+        : `${count} licence region${count === 1 ? "" : "s"} selected`;
+    }
+  }
+
+  function renderRegionList() {
+    if (!elements.regionList) return;
+
+    elements.regionList.innerHTML = PROVIDER_REGIONS.map((region) => {
+      const active = state.pendingRegions.has(region.id);
+      const provider = PROVIDERS.find((item) => item.id === region.id);
+      const records = state.providerRecords.get(region.id) || [];
+
+      return [
+        `<button class="outage-region-button${active ? " is-selected" : ""}" style="--outage-region-colour:${escapeAttribute(region.colour)}" type="button" data-region-toggle="${escapeAttribute(region.id)}" aria-pressed="${String(active)}">`,
+        '<span class="outage-region-swatch" aria-hidden="true"></span>',
+        '<span class="outage-region-copy">',
+        `<strong>${escapeHtml(region.label)}</strong>`,
+        `<small>${escapeHtml(provider?.name || region.label)} · ${records.length} incidents</small>`,
+        '</span>',
+        '</button>'
+      ].join("");
+    }).join("");
+  }
+
+  function fitActiveRegions() {
+    const selected = PROVIDER_REGIONS.filter((region) => state.activeSources.has(region.id));
+    if (!selected.length) return;
+
+    const bounds = selected.reduce((result, region) => {
+      const next = window.L.latLngBounds(region.bounds);
+      return result ? result.extend(next) : next;
+    }, null);
+
+    if (bounds?.isValid()) state.map.fitBounds(bounds, { padding: [28, 28], maxZoom: 8 });
   }
 
   async function refreshAll() {
@@ -471,6 +617,7 @@
       });
     } finally {
       renderSourceList();
+      renderRegionList();
       updateSummary();
     }
   }
