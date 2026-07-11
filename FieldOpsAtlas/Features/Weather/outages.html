@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../../shell.css?v=1.1.22-weather-nav" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css?v=1.0.0-weather-map-shell" />
-  <link rel="stylesheet" href="outages.css?v=0.4.0-static-collector" />
+  <link rel="stylesheet" href="outages.css?v=0.4.1-region-selector" />
 </head>
 
 <body class="weather-page">
@@ -16,7 +16,7 @@
     class="fieldops-shell-root weather-shell outage-shell"
     data-page="weather"
     data-weather-provider="outages"
-    data-version="0.4.0-static-collector"
+    data-version="0.4.1-region-selector"
   >
     <section class="weather-stage" aria-label="UK electricity outage map">
       <div
@@ -49,21 +49,41 @@
       <details class="outage-panel outage-region-panel">
         <summary>
           <span class="outage-summary-title">
-            <strong>Regions</strong>
-            <small id="regionSummary">All licence regions highlighted</small>
+            <strong>Select region</strong>
+            <small id="regionSummary">All outage regions selected</small>
           </span>
           <span class="outage-summary-state" aria-hidden="true">Show</span>
         </summary>
 
-        <div class="outage-region-list" id="regionList" aria-label="Outage licence regions"></div>
+        <div class="outage-region-card">
+          <h2>1. SELECT REGION</h2>
+          <p>Select one or more regions to filter outage points.</p>
 
-        <div class="outage-region-actions">
-          <button id="regionReset" class="weather-button" type="button">
-            All regions
-          </button>
-          <button id="regionOk" class="weather-button is-primary" type="button">
-            OK
-          </button>
+          <div class="outage-region-map" aria-label="Outage point regions">
+            <div class="outage-uk-silhouette" aria-hidden="true">
+              <span class="outage-uk-shape is-scotland"></span>
+              <span class="outage-uk-shape is-north"></span>
+              <span class="outage-uk-shape is-midlands"></span>
+              <span class="outage-uk-shape is-wales"></span>
+              <span class="outage-uk-shape is-south"></span>
+              <span class="outage-uk-shape is-ireland"></span>
+            </div>
+            <div class="outage-region-list" id="regionList" aria-label="Outage point regions"></div>
+          </div>
+
+          <div class="outage-region-info">
+            <span class="outage-region-info-icon" aria-hidden="true">i</span>
+            <p>
+              Select a single region to focus outage points there.
+              Multiple regions: matching points will be shown together.
+            </p>
+            <button id="regionOk" class="weather-button is-primary outage-region-continue" type="button">
+              Continue
+            </button>
+            <button id="regionReset" class="outage-region-reset" type="button">
+              Select all regions
+            </button>
+          </div>
         </div>
       </details>
 
@@ -186,6 +206,6 @@
   <script src="weather-display-style.js?v=0.1.2" defer></script>
   <script src="weather-pages.js?v=0.1.0-shared-weather-shell" defer></script>
   <script src="weather-shell.js?v=0.1.0-shared-weather-shell" defer></script>
-  <script src="outages.js?v=0.4.0-static-collector" defer></script>
+  <script src="outages.js?v=0.4.1-region-selector" defer></script>
 </body>
 </html>
