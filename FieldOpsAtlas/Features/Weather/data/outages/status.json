@@ -1,71 +1,71 @@
 {
   "version": "0.5.0-public-provider-fallbacks",
-  "generatedAt": "2026-07-11T17:42:43.937Z",
+  "generatedAt": "2026-08-22T13:51:50.547Z",
   "providers": {
     "ukpn": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 98,
-      "validRows": 98,
-      "uniqueIncidents": 98,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 62,
+      "validRows": 62,
+      "uniqueIncidents": 62,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 12,
-        "planned": 86,
+        "current": 8,
+        "planned": 54,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 98,
+          "rawRows": 62,
           "authConfigured": false,
           "selectedSource": "https://ukpowernetworks.opendatasoft.com:ukpn-live-faults"
         }
       ],
-      "message": "12 unplanned · 86 planned · 0 restored"
+      "message": "8 unplanned · 54 planned · 0 restored"
     },
     "npg": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 460,
-      "validRows": 460,
-      "uniqueIncidents": 22,
-      "groupedRows": 438,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 85,
+      "validRows": 85,
+      "uniqueIncidents": 17,
+      "groupedRows": 68,
       "skippedRows": 0,
       "categories": {
-        "current": 18,
-        "planned": 4,
+        "current": 15,
+        "planned": 2,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 460,
+          "rawRows": 85,
           "authConfigured": false,
           "selectedSource": "https://northernpowergrid.opendatasoft.com:live-power-cuts-data"
         }
       ],
-      "message": "18 unplanned · 4 planned · 0 restored"
+      "message": "15 unplanned · 2 planned · 0 restored"
     },
     "nged": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 17,
-      "validRows": 17,
-      "uniqueIncidents": 17,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 16,
+      "validRows": 16,
+      "uniqueIncidents": 16,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 17,
+        "current": 16,
         "planned": 0,
         "restored": 0
       },
@@ -73,58 +73,58 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 17,
+          "rawRows": 16,
           "authConfigured": false,
-          "selectedSource": "https://powercuts.nationalgrid.co.uk/__powercuts/getIncidentsAndAlertSummary + https://powercuts.nationalgrid.co.uk/__powercuts/getTabularView"
+          "selectedSource": "https://connecteddata.nationalgrid.co.uk/api/3/action/datastore_search (fallback after HTTP 403 Forbidden [live] {server=cloudflare, content-type=text/html; charset=UTF-8, cf-ray=a2f25ad41ba8e088-DFW} body=\"<!DOCTYPE html><html lang=\\\"en-US\\\"><head><title>Just a moment...</title><meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=UTF-8\\\"><meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"IE=Edge\\\"><meta name=\\\"robots\\\" content=\\\"noindex,nofollow\\\"><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\"><meta http-equiv=\\\"content-security-policy\\\" content=\\\"default-src &#39;none&#39;; script-src &#39;nonce-Slu6AzALsIF8I0TOrF73WF&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; )"
         }
       ],
-      "message": "17 unplanned · 0 planned · 0 restored"
+      "message": "16 unplanned · 0 planned · 0 restored"
     },
     "enwl": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 77,
-      "validRows": 77,
-      "uniqueIncidents": 77,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 73,
+      "validRows": 73,
+      "uniqueIncidents": 73,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 2,
-        "planned": 75,
+        "current": 4,
+        "planned": 69,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 2,
+          "rawRows": 4,
           "authConfigured": false,
           "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
         },
         {
           "id": "planned",
           "state": "live",
-          "rawRows": 75,
+          "rawRows": 69,
           "authConfigured": false,
           "selectedSource": "https://www.enwl.co.uk/api/power-outages/search"
         }
       ],
-      "message": "2 unplanned · 75 planned · 0 restored"
+      "message": "4 unplanned · 69 planned · 0 restored"
     },
     "ssen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 18,
-      "validRows": 18,
-      "uniqueIncidents": 18,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 13,
+      "validRows": 13,
+      "uniqueIncidents": 13,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 18,
+        "current": 13,
         "planned": 0,
         "restored": 0
       },
@@ -132,64 +132,64 @@
         {
           "id": "live",
           "state": "live",
-          "rawRows": 18,
+          "rawRows": 13,
           "authConfigured": false,
           "selectedSource": "https://external.distribution.prd.ssen.co.uk/opendataportal-prd/v4/api/getallfaults"
         }
       ],
-      "message": "18 unplanned · 0 planned · 0 restored"
+      "message": "13 unplanned · 0 planned · 0 restored"
     },
     "spen": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 48,
-      "validRows": 48,
-      "uniqueIncidents": 48,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 28,
+      "validRows": 28,
+      "uniqueIncidents": 28,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
-        "current": 3,
-        "planned": 1,
-        "restored": 44
+        "current": 4,
+        "planned": 2,
+        "restored": 22
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 48,
+          "rawRows": 28,
           "authConfigured": false,
-          "selectedSource": "salesforce-lwr current=3 planned=1 restored=44"
+          "selectedSource": "salesforce-lwr current=5 planned=1 restored=22"
         }
       ],
-      "message": "3 unplanned · 1 planned · 44 restored"
+      "message": "4 unplanned · 2 planned · 22 restored"
     },
     "nie": {
       "state": "live",
       "stale": false,
-      "generatedAt": "2026-07-11T17:42:43.937Z",
-      "lastGoodAt": "2026-07-11T17:42:43.937Z",
-      "rawRows": 3,
-      "validRows": 3,
-      "uniqueIncidents": 3,
+      "generatedAt": "2026-08-22T13:51:50.547Z",
+      "lastGoodAt": "2026-08-22T13:51:50.547Z",
+      "rawRows": 5,
+      "validRows": 5,
+      "uniqueIncidents": 5,
       "groupedRows": 0,
       "skippedRows": 0,
       "categories": {
         "current": 3,
-        "planned": 0,
+        "planned": 2,
         "restored": 0
       },
       "feeds": [
         {
           "id": "live",
           "state": "live",
-          "rawRows": 3,
+          "rawRows": 5,
           "authConfigured": false,
           "selectedSource": "https://powercheck.nienetworks.co.uk/NIEPowerCheckerWebAPI/api/faults"
         }
       ],
-      "message": "3 unplanned · 0 planned · 0 restored"
+      "message": "3 unplanned · 2 planned · 0 restored"
     }
   }
 }
