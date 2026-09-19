@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "ssen",
-  "generatedAt": "2026-08-22T13:51:50.547Z",
+  "generatedAt": "2026-09-19T12:31:47.678Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "ssen:current:tt2448",
+      "id": "ssen:current:tz8004",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.4997193,
-          50.7061702
+          -1.3409467,
+          50.919523
         ]
       },
       "properties": {
@@ -20,7 +20,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TT2448",
+        "reference": "TZ8004",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -29,41 +29,32 @@
           "Published incident location"
         ],
         "postcodes": [
-          "PO41 0PB",
-          "PO41 0PD",
-          "PO41 0PE",
-          "PO41 0PF"
+          "SO18 5FT",
+          "SO18 5FW",
+          "SO18 5GB"
         ],
         "groupedLocations": [
           {
-            "area": "PO41 0PB",
-            "lat": 50.706171,
-            "lon": -1.499979,
-            "reference": "TT2448",
+            "area": "SO18 5FT",
+            "lat": 50.919514,
+            "lon": -1.340937,
+            "reference": "TZ8004",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "PO41 0PD",
-            "lat": 50.70616,
-            "lon": -1.49971,
-            "reference": "TT2448",
+            "area": "SO18 5FW",
+            "lat": 50.92075,
+            "lon": -1.340094,
+            "reference": "TZ8004",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "PO41 0PE",
-            "lat": 50.706332,
-            "lon": -1.499949,
-            "reference": "TT2448",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "PO41 0PF",
-            "lat": 50.706009,
-            "lon": -1.499981,
-            "reference": "TT2448",
+            "area": "SO18 5GB",
+            "lat": 50.922045,
+            "lon": -1.340175,
+            "reference": "TZ8004",
             "status": "current",
             "type": "LV"
           }
@@ -74,18 +65,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.019
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.145
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw3035",
+      "id": "ssen:current:tz7987",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.332455,
-          50.8995295
+          -1.2271193,
+          51.7267849
         ]
       },
       "properties": {
@@ -94,7 +85,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW3035",
+        "reference": "TZ7987",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -103,14 +94,23 @@
           "Published incident location"
         ],
         "postcodes": [
-          "SO19 0SW"
+          "OX4 4SL",
+          "OX4 4SN"
         ],
         "groupedLocations": [
           {
-            "area": "SO19 0SW",
-            "lat": 50.89952,
-            "lon": -1.332445,
-            "reference": "TW3035",
+            "area": "OX4 4SL",
+            "lat": 51.72679,
+            "lon": -1.227101,
+            "reference": "TZ7987",
+            "status": "current",
+            "type": "LV"
+          },
+          {
+            "area": "OX4 4SN",
+            "lat": 51.727456,
+            "lon": -1.225844,
+            "reference": "TZ7987",
             "status": "current",
             "type": "LV"
           }
@@ -121,18 +121,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.057
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw2984",
+      "id": "ssen:current:tz7786",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.5921588999999999,
-          51.4398418
+          -1.2286523,
+          51.9087582
         ]
       },
       "properties": {
@@ -141,7 +141,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW2984",
+        "reference": "TZ7786",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -150,50 +150,50 @@
           "Published incident location"
         ],
         "postcodes": [
-          "TW20 0XN",
-          "TW20 0XU",
-          "TW20 0YB",
-          "TW20 0YJ",
-          "TW20 0YL"
+          "OX25 4AF",
+          "OX25 4AQ",
+          "OX25 4AW",
+          "OX25 4GX",
+          "OX25 4JG"
         ],
         "groupedLocations": [
           {
-            "area": "TW20 0XN",
-            "lat": 51.433353,
-            "lon": -0.58942,
-            "reference": "TW2984",
+            "area": "OX25 4AF",
+            "lat": 51.908322,
+            "lon": -1.229383,
+            "reference": "TZ7786",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "TW20 0XU",
-            "lat": 51.439842,
-            "lon": -0.592141,
-            "reference": "TW2984",
+            "area": "OX25 4AQ",
+            "lat": 51.906147,
+            "lon": -1.237793,
+            "reference": "TZ7786",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "TW20 0YB",
-            "lat": 51.442361,
-            "lon": -0.584783,
-            "reference": "TW2984",
+            "area": "OX25 4AW",
+            "lat": 51.907844,
+            "lon": -1.227763,
+            "reference": "TZ7786",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "TW20 0YJ",
-            "lat": 51.439404,
-            "lon": -0.583407,
-            "reference": "TW2984",
+            "area": "OX25 4GX",
+            "lat": 51.908134,
+            "lon": -1.228223,
+            "reference": "TZ7786",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "TW20 0YL",
-            "lat": 51.439386,
-            "lon": -0.58781,
-            "reference": "TW2984",
+            "area": "OX25 4JG",
+            "lat": 51.908766,
+            "lon": -1.228634,
+            "reference": "TZ7786",
             "status": "current",
             "type": "LV"
           }
@@ -205,17 +205,17 @@
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
         "rawRecordCount": 5,
-        "coordinateSpreadKm": 0.627
+        "coordinateSpreadKm": 0.544
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw2391",
+      "id": "ssen:current:tz7836",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.9809536,
-          50.6087072
+          -1.6190788,
+          51.0404846
         ]
       },
       "properties": {
@@ -224,7 +224,135 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW2391",
+        "reference": "TZ7836",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "SP5 1GZ",
+          "SP5 1HA",
+          "SP5 1HB",
+          "SP5 1HU",
+          "SP5 1JL",
+          "SP5 1JQ",
+          "SP5 1NF",
+          "SP5 1PA",
+          "SP5 3RT",
+          "SP5 3SB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "SP5 1GZ",
+            "lat": 51.043218,
+            "lon": -1.618117,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1HA",
+            "lat": 51.040479,
+            "lon": -1.619067,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1HB",
+            "lat": 51.039498,
+            "lon": -1.613484,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1HU",
+            "lat": 51.03951,
+            "lon": -1.619859,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1JL",
+            "lat": 51.045603,
+            "lon": -1.632591,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1JQ",
+            "lat": 51.044294,
+            "lon": -1.634057,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1NF",
+            "lat": 51.070083,
+            "lon": -1.608905,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 1PA",
+            "lat": 51.052675,
+            "lon": -1.603844,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 3RT",
+            "lat": 51.04949,
+            "lon": -1.679568,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP5 3SB",
+            "lat": 51.045422,
+            "lon": -1.68125,
+            "reference": "TZ7836",
+            "status": "current",
+            "type": "HV"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 3.512
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tz7806",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.9193718000000001,
+          51.4288011
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TZ7806",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -233,32 +361,32 @@
           "Published incident location"
         ],
         "postcodes": [
-          "BH19 2SP",
-          "BH19 2SU",
-          "BH19 2SX"
+          "RG6 3DZ",
+          "RG6 4ER",
+          "RG6 5UP"
         ],
         "groupedLocations": [
           {
-            "area": "BH19 2SP",
-            "lat": 50.608506,
-            "lon": -1.980113,
-            "reference": "TW2391",
+            "area": "RG6 3DZ",
+            "lat": 51.430801,
+            "lon": -0.91968,
+            "reference": "TZ7806",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "BH19 2SU",
-            "lat": 50.608776,
-            "lon": -1.980848,
-            "reference": "TW2391",
+            "area": "RG6 4ER",
+            "lat": 51.428802,
+            "lon": -0.919353,
+            "reference": "TZ7806",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "BH19 2SX",
-            "lat": 50.607787,
-            "lon": -1.980849,
-            "reference": "TW2391",
+            "area": "RG6 5UP",
+            "lat": 51.429157,
+            "lon": -0.921819,
+            "reference": "TZ7806",
             "status": "current",
             "type": "LV"
           }
@@ -270,17 +398,17 @@
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
         "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.066
+        "coordinateSpreadKm": 0.141
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw2981",
+      "id": "ssen:current:254484",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.8511134,
-          51.6131093
+          -2.4953273,
+          56.7369807
         ]
       },
       "properties": {
@@ -289,7 +417,438 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW2981",
+        "reference": "254484",
+        "category": "current",
+        "status": "current",
+        "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "DD10 9EG",
+          "DD10 9JS",
+          "DD10 9LE",
+          "DD10 9LF",
+          "DD10 9LG",
+          "DD10 9LQ",
+          "DD10 9LS",
+          "DD10 9LT",
+          "DD10 9LW",
+          "DD10 9LX",
+          "DD10 9LY"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DD10 9EG",
+            "lat": 56.73697,
+            "lon": -2.495333,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9JS",
+            "lat": 56.74573,
+            "lon": -2.504048,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LE",
+            "lat": 56.721812,
+            "lon": -2.482063,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LF",
+            "lat": 56.729606,
+            "lon": -2.505974,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LG",
+            "lat": 56.738223,
+            "lon": -2.522812,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LQ",
+            "lat": 56.725684,
+            "lon": -2.537149,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LS",
+            "lat": 56.721887,
+            "lon": -2.483567,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LT",
+            "lat": 56.721402,
+            "lon": -2.483659,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LW",
+            "lat": 56.73832,
+            "lon": -2.550537,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LX",
+            "lat": 56.721663,
+            "lon": -2.478826,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "DD10 9LY",
+            "lat": 56.721407,
+            "lon": -2.479982,
+            "reference": "254484",
+            "status": "current",
+            "type": "PSI"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 11,
+        "coordinateSpreadKm": 3.114
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:254671",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.3874834,
+          51.3925632
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "254671",
+        "category": "current",
+        "status": "current",
+        "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "RG20 0HE"
+        ],
+        "groupedLocations": [
+          {
+            "area": "RG20 0HE",
+            "lat": 51.392561,
+            "lon": -1.387466,
+            "reference": "254671",
+            "status": "current",
+            "type": "PSI"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:254704",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.871118799999999,
+          57.5777417
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "254704",
+        "category": "current",
+        "status": "current",
+        "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "IV12 5ER",
+          "IV13 7AA",
+          "IV13 7XW",
+          "IV13 7XX",
+          "IV13 7XY",
+          "IV13 7XZ",
+          "IV13 7YA",
+          "IV13 7YB",
+          "IV13 7YN",
+          "IV13 7YP",
+          "IV13 7YT",
+          "IV13 7YW",
+          "IV13 7ZB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "IV12 5ER",
+            "lat": 57.577726,
+            "lon": -3.871119,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7AA",
+            "lat": 57.335771,
+            "lon": -3.991148,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7XW",
+            "lat": 57.333428,
+            "lon": -3.993264,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7XX",
+            "lat": 57.344251,
+            "lon": -3.978711,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7XY",
+            "lat": 57.335448,
+            "lon": -3.96998,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7XZ",
+            "lat": 57.307473,
+            "lon": -3.996491,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YA",
+            "lat": 57.30469,
+            "lon": -4.020544,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YB",
+            "lat": 57.265303,
+            "lon": -4.087339,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YN",
+            "lat": 57.331817,
+            "lon": -3.989489,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YP",
+            "lat": 57.341388,
+            "lon": -3.997318,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YT",
+            "lat": 57.34144,
+            "lon": -4.010366,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7YW",
+            "lat": 57.3336,
+            "lon": -3.992061,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "IV13 7ZB",
+            "lat": 57.330962,
+            "lon": -3.991287,
+            "reference": "254704",
+            "status": "current",
+            "type": "PSI"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 13,
+        "coordinateSpreadKm": 26.874
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:254505",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.4912852,
+          50.9761172
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "254505",
+        "category": "current",
+        "status": "current",
+        "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "SO51 9LB",
+          "SO51 9LE",
+          "SO51 9LF",
+          "SO51 9LG",
+          "SO51 9LH",
+          "SO51 9NJ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "SO51 9LB",
+            "lat": 50.97611,
+            "lon": -1.491276,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "SO51 9LE",
+            "lat": 50.962569,
+            "lon": -1.491709,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "SO51 9LF",
+            "lat": 50.960722,
+            "lon": -1.495075,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "SO51 9LG",
+            "lat": 50.958607,
+            "lon": -1.488534,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "SO51 9LH",
+            "lat": 50.958211,
+            "lon": -1.486246,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          },
+          {
+            "area": "SO51 9NJ",
+            "lat": 50.970859,
+            "lon": -1.479299,
+            "reference": "254505",
+            "status": "current",
+            "type": "PSI"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 1.302
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:tz7841",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.2606079,
+          51.0148528
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "TZ7841",
         "category": "current",
         "status": "current",
         "type": "HV",
@@ -298,23 +857,32 @@
           "Published incident location"
         ],
         "postcodes": [
-          "SN5 4JJ",
-          "SN5 4JL"
+          "SP8 5JR",
+          "SP8 5JW",
+          "SP8 5ND"
         ],
         "groupedLocations": [
           {
-            "area": "SN5 4JJ",
-            "lat": 51.619301,
-            "lon": -1.854072,
-            "reference": "TW2981",
+            "area": "SP8 5JR",
+            "lat": 51.015364,
+            "lon": -2.27787,
+            "reference": "TZ7841",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "SN5 4JL",
-            "lat": 51.613111,
-            "lon": -1.851102,
-            "reference": "TW2981",
+            "area": "SP8 5JW",
+            "lat": 51.014846,
+            "lon": -2.260604,
+            "reference": "TZ7841",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "SP8 5ND",
+            "lat": 51.010453,
+            "lon": -2.254521,
+            "reference": "TZ7841",
             "status": "current",
             "type": "HV"
           }
@@ -325,18 +893,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.359
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.968
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw2909",
+      "id": "ssen:current:tz7546",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.9845534,
-          56.4895142
+          -2.6544207,
+          50.8318508
         ]
       },
       "properties": {
@@ -345,52 +913,61 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW2909",
+        "reference": "TZ7546",
         "category": "current",
         "status": "current",
-        "type": "LV",
+        "type": "HV",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
         "postcodes": [
-          "DD3 0BB",
-          "DD3 0BD",
-          "DD3 0BE",
-          "DD3 0DS"
+          "DT2 0NN",
+          "DT2 0NW",
+          "DT2 0PL",
+          "DT2 0PP",
+          "DT2 0PY"
         ],
         "groupedLocations": [
           {
-            "area": "DD3 0BB",
-            "lat": 56.490467,
-            "lon": -2.985525,
-            "reference": "TW2909",
+            "area": "DT2 0NN",
+            "lat": 50.831842,
+            "lon": -2.654421,
+            "reference": "TZ7546",
             "status": "current",
-            "type": "LV"
+            "type": "HV"
           },
           {
-            "area": "DD3 0BD",
-            "lat": 56.491293,
-            "lon": -2.984539,
-            "reference": "TW2909",
+            "area": "DT2 0NW",
+            "lat": 50.830213,
+            "lon": -2.662478,
+            "reference": "TZ7546",
             "status": "current",
-            "type": "LV"
+            "type": "HV"
           },
           {
-            "area": "DD3 0BE",
-            "lat": 56.489388,
-            "lon": -2.986796,
-            "reference": "TW2909",
+            "area": "DT2 0PL",
+            "lat": 50.824173,
+            "lon": -2.634565,
+            "reference": "TZ7546",
             "status": "current",
-            "type": "LV"
+            "type": "HV"
           },
           {
-            "area": "DD3 0DS",
-            "lat": 56.489505,
-            "lon": -2.984558,
-            "reference": "TW2909",
+            "area": "DT2 0PP",
+            "lat": 50.822256,
+            "lon": -2.63312,
+            "reference": "TZ7546",
             "status": "current",
-            "type": "LV"
+            "type": "HV"
+          },
+          {
+            "area": "DT2 0PY",
+            "lat": 50.843516,
+            "lon": -2.652483,
+            "reference": "TZ7546",
+            "status": "current",
+            "type": "HV"
           }
         ],
         "startedAt": null,
@@ -399,18 +976,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.135
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 1.501
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:tw2798",
+      "id": "ssen:current:tz7068",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.8499321999999999,
-          51.5246866
+          -1.1311041,
+          50.91049779999999
         ]
       },
       "properties": {
@@ -419,7 +996,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "TW2798",
+        "reference": "TZ7068",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -428,14 +1005,14 @@
           "Published incident location"
         ],
         "postcodes": [
-          "RG10 8NT"
+          "PO17 6LJ"
         ],
         "groupedLocations": [
           {
-            "area": "RG10 8NT",
-            "lat": 51.524689,
-            "lon": -0.849914,
-            "reference": "TW2798",
+            "area": "PO17 6LJ",
+            "lat": 50.910491,
+            "lon": -1.13109,
+            "reference": "TZ7068",
             "status": "current",
             "type": "LV"
           }
@@ -452,12 +1029,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:253957",
+      "id": "ssen:current:254566",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.7140427,
-          56.7371413
+          -1.140409,
+          51.0847145
         ]
       },
       "properties": {
@@ -466,7 +1043,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "253957",
+        "reference": "254566",
         "category": "current",
         "status": "current",
         "type": "PSI",
@@ -475,68 +1052,14 @@
           "Published incident location"
         ],
         "postcodes": [
-          "DD9 6RD",
-          "DD9 6RE",
-          "DD9 6RL",
-          "DD9 6RP",
-          "DD9 6RW",
-          "DD9 6SG",
-          "DD9 6SQ"
+          "SO24 0AA"
         ],
         "groupedLocations": [
           {
-            "area": "DD9 6RD",
-            "lat": 56.741947,
-            "lon": -2.694849,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RE",
-            "lat": 56.737131,
-            "lon": -2.714049,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RL",
-            "lat": 56.728447,
-            "lon": -2.691037,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RP",
-            "lat": 56.727151,
-            "lon": -2.710656,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RW",
-            "lat": 56.721234,
-            "lon": -2.761687,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6SG",
-            "lat": 56.726958,
-            "lon": -2.66769,
-            "reference": "253957",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6SQ",
-            "lat": 56.720353,
-            "lon": -2.682932,
-            "reference": "253957",
+            "area": "SO24 0AA",
+            "lat": 51.084709,
+            "lon": -1.140394,
+            "reference": "254566",
             "status": "current",
             "type": "PSI"
           }
@@ -547,361 +1070,8 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 7,
-        "coordinateSpreadKm": 3.668
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:253485",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.3084025,
-          57.4607715
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "253485",
-        "category": "current",
-        "status": "current",
-        "type": "PSI",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "IV51 9NP",
-          "IV51 9PF",
-          "IV51 9PQ"
-        ],
-        "groupedLocations": [
-          {
-            "area": "IV51 9NP",
-            "lat": 57.455752,
-            "lon": -6.320782,
-            "reference": "253485",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "IV51 9PF",
-            "lat": 57.467221,
-            "lon": -6.305231,
-            "reference": "253485",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "IV51 9PQ",
-            "lat": 57.460745,
-            "lon": -6.30839,
-            "reference": "253485",
-            "status": "current",
-            "type": "PSI"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.826
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:tw2699",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.3173731,
-          51.4032448
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TW2699",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "RG14 1NF",
-          "RG14 2AB",
-          "RG14 2AD",
-          "RG14 2BX"
-        ],
-        "groupedLocations": [
-          {
-            "area": "RG14 2AB",
-            "lat": 51.40491,
-            "lon": -1.314698,
-            "reference": "TW2699",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "RG14 2AD",
-            "lat": 51.403244,
-            "lon": -1.317354,
-            "reference": "TW2699",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "RG14 2BX",
-            "lat": 51.405499,
-            "lon": -1.315408,
-            "reference": "TW2699",
-            "status": "current",
-            "type": "LV"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.18
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:253958",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.7140427,
-          56.7371413
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "253958",
-        "category": "current",
-        "status": "current",
-        "type": "PSI",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "DD9 6RE",
-          "DD9 6RJ",
-          "DD9 6RL"
-        ],
-        "groupedLocations": [
-          {
-            "area": "DD9 6RE",
-            "lat": 56.737131,
-            "lon": -2.714049,
-            "reference": "253958",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RJ",
-            "lat": 56.731972,
-            "lon": -2.682374,
-            "reference": "253958",
-            "status": "current",
-            "type": "PSI"
-          },
-          {
-            "area": "DD9 6RL",
-            "lat": 56.728447,
-            "lon": -2.691037,
-            "reference": "253958",
-            "status": "current",
-            "type": "PSI"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 1.225
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:tw2537",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6981601,
-          51.5474668
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TW2537",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "SN4 0EH",
-          "SN4 0EJ",
-          "SN4 0EL",
-          "SN4 0EN",
-          "SN4 0ES",
-          "SN4 0EW"
-        ],
-        "groupedLocations": [
-          {
-            "area": "SN4 0EH",
-            "lat": 51.547467,
-            "lon": -1.698148,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SN4 0EJ",
-            "lat": 51.547482,
-            "lon": -1.696835,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SN4 0EL",
-            "lat": 51.547977,
-            "lon": -1.697178,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SN4 0EN",
-            "lat": 51.547066,
-            "lon": -1.69603,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SN4 0ES",
-            "lat": 51.546365,
-            "lon": -1.695876,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SN4 0EW",
-            "lat": 51.546962,
-            "lon": -1.6973,
-            "reference": "TW2537",
-            "status": "current",
-            "type": "LV"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.118
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:tw2460",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.7337944,
-          51.397189
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "TW2460",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "RG12 0PE",
-          "RG12 0UJ",
-          "RG12 0UL"
-        ],
-        "groupedLocations": [
-          {
-            "area": "RG12 0PE",
-            "lat": 51.396912,
-            "lon": -0.73551,
-            "reference": "TW2460",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "RG12 0UJ",
-            "lat": 51.397022,
-            "lon": -0.732387,
-            "reference": "TW2460",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "RG12 0UL",
-            "lat": 51.39719,
-            "lon": -0.733777,
-            "reference": "TW2460",
-            "status": "current",
-            "type": "LV"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.113
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
       }
     }
   ]

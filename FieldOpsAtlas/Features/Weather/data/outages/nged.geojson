@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "nged",
-  "generatedAt": "2026-08-22T13:51:50.547Z",
+  "generatedAt": "2026-09-19T12:31:47.678Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "nged:current:incd-100641-l",
+      "id": "nged:current:incd-104174-l",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.5556,
-          50.723
+          -3.504535,
+          50.91396
         ]
       },
       "properties": {
@@ -20,290 +20,90 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-100641-l",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV GENERIC",
-        "area": "EX4 1SP, EX4 1SR, EX4 1SE",
-        "areas": [
-          "EX4 1SP, EX4 1SR, EX4 1SE"
-        ],
-        "postcodes": [
-          "EX4 1SP",
-          "EX4 1SR",
-          "EX4 1SE"
-        ],
-        "groupedLocations": [
-          {
-            "area": "EX4 1SP",
-            "lat": 50.722648,
-            "lon": -3.557861,
-            "reference": "INCD-100641-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX4 1SR",
-            "lat": 50.723632,
-            "lon": -3.558219,
-            "reference": "INCD-100641-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX4 1SE",
-            "lat": 50.722623,
-            "lon": -3.556315,
-            "reference": "INCD-100641-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          }
-        ],
-        "startedAt": "2026-08-21T20:50:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.091
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-100632-l",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.416856,
-          50.61944
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-100632-l",
+        "reference": "INCD-104174-l",
         "category": "current",
         "status": "Awaiting",
-        "type": "LV UNDERGROUND",
-        "area": "EX8 1AZ, EX8 1DW, EX8 1AQ, EX8 1AR, EX8 1AP, EX8 1AU, EX8 1NT, EX8 1EW, EX8 1AH, EX8 1NY, EX8 1DL, EX8 1AX, EX8 1FA, EX8 1BL, EX8 1DP, EX8 1AS, EX8 1NX, EX8 1NN, EX8 1NP, EX8 1JF, EX8 1AW",
+        "type": "LV GENERIC",
+        "area": "EX16 5QA, EX16 5QF, EX16 5QD, EX16 5QB, EX16 5QE, EX16 8FA",
         "areas": [
-          "EX8 1AZ, EX8 1DW, EX8 1AQ, EX8 1AR, EX8 1AP, EX8 1AU, EX8 1NT, EX8 1EW, EX8 1AH, EX8 1NY, EX8 1DL, EX8 1AX, EX8 1FA, EX8 1BL, EX8 1DP, EX8 1AS, EX8 1NX, EX8 1NN, EX8 1NP, EX8 1JF, EX8 1AW"
+          "EX16 5QA, EX16 5QF, EX16 5QD, EX16 5QB, EX16 5QE, EX16 8FA"
         ],
         "postcodes": [
-          "EX8 1AZ",
-          "EX8 1DW",
-          "EX8 1AQ",
-          "EX8 1AR",
-          "EX8 1AP",
-          "EX8 1AU",
-          "EX8 1NT",
-          "EX8 1EW",
-          "EX8 1AH",
-          "EX8 1NY",
-          "EX8 1DL",
-          "EX8 1AX",
-          "EX8 1FA",
-          "EX8 1BL",
-          "EX8 1DP",
-          "EX8 1AS",
-          "EX8 1NX",
-          "EX8 1NN",
-          "EX8 1NP",
-          "EX8 1JF",
-          "EX8 1AW"
+          "EX16 5QA",
+          "EX16 5QF",
+          "EX16 5QD",
+          "EX16 5QB",
+          "EX16 5QE",
+          "EX16 8FA"
         ],
         "groupedLocations": [
           {
-            "area": "EX8 1AZ",
-            "lat": 50.618148,
-            "lon": -3.418075,
-            "reference": "INCD-100632-l",
+            "area": "EX16 5QA",
+            "lat": 50.913522,
+            "lon": -3.504452,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           },
           {
-            "area": "EX8 1DW",
-            "lat": 50.618827,
-            "lon": -3.4177,
-            "reference": "INCD-100632-l",
+            "area": "EX16 5QF",
+            "lat": 50.912751,
+            "lon": -3.503545,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           },
           {
-            "area": "EX8 1AQ",
-            "lat": 50.618844,
-            "lon": -3.414845,
-            "reference": "INCD-100632-l",
+            "area": "EX16 5QD",
+            "lat": 50.913833,
+            "lon": -3.502655,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           },
           {
-            "area": "EX8 1AR",
-            "lat": 50.617866,
-            "lon": -3.416908,
-            "reference": "INCD-100632-l",
+            "area": "EX16 5QB",
+            "lat": 50.914237,
+            "lon": -3.503365,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           },
           {
-            "area": "EX8 1AP",
-            "lat": 50.618645,
-            "lon": -3.415645,
-            "reference": "INCD-100632-l",
+            "area": "EX16 5QE",
+            "lat": 50.913357,
+            "lon": -3.502597,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           },
           {
-            "area": "EX8 1AU",
-            "lat": 50.618553,
-            "lon": -3.416603,
-            "reference": "INCD-100632-l",
+            "area": "EX16 8FA",
+            "lat": 50.91433,
+            "lon": -3.505246,
+            "reference": "INCD-104174-l",
             "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1NT",
-            "lat": 50.618717,
-            "lon": -3.413484,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1EW",
-            "lat": 50.618929,
-            "lon": -3.418184,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1AH",
-            "lat": 50.618752,
-            "lon": -3.414291,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1NY",
-            "lat": 50.618512,
-            "lon": -3.414043,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1DL",
-            "lat": 50.619252,
-            "lon": -3.416059,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1AX",
-            "lat": 50.617687,
-            "lon": -3.416082,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1FA",
-            "lat": 50.618739,
-            "lon": -3.413117,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1BL",
-            "lat": 50.618934,
-            "lon": -3.415611,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1DP",
-            "lat": 50.618323,
-            "lon": -3.419183,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1AS",
-            "lat": 50.617557,
-            "lon": -3.419344,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1NX",
-            "lat": 50.618862,
-            "lon": -3.414125,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1NN",
-            "lat": 50.618262,
-            "lon": -3.413131,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1NP",
-            "lat": 50.618633,
-            "lon": -3.412987,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1JF",
-            "lat": 50.620156,
-            "lon": -3.409767,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "EX8 1AW",
-            "lat": 50.61844,
-            "lon": -3.414805,
-            "reference": "INCD-100632-l",
-            "status": "Awaiting",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           }
         ],
-        "startedAt": "2026-08-21T18:59:00.000Z",
+        "startedAt": "2026-09-19T08:11:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 21,
-        "coordinateSpreadKm": 0.435
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.134
       }
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-100637-l",
+      "id": "nged:current:incd-104160-l",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.073183,
-          50.83597
+          -3.371613,
+          50.8873
         ]
       },
       "properties": {
@@ -312,129 +112,28 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-100637-l",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV ISOLATION",
-        "area": "EX14 9DS, EX14 9EF, EX14 9BR, EX14 9DR, EX14 9BS, EX14 9BS, EX14 9BT, EX14 9BP, EX14 9EF, EX14 9BR, EX14 9DS",
-        "areas": [
-          "EX14 9DS, EX14 9EF, EX14 9BR, EX14 9DR, EX14 9BS, EX14 9BS, EX14 9BT, EX14 9BP, EX14 9EF, EX14 9BR, EX14 9DS"
-        ],
-        "postcodes": [
-          "EX14 9DS",
-          "EX14 9EF",
-          "EX14 9BR",
-          "EX14 9DR",
-          "EX14 9BS",
-          "EX14 9BT",
-          "EX14 9BP"
-        ],
-        "groupedLocations": [
-          {
-            "area": "EX14 9DS",
-            "lat": 50.83744,
-            "lon": -3.072784,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9EF",
-            "lat": 50.836005,
-            "lon": -3.072425,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9BR",
-            "lat": 50.835115,
-            "lon": -3.075302,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9DR",
-            "lat": 50.83618,
-            "lon": -3.073863,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9BS",
-            "lat": 50.836533,
-            "lon": -3.074624,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9BT",
-            "lat": 50.836835,
-            "lon": -3.075994,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          },
-          {
-            "area": "EX14 9BP",
-            "lat": 50.836008,
-            "lon": -3.074072,
-            "reference": "INCD-100637-l",
-            "status": "In Progress",
-            "type": "LV ISOLATION"
-          }
-        ],
-        "startedAt": "2026-08-21T19:29:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 7,
-        "coordinateSpreadKm": 0.159
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-100642-l",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.04221,
-          50.38358
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-100642-l",
+        "reference": "INCD-104160-l",
         "category": "current",
         "status": "In Progress",
         "type": "LV GENERIC",
-        "area": "PL7 2HX, PL7 2HX",
+        "area": "EX15 2SH",
         "areas": [
-          "PL7 2HX, PL7 2HX"
+          "EX15 2SH"
         ],
         "postcodes": [
-          "PL7 2HX"
+          "EX15 2SH"
         ],
         "groupedLocations": [
           {
-            "area": "PL7 2HX",
-            "lat": 50.384307,
-            "lon": -4.041752,
-            "reference": "INCD-100642-l",
+            "area": "EX15 2SH",
+            "lat": 50.886648,
+            "lon": -3.374151,
+            "reference": "INCD-104160-l",
             "status": "In Progress",
             "type": "LV GENERIC"
           }
         ],
-        "startedAt": "2026-08-21T21:55:00.000Z",
+        "startedAt": "2026-09-18T22:41:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
         "updatedAt": null,
@@ -446,12 +145,12 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-100646-l",
+      "id": "nged:current:incd-74249-p",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.191442,
-          51.05288
+          -2.507231,
+          51.61221
         ]
       },
       "properties": {
@@ -460,652 +159,246 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-100646-l",
+        "reference": "INCD-74249-p",
         "category": "current",
-        "status": "In Progress",
+        "status": "Awaiting",
         "type": "LV GENERIC",
-        "area": "EX39 1PS, EX39 1PN, EX39 1PW, EX39 1PL, EX39 1QR, EX39 1QS, EX39 1PJ",
+        "area": "BS35 1UL, BS35 1UH, BS35 1UJ",
         "areas": [
-          "EX39 1PS, EX39 1PN, EX39 1PW, EX39 1PL, EX39 1QR, EX39 1QS, EX39 1PJ"
+          "BS35 1UL, BS35 1UH, BS35 1UJ"
         ],
         "postcodes": [
-          "EX39 1PS",
-          "EX39 1PN",
-          "EX39 1PW",
-          "EX39 1PL",
-          "EX39 1QR",
-          "EX39 1QS",
-          "EX39 1PJ"
+          "BS35 1UL",
+          "BS35 1UH",
+          "BS35 1UJ"
         ],
         "groupedLocations": [
           {
-            "area": "EX39 1PS",
-            "lat": 51.052856,
-            "lon": -4.192537,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
+            "area": "BS35 1UL",
+            "lat": 51.61135,
+            "lon": -2.50985,
+            "reference": "INCD-74249-p",
+            "status": "Awaiting",
             "type": "LV GENERIC"
           },
           {
-            "area": "EX39 1PN",
-            "lat": 51.05263,
-            "lon": -4.192098,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
+            "area": "BS35 1UH",
+            "lat": 51.613152,
+            "lon": -2.509133,
+            "reference": "INCD-74249-p",
+            "status": "Awaiting",
             "type": "LV GENERIC"
           },
           {
-            "area": "EX39 1PW",
-            "lat": 51.053058,
-            "lon": -4.191362,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX39 1PL",
-            "lat": 51.052502,
-            "lon": -4.191707,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX39 1QR",
-            "lat": 51.052228,
-            "lon": -4.192407,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX39 1QS",
-            "lat": 51.05318,
-            "lon": -4.191082,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
-            "type": "LV GENERIC"
-          },
-          {
-            "area": "EX39 1PJ",
-            "lat": 51.052065,
-            "lon": -4.191558,
-            "reference": "INCD-100646-l",
-            "status": "In Progress",
+            "area": "BS35 1UJ",
+            "lat": 51.612511,
+            "lon": -2.509588,
+            "reference": "INCD-74249-p",
+            "status": "Awaiting",
             "type": "LV GENERIC"
           }
         ],
-        "startedAt": "2026-08-21T23:25:00.000Z",
+        "startedAt": "2026-09-19T08:23:00.000Z",
         "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.112
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-364702-f",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.246411,
+          53.08083
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-364702-f",
+        "category": "current",
+        "status": "In Progress",
+        "type": "LV UNDERGROUND",
+        "area": "ST7 1AP, ST7 1AW, ST7 1AR, ST7 1BQ, ST7 1BG, ST7 1AP, ST7 1AN",
+        "areas": [
+          "ST7 1AP, ST7 1AW, ST7 1AR, ST7 1BQ, ST7 1BG, ST7 1AP, ST7 1AN"
+        ],
+        "postcodes": [
+          "ST7 1AP",
+          "ST7 1AW",
+          "ST7 1AR",
+          "ST7 1BQ",
+          "ST7 1BG",
+          "ST7 1AN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "ST7 1AP",
+            "lat": 53.079916,
+            "lon": -2.24654,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "ST7 1AW",
+            "lat": 53.081117,
+            "lon": -2.243919,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "ST7 1AR",
+            "lat": 53.080018,
+            "lon": -2.244853,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "ST7 1BQ",
+            "lat": 53.080486,
+            "lon": -2.248961,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "ST7 1BG",
+            "lat": 53.080325,
+            "lon": -2.248498,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "ST7 1AN",
+            "lat": 53.081489,
+            "lon": -2.246399,
+            "reference": "INCD-364702-f",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          }
+        ],
+        "startedAt": "2026-09-18T22:51:00.000Z",
+        "restoreAt": "2026-09-19T11:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.185
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-74237-p",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.755111,
+          51.98416
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-74237-p",
+        "category": "current",
+        "status": "In Progress",
+        "type": "HV GENERIC",
+        "area": "GL56 9TE, GL56 9TB, GL56 9TG, GL56 9TF, GL56 9TD, GL56 9AE, GL56 9TB, GL56 9AN, GL56 9TE, GL56 9TG, GL56 9TF",
+        "areas": [
+          "GL56 9TE, GL56 9TB, GL56 9TG, GL56 9TF, GL56 9TD, GL56 9AE, GL56 9TB, GL56 9AN, GL56 9TE, GL56 9TG, GL56 9TF"
+        ],
+        "postcodes": [
+          "GL56 9TE",
+          "GL56 9TB",
+          "GL56 9TG",
+          "GL56 9TF",
+          "GL56 9TD",
+          "GL56 9AE",
+          "GL56 9AN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "GL56 9TE",
+            "lat": 51.997003,
+            "lon": -1.783564,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9TB",
+            "lat": 51.982011,
+            "lon": -1.767445,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9TG",
+            "lat": 52.002631,
+            "lon": -1.793603,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9TF",
+            "lat": 51.993713,
+            "lon": -1.789245,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9TD",
+            "lat": 51.98578,
+            "lon": -1.787069,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9AE",
+            "lat": 51.990639,
+            "lon": -1.743837,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "GL56 9AN",
+            "lat": 51.980333,
+            "lon": -1.755398,
+            "reference": "INCD-74237-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          }
+        ],
+        "startedAt": "2026-09-19T03:19:00.000Z",
+        "restoreAt": "2026-09-19T13:00:00.000Z",
         "restoreAtText": "",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
         "rawRecordCount": 7,
-        "coordinateSpreadKm": 0.079
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-73335-m",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.03039,
-          52.20985
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-73335-m",
-        "category": "current",
-        "status": "In Progress",
-        "type": "HV OVERHEAD",
-        "area": "WR7 4PJ, WR7 4PH, WR7 4LE, WR9 7LH, WR9 7LE, WR7 4PQ, WR9 7LF, WR7 4PL, WR7 4PJ",
-        "areas": [
-          "WR7 4PJ, WR7 4PH, WR7 4LE, WR9 7LH, WR9 7LE, WR7 4PQ, WR9 7LF, WR7 4PL, WR7 4PJ"
-        ],
-        "postcodes": [
-          "WR7 4PJ",
-          "WR7 4PH",
-          "WR7 4LE",
-          "WR9 7LH",
-          "WR9 7LE",
-          "WR7 4PQ",
-          "WR9 7LF",
-          "WR7 4PL"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WR7 4PJ",
-            "lat": 52.214861,
-            "lon": -2.054381,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR7 4PH",
-            "lat": 52.212669,
-            "lon": -2.0493,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR7 4LE",
-            "lat": 52.211507,
-            "lon": -2.030361,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR9 7LH",
-            "lat": 52.223426,
-            "lon": -2.088339,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR9 7LE",
-            "lat": 52.22295,
-            "lon": -2.075441,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR7 4PQ",
-            "lat": 52.208019,
-            "lon": -2.054797,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR9 7LF",
-            "lat": 52.223564,
-            "lon": -2.084255,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "WR7 4PL",
-            "lat": 52.211539,
-            "lon": -2.062763,
-            "reference": "INCD-73335-m",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          }
-        ],
-        "startedAt": "2026-08-21T21:15:00.000Z",
-        "restoreAt": "2026-08-22T02:30:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 2.245
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-73336-m",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.145341,
-          52.52848
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-73336-m",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV UNDERGROUND",
-        "area": "DY3 3DJ, DY3 3DL, DY3 3DX",
-        "areas": [
-          "DY3 3DJ, DY3 3DL, DY3 3DX"
-        ],
-        "postcodes": [
-          "DY3 3DJ",
-          "DY3 3DL",
-          "DY3 3DX"
-        ],
-        "groupedLocations": [
-          {
-            "area": "DY3 3DJ",
-            "lat": 52.529027,
-            "lon": -2.145336,
-            "reference": "INCD-73336-m",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "DY3 3DL",
-            "lat": 52.529494,
-            "lon": -2.145544,
-            "reference": "INCD-73336-m",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "DY3 3DX",
-            "lat": 52.528335,
-            "lon": -2.144877,
-            "reference": "INCD-73336-m",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          }
-        ],
-        "startedAt": "2026-08-21T21:11:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.073
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-73345-m",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.212641,
-          52.16723
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-73345-m",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV FUSE",
-        "area": "WR5 3LR, WR5 3SN, WR5 3RS, WR5 3LS, WR5 3HH, WR5 3RZ, WR5 3UW, WR5 3HJ, WR5 3HT, WR5 3HL",
-        "areas": [
-          "WR5 3LR, WR5 3SN, WR5 3RS, WR5 3LS, WR5 3HH, WR5 3RZ, WR5 3UW, WR5 3HJ, WR5 3HT, WR5 3HL"
-        ],
-        "postcodes": [
-          "WR5 3LR",
-          "WR5 3SN",
-          "WR5 3RS",
-          "WR5 3LS",
-          "WR5 3HH",
-          "WR5 3RZ",
-          "WR5 3UW",
-          "WR5 3HJ",
-          "WR5 3HT",
-          "WR5 3HL"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WR5 3LR",
-            "lat": 52.168658,
-            "lon": -2.212498,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3SN",
-            "lat": 52.168723,
-            "lon": -2.211504,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3RS",
-            "lat": 52.168396,
-            "lon": -2.213374,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3LS",
-            "lat": 52.168453,
-            "lon": -2.211517,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3HH",
-            "lat": 52.166831,
-            "lon": -2.213688,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3RZ",
-            "lat": 52.167433,
-            "lon": -2.214174,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3UW",
-            "lat": 52.166659,
-            "lon": -2.214491,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3HJ",
-            "lat": 52.167587,
-            "lon": -2.213165,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3HT",
-            "lat": 52.167163,
-            "lon": -2.209201,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 3HL",
-            "lat": 52.167739,
-            "lon": -2.213941,
-            "reference": "INCD-73345-m",
-            "status": "In Progress",
-            "type": "LV FUSE"
-          }
-        ],
-        "startedAt": "2026-08-21T22:21:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 10,
-        "coordinateSpreadKm": 0.251
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-71857-p",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.185952,
-          52.17949
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-71857-p",
-        "category": "current",
-        "status": "Awaiting",
-        "type": "LV FUSE",
-        "area": "WR5 2LN, WR5 2LW, WR5 2NN",
-        "areas": [
-          "WR5 2LN, WR5 2LW, WR5 2NN"
-        ],
-        "postcodes": [
-          "WR5 2LN",
-          "WR5 2LW",
-          "WR5 2NN"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WR5 2LN",
-            "lat": 52.179553,
-            "lon": -2.187424,
-            "reference": "INCD-71857-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 2LW",
-            "lat": 52.1795,
-            "lon": -2.186488,
-            "reference": "INCD-71857-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "WR5 2NN",
-            "lat": 52.178801,
-            "lon": -2.185096,
-            "reference": "INCD-71857-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          }
-        ],
-        "startedAt": "2026-08-21T23:14:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.1
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-71858-p",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.062431,
-          52.49035
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-71858-p",
-        "category": "current",
-        "status": "Awaiting",
-        "type": "LV FUSE",
-        "area": "B65 8PH, B65 8PF, B65 8PG",
-        "areas": [
-          "B65 8PH, B65 8PF, B65 8PG"
-        ],
-        "postcodes": [
-          "B65 8PH",
-          "B65 8PF",
-          "B65 8PG"
-        ],
-        "groupedLocations": [
-          {
-            "area": "B65 8PH",
-            "lat": 52.490254,
-            "lon": -2.06403,
-            "reference": "INCD-71858-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "B65 8PF",
-            "lat": 52.490811,
-            "lon": -2.063619,
-            "reference": "INCD-71858-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "B65 8PG",
-            "lat": 52.490631,
-            "lon": -2.065062,
-            "reference": "INCD-71858-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          }
-        ],
-        "startedAt": "2026-08-21T23:20:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.056
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-71859-p",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.004005,
-          52.47126
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-71859-p",
-        "category": "current",
-        "status": "Awaiting",
-        "type": "LV FUSE",
-        "area": "B68 0SN, B68 0SL, B68 0ST",
-        "areas": [
-          "B68 0SN, B68 0SL, B68 0ST"
-        ],
-        "postcodes": [
-          "B68 0SN",
-          "B68 0SL",
-          "B68 0ST"
-        ],
-        "groupedLocations": [
-          {
-            "area": "B68 0SN",
-            "lat": 52.470052,
-            "lon": -2.001643,
-            "reference": "INCD-71859-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "B68 0SL",
-            "lat": 52.471419,
-            "lon": -2.002806,
-            "reference": "INCD-71859-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          },
-          {
-            "area": "B68 0ST",
-            "lat": 52.472183,
-            "lon": -2.002276,
-            "reference": "INCD-71859-p",
-            "status": "Awaiting",
-            "type": "LV FUSE"
-          }
-        ],
-        "startedAt": "2026-08-21T23:23:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.136
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nged:current:incd-71832-p",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.232994,
-          52.22322
-        ]
-      },
-      "properties": {
-        "providerId": "nged",
-        "provider": "National Grid ED",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-71832-p",
-        "category": "current",
-        "status": "In Progress",
-        "type": "LV UNDERGROUND",
-        "area": "WR3 7QP, WR3 7QL, WR3 7QW, WR3 7QP",
-        "areas": [
-          "WR3 7QP, WR3 7QL, WR3 7QW, WR3 7QP"
-        ],
-        "postcodes": [
-          "WR3 7QP",
-          "WR3 7QL",
-          "WR3 7QW"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WR3 7QP",
-            "lat": 52.222474,
-            "lon": -2.232795,
-            "reference": "INCD-71832-p",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "WR3 7QL",
-            "lat": 52.224108,
-            "lon": -2.234209,
-            "reference": "INCD-71832-p",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          },
-          {
-            "area": "WR3 7QW",
-            "lat": 52.223128,
-            "lon": -2.234072,
-            "reference": "INCD-71832-p",
-            "status": "In Progress",
-            "type": "LV UNDERGROUND"
-          }
-        ],
-        "startedAt": "2026-08-21T09:48:00.000Z",
-        "restoreAt": "2026-08-22T01:30:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.105
+        "coordinateSpreadKm": 2.087
       }
     },
     {
@@ -1157,12 +450,12 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-136149-h",
+      "id": "nged:current:incd-74246-p",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.2627999,
-          53.1357
+          -2.460955,
+          51.53481
         ]
       },
       "properties": {
@@ -1171,135 +464,770 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-136149-h",
+        "reference": "INCD-74246-p",
+        "category": "current",
+        "status": "In Progress",
+        "type": "HV GENERIC",
+        "area": "BS36 2AP, BS37 9TW, BS36 2AQ, BS37 9US, BS37 9UT, BS36 2AX, BS36 2AH, BS36 2AB, BS37 9UQ, BS36 2BY, BS36 2DA, BS36 2GD, BS36 2AR, BS37 9TQ, BS37 9UG, BS36 2BP, BS36 2BT, BS36 2AE, BS36 2NS, BS36 2AJ, BS36 2AA, BS36 2AG, BS37 9UH, BS36 2BS, BS36 2BX, BS36 2AD, BS36 2DB, BS36 2BU, BS37 9UP, BS36 2AU, BS37 9TF, BS36 2AF, BS36 2BZ, BS36 2AL, BS36 2AT, BS37 9XZ, BS36 2AW, BS36 1RU, BS36 2DD, BS37 9TA, BS37 9UJ, BS37 9UZ, BS36 2GG, BS37 9TD, BS36 1RT, BS37 9TG, BS36 2BG, BS37 9XA, BS36 2AZ, BS36 2NU, BS36 2DW, BS36 2NT, BS37 9TB, BS36 2DQ, BS36 2BW, BS37 9UW, BS37 9TU, BS37 9TE, BS37 9UL, BS36 2FF, BS36 1RX, BS37 9UR, BS36 2DR, BS37 5JF, BS36 1TX, BS36 1AW, BS36 2NR, BS36 2AN, BS36 2BN, BS36 1RW, BS36 9UR, BS36 1QX, BS37 9UN, BS37 4HE, BS36 2BD",
+        "areas": [
+          "BS36 2AP, BS37 9TW, BS36 2AQ, BS37 9US, BS37 9UT, BS36 2AX, BS36 2AH, BS36 2AB, BS37 9UQ, BS36 2BY, BS36 2DA, BS36 2GD, BS36 2AR, BS37 9TQ, BS37 9UG, BS36 2BP, BS36 2BT, BS36 2AE, BS36 2NS, BS36 2AJ, BS36 2AA, BS36 2AG, BS37 9UH, BS36 2BS, BS36 2BX, BS36 2AD, BS36 2DB, BS36 2BU, BS37 9UP, BS36 2AU, BS37 9TF, BS36 2AF, BS36 2BZ, BS36 2AL, BS36 2AT, BS37 9XZ, BS36 2AW, BS36 1RU, BS36 2DD, BS37 9TA, BS37 9UJ, BS37 9UZ, BS36 2GG, BS37 9TD, BS36 1RT, BS37 9TG, BS36 2BG, BS37 9XA, BS36 2AZ, BS36 2NU, BS36 2DW, BS36 2NT, BS37 9TB, BS36 2DQ, BS36 2BW, BS37 9UW, BS37 9TU, BS37 9TE, BS37 9UL, BS36 2FF, BS36 1RX, BS37 9UR, BS36 2DR, BS37 5JF, BS36 1TX, BS36 1AW, BS36 2NR, BS36 2AN, BS36 2BN, BS36 1RW, BS36 9UR, BS36 1QX, BS37 9UN, BS37 4HE, BS36 2BD"
+        ],
+        "postcodes": [
+          "BS36 2AP",
+          "BS37 9TW",
+          "BS36 2AQ",
+          "BS37 9US",
+          "BS37 9UT",
+          "BS36 2AX",
+          "BS36 2AH",
+          "BS36 2AB",
+          "BS37 9UQ",
+          "BS36 2BY",
+          "BS36 2DA",
+          "BS36 2GD",
+          "BS36 2AR",
+          "BS37 9TQ",
+          "BS37 9UG",
+          "BS36 2BP",
+          "BS36 2BT",
+          "BS36 2AE",
+          "BS36 2NS",
+          "BS36 2AJ",
+          "BS36 2AA",
+          "BS36 2AG",
+          "BS37 9UH",
+          "BS36 2BS",
+          "BS36 2BX",
+          "BS36 2AD",
+          "BS36 2DB",
+          "BS36 2BU",
+          "BS37 9UP",
+          "BS36 2AU",
+          "BS37 9TF",
+          "BS36 2AF",
+          "BS36 2BZ",
+          "BS36 2AL",
+          "BS36 2AT",
+          "BS37 9XZ",
+          "BS36 2AW",
+          "BS36 1RU",
+          "BS36 2DD",
+          "BS37 9TA",
+          "BS37 9UJ",
+          "BS37 9UZ",
+          "BS36 2GG",
+          "BS37 9TD",
+          "BS36 1RT",
+          "BS37 9TG",
+          "BS36 2BG",
+          "BS37 9XA",
+          "BS36 2AZ",
+          "BS36 2NU",
+          "BS36 2DW",
+          "BS36 2NT",
+          "BS37 9TB",
+          "BS36 2DQ",
+          "BS36 2BW",
+          "BS37 9UW",
+          "BS37 9TU",
+          "BS37 9TE",
+          "BS37 9UL",
+          "BS36 2FF",
+          "BS36 1RX",
+          "BS37 9UR",
+          "BS36 2DR",
+          "BS37 5JF",
+          "BS36 1TX",
+          "BS36 1AW",
+          "BS36 2NR",
+          "BS36 2AN",
+          "BS36 2BN",
+          "BS36 1RW",
+          "BS36 9UR",
+          "BS36 1QX",
+          "BS37 9UN",
+          "BS37 4HE",
+          "BS36 2BD"
+        ],
+        "groupedLocations": [
+          {
+            "area": "BS36 2AP",
+            "lat": 51.544877,
+            "lon": -2.481591,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TW",
+            "lat": 51.560081,
+            "lon": -2.48406,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AQ",
+            "lat": 51.536471,
+            "lon": -2.485799,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9US",
+            "lat": 51.54721,
+            "lon": -2.460431,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UT",
+            "lat": 51.546846,
+            "lon": -2.459245,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AX",
+            "lat": 51.536117,
+            "lon": -2.493033,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AH",
+            "lat": 51.536642,
+            "lon": -2.487906,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AB",
+            "lat": 51.535621,
+            "lon": -2.482517,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UQ",
+            "lat": 51.549688,
+            "lon": -2.463802,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BY",
+            "lat": 51.535927,
+            "lon": -2.491114,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DA",
+            "lat": 51.534408,
+            "lon": -2.493217,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2GD",
+            "lat": 51.535707,
+            "lon": -2.496431,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AR",
+            "lat": 51.539205,
+            "lon": -2.494278,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TQ",
+            "lat": 51.551411,
+            "lon": -2.466718,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UG",
+            "lat": 51.550503,
+            "lon": -2.46681,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BP",
+            "lat": 51.53429,
+            "lon": -2.484752,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BT",
+            "lat": 51.53555,
+            "lon": -2.486698,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AE",
+            "lat": 51.534967,
+            "lon": -2.484139,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2NS",
+            "lat": 51.535797,
+            "lon": -2.449589,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AJ",
+            "lat": 51.536084,
+            "lon": -2.490164,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AA",
+            "lat": 51.537192,
+            "lon": -2.480962,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AG",
+            "lat": 51.535168,
+            "lon": -2.483464,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UH",
+            "lat": 51.550003,
+            "lon": -2.46369,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BS",
+            "lat": 51.533439,
+            "lon": -2.486271,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BX",
+            "lat": 51.535326,
+            "lon": -2.488569,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AD",
+            "lat": 51.53526,
+            "lon": -2.484936,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DB",
+            "lat": 51.534661,
+            "lon": -2.492787,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BU",
+            "lat": 51.535558,
+            "lon": -2.489105,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UP",
+            "lat": 51.547595,
+            "lon": -2.458546,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AU",
+            "lat": 51.535586,
+            "lon": -2.49532,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TF",
+            "lat": 51.548146,
+            "lon": -2.475886,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AF",
+            "lat": 51.534764,
+            "lon": -2.4832,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BZ",
+            "lat": 51.535268,
+            "lon": -2.491798,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AL",
+            "lat": 51.537146,
+            "lon": -2.489843,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AT",
+            "lat": 51.542112,
+            "lon": -2.497929,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9XZ",
+            "lat": 51.549232,
+            "lon": -2.458331,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AW",
+            "lat": 51.538967,
+            "lon": -2.490844,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1RU",
+            "lat": 51.548913,
+            "lon": -2.513694,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DD",
+            "lat": 51.533864,
+            "lon": -2.491985,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TA",
+            "lat": 51.548511,
+            "lon": -2.467915,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UJ",
+            "lat": 51.550686,
+            "lon": -2.465846,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UZ",
+            "lat": 51.549762,
+            "lon": -2.460889,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TD",
+            "lat": 51.545458,
+            "lon": -2.46921,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1RT",
+            "lat": 51.543756,
+            "lon": -2.514862,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TG",
+            "lat": 51.548186,
+            "lon": -2.48167,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BG",
+            "lat": 51.534892,
+            "lon": -2.489242,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9XA",
+            "lat": 51.55256,
+            "lon": -2.458062,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AZ",
+            "lat": 51.537032,
+            "lon": -2.489323,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2NU",
+            "lat": 51.536955,
+            "lon": -2.452296,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DW",
+            "lat": 51.531859,
+            "lon": -2.489888,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2NT",
+            "lat": 51.53615,
+            "lon": -2.456051,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TB",
+            "lat": 51.546046,
+            "lon": -2.468351,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DQ",
+            "lat": 51.534022,
+            "lon": -2.492938,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BW",
+            "lat": 51.540022,
+            "lon": -2.494388,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UW",
+            "lat": 51.548892,
+            "lon": -2.460318,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TU",
+            "lat": 51.551597,
+            "lon": -2.493749,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9TE",
+            "lat": 51.547661,
+            "lon": -2.471468,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UL",
+            "lat": 51.549051,
+            "lon": -2.460925,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2FF",
+            "lat": 51.53648,
+            "lon": -2.454411,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1RX",
+            "lat": 51.535177,
+            "lon": -2.523199,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UR",
+            "lat": 51.546365,
+            "lon": -2.453399,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2DR",
+            "lat": 51.534135,
+            "lon": -2.493805,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 5JF",
+            "lat": 51.538845,
+            "lon": -2.444875,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1AW",
+            "lat": 51.515755,
+            "lon": -2.485435,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2NR",
+            "lat": 51.533124,
+            "lon": -2.459596,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2AN",
+            "lat": 51.537631,
+            "lon": -2.490036,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BN",
+            "lat": 51.532682,
+            "lon": -2.482342,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1RW",
+            "lat": 51.534073,
+            "lon": -2.516584,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 1QX",
+            "lat": 51.531171,
+            "lon": -2.490976,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 9UN",
+            "lat": 51.549252,
+            "lon": -2.460192,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS37 4HE",
+            "lat": 51.532623,
+            "lon": -2.415346,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          },
+          {
+            "area": "BS36 2BD",
+            "lat": 51.534268,
+            "lon": -2.479144,
+            "reference": "INCD-74246-p",
+            "status": "In Progress",
+            "type": "HV GENERIC"
+          }
+        ],
+        "startedAt": "2026-09-19T07:41:00.000Z",
+        "restoreAt": "2026-09-19T09:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
+        "locationQuality": "published_point",
+        "rawRecordCount": 72,
+        "coordinateSpreadKm": 4.499
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nged:current:incd-74159-p",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.307764,
+          52.38517
+        ]
+      },
+      "properties": {
+        "providerId": "nged",
+        "provider": "National Grid ED",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-74159-p",
         "category": "current",
         "status": "In Progress",
         "type": "HV OVERHEAD",
-        "area": "LN10 6XH, LN10 6XW, LN10 6XN, LN10 6AB, LN10 6XP, LN4 3RF, LN10 6XL, LN10 6XR, LN10 6XS, LN10 6XJ, LN3 5TB",
+        "area": "DY12 1PN, DY12 1AT, DY12 1AA, DY12 1AS, DY12 1AN",
         "areas": [
-          "LN10 6XH, LN10 6XW, LN10 6XN, LN10 6AB, LN10 6XP, LN4 3RF, LN10 6XL, LN10 6XR, LN10 6XS, LN10 6XJ, LN3 5TB"
+          "DY12 1PN, DY12 1AT, DY12 1AA, DY12 1AS, DY12 1AN"
         ],
         "postcodes": [
-          "LN10 6XH",
-          "LN10 6XW",
-          "LN10 6XN",
-          "LN10 6AB",
-          "LN10 6XP",
-          "LN4 3RF",
-          "LN10 6XL",
-          "LN10 6XR",
-          "LN10 6XS",
-          "LN10 6XJ",
-          "LN3 5TB"
+          "DY12 1PN",
+          "DY12 1AT",
+          "DY12 1AA",
+          "DY12 1AS",
+          "DY12 1AN"
         ],
         "groupedLocations": [
           {
-            "area": "LN10 6XH",
-            "lat": 53.154712,
-            "lon": -0.295546,
-            "reference": "INCD-136149-h",
+            "area": "DY12 1PN",
+            "lat": 52.404899,
+            "lon": -2.332578,
+            "reference": "INCD-74159-p",
             "status": "In Progress",
             "type": "HV OVERHEAD"
           },
           {
-            "area": "LN10 6XW",
-            "lat": 53.140202,
-            "lon": -0.257054,
-            "reference": "INCD-136149-h",
+            "area": "DY12 1AT",
+            "lat": 52.397051,
+            "lon": -2.326259,
+            "reference": "INCD-74159-p",
             "status": "In Progress",
             "type": "HV OVERHEAD"
           },
           {
-            "area": "LN10 6XN",
-            "lat": 53.139084,
-            "lon": -0.279719,
-            "reference": "INCD-136149-h",
+            "area": "DY12 1AA",
+            "lat": 52.395598,
+            "lon": -2.32156,
+            "reference": "INCD-74159-p",
             "status": "In Progress",
             "type": "HV OVERHEAD"
           },
           {
-            "area": "LN10 6AB",
-            "lat": 53.155373,
-            "lon": -0.294668,
-            "reference": "INCD-136149-h",
+            "area": "DY12 1AS",
+            "lat": 52.396494,
+            "lon": -2.329164,
+            "reference": "INCD-74159-p",
             "status": "In Progress",
             "type": "HV OVERHEAD"
           },
           {
-            "area": "LN10 6XP",
-            "lat": 53.135665,
-            "lon": -0.263397,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN4 3RF",
-            "lat": 53.125817,
-            "lon": -0.281714,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN10 6XL",
-            "lat": 53.147761,
-            "lon": -0.268621,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN10 6XR",
-            "lat": 53.140221,
-            "lon": -0.252778,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN10 6XS",
-            "lat": 53.119795,
-            "lon": -0.227843,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN10 6XJ",
-            "lat": 53.16492,
-            "lon": -0.268425,
-            "reference": "INCD-136149-h",
-            "status": "In Progress",
-            "type": "HV OVERHEAD"
-          },
-          {
-            "area": "LN3 5TB",
-            "lat": 53.186444,
-            "lon": -0.30044,
-            "reference": "INCD-136149-h",
+            "area": "DY12 1AN",
+            "lat": 52.380134,
+            "lon": -2.315424,
+            "reference": "INCD-74159-p",
             "status": "In Progress",
             "type": "HV OVERHEAD"
           }
         ],
-        "startedAt": "2026-08-21T21:49:00.000Z",
-        "restoreAt": "2026-08-22T03:00:00.000Z",
+        "startedAt": "2026-09-18T13:45:00.000Z",
+        "restoreAt": "2026-09-19T16:00:00.000Z",
         "restoreAtText": "",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 11,
-        "coordinateSpreadKm": 4.848
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 1.759
       }
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-136128-h",
+      "id": "nged:current:incd-13327-n",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.261042,
-          53.21365
+          -0.1790644,
+          52.87058
         ]
       },
       "properties": {
@@ -1308,28 +1236,28 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-136128-h",
+        "reference": "INCD-13327-n",
         "category": "current",
         "status": "In Progress",
-        "type": "LV UNDERGROUND",
-        "area": "S44 6SZ",
+        "type": "LV GENERIC",
+        "area": "PE11 4LJ",
         "areas": [
-          "S44 6SZ"
+          "PE11 4LJ"
         ],
         "postcodes": [
-          "S44 6SZ"
+          "PE11 4LJ"
         ],
         "groupedLocations": [
           {
-            "area": "S44 6SZ",
-            "lat": 53.212839,
-            "lon": -1.264619,
-            "reference": "INCD-136128-h",
+            "area": "PE11 4LJ",
+            "lat": 52.870474,
+            "lon": -0.180338,
+            "reference": "INCD-13327-n",
             "status": "In Progress",
-            "type": "LV UNDERGROUND"
+            "type": "LV GENERIC"
           }
         ],
-        "startedAt": "2026-08-21T16:57:00.000Z",
+        "startedAt": "2026-09-19T04:52:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
         "updatedAt": null,
@@ -1341,12 +1269,12 @@
     },
     {
       "type": "Feature",
-      "id": "nged:current:incd-135992-h",
+      "id": "nged:current:incd-13329-n",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.571287,
-          52.35318
+          -1.248369,
+          52.36781
         ]
       },
       "properties": {
@@ -1355,35 +1283,62 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-135992-h",
+        "reference": "INCD-13329-n",
         "category": "current",
         "status": "In Progress",
         "type": "LV UNDERGROUND",
-        "area": "CV8 2FQ, CV8 2FQ",
+        "area": "CV22 5AY, CV22 5LN, CV22 5AY, CV22 5LR, CV22 5LP",
         "areas": [
-          "CV8 2FQ, CV8 2FQ"
+          "CV22 5AY, CV22 5LN, CV22 5AY, CV22 5LR, CV22 5LP"
         ],
         "postcodes": [
-          "CV8 2FQ"
+          "CV22 5AY",
+          "CV22 5LN",
+          "CV22 5LR",
+          "CV22 5LP"
         ],
         "groupedLocations": [
           {
-            "area": "CV8 2FQ",
-            "lat": 52.354859,
-            "lon": -1.570951,
-            "reference": "INCD-135992-h",
+            "area": "CV22 5AY",
+            "lat": 52.367258,
+            "lon": -1.248631,
+            "reference": "INCD-13329-n",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "CV22 5LN",
+            "lat": 52.365644,
+            "lon": -1.248012,
+            "reference": "INCD-13329-n",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "CV22 5LR",
+            "lat": 52.366424,
+            "lon": -1.249041,
+            "reference": "INCD-13329-n",
+            "status": "In Progress",
+            "type": "LV UNDERGROUND"
+          },
+          {
+            "area": "CV22 5LP",
+            "lat": 52.367264,
+            "lon": -1.249629,
+            "reference": "INCD-13329-n",
             "status": "In Progress",
             "type": "LV UNDERGROUND"
           }
         ],
-        "startedAt": "2026-08-20T17:22:00.000Z",
+        "startedAt": "2026-09-19T04:58:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
         "updatedAt": null,
         "officialUrl": "https://powercuts.nationalgrid.co.uk/power-cut-map",
         "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.125
       }
     }
   ]
