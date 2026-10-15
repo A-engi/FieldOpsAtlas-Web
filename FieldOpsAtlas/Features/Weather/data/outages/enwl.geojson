@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-09-19T12:31:47.678Z",
+  "generatedAt": "2026-10-15T00:07:22.231Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "enwl:current:inc-149001992",
+      "id": "enwl:current:inc-149004194",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.187479,
-          54.198116
+          -3.348496,
+          54.783324
         ]
       },
       "properties": {
@@ -20,24 +20,33 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INC 149001992",
+        "reference": "INC 149004194",
         "category": "current",
-        "status": "Team on their way",
+        "status": "Preparing to send team",
         "type": "CurrentFault",
-        "area": "Askam And Ireleth, Barrow-In-Furness",
+        "area": "Aspatria, Allerdale",
         "areas": [
-          "Askam And Ireleth, Barrow-In-Furness"
+          "Aspatria, Allerdale"
         ],
         "postcodes": [
-          "LA16 7HA"
+          "CA7 3NX",
+          "CA7 3PA"
         ],
         "groupedLocations": [
           {
-            "area": "LA16 7HA",
-            "lat": 54.198112,
-            "lon": -3.187487,
-            "reference": "INC 149001992",
-            "status": "Team on their way",
+            "area": "CA7 3NX",
+            "lat": 54.78331,
+            "lon": -3.3488,
+            "reference": "INC 149004194",
+            "status": "Preparing to send team",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "CA7 3PA",
+            "lat": 54.783734,
+            "lon": -3.348581,
+            "reference": "INC 149004194",
+            "status": "Preparing to send team",
             "type": "CurrentFault"
           }
         ],
@@ -47,8 +56,8 @@
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.025
       }
     }
   ]
