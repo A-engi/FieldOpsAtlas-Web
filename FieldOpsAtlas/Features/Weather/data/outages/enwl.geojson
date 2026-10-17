@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "enwl",
-  "generatedAt": "2026-10-15T00:07:22.231Z",
+  "generatedAt": "2026-10-17T21:15:02.464Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "enwl:current:inc-149004194",
+      "id": "enwl:current:inc-143012062",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -3.348496,
-          54.783324
+          -2.980535,
+          53.588648
         ]
       },
       "properties": {
@@ -20,33 +20,87 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INC 149004194",
+        "reference": "INC 143012062",
         "category": "current",
-        "status": "Preparing to send team",
+        "status": "Team on their way",
         "type": "CurrentFault",
-        "area": "Aspatria, Allerdale",
+        "area": "Halsall, West Lancashire",
         "areas": [
-          "Aspatria, Allerdale"
+          "Halsall, West Lancashire"
         ],
         "postcodes": [
-          "CA7 3NX",
-          "CA7 3PA"
+          "L39 8RX",
+          "L39 8SL",
+          "L39 8RY",
+          "L39 8SU",
+          "L39 8SN",
+          "L39 8SW",
+          "L39 8SS",
+          "L39 8RZ"
         ],
         "groupedLocations": [
           {
-            "area": "CA7 3NX",
-            "lat": 54.78331,
-            "lon": -3.3488,
-            "reference": "INC 149004194",
-            "status": "Preparing to send team",
+            "area": "L39 8RX",
+            "lat": 53.58537,
+            "lon": -2.970365,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
             "type": "CurrentFault"
           },
           {
-            "area": "CA7 3PA",
-            "lat": 54.783734,
-            "lon": -3.348581,
-            "reference": "INC 149004194",
-            "status": "Preparing to send team",
+            "area": "L39 8SL",
+            "lat": 53.58659,
+            "lon": -2.981617,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8RY",
+            "lat": 53.590068,
+            "lon": -2.99046,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8SU",
+            "lat": 53.583412,
+            "lon": -3.013505,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8SN",
+            "lat": 53.601708,
+            "lon": -2.977373,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8SW",
+            "lat": 53.606886,
+            "lon": -2.986077,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8SS",
+            "lat": 53.577363,
+            "lon": -2.966737,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "L39 8RZ",
+            "lat": 53.595686,
+            "lon": -2.996952,
+            "reference": "INC 143012062",
+            "status": "Team on their way",
             "type": "CurrentFault"
           }
         ],
@@ -56,8 +110,1240 @@
         "updatedAt": null,
         "officialUrl": "https://www.enwl.co.uk/power-cuts",
         "locationQuality": "upstream_switch",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.025
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 2.034
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012079",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.193307,
+          53.460521
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012079",
+        "category": "current",
+        "status": "Team on their way",
+        "type": "CurrentFault",
+        "area": "Longsight, Manchester",
+        "areas": [
+          "Longsight, Manchester"
+        ],
+        "postcodes": [
+          "M12 4WB",
+          "M12 4TF",
+          "M12 4TP",
+          "M12 4TH",
+          "M12 4AZ",
+          "M12 4RQ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "M12 4WB",
+            "lat": 53.459507,
+            "lon": -2.19575,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "M12 4TF",
+            "lat": 53.460305,
+            "lon": -2.191431,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "M12 4TP",
+            "lat": 53.460762,
+            "lon": -2.19193,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "M12 4TH",
+            "lat": 53.461185,
+            "lon": -2.191782,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "M12 4AZ",
+            "lat": 53.461023,
+            "lon": -2.192037,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "M12 4RQ",
+            "lat": 53.460171,
+            "lon": -2.196175,
+            "reference": "INC 143012079",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.202
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012065",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.097318,
+          53.605223
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012065",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Milnrow & Newhey, Rochdale",
+        "areas": [
+          "Milnrow & Newhey, Rochdale"
+        ],
+        "postcodes": [
+          "OL16 3QD",
+          "OL16 3RA",
+          "OL16 3TU",
+          "OL16 3PA",
+          "OL16 3RU",
+          "OL16 3SF",
+          "OL16 3PJ",
+          "OL16 3RF",
+          "OL16 4JD",
+          "OL16 3QZ",
+          "OL16 3DR",
+          "OL16 3QG",
+          "OL16 3PR",
+          "OL16 3PT",
+          "OL16 3QE",
+          "OL16 3RL",
+          "OL16 3NS",
+          "OL16 3AP",
+          "OL16 3RH",
+          "OL16 3PE",
+          "OL16 3TG",
+          "OL16 3QQ",
+          "OL16 3NY",
+          "OL16 3NP",
+          "OL16 3NZ",
+          "OL16 3PH",
+          "OL16 3HD",
+          "OL16 3TB",
+          "OL16 3TR",
+          "OL16 3PY",
+          "OL16 3RP",
+          "OL16 3RB",
+          "OL16 3PQ",
+          "OL16 3NL",
+          "OL16 3TQ",
+          "OL16 3RW",
+          "OL16 3QS",
+          "OL16 3TZ",
+          "OL16 3RN",
+          "OL16 3QH",
+          "OL16 3RS",
+          "OL16 3RD",
+          "OL16 3QA",
+          "OL16 3TY",
+          "OL16 3NX",
+          "OL16 4JF",
+          "OL16 3QR",
+          "OL16 3PS",
+          "OL16 3SG",
+          "OL16 3TX",
+          "OL16 4EF",
+          "OL16 3RR",
+          "OL16 3TS",
+          "OL16 3DP",
+          "OL16 3TA",
+          "OL16 3RG",
+          "OL16 3TL",
+          "OL16 3RQ",
+          "OL16 3PD",
+          "OL16 3DW",
+          "OL16 3TE",
+          "OL16 3NR",
+          "OL11 5QY",
+          "OL16 3RJ",
+          "OL16 3NU",
+          "OL16 3SL",
+          "OL16 3NT",
+          "OL16 4EG",
+          "OL16 3TD",
+          "OL16 3QJ",
+          "OL16 4JA",
+          "OL16 4EQ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "OL16 3QD",
+            "lat": 53.603097,
+            "lon": -2.089377,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RA",
+            "lat": 53.602117,
+            "lon": -2.09069,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TU",
+            "lat": 53.607008,
+            "lon": -2.099874,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PA",
+            "lat": 53.607705,
+            "lon": -2.104651,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RU",
+            "lat": 53.600547,
+            "lon": -2.097592,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3SF",
+            "lat": 53.602073,
+            "lon": -2.088861,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PJ",
+            "lat": 53.607626,
+            "lon": -2.102218,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RF",
+            "lat": 53.601256,
+            "lon": -2.087953,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4JD",
+            "lat": 53.607109,
+            "lon": -2.107007,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QZ",
+            "lat": 53.601979,
+            "lon": -2.093606,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3DR",
+            "lat": 53.608747,
+            "lon": -2.104714,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QG",
+            "lat": 53.603367,
+            "lon": -2.089816,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PR",
+            "lat": 53.60554,
+            "lon": -2.103648,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PT",
+            "lat": 53.607694,
+            "lon": -2.106268,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QE",
+            "lat": 53.603143,
+            "lon": -2.088773,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RL",
+            "lat": 53.601737,
+            "lon": -2.093303,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NS",
+            "lat": 53.608323,
+            "lon": -2.106572,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3AP",
+            "lat": 53.603575,
+            "lon": -2.08687,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RH",
+            "lat": 53.601694,
+            "lon": -2.091475,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PE",
+            "lat": 53.607148,
+            "lon": -2.104257,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TG",
+            "lat": 53.60266,
+            "lon": -2.070517,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QQ",
+            "lat": 53.605104,
+            "lon": -2.085392,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NY",
+            "lat": 53.607299,
+            "lon": -2.10592,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NP",
+            "lat": 53.60667,
+            "lon": -2.105631,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NZ",
+            "lat": 53.608009,
+            "lon": -2.105876,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PH",
+            "lat": 53.606823,
+            "lon": -2.105737,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3HD",
+            "lat": 53.606746,
+            "lon": -2.101641,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TB",
+            "lat": 53.602681,
+            "lon": -2.080838,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TR",
+            "lat": 53.616294,
+            "lon": -2.098551,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PY",
+            "lat": 53.606339,
+            "lon": -2.104739,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RP",
+            "lat": 53.600706,
+            "lon": -2.08984,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RB",
+            "lat": 53.601676,
+            "lon": -2.090492,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PQ",
+            "lat": 53.60712,
+            "lon": -2.105557,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NL",
+            "lat": 53.608262,
+            "lon": -2.105106,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TQ",
+            "lat": 53.607549,
+            "lon": -2.071024,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RW",
+            "lat": 53.600945,
+            "lon": -2.094132,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QS",
+            "lat": 53.602607,
+            "lon": -2.096237,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TZ",
+            "lat": 53.60772,
+            "lon": -2.097835,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RN",
+            "lat": 53.600838,
+            "lon": -2.092969,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QH",
+            "lat": 53.607659,
+            "lon": -2.082223,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RS",
+            "lat": 53.600419,
+            "lon": -2.089054,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RD",
+            "lat": 53.601696,
+            "lon": -2.08815,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QA",
+            "lat": 53.603458,
+            "lon": -2.088063,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TY",
+            "lat": 53.607486,
+            "lon": -2.098122,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NX",
+            "lat": 53.60765,
+            "lon": -2.105573,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4JF",
+            "lat": 53.603292,
+            "lon": -2.103839,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QR",
+            "lat": 53.608523,
+            "lon": -2.093091,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PS",
+            "lat": 53.605629,
+            "lon": -2.104223,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3SG",
+            "lat": 53.602153,
+            "lon": -2.089738,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TX",
+            "lat": 53.607134,
+            "lon": -2.099194,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4EF",
+            "lat": 53.605951,
+            "lon": -2.105539,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RR",
+            "lat": 53.599862,
+            "lon": -2.089249,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TS",
+            "lat": 53.614317,
+            "lon": -2.085093,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3DP",
+            "lat": 53.608656,
+            "lon": -2.105863,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TA",
+            "lat": 53.60402,
+            "lon": -2.081022,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RG",
+            "lat": 53.601689,
+            "lon": -2.086004,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TL",
+            "lat": 53.607421,
+            "lon": -2.099603,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RQ",
+            "lat": 53.601015,
+            "lon": -2.085051,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3PD",
+            "lat": 53.607723,
+            "lon": -2.104908,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3DW",
+            "lat": 53.60862,
+            "lon": -2.106905,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TE",
+            "lat": 53.604457,
+            "lon": -2.072696,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL11 5QY",
+            "lat": 53.614698,
+            "lon": -2.207215,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3RJ",
+            "lat": 53.600815,
+            "lon": -2.088435,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NU",
+            "lat": 53.608063,
+            "lon": -2.10571,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3SL",
+            "lat": 53.600152,
+            "lon": -2.096594,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3NT",
+            "lat": 53.608503,
+            "lon": -2.106391,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4EG",
+            "lat": 53.606625,
+            "lon": -2.106341,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TD",
+            "lat": 53.605123,
+            "lon": -2.070431,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3QJ",
+            "lat": 53.607315,
+            "lon": -2.086545,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4JA",
+            "lat": 53.60762,
+            "lon": -2.10849,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 4EQ",
+            "lat": 53.605529,
+            "lon": -2.105764,
+            "reference": "INC 143012065",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 71,
+        "coordinateSpreadKm": 7.341
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012050",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.849877,
+          53.698242
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012050",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Hesketh-With-Becconsall, West Lancashire",
+        "areas": [
+          "Hesketh-With-Becconsall, West Lancashire"
+        ],
+        "postcodes": [
+          "PR4 6SE",
+          "PR4 6PJ",
+          "PR4 6JH",
+          "PR4 6SD",
+          "PR4 6SY"
+        ],
+        "groupedLocations": [
+          {
+            "area": "PR4 6SE",
+            "lat": 53.706312,
+            "lon": -2.848225,
+            "reference": "INC 143012050",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "PR4 6PJ",
+            "lat": 53.706047,
+            "lon": -2.850022,
+            "reference": "INC 143012050",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "PR4 6JH",
+            "lat": 53.664164,
+            "lon": -2.859637,
+            "reference": "INC 143012050",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "PR4 6SD",
+            "lat": 53.706264,
+            "lon": -2.84736,
+            "reference": "INC 143012050",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "PR4 6SY",
+            "lat": 53.707158,
+            "lon": -2.84809,
+            "reference": "INC 143012050",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 3.807
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012017",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.927342,
+          54.361606
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012017",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Windermere, South Lakeland",
+        "areas": [
+          "Windermere, South Lakeland"
+        ],
+        "postcodes": [
+          "LA23 3HE"
+        ],
+        "groupedLocations": [
+          {
+            "area": "LA23 3HE",
+            "lat": 54.361731,
+            "lon": -2.927456,
+            "reference": "INC 143012017",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012071",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.025694,
+          53.751136
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012071",
+        "category": "current",
+        "status": "Team on their way",
+        "type": "CurrentFault",
+        "area": "Saint Anne's On The Sea, Fylde",
+        "areas": [
+          "Saint Anne's On The Sea, Fylde"
+        ],
+        "postcodes": [
+          "FY8 1SZ",
+          "FY8 1SN",
+          "FY8 1SR",
+          "FY8 1SX",
+          "FY8 1TF",
+          "FY8 1PZ",
+          "FY8 1QD"
+        ],
+        "groupedLocations": [
+          {
+            "area": "FY8 1SZ",
+            "lat": 53.752761,
+            "lon": -3.027664,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1SN",
+            "lat": 53.752102,
+            "lon": -3.029043,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1SR",
+            "lat": 53.752025,
+            "lon": -3.028556,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1SX",
+            "lat": 53.75212,
+            "lon": -3.027906,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1TF",
+            "lat": 53.753151,
+            "lon": -3.026157,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1PZ",
+            "lat": 53.751582,
+            "lon": -3.026816,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "FY8 1QD",
+            "lat": 53.75154,
+            "lon": -3.026391,
+            "reference": "INC 143012071",
+            "status": "Team on their way",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.139
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012046",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.072662,
+          53.603968
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012046",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Milnrow & Newhey, Rochdale",
+        "areas": [
+          "Milnrow & Newhey, Rochdale"
+        ],
+        "postcodes": [
+          "OL16 3TD",
+          "OL16 3TQ",
+          "OL16 3TE",
+          "OL16 3TG",
+          "OL16 3WB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "OL16 3TD",
+            "lat": 53.605123,
+            "lon": -2.070431,
+            "reference": "INC 143012046",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TQ",
+            "lat": 53.607549,
+            "lon": -2.071024,
+            "reference": "INC 143012046",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TE",
+            "lat": 53.604457,
+            "lon": -2.072696,
+            "reference": "INC 143012046",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3TG",
+            "lat": 53.60266,
+            "lon": -2.070517,
+            "reference": "INC 143012046",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL16 3WB",
+            "lat": 53.602184,
+            "lon": -2.070108,
+            "reference": "INC 143012046",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.351
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012031",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.122653,
+          53.255326
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012031",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Macclesfield, Cheshire East",
+        "areas": [
+          "Macclesfield, Cheshire East"
+        ],
+        "postcodes": [
+          "SK11 7GY",
+          "SK11 7NH",
+          "SK11 7NN",
+          "SK11 7NL",
+          "SK11 7NW"
+        ],
+        "groupedLocations": [
+          {
+            "area": "SK11 7GY",
+            "lat": 53.25594,
+            "lon": -2.124188,
+            "reference": "INC 143012031",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK11 7NH",
+            "lat": 53.255591,
+            "lon": -2.122718,
+            "reference": "INC 143012031",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK11 7NN",
+            "lat": 53.25489,
+            "lon": -2.122176,
+            "reference": "INC 143012031",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK11 7NL",
+            "lat": 53.255357,
+            "lon": -2.122507,
+            "reference": "INC 143012031",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "SK11 7NW",
+            "lat": 53.255124,
+            "lon": -2.121772,
+            "reference": "INC 143012031",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.118
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "enwl:current:inc-143012044",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.121041,
+          53.549019
+        ]
+      },
+      "properties": {
+        "providerId": "enwl",
+        "provider": "Electricity North West",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INC 143012044",
+        "category": "current",
+        "status": "We're on site",
+        "type": "CurrentFault",
+        "area": "Coldhurst, Oldham",
+        "areas": [
+          "Coldhurst, Oldham"
+        ],
+        "postcodes": [
+          "OL1 2HQ",
+          "OL1 2HN",
+          "OL1 2HG"
+        ],
+        "groupedLocations": [
+          {
+            "area": "OL1 2HQ",
+            "lat": 53.549327,
+            "lon": -2.121953,
+            "reference": "INC 143012044",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL1 2HN",
+            "lat": 53.548349,
+            "lon": -2.120818,
+            "reference": "INC 143012044",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          },
+          {
+            "area": "OL1 2HG",
+            "lat": 53.549464,
+            "lon": -2.120459,
+            "reference": "INC 143012044",
+            "status": "We're on site",
+            "type": "CurrentFault"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "We didn't know before your electricity went off that this was going to happen but now we know, rest assured we will get your power back on safely and as quickly as possible.",
+        "updatedAt": null,
+        "officialUrl": "https://www.enwl.co.uk/power-cuts",
+        "locationQuality": "upstream_switch",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.079
       }
     }
   ]

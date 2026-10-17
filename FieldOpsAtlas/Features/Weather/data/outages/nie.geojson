@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "nie",
-  "generatedAt": "2026-10-15T00:07:22.231Z",
+  "generatedAt": "2026-10-17T21:15:02.464Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "nie:current:5940807",
+      "id": "nie:current:5941552",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -5.94990623199714,
-          54.56299336053971
+          -5.9450091141440184,
+          54.27888023986193
         ]
       },
       "properties": {
@@ -20,29 +20,29 @@
         "feedIds": [
           "live"
         ],
-        "reference": "5940807",
+        "reference": "5941552",
         "category": "current",
-        "status": "A repair team has been assigned and will be on its way as soon as possible.",
+        "status": "Our repair team has arrived and is assessing the problem.",
         "type": "Fault",
-        "area": "BT9 6 ;BT9 7",
+        "area": "BT31 9",
         "areas": [
-          "BT9 6 ;BT9 7"
+          "BT31 9"
         ],
         "postcodes": [],
         "groupedLocations": [
           {
-            "area": "BT9 6 ;BT9 7",
-            "lat": 54.56299336053971,
-            "lon": -5.94990623199714,
-            "reference": "5940807",
-            "status": "A repair team has been assigned and will be on its way as soon as possible.",
+            "area": "BT31 9",
+            "lat": 54.27888023986193,
+            "lon": -5.9450091141440184,
+            "reference": "5941552",
+            "status": "Our repair team has arrived and is assessing the problem.",
             "type": "Fault"
           }
         ],
-        "startedAt": "2026-10-14T17:18:00.000Z",
+        "startedAt": "2026-10-17T16:02:00.000Z",
         "restoreAt": null,
         "restoreAtText": "Not available - Update to follow",
-        "updatedAt": "2026-10-15T01:06:00.000Z",
+        "updatedAt": "2026-10-17T22:14:00.000Z",
         "officialUrl": "https://powercheck.nienetworks.co.uk/",
         "locationQuality": "approximate_area",
         "rawRecordCount": 1,
@@ -51,12 +51,12 @@
     },
     {
       "type": "Feature",
-      "id": "nie:current:5940843",
+      "id": "nie:current:5941566",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -5.919000972451087,
-          54.57199241753809
+          -6.165401885155336,
+          54.29691930265109
         ]
       },
       "properties": {
@@ -65,29 +65,74 @@
         "feedIds": [
           "live"
         ],
-        "reference": "5940843",
+        "reference": "5941566",
         "category": "current",
-        "status": "Our repair team has arrived and is assessing the problem.",
+        "status": "A repair team has been assigned and will be on its way as soon as possible.",
         "type": "Fault",
-        "area": "BT7 2 ;BT7 3",
+        "area": "BT32 5",
         "areas": [
-          "BT7 2 ;BT7 3"
+          "BT32 5"
         ],
         "postcodes": [],
         "groupedLocations": [
           {
-            "area": "BT7 2 ;BT7 3",
-            "lat": 54.57199241753809,
-            "lon": -5.919000972451087,
-            "reference": "5940843",
-            "status": "Our repair team has arrived and is assessing the problem.",
+            "area": "BT32 5",
+            "lat": 54.29691930265109,
+            "lon": -6.165401885155336,
+            "reference": "5941566",
+            "status": "A repair team has been assigned and will be on its way as soon as possible.",
             "type": "Fault"
           }
         ],
-        "startedAt": "2026-10-14T20:35:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "Not available - Update to follow",
-        "updatedAt": "2026-10-15T01:06:00.000Z",
+        "startedAt": "2026-10-17T20:55:00.000Z",
+        "restoreAt": "2026-10-18T00:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-17T22:14:00.000Z",
+        "officialUrl": "https://powercheck.nienetworks.co.uk/",
+        "locationQuality": "approximate_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nie:planned:2026-34546",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.060813051020913,
+          54.4919775715992
+        ]
+      },
+      "properties": {
+        "providerId": "nie",
+        "provider": "NIE Networks",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "2026/34546",
+        "category": "planned",
+        "status": "We are carrying out essential planned maintenance to the electricity network in your area.",
+        "type": "Planned",
+        "area": "BT27 5",
+        "areas": [
+          "BT27 5"
+        ],
+        "postcodes": [],
+        "groupedLocations": [
+          {
+            "area": "BT27 5",
+            "lat": 54.4919775715992,
+            "lon": -6.060813051020913,
+            "reference": "2026/34546",
+            "status": "We are carrying out essential planned maintenance to the electricity network in your area.",
+            "type": "Planned"
+          }
+        ],
+        "startedAt": "2026-10-17T21:44:00.000Z",
+        "restoreAt": "2026-10-18T08:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-17T22:14:00.000Z",
         "officialUrl": "https://powercheck.nienetworks.co.uk/",
         "locationQuality": "approximate_area",
         "rawRecordCount": 1,
