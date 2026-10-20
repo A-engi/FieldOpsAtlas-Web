@@ -1,17 +1,17 @@
 {
   "type": "FeatureCollection",
   "provider": "npg",
-  "generatedAt": "2026-10-17T21:15:02.464Z",
+  "generatedAt": "2026-10-20T00:25:18.400Z",
   "stale": false,
   "features": [
     {
       "type": "Feature",
-      "id": "npg:current:incd-824640-a",
+      "id": "npg:current:incd-825846-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.2036883333333332,
-          53.80893333333333
+          -0.7722333071895428,
+          53.53028823529413
         ]
       },
       "properties": {
@@ -20,364 +20,1889 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-824640-A",
+        "reference": "INCD-825846-A",
+        "category": "current",
+        "status": "6",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "DN9 2LU",
+          "DN9 1RR",
+          "DN9 1FB",
+          "DN9 1BS",
+          "DN9 1RB",
+          "DN9 1JD",
+          "DN9 1BG",
+          "DN17 3HX",
+          "DN9 1RW",
+          "DN9 1HS",
+          "DN17 3EF",
+          "DN17 3LE",
+          "DN9 1RS",
+          "DN9 1TZ",
+          "DN9 1AS",
+          "DN9 1BP",
+          "DN9 1AA",
+          "DN17 3EN",
+          "DN9 1RL",
+          "DN9 1AG",
+          "DN9 1RN",
+          "DN9 1JH",
+          "DN9 1BQ",
+          "DN17 3AU",
+          "DN17 3LQ",
+          "DN17 3BP",
+          "DN17 3DR",
+          "DN17 3HS",
+          "DN17 3LA",
+          "DN17 3HP",
+          "DN17 1LR",
+          "DN17 3BS",
+          "DN17 4JG",
+          "DN17 3LG",
+          "DN17 3HA",
+          "DN9 2LY",
+          "DN9 1AF",
+          "DN9 1EZ",
+          "DN17 3DS",
+          "DN17 3HB",
+          "DN17 3LL",
+          "DN17 3LJ",
+          "DN9 1AL",
+          "DN17 3DH",
+          "DN17 3JS",
+          "DN17 3HY",
+          "DN9 1TT",
+          "DN17 3HN",
+          "DN9 1BH",
+          "DN17 3LN",
+          "DN9 1HB",
+          "DN9 1RD",
+          "DN17 3HT",
+          "DN9 1BA",
+          "DN9 1SJ",
+          "DN17 3JE",
+          "DN9 1RF",
+          "DN9 1AB",
+          "DN17 3HQ",
+          "DN17 3HU",
+          "DN17 3LH",
+          "DN17 3EH",
+          "DN9 2LR",
+          "DN17 3JF",
+          "DN9 1JF",
+          "DN17 3JY",
+          "DN9 1AU",
+          "DN17 3EB",
+          "DN9 1JJ",
+          "DN9 1SG",
+          "DN9 1RT",
+          "DN17 3DP",
+          "DN17 3BU",
+          "DN9 1AW",
+          "DN9 1AH",
+          "DN17 3BN",
+          "DN9 1SH",
+          "DN9 1AT",
+          "DN9 2HX",
+          "DN9 1RQ",
+          "DN9 1AP",
+          "DN17 3JR",
+          "DN9 1AX",
+          "DN9 1JG",
+          "DN10 4BE",
+          "DN17 3JU",
+          "DN17 3DN",
+          "DN9 1AJ",
+          "DN9 1BB",
+          "DN9 1AQ",
+          "DN17 3LD",
+          "DN17 3DJ",
+          "DN17 3JZ",
+          "DN9 1JL",
+          "DN17 3DW",
+          "DN9 1AZ",
+          "DN17 3DL",
+          "DN9 1RH",
+          "DN9 1BD",
+          "DN9 1AE",
+          "DN9 1BJ",
+          "DN9 1EY",
+          "DN9 1SY",
+          "DN17 3JQ",
+          "DN9 1SF",
+          "DN17 3JJ",
+          "DN9 1QZ",
+          "DN9 1SR",
+          "DN9 1SE",
+          "DN17 3HZ",
+          "DN9 1JQ",
+          "DN9 1RE",
+          "DN9 1HX",
+          "DN9 1HY",
+          "DN9 1RG",
+          "DN9 1AN",
+          "DN17 3LF",
+          "DN9 2LW",
+          "DN9 1FE",
+          "DN17 3HH",
+          "DN17 3DQ",
+          "DN17 3BT",
+          "DN9 1AY",
+          "DN17 3HJ",
+          "DN17 3DT",
+          "DN17 3LB",
+          "DN9 2LX",
+          "DN17 3JB",
+          "DN17 3HR",
+          "DN17 3JT",
+          "DN17 3JW",
+          "DN17 3JP",
+          "DN9 1BE",
+          "DN9 1SD",
+          "DN17 3PH",
+          "DN9 1AR",
+          "DN17 3JA",
+          "DN9 1EX",
+          "DN9 1RP",
+          "DN9 2LT",
+          "DN9 1EU",
+          "DN17 3BZ",
+          "DN17 3JX",
+          "DN9 1QY",
+          "DN17 3HW",
+          "DN17 3JD",
+          "DN21 3NY",
+          "DN9 1HA",
+          "DN17 3ED",
+          "DN9 1JA",
+          "DN9 1RJ",
+          "DN9 1SX",
+          "DN9 1AD"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DN9 2LU",
+            "lat": 53.488696,
+            "lon": -0.812533,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RR",
+            "lat": 53.484678,
+            "lon": -0.774215,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1FB",
+            "lat": 53.523872,
+            "lon": -0.823617,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BS",
+            "lat": 53.495344,
+            "lon": -0.783525,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RB",
+            "lat": 53.49087,
+            "lon": -0.777639,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JD",
+            "lat": 53.530968,
+            "lon": -0.803234,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BG",
+            "lat": 53.470059,
+            "lon": -0.81227,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HX",
+            "lat": 53.576743,
+            "lon": -0.740441,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RW",
+            "lat": 53.489946,
+            "lon": -0.775992,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1HS",
+            "lat": 53.522836,
+            "lon": -0.811609,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3EF",
+            "lat": 53.595135,
+            "lon": -0.739713,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LE",
+            "lat": 53.542485,
+            "lon": -0.749788,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RS",
+            "lat": 53.489858,
+            "lon": -0.776206,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1TZ",
+            "lat": 53.477677,
+            "lon": -0.810836,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AS",
+            "lat": 53.49504,
+            "lon": -0.781905,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BP",
+            "lat": 53.495124,
+            "lon": -0.780441,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AA",
+            "lat": 53.521467,
+            "lon": -0.80504,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3EN",
+            "lat": 53.59643,
+            "lon": -0.741473,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RL",
+            "lat": 53.490832,
+            "lon": -0.776524,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AG",
+            "lat": 53.501279,
+            "lon": -0.75575,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RN",
+            "lat": 53.489793,
+            "lon": -0.776931,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JH",
+            "lat": 53.52557,
+            "lon": -0.813599,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BQ",
+            "lat": 53.462722,
+            "lon": -0.786958,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3AU",
+            "lat": 53.532639,
+            "lon": -0.713068,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LQ",
+            "lat": 53.543271,
+            "lon": -0.753643,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BP",
+            "lat": 53.590751,
+            "lon": -0.739103,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DR",
+            "lat": 53.587703,
+            "lon": -0.740735,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HS",
+            "lat": 53.577073,
+            "lon": -0.740265,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LA",
+            "lat": 53.542822,
+            "lon": -0.74507,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HP",
+            "lat": 53.579743,
+            "lon": -0.740261,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 1LR",
+            "lat": 53.571289,
+            "lon": -0.670109,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BS",
+            "lat": 53.588014,
+            "lon": -0.737764,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 4JG",
+            "lat": 53.596611,
+            "lon": -0.813726,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LG",
+            "lat": 53.542486,
+            "lon": -0.751614,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HA",
+            "lat": 53.578516,
+            "lon": -0.742352,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2LY",
+            "lat": 53.47853,
+            "lon": -0.830808,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AF",
+            "lat": 53.498955,
+            "lon": -0.769235,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1EZ",
+            "lat": 53.524441,
+            "lon": -0.815682,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DS",
+            "lat": 53.58823,
+            "lon": -0.740432,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HB",
+            "lat": 53.578452,
+            "lon": -0.741417,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LL",
+            "lat": 53.544029,
+            "lon": -0.74274,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LJ",
+            "lat": 53.538707,
+            "lon": -0.769441,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AL",
+            "lat": 53.494179,
+            "lon": -0.781237,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DH",
+            "lat": 53.588397,
+            "lon": -0.743418,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JS",
+            "lat": 53.543429,
+            "lon": -0.741234,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HY",
+            "lat": 53.576242,
+            "lon": -0.742419,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1TT",
+            "lat": 53.494025,
+            "lon": -0.784648,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HN",
+            "lat": 53.579386,
+            "lon": -0.742175,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BH",
+            "lat": 53.461328,
+            "lon": -0.78867,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LN",
+            "lat": 53.543086,
+            "lon": -0.743719,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1HB",
+            "lat": 53.522735,
+            "lon": -0.815971,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RD",
+            "lat": 53.490884,
+            "lon": -0.777201,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HT",
+            "lat": 53.57644,
+            "lon": -0.742444,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BA",
+            "lat": 53.494815,
+            "lon": -0.791665,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SJ",
+            "lat": 53.523838,
+            "lon": -0.816559,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JE",
+            "lat": 53.562892,
+            "lon": -0.750817,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RF",
+            "lat": 53.49236,
+            "lon": -0.780867,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AB",
+            "lat": 53.511383,
+            "lon": -0.797105,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HQ",
+            "lat": 53.577979,
+            "lon": -0.74264,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HU",
+            "lat": 53.57643,
+            "lon": -0.741492,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LH",
+            "lat": 53.543091,
+            "lon": -0.751023,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3EH",
+            "lat": 53.594312,
+            "lon": -0.740871,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2LR",
+            "lat": 53.489147,
+            "lon": -0.817177,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JF",
+            "lat": 53.57547,
+            "lon": -0.744209,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JF",
+            "lat": 53.523985,
+            "lon": -0.813266,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JY",
+            "lat": 53.541302,
+            "lon": -0.741598,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AU",
+            "lat": 53.496227,
+            "lon": -0.782821,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3EB",
+            "lat": 53.591501,
+            "lon": -0.742042,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JJ",
+            "lat": 53.52527,
+            "lon": -0.813185,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SG",
+            "lat": 53.523231,
+            "lon": -0.814252,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RT",
+            "lat": 53.492512,
+            "lon": -0.772934,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DP",
+            "lat": 53.589014,
+            "lon": -0.741421,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BU",
+            "lat": 53.590614,
+            "lon": -0.741449,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AW",
+            "lat": 53.492124,
+            "lon": -0.782441,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AH",
+            "lat": 53.494521,
+            "lon": -0.779524,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BN",
+            "lat": 53.589283,
+            "lon": -0.737923,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SH",
+            "lat": 53.523751,
+            "lon": -0.811462,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AT",
+            "lat": 53.495701,
+            "lon": -0.782354,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2HX",
+            "lat": 53.490063,
+            "lon": -0.842805,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RQ",
+            "lat": 53.492951,
+            "lon": -0.783292,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AP",
+            "lat": 53.493868,
+            "lon": -0.782497,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JR",
+            "lat": 53.546328,
+            "lon": -0.740816,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AX",
+            "lat": 53.497022,
+            "lon": -0.782331,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JG",
+            "lat": 53.524104,
+            "lon": -0.815314,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN10 4BE",
+            "lat": 53.455927,
+            "lon": -0.799546,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JU",
+            "lat": 53.519922,
+            "lon": -0.741161,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DN",
+            "lat": 53.589196,
+            "lon": -0.739965,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AJ",
+            "lat": 53.494022,
+            "lon": -0.780864,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BB",
+            "lat": 53.493593,
+            "lon": -0.800578,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AQ",
+            "lat": 53.5109,
+            "lon": -0.767381,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LD",
+            "lat": 53.543294,
+            "lon": -0.748919,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DJ",
+            "lat": 53.589736,
+            "lon": -0.743454,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JZ",
+            "lat": 53.542282,
+            "lon": -0.74418,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JL",
+            "lat": 53.528798,
+            "lon": -0.823647,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DW",
+            "lat": 53.588972,
+            "lon": -0.740833,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AZ",
+            "lat": 53.494885,
+            "lon": -0.78705,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DL",
+            "lat": 53.589644,
+            "lon": -0.740677,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RH",
+            "lat": 53.492389,
+            "lon": -0.779359,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BD",
+            "lat": 53.479507,
+            "lon": -0.80955,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AE",
+            "lat": 53.495302,
+            "lon": -0.774135,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BJ",
+            "lat": 53.477971,
+            "lon": -0.785604,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1EY",
+            "lat": 53.525383,
+            "lon": -0.81644,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SY",
+            "lat": 53.524986,
+            "lon": -0.809934,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JQ",
+            "lat": 53.545463,
+            "lon": -0.739815,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SF",
+            "lat": 53.523547,
+            "lon": -0.812554,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JJ",
+            "lat": 53.543215,
+            "lon": -0.751653,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1QZ",
+            "lat": 53.523609,
+            "lon": -0.809822,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SR",
+            "lat": 53.522514,
+            "lon": -0.813548,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SE",
+            "lat": 53.523317,
+            "lon": -0.812998,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HZ",
+            "lat": 53.575629,
+            "lon": -0.748267,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JQ",
+            "lat": 53.524448,
+            "lon": -0.81277,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RE",
+            "lat": 53.492479,
+            "lon": -0.779401,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1HX",
+            "lat": 53.522959,
+            "lon": -0.813099,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1HY",
+            "lat": 53.522744,
+            "lon": -0.806905,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RG",
+            "lat": 53.493536,
+            "lon": -0.78433,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AN",
+            "lat": 53.493233,
+            "lon": -0.780163,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LF",
+            "lat": 53.541477,
+            "lon": -0.748822,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2LW",
+            "lat": 53.488882,
+            "lon": -0.82864,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1FE",
+            "lat": 53.494503,
+            "lon": -0.784845,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HH",
+            "lat": 53.577914,
+            "lon": -0.739893,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DQ",
+            "lat": 53.588007,
+            "lon": -0.743929,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BT",
+            "lat": 53.586514,
+            "lon": -0.737069,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AY",
+            "lat": 53.495109,
+            "lon": -0.785205,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HJ",
+            "lat": 53.57879,
+            "lon": -0.739398,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3DT",
+            "lat": 53.589131,
+            "lon": -0.742339,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3LB",
+            "lat": 53.543334,
+            "lon": -0.742429,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2LX",
+            "lat": 53.489629,
+            "lon": -0.8132,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JB",
+            "lat": 53.569639,
+            "lon": -0.748746,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HR",
+            "lat": 53.578261,
+            "lon": -0.744655,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JT",
+            "lat": 53.541593,
+            "lon": -0.741001,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JW",
+            "lat": 53.545469,
+            "lon": -0.740313,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JP",
+            "lat": 53.545724,
+            "lon": -0.739807,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1BE",
+            "lat": 53.475404,
+            "lon": -0.799268,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SD",
+            "lat": 53.524633,
+            "lon": -0.813293,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3PH",
+            "lat": 53.526008,
+            "lon": -0.651327,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AR",
+            "lat": 53.494614,
+            "lon": -0.782445,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JA",
+            "lat": 53.573606,
+            "lon": -0.746469,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1EX",
+            "lat": 53.525558,
+            "lon": -0.817793,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RP",
+            "lat": 53.487477,
+            "lon": -0.77632,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 2LT",
+            "lat": 53.487992,
+            "lon": -0.81311,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1EU",
+            "lat": 53.525256,
+            "lon": -0.819928,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3BZ",
+            "lat": 53.590262,
+            "lon": -0.740447,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JX",
+            "lat": 53.512167,
+            "lon": -0.743939,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1QY",
+            "lat": 53.523934,
+            "lon": -0.809979,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3HW",
+            "lat": 53.578102,
+            "lon": -0.746578,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN17 3JD",
+            "lat": 53.563682,
+            "lon": -0.749903,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN21 3NY",
+            "lat": 53.435542,
+            "lon": -0.699173,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1HA",
+            "lat": 53.525096,
+            "lon": -0.816508,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.5925,
+            "lon": -0.741601,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1JA",
+            "lat": 53.52496,
+            "lon": -0.78239,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1RJ",
+            "lat": 53.491724,
+            "lon": -0.777614,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1SX",
+            "lat": 53.524152,
+            "lon": -0.809249,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN9 1AD",
+            "lat": 53.50813,
+            "lon": -0.788301,
+            "reference": "INCD-825846-A",
+            "status": "6",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-19T16:20:00.000Z",
+        "restoreAt": "2026-10-20T00:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T00:00:29.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 153,
+        "coordinateSpreadKm": 11.601
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825822-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.286084,
+          53.614509999999996
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825822-A",
         "category": "current",
         "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "WF9 1DY",
+          "WF9 1DQ",
+          "WF9 1DH",
+          "WF9 1FT",
+          "WF9 1DE",
+          "WF9 1DZ",
+          "WF9 1DJ",
+          "WF9 1HE",
+          "WF9 1DG",
+          "WF9 1DF"
+        ],
+        "groupedLocations": [
+          {
+            "area": "WF9 1DY",
+            "lat": 53.614186,
+            "lon": -1.291332,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DQ",
+            "lat": 53.612606,
+            "lon": -1.288683,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DH",
+            "lat": 53.613374,
+            "lon": -1.289381,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1FT",
+            "lat": 53.614165,
+            "lon": -1.287856,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DE",
+            "lat": 53.613885,
+            "lon": -1.287679,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DZ",
+            "lat": 53.613528,
+            "lon": -1.291147,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DJ",
+            "lat": 53.614173,
+            "lon": -1.289156,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1HE",
+            "lat": 53.61403,
+            "lon": -1.286286,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DG",
+            "lat": 53.614225,
+            "lon": -1.287387,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "WF9 1DF",
+            "lat": 53.613556,
+            "lon": -1.288229,
+            "reference": "INCD-825822-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T15:27:00.000Z",
+        "restoreAt": "2026-10-20T01:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:31.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 0.179
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825883-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.270504210526316,
+          53.344852631578945
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825883-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S26 6LD",
+          "S26 6SA",
+          "S26 6LR",
+          "S26 6SB",
+          "S26 6SD",
+          "S26 6SP",
+          "S26 6RH",
+          "S26 6NH",
+          "S26 6PU",
+          "S26 6SG",
+          "S9 2QL",
+          "S26 6QQ",
+          "S26 6NE",
+          "S31 8SG",
+          "S26 6SE",
+          "S26 6SQ",
+          "S26 6SJ",
+          "S26 6SH",
+          "S26 6QP"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S26 6LD",
+            "lat": 53.342598,
+            "lon": -1.260513,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SA",
+            "lat": 53.343439,
+            "lon": -1.259823,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6LR",
+            "lat": 53.340445,
+            "lon": -1.266919,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SB",
+            "lat": 53.340465,
+            "lon": -1.262983,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SD",
+            "lat": 53.342284,
+            "lon": -1.257635,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SP",
+            "lat": 53.343529,
+            "lon": -1.258409,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6RH",
+            "lat": 53.342623,
+            "lon": -1.262991,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6NH",
+            "lat": 53.342176,
+            "lon": -1.262053,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6PU",
+            "lat": 53.342626,
+            "lon": -1.263487,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SG",
+            "lat": 53.340771,
+            "lon": -1.26448,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S9 2QL",
+            "lat": 53.397533,
+            "lon": -1.432541,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6QQ",
+            "lat": 53.341494,
+            "lon": -1.260803,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6NE",
+            "lat": 53.343343,
+            "lon": -1.261687,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.3407,
+            "lon": -1.26441,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SE",
+            "lat": 53.342673,
+            "lon": -1.258109,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SQ",
+            "lat": 53.340692,
+            "lon": -1.260366,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SJ",
+            "lat": 53.341032,
+            "lon": -1.26009,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SH",
+            "lat": 53.342738,
+            "lon": -1.259895,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6QP",
+            "lat": 53.341569,
+            "lon": -1.262754,
+            "reference": "INCD-825883-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T17:09:00.000Z",
+        "restoreAt": "2026-10-19T23:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T00:10:13.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 19,
+        "coordinateSpreadKm": 12.24
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825641-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.54918,
+          53.78944
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825641-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "LS27 0EX",
+          "LS2 7PN",
+          "LS2 7DH",
+          "LS2 8JS",
+          "LS2 7QW"
+        ],
+        "groupedLocations": [
+          {
+            "area": "LS27 0EX",
+            "lat": 53.738599,
+            "lon": -1.597761,
+            "reference": "INCD-825641-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "LS2 7PN",
+            "lat": 53.801723,
+            "lon": -1.537792,
+            "reference": "INCD-825641-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8022,
+            "lon": -1.53897,
+            "reference": "INCD-825641-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "LS2 8JS",
+            "lat": 53.80215,
+            "lon": -1.538956,
+            "reference": "INCD-825641-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "LS2 7QW",
+            "lat": 53.800849,
+            "lon": -1.537422,
+            "reference": "INCD-825641-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T11:10:00.000Z",
+        "restoreAt": "2026-10-20T01:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:32.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 6.428
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825631-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.2647300000000001,
+          53.73695
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825631-A",
+        "category": "current",
+        "status": "6",
         "type": "HV_S",
         "area": "Yorkshire",
         "areas": [
           "Yorkshire"
         ],
         "postcodes": [
-          "LS25 6HE",
-          "LS25 6HG",
-          "LS25 6HJ",
-          "LS25 6HD",
-          "LS25 6HF",
-          "LS25 6HQ"
+          "LS25 5JP",
+          "WF11 9EF"
         ],
         "groupedLocations": [
           {
-            "area": "LS25 6HE",
-            "lat": 53.808556,
-            "lon": -1.210446,
-            "reference": "INCD-824640-A",
-            "status": "5",
+            "area": "LS25 5JP",
+            "lat": 53.736385,
+            "lon": -1.264873,
+            "reference": "INCD-825631-A",
+            "status": "6",
             "type": "HV_S"
           },
           {
-            "area": "LS25 6HG",
-            "lat": 53.81038,
-            "lon": -1.21029,
-            "reference": "INCD-824640-A",
-            "status": "5",
-            "type": "HV_S"
-          },
-          {
-            "area": "LS25 6HJ",
-            "lat": 53.806782,
-            "lon": -1.173898,
-            "reference": "INCD-824640-A",
-            "status": "5",
-            "type": "HV_S"
-          },
-          {
-            "area": "LS25 6HD",
-            "lat": 53.809366,
-            "lon": -1.213301,
-            "reference": "INCD-824640-A",
-            "status": "5",
-            "type": "HV_S"
-          },
-          {
-            "area": "LS25 6HF",
-            "lat": 53.808533,
-            "lon": -1.20832,
-            "reference": "INCD-824640-A",
-            "status": "5",
-            "type": "HV_S"
-          },
-          {
-            "area": "LS25 6HQ",
-            "lat": 53.810095,
-            "lon": -1.205223,
-            "reference": "INCD-824640-A",
-            "status": "5",
+            "area": "WF11 9EF",
+            "lat": 53.736106,
+            "lon": -1.266273,
+            "reference": "INCD-825631-A",
+            "status": "6",
             "type": "HV_S"
           }
         ],
-        "startedAt": "2026-10-16T05:38:00.000Z",
-        "restoreAt": "2026-10-18T00:30:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:15.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 1.964
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr80142",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.45673,
-          54.602824999999996
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR80142",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "postcodes": [
-          "TS21 1NH",
-          "TS21 1LJ",
-          "TS21 1LZ",
-          "TS21 1NL",
-          "TS21 2HQ",
-          "TS21 1EN",
-          "TS21 1NQ",
-          "TS21 1NJ"
-        ],
-        "groupedLocations": [
-          {
-            "area": "TS21 1NH",
-            "lat": 54.608343,
-            "lon": -1.476599,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1LJ",
-            "lat": 54.595962,
-            "lon": -1.414308,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1LZ",
-            "lat": 54.59664,
-            "lon": -1.469954,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1NL",
-            "lat": 54.606156,
-            "lon": -1.457493,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 2HQ",
-            "lat": 54.612092,
-            "lon": -1.483286,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1EN",
-            "lat": 54.589535,
-            "lon": -1.404821,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1NQ",
-            "lat": 54.602849,
-            "lon": -1.484332,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "TS21 1NJ",
-            "lat": 54.611195,
-            "lon": -1.463031,
-            "reference": "PPCR80142",
-            "status": "6",
-            "type": "HV_N"
-          }
-        ],
-        "startedAt": "2026-10-17T09:00:00.000Z",
-        "restoreAt": "2026-10-17T16:00:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 3.657
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:incd-825213-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6277414285714282,
-          53.710649999999994
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825213-A",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "WF17 5PG",
-          "WF17 5AQ",
-          "WF17 5PJ",
-          "WF17 5PN",
-          "WF17 5PQ",
-          "WF17 5PH",
-          "WF17 5PW",
-          "WF17 5AG",
-          "WF17 5LZ",
-          "WF17 5PL",
-          "WF17 5PU",
-          "WF17 5TD",
-          "WF17 5PS",
-          "WF17 5PT"
-        ],
-        "groupedLocations": [
-          {
-            "area": "WF17 5PG",
-            "lat": 53.710959,
-            "lon": -1.627886,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5AQ",
-            "lat": 53.710342,
-            "lon": -1.629164,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "Yorkshire",
-            "lat": 53.7107,
-            "lon": -1.62726,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PN",
-            "lat": 53.710525,
-            "lon": -1.627239,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PQ",
-            "lat": 53.709519,
-            "lon": -1.627293,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PH",
-            "lat": 53.710894,
-            "lon": -1.627402,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PW",
-            "lat": 53.710937,
-            "lon": -1.626826,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5AG",
-            "lat": 53.711539,
-            "lon": -1.629623,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5LZ",
-            "lat": 53.711952,
-            "lon": -1.626514,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PL",
-            "lat": 53.710841,
-            "lon": -1.627721,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PU",
-            "lat": 53.709305,
-            "lon": -1.628037,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5TD",
-            "lat": 53.712002,
-            "lon": -1.627983,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PS",
-            "lat": 53.709915,
-            "lon": -1.62738,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF17 5PT",
-            "lat": 53.709353,
-            "lon": -1.629052,
-            "reference": "INCD-825213-A",
-            "status": "5",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T22:03:00.000Z",
+        "startedAt": "2026-10-19T10:59:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:15.000Z",
+        "updatedAt": "2026-10-19T23:00:24.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
-        "rawRecordCount": 14,
-        "coordinateSpreadKm": 0.17
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.049
       }
     },
     {
       "type": "Feature",
-      "id": "npg:planned:incd-825209-a",
+      "id": "npg:current:incd-825497-a",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -2.097235,
-          53.71328333333333
+          -1.5746625,
+          53.79175
         ]
       },
       "properties": {
@@ -386,99 +1911,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "INCD-825209-A",
-        "category": "planned",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "OL14 5AJ",
-          "OL14 5AA",
-          "OL14 5PU",
-          "OL14 5AD",
-          "OL14 5PX",
-          "OL14 5AB"
-        ],
-        "groupedLocations": [
-          {
-            "area": "OL14 5AJ",
-            "lat": 53.714004,
-            "lon": -2.096661,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "OL14 5AA",
-            "lat": 53.713176,
-            "lon": -2.098007,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "OL14 5PU",
-            "lat": 53.712979,
-            "lon": -2.097446,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "OL14 5AD",
-            "lat": 53.713536,
-            "lon": -2.097084,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "OL14 5PX",
-            "lat": 53.713177,
-            "lon": -2.096659,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "OL14 5AB",
-            "lat": 53.712952,
-            "lon": -2.09778,
-            "reference": "INCD-825209-A",
-            "status": "5",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T21:21:00.000Z",
-        "restoreAt": "2026-10-18T00:23:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:15.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.088
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825202-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.29216,
-          53.6932625
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825202-A",
+        "reference": "INCD-825497-A",
         "category": "current",
         "status": "5",
         "type": "LV",
@@ -487,888 +1920,53 @@
           "Yorkshire"
         ],
         "postcodes": [
-          "WF8 2HT",
-          "WF8 2JD",
-          "WF8 2DY",
-          "WF8 2EX",
-          "WF8 2HN",
-          "WF8 2HS",
-          "WF8 2HR",
-          "WF8 2EZ"
+          "LS12 1XN",
+          "LS12 1XW",
+          "LS12 1JZ",
+          "LS12 1JE"
         ],
         "groupedLocations": [
           {
-            "area": "WF8 2HT",
-            "lat": 53.693391,
-            "lon": -1.291184,
-            "reference": "INCD-825202-A",
+            "area": "LS12 1XN",
+            "lat": 53.791349,
+            "lon": -1.573926,
+            "reference": "INCD-825497-A",
             "status": "5",
             "type": "LV"
           },
           {
-            "area": "WF8 2JD",
-            "lat": 53.694209,
-            "lon": -1.291307,
-            "reference": "INCD-825202-A",
+            "area": "LS12 1XW",
+            "lat": 53.791349,
+            "lon": -1.573926,
+            "reference": "INCD-825497-A",
             "status": "5",
             "type": "LV"
           },
           {
-            "area": "WF8 2DY",
-            "lat": 53.693966,
-            "lon": -1.292629,
-            "reference": "INCD-825202-A",
+            "area": "LS12 1JZ",
+            "lat": 53.792388,
+            "lon": -1.575176,
+            "reference": "INCD-825497-A",
             "status": "5",
             "type": "LV"
           },
           {
-            "area": "WF8 2EX",
-            "lat": 53.693308,
-            "lon": -1.293821,
-            "reference": "INCD-825202-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF8 2HN",
-            "lat": 53.693159,
-            "lon": -1.290067,
-            "reference": "INCD-825202-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF8 2HS",
-            "lat": 53.693313,
-            "lon": -1.291625,
-            "reference": "INCD-825202-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF8 2HR",
-            "lat": 53.69213,
-            "lon": -1.292205,
-            "reference": "INCD-825202-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "WF8 2EZ",
-            "lat": 53.692717,
-            "lon": -1.294331,
-            "reference": "INCD-825202-A",
+            "area": "LS12 1JE",
+            "lat": 53.791924,
+            "lon": -1.576212,
+            "reference": "INCD-825497-A",
             "status": "5",
             "type": "LV"
           }
         ],
-        "startedAt": "2026-10-17T20:15:00.000Z",
-        "restoreAt": "2026-10-18T04:00:00.000Z",
+        "startedAt": "2026-10-19T05:58:00.000Z",
+        "restoreAt": "2026-10-20T02:00:00.000Z",
         "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:15.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 0.157
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825201-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.6995025,
-          53.575649999999996
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825201-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "HD8 8AX",
-          "HD8 8BE",
-          "HD8 8YR",
-          "HD8 8AY"
-        ],
-        "groupedLocations": [
-          {
-            "area": "HD8 8AX",
-            "lat": 53.580146,
-            "lon": -1.721045,
-            "reference": "INCD-825201-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8BE",
-            "lat": 53.57462,
-            "lon": -1.706523,
-            "reference": "INCD-825201-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8YR",
-            "lat": 53.572711,
-            "lon": -1.701568,
-            "reference": "INCD-825201-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8AY",
-            "lat": 53.577472,
-            "lon": -1.722844,
-            "reference": "INCD-825201-A",
-            "status": "6",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T20:17:00.000Z",
-        "restoreAt": "2026-10-17T23:21:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T20:30:17.000Z",
+        "updatedAt": "2026-10-20T01:20:32.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 4,
-        "coordinateSpreadKm": 0.85
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825199-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.70857,
-          53.57855000000001
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825199-A",
-        "category": "current",
-        "status": "5",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "HD8 8AY",
-          "HD8 8BE",
-          "HD8 8AE",
-          "HD8 8AS",
-          "HD8 8AX",
-          "HD8 8YR",
-          "HD8 8BT",
-          "HD8 8AU"
-        ],
-        "groupedLocations": [
-          {
-            "area": "HD8 8AY",
-            "lat": 53.577472,
-            "lon": -1.722844,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8BE",
-            "lat": 53.57462,
-            "lon": -1.706523,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8AE",
-            "lat": 53.584004,
-            "lon": -1.710416,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8AS",
-            "lat": 53.581219,
-            "lon": -1.718697,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8AX",
-            "lat": 53.580146,
-            "lon": -1.721045,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8YR",
-            "lat": 53.572711,
-            "lon": -1.701568,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8BT",
-            "lat": 53.580882,
-            "lon": -1.72039,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          },
-          {
-            "area": "HD8 8AU",
-            "lat": 53.579668,
-            "lon": -1.720247,
-            "reference": "INCD-825199-A",
-            "status": "5",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T20:14:00.000Z",
-        "restoreAt": "2026-10-17T23:17:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:14.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 8,
-        "coordinateSpreadKm": 1.13
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825172-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.36934,
-          53.51933333333333
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825172-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "S73 0FD",
-          "S73 0FH",
-          "S73 0YG"
-        ],
-        "groupedLocations": [
-          {
-            "area": "S73 0FD",
-            "lat": 53.519358,
-            "lon": -1.369955,
-            "reference": "INCD-825172-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "S73 0FH",
-            "lat": 53.519129,
-            "lon": -1.369023,
-            "reference": "INCD-825172-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "S73 0YG",
-            "lat": 53.519641,
-            "lon": -1.368971,
-            "reference": "INCD-825172-A",
-            "status": "6",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T18:57:00.000Z",
-        "restoreAt": "2026-10-17T21:59:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T20:00:34.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.042
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825167-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.8091716666666668,
-          53.75348333333333
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825167-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "HX3 7QR",
-          "HX3 7TR",
-          "HX3 7QP",
-          "HX3 7QW",
-          "HX3 7TZ",
-          "HX3 7QL"
-        ],
-        "groupedLocations": [
-          {
-            "area": "HX3 7QR",
-            "lat": 53.754033,
-            "lon": -1.809269,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HX3 7TR",
-            "lat": 53.752582,
-            "lon": -1.807319,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HX3 7QP",
-            "lat": 53.753529,
-            "lon": -1.809044,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HX3 7QW",
-            "lat": 53.753755,
-            "lon": -1.809983,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HX3 7TZ",
-            "lat": 53.753205,
-            "lon": -1.808788,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HX3 7QL",
-            "lat": 53.753936,
-            "lon": -1.810528,
-            "reference": "INCD-825167-A",
-            "status": "6",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T18:44:00.000Z",
-        "restoreAt": "2026-10-17T21:46:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T20:05:10.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 6,
-        "coordinateSpreadKm": 0.159
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825165-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.12510865714285715,
-          53.792295238095235
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825165-A",
-        "category": "current",
-        "status": "6",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "HU12 9QQ",
-          "HU11 4NG",
-          "HU11 4NL",
-          "HU11 4NP",
-          "HU11 4RE",
-          "HU11 4NF",
-          "HU11 4QB",
-          "HU11 4NQ",
-          "HU11 4NR",
-          "HU11 4FB",
-          "HU11 4NS",
-          "HU11 4NJ",
-          "HU11 4NW",
-          "HU11 4NH",
-          "HU12 9AL",
-          "HU11 4QD",
-          "HU11 4NE",
-          "HU11 4QA",
-          "HU12 9PU",
-          "HU12 9AJ",
-          "HU11 4QE"
-        ],
-        "groupedLocations": [
-          {
-            "area": "HU12 9QQ",
-            "lat": 53.718458,
-            "lon": -0.175777,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NG",
-            "lat": 53.80774,
-            "lon": -0.148788,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NL",
-            "lat": 53.792187,
-            "lon": -0.137691,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NP",
-            "lat": 53.792006,
-            "lon": -0.137031,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4RE",
-            "lat": 53.8162,
-            "lon": -0.126282,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NF",
-            "lat": 53.806193,
-            "lon": -0.152273,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4QB",
-            "lat": 53.800993,
-            "lon": -0.082664,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NQ",
-            "lat": 53.809297,
-            "lon": -0.145985,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NR",
-            "lat": 53.792906,
-            "lon": -0.137113,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4FB",
-            "lat": 53.790451,
-            "lon": -0.067113,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NS",
-            "lat": 53.796297,
-            "lon": -0.129674,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NJ",
-            "lat": 53.794087,
-            "lon": -0.138488,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NW",
-            "lat": 53.790633,
-            "lon": -0.137183,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NH",
-            "lat": 53.795045,
-            "lon": -0.145171,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU12 9AL",
-            "lat": 53.794353,
-            "lon": -0.098681,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4QD",
-            "lat": 53.79929,
-            "lon": -0.082393,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4NE",
-            "lat": 53.805966,
-            "lon": -0.1533,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4QA",
-            "lat": 53.821424,
-            "lon": -0.109701,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU12 9PU",
-            "lat": 53.717957,
-            "lon": -0.164705,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU12 9AJ",
-            "lat": 53.79739,
-            "lon": -0.099121,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "HU11 4QE",
-            "lat": 53.798436,
-            "lon": -0.058349,
-            "reference": "INCD-825165-A",
-            "status": "6",
-            "type": "HV_N"
-          }
-        ],
-        "startedAt": "2026-10-17T18:44:00.000Z",
-        "restoreAt": "2026-10-17T21:17:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T20:55:10.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 21,
-        "coordinateSpreadKm": 8.856
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825156-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.2338049999999998,
-          54.670950000000005
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825156-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "postcodes": [
-          "TS25 5JP",
-          "TS25 5JU"
-        ],
-        "groupedLocations": [
-          {
-            "area": "TS25 5JP",
-            "lat": 54.671122,
-            "lon": -1.234383,
-            "reference": "INCD-825156-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "TS25 5JU",
-            "lat": 54.670764,
-            "lon": -1.233258,
-            "reference": "INCD-825156-A",
-            "status": "6",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T17:36:00.000Z",
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T19:25:16.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.041
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:current:incd-825144-a",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.493371111111111,
-          54.001000000000005
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "INCD-825144-A",
-        "category": "current",
-        "status": "6",
-        "type": "LV",
-        "area": "North East",
-        "areas": [
-          "North East"
-        ],
-        "postcodes": [
-          "HG2 7HD",
-          "HG2 7LW",
-          "HG2 7EB",
-          "HG2 7EZ",
-          "HG2 7LL",
-          "HG2 7HB",
-          "HG2 7EX",
-          "HG2 7ET",
-          "HG2 7HA"
-        ],
-        "groupedLocations": [
-          {
-            "area": "HG2 7HD",
-            "lat": 54.001097,
-            "lon": -1.492308,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7LW",
-            "lat": 54.001479,
-            "lon": -1.495599,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7EB",
-            "lat": 54.002853,
-            "lon": -1.493248,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7EZ",
-            "lat": 54.000672,
-            "lon": -1.491703,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7LL",
-            "lat": 54.002091,
-            "lon": -1.495866,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7HB",
-            "lat": 54.001371,
-            "lon": -1.493342,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7EX",
-            "lat": 53.999469,
-            "lon": -1.492145,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7ET",
-            "lat": 53.999554,
-            "lon": -1.492937,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          },
-          {
-            "area": "HG2 7HA",
-            "lat": 54.00068,
-            "lon": -1.493549,
-            "reference": "INCD-825144-A",
-            "status": "6",
-            "type": "LV"
-          }
-        ],
-        "startedAt": "2026-10-17T16:25:00.000Z",
-        "restoreAt": "2026-10-17T20:30:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T20:30:17.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 9,
-        "coordinateSpreadKm": 0.203
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "npg:planned:ppcr79373",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.880105,
-          53.868849999999995
-        ]
-      },
-      "properties": {
-        "providerId": "npg",
-        "provider": "Northern Powergrid",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "PPCR79373",
-        "category": "planned",
-        "status": "6",
-        "type": "HV_N",
-        "area": "Yorkshire",
-        "areas": [
-          "Yorkshire"
-        ],
-        "postcodes": [
-          "BD21 4LT",
-          "BD21 4LW"
-        ],
-        "groupedLocations": [
-          {
-            "area": "BD21 4LT",
-            "lat": 53.867014,
-            "lon": -1.873218,
-            "reference": "PPCR79373",
-            "status": "6",
-            "type": "HV_N"
-          },
-          {
-            "area": "BD21 4LW",
-            "lat": 53.870712,
-            "lon": -1.88621,
-            "reference": "PPCR79373",
-            "status": "6",
-            "type": "HV_N"
-          }
-        ],
-        "startedAt": "2026-10-17T08:30:00.000Z",
-        "restoreAt": "2026-10-17T09:00:00.000Z",
-        "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:09.000Z",
-        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
-        "locationQuality": "centralised_area",
-        "rawRecordCount": 2,
-        "coordinateSpreadKm": 0.473
+        "coordinateSpreadKm": 0.094
       }
     },
     {
@@ -1411,7 +2009,4098 @@
         "startedAt": "2026-09-22T09:58:00.000Z",
         "restoreAt": null,
         "restoreAtText": "",
-        "updatedAt": "2026-10-17T22:10:15.000Z",
+        "updatedAt": "2026-10-20T01:20:32.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825960-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7085700000000001,
+          53.57855000000001
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825960-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HD8 8BE",
+          "HD8 8AE",
+          "HD8 8AX",
+          "HD8 8BT",
+          "HD8 8AS",
+          "HD8 8AU",
+          "HD8 8YR",
+          "HD8 8AY"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HD8 8BE",
+            "lat": 53.57462,
+            "lon": -1.706523,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AE",
+            "lat": 53.584004,
+            "lon": -1.710416,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AX",
+            "lat": 53.580146,
+            "lon": -1.721045,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8BT",
+            "lat": 53.580882,
+            "lon": -1.72039,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AS",
+            "lat": 53.581219,
+            "lon": -1.718697,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AU",
+            "lat": 53.579668,
+            "lon": -1.720247,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8YR",
+            "lat": 53.572711,
+            "lon": -1.701568,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AY",
+            "lat": 53.577472,
+            "lon": -1.722844,
+            "reference": "INCD-825960-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T21:55:00.000Z",
+        "restoreAt": "2026-10-20T01:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:31.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 1.13
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825954-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.09620125,
+          53.698237500000005
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825954-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "OL14 6BG",
+          "OL14 6QR",
+          "OL14 6QX",
+          "OL14 6SW",
+          "OL14 6BN",
+          "OL14 6QU",
+          "OL14 6QT",
+          "OL14 6RH"
+        ],
+        "groupedLocations": [
+          {
+            "area": "OL14 6BG",
+            "lat": 53.694615,
+            "lon": -2.098872,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6QR",
+            "lat": 53.696214,
+            "lon": -2.099815,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6QX",
+            "lat": 53.693575,
+            "lon": -2.096386,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6SW",
+            "lat": 53.694506,
+            "lon": -2.100114,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6BN",
+            "lat": 53.694274,
+            "lon": -2.098856,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6QU",
+            "lat": 53.694221,
+            "lon": -2.098069,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6QT",
+            "lat": 53.695336,
+            "lon": -2.097223,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "OL14 6RH",
+            "lat": 53.70028,
+            "lon": -2.106368,
+            "reference": "INCD-825954-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T20:21:00.000Z",
+        "restoreAt": "2026-10-20T04:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:33.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.71
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825942-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7736476470588234,
+          53.766835294117655
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825942-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "BD6 1QJ",
+          "BD6 1QP",
+          "BD6 1JZ",
+          "BD6 1QS",
+          "BD6 1TP",
+          "BD6 1RF",
+          "BD6 1JX",
+          "BD6 1QX",
+          "BD6 1QU",
+          "BD6 1RD",
+          "BD6 1BJ",
+          "BD6 1RB",
+          "BD6 1RE",
+          "BD6 1JY",
+          "BD6 1QR",
+          "BD6 1JU",
+          "BD6 1QN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "BD6 1QJ",
+            "lat": 53.767373,
+            "lon": -1.774392,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QP",
+            "lat": 53.766942,
+            "lon": -1.77447,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1JZ",
+            "lat": 53.767513,
+            "lon": -1.772252,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QS",
+            "lat": 53.767237,
+            "lon": -1.773392,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1TP",
+            "lat": 53.766497,
+            "lon": -1.776566,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1RF",
+            "lat": 53.766006,
+            "lon": -1.773884,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1JX",
+            "lat": 53.766851,
+            "lon": -1.773591,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QX",
+            "lat": 53.767545,
+            "lon": -1.774862,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QU",
+            "lat": 53.76739,
+            "lon": -1.773846,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1RD",
+            "lat": 53.767402,
+            "lon": -1.775515,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1BJ",
+            "lat": 53.76383,
+            "lon": -1.759591,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1RB",
+            "lat": 53.767026,
+            "lon": -1.775835,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1RE",
+            "lat": 53.767215,
+            "lon": -1.776016,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1JY",
+            "lat": 53.767561,
+            "lon": -1.773633,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QR",
+            "lat": 53.76661,
+            "lon": -1.774791,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1JU",
+            "lat": 53.766958,
+            "lon": -1.77353,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "BD6 1QN",
+            "lat": 53.766757,
+            "lon": -1.776307,
+            "reference": "INCD-825942-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T19:54:00.000Z",
+        "restoreAt": "2026-10-20T02:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:33.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 17,
+        "coordinateSpreadKm": 0.985
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825931-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.40789625,
+          53.567062500000006
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825931-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S72 8JA",
+          "S72 8HY",
+          "S72 8JB",
+          "S72 8HS",
+          "S72 8HP",
+          "S72 8HG",
+          "S72 8HU",
+          "S72 8HR"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S72 8JA",
+            "lat": 53.566765,
+            "lon": -1.409584,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HY",
+            "lat": 53.566301,
+            "lon": -1.408503,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8JB",
+            "lat": 53.565591,
+            "lon": -1.408543,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HS",
+            "lat": 53.566904,
+            "lon": -1.406834,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HP",
+            "lat": 53.567684,
+            "lon": -1.406415,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HG",
+            "lat": 53.568607,
+            "lon": -1.407565,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HU",
+            "lat": 53.566851,
+            "lon": -1.407016,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S72 8HR",
+            "lat": 53.567649,
+            "lon": -1.408379,
+            "reference": "INCD-825931-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T19:10:00.000Z",
+        "restoreAt": "2026-10-19T23:59:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-19T23:50:16.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 0.175
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80458",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.036703200000000005,
+          53.36574
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80458",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "LN12 1PG",
+          "LN12 1NS",
+          "LN1 2AU",
+          "LN12 1PH",
+          "LN12 1PF"
+        ],
+        "groupedLocations": [
+          {
+            "area": "LN12 1PG",
+            "lat": 53.379509,
+            "lon": 0.214652,
+            "reference": "PPCR80458",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "LN12 1NS",
+            "lat": 53.37512,
+            "lon": 0.218649,
+            "reference": "PPCR80458",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "LN1 2AU",
+            "lat": 53.312978,
+            "lon": -0.669472,
+            "reference": "PPCR80458",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "LN12 1PH",
+            "lat": 53.38633,
+            "lon": 0.211938,
+            "reference": "PPCR80458",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "LN12 1PF",
+            "lat": 53.374859,
+            "lon": 0.208938,
+            "reference": "PPCR80458",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T13:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 47.265
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80450",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.8096899999999998,
+          54.28856
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80450",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL8 4PW",
+          "DL8 4PP",
+          "DL8 4PL",
+          "DL8 4QA",
+          "DL8 4PS"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL8 4PW",
+            "lat": 54.287589,
+            "lon": -1.809676,
+            "reference": "PPCR80450",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 4PP",
+            "lat": 54.288316,
+            "lon": -1.80892,
+            "reference": "PPCR80450",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 4PL",
+            "lat": 54.287755,
+            "lon": -1.806849,
+            "reference": "PPCR80450",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 4QA",
+            "lat": 54.288164,
+            "lon": -1.809489,
+            "reference": "PPCR80450",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 4PS",
+            "lat": 54.291183,
+            "lon": -1.814576,
+            "reference": "PPCR80450",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.418
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80370",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.58035,
+          54.61947142857144
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80370",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL5 4HD",
+          "DL5 4HE",
+          "DL5 4HB",
+          "DL5 4HA",
+          "DL5 7AQ",
+          "DL5 4HF",
+          "DL5 7AF"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL5 4HD",
+            "lat": 54.621254,
+            "lon": -1.579885,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 4HE",
+            "lat": 54.619882,
+            "lon": -1.580797,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 4HB",
+            "lat": 54.620398,
+            "lon": -1.57946,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 4HA",
+            "lat": 54.619116,
+            "lon": -1.580263,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 7AQ",
+            "lat": 54.617751,
+            "lon": -1.580401,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 4HF",
+            "lat": 54.619661,
+            "lon": -1.581837,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL5 7AF",
+            "lat": 54.618252,
+            "lon": -1.580024,
+            "reference": "PPCR80370",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T10:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 0.201
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80367",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.3512766666666665,
+          53.638666666666666
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80367",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "WF7 7AE",
+          "WF7 7AT",
+          "WF7 7AS"
+        ],
+        "groupedLocations": [
+          {
+            "area": "WF7 7AE",
+            "lat": 53.641093,
+            "lon": -1.350825,
+            "reference": "PPCR80367",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "WF7 7AT",
+            "lat": 53.64059,
+            "lon": -1.354326,
+            "reference": "PPCR80367",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "WF7 7AS",
+            "lat": 53.634235,
+            "lon": -1.349327,
+            "reference": "PPCR80367",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-23T14:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.51
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80321",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7012733333333332,
+          54.653166666666664
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80321",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL14 0RW",
+          "DL14 6NR",
+          "DL14 6NS"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL14 0RW",
+            "lat": 54.653672,
+            "lon": -1.702582,
+            "reference": "PPCR80321",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL14 6NR",
+            "lat": 54.652642,
+            "lon": -1.700296,
+            "reference": "PPCR80321",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL14 6NS",
+            "lat": 54.653245,
+            "lon": -1.700973,
+            "reference": "PPCR80321",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T10:30:00.000Z",
+        "restoreAt": "2026-10-20T14:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.099
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80316",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.4030103333333333,
+          54.27481666666667
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80316",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "YO11 2LN",
+          "YO11 2QE",
+          "YO11 2LQ",
+          "YO11 2BJ",
+          "YO11 2LJ",
+          "YO11 2SF"
+        ],
+        "groupedLocations": [
+          {
+            "area": "YO11 2LN",
+            "lat": 54.273912,
+            "lon": -0.403029,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO11 2QE",
+            "lat": 54.275936,
+            "lon": -0.40249,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO11 2LQ",
+            "lat": 54.275687,
+            "lon": -0.40336,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO11 2BJ",
+            "lat": 54.275992,
+            "lon": -0.401981,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO11 2LJ",
+            "lat": 54.275111,
+            "lon": -0.404672,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO11 2SF",
+            "lat": 54.272306,
+            "lon": -0.402584,
+            "reference": "PPCR80316",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T15:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.281
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80301",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.0475675,
+          55.285775
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80301",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "NE65 7AS",
+          "NE65 7AT",
+          "NE65 7AR",
+          "NE65 7LH"
+        ],
+        "groupedLocations": [
+          {
+            "area": "NE65 7AS",
+            "lat": 55.277776,
+            "lon": -2.056256,
+            "reference": "PPCR80301",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "NE65 7AT",
+            "lat": 55.28252,
+            "lon": -2.056939,
+            "reference": "PPCR80301",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "NE65 7AR",
+            "lat": 55.283314,
+            "lon": -2.050108,
+            "reference": "PPCR80301",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "NE65 7LH",
+            "lat": 55.299639,
+            "lon": -2.026882,
+            "reference": "PPCR80301",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-22T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 2.019
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80291",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.3725840000000002,
+          53.4707
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80291",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S62 7TT",
+          "S60 4BZ",
+          "S62 7SA",
+          "S63 6HD",
+          "S63 6HE"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S62 7TT",
+            "lat": 53.481171,
+            "lon": -1.428444,
+            "reference": "PPCR80291",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S60 4BZ",
+            "lat": 53.417681,
+            "lon": -1.308714,
+            "reference": "PPCR80291",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S62 7SA",
+            "lat": 53.478786,
+            "lon": -1.382504,
+            "reference": "PPCR80291",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S63 6HD",
+            "lat": 53.489415,
+            "lon": -1.374799,
+            "reference": "PPCR80291",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S63 6HE",
+            "lat": 53.485951,
+            "lon": -1.369033,
+            "reference": "PPCR80291",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T10:00:00.000Z",
+        "restoreAt": "2026-10-20T14:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 7.251
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80278",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.28874449999999996,
+          53.857
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80278",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HU11 5JA",
+          "HU11 5HP"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HU11 5JA",
+            "lat": 53.854691,
+            "lon": -0.288148,
+            "reference": "PPCR80278",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HU11 5HP",
+            "lat": 53.859139,
+            "lon": -0.289335,
+            "reference": "PPCR80278",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.25
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80267",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.010605,
+          53.76445
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80267",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HX7 8RA",
+          "HX7 8RB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HX7 8RA",
+            "lat": 53.763981,
+            "lon": -2.009779,
+            "reference": "PPCR80267",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "HX7 8RB",
+            "lat": 53.764942,
+            "lon": -2.011433,
+            "reference": "PPCR80267",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T11:00:00.000Z",
+        "restoreAt": "2026-10-22T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.076
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80265",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.239884,
+          54.68745333333334
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80265",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "TS26 0ED",
+          "TS26 0EG",
+          "TS26 0LY",
+          "TS26 0EH",
+          "TS26 0LX",
+          "TS26 0NA",
+          "TS26 0LT",
+          "TS26 0LZ",
+          "TS26 0EQ",
+          "TS26 0EA",
+          "TS26 0EF",
+          "TS26 0DZ",
+          "TS26 0FB",
+          "TS26 0DE",
+          "TS26 0EB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "TS26 0ED",
+            "lat": 54.687322,
+            "lon": -1.239694,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EG",
+            "lat": 54.687066,
+            "lon": -1.241777,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0LY",
+            "lat": 54.688197,
+            "lon": -1.238715,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EH",
+            "lat": 54.68803,
+            "lon": -1.243714,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0LX",
+            "lat": 54.688781,
+            "lon": -1.237355,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0NA",
+            "lat": 54.687511,
+            "lon": -1.238263,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0LT",
+            "lat": 54.688043,
+            "lon": -1.239959,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0LZ",
+            "lat": 54.688285,
+            "lon": -1.236976,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EQ",
+            "lat": 54.68811,
+            "lon": -1.240625,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EA",
+            "lat": 54.686371,
+            "lon": -1.242736,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EF",
+            "lat": 54.687399,
+            "lon": -1.241879,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0DZ",
+            "lat": 54.685133,
+            "lon": -1.238757,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0FB",
+            "lat": 54.687639,
+            "lon": -1.235748,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0DE",
+            "lat": 54.687459,
+            "lon": -1.244314,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "TS26 0EB",
+            "lat": 54.686378,
+            "lon": -1.239572,
+            "reference": "PPCR80265",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T14:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 15,
+        "coordinateSpreadKm": 0.277
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80225",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.8301715384615385,
+          54.3111
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80225",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL8 5AR",
+          "DL8 5DL",
+          "DL8 5AE",
+          "DL8 5DN",
+          "DL8 5EE",
+          "DL8 5DZ",
+          "DL8 5ST",
+          "DL8 5SU",
+          "DL8 5AD",
+          "DL8 5AS",
+          "DL8 5AQ",
+          "DL8 5DW",
+          "DL8 5AG"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL8 5AR",
+            "lat": 54.310653,
+            "lon": -1.829443,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5DL",
+            "lat": 54.31156,
+            "lon": -1.829409,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5AE",
+            "lat": 54.311346,
+            "lon": -1.830455,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5DN",
+            "lat": 54.311156,
+            "lon": -1.82918,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5EE",
+            "lat": 54.310472,
+            "lon": -1.829013,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5DZ",
+            "lat": 54.310691,
+            "lon": -1.831072,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "North East",
+            "lat": 54.3116,
+            "lon": -1.83228,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5SU",
+            "lat": 54.311679,
+            "lon": -1.830961,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5AD",
+            "lat": 54.311986,
+            "lon": -1.831436,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5AS",
+            "lat": 54.310059,
+            "lon": -1.828954,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5AQ",
+            "lat": 54.310708,
+            "lon": -1.830042,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5DW",
+            "lat": 54.311533,
+            "lon": -1.828963,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL8 5AG",
+            "lat": 54.310853,
+            "lon": -1.830995,
+            "reference": "PPCR80225",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 13,
+        "coordinateSpreadKm": 0.148
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80219",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1260000000000001,
+          53.37933636363637
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80219",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S81 9NW",
+          "S81 9SF",
+          "S81 9PX",
+          "S81 9PS",
+          "S81 9SQ",
+          "S81 9PY",
+          "S81 9SE",
+          "S81 9PT",
+          "S81 9SH",
+          "S81 9PU",
+          "S81 9SG"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S81 9NW",
+            "lat": 53.374757,
+            "lon": -1.12448,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9SF",
+            "lat": 53.380544,
+            "lon": -1.125458,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9PX",
+            "lat": 53.379354,
+            "lon": -1.12879,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9PS",
+            "lat": 53.37931,
+            "lon": -1.126416,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9SQ",
+            "lat": 53.379167,
+            "lon": -1.125231,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9PY",
+            "lat": 53.379485,
+            "lon": -1.128231,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9SE",
+            "lat": 53.380563,
+            "lon": -1.124451,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9PT",
+            "lat": 53.379424,
+            "lon": -1.127255,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9SH",
+            "lat": 53.379982,
+            "lon": -1.123576,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9PU",
+            "lat": 53.380881,
+            "lon": -1.126173,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "S81 9SG",
+            "lat": 53.379261,
+            "lon": -1.125876,
+            "reference": "PPCR80219",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T10:30:00.000Z",
+        "restoreAt": "2026-10-20T14:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 11,
+        "coordinateSpreadKm": 0.519
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80206",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.45471,
+          54.5761
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80206",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "TS21 1HJ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "TS21 1HJ",
+            "lat": 54.576145,
+            "lon": -1.45472,
+            "reference": "PPCR80206",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80175",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.2160814285714285,
+          54.526650000000004
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80175",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "TS8 0TH",
+          "TS8 0SL",
+          "TS8 0SB",
+          "TS8 0SZ",
+          "TS8 0RX",
+          "TS8 0TE",
+          "TS8 0RU",
+          "TS8 0SN",
+          "TS8 0TF",
+          "TS8 0SE",
+          "TS8 0SD",
+          "TS8 0TG",
+          "TS8 0TA",
+          "TS8 0AN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "TS8 0TH",
+            "lat": 54.5281,
+            "lon": -1.219739,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SL",
+            "lat": 54.526957,
+            "lon": -1.218092,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SB",
+            "lat": 54.529599,
+            "lon": -1.220792,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SZ",
+            "lat": 54.529086,
+            "lon": -1.216506,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0RX",
+            "lat": 54.530692,
+            "lon": -1.21887,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0TE",
+            "lat": 54.524672,
+            "lon": -1.209452,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0RU",
+            "lat": 54.529689,
+            "lon": -1.218086,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SN",
+            "lat": 54.527793,
+            "lon": -1.218045,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0TF",
+            "lat": 54.529385,
+            "lon": -1.216933,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SE",
+            "lat": 54.530608,
+            "lon": -1.215565,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0SD",
+            "lat": 54.530025,
+            "lon": -1.215854,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0TG",
+            "lat": 54.530964,
+            "lon": -1.220658,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0TA",
+            "lat": 54.528394,
+            "lon": -1.21655,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "TS8 0AN",
+            "lat": 54.498342,
+            "lon": -1.200093,
+            "reference": "PPCR80175",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T12:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 14,
+        "coordinateSpreadKm": 3.322
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80153",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.783876,
+          54.742200000000004
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80153",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL13 4LS",
+          "DL13 4LW",
+          "DL13 4LN",
+          "DL13 4LT",
+          "DL13 4LR"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL13 4LS",
+            "lat": 54.742784,
+            "lon": -1.784194,
+            "reference": "PPCR80153",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL13 4LW",
+            "lat": 54.740859,
+            "lon": -1.783164,
+            "reference": "PPCR80153",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL13 4LN",
+            "lat": 54.741356,
+            "lon": -1.784823,
+            "reference": "PPCR80153",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL13 4LT",
+            "lat": 54.744623,
+            "lon": -1.782708,
+            "reference": "PPCR80153",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DL13 4LR",
+            "lat": 54.741526,
+            "lon": -1.784123,
+            "reference": "PPCR80153",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.275
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80133",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.6433776000000001,
+          54.354326666666665
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80133",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "YO13 0BN",
+          "YO18 7NR",
+          "NE29 7BX",
+          "YO13 0JX",
+          "YO13 0LN",
+          "YO13 0BS",
+          "YO18 7NS",
+          "YO13 9AB",
+          "YO13 0LP",
+          "YO13 0BP",
+          "YO13 9EB",
+          "YO13 0LL",
+          "YO13 0LH",
+          "YO13 0BW",
+          "YO13 0LJ"
+        ],
+        "groupedLocations": [
+          {
+            "area": "YO13 0BN",
+            "lat": 54.308444,
+            "lon": -0.558688,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO18 7NR",
+            "lat": 54.32474,
+            "lon": -0.689709,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "NE29 7BX",
+            "lat": 55.002631,
+            "lon": -1.475829,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0JX",
+            "lat": 54.2976,
+            "lon": -0.521911,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0LN",
+            "lat": 54.321265,
+            "lon": -0.626075,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0BS",
+            "lat": 54.29595,
+            "lon": -0.569942,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO18 7NS",
+            "lat": 54.342058,
+            "lon": -0.689528,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 9AB",
+            "lat": 54.289947,
+            "lon": -0.517914,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0LP",
+            "lat": 54.301169,
+            "lon": -0.576523,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0BP",
+            "lat": 54.310094,
+            "lon": -0.548594,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 9EB",
+            "lat": 54.266679,
+            "lon": -0.568652,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0LL",
+            "lat": 54.314575,
+            "lon": -0.595399,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0LH",
+            "lat": 54.309737,
+            "lon": -0.567574,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0BW",
+            "lat": 54.320107,
+            "lon": -0.57733,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO13 0LJ",
+            "lat": 54.308707,
+            "lon": -0.567902,
+            "reference": "PPCR80133",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T08:30:00.000Z",
+        "restoreAt": "2026-10-20T16:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 15,
+        "coordinateSpreadKm": 89.786
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80127",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.597095,
+          54.81939285714286
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80127",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DH2 3QW",
+          "DH2 3QQ",
+          "DH2 3QH",
+          "DH2 3QD",
+          "DH2 3QF",
+          "DH2 3QJ",
+          "DH2 3QB",
+          "DH2 3NX",
+          "DH2 3QT",
+          "DH2 3QP",
+          "DH2 3QE",
+          "DH2 3QR",
+          "DH2 3QN",
+          "DH2 3QA"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DH2 3QW",
+            "lat": 54.818507,
+            "lon": -1.597592,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QQ",
+            "lat": 54.820718,
+            "lon": -1.597959,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QH",
+            "lat": 54.819883,
+            "lon": -1.597952,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QD",
+            "lat": 54.821232,
+            "lon": -1.595573,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QF",
+            "lat": 54.82076,
+            "lon": -1.596947,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QJ",
+            "lat": 54.819161,
+            "lon": -1.597196,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QB",
+            "lat": 54.820272,
+            "lon": -1.596034,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3NX",
+            "lat": 54.81931,
+            "lon": -1.59858,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QT",
+            "lat": 54.817007,
+            "lon": -1.595366,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QP",
+            "lat": 54.817166,
+            "lon": -1.597014,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QE",
+            "lat": 54.821092,
+            "lon": -1.596741,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QR",
+            "lat": 54.816968,
+            "lon": -1.597094,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QN",
+            "lat": 54.818076,
+            "lon": -1.597907,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH2 3QA",
+            "lat": 54.821332,
+            "lon": -1.596132,
+            "reference": "PPCR80127",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 14,
+        "coordinateSpreadKm": 0.285
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80123",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.2075033333333334,
+          53.707966666666664
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80123",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "WF11 8DP",
+          "WF11 8DL",
+          "WF11 8DT"
+        ],
+        "groupedLocations": [
+          {
+            "area": "WF11 8DP",
+            "lat": 53.707237,
+            "lon": -1.208434,
+            "reference": "PPCR80123",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "WF11 8DL",
+            "lat": 53.70897,
+            "lon": -1.20825,
+            "reference": "PPCR80123",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.7076,
+            "lon": -1.2062,
+            "reference": "PPCR80123",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.122
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80121",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12372006666666666,
+          54.11353333333333
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80121",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "YO15 1PD",
+          "YO15 1NJ",
+          "YO15 1PE",
+          "YO15 1PY",
+          "YO15 1NG",
+          "YO15 1PG",
+          "YO15 1AQ",
+          "YO15 1AD",
+          "YO15 1PF",
+          "YO15 1NQ",
+          "YO15 1RH",
+          "YO15 1NL",
+          "YO15 1AE",
+          "YO15 1PJ",
+          "YO15 1QG"
+        ],
+        "groupedLocations": [
+          {
+            "area": "YO15 1PD",
+            "lat": 54.115081,
+            "lon": -0.124596,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1NJ",
+            "lat": 54.114947,
+            "lon": -0.122934,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1PE",
+            "lat": 54.11293,
+            "lon": -0.125611,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1PY",
+            "lat": 54.113414,
+            "lon": -0.123784,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1NG",
+            "lat": 54.115241,
+            "lon": -0.123349,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1PG",
+            "lat": 54.111525,
+            "lon": -0.125414,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1AQ",
+            "lat": 54.113967,
+            "lon": -0.122351,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1AD",
+            "lat": 54.113967,
+            "lon": -0.123514,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1PF",
+            "lat": 54.112457,
+            "lon": -0.124622,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1NQ",
+            "lat": 54.116533,
+            "lon": -0.120889,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1RH",
+            "lat": 54.113963,
+            "lon": -0.124401,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1NL",
+            "lat": 54.114299,
+            "lon": -0.122887,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1AE",
+            "lat": 54.110592,
+            "lon": -0.122091,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1PJ",
+            "lat": 54.111937,
+            "lon": -0.125885,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "YO15 1QG",
+            "lat": 54.112792,
+            "lon": -0.12421,
+            "reference": "PPCR80121",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 15,
+        "coordinateSpreadKm": 0.379
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80068",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.9817855,
+          53.62658333333334
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80068",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "DN8 4JW",
+          "DN8 4JS",
+          "DN7 5JT",
+          "DN8 4JT",
+          "DN8 4JD",
+          "DN8 4JL"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DN8 4JW",
+            "lat": 53.627644,
+            "lon": -0.981127,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN8 4JS",
+            "lat": 53.632692,
+            "lon": -0.976544,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN7 5JT",
+            "lat": 53.613382,
+            "lon": -1.011537,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN8 4JT",
+            "lat": 53.635558,
+            "lon": -0.970017,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN8 4JD",
+            "lat": 53.626667,
+            "lon": -0.981408,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DN8 4JL",
+            "lat": 53.623192,
+            "lon": -0.973403,
+            "reference": "PPCR80068",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 2.417
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80065",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.9751526666666666,
+          53.84232222222223
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80065",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "YO8 5SW",
+          "YO19 6DF",
+          "YO8 5DF",
+          "YO8 5RX",
+          "YO8 7DF",
+          "YO8 5RU",
+          "YO19 6DH",
+          "YO8 5DE",
+          "YO8 5SN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "YO8 5SW",
+            "lat": 53.846713,
+            "lon": -0.990957,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO19 6DF",
+            "lat": 53.851236,
+            "lon": -0.951309,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO8 5DF",
+            "lat": 53.832887,
+            "lon": -0.975805,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO8 5RX",
+            "lat": 53.84179,
+            "lon": -0.963794,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8329,
+            "lon": -0.9758,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO8 5RU",
+            "lat": 53.828418,
+            "lon": -0.964063,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO19 6DH",
+            "lat": 53.856107,
+            "lon": -0.978356,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO8 5DE",
+            "lat": 53.83946,
+            "lon": -0.981435,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "YO8 5SN",
+            "lat": 53.852093,
+            "lon": -0.995875,
+            "reference": "PPCR80065",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 9,
+        "coordinateSpreadKm": 1.853
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80064",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.9142683333333335,
+          53.69971666666666
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80064",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HX6 3QW",
+          "HX6 3QP",
+          "HX6 3QJ",
+          "HX6 3SQ",
+          "HX6 3QL",
+          "HX6 3QN"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HX6 3QW",
+            "lat": 53.699499,
+            "lon": -1.917295,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HX6 3QP",
+            "lat": 53.698211,
+            "lon": -1.912572,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HX6 3QJ",
+            "lat": 53.700216,
+            "lon": -1.913992,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HX6 3SQ",
+            "lat": 53.699983,
+            "lon": -1.914295,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HX6 3QL",
+            "lat": 53.700206,
+            "lon": -1.913174,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HX6 3QN",
+            "lat": 53.699965,
+            "lon": -1.914901,
+            "reference": "PPCR80064",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 6,
+        "coordinateSpreadKm": 0.202
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80017",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.7287414285714287,
+          54.723400000000005
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80017",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DL15 9RX",
+          "DL15 9RY",
+          "DL15 9SA",
+          "DL15 0XR",
+          "DL15 0EQ",
+          "DL15 9AL",
+          "DL15 9RU"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DL15 9RX",
+            "lat": 54.732099,
+            "lon": -1.738565,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 9RY",
+            "lat": 54.731909,
+            "lon": -1.737836,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 9SA",
+            "lat": 54.732553,
+            "lon": -1.74055,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 0XR",
+            "lat": 54.692961,
+            "lon": -1.709697,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 0EQ",
+            "lat": 54.710285,
+            "lon": -1.694347,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 9AL",
+            "lat": 54.731248,
+            "lon": -1.735527,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          },
+          {
+            "area": "DL15 9RU",
+            "lat": 54.732479,
+            "lon": -1.739618,
+            "reference": "PPCR80017",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 7,
+        "coordinateSpreadKm": 3.58
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80011",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.605,
+          55.4676
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80011",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "NE66 3ST"
+        ],
+        "groupedLocations": [
+          {
+            "area": "NE66 3ST",
+            "lat": 55.467572,
+            "lon": -1.604635,
+            "reference": "PPCR80011",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825981-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.0588009999999999,
+          54.533849999999994
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825981-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "TS14 6NA",
+          "TS14 6PD",
+          "TS14 6NE",
+          "TS14 6AW",
+          "TS14 6ND",
+          "TS14 6AN",
+          "TS14 6GT",
+          "TS14 7DJ",
+          "TS14 6NB",
+          "TS14 6PB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "TS14 6NA",
+            "lat": 54.533239,
+            "lon": -1.058968,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6PD",
+            "lat": 54.534792,
+            "lon": -1.059829,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6NE",
+            "lat": 54.533062,
+            "lon": -1.059328,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6AW",
+            "lat": 54.53417,
+            "lon": -1.058437,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6ND",
+            "lat": 54.533631,
+            "lon": -1.059655,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6AN",
+            "lat": 54.533926,
+            "lon": -1.058334,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6GT",
+            "lat": 54.533477,
+            "lon": -1.058345,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 7DJ",
+            "lat": 54.53261,
+            "lon": -1.055459,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6NB",
+            "lat": 54.533795,
+            "lon": -1.059914,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "TS14 6PB",
+            "lat": 54.535609,
+            "lon": -1.05981,
+            "reference": "INCD-825981-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T00:11:00.000Z",
+        "restoreAt": "2026-10-20T01:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T00:50:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 0.255
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825979-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.54918,
+          53.78943999999999
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825979-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "LS2 7QW",
+          "LS2 8JS",
+          "LS27 0EX",
+          "LS2 7PN",
+          "LS2 7DH"
+        ],
+        "groupedLocations": [
+          {
+            "area": "LS2 7QW",
+            "lat": 53.800849,
+            "lon": -1.537422,
+            "reference": "INCD-825979-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "LS2 8JS",
+            "lat": 53.80215,
+            "lon": -1.538956,
+            "reference": "INCD-825979-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "LS27 0EX",
+            "lat": 53.738599,
+            "lon": -1.597761,
+            "reference": "INCD-825979-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "LS2 7PN",
+            "lat": 53.801723,
+            "lon": -1.537792,
+            "reference": "INCD-825979-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "Yorkshire",
+            "lat": 53.8022,
+            "lon": -1.53897,
+            "reference": "INCD-825979-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T00:10:00.000Z",
+        "restoreAt": "2026-10-20T03:10:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T00:15:14.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 6.428
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825968-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.482618,
+          54.82387
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825968-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DH5 9QT",
+          "DH5 9QF",
+          "DH5 9GA",
+          "DH5 9QP",
+          "DH5 9QU",
+          "DH5 9QL",
+          "DH5 9RA",
+          "DH4 6NU",
+          "DH5 9SD",
+          "DH5 9BF"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DH5 9QT",
+            "lat": 54.82462,
+            "lon": -1.481934,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9QF",
+            "lat": 54.825189,
+            "lon": -1.478564,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9GA",
+            "lat": 54.824846,
+            "lon": -1.482304,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9QP",
+            "lat": 54.824414,
+            "lon": -1.480178,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9QU",
+            "lat": 54.824571,
+            "lon": -1.481032,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9QL",
+            "lat": 54.824743,
+            "lon": -1.479146,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9RA",
+            "lat": 54.823514,
+            "lon": -1.481917,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH4 6NU",
+            "lat": 54.815888,
+            "lon": -1.502073,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9SD",
+            "lat": 54.82513,
+            "lon": -1.479468,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "DH5 9BF",
+            "lat": 54.825399,
+            "lon": -1.47934,
+            "reference": "INCD-825968-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T22:51:00.000Z",
+        "restoreAt": "2026-10-20T08:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:33.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 10,
+        "coordinateSpreadKm": 1.529
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825965-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.255385,
+          53.34335
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825965-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S26 6NL",
+          "S26 6SS"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S26 6NL",
+            "lat": 53.343521,
+            "lon": -1.254219,
+            "reference": "INCD-825965-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "S26 6SS",
+            "lat": 53.343292,
+            "lon": -1.256506,
+            "reference": "INCD-825965-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T22:39:00.000Z",
+        "restoreAt": "2026-10-20T01:46:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:31.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.077
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825963-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.42952,
+          53.345974999999996
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825963-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S12 2LG",
+          "S12 2LS",
+          "S12 2LQ",
+          "S12 2LR"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S12 2LG",
+            "lat": 53.346585,
+            "lon": -1.428665,
+            "reference": "INCD-825963-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S12 2LS",
+            "lat": 53.346022,
+            "lon": -1.429424,
+            "reference": "INCD-825963-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S12 2LQ",
+            "lat": 53.346062,
+            "lon": -1.430295,
+            "reference": "INCD-825963-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "S12 2LR",
+            "lat": 53.345557,
+            "lon": -1.429941,
+            "reference": "INCD-825963-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T21:59:00.000Z",
+        "restoreAt": "2026-10-20T01:01:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T00:00:29.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.085
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825856-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.467615,
+          53.3195
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825856-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "S8 8ET",
+          "S8 8FB"
+        ],
+        "groupedLocations": [
+          {
+            "area": "S8 8ET",
+            "lat": 53.319761,
+            "lon": -1.467334,
+            "reference": "INCD-825856-A",
+            "status": "5",
+            "type": "LV"
+          },
+          {
+            "area": "S8 8FB",
+            "lat": 53.319323,
+            "lon": -1.46791,
+            "reference": "INCD-825856-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T16:39:00.000Z",
+        "restoreAt": "2026-10-20T01:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:31.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 2,
+        "coordinateSpreadKm": 0.031
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825957-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.36126319999999995,
+          53.75326
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825957-A",
+        "category": "current",
+        "status": "6",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HU5 3QA",
+          "HU5 3QY",
+          "HU5 3RA",
+          "HU5 3SA",
+          "HU5 3QX"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HU5 3QA",
+            "lat": 53.753364,
+            "lon": -0.359931,
+            "reference": "INCD-825957-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "HU5 3QY",
+            "lat": 53.753339,
+            "lon": -0.360766,
+            "reference": "INCD-825957-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "HU5 3RA",
+            "lat": 53.753212,
+            "lon": -0.362637,
+            "reference": "INCD-825957-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "HU5 3SA",
+            "lat": 53.752779,
+            "lon": -0.362578,
+            "reference": "INCD-825957-A",
+            "status": "6",
+            "type": "LV"
+          },
+          {
+            "area": "HU5 3QX",
+            "lat": 53.753739,
+            "lon": -0.360417,
+            "reference": "INCD-825957-A",
+            "status": "6",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T21:40:00.000Z",
+        "restoreAt": "2026-10-20T00:41:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-19T23:35:21.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 5,
+        "coordinateSpreadKm": 0.103
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80318",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.5009,
+          53.7141
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80318",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "WF1 2LW"
+        ],
+        "groupedLocations": [
+          {
+            "area": "WF1 2LW",
+            "lat": 53.714157,
+            "lon": -1.500901,
+            "reference": "PPCR80318",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T09:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80187",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.516775,
+          54.814
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80187",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "DH4 6QX",
+          "DH4 6QS",
+          "DH4 6QR",
+          "DH4 6QU"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DH4 6QX",
+            "lat": 54.813336,
+            "lon": -1.515346,
+            "reference": "PPCR80187",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH4 6QS",
+            "lat": 54.813901,
+            "lon": -1.517502,
+            "reference": "PPCR80187",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH4 6QR",
+            "lat": 54.815094,
+            "lon": -1.516896,
+            "reference": "PPCR80187",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "DH4 6QU",
+            "lat": 54.813584,
+            "lon": -1.516774,
+            "reference": "PPCR80187",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.125
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80109",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.08746,
+          53.9075
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80109",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "YO19 4RW"
+        ],
+        "groupedLocations": [
+          {
+            "area": "YO19 4RW",
+            "lat": 53.90748,
+            "lon": -1.087464,
+            "reference": "PPCR80109",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T15:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr79996",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.70857,
+          53.57855000000001
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR79996",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "HD8 8YR",
+          "HD8 8AY",
+          "HD8 8AX",
+          "HD8 8BE",
+          "HD8 8AE",
+          "HD8 8AU",
+          "HD8 8BT",
+          "HD8 8AS"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HD8 8YR",
+            "lat": 53.572711,
+            "lon": -1.701568,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AY",
+            "lat": 53.577472,
+            "lon": -1.722844,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AX",
+            "lat": 53.580146,
+            "lon": -1.721045,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8BE",
+            "lat": 53.57462,
+            "lon": -1.706523,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AE",
+            "lat": 53.584004,
+            "lon": -1.710416,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AU",
+            "lat": 53.579668,
+            "lon": -1.720247,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8BT",
+            "lat": 53.580882,
+            "lon": -1.72039,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          },
+          {
+            "area": "HD8 8AS",
+            "lat": 53.581219,
+            "lon": -1.718697,
+            "reference": "PPCR79996",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:00:00.000Z",
+        "restoreAt": "2026-10-20T16:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 8,
+        "coordinateSpreadKm": 1.13
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:current:incd-825901-a",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.39535,
+          53.8328
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "INCD-825901-A",
+        "category": "current",
+        "status": "5",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "LS15 4JH"
+        ],
+        "groupedLocations": [
+          {
+            "area": "LS15 4JH",
+            "lat": 53.832809,
+            "lon": -1.395305,
+            "reference": "INCD-825901-A",
+            "status": "5",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-19T17:31:00.000Z",
+        "restoreAt": "2026-10-20T04:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:32.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80258",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.62738,
+          54.0371
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80258",
+        "category": "planned",
+        "status": "4",
+        "type": "HV_N",
+        "area": "North East",
+        "areas": [
+          "North East"
+        ],
+        "postcodes": [
+          "HG3 3AW"
+        ],
+        "groupedLocations": [
+          {
+            "area": "HG3 3AW",
+            "lat": 54.037128,
+            "lon": -1.62732,
+            "reference": "PPCR80258",
+            "status": "4",
+            "type": "HV_N"
+          }
+        ],
+        "startedAt": "2026-10-20T08:30:00.000Z",
+        "restoreAt": "2026-10-20T16:00:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:25.000Z",
+        "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
+        "locationQuality": "centralised_area",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "npg:planned:ppcr80120",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.983961,
+          53.6989
+        ]
+      },
+      "properties": {
+        "providerId": "npg",
+        "provider": "Northern Powergrid",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "PPCR80120",
+        "category": "planned",
+        "status": "4",
+        "type": "LV",
+        "area": "Yorkshire",
+        "areas": [
+          "Yorkshire"
+        ],
+        "postcodes": [
+          "DN14 9NH"
+        ],
+        "groupedLocations": [
+          {
+            "area": "DN14 9NH",
+            "lat": 53.698947,
+            "lon": -0.98401,
+            "reference": "PPCR80120",
+            "status": "4",
+            "type": "LV"
+          }
+        ],
+        "startedAt": "2026-10-20T09:30:00.000Z",
+        "restoreAt": "2026-10-20T12:30:00.000Z",
+        "restoreAtText": "",
+        "updatedAt": "2026-10-20T01:20:24.000Z",
         "officialUrl": "https://www.northernpowergrid.com/power-cuts-map",
         "locationQuality": "centralised_area",
         "rawRecordCount": 1,

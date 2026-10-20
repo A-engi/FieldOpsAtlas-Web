@@ -1,56 +1,9 @@
 {
   "type": "FeatureCollection",
   "provider": "ssen",
-  "generatedAt": "2026-10-17T21:15:02.464Z",
+  "generatedAt": "2026-10-20T00:25:18.400Z",
   "stale": false,
   "features": [
-    {
-      "type": "Feature",
-      "id": "ssen:current:254583",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.8444417999999999,
-          51.20667299999999
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "254583",
-        "category": "current",
-        "status": "current",
-        "type": "PSI",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "GU10 5EF"
-        ],
-        "groupedLocations": [
-          {
-            "area": "GU10 5EF",
-            "lat": 51.206671,
-            "lon": -0.844425,
-            "reference": "254583",
-            "status": "current",
-            "type": "PSI"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 1,
-        "coordinateSpreadKm": 0
-      }
-    },
     {
       "type": "Feature",
       "id": "ssen:current:254579",
@@ -100,12 +53,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:uc7552",
+      "id": "ssen:current:254583",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.5720925,
-          51.5106998
+          -0.8444417999999999,
+          51.20667299999999
         ]
       },
       "properties": {
@@ -114,90 +67,25 @@
         "feedIds": [
           "live"
         ],
-        "reference": "UC7552",
+        "reference": "254583",
         "category": "current",
         "status": "current",
-        "type": "LV",
+        "type": "PSI",
         "area": "Published incident location",
         "areas": [
           "Published incident location"
         ],
         "postcodes": [
-          "SL2 5NL",
-          "SL2 5NS",
-          "SL2 5NW"
+          "GU10 5EF"
         ],
         "groupedLocations": [
           {
-            "area": "SL2 5NL",
-            "lat": 51.510701,
-            "lon": -0.572075,
-            "reference": "UC7552",
+            "area": "GU10 5EF",
+            "lat": 51.206671,
+            "lon": -0.844425,
+            "reference": "254583",
             "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SL2 5NS",
-            "lat": 51.51199,
-            "lon": -0.573807,
-            "reference": "UC7552",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "SL2 5NW",
-            "lat": 51.510254,
-            "lon": -0.572982,
-            "reference": "UC7552",
-            "status": "current",
-            "type": "LV"
-          }
-        ],
-        "startedAt": null,
-        "restoreAt": null,
-        "restoreAtText": "",
-        "updatedAt": null,
-        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
-        "locationQuality": "published_point",
-        "rawRecordCount": 3,
-        "coordinateSpreadKm": 0.127
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "ssen:current:uc7547",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -2.536513,
-          50.6700355
-        ]
-      },
-      "properties": {
-        "providerId": "ssen",
-        "provider": "SSEN Distribution",
-        "feedIds": [
-          "live"
-        ],
-        "reference": "UC7547",
-        "category": "current",
-        "status": "current",
-        "type": "LV",
-        "area": "Published incident location",
-        "areas": [
-          "Published incident location"
-        ],
-        "postcodes": [
-          "DT3 4ER"
-        ],
-        "groupedLocations": [
-          {
-            "area": "DT3 4ER",
-            "lat": 50.670026,
-            "lon": -2.536512,
-            "reference": "UC7547",
-            "status": "current",
-            "type": "LV"
+            "type": "PSI"
           }
         ],
         "startedAt": null,
@@ -212,12 +100,12 @@
     },
     {
       "type": "Feature",
-      "id": "ssen:current:uc7519",
+      "id": "ssen:current:uc9944",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -0.3068616,
-          51.5076299
+          -1.8155977,
+          57.5093311
         ]
       },
       "properties": {
@@ -226,7 +114,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "UC7519",
+        "reference": "UC9944",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -235,122 +123,41 @@
           "Published incident location"
         ],
         "postcodes": [
-          "W5 5BX",
-          "W5 5ER",
-          "W5 5ES",
-          "W5 5HP",
-          "W5 5HS",
-          "W5 5HT",
-          "W5 5NA",
-          "W5 5NB",
-          "W5 5ND",
-          "W5 5NH",
-          "W5 5QR",
-          "W5 5QU",
-          "W5 5RA"
+          "AB42 1EZ",
+          "AB42 1QZ",
+          "AB42 1WL",
+          "AB42 1WZ"
         ],
         "groupedLocations": [
           {
-            "area": "W5 5BX",
-            "lat": 51.509391,
-            "lon": -0.30235,
-            "reference": "UC7519",
+            "area": "AB42 1EZ",
+            "lat": 57.509783,
+            "lon": -1.814798,
+            "reference": "UC9944",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "W5 5ER",
-            "lat": 51.508342,
-            "lon": -0.305646,
-            "reference": "UC7519",
+            "area": "AB42 1QZ",
+            "lat": 57.510222,
+            "lon": -1.814429,
+            "reference": "UC9944",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "W5 5ES",
-            "lat": 51.507457,
-            "lon": -0.305419,
-            "reference": "UC7519",
+            "area": "AB42 1WL",
+            "lat": 57.509317,
+            "lon": -1.815602,
+            "reference": "UC9944",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "W5 5HP",
-            "lat": 51.50792,
-            "lon": -0.306929,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5HS",
-            "lat": 51.508188,
-            "lon": -0.307467,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5HT",
-            "lat": 51.507631,
-            "lon": -0.306839,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5NA",
-            "lat": 51.508824,
-            "lon": -0.301665,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5NB",
-            "lat": 51.508575,
-            "lon": -0.303721,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5ND",
-            "lat": 51.509271,
-            "lon": -0.300841,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5NH",
-            "lat": 51.508878,
-            "lon": -0.303565,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5QR",
-            "lat": 51.508969,
-            "lon": -0.304859,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5QU",
-            "lat": 51.508771,
-            "lon": -0.304837,
-            "reference": "UC7519",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "W5 5RA",
-            "lat": 51.508026,
-            "lon": -0.304951,
-            "reference": "UC7519",
+            "area": "AB42 1WZ",
+            "lat": 57.510573,
+            "lon": -1.814844,
+            "reference": "UC9944",
             "status": "current",
             "type": "LV"
           }
@@ -361,18 +168,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 13,
-        "coordinateSpreadKm": 0.271
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.084
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:uc7494",
+      "id": "ssen:current:uc9920",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -4.2203891,
-          57.66595179999999
+          -0.3434476,
+          51.5358575
         ]
       },
       "properties": {
@@ -381,7 +188,72 @@
         "feedIds": [
           "live"
         ],
-        "reference": "UC7494",
+        "reference": "UC9920",
+        "category": "current",
+        "status": "current",
+        "type": "LV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "UB6 8BJ",
+          "UB6 8SU",
+          "UB6 8SX"
+        ],
+        "groupedLocations": [
+          {
+            "area": "UB6 8BJ",
+            "lat": 51.53559,
+            "lon": -0.338446,
+            "reference": "UC9920",
+            "status": "current",
+            "type": "LV"
+          },
+          {
+            "area": "UB6 8SU",
+            "lat": 51.535858,
+            "lon": -0.343425,
+            "reference": "UC9920",
+            "status": "current",
+            "type": "LV"
+          },
+          {
+            "area": "UB6 8SX",
+            "lat": 51.535224,
+            "lon": -0.340492,
+            "reference": "UC9920",
+            "status": "current",
+            "type": "LV"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 3,
+        "coordinateSpreadKm": 0.185
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:uc9861",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.4554501,
+          50.6180873
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "UC9861",
         "category": "current",
         "status": "current",
         "type": "HV",
@@ -390,104 +262,149 @@
           "Published incident location"
         ],
         "postcodes": [
-          "IV16 9YB",
-          "IV7 8LG",
-          "IV7 8LH",
-          "IV7 8LJ",
-          "IV7 8LP",
-          "IV7 8LQ",
-          "IV7 8LR",
-          "IV7 8LT",
-          "IV7 8LU",
-          "IV7 8LX",
-          "IV7 8LZ"
+          "DT4 7HD",
+          "DT4 7HE",
+          "DT4 7HH",
+          "DT4 7HJ",
+          "DT4 7HT",
+          "DT4 7HU",
+          "DT4 7HW",
+          "DT4 7JD",
+          "DT4 7JE",
+          "DT4 7JF",
+          "DT4 7JG",
+          "DT4 7JH",
+          "DT4 7JJ",
+          "DT4 7JN",
+          "DT4 7JQ",
+          "DT4 7PL"
         ],
         "groupedLocations": [
           {
-            "area": "IV16 9YB",
-            "lat": 57.661884,
-            "lon": -4.339929,
-            "reference": "UC7494",
+            "area": "DT4 7HD",
+            "lat": 50.618176,
+            "lon": -2.452974,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LG",
-            "lat": 57.673155,
-            "lon": -4.171006,
-            "reference": "UC7494",
+            "area": "DT4 7HE",
+            "lat": 50.61852,
+            "lon": -2.454716,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LH",
-            "lat": 57.639092,
-            "lon": -4.181487,
-            "reference": "UC7494",
+            "area": "DT4 7HH",
+            "lat": 50.617762,
+            "lon": -2.455303,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LJ",
-            "lat": 57.665936,
-            "lon": -4.220389,
-            "reference": "UC7494",
+            "area": "DT4 7HJ",
+            "lat": 50.618073,
+            "lon": -2.454048,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LP",
-            "lat": 57.653865,
-            "lon": -4.21546,
-            "reference": "UC7494",
+            "area": "DT4 7HT",
+            "lat": 50.617694,
+            "lon": -2.454313,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LQ",
-            "lat": 57.660807,
-            "lon": -4.175851,
-            "reference": "UC7494",
+            "area": "DT4 7HU",
+            "lat": 50.61816,
+            "lon": -2.454784,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LR",
-            "lat": 57.670469,
-            "lon": -4.176212,
-            "reference": "UC7494",
+            "area": "DT4 7HW",
+            "lat": 50.617225,
+            "lon": -2.454633,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LT",
-            "lat": 57.65657,
-            "lon": -4.189124,
-            "reference": "UC7494",
+            "area": "DT4 7JD",
+            "lat": 50.615931,
+            "lon": -2.454338,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LU",
-            "lat": 57.658211,
-            "lon": -4.148472,
-            "reference": "UC7494",
+            "area": "DT4 7JE",
+            "lat": 50.616765,
+            "lon": -2.455152,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LX",
-            "lat": 57.648646,
-            "lon": -4.162486,
-            "reference": "UC7494",
+            "area": "DT4 7JF",
+            "lat": 50.618028,
+            "lon": -2.456422,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           },
           {
-            "area": "IV7 8LZ",
-            "lat": 57.659351,
-            "lon": -4.194036,
-            "reference": "UC7494",
+            "area": "DT4 7JG",
+            "lat": 50.618291,
+            "lon": -2.455817,
+            "reference": "UC9861",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "DT4 7JH",
+            "lat": 50.618847,
+            "lon": -2.453942,
+            "reference": "UC9861",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "DT4 7JJ",
+            "lat": 50.619103,
+            "lon": -2.452757,
+            "reference": "UC9861",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "DT4 7JN",
+            "lat": 50.618831,
+            "lon": -2.455794,
+            "reference": "UC9861",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "DT4 7JQ",
+            "lat": 50.618076,
+            "lon": -2.455447,
+            "reference": "UC9861",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "DT4 7PL",
+            "lat": 50.619319,
+            "lon": -2.455134,
+            "reference": "UC9861",
             "status": "current",
             "type": "HV"
           }
@@ -498,18 +415,18 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 11,
-        "coordinateSpreadKm": 8.468
+        "rawRecordCount": 16,
+        "coordinateSpreadKm": 0.237
       }
     },
     {
       "type": "Feature",
-      "id": "ssen:current:uc7337",
+      "id": "ssen:current:uc9479",
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -1.0690253,
-          50.815893
+          -0.9097094,
+          51.2925003
         ]
       },
       "properties": {
@@ -518,7 +435,7 @@
         "feedIds": [
           "live"
         ],
-        "reference": "UC7337",
+        "reference": "UC9479",
         "category": "current",
         "status": "current",
         "type": "LV",
@@ -527,50 +444,41 @@
           "Published incident location"
         ],
         "postcodes": [
-          "PO2 0DU",
-          "PO2 0DY",
-          "PO2 0EU",
-          "PO2 0EZ",
-          "PO2 0HE"
+          "RG27 8AU",
+          "RG27 8ZF",
+          "RG27 8ZH",
+          "RG27 8ZQ"
         ],
         "groupedLocations": [
           {
-            "area": "PO2 0DU",
-            "lat": 50.814871,
-            "lon": -1.06967,
-            "reference": "UC7337",
+            "area": "RG27 8AU",
+            "lat": 51.292296,
+            "lon": -0.908106,
+            "reference": "UC9479",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "PO2 0DY",
-            "lat": 50.816213,
-            "lon": -1.06767,
-            "reference": "UC7337",
+            "area": "RG27 8ZF",
+            "lat": 51.292536,
+            "lon": -0.907799,
+            "reference": "UC9479",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "PO2 0EU",
-            "lat": 50.815586,
-            "lon": -1.069046,
-            "reference": "UC7337",
+            "area": "RG27 8ZH",
+            "lat": 51.292854,
+            "lon": -0.90815,
+            "reference": "UC9479",
             "status": "current",
             "type": "LV"
           },
           {
-            "area": "PO2 0EZ",
-            "lat": 50.814855,
-            "lon": -1.067626,
-            "reference": "UC7337",
-            "status": "current",
-            "type": "LV"
-          },
-          {
-            "area": "PO2 0HE",
-            "lat": 50.815882,
-            "lon": -1.069011,
-            "reference": "UC7337",
+            "area": "RG27 8ZQ",
+            "lat": 51.2925,
+            "lon": -0.909693,
+            "reference": "UC9479",
             "status": "current",
             "type": "LV"
           }
@@ -581,8 +489,309 @@
         "updatedAt": null,
         "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
         "locationQuality": "published_point",
-        "rawRecordCount": 5,
-        "coordinateSpreadKm": 0.105
+        "rawRecordCount": 4,
+        "coordinateSpreadKm": 0.087
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:uc9654",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.7877177999999999,
+          51.3480597
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "UC9654",
+        "category": "current",
+        "status": "current",
+        "type": "HV",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "GU47 0HH",
+          "GU47 0HJ",
+          "GU47 0RN",
+          "GU47 0RP",
+          "GU47 0RR",
+          "GU47 0RS",
+          "GU47 0RT",
+          "GU47 0RW",
+          "GU47 0RZ",
+          "GU47 0XE",
+          "GU47 0XF",
+          "GU47 0XG",
+          "GU47 0XH",
+          "GU47 0XJ",
+          "GU47 0XL",
+          "GU47 0XQ",
+          "GU47 0XW",
+          "GU47 0XY",
+          "GU47 0XZ",
+          "GU47 0YA",
+          "GU47 0YB",
+          "GU47 9AH",
+          "GU47 9AJ",
+          "GU47 9RG"
+        ],
+        "groupedLocations": [
+          {
+            "area": "GU47 0HH",
+            "lat": 51.347152,
+            "lon": -0.784293,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0HJ",
+            "lat": 51.347517,
+            "lon": -0.783925,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RN",
+            "lat": 51.345575,
+            "lon": -0.783991,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RP",
+            "lat": 51.346214,
+            "lon": -0.784045,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RR",
+            "lat": 51.346779,
+            "lon": -0.783815,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RS",
+            "lat": 51.347004,
+            "lon": -0.783852,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RT",
+            "lat": 51.344566,
+            "lon": -0.784592,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RW",
+            "lat": 51.345947,
+            "lon": -0.784268,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0RZ",
+            "lat": 51.346051,
+            "lon": -0.786448,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XE",
+            "lat": 51.344477,
+            "lon": -0.782943,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XF",
+            "lat": 51.344271,
+            "lon": -0.783939,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XG",
+            "lat": 51.345192,
+            "lon": -0.782608,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XH",
+            "lat": 51.346015,
+            "lon": -0.782988,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XJ",
+            "lat": 51.344914,
+            "lon": -0.782673,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XL",
+            "lat": 51.345425,
+            "lon": -0.78164,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XQ",
+            "lat": 51.345194,
+            "lon": -0.783584,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XW",
+            "lat": 51.346826,
+            "lon": -0.781416,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XY",
+            "lat": 51.346119,
+            "lon": -0.780961,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0XZ",
+            "lat": 51.34638,
+            "lon": -0.781844,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0YA",
+            "lat": 51.347488,
+            "lon": -0.782016,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 0YB",
+            "lat": 51.347612,
+            "lon": -0.782716,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 9AH",
+            "lat": 51.34663,
+            "lon": -0.788601,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 9AJ",
+            "lat": 51.347363,
+            "lon": -0.789012,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          },
+          {
+            "area": "GU47 9RG",
+            "lat": 51.34806,
+            "lon": -0.787701,
+            "reference": "UC9654",
+            "status": "current",
+            "type": "HV"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 24,
+        "coordinateSpreadKm": 0.377
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ssen:current:255910",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.507971,
+          51.250071
+        ]
+      },
+      "properties": {
+        "providerId": "ssen",
+        "provider": "SSEN Distribution",
+        "feedIds": [
+          "live"
+        ],
+        "reference": "255910",
+        "category": "current",
+        "status": "current",
+        "type": "PSI",
+        "area": "Published incident location",
+        "areas": [
+          "Published incident location"
+        ],
+        "postcodes": [
+          "SP11 0HT"
+        ],
+        "groupedLocations": [
+          {
+            "area": "SP11 0HT",
+            "lat": 51.250067,
+            "lon": -1.507959,
+            "reference": "255910",
+            "status": "current",
+            "type": "PSI"
+          }
+        ],
+        "startedAt": null,
+        "restoreAt": null,
+        "restoreAtText": "",
+        "updatedAt": null,
+        "officialUrl": "https://powertrack.ssen.co.uk/powertrack",
+        "locationQuality": "published_point",
+        "rawRecordCount": 1,
+        "coordinateSpreadKm": 0
       }
     }
   ]
